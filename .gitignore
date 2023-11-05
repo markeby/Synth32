@@ -1,0 +1,14 @@
+*.vpwhist
+*.vtg
+*.bin
+*.elf
+*.map
+*.log
+*.cfg
+*.json
+*.svd
+*-bak
+Schematics-backups/
+Schematics/#auto_saved_files#
+Schematics/Drawings.pdf
+Schematics/_autosave-*

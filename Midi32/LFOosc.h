@@ -1,0 +1,81 @@
+//#######################################################################
+// Module:     LFOosc.h
+// Descrption: Oscillator controls
+// Creator:    markeby
+// Date:       9/18/2023
+//#######################################################################
+#pragma once
+
+#include "config.h"
+
+
+namespace LFO_N
+{
+
+#define LFO_VCA_COUNT     4
+
+//#######################################################################
+enum class SHAPE {
+    SINE = 0,
+    TRIANGLE,
+    SAWTOOTH,
+    PULSE,
+    };
+
+enum class D_A_OFF {
+    BEND = 0,
+    WIDTH,
+    FREQ,
+    DIR,
+    SINE,
+    PULSE,
+    SAWTOOTH,
+    TRIANGLE
+    };
+
+#define MAX_FREQ_DEV    36
+
+//#######################################################################
+class   SYNTH_LFO_C
+    {
+private:
+    bool    Valid;
+    int     Active;
+    int     Number;
+    uint8_t OscChannel;
+    uint8_t PwmChannel;
+    uint8_t BendChannel;
+    bool    Update;
+    int     CurrentLevel;
+    int     FreqDiv;
+    float   CurrentPercent;
+
+    typedef struct
+        {
+        uint8_t     Channel;            // I2C device index
+        uint16_t    CurrentLevel;       // Current setting 12 bit D/A
+        uint16_t    MaximumLevel;       // No higher than this
+        bool        Select;
+        String      Name;
+        } VCA_T;
+
+    VCA_T     Vca[OSC_MIXER_COUNT];
+
+    void  ClearState (void);
+    void  SetLevel  (uint8_t wave, uint16_t level);
+
+public:
+         SYNTH_LFO_C     (void);
+    void Begin           (int num, uint8_t first_device);
+    void Clear           (void);
+    void SetFreq         (float percent);
+    void SetMaxLevel     (uint8_t wave, float level_percent);
+    void Level           (float percent);
+    void Select          (uint8_t wave, bool sel);
+    void PitchBend       (float percent);
+    void Range           (bool up);
+
+    };
+}
+
+

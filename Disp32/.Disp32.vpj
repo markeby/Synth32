@@ -1,0 +1,151 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+    Version="10.0"
+    VendorName="SlickEdit"
+    TemplateName="Other C/C++"
+    WorkingDir="."
+    VCSProject="Git:">
+    <Config
+        Name="TestBuild"
+        Type="cpp"
+        DebugCallbackName="gdb"
+        OutputFile=""
+        CompilerConfigName="Latest Version">
+        <Menu>
+            <Target
+                Name="Build"
+                MenuCaption="&amp;Build"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                RunFromDir="%rw"
+                ClearProcessBuffer="1"
+                Verbose="1"
+                Beep="1">
+                <Exec CmdLine=" make Disp32_Serial"/>
+            </Target>
+            <Target
+                Name="Monitor"
+                MenuCaption="Monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
+            </Target>
+            <Target
+                Name="Build-monitor"
+                MenuCaption="Build-monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                BuildFirst="1"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make monitor"/>
+            </Target>
+            <Target
+                Name="Clean"
+                MenuCaption="Clean"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make clean &amp; make Disp32_Serial"/>
+            </Target>
+        </Menu>
+    </Config>
+    <Config
+        Name="ReleaseBuild"
+        Type="cpp"
+        DebugCallbackName="gdb"
+        OutputFile=""
+        CompilerConfigName="Latest Version">
+        <Menu>
+            <Target
+                Name="Build"
+                MenuCaption="&amp;Build"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                RunFromDir="%rw"
+                ClearProcessBuffer="1"
+                Verbose="1"
+                Beep="1">
+                <Exec CmdLine="make Disp32_OTA"/>
+            </Target>
+            <Target
+                Name="Monitor"
+                MenuCaption="Monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
+            </Target>
+            <Target
+                Name="Build-monitor"
+                MenuCaption="Build-monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                BuildFirst="1"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make monitor"/>
+            </Target>
+            <Target
+                Name="Clean"
+                MenuCaption="Clean"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make clean &amp; make Disp32_OTA"/>
+            </Target>
+        </Menu>
+    </Config>
+    <Rules Name="Compile">
+        <Rule
+            InputExts="*.s"
+            OutputExts="*.o"
+            LinkObject="1">
+            <Exec CmdLine='as -o "%bd%n.o" "%f"'/>
+        </Rule>
+    </Rules>
+    <Files>
+        <Folder
+            Name="Arduino"
+            Filters="*.ino"
+            GUID="{B31A05FC-70FC-4B13-A6C0-2E4AE407B205}">
+            <F N="Disp32.ino"/>
+        </Folder>
+        <Folder
+            Name="Source"
+            Filters="*.cpp"
+            GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="SerialMonitor.cpp"/>
+            <F N="Settings.cpp"/>
+            <F N="SynthConfig.cpp"/>
+            <F N="SynthFront.cpp"/>
+            <F N="WebOTA.cpp"/>
+        </Folder>
+        <Folder
+            Name="Header Source"
+            Filters="*.h;*.hxx"
+            GUID="{9EC47BEA-593C-419E-9086-283E6E3CB393}">
+            <F N="config.h"/>
+            <F N="SerialMonitor.h"/>
+            <F N="Settings.h"/>
+            <F N="SynthFront.h"/>
+            <F N="WebOTA.h"/>
+        </Folder>
+        <Folder
+            Name="Tools"
+            Filters="*.py"
+            GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
+            <F N="../.gitignore"/>
+            <F
+                N="Makefile"
+                Type="Makefile"/>
+            <F N="../README.md"/>
+            <F N="../tools/UploadOTA.py"/>
+        </Folder>
+    </Files>
+    <List Name="RTE">
+    </List>
+</Project>
