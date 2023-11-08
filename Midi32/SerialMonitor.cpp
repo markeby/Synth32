@@ -13,6 +13,27 @@
 using namespace SERIAL_MONITOR;
 
 //#######################################################################
+inline void DispRunTime (void)
+    {
+    float fsc = RunTime * 0.000001;
+    float fmn = fsc / 60;
+    float fhr = fmn / 60;
+    int   hr  = fhr;
+    int   mhr = hr * 60.0;
+    int   mn  = fmn - mhr;
+    float sc  = fsc - ((float)(mhr + mn) * 60.0);
+    Serial << hr << ":" << mn << ":" << sc;
+    }
+
+//#######################################################################
+inline static void DumpTitle (void)
+    {
+    Serial << endl << endl;
+    Serial << "####    Synth32 -- Midi32    ####" << endl;
+    Serial << "####  Midi eMusic Subsystem  ####" << endl;
+    }
+
+//#######################################################################
 const char* StateDebug (bool d)
     {
     static const char* StateOn  = "\t<ON> ";
@@ -32,14 +53,21 @@ void MONITOR_C::Mode (SMODE m)
 //#######################################################################
 void MONITOR_C::DumpStats (void)
     {
-    Serial << endl << endl;
-    Serial << " ## " << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
-    Serial << " ## " << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
-    Serial << " ## " << "SDK " << ESP.getSdkVersion () << endl;
-    Serial << " ## " << "Flash size = " << ESP.getFlashChipSize () << endl;
-    Serial << " ## " << "Sketch size = " << ESP.getSketchSize () << endl;
-    Serial << " ## " << "Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << " ## " << "Free space = " << ESP.getFreeSketchSpace () << endl;
+    static const char* hh = " ## ";
+
+    DumpTitle ();
+    Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
+    Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
+    Serial << hh << "SDK " << ESP.getSdkVersion () << endl;
+    Serial << hh << "      Flash size = " << ESP.getFlashChipSize () << endl;
+    Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
+    Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
+    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
+    Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
+    Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
+    Serial << hh << "     Runing Time = ";
+    DispRunTime ();
+    Serial << endl;
     }
 
 //#######################################################################
@@ -154,7 +182,7 @@ void MONITOR_C::MenuSel (void)
     switch ( InputMode )
         {
         case CMD:
-            printf ("%c", s);
+            Serial << s << endl;
             switch ( s )
                 {
                 case 's':
@@ -211,7 +239,6 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'Z':
-                    SynthFront.SendControl ();
                     break;
                 default:
                     Serial << "       ??" << endl;
@@ -240,16 +267,15 @@ void MONITOR_C::MenuSel (void)
 //#######################################################################
 void MONITOR_C::Menu (void)
     {
-    Serial << endl << endl;
+    DumpTitle ();
     Serial << "    1 - Debug MIDI interface   " << StateDebug (DebugMidi) << endl;
     Serial << "    2 - Debug D to A interface " << StateDebug (DebugDtoA) << endl;
     Serial << "    3 - Debug Oscillators      " << StateDebug (DebugOsc) << endl;
     Serial << "    4 - Debug Synth            " << StateDebug (DebugSynth) << endl;
-    Serial << endl;
     Serial << "    q - D/A Diagnostic mode" << endl;
     Serial << "    s - Dump process Stats" << endl;
     Serial << "    t - Tuning mode" << endl;
-    Serial << "    Z - Test funciton" << endl;
+    Serial << "    Z - Test function" << endl;
     Serial << "    S - SSID" << endl;
     Serial << "    P - Password" << endl;
     Serial << "    C - Clear Preferences" << endl;

@@ -10,7 +10,6 @@
 #include "WebOTA.h"
 #include "SynthFront.h"
 
-
 //#######################################################################
 I2C_LOCATION_T  BusI2C[] =
 //    Cluster   Slice   Channel   DtoA  AtoD    Dig     Name
@@ -43,35 +42,36 @@ I2C_LOCATION_T  BusI2C[] =
 I2C_INTERFACE_C I2cDevices (BusI2C);
 SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, PitchMapArray, SwitchMapArray);
 
-bool            SystemError         = false;
-bool            SystemFail          = false;
-bool            SynthActive         = false;
-int             DeltaTime           = 0;
-unsigned long   RunTime             = 0;
-int             UsbWait             = 0;
-int             UsbTimeoutCount     = 0;
-bool            UsbOnline           = true;
-bool            DebugMidi           = false;
-bool            DebugDtoA           = false;
-bool            DebugOsc            = false;
-bool            DebugSynth          = false;
+bool       SystemError         = false;
+bool       SystemFail          = false;
+bool       SynthActive         = false;
+float      DeltaTime           = 0;             // micro second interval.
+int        DeltaMicro          = 0;
+float      AverageDeltaTime    = 0;
+uint64_t   RunTime             = 0;
+int        UsbWait             = 0;
+int        UsbTimeoutCount     = 0;
+bool       UsbOnline           = true;
+bool       DebugMidi           = false;
+bool       DebugDtoA           = false;
+bool       DebugOsc            = false;
+bool       DebugSynth          = false;
 
-bool            AnalogDiagEnabled   = false;
-int             AnalogDiagDevice    = 0;
+bool       AnalogDiagEnabled   = false;
+int        AnalogDiagDevice    = 0;
 
 // this is used to add a task to core 0
 //TaskHandle_t  Core0TaskHnd;
 
-//#######################################################################
-
 #include "Test.h"
 
-inline int TimeDeltaMilli (void)
+//#######################################################################
+inline int TimeDeltaMiicro (void)
     {
     static uint64_t strt = 0;
     int             delta;
 
-    RunTime =  micros () / 1000ULL;
+    RunTime =  micros ();
     delta = (int)((uint64_t)RunTime - (uint64_t)strt);
     strt = RunTime;
     return (delta);
@@ -80,12 +80,18 @@ inline int TimeDeltaMilli (void)
 //#######################################################################
 inline bool TickTime (void)
     {
-    static uint32_t loop_cnt_10hz;
+    static uint64_t loop_cnt_10hz = 0;
+    static uint64_t icount = 0;
 
-    loop_cnt_10hz += DeltaTime;
-    if ( loop_cnt_10hz >= 100 )
+    RunTime       += DeltaMicro;
+    loop_cnt_10hz += DeltaMicro;
+    icount++;
+
+    if ( loop_cnt_10hz >= MILLI_TO_MICRO (100)  )
         {
+        AverageDeltaTime = MICRO_TO_MILLI (loop_cnt_10hz / icount);
         loop_cnt_10hz = 0;
+        icount = 0;
         return (true);
         }
     return (false);
@@ -105,13 +111,13 @@ inline void TickState (void)
         {
         if ( counter % 4 )
             {
-            digitalWrite (BEEP_PIN, LOW);           // Tone off
-            digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
+            digitalWrite (BEEP_PIN, LOW);       // Tone off
+            digitalWrite (HEARTBEAT_PIN, LOW);  // LED off
             }
         else
             {
-            digitalWrite (BEEP_PIN, HIGH);          // Tone on
-            digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
+            digitalWrite (BEEP_PIN, HIGH);      // Tone on
+            digitalWrite (HEARTBEAT_PIN, HIGH); // LED on
             }
         }
     if ( counter == 9 )
@@ -149,9 +155,6 @@ void setup (void)
         }
     if ( SystemFail )
         Serial << "*******  Synth interface is not operational *******" << endl << endl << endl;
-
-    printf ("\t>>> Starting Echo MIDI on Port 2... port TX = %d RX= %d\n", TXD2, RXD2);
-    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2);
 
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
@@ -242,7 +245,8 @@ void AnalogDiagnostics (void)
 void loop (void)
     {
     // heartbeat and error alerts based on time intervals
-    DeltaTime = TimeDeltaMilli ();
+    DeltaMicro = TimeDeltaMiicro ();
+    DeltaTime = MICRO_TO_MILLI (DeltaMicro);
     if ( TickTime () )
         TickState ();
 
@@ -264,8 +268,8 @@ void loop (void)
         }
     else
         {
-        UsbWait += DeltaTime;
-        if ( UsbWait > 1000 )
+        UsbWait += DeltaMicro;
+        if ( UsbWait > MILLI_TO_MICRO (1000) )
             {
             UsbWait = 0;
             UsbTimeoutCount += 1;

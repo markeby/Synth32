@@ -9,9 +9,8 @@
 //#####################################
 // Usefull constants
 //#####################################
-
-#define MICRO_TO_MILLI(x) (x * 0.001)
-#define MILLI_TO_MICRO(x) (x * 1000)
+#define MICRO_TO_MILLI(x) ((x) * 0.001)
+#define MILLI_TO_MICRO(x) ((x) * 1000)
 
 //#####################################
 // In case I get confused with Python
@@ -37,15 +36,19 @@ extern int  AnalogDiagDevice;
 #define GREEN_PIN          16
 
 //#################################################
+//    Serial 1 MIDI echo in port
+//#################################################
+#define RXD1    35
+#define TXD1    22
+
+//#################################################
 //   Global system variables
 //#################################################
-extern bool          SynthActive;
-
 extern bool     SystemError;
 extern bool     SystemFail;
-extern int      DeltaTime;
+extern float    DeltaTime;
 extern uint64_t RunTime;
-extern int      AverageDeltaTime;
+extern float    AverageDeltaTime;
 extern bool     UsbOnline;
 
 //#################################################

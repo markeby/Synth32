@@ -9,6 +9,12 @@
 #include "I2Cdevices.h"
 
 //#####################################
+// Usefull constants
+//#####################################
+#define MICRO_TO_MILLI(x) ((x) * 0.001)
+#define MILLI_TO_MICRO(x) ((x) * 1000)
+
+//#####################################
 // In case I get confused with Python
 //#####################################
 #define False false
@@ -31,26 +37,27 @@ extern int  AnalogDiagDevice;
 #define BEEP_PIN            15
 
 //#################################################
-//    DIN MIDI-2     Pinout
+//    Serial 1 MIDI echo out port
 //#################################################
-#define RXD2                16      // U2RRXD
-#define TXD2                13
+#define RXD1    35
+#define TXD1    32
 
 //#################################################
 //   Global system variables
 //#################################################
-extern bool          SynthActive;
+extern bool     SynthActive;
 
-extern bool          SystemError;
-extern bool          SystemFail;
-extern int           DeltaTime;
-extern unsigned long RunTime;
-extern bool          UsbOnline;
+extern bool     SystemError;
+extern bool     SystemFail;
+extern float    DeltaTime;
+extern uint64_t RunTime;
+extern float    AverageDeltaTime;
+extern bool     UsbOnline;
 
 //#################################################
 //    Synth specific constants
 //#################################################
-#define MIDI_PORT           0                           // sometime referred to as cable number
+#define MIDI_PORT           0        // sometime referred to as cable number
 #define OSC_MIXER_COUNT     5
 #define FULL_KEYS           128
 #define DA_RANGE            4096

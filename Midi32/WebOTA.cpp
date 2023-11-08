@@ -21,7 +21,7 @@ bool OTA_C::WaitWiFi (void)
     if ( WiFi.status () == WL_CONNECTED )
         {
         IPaddressString = WiFi.localIP ().toString ();
-        printf ("\t>>> OTA available. Use http:// %s\n", IPaddressString);
+        printf ("\t>>> OTA available.  IP: %s\n", IPaddressString);
         WiFi_On = true;
         return (true);
         }

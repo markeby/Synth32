@@ -15,11 +15,10 @@ SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, PitchMapArray, Switc
 
 bool       SystemError         = false;
 bool       SystemFail          = false;
-bool       SynthActive         = false;
-int        DeltaTime           = 0;             // micro second interval.
-int        AverageDeltaTime    = 0;
+float      DeltaTime           = 0;
+int        DeltaMicro          = 0;             // micro second interval.
+float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
-bool       UsbOnline           = true;
 bool       DebugMidi           = false;
 bool       DebugDtoA           = false;
 bool       DebugOsc            = false;
@@ -31,11 +30,10 @@ int        AnalogDiagDevice    = 0;
 // this is used to add a task to core 0
 //TaskHandle_t  Core0TaskHnd;
 
-//#######################################################################
-
 #include "Test.h"
 
-inline int TimeDeltaMilli (void)
+//#######################################################################
+inline int TimeDeltaMiicro (void)
     {
     static uint64_t strt = 0;
     int             delta;
@@ -52,13 +50,13 @@ inline bool TickTime (void)
     static uint64_t loop_cnt_10hz = 0;
     static uint64_t icount = 0;
 
-    RunTime       += DeltaTime;
-    loop_cnt_10hz += DeltaTime;
+    RunTime       += DeltaMicro;
+    loop_cnt_10hz += DeltaMicro;
     icount++;
 
     if ( loop_cnt_10hz >= MILLI_TO_MICRO (100)  )
         {
-        AverageDeltaTime = loop_cnt_10hz / icount;
+        AverageDeltaTime = MICRO_TO_MILLI (loop_cnt_10hz / icount);
         loop_cnt_10hz = 0;
         icount = 0;
         return (true);
@@ -115,7 +113,9 @@ void setup (void)
 
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
-    printf ("\t>>> System startup complete.\n");
+    SynthFront.Begin ();
+
+    printf ("\t>>> System startup complete.\n\n\n");
     }
 
 //#######################################################################
@@ -156,7 +156,8 @@ void Core0Task (void *parameter)
 void loop (void)
     {
     // heartbeat and error alerts based on time intervals
-    DeltaTime = TimeDeltaMilli ();
+    DeltaMicro = TimeDeltaMiicro ();
+    DeltaTime = MICRO_TO_MILLI (DeltaMicro);
     if ( TickTime () )
         TickState ();
 
@@ -164,8 +165,13 @@ void loop (void)
     if ( !UpdateOta.WiFiStatus () )
         {
         if ( UpdateOta.WaitWiFi () )
+            {
             UpdateOta.Begin ();
+            SynthFront.SendReset ();
+            }
+
         }
+    SynthFront.Loop ();
     Monitor.Loop ();
     }
 

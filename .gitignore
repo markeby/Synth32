@@ -1,4 +1,5 @@
 *.vpwhist
+*.vpwhistxml
 *.vtg
 *.bin
 *.elf
@@ -8,6 +9,8 @@
 *.json
 *.svd
 *-bak
+Disp32/output_doit/
+Midi32/output_doit/
 Schematics-backups/
 Schematics/#auto_saved_files#
 Schematics/Drawings.pdf

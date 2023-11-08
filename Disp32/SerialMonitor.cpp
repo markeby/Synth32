@@ -26,6 +26,14 @@ inline void DispRunTime (void)
     }
 
 //#######################################################################
+inline static void DumpTitle (void)
+    {
+    Serial << endl << endl;
+    Serial << "####  Synth32 -- Disp32  ####" << endl;
+    Serial << "####  Display Subsystem  ####" << endl;
+    }
+
+//#######################################################################
 const char* StateDebug (bool d)
     {
     static const char* StateOn  = "\t<ON> ";
@@ -46,7 +54,8 @@ void MONITOR_C::Mode (SMODE m)
 void MONITOR_C::DumpStats (void)
     {
     static const char* hh = " ## ";
-    Serial << endl << endl;
+
+    DumpTitle ();
     Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
     Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
     Serial << hh << "SDK " << ESP.getSdkVersion () << endl;
@@ -54,8 +63,8 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
     Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
     Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
-    Serial << hh << "Average interval = " << AverageDeltaTime << " MicroSec" << endl;
-    Serial << hh << "   Last interval = " << DeltaTime << " MicroSec" << endl;
+    Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
+    Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
     Serial << hh << "     Runing Time = ";
     DispRunTime ();
     Serial << endl;
@@ -173,7 +182,7 @@ void MONITOR_C::MenuSel (void)
     switch ( InputMode )
         {
         case CMD:
-            printf ("%c", s);
+            Serial << s << endl;
             switch ( s )
                 {
                 case 's':
@@ -215,25 +224,15 @@ void MONITOR_C::MenuSel (void)
                     InputPrompt (9, "  Cleared preferences.");
                     Mode (ZAP);
                     break;
-                case 't':
-                    Tuning (1);
-                    Mode (TUNING);
-                    break;
-                case 'q':
-                    AnalogDiagEnabled = true;
-                    SynthActive       = false;
-                    AnalogDiagDevice  = 0;
-                    Serial << endl << endl;
-                    Mode (ADIAG);
-                    break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
                 case 'Z':
-                    SynthFront.SendControl ();
+                    Serial << "        TEST" << endl;
+                    Mode (MENU);
                     break;
                 default:
-                    Serial << "       ??" << endl;
+                    Serial << "        ??" << endl;
                     Mode (MENU);
                     break;
                 }
@@ -259,16 +258,13 @@ void MONITOR_C::MenuSel (void)
 //#######################################################################
 void MONITOR_C::Menu (void)
     {
-    Serial << endl << endl;
+    DumpTitle ();
     Serial << "    1 - Debug MIDI interface   " << StateDebug (DebugMidi) << endl;
     Serial << "    2 - Debug D to A interface " << StateDebug (DebugDtoA) << endl;
     Serial << "    3 - Debug Oscillators      " << StateDebug (DebugOsc) << endl;
     Serial << "    4 - Debug Synth            " << StateDebug (DebugSynth) << endl;
-    Serial << endl;
-    Serial << "    q - D/A Diagnostic mode" << endl;
     Serial << "    s - Dump process Stats" << endl;
-    Serial << "    t - Tuning mode" << endl;
-    Serial << "    Z - Test funciton" << endl;
+    Serial << "    Z - Test function" << endl;
     Serial << "    S - SSID" << endl;
     Serial << "    P - Password" << endl;
     Serial << "    C - Clear Preferences" << endl;
@@ -359,8 +355,11 @@ void MONITOR_C::Loop (void)
         }
     else
         {
-        Menu ();
-        Mode (CMD);
+        if ( RunTime > MILLI_TO_MICRO (1000) )
+            {
+            Menu();
+            Mode (CMD);
+            }
         }
     }
 
