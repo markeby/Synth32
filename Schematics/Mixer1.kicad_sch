@@ -1823,7 +1823,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 148.59 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 06bbe3d7-7cbc-4293-aa1a-7cb3a9e9e8b9)
-    (property "Reference" "J58" (at 27.305 146.05 0)
+    (property "Reference" "J59" (at 27.305 146.05 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 151.3839 0)
@@ -1840,7 +1840,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J58") (unit 1)
+          (reference "J59") (unit 1)
         )
       )
     )
@@ -1849,7 +1849,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 140.97 86.36 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0bfc2ef8-64ba-4cd6-834d-4b3972f337d4)
-    (property "Reference" "R150" (at 138.557 84.9884 90)
+    (property "Reference" "R149" (at 138.557 84.9884 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 138.3538 87.5792 90)
@@ -1866,7 +1866,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R150") (unit 1)
+          (reference "R149") (unit 1)
         )
       )
     )
@@ -1875,7 +1875,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 48.26 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 15f94431-3baa-4298-b827-42bc11d01be9)
-    (property "Reference" "R144" (at 73.787 46.8884 90)
+    (property "Reference" "R143" (at 73.787 46.8884 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 49.4792 90)
@@ -1892,7 +1892,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R144") (unit 1)
+          (reference "R143") (unit 1)
         )
       )
     )
@@ -1901,7 +1901,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 97.79 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1eaf8882-1565-4313-a5c1-b0314fc7b780)
-    (property "Reference" "R137" (at 58.547 96.4184 90)
+    (property "Reference" "R136" (at 58.547 96.4184 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 99.0092 90)
@@ -1918,7 +1918,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R137") (unit 1)
+          (reference "R136") (unit 1)
         )
       )
     )
@@ -1927,7 +1927,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 156.21 93.98 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 22d82467-b375-44c7-a634-d4abfba630d4)
-    (property "Reference" "J62" (at 156.21 91.44 0)
+    (property "Reference" "J63" (at 156.21 91.44 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 158.75 96.7739 0)
@@ -1944,7 +1944,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J62") (unit 1)
+          (reference "J63") (unit 1)
         )
       )
     )
@@ -1953,7 +1953,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 80.01 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 243a3c1a-0717-40ec-a223-dc842be21ed1)
-    (property "Reference" "R136" (at 58.547 78.6384 90)
+    (property "Reference" "R135" (at 58.547 78.6384 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 81.2292 90)
@@ -1970,7 +1970,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R136") (unit 1)
+          (reference "R135") (unit 1)
         )
       )
     )
@@ -1979,7 +1979,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 167.64 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2759b406-6e7f-440e-b1b9-9e45097e4a77)
-    (property "Reference" "R132" (at 39.497 166.2684 90)
+    (property "Reference" "R131" (at 39.497 166.2684 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 168.8592 90)
@@ -1996,7 +1996,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R132") (unit 1)
+          (reference "R131") (unit 1)
         )
       )
     )
@@ -2030,7 +2030,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 140.97 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 34c86af8-f2d3-4247-bdbe-993c097b73ce)
-    (property "Reference" "R139" (at 58.547 139.5984 90)
+    (property "Reference" "R138" (at 58.547 139.5984 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 142.1892 90)
@@ -2047,7 +2047,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R139") (unit 1)
+          (reference "R138") (unit 1)
         )
       )
     )
@@ -2056,7 +2056,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 107.95 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 34e3eddd-2b2d-4572-9e51-e097751e859c)
-    (property "Reference" "J56" (at 27.305 105.41 0)
+    (property "Reference" "J57" (at 27.305 105.41 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 110.7439 0)
@@ -2073,7 +2073,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J56") (unit 1)
+          (reference "J57") (unit 1)
         )
       )
     )
@@ -2120,7 +2120,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 149.86 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 39a5e956-8392-4aa6-9bf7-6564ceecff06)
-    (property "Reference" "R147" (at 73.787 148.4884 90)
+    (property "Reference" "R146" (at 73.787 148.4884 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 151.0792 90)
@@ -2137,7 +2137,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R147") (unit 1)
+          (reference "R146") (unit 1)
         )
       )
     )
@@ -2209,7 +2209,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 67.31 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 45b90d56-3c01-467d-83f1-802dd6ef6c98)
-    (property "Reference" "J54" (at 27.305 64.77 0)
+    (property "Reference" "J55" (at 27.305 64.77 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 70.1039 0)
@@ -2226,7 +2226,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J54") (unit 1)
+          (reference "J55") (unit 1)
         )
       )
     )
@@ -2260,7 +2260,7 @@
   (symbol (lib_id "Connector:AudioJack2_Ground") (at 156.21 74.93 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 48742f39-e61f-4122-b7ce-dc7245615d33)
-    (property "Reference" "J61" (at 161.29 74.2949 0)
+    (property "Reference" "J62" (at 161.29 74.2949 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "AudioJack2_Ground" (at 161.925 75.5649 0)
@@ -2278,7 +2278,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J61") (unit 1)
+          (reference "J62") (unit 1)
         )
       )
     )
@@ -2287,7 +2287,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 68.58 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 49340243-2111-46bb-b34c-4b4e49f49d8b)
-    (property "Reference" "R145" (at 73.787 67.2084 90)
+    (property "Reference" "R144" (at 73.787 67.2084 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 69.7992 90)
@@ -2304,7 +2304,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R145") (unit 1)
+          (reference "R144") (unit 1)
         )
       )
     )
@@ -2351,7 +2351,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 128.27 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4aeac122-582b-4c2d-9560-fe538f5c1c1d)
-    (property "Reference" "J57" (at 27.305 125.73 0)
+    (property "Reference" "J58" (at 27.305 125.73 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 131.0639 0)
@@ -2368,7 +2368,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J57") (unit 1)
+          (reference "J58") (unit 1)
         )
       )
     )
@@ -2440,7 +2440,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 106.68 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 50a5e8a0-4594-4d2c-be76-db1019dfa28e)
-    (property "Reference" "R129" (at 39.497 105.3084 90)
+    (property "Reference" "R128" (at 39.497 105.3084 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 107.8992 90)
@@ -2457,7 +2457,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R129") (unit 1)
+          (reference "R128") (unit 1)
         )
       )
     )
@@ -2466,7 +2466,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 74.93 109.22 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 548010e0-cd85-43b2-8bfe-8bc5dc1ad3cd)
-    (property "Reference" "R141" (at 72.517 107.8484 90)
+    (property "Reference" "R140" (at 72.517 107.8484 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 72.3138 110.4392 90)
@@ -2483,7 +2483,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R141") (unit 1)
+          (reference "R140") (unit 1)
         )
       )
     )
@@ -2492,7 +2492,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 88.9 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 54aefa9e-6527-4df5-9f62-5634f6cf1bed)
-    (property "Reference" "R146" (at 73.787 87.5284 90)
+    (property "Reference" "R145" (at 73.787 87.5284 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 90.1192 90)
@@ -2509,7 +2509,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R146") (unit 1)
+          (reference "R145") (unit 1)
         )
       )
     )
@@ -2518,7 +2518,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 26.67 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 57e0268d-841e-453a-92f4-6ed1811f1d83)
-    (property "Reference" "J52" (at 27.305 24.13 0)
+    (property "Reference" "J53" (at 27.305 24.13 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 29.4639 0)
@@ -2535,7 +2535,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J52") (unit 1)
+          (reference "J53") (unit 1)
         )
       )
     )
@@ -2608,7 +2608,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x03") (at 99.695 185.42 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 63cc467b-a227-4d25-a860-a67f87eb8e3b)
-    (property "Reference" "J60" (at 99.4918 179.8828 0)
+    (property "Reference" "J61" (at 99.4918 179.8828 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x03" (at 99.695 178.435 0)
@@ -2626,7 +2626,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J60") (unit 1)
+          (reference "J61") (unit 1)
         )
       )
     )
@@ -2660,7 +2660,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 16.51 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 68431322-b6f8-43eb-9e86-564d5d15728d)
-    (property "Reference" "R133" (at 58.547 15.1384 90)
+    (property "Reference" "R132" (at 58.547 15.1384 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 17.7292 90)
@@ -2677,7 +2677,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R133") (unit 1)
+          (reference "R132") (unit 1)
         )
       )
     )
@@ -2724,7 +2724,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 45.72 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6f8bf74b-a0e8-4f9c-9afc-50f0cbbfe074)
-    (property "Reference" "R126" (at 39.497 44.3484 90)
+    (property "Reference" "R125" (at 39.497 44.3484 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 46.9392 90)
@@ -2741,7 +2741,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R126") (unit 1)
+          (reference "R125") (unit 1)
         )
       )
     )
@@ -2750,7 +2750,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 140.97 93.98 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6fa2d741-d485-4fa2-be64-26b25d64c94a)
-    (property "Reference" "R151" (at 138.557 92.6084 90)
+    (property "Reference" "R150" (at 138.557 92.6084 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 138.3538 95.1992 90)
@@ -2767,7 +2767,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R151") (unit 1)
+          (reference "R150") (unit 1)
         )
       )
     )
@@ -2814,7 +2814,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 46.99 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 72e8efc7-c3b7-4594-bf78-6d5b86c4e946)
-    (property "Reference" "J53" (at 27.305 44.45 0)
+    (property "Reference" "J54" (at 27.305 44.45 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 49.7839 0)
@@ -2831,7 +2831,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J53") (unit 1)
+          (reference "J54") (unit 1)
         )
       )
     )
@@ -2966,7 +2966,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 161.29 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9176e703-262a-4410-9a8c-e329f5c4dd50)
-    (property "Reference" "R140" (at 58.547 159.9184 90)
+    (property "Reference" "R139" (at 58.547 159.9184 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 162.5092 90)
@@ -2983,7 +2983,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R140") (unit 1)
+          (reference "R139") (unit 1)
         )
       )
     )
@@ -3030,7 +3030,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 74.93 129.54 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9824ed03-0ea0-489d-bef1-f6bb2403197e)
-    (property "Reference" "R142" (at 72.517 128.1684 90)
+    (property "Reference" "R141" (at 72.517 128.1684 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 72.3138 130.7592 90)
@@ -3047,7 +3047,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R142") (unit 1)
+          (reference "R141") (unit 1)
         )
       )
     )
@@ -3056,7 +3056,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 147.32 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9888c5ae-0f26-4485-9845-c71b87a9c953)
-    (property "Reference" "R131" (at 39.497 145.9484 90)
+    (property "Reference" "R130" (at 39.497 145.9484 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 148.5392 90)
@@ -3073,7 +3073,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R131") (unit 1)
+          (reference "R130") (unit 1)
         )
       )
     )
@@ -3082,7 +3082,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 87.63 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9b8d3ceb-13cc-40f9-a439-d9d8ad9b81aa)
-    (property "Reference" "J55" (at 27.305 85.09 0)
+    (property "Reference" "J56" (at 27.305 85.09 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 90.4239 0)
@@ -3099,7 +3099,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J55") (unit 1)
+          (reference "J56") (unit 1)
         )
       )
     )
@@ -3140,7 +3140,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 27.94 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a3fb9b04-8002-4f91-8e2d-852ef1492909)
-    (property "Reference" "R143" (at 73.787 26.5684 90)
+    (property "Reference" "R142" (at 73.787 26.5684 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 29.1592 90)
@@ -3157,7 +3157,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R143") (unit 1)
+          (reference "R142") (unit 1)
         )
       )
     )
@@ -3166,7 +3166,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 86.36 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid acff31e8-96ab-453c-846c-7439ee023130)
-    (property "Reference" "R128" (at 39.497 84.9884 90)
+    (property "Reference" "R127" (at 39.497 84.9884 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 87.5792 90)
@@ -3183,7 +3183,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R128") (unit 1)
+          (reference "R127") (unit 1)
         )
       )
     )
@@ -3218,7 +3218,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 66.04 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b88f9944-38e7-4abe-b95f-38349f051628)
-    (property "Reference" "R127" (at 39.497 64.6684 90)
+    (property "Reference" "R126" (at 39.497 64.6684 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 67.2592 90)
@@ -3235,7 +3235,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R127") (unit 1)
+          (reference "R126") (unit 1)
         )
       )
     )
@@ -3244,7 +3244,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 127 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid bd56973d-79cc-4cd5-8dd0-fa3439568e47)
-    (property "Reference" "R130" (at 39.497 125.6284 90)
+    (property "Reference" "R129" (at 39.497 125.6284 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 128.2192 90)
@@ -3261,7 +3261,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R130") (unit 1)
+          (reference "R129") (unit 1)
         )
       )
     )
@@ -3416,7 +3416,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 140.97 60.96 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d366a77f-d88e-447e-b618-82cfbf85613d)
-    (property "Reference" "R149" (at 138.557 59.5884 90)
+    (property "Reference" "R148" (at 138.557 59.5884 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 138.3538 62.1792 90)
@@ -3433,7 +3433,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R149") (unit 1)
+          (reference "R148") (unit 1)
         )
       )
     )
@@ -3442,7 +3442,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 39.37 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d4bec2c7-84b6-4169-b8ff-6ec0640a75b1)
-    (property "Reference" "R134" (at 58.547 37.9984 90)
+    (property "Reference" "R133" (at 58.547 37.9984 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 40.5892 90)
@@ -3459,7 +3459,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R134") (unit 1)
+          (reference "R133") (unit 1)
         )
       )
     )
@@ -3531,7 +3531,7 @@
   (symbol (lib_id "Connector_keyed_kicad_sym:Conn_01x02") (at 27.94 168.91 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e01bc217-ee26-47a0-87c7-39fabd3e5693)
-    (property "Reference" "J59" (at 27.305 166.37 0)
+    (property "Reference" "J60" (at 27.305 166.37 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "Conn_01x02" (at 25.4 171.7039 0)
@@ -3548,7 +3548,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "J59") (unit 1)
+          (reference "J60") (unit 1)
         )
       )
     )
@@ -3589,7 +3589,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 76.2 170.18 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f4832418-fa99-443c-80a2-6979aeca5a1b)
-    (property "Reference" "R148" (at 73.787 168.8084 90)
+    (property "Reference" "R147" (at 73.787 168.8084 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "49.9k" (at 73.5838 171.3992 90)
@@ -3606,7 +3606,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R148") (unit 1)
+          (reference "R147") (unit 1)
         )
       )
     )
@@ -3615,7 +3615,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 120.65 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f86a0c2d-1b34-4720-8a39-cd68bb7e59eb)
-    (property "Reference" "R138" (at 58.547 119.2784 90)
+    (property "Reference" "R137" (at 58.547 119.2784 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 121.8692 90)
@@ -3632,7 +3632,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R138") (unit 1)
+          (reference "R137") (unit 1)
         )
       )
     )
@@ -3641,7 +3641,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 41.91 25.4 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid fa10a8c4-2343-47de-b559-8bc3171b3a5c)
-    (property "Reference" "R125" (at 39.497 24.0284 90)
+    (property "Reference" "R124" (at 39.497 24.0284 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "1k" (at 39.2938 26.6192 90)
@@ -3658,7 +3658,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R125") (unit 1)
+          (reference "R124") (unit 1)
         )
       )
     )
@@ -3679,9 +3679,9 @@
     (property "Datasheet" "~" (at 91.44 76.2 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b29))
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b29))
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b29))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
@@ -3694,7 +3694,7 @@
   (symbol (lib_id "Device:R_Small_US") (at 60.96 59.69 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid feaa05a6-84e0-4d19-aa87-ee0f848eb7eb)
-    (property "Reference" "R135" (at 58.547 58.3184 90)
+    (property "Reference" "R134" (at 58.547 58.3184 90)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "100k" (at 58.3438 60.9092 90)
@@ -3711,7 +3711,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"
-          (reference "R135") (unit 1)
+          (reference "R134") (unit 1)
         )
       )
     )

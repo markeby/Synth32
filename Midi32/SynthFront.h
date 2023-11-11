@@ -44,6 +44,14 @@ namespace SYNTH_FRONT
         SystemReset           = 0xFF,    ///< System Real Time - System Reset
         };
 
+    typedef struct ACTION_C
+        {
+        byte MidiValue;
+        byte MidiType;
+        byte MidiStatus;
+        MIDI_VALUE_MAP* Params;
+        } ACTION_TC;
+
     } // end namespace SYNTH_FRONT
 
 //#################################################
@@ -78,7 +86,6 @@ public:
     void  Loop              (void);
     void  Controller        (byte chan, byte type, byte value);
     void  PitchBend         (byte chan, int value);
-    void  ShortMsg          (uint8_t* data);
     void  ChannelSelect     (uint8_t chan, bool state);
     void  SelectWaveLFO     (uint8_t ch, uint8_t state);
     void  FreqSelectLFO     (uint8_t ch, float val);

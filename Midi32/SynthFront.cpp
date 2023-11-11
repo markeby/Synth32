@@ -365,33 +365,6 @@ void SYNTH_FRONT_C::PitchBend (byte chan, int value)
         }
     }
 
-//#######################################################################
-void SYNTH_FRONT_C::ShortMsg (uint8_t *data)
-    {
-    float   scaler;
-    uint8_t chan = data[0] & 0x0F;
-
-    if ( data[0] == 99 )                // Pad pressure
-
-        return;
-
-    switch ( data[0] & 0xF0 )
-        {
-        case 0xe0:      /* pitchbend */
-            if ( PitchMap[1].CallBack != nullptr )
-                {
-                scaler = ((((data[2] - 64) << 8) | data[1]) + 16384) * PitchMap[1].Scaler;
-//                scaler = ( scaler < 0.8 ) ? 0.0 : scaler;
-                PitchMap[1].CallBack (1, scaler);
-                if ( DebugSynth )
-                    Serial << "\r[s] Pitch bend > " << scaler << "    ";
-                }
-            break;
-        default:
-            break;
-        }
-    }
-
 //#####################################################################
 void SYNTH_FRONT_C::SetMaxLevel (uint8_t wave, float data)
     {
