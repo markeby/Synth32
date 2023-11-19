@@ -118,20 +118,30 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="DispFrontEnd.cpp"/>
+            <F N="Graphics.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
-            <F N="SynthConfig.cpp"/>
-            <F N="SynthFront.cpp"/>
+            <F N="SynthData.cpp"/>
             <F N="WebOTA.cpp"/>
         </Folder>
         <Folder
-            Name="Header Source"
+            Name="Headers"
             Filters="*.h;*.hxx"
             GUID="{9EC47BEA-593C-419E-9086-283E6E3CB393}">
+            <Folder
+                Name="Common"
+                Filters=""
+                GUID="{1DFDD49E-3B9E-45ED-AA67-5F2F56A39599}">
+                <F N="../Common/DispMessages.h"/>
+                <F N="../Common/SynthCommon.h"/>
+            </Folder>
             <F N="config.h"/>
+            <F N="DispFrontEnd.h"/>
+            <F N="Graphics.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
-            <F N="SynthFront.h"/>
+            <F N="SynthData.h"/>
             <F N="WebOTA.h"/>
         </Folder>
         <Folder

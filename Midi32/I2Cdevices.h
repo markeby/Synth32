@@ -26,7 +26,7 @@ private:
         uint64_t        LastDataAtoD;
         union
             {
-            uint8_t     ByteDtoA[MAX_ANALOG_PER_BOARD * 2];
+            byte        ByteDtoA[MAX_ANALOG_PER_BOARD * 2];
             uint16_t    DtoA[MAX_ANALOG_PER_BOARD];
             uint64_t    DataDtoA;
             };
@@ -45,31 +45,31 @@ private:
 
     I2C_BOARD_T*    pBoard;
     I2C_DEVICE_T*   pDevice;
-    uint8_t         DeviceCount;
-    uint8_t         AnalogOutCount;
-    uint8_t         BoardCount;
+    byte            DeviceCount;
+    byte            AnalogOutCount;
+    byte            BoardCount;
     bool            SystemFail;
 
-    void BusMux         (uint8_t bus, uint8_t channel);
-    void EndBusMux      (uint8_t bus);
+    void BusMux         (byte bus, byte channel);
+    void EndBusMux      (byte bus);
     void Init4728       (I2C_LOCATION_T &loc);
     void Write4728      (I2C_BOARD_T& board);
-    void Write          (I2C_LOCATION_T& loc, uint8_t* buff, uint8_t length);
-    bool ValidateDevice (uint8_t board);
+    void Write          (I2C_LOCATION_T& loc, byte* buff, byte length);
+    bool ValidateDevice (byte board);
 
 public:
          I2C_INTERFACE_C (I2C_LOCATION_T* ploc);
 //        ~I2C_INTERFACE_C (void);
     int  Begin           (void);
     void Zero            (void);
-    void D2Analog        (uint8_t converter, int value);
+    void D2Analog        (byte converter, int value);
     void AnalogClear     (void);
     void UpdateAnalog    (void);
     void Error           (void);
     int  NumBoards       (void)    { return (BoardCount); }
     int  NumAnalog       (void)    { return (AnalogOutCount); }
 
-    inline bool IsChannelValid (uint8_t device)
+    inline bool IsChannelValid (byte device)
         {
         if ( device < DeviceCount && pDevice[device].pBoard->Valid )
             return (true);

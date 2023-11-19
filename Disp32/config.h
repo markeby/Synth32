@@ -5,6 +5,7 @@
 #pragma once
 
 #include <Streaming.h>
+#include "SynthCommon.h"
 
 //#####################################
 // Usefull constants
@@ -21,12 +22,8 @@
 //#####################################
 //   debug controls
 //#####################################
-extern bool DebugMidi;
-extern bool DebugDtoA;
-extern bool DebugOsc;
-extern bool DebugSynth;
-extern bool AnalogDiagEnabled;
-extern int  AnalogDiagDevice;
+extern bool DebugInterface;
+extern bool DebugGraphics;
 
 //#################################################
 //   Alarms and alerts
@@ -45,11 +42,9 @@ extern int  AnalogDiagDevice;
 //   Global system variables
 //#################################################
 extern bool     SystemError;
-extern bool     SystemFail;
 extern float    DeltaTime;
 extern uint64_t RunTime;
 extern float    AverageDeltaTime;
-extern bool     UsbOnline;
 
 //#################################################
 //    Synth specific constants

@@ -129,9 +129,16 @@
             <F N="WebOTA.cpp"/>
         </Folder>
         <Folder
-            Name="Header Source"
+            Name="Headers"
             Filters="*.h;*.hxx"
             GUID="{9EC47BEA-593C-419E-9086-283E6E3CB393}">
+            <Folder
+                Name="Common"
+                Filters=""
+                GUID="{BA92E361-9D26-4E50-8EB8-EFDDA5C01AD6}">
+                <F N="../Common/DispMessages.h"/>
+                <F N="../Common/SynthCommon.h"/>
+            </Folder>
             <F N="config.h"/>
             <F N="I2Cdevices.h"/>
             <F N="LFOosc.h"/>

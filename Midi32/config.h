@@ -75,17 +75,17 @@ extern bool     UsbOnline;
 //#################################################
 typedef struct
     {
-    uint8_t     Channel;
+    byte        Channel;
     const char* desc;
-    void       (*CallBack)(uint8_t chan, float control);
+    void       (*CallBack)(byte chan, float control);
     float       Scaler;
     }  MIDI_VALUE_MAP;
 
 typedef struct
     {
-    uint8_t     Channel;
+    byte        Channel;
     const char* desc;
-    void       (*CallBack)(uint8_t ch, uint8_t state);
+    void       (*CallBack)(byte ch, byte state);
     } MIDI_SWITCH_MAP;
 
 

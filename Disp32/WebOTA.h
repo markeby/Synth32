@@ -17,11 +17,8 @@ public:
     bool WaitWiFi   (void);
     void Setup      (const char* pssid, const char* ppasswd);
     void Begin      (void);
-
-    inline bool WiFiStatus (void)
-        {
-        return (WiFi_On);
-        }
+    const char* GetIP    (void) { return (IPaddressString.c_str ()); }
+    bool WiFiStatus (void) { return (WiFi_On); }
     };
 
 extern OTA_C UpdateOta;

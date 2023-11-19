@@ -13,6 +13,8 @@ PROJECT       := Midi32.ino
 # header files
 INCLUDES      := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h \
 		 SynthChannel.h Osc.h LFOosc.h Test.h
+# Shared files directory
+SHARED        := ../Common
 # source files
 SOURCES       := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp \
 		 SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
@@ -49,7 +51,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log 
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED)
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 

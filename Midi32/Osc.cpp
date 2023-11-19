@@ -117,7 +117,7 @@ void SYNTH_OSC_C::NoteClear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetAttack (uint8_t wave, float time)
+void SYNTH_OSC_C::SetAttackTime (uint8_t wave, float time)
     {
     Mix[wave].AttackTime = time;
     if ( DebugOsc )
@@ -125,7 +125,7 @@ void SYNTH_OSC_C::SetAttack (uint8_t wave, float time)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetDecay (uint8_t wave, float time)
+void SYNTH_OSC_C::SetDecayTime (uint8_t wave, float time)
     {
     Mix[wave].DecayTime = time;
     if ( DebugOsc )
@@ -133,7 +133,7 @@ void SYNTH_OSC_C::SetDecay (uint8_t wave, float time)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetRelease (uint8_t wave, float time)
+void SYNTH_OSC_C::SetReleaseTime (uint8_t wave, float time)
     {
     Mix[wave].ReleaseTime = time;
     if ( DebugOsc )

@@ -12,8 +12,6 @@
 
 namespace OSC_N
 {
-
-
 //#######################################################################
 enum class SHAPE {
     SINE = 0,
@@ -42,6 +40,7 @@ enum class D_A_OFF {
     EXPO
     };
 
+}// end namespace OSC_N
 
 //#######################################################################
 class   SYNTH_OSC_C
@@ -52,28 +51,28 @@ private:
     int     Valid;
     int     Active;
     int     Number;
-    uint8_t CurrentNote;
+    byte    CurrentNote;
     bool    TriggerUp;
     bool    TriggerDown;
-    uint8_t OscChannel;
-    uint8_t PwmChannel;
+    byte    OscChannel;
+    byte    PwmChannel;
 
     typedef struct
         {
-        uint8_t     Channel;            // I2C device index
-        uint16_t    CurrentLevel;       // Current setting 12 bit D/A
-        uint16_t    LimitLevel;         // Maximum value for channel as 12 bit D/A
-        float       AttackTime;         // Attack time in mSec.
-        float       DecayTime;          // Decay time to sustatin level in mSec.
-        uint16_t    DacayTargetLevel;   // Target for end of decay stage
-        uint16_t    SustainLevel;       // Sustain level in channel as 12 bit D/A
-        float       SustainTime;        // How long to hold the sustain level (-1 = hold with key down)
-        float       ReleaseTime;        // How long to devel 0 in mSec.
+        byte            Channel;            // I2C device index
+        uint16_t        CurrentLevel;       // Current setting 12 bit D/A
+        uint16_t        LimitLevel;         // Maximum value for channel as 12 bit D/A
+        float           AttackTime;         // Attack time in mSec.
+        float           DecayTime;          // Decay time to sustatin level in mSec.
+        uint16_t        DacayTargetLevel;   // Target for end of decay stage
+        uint16_t        SustainLevel;       // Sustain level in channel as 12 bit D/A
+        float           SustainTime;        // How long to hold the sustain level (-1 = hold with key down)
+        float           ReleaseTime;        // How long to devel 0 in mSec.
 
-        bool        Active;             // Mixer channel is active
-        bool        Change;             // Mixer in change state
-        float       Timer;              // Timer loaded with state time and descrimented
-        STATE       State;              // Current state of this mixer channel
+        bool            Active;             // Mixer channel is active
+        bool            Change;             // Mixer in change state
+        float           Timer;              // Timer loaded with state time and descrimented
+        OSC_N::STATE    State;              // Current state of this mixer channel
         String      Name;
         } MIXER_T;
 
@@ -86,16 +85,22 @@ public:
     void Begin           (int num, uint8_t first_device);
     bool Loop            (void);
     void SetTuning       (void);
-    void NoteSet         (uint8_t key, uint8_t velocity);
+    void NoteSet         (byte key, uint8_t velocity);
     void NoteClear       ();
     void Clear           (void);
-    void SetAttack       (uint8_t wave, float time);
-    void SetDecay        (uint8_t wave, float time);
-    void SetRelease      (uint8_t wave, float time);
-    void SetSustainLevel (uint8_t wave, float level_percent);
-    void SetSustainTime  (uint8_t wave, float time);
-    void SetMaxLevel     (uint8_t wave, float level_percent);
+    void SetAttackTime   (byte wave, float time);
+    void SetDecayTime    (byte wave, float time);
+    void SetSustainTime  (byte wave, float time);
+    void SetReleaseTime  (byte wave, float time);
+    void SetSustainLevel (byte wave, float level_percent);
+    void SetMaxLevel     (byte wave, float level_percent);
+
+    float GetAttackTime   (byte wave) { return (Mix[wave].AttackTime);   }
+    float GetDecayTime    (byte wave) { return (Mix[wave].DecayTime);    }
+    float GetSustainTime  (byte wave) { return (Mix[wave].SustainTime);  }
+    float GetReleaseTime  (byte wave) { return (Mix[wave].ReleaseTime);  }
+    float GetSustainLevel (byte wave) { return (Mix[wave].SustainLevel / (0.01 * MAXDA)); }
+    float GetLevelLimit   (byte wave) { return (Mix[wave].LimitLevel   / (0.01 * MAXDA)); }
     };
-}
 
 

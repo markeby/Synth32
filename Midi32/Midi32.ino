@@ -172,15 +172,15 @@ void setup (void)
         SynthFront.Begin ();
         for ( int z = 0;  z < 5;  z++ )
             {
-            SynthFront.SetSustainLevel (z, 100.0);
-            SynthFront.ChannelSelect(z, true);
+            SynthFront.SetOscSustainLevel (z, 100.0);
+            SynthFront.OscChannelSelect(z, true);
             }
-        SynthFront.SetAttack (30.0);
-        SynthFront.SetDecay (400.0);
-        SynthFront.SetRelease (30);
-        SynthFront.SetSustainTime (-1);
-        SynthFront.SetMaxLevel(0, 100.0);
-        printf("\t>>> Synth ready.\n\n\n");
+        SynthFront.SetOscAttackTime (30.0);
+        SynthFront.SetOscDecayTime (400.0);
+        SynthFront.SetOscReleaseTime (30);
+        SynthFront.SetOscSustainTime (-1);
+        SynthFront.SetOscMaxLevel (0, 100.0);
+        printf("\t>>> Synth ready.\n");
         }
     }
 
@@ -235,7 +235,6 @@ void AnalogDiagnostics (void)
 
         printf("Analog diag:  Device %d  Board %d, Channel V%c\n", lastdevice, lastdevice / 4, (lastdevice % 4) + 'A');
         I2cDevices.UpdateAnalog ();     // Update D/A ports
-
         }
     }
 
@@ -274,7 +273,7 @@ void loop (void)
             UsbWait = 0;
             UsbTimeoutCount += 1;
             if ( UsbTimeoutCount < 10 )
-                Serial << "\t** No USB device found for " << UsbTimeoutCount << " Seconds!" << endl;
+                Serial << "\t** No USB device response for " << UsbTimeoutCount << " Seconds!" << endl;
             }
         if ( UsbTimeoutCount >= 10 )
             {

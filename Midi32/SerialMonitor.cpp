@@ -28,16 +28,16 @@ inline void DispRunTime (void)
 //#######################################################################
 inline static void DumpTitle (void)
     {
-    Serial << endl << endl;
-    Serial << "####    Synth32 -- Midi32    ####" << endl;
-    Serial << "####  Midi eMusic Subsystem  ####" << endl;
+    Serial << endl;
+    Serial << "\t####    Synth32 -- Midi32    ####" << endl;
+    Serial << "\t####  Midi eMusic Subsystem  ####" << endl;
     }
 
 //#######################################################################
 const char* StateDebug (bool d)
     {
-    static const char* StateOn  = "\t<ON> ";
-    static const char* StateOff = "\t<off>";
+    static const char* StateOn  = " <ON> ";
+    static const char* StateOff = " <off>";
 
     if ( d )
         return (StateOn);
@@ -182,7 +182,6 @@ void MONITOR_C::MenuSel (void)
     switch ( InputMode )
         {
         case CMD:
-            Serial << s << endl;
             switch ( s )
                 {
                 case 's':
@@ -192,22 +191,22 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case '1':
                     DebugMidi  = !DebugMidi;
-                    Serial << "  MIDI " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
+                    Serial << "  MIDI debugging " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '2':
                     DebugDtoA  = !DebugDtoA;
-                    Serial << "  D/A " << (( DebugDtoA ) ? "Enabled" : "Disabled") << endl;
+                    Serial << "  D/A debugging " << (( DebugDtoA ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '3':
                     DebugOsc   = !DebugOsc;
-                    Serial << "  Oscillator " << (( DebugOsc ) ? "Enabled" : "Disabled") << endl;
+                    Serial << "  Oscillator debugging " << (( DebugOsc ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '4':
                     DebugSynth = !DebugSynth;
-                    Serial << "  Synth " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
+                    Serial << "  Synth debugging1 " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case 'S':
@@ -268,19 +267,18 @@ void MONITOR_C::MenuSel (void)
 void MONITOR_C::Menu (void)
     {
     DumpTitle ();
-    Serial << "    1 - Debug MIDI interface   " << StateDebug (DebugMidi) << endl;
-    Serial << "    2 - Debug D to A interface " << StateDebug (DebugDtoA) << endl;
-    Serial << "    3 - Debug Oscillators      " << StateDebug (DebugOsc) << endl;
-    Serial << "    4 - Debug Synth            " << StateDebug (DebugSynth) << endl;
-    Serial << "    q - D/A Diagnostic mode" << endl;
-    Serial << "    s - Dump process Stats" << endl;
-    Serial << "    t - Tuning mode" << endl;
-    Serial << "    Z - Test function" << endl;
-    Serial << "    S - SSID" << endl;
-    Serial << "    P - Password" << endl;
-    Serial << "    C - Clear Preferences" << endl;
-    Serial << "  F12 - Reset" << endl << endl;
-    Serial << "Select >";
+    Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
+    Serial << StateDebug (DebugDtoA)  << "\t2   - Debug D to A interface " << endl;
+    Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators      " << endl;
+    Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
+    Serial << "\tq   - D/A Diagnostic mode" << endl;
+    Serial << "\ts   - Dump process Stats" << endl;
+    Serial << "\tt   - Tuning mode" << endl;
+    Serial << "\tZ   - Test function" << endl;
+    Serial << "\tS   - SSID" << endl;
+    Serial << "\tP   - Password" << endl;
+    Serial << "\tC   - Clear Preferences" << endl;
+    Serial << "\tF12 - Reset" << endl << endl;
     }
 
 //#######################################################################

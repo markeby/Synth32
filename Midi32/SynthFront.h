@@ -6,15 +6,13 @@
 //#######################################################################
 #pragma once
 
-#define CHAN_COUNT 6    // number of synth oscillaotor/filter/control channels
-
 namespace SYNTH_FRONT
     {
     void  KeyDown (byte channel, byte key, byte velocity);
     void  KeyUp (byte channel, byte key, byte velocity);
 
         /*! Enumeration of MIDI types */
-    enum MidiType: uint8_t
+    enum MidiType: byte
         {
         InvalidType           = 0x00,    ///< For notifying errors
         NoteOff               = 0x80,    ///< Channel Message - Note Off
@@ -60,18 +58,19 @@ namespace SYNTH_FRONT
 class   SYNTH_FRONT_C
     {
 private:
-    uint8_t             DownKey;
-    uint8_t             DownVelocity;
+    byte                DownKey;
+    byte                DownVelocity;
     bool                DownTrigger;
-    uint8_t             UpKey;
-    uint8_t             UpVelocity;
+    byte                UpKey;
+    byte                UpVelocity;
     bool                UpTrigger;
     uint16_t            LastOp;
     bool                SelectWaveShapeVCO[OSC_MIXER_COUNT];
     int                 InTuning;
     int                 SetTuning;
     int                 SetDeviceIndex;
-
+    bool                InDispReset;
+    uint64_t            DispMessageTimer;
     MIDI_VALUE_MAP*     FaderMap;
     MIDI_VALUE_MAP*     KnobMap;
     MIDI_SWITCH_MAP*    SwitchMap;
@@ -80,24 +79,25 @@ private:
     String Selected (void);
 
 public:
-          SYNTH_FRONT_C     (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_VALUE_MAP* pitch_map, MIDI_SWITCH_MAP* switch_map);
-    void  Begin             (void);
-    void  DisplayCommanded  (byte cmd);
-    void  Loop              (void);
-    void  Controller        (byte chan, byte type, byte value);
-    void  PitchBend         (byte chan, int value);
-    void  ChannelSelect     (uint8_t chan, bool state);
-    void  SelectWaveLFO     (uint8_t ch, uint8_t state);
-    void  FreqSelectLFO     (uint8_t ch, float val);
-    void  PitchBend         (float val);
-    void  LFOrange          (bool up);
-    void  SetLevelLFO       (float data);
-    void  SetMaxLevel       (uint8_t wave, float data);
-    void  SetAttack         ( float data);
-    void  SetDecay          (float data);
-    void  SetSustainLevel   (uint8_t ch, float data);
-    void  SetSustainTime    (float data);
-    void  SetRelease        (float data);
+          SYNTH_FRONT_C         (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_VALUE_MAP* pitch_map, MIDI_SWITCH_MAP* switch_map);
+    void  Begin                 (void);
+    void  DispMessageHandler    (byte cmd);
+    void  Loop                  (void);
+    void  Controller            (byte chan, byte type, byte value);
+    void  PitchBend             (byte chan, int value);
+    void  OscChannelSelect      (byte chan, bool state);
+    void  SelectWaveLFO         (byte ch, byte state);
+    void  FreqSelectLFO         (byte ch, float val);
+    void  PitchBend             (float val);
+    void  LFOrange              (bool up);
+    void  SetLevelLFO           (float data);
+    void  SetOscMaxLevel        (byte wave, float data);
+    void  SetOscAttackTime      (float data);
+    void  SetOscDecayTime       (float data);
+    void  SetOscSustainLevel    (byte ch, float data);
+    void  SetOscSustainTime     (float data);
+    void  SetOscReleaseTime     (float data);
+    void  DISP32UpdateAll       (void);
 
     //#######################################################################
     inline void  KeyDown (byte chan, byte key, byte velocity)

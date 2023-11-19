@@ -67,39 +67,4 @@ bool SYNTH_CHANNEL_C::NoteClear (uint8_t key)
     return true;
     }
 
-//#####################################################################
-void SYNTH_CHANNEL_C::SetMaxLevel (int wave, float data)
-    {
-    Osc.SetMaxLevel (wave, data);
-    }
-
-//#####################################################################
-void SYNTH_CHANNEL_C::SetAttack (int wave, float data)
-    {
-    Osc.SetAttack (wave, data);
-    }
-
-//#####################################################################
-void SYNTH_CHANNEL_C::SetDecay (int wave, float data)
-    {
-    Osc.SetDecay (wave, data);
-    }
-
-//#####################################################################
-void SYNTH_CHANNEL_C::SetSustainLevel (int wave, float data)
-    {
-    Osc.SetSustainLevel (wave, data);
-    }
-
-//#####################################################################
-void SYNTH_CHANNEL_C::SetSustainTime (int wave, float data)
-    {
-    Osc.SetSustainTime (wave, data);
-    }
-
-//#####################################################################
-void SYNTH_CHANNEL_C::SetRelease (int wave, float data)
-    {
-    Osc.SetRelease (wave, data);
-    }
 

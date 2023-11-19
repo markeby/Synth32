@@ -8,10 +8,11 @@
 #include "Settings.h"
 #include "SerialMonitor.h"
 #include "WebOTA.h"
-#include "SynthFront.h"
+#include "DispFrontEnd.h"
+#include "Graphics.h"
 
 //#######################################################################
-SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, PitchMapArray, SwitchMapArray);
+DISP_FRONT_END_C  DispFront;
 
 bool       SystemError         = false;
 bool       SystemFail          = false;
@@ -19,13 +20,8 @@ float      DeltaTime           = 0;
 int        DeltaMicro          = 0;             // micro second interval.
 float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
-bool       DebugMidi           = false;
-bool       DebugDtoA           = false;
-bool       DebugOsc            = false;
-bool       DebugSynth          = false;
-
-bool       AnalogDiagEnabled   = false;
-int        AnalogDiagDevice    = 0;
+bool       DebugInterface      = true;
+bool       DebugGraphics       = true;
 
 // this is used to add a task to core 0
 //TaskHandle_t  Core0TaskHnd;
@@ -111,11 +107,15 @@ void setup (void)
     printf ("\t>>> Startup OTA...\n");
     UpdateOta.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
+    printf ("\t>>> Startup Graphics...\n");
+    Graphics.Begin ();
+
+
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
-    SynthFront.Begin ();
+    DispFront.Begin ();
 
-    printf ("\t>>> System startup complete.\n\n\n");
+    printf ("\t>>> System startup complete.\n\n");
     }
 
 //#######################################################################
@@ -167,11 +167,11 @@ void loop (void)
         if ( UpdateOta.WaitWiFi () )
             {
             UpdateOta.Begin ();
-            SynthFront.SendReset ();
+            DispFront.SendReset ();
             }
 
         }
-    SynthFront.Loop ();
+    DispFront.Loop ();
     Monitor.Loop ();
     }
 

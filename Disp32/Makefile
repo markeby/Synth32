@@ -11,9 +11,11 @@ DOIT          := 1
 # Base package name
 PROJECT       := Disp32.ino
 # header files
-INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h SynthFront.h 
+INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h
+# Shared files directory
+SHARED        := ../Common
 # source files
-SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp SynthFront.cpp SynthConfig.cpp 
+SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
 # serial port for uploading
 DEFAULT_PORT  := COM4
 # IP address for uploading
@@ -47,7 +49,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log 
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED)
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 
@@ -95,6 +97,6 @@ target : $(TARGET)
 	$(UPLOAD)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
-	if not exist $(OUTPUT) (mkdir $(OUTPUT))
+	@if not exist $(OUTPUT) (mkdir $(OUTPUT))
 	$(ARDUNIO) $(COMPILE) $(ESP32)
 
