@@ -62,16 +62,16 @@ private:
     VCA_T     Vca[OSC_MIXER_COUNT];
 
     void  ClearState (void);
-    void  SetLevel  (byte wave, uint16_t level);
+    void  SetLevel  (byte ch, byte data);
 
 public:
          SYNTH_LFO_C     (void);
     void Begin           (int num, byte first_device);
     void Clear           (void);
-    void SetFreq         (float percent);
-    void SetMaxLevel     (byte wave, float level_percent);
-    void Level           (float percent);
-    void Select          (byte wave, bool sel);
+    void SetFreq         (byte data);
+    void SetMaxLevel     (byte ch, byte data);
+    void Level           (byte data);
+    void Select          (byte ch, bool sel);
     void PitchBend       (float percent);
     void Range           (bool up);
 

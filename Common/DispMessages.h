@@ -34,6 +34,7 @@ namespace DISP_MESSAGE_N
         SUSTAIN_VOL,
       // RENDER
         RENDER_ADSR,
+        INIT,
         LAST
         };
     }

@@ -77,8 +77,7 @@ typedef struct
     {
     byte        Channel;
     const char* desc;
-    void       (*CallBack)(byte chan, float control);
-    float       Scaler;
+    void       (*CallBack)(byte chan, byte data);
     }  MIDI_VALUE_MAP;
 
 typedef struct

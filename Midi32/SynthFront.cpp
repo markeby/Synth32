@@ -57,7 +57,7 @@ namespace ___StuffForThisModuleOnly___
         {
         SynthFront.Controller (chan, type, value);
         if ( DebugMidi )
-            printf ("Chan %2.2X  type %2.2X  value %2.2X ", chan, type, value);
+            printf ("Chan %2.2X  type %2.2X  value %2.2X\n", chan, type, value);
         }
 
     //###################################################################
@@ -90,13 +90,12 @@ String SYNTH_FRONT_C::Selected ()
     }
 
 //#####################################################################
-SYNTH_FRONT_C::SYNTH_FRONT_C (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_VALUE_MAP* pitch_map, MIDI_SWITCH_MAP* switch_map)
+SYNTH_FRONT_C::SYNTH_FRONT_C (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map)
     {
     SetDeviceIndex   = first_device;
     FaderMap         = fader_map;
     KnobMap          = knob_map;
     SwitchMap        = switch_map;
-    PitchMap         = pitch_map;
     DownKey          = 0;
     DownTrigger      = false;
     DownVelocity     = 0;
@@ -298,22 +297,17 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
         {
         case 0x01:
             // mod wheel
-            if ( PitchMap[0].CallBack != nullptr )
+            Lfo.Level (value);
+            if ( DebugSynth )
                 {
-                scaler = value * PitchMap[chan].Scaler;
-                PitchMap[0].CallBack (0, scaler);
-                if ( DebugSynth )
-                    {
-                    printf ("\r[s] %s > %f    ", PitchMap[0].desc, scaler);
-                    fflush(stdout);
-                    }
+                printf ("\r[s] modulation = %f    ", scaler);
+                fflush(stdout);
                 }
             break;
         case 0x07:          // Faders controls
             if ( FaderMap[chan].CallBack != nullptr )
                 {
-                scaler = value * FaderMap[chan].Scaler;
-                FaderMap[chan].CallBack (chan, scaler);
+                FaderMap[chan].CallBack (chan, value);
                 if ( DebugSynth )
                     {
                     printf ("\r[s] %s > %f    ", FaderMap[chan].desc, scaler);
@@ -324,8 +318,7 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
         case 0x0a:          // Rotatation controls
             if ( KnobMap[chan].CallBack != nullptr )
                 {
-                scaler = value * KnobMap[chan].Scaler;
-                KnobMap[chan].CallBack (chan, scaler);
+                KnobMap[chan].CallBack (chan, value);
                 if ( DebugSynth )
                     {
                     printf ("\r[s] %s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, scaler);
@@ -370,65 +363,102 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::PitchBend (byte chan, int value)
+void SYNTH_FRONT_C::PitchBend (byte ch, int value)
     {
-    if ( PitchMap[1].CallBack != nullptr )
+    float scaler = (value + 16384) * BEND_SCALER;
+    Lfo.PitchBend (scaler);
+    if ( DebugSynth )
+        Serial << "\r[s] Pitch bend > " << scaler << "    ";
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SetOscMaxLevel (byte ch, byte data)
+    {
+    float val = (float)data * PRS_SCALER;
+    for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
+        pChan[zc]->pOsc()->SetMaxLevel (ch, val);
+    MidiAdsr[ch].MaxLevel = data;
+    SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, data);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SetOscAttackTime (byte data)
+    {
+    float dtime = data * TIME_MULT;
+    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
         {
-        float scaler = (value + 16384) * PitchMap[1].Scaler;
-        PitchMap[1].CallBack (1, scaler);
-        if ( DebugSynth )
-            Serial << "\r[s] Pitch bend > " << scaler << "    ";
+        if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].AttackTime = data;
+            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
+                pChan[zc]->pOsc()->SetAttackTime (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, data);
+            }
         }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetOscMaxLevel (byte wave, float data)
+void SYNTH_FRONT_C::SetOscDecayTime (byte data)
     {
+    float dtime = data * TIME_MULT;
+    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
+        {
+        if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].DecayTime = data;
+            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
+                pChan[zc]->pOsc()->SetDecayTime (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, data);
+            }
+        }
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SetOscSustainLevel (byte ch, byte data)
+    {
+    float val = (float)data * PRS_SCALER;
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-        pChan[zc]->pOsc()->SetMaxLevel (wave, data);
+        pChan[zc]->pOsc()->SetSustainLevel (ch, val);
+    MidiAdsr[ch].SustainLevel = data;
+    SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, data);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetOscAttackTime (float data)
+void SYNTH_FRONT_C::SetOscSustainTime (byte data)
     {
+    float dtime;
+
+    if ( data == 0 )
+        dtime = -1;
+    else
+        float dtime = data * TIME_MULT;
+
     for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
+        {
         if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].SustainTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                pChan[zc]->pOsc()->SetAttackTime (zs, data);
+                pChan[zc]->pOsc()->SetSustainTime (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, data);
+            }
+        }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetOscDecayTime (float data)
+void SYNTH_FRONT_C::SetOscReleaseTime (byte data)
     {
+    float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
+        {
         if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].ReleaseTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                pChan[zc]->pOsc()->SetDecayTime (zs, data);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SetOscSustainLevel (byte ch, float data)
-    {
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-        pChan[zc]->pOsc()->SetSustainLevel (ch, data);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SetOscSustainTime (float data)
-    {
-    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
-        if ( SelectWaveShapeVCO[zs] )
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                pChan[zc]->pOsc()->SetSustainTime (zs, data);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SetOscReleaseTime (float data)
-    {
-    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
-        if ( SelectWaveShapeVCO[zs] )
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                pChan[zc]->pOsc()->SetReleaseTime (zs, data);
+                pChan[zc]->pOsc()->SetReleaseTime (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,  data);
+            }
+        }
     }
 
 //#####################################################################
@@ -436,21 +466,16 @@ void SYNTH_FRONT_C::DISP32UpdateAll ()
     {
     byte zd;
 
+    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::INIT, (byte)(DISP_MESSAGE_N::SHAPE_C::ALL));
     for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SELECTED, SelectWaveShapeVCO[z]);
-        zd = pChan[0]->pOsc()->GetLevelLimit   (z) / PERS_SCALER;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, zd);
-        zd = pChan[0]->pOsc()->GetAttackTime  (z) / (float)TIME_MULT;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, zd);
-        zd = pChan[0]->pOsc()->GetDecayTime   (z) / (float)TIME_MULT;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, zd);
-        zd = pChan[0]->pOsc()->GetSustainTime (z) / (float)TIME_MULT;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, zd);
-        zd = pChan[0]->pOsc()->GetReleaseTime (z) / (float)TIME_MULT;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, zd);
-        zd = pChan[0]->pOsc()->GetSustainLevel (z) / PERS_SCALER;
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, zd);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, MidiAdsr[z].MaxLevel);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, MidiAdsr[z].AttackTime);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, MidiAdsr[z].DecayTime);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, MidiAdsr[z].SustainTime);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, MidiAdsr[z].ReleaseTime);
+        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, MidiAdsr[z].SustainLevel);
         }
     SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::RENDER_ADSR, (byte)(DISP_MESSAGE_N::SHAPE_C::ALL));
     }
@@ -463,15 +488,9 @@ void SYNTH_FRONT_C::SelectWaveLFO (byte ch, byte state)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::FreqSelectLFO (byte ch, float val)
+void SYNTH_FRONT_C::FreqSelectLFO (byte ch, byte data)
     {
-    Lfo.SetFreq (val);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::PitchBend (float val)
-    {
-    Lfo.PitchBend (val);
+    Lfo.SetFreq (data);
     }
 
 //#######################################################################
@@ -481,8 +500,8 @@ void SYNTH_FRONT_C::LFOrange (bool up)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetLevelLFO (float data)
+void SYNTH_FRONT_C::SetLevelLFO (byte data)
     {
-    Lfo.Level (data);
+    Lfo.Level (data * PERS_SCALER);
     }
 

@@ -8,16 +8,22 @@
 ############################################
 # default platform
 DOIT          := 1
+
 # Base package name
 PROJECT       := Disp32.ino
+
 # header files
-INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h
-# Shared files directory
 SHARED        := ../Common
+
+# Shared files directory
+INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
+                 $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
 SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
+
 # serial port for uploading
 DEFAULT_PORT  := COM4
+
 # IP address for uploading
 UPLOAD_OTA    := 192.168.1.4
 
@@ -94,7 +100,7 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
-	$(UPLOAD)
+	@$(UPLOAD)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	@if not exist $(OUTPUT) (mkdir $(OUTPUT))

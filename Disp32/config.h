@@ -50,7 +50,6 @@ extern float    AverageDeltaTime;
 //    Synth specific constants
 //#################################################
 #define MIDI_PORT           0                           // sometime referred to as cable number
-#define OSC_MIXER_COUNT     5
 #define FULL_KEYS           128
 #define DA_RANGE            4096
 #define NOTES_PER_OCTAVE    12

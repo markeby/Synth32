@@ -104,6 +104,7 @@ void setup (void)
     digitalWrite (GREEN_PIN, HIGH);         // Green off
     digitalWrite (HEARTBEAT_PIN, LOW);      // Blue hearbeat LED off
 
+
     printf ("\t>>> Startup OTA...\n");
     UpdateOta.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
@@ -113,7 +114,6 @@ void setup (void)
 
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
-    DispFront.Begin ();
 
     printf ("\t>>> System startup complete.\n\n");
     }
@@ -167,6 +167,7 @@ void loop (void)
         if ( UpdateOta.WaitWiFi () )
             {
             UpdateOta.Begin ();
+            DispFront.Begin ();
             DispFront.SendReset ();
             }
 

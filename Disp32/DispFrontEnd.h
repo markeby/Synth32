@@ -14,10 +14,7 @@
 class   DISP_FRONT_END_C
     {
 private:
-    uint16_t            LastOp;
-    int                 InTuning;
-    int                 SetTuning;
-    int                 SetDeviceIndex;
+    bool    DisplayInit;
 
 public:
     void  SendControl       (void);
@@ -25,11 +22,11 @@ public:
     void  Begin             (void);
     void  SendReset         (void);
     void  Loop              (void);
-    void  Controller        (byte chan, byte type, byte value);
-    void  ChannelSelect     (byte chan, bool state);
+    void  Controller        (byte ch, byte type, byte value);
+    void  ChannelSelect     (byte ch, bool state);
+    void  Display           (byte ch);
     };
 
 //#################################################
-
 extern DISP_FRONT_END_C DispFront;        // Synth Display front end class
 

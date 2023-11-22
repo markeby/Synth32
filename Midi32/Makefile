@@ -10,16 +10,21 @@
 DOIT          := 1
 # Base package name
 PROJECT       := Midi32.ino
-# header files
-INCLUDES      := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h \
-		 SynthChannel.h Osc.h LFOosc.h Test.h
+
 # Shared files directory
 SHARED        := ../Common
+
+# header files
+INCLUDES      := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h SynthChannel.h \
+		 Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+
 # source files
 SOURCES       := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp \
 		 SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
+
 # serial port for uploading
 DEFAULT_PORT  := COM3
+
 # IP address for uploading
 UPLOAD_OTA    := 192.168.1.3
 
@@ -97,7 +102,7 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
-	$(UPLOAD)
+	@$(UPLOAD)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	if not exist $(OUTPUT) (mkdir $(OUTPUT))

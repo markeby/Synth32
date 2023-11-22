@@ -201,6 +201,10 @@ void MONITOR_C::MenuSel (void)
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
+                case '0':
+                    DispFront.SendReset ();
+                    Mode (MENU);
+                    break;
                 case 'Z':
                     Serial << "        TEST" << endl;
                     Mode (MENU);
@@ -221,6 +225,7 @@ void MONITOR_C::Menu (void)
     Serial << StateDebug (DebugInterface) << "\t1 - Debug interface        " << endl;
     Serial << StateDebug (DebugGraphics)  << "\t2 - Debug graphics         " << endl;
     Serial << "\ts - Dump process Stats" << endl;
+    Serial << "\t0 - Update request" << endl;
     Serial << "\tZ - Test function" << endl;
     Serial << "\tS - SSID" << endl;
     Serial << "\tP - Password" << endl;

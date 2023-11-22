@@ -11,12 +11,11 @@
 #include "Graphics.h"
 
 static  const char* MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
-static         int  MixerColor[] = { ILI9341_GREEN, ILI9341_RED, ILI9341_PURPLE, ILI9341_CYAN, ILI9341_OLIVE };
+extern  int  OscMixerColor[OSC_MIXER_COUNT];
 
 //#######################################################################
 SYNTH_DATA_C::SYNTH_DATA_C ()
     {
-
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         MIXER_T& m = Mix[z];
@@ -29,9 +28,10 @@ SYNTH_DATA_C::SYNTH_DATA_C ()
         m.SustainTime      = 0;
         m.ReleaseTime      = 0;
         m.Selected         = false;
-        m.Color            = MixerColor[z];
+        m.Color            = OscMixerColor[z];
+        InitSaveVectors (z);
         }
     }
 
 //#######################################################################
-SYNTH_DATA_C  SynthData;
+SYNTH_DATA_C  SynthD;

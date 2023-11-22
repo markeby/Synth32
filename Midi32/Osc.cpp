@@ -143,7 +143,7 @@ void SYNTH_OSC_C::SetReleaseTime (uint8_t wave, float time)
 //#######################################################################
 void SYNTH_OSC_C::SetSustainLevel (uint8_t wave, float level_percent)
     {
-    Mix[wave].SustainLevel = (int)((level_percent * 0.01) * (float)MAXDA);
+    Mix[wave].SustainLevel = (int)(level_percent * (float)MAXDA);
     if ( DebugOsc )
         printf("[VCO %d] %s Sustain level > %d\n", Number, Mix[wave].Name, Mix[wave].SustainLevel);
     }
@@ -159,7 +159,7 @@ void SYNTH_OSC_C::SetSustainTime (uint8_t wave, float time)
 //#######################################################################
 void SYNTH_OSC_C::SetMaxLevel (uint8_t wave, float level_percent)
     {
-    Mix[wave].LimitLevel = (int)((level_percent * 0.01) * (float)MAXDA);
+    Mix[wave].LimitLevel = (int)(level_percent * (float)MAXDA);
     if ( DebugOsc )
         printf("[VCO %d] %s Level limit > %d\n", Number, Mix[wave].Name, Mix[wave].LimitLevel );
     }

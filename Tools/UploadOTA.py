@@ -12,6 +12,7 @@ if len (sys.argv) < 3:
 File = sys.argv[1]
 Url  = f'http://{sys.argv[2]}/update'
 
+print (f'## Uploading to {sys.argv[2]}', flush=True)
 with open(File, 'rb') as fi:
     data = fi.read()
     md5 = hashlib.md5(data).hexdigest()

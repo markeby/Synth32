@@ -8,16 +8,14 @@
 //
 #pragma once
 
-#include <Adafruit_ILI9341.h>
-
 class GRPH_C
     {
 private:
     bool                Active;
     int                 FullTime;
-    Adafruit_ILI9341*   pDisp;
 
     void    DrawGrid    (void);
+    void    DeleteADSR  (byte ch);
 
 public:
             GRPH_C      (void);

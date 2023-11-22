@@ -94,13 +94,6 @@ public:
     void SetReleaseTime  (byte wave, float time);
     void SetSustainLevel (byte wave, float level_percent);
     void SetMaxLevel     (byte wave, float level_percent);
-
-    float GetAttackTime   (byte wave) { return (Mix[wave].AttackTime);   }
-    float GetDecayTime    (byte wave) { return (Mix[wave].DecayTime);    }
-    float GetSustainTime  (byte wave) { return (Mix[wave].SustainTime);  }
-    float GetReleaseTime  (byte wave) { return (Mix[wave].ReleaseTime);  }
-    float GetSustainLevel (byte wave) { return (Mix[wave].SustainLevel / (0.01 * MAXDA)); }
-    float GetLevelLimit   (byte wave) { return (Mix[wave].LimitLevel   / (0.01 * MAXDA)); }
     };
 
 

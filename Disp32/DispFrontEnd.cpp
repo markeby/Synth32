@@ -27,6 +27,7 @@ void DISP_FRONT_END_C::SendReset ()
 //#####################################################################
 DISP_FRONT_END_C::DISP_FRONT_END_C ()
     {
+    DisplayInit = true;
     }
 
 //#######################################################################
@@ -39,6 +40,13 @@ void DISP_FRONT_END_C::Begin ()
 //#######################################################################
 void DISP_FRONT_END_C::ChannelSelect (uint8_t chan, bool state)
     {
+    }
+
+//#######################################################################
+void DISP_FRONT_END_C::Display (byte ch)
+    {
+    if ( !DisplayInit )
+        Graphics.ShowADSR (ch);
     }
 
 //#######################################################################
@@ -56,22 +64,30 @@ void DISP_FRONT_END_C::Loop ()
         if ( z == 3 )
             {
             byte status = buf[0] & 0xF0;
-            byte wave   = buf[0] & 0x0F;
+            byte ch     = buf[0] & 0x0F;
             byte effect = buf[1];
             byte value  = buf[2];
 
             if ( DebugInterface )
-                printf("[i] status %2.2X  wave %2.2X  effect %2.2X  value %2.2X\n", status, wave, effect, value);
+                printf("\n[i]status = %2.2X  channel = %2.2X  effect = %2.2X  value = %2.2X  Command: ", status, ch, effect, value);
 
             switch ( (CMD_C)status )
                 {
                 case CMD_C::CONTROL:
-                    this->Controller (wave, effect, value);
+                    this->Controller (ch, effect, value);
                     break;
                 case CMD_C::RENDER:
                     switch ( (EFFECT_C)effect )
                         {
+                        case EFFECT_C::INIT:
+                            if ( DebugInterface )
+                                printf("Initialize phase");
+                            DisplayInit = true;
+                            break;
                         case EFFECT_C::RENDER_ADSR:
+                            DisplayInit = false;
+                            if ( DebugInterface )
+                                printf("Render now\n");
                             Graphics.ShowADSR (value);
                             break;
                         default:
@@ -86,30 +102,51 @@ void DISP_FRONT_END_C::Loop ()
     }
 
 //#######################################################################
-void DISP_FRONT_END_C::Controller (byte wave, byte effect, byte value)
+void DISP_FRONT_END_C::Controller (byte ch, byte effect, byte value)
     {
     switch ( (EFFECT_C)effect )
         {
         case EFFECT_C::SELECTED:
-            SynthData.SetSelected (wave, (bool)value);
+            SynthD.SetSelected (ch, (bool)value);
+            if ( DebugInterface )
+                printf("Select");
+            this->Display (ch);
             break;
         case EFFECT_C::LIMIT_VOL:
-            SynthData.SetLimitLevel (wave, value * PERS_SCALER);
+            SynthD.SetLimitLevel (ch, value);
+            if ( DebugInterface )
+                printf("Max Level");
+            this->Display (ch);
             break;
         case EFFECT_C::ATTACK_TIME:
-            SynthData.SetAttackTime (wave, value * TIME_MULT);
+            SynthD.SetAttackTime (ch, value);
+            if ( DebugInterface )
+                printf("Attack time");
+            this->Display (ch);
             break;
         case EFFECT_C::DECAY_TIME:
-            SynthData.SetDecayTime (wave, value * TIME_MULT);
+            SynthD.SetDecayTime (ch, value);
+            if ( DebugInterface )
+                printf("Decay time");
+            this->Display (ch);
             break;
         case EFFECT_C::SUSTAIN_TIME:
-            SynthData.SetSustainTime (wave, value * TIME_MULT);
+            SynthD.SetSustainTime (ch, value);
+            if ( DebugInterface )
+                printf("Sustain time");
+            this->Display (ch);
             break;
         case EFFECT_C::RELEASE_TIME:
-            SynthData.SetReleaseTime (wave, value * TIME_MULT);
+            SynthD.SetReleaseTime (ch, value);
+            if ( DebugInterface )
+                printf("Release time");
+            this->Display (ch);
             break;
         case EFFECT_C::SUSTAIN_VOL:
-            SynthData.SetSustainLevel (wave, value * PERS_SCALER);
+            SynthD.SetSustainLevel (ch, value);
+            if ( DebugInterface )
+                printf("Sustain level");
+            this->Display (ch);
             break;
         default:
             break;

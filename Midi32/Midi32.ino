@@ -40,7 +40,7 @@ I2C_LOCATION_T  BusI2C[] =
 
 //#######################################################################
 I2C_INTERFACE_C I2cDevices (BusI2C);
-SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, PitchMapArray, SwitchMapArray);
+SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, SwitchMapArray);
 
 bool       SystemError         = false;
 bool       SystemFail          = false;
@@ -172,14 +172,14 @@ void setup (void)
         SynthFront.Begin ();
         for ( int z = 0;  z < 5;  z++ )
             {
-            SynthFront.SetOscSustainLevel (z, 100.0);
+            SynthFront.SetOscSustainLevel (z, 100);
             SynthFront.OscChannelSelect(z, true);
             }
-        SynthFront.SetOscAttackTime (30.0);
-        SynthFront.SetOscDecayTime (400.0);
-        SynthFront.SetOscReleaseTime (30);
-        SynthFront.SetOscSustainTime (-1);
-        SynthFront.SetOscMaxLevel (0, 100.0);
+        SynthFront.SetOscAttackTime (3);
+        SynthFront.SetOscDecayTime (12);
+        SynthFront.SetOscReleaseTime (9);
+        SynthFront.SetOscSustainTime (0);
+        SynthFront.SetOscMaxLevel (0, 100);
         printf("\t>>> Synth ready.\n");
         }
     }

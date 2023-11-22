@@ -74,12 +74,24 @@ private:
     MIDI_VALUE_MAP*     FaderMap;
     MIDI_VALUE_MAP*     KnobMap;
     MIDI_SWITCH_MAP*    SwitchMap;
-    MIDI_VALUE_MAP*     PitchMap;
+
+    typedef struct
+        {
+        byte    MaxLevel;
+        byte    AttackTime;
+        byte    DecayTime;
+        byte    SustainLevel;
+        byte    SustainTime;
+        byte    ReleaseTime;
+        }
+    MIDI_ADSR_T;
+
+    MIDI_ADSR_T     MidiAdsr[OSC_MIXER_COUNT];
 
     String Selected (void);
 
 public:
-          SYNTH_FRONT_C         (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_VALUE_MAP* pitch_map, MIDI_SWITCH_MAP* switch_map);
+          SYNTH_FRONT_C         (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map);
     void  Begin                 (void);
     void  DispMessageHandler    (byte cmd);
     void  Loop                  (void);
@@ -87,16 +99,15 @@ public:
     void  PitchBend             (byte chan, int value);
     void  OscChannelSelect      (byte chan, bool state);
     void  SelectWaveLFO         (byte ch, byte state);
-    void  FreqSelectLFO         (byte ch, float val);
-    void  PitchBend             (float val);
+    void  FreqSelectLFO         (byte ch, byte data);
     void  LFOrange              (bool up);
-    void  SetLevelLFO           (float data);
-    void  SetOscMaxLevel        (byte wave, float data);
-    void  SetOscAttackTime      (float data);
-    void  SetOscDecayTime       (float data);
-    void  SetOscSustainLevel    (byte ch, float data);
-    void  SetOscSustainTime     (float data);
-    void  SetOscReleaseTime     (float data);
+    void  SetLevelLFO           (byte data);
+    void  SetOscMaxLevel        (byte ch, byte data);
+    void  SetOscAttackTime      (byte data);
+    void  SetOscDecayTime       (byte data);
+    void  SetOscSustainLevel    (byte ch, byte data);
+    void  SetOscSustainTime     (byte data);
+    void  SetOscReleaseTime     (byte data);
     void  DISP32UpdateAll       (void);
 
     //#######################################################################
@@ -120,7 +131,6 @@ public:
         {
         SetTuning = setting;
         }
-
     };
 
 //#################################################

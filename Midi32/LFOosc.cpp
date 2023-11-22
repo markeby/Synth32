@@ -5,6 +5,8 @@
 // Date:       9/18/2023
 //#######################################################################
 #include <Arduino.h>
+#include <SynthCommon.h>
+
 #include "config.h"
 #include "LFOosc.h"
 
@@ -32,9 +34,9 @@ void SYNTH_LFO_C::ClearState ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetMaxLevel (uint8_t wave, float level_percent)
+void SYNTH_LFO_C::SetMaxLevel (byte wave, byte data)
     {
-    int z = (int)((level_percent * 0.01) * (float)MAXDA);
+    int z = (int)((data * 0.007874) * (float)MAXDA);
     Vca[wave].MaximumLevel =  (z > MAXDA ) ? MAXDA : z;
 
     if ( DebugOsc )
@@ -42,25 +44,24 @@ void SYNTH_LFO_C::SetMaxLevel (uint8_t wave, float level_percent)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetLevel (uint8_t wave, uint16_t level)
+void SYNTH_LFO_C::SetLevel (byte ch, byte data)
     {
-    uint16_t z;
+    int z = (int)((data * 0.007874) * (float)MAXDA);
+    z = (z > Vca[ch].MaximumLevel ) ? Vca[ch].MaximumLevel : z;
 
-    z = (level > Vca[wave].MaximumLevel ) ? Vca[wave].MaximumLevel : level;
-
-    if ( z != Vca[wave].CurrentLevel )
+    if ( z != Vca[ch].CurrentLevel )
         {
-        Vca[wave].CurrentLevel = z;
-        I2cDevices.D2Analog (Vca[wave].Channel,  z);
+        Vca[ch].CurrentLevel = z;
+        I2cDevices.D2Analog (Vca[ch].Channel,  z);
         Update = true;
         if ( DebugOsc )
-            Serial << "\r[LFO]" << Vca[wave].Name << "set > " << z;
+            Serial << "\r[LFO]" << Vca[ch].Name << "set > " << z;
         }
     }
 
 //#######################################################################
 //#######################################################################
-void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
+void SYNTH_LFO_C::Begin (int num, byte first_device)
     {
     Number = num;
     // D/A configuration
@@ -109,21 +110,20 @@ void SYNTH_LFO_C::Range (bool up)
     else
         {
         if ( FreqDiv > 1 )
-                 FreqDiv >>= 1
-            ;
+                 FreqDiv >>= 1;
         }
     SetFreq (CurrentPercent);
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetFreq (float percent)
+void SYNTH_LFO_C::SetFreq (byte data)
     {
-    CurrentPercent = percent;
-    int z = ((percent * 0.01) * MAXDA) / FreqDiv;
+    CurrentPercent = data * PRS_SCALER;
+    int z = (CurrentPercent * MAXDA) / FreqDiv;
     I2cDevices.D2Analog (OscChannel, z);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     if ( DebugSynth )
-        printf ("\r[LFO] %f%", percent);
+        printf ("\r[LFO] %f%", CurrentPercent);
     }
 
 //#######################################################################
@@ -146,9 +146,9 @@ void SYNTH_LFO_C::Select (uint8_t wave, bool sel)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Level (float percent)
+void SYNTH_LFO_C::Level (byte data)
     {
-    CurrentLevel = (percent * 0.01) * MAXDA;
+    CurrentLevel = data * PRS_SCALER * MAXDA;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
         {
         if ( Vca[z].Select )
@@ -166,9 +166,9 @@ void SYNTH_LFO_C::Level (float percent)
 //#######################################################################
 void SYNTH_LFO_C::PitchBend (float percent)
     {
-        if ( percent < 1.0 )
-            percent = 1.0;
-        I2cDevices.D2Analog(BendChannel, (percent * 0.01) * (float)MAXDA);
+    if ( percent < 1.0 )
+        percent = 1.0;
+    I2cDevices.D2Analog(BendChannel, (percent * 0.01) * (float)MAXDA);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
