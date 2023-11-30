@@ -22,7 +22,7 @@ INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Gra
 SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
 
 # serial port for uploading
-DEFAULT_PORT  := COM4
+DEFAULT_PORT  := COM5
 
 # IP address for uploading
 UPLOAD_OTA    := 192.168.1.4

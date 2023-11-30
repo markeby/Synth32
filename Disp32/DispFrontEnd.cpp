@@ -113,7 +113,7 @@ void DISP_FRONT_END_C::Controller (byte ch, byte effect, byte value)
             this->Display (ch);
             break;
         case EFFECT_C::LIMIT_VOL:
-            SynthD.SetLimitLevel (ch, value);
+            SynthD.SetMaxLevel (ch, value);
             if ( DebugInterface )
                 printf("Max Level");
             this->Display (ch);

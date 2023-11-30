@@ -52,7 +52,6 @@ extern bool     SystemFail;
 extern float    DeltaTime;
 extern uint64_t RunTime;
 extern float    AverageDeltaTime;
-extern bool     UsbOnline;
 
 //#################################################
 //    Synth specific constants

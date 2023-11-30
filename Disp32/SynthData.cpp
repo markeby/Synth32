@@ -21,12 +21,12 @@ SYNTH_DATA_C::SYNTH_DATA_C ()
         MIXER_T& m = Mix[z];
 
         m.Name             = MixerNames[z];
-        m.LimitLevel       = 0;
-        m.AttackTime       = 0;
-        m.DecayTime        = 0;
-        m.SustainLevel     = 0;
-        m.SustainTime      = 0;
-        m.ReleaseTime      = 0;
+        m.LimitLevel       = 0.0;
+        m.AttackTime       = 0.0;
+        m.DecayTime        = 0.0;
+        m.SustainLevel     = 0.0;
+        m.SustainTime      = 0.0;
+        m.ReleaseTime      = 0.0;
         m.Selected         = false;
         m.Color            = OscMixerColor[z];
         InitSaveVectors (z);

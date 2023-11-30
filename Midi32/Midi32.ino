@@ -49,13 +49,10 @@ float      DeltaTime           = 0;             // micro second interval.
 int        DeltaMicro          = 0;
 float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
-int        UsbWait             = 0;
-int        UsbTimeoutCount     = 0;
-bool       UsbOnline           = true;
 bool       DebugMidi           = false;
 bool       DebugDtoA           = false;
 bool       DebugOsc            = false;
-bool       DebugSynth          = false;
+bool       DebugSynth          = true;
 
 bool       AnalogDiagEnabled   = false;
 int        AnalogDiagDevice    = 0;
@@ -173,8 +170,9 @@ void setup (void)
         for ( int z = 0;  z < 5;  z++ )
             {
             SynthFront.SetOscSustainLevel (z, 100);
-            SynthFront.OscChannelSelect(z, true);
+            SynthFront.OscChannelSelect(z, false);
             }
+        SynthFront.OscChannelSelect(0, true);
         SynthFront.SetOscAttackTime (3);
         SynthFront.SetOscDecayTime (12);
         SynthFront.SetOscReleaseTime (9);
@@ -256,30 +254,11 @@ void loop (void)
             UpdateOta.Begin ();
         }
 
-    if ( UsbOnline )
-        {
-        if ( SynthActive )
-            SynthFront.Loop ();
-        else if ( AnalogDiagEnabled )
-            AnalogDiagnostics ();
-        TestSine ();
-        Monitor.Loop ();
-        }
-    else
-        {
-        UsbWait += DeltaMicro;
-        if ( UsbWait > MILLI_TO_MICRO (1000) )
-            {
-            UsbWait = 0;
-            UsbTimeoutCount += 1;
-            if ( UsbTimeoutCount < 10 )
-                Serial << "\t** No USB device response for " << UsbTimeoutCount << " Seconds!" << endl;
-            }
-        if ( UsbTimeoutCount >= 10 )
-            {
-            TestSine ();
-            Monitor.Loop ();
-            }
-        }
+    if ( SynthActive )
+        SynthFront.Loop ();
+    else if ( AnalogDiagEnabled )
+        AnalogDiagnostics ();
+    TestSine ();
+    Monitor.Loop ();
     }
 

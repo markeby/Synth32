@@ -174,7 +174,8 @@ void  SYNTH_FRONT_C::DispMessageHandler (byte cmd)
 //#######################################################################
 void SYNTH_FRONT_C::OscChannelSelect (byte chan, bool state)
     {
-    SelectWaveShapeVCO[chan] = !SelectWaveShapeVCO[chan];
+//    SelectWaveShapeVCO[chan] = !SelectWaveShapeVCO[chan];
+    SelectWaveShapeVCO[chan] = state;
     if ( DebugSynth )
         Serial << endl << SwitchMap[chan].desc << ((SelectWaveShapeVCO[chan]) ? " ON" : " off");
     }
@@ -281,8 +282,6 @@ void SYNTH_FRONT_C::Loop ()
 //#######################################################################
 void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
     {
-    float   scaler;
-
     if ( DebugSynth )
         {
         uint16_t op = (type << sizeof (byte)) | chan;
@@ -300,7 +299,7 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
             Lfo.Level (value);
             if ( DebugSynth )
                 {
-                printf ("\r[s] modulation = %f    ", scaler);
+                printf ("\r[s] modulation = %f    ", (float)value * (float)PRS_SCALER);
                 fflush(stdout);
                 }
             break;
@@ -310,7 +309,7 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
                 FaderMap[chan].CallBack (chan, value);
                 if ( DebugSynth )
                     {
-                    printf ("\r[s] %s > %f    ", FaderMap[chan].desc, scaler);
+                    printf ("\r[s] %s > %f    ", FaderMap[chan].desc, (float)value * (float)PRS_SCALER);
                     fflush(stdout);
                     }
                 }
@@ -321,7 +320,7 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
                 KnobMap[chan].CallBack (chan, value);
                 if ( DebugSynth )
                     {
-                    printf ("\r[s] %s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, scaler);
+                    printf ("\r[s] %s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, (float)value * (float)TIME_MULT);
                     fflush(stdout);
                     }
                 }
