@@ -17,7 +17,7 @@ SHARED        := ../Common
 
 # Shared files directory
 INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
-                 $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+                 Graphics.hpp $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
 SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
 

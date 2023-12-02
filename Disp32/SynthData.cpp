@@ -20,16 +20,21 @@ SYNTH_DATA_C::SYNTH_DATA_C ()
         {
         MIXER_T& m = Mix[z];
 
-        m.Name             = MixerNames[z];
-        m.LimitLevel       = 0.0;
-        m.AttackTime       = 0.0;
-        m.DecayTime        = 0.0;
-        m.SustainLevel     = 0.0;
-        m.SustainTime      = 0.0;
-        m.ReleaseTime      = 0.0;
-        m.Selected         = false;
-        m.Color            = OscMixerColor[z];
+        m.Name              = MixerNames[z];
+        m.LimitLevel        = 0.0;
+        m.AttackTime        = 0.0;
+        m.DecayTime         = 0.0;
+        m.SustainLevel      = 0.0;
+        m.SustainTime       = 0.0;
+        m.ReleaseTime       = 0.0;
+        m.Selected          = false;
         InitSaveVectors (z);
+        m.pDispAttackTime   = nullptr;
+        m.pDispADecayTime   = nullptr;
+        m.pDispSustainLevel = nullptr;
+        m.pDispSustainTime  = nullptr;
+        m.pDispReleaseTime  = nullptr;
+        m.pDispLimitLevel   = nullptr;
         }
     }
 

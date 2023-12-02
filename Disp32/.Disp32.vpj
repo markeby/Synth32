@@ -6,7 +6,54 @@
     WorkingDir="."
     VCSProject="Git:">
     <Config
-        Name="TestBuild"
+        Name="OTA Loader"
+        Type="cpp"
+        DebugCallbackName="gdb"
+        OutputFile=""
+        CompilerConfigName="Latest Version">
+        <Menu>
+            <Target
+                Name="Build"
+                MenuCaption="&amp;Build"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                RunFromDir="%rw"
+                ClearProcessBuffer="1"
+                Verbose="1"
+                Beep="1">
+                <Exec CmdLine="ptime make Disp32_OTA"/>
+            </Target>
+            <Target
+                Name="Monitor"
+                MenuCaption="Monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
+            </Target>
+            <Target
+                Name="Build-monitor"
+                MenuCaption="Build-monitor"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone"
+                BuildFirst="1"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make monitor"/>
+            </Target>
+            <Target
+                Name="Clean"
+                MenuCaption="Clean"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveWorkspaceFiles"
+                ClearProcessBuffer="1">
+                <Exec CmdLine="make clean &amp; make Disp32_OTA"/>
+            </Target>
+        </Menu>
+    </Config>
+    <Config
+        Name="Serial Loader"
         Type="cpp"
         DebugCallbackName="gdb"
         OutputFile=""
@@ -52,53 +99,6 @@
             </Target>
         </Menu>
     </Config>
-    <Config
-        Name="ReleaseBuild"
-        Type="cpp"
-        DebugCallbackName="gdb"
-        OutputFile=""
-        CompilerConfigName="Latest Version">
-        <Menu>
-            <Target
-                Name="Build"
-                MenuCaption="&amp;Build"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveWorkspaceFiles"
-                RunFromDir="%rw"
-                ClearProcessBuffer="1"
-                Verbose="1"
-                Beep="1">
-                <Exec CmdLine="make Disp32_OTA"/>
-            </Target>
-            <Target
-                Name="Monitor"
-                MenuCaption="Monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
-            </Target>
-            <Target
-                Name="Build-monitor"
-                MenuCaption="Build-monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone"
-                BuildFirst="1"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="make monitor"/>
-            </Target>
-            <Target
-                Name="Clean"
-                MenuCaption="Clean"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveWorkspaceFiles"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; make Disp32_OTA"/>
-            </Target>
-        </Menu>
-    </Config>
     <Rules Name="Compile">
         <Rule
             InputExts="*.s"
@@ -126,8 +126,14 @@
             <F N="WebOTA.cpp"/>
         </Folder>
         <Folder
+            Name="Source2"
+            Filters="*.hpp"
+            GUID="{755465D7-65A3-4189-9FE2-F8C4D402E79D}">
+            <F N="Graphics.hpp"/>
+        </Folder>
+        <Folder
             Name="Headers"
-            Filters="*.h;*.hxx"
+            Filters="*.h"
             GUID="{9EC47BEA-593C-419E-9086-283E6E3CB393}">
             <Folder
                 Name="Common"
