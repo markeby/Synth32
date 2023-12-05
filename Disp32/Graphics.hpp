@@ -114,6 +114,15 @@ namespace GRPH_DISP_N
     #define KNOB_FULL_ANGLE     (KNOB_BASE_ANGLE + KNOB_FULL_ROTATION)
     #define KNOB_DIAMETER       12
     #define KNOB_WIDTH          3
+    #define KNOB_TEXT_Y         20
+    #define FADER_TOP           (KNOB_DIAMETER + KNOB_WIDTH)
+    #define FADER_HEIGHT        (FADER_TOP * 2)
+    #define FADER_WIDTH         6
+    #define FADER_WIDTH_OFFSET  (FADER_WIDTH / 2)
+    #define FADER_TEXT_Y        19
+    #define FADER_DEL_X         8
+    #define FADER_DEL_W         18
+    #define FADER_DEL_H         (FADER_HEIGHT + 2)
 
     typedef struct
         {
@@ -127,13 +136,15 @@ namespace GRPH_DISP_N
 
     #define NUM_CNT_PAGE1   6
 
+    String WaveShapes[OSC_MIXER_COUNT] = { "Sine", "Triangle", "Square", "Sawtooth", "Pulse" };
+
     CONTROL_T     ControlPageOsc1[] =
-        { {CNTRL_TYPE_C::POT,   "Attack",   42, TFT_GREEN,         60, 2540 },
-          {CNTRL_TYPE_C::POT,   "Decay",    89, TFT_GREENYELLOW,  107, 2540 },
-          {CNTRL_TYPE_C::FADER, "Sustain", 151, TFT_YELLOW,       150,  100 },
-          {CNTRL_TYPE_C::POT,   "",        182, TFT_YELLOW,       195,  100 },
-          {CNTRL_TYPE_C::POT,   "Release", 214, TFT_RED,          248, 2540 },
-          {CNTRL_TYPE_C::FADER, "Max",     260, TFT_MAGENTA,      295,  100 },
+        { {CNTRL_TYPE_C::POT,   "Attack",   61, TFT_GREEN,         84, 2540 },
+          {CNTRL_TYPE_C::POT,   "Decay",   113, TFT_GREENYELLOW,  132, 2540 },
+          {CNTRL_TYPE_C::FADER, "Sustain", 168, TFT_YELLOW,       175,  100 },
+          {CNTRL_TYPE_C::POT,   "",        182, TFT_YELLOW,       207, 2540 },
+          {CNTRL_TYPE_C::POT,   "Release", 234, TFT_RED,          255, 2540 },
+          {CNTRL_TYPE_C::FADER, "Max",     290, TFT_MAGENTA,      299,  100 },
         };
 
     String BlankingString = "      ";

@@ -25,10 +25,11 @@ DISP_CTRL_C::DISP_CTRL_C (CNTRL_TYPE_C _t, int _x, int _y, float _range, int _co
     switch ( Type )
         {
         case CNTRL_TYPE_C::FADER:
-            TextY = _y + 22;
+            TextY = _y + FADER_TEXT_Y;
             break;
         case CNTRL_TYPE_C::POT:
-            TextY = _y + 15;
+            TextY = _y + KNOB_TEXT_Y;
+            tft.fillCircle (_x, _y, 2, _color);
             break;
         default:
             break;
@@ -56,23 +57,36 @@ DISP_CTRL_C::~DISP_CTRL_C ()
 //#######################################################################
 void DISP_CTRL_C::Set (float val)
     {
+    int data;
+
     Active = true;
 
     tft.setFont(&fonts::Font2);
+    val += 0.0003;
     switch ( Type )
         {
         case CNTRL_TYPE_C::FADER:
+            tft.fillRect (PosX - FADER_DEL_X, PosY - FADER_TOP, FADER_DEL_W, FADER_DEL_H, BACKGRND);  // Erase whole fader
+            tft.drawRect (PosX - FADER_WIDTH_OFFSET, PosY - FADER_TOP, FADER_WIDTH, FADER_HEIGHT, KNOB_OFF_COLOR);
+            tft.drawRect (PosX - (FADER_WIDTH_OFFSET - 1), PosY - (FADER_TOP - 1), FADER_WIDTH - 2, FADER_HEIGHT - 1, KNOB_OFF_COLOR);
+
+            data = val * FADER_HEIGHT;
+            tft.fillRect (PosX - 2, (PosY + FADER_TOP) - data, 4, data, Color);
+            tft.fillRect (PosX - 7, PosY + (FADER_TOP) - data, 14, 2, Color);
+            data = (int)(val * Range);
             break;
         case CNTRL_TYPE_C::POT:
+            tft.fillArc (PosX, PosY, KNOB_DIAMETER - 8, KNOB_DIAMETER + 8, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, BACKGRND);
             tft.fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, KNOB_OFF_COLOR);
             tft.fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
-            tft.drawString (BlankingString, TextX, TextY);
-            tft.drawString (String ((int)(val * Range) + 1), TextX, TextY);
+            tft.fillArc (PosX, PosY, KNOB_DIAMETER - 8, KNOB_DIAMETER + 5, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
+            data = (int)(val * Range);
             break;
         default:
             break;
         }
-
+    tft.drawString (BlankingString, TextX, TextY);
+    tft.drawString (String (data), TextX, TextY);
     }
 
 //#######################################################################
@@ -123,6 +137,7 @@ void GRPH_C::ShowADSR (byte ch)
             this->InitPageOsc1 ();
             for ( int z = 0;  z < (int)(SHAPE_C::ALL);  z++ )
                 {
+                tft.drawString (WaveShapes[z], 5, 65 + (z * 60));
                 for ( int zc = 0;  zc < NUM_CNT_PAGE1;  zc++ )
                     {
                     CONTROL_T& cta = ControlPageOsc1[0];

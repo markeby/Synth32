@@ -77,7 +77,7 @@ public:
 
     inline void SetSustainTime (byte sel, byte set)
         {
-        Mix[sel].SustainTime = (float)set;
+        Mix[sel].SustainTime = (float)set * PRS_SCALER;
         if ( set == 0 )
              Mix[sel].NoSustainTime = true;
         else
