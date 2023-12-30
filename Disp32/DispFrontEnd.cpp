@@ -110,47 +110,45 @@ void DISP_FRONT_END_C::Controller (byte ch, byte effect, byte value)
             SynthD.SetSelected (ch, (bool)value);
             if ( DebugInterface )
                 printf("Select");
-            this->Display (ch);
             break;
         case EFFECT_C::LIMIT_VOL:
             SynthD.SetMaxLevel (ch, value);
             if ( DebugInterface )
                 printf("Max Level");
-            this->Display (ch);
             break;
         case EFFECT_C::ATTACK_TIME:
             SynthD.SetAttackTime (ch, value);
             if ( DebugInterface )
                 printf("Attack time");
-            this->Display (ch);
             break;
         case EFFECT_C::DECAY_TIME:
             SynthD.SetDecayTime (ch, value);
             if ( DebugInterface )
                 printf("Decay time");
-            this->Display (ch);
             break;
         case EFFECT_C::SUSTAIN_TIME:
             SynthD.SetSustainTime (ch, value);
             if ( DebugInterface )
                 printf("Sustain time");
-            this->Display (ch);
             break;
         case EFFECT_C::RELEASE_TIME:
             SynthD.SetReleaseTime (ch, value);
             if ( DebugInterface )
                 printf("Release time");
-            this->Display (ch);
             break;
         case EFFECT_C::SUSTAIN_VOL:
             SynthD.SetSustainLevel (ch, value);
             if ( DebugInterface )
                 printf("Sustain level");
-            this->Display (ch);
+            break;
+        case EFFECT_C::SAWTOOTH_REVERSE:
+            SynthD.SetSawtoothDir (value);
+            if ( DebugInterface )
+                printf("Sawtooth Direction");
             break;
         default:
             break;
         }
-
+    this->Display (ch);
     }
 

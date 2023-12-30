@@ -40,21 +40,27 @@ void SetAttckTime (byte ch, byte data)
     }
 
 //########################################################
-void  SetDecayTime (byte ch, byte data)
+void SetDecayTime (byte ch, byte data)
     {
     SynthFront.SetOscDecayTime (data);
     }
 
 //########################################################
-void  SetSustainTime (byte ch, byte data)
+void SetSustainTime (byte ch, byte data)
     {
     SynthFront.SetOscSustainTime(data);
     }
 
 //########################################################
-void  SetReleaseTime (byte ch, byte data)
+void SetReleaseTime (byte ch, byte data)
     {
     SynthFront.SetOscReleaseTime (data);
+    }
+
+//########################################################
+void SetSawReverse (byte ch, byte data)
+    {
+    SynthFront.SetSawReverse (data != 0);
     }
 
 //########################################################
@@ -117,30 +123,30 @@ MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
 
 //########################################################
 MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
-    {   {  0, "Sine",         SetOscTimeSwitch },
-        {  1, "Triangle",     SetOscTimeSwitch },
-        {  2, "Sqiare",       SetOscTimeSwitch },
-        {  3, "Sawtooth",     SetOscTimeSwitch },
-        {  4, "Pulse",        SetOscTimeSwitch },
-        {  5, "Switch #6",    nullptr          },
-        {  6, "Switch #7",    nullptr          },
-        {  7, "Switch #8",    nullptr          },
-        {  8, "Mod Sine",     SetModSwitch     },
-        {  9, "Mod Triangle", SetModSwitch     },
-        { 10, "Mod Sawtooth", SetModSwitch     },
-        { 11, "Mod Pulse   ", SetModSwitch     },
-        { 12, "Switch #14",   nullptr          },
-        { 13, "Switch #14",   nullptr          },
-        { 14, "Switch #15",   nullptr          },
-        { 15, "Switch #16",   nullptr          },
-        { 16, "Switch #17",   nullptr          },
-        { 17, "Switch #18",   nullptr          },
-        { 18, "Switch #18",   nullptr          },
-        { 19, "Switch #18",   nullptr          },
-        { 20, "LFO Range -",  SetPlusRangeLFO  },
-        { 21, "LFO Range +",  SetMinusRangeLFO },
-        { 22, "Switch #18",   nullptr          },
-        { 23, "Switch #18",   nullptr          },
+    {   {  0, "Sine",               SetOscTimeSwitch },
+        {  1, "Triangle",           SetOscTimeSwitch },
+        {  2, "Sawtooth",           SetOscTimeSwitch },
+        {  3, "Pulse",              SetOscTimeSwitch },
+        {  4, "Square",             SetOscTimeSwitch },
+        {  5, "Sawtooth reverse",   SetSawReverse    },
+        {  6, "Switch #7",          nullptr          },
+        {  7, "Switch #8",          nullptr          },
+        {  8, "Mod Sine",           SetModSwitch     },
+        {  9, "Mod Triangle",       SetModSwitch     },
+        { 10, "Mod Sawtooth",       SetModSwitch     },
+        { 11, "Mod Pulse   ",       SetModSwitch     },
+        { 12, "Mod Square",         SetModSwitch     },
+        { 13, "Switch #14",         nullptr          },
+        { 14, "Switch #15",         nullptr          },
+        { 15, "Switch #16",         nullptr          },
+        { 16, "Switch #17",         nullptr          },
+        { 17, "Switch #18",         nullptr          },
+        { 18, "Switch #18",         nullptr          },
+        { 19, "Switch #18",         nullptr          },
+        { 20, "LFO Range -",        SetPlusRangeLFO  },
+        { 21, "LFO Range +",        SetMinusRangeLFO },
+        { 22, "Switch #18",         nullptr          },
+        { 23, "Switch #18",         nullptr          },
     };
 
 

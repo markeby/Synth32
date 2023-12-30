@@ -31,6 +31,7 @@ void SYNTH_OSC_C::Begin (int num, uint8_t first_device)
     Mix[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
     Mix[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
     Mix[int(SHAPE::SQUARE)].Channel   = first_device + uint8_t(D_A_OFF::SQUARE);
+    SawtoothDirChannel                = first_device + uint8_t(D_A_OFF::DIR);
 
     // Initialize mixer
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
@@ -94,7 +95,7 @@ void SYNTH_OSC_C::Clear ()
 //#######################################################################
 void SYNTH_OSC_C::SetTuning ()
     {
-    I2cDevices.D2Analog (Mix[(int)SHAPE::SQUARE].Channel, MAXDA);
+    I2cDevices.D2Analog (Mix[(int)TUNING_WAVES_SHAPE].Channel, MAXDA);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -114,6 +115,12 @@ void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
 void SYNTH_OSC_C::NoteClear ()
     {
     TriggerUp = true;
+    }
+
+//#######################################################################
+void SYNTH_OSC_C::SetSawReverse (bool data)
+    {
+    I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? 4095 : 0);
     }
 
 //#######################################################################
@@ -178,7 +185,7 @@ bool SYNTH_OSC_C::Loop ()
         for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
             {
             MIXER_T& m = Mix[z];
-            if ( m.LimitLevel > 0 )
+//            if ( m.LimitLevel > 0 )
                 {
                 m.Active    = true;
                 m.State     = STATE::ATTACK;
@@ -201,6 +208,10 @@ bool SYNTH_OSC_C::Loop ()
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
         {
         MIXER_T& m = Mix[z];
+
+//        if ( m.CurrentLevel > m.LimitLevel )
+//            m.CurrentLevel = m.LimitLevel;
+
         if ( !m.Active )
             continue;
 
@@ -226,7 +237,6 @@ bool SYNTH_OSC_C::Loop ()
                 }
             m.State        = STATE::DECAY;
             m.Timer        = m.DecayTime;
-            m.DacayTargetLevel = (m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel;
             m.CurrentLevel = m.LimitLevel;
             if ( DebugOsc )
                printf ("DECAY   start > %f  mSec from level %d to level %d\n", m.DecayTime, m.CurrentLevel, m.DacayTargetLevel);
@@ -239,10 +249,11 @@ bool SYNTH_OSC_C::Loop ()
             {
             if ( !TriggerUp )       // key is still down
                 {
+                m.DacayTargetLevel = (m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel;
                 if ( m.Timer > 10 )
                     {
                     m.Timer       -= deltaTime;
-                    m.CurrentLevel  = m.DacayTargetLevel + (m.Timer / m.DecayTime) * (m.LimitLevel - m.DacayTargetLevel);
+                    m.CurrentLevel = m.DacayTargetLevel + (m.Timer / m.DecayTime) * (m.LimitLevel - m.DacayTargetLevel);
                     if ( DebugOsc )
                         printf ("DECAY   timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
                     continue;
@@ -250,7 +261,6 @@ bool SYNTH_OSC_C::Loop ()
                 }
             m.State        = STATE::SUSTAIN;
             m.Timer        = m.SustainTime;
-            m.CurrentLevel = m.DacayTargetLevel;
             if ( m.SustainTime > 0 )
                 {
                 if ( DebugOsc )
@@ -272,6 +282,7 @@ bool SYNTH_OSC_C::Loop ()
             if ( !TriggerUp )       // key is still down
                 {
                 if ( m.Timer < 0 )
+                    m.CurrentLevel = (m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel;
                     continue;
                 if ( m.Timer > 10 )
                     {
@@ -297,7 +308,7 @@ bool SYNTH_OSC_C::Loop ()
             if ( m.Timer > 10)
                 {
                 m.Timer -= deltaTime;
-                m.CurrentLevel = ((float)m.Timer / (float)m.ReleaseTime) * m.DacayTargetLevel;
+                m.CurrentLevel = ((float)m.Timer / (float)m.ReleaseTime) * ((m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel);
                 if ( DebugOsc )
                     printf ("RELEASE timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
 

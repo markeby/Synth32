@@ -11,9 +11,9 @@ namespace DISP_MESSAGE_N
     enum class SHAPE_C: byte {
         SINE = 0,
         TRIANGLE,
-        SQUARE,
         SAWTOOTH,
         PULSE,
+        SQUARE,
         ALL
         };
 
@@ -32,6 +32,7 @@ namespace DISP_MESSAGE_N
         SUSTAIN_TIME,
         RELEASE_TIME,
         SUSTAIN_VOL,
+        SAWTOOTH_REVERSE,
       // RENDER
         RENDER_ADSR,
         INIT,

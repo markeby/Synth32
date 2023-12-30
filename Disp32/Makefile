@@ -7,25 +7,25 @@
 # User supplied and default parameters
 ############################################
 # default platform
-DOIT          := 1
+S3 := 1
 
 # Base package name
-PROJECT       := Disp32.ino
+PROJECT := Disp32.ino
 
 # header files
-SHARED        := ../Common
+SHARED := ../Common
 
 # Shared files directory
-INCLUDES      := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
-                 Graphics.hpp $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+INCLUDES := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
+            Graphics.hpp $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
-SOURCES       := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
+SOURCES := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
 
 # serial port for uploading
-DEFAULT_PORT  := COM5
+DEFAULT_PORT := COM5
 
 # IP address for uploading
-UPLOAD_OTA    := 192.168.1.4
+UPLOAD_OTA := 192.168.1.4
 
 ############################################
 # Configuration for Seeed Studio ESP32c3
@@ -38,8 +38,8 @@ endif
 # Configuration for Wrooom ESP32-S3-WROOM-1
 ############################################
 ifdef S3
-  ESP32 := --fqbn esp32:esp32:esp32s3usbotg
-#  ESP32 := --fqbn esp32:esp32:esp32s3
+# ESP32 := --fqbn esp32:esp32:esp32s3usbotg
+  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
   OUTPUT := output_esp32s3
 endif
 ############################################
@@ -55,7 +55,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED)
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED) 
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 
@@ -104,5 +104,6 @@ target : $(TARGET)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	@if not exist $(OUTPUT) (mkdir $(OUTPUT))
-	$(ARDUNIO) $(COMPILE) $(ESP32)
+	$(ARDUNIO) $(COMPILE) $(ESP32) 
+
 

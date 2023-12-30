@@ -16,9 +16,9 @@ namespace OSC_N
 enum class SHAPE {
     SINE = 0,
     TRIANGLE,
-    SQUARE,
     SAWTOOTH,
     PULSE,
+    SQUARE,
     };
 
 enum class STATE {
@@ -31,14 +31,16 @@ enum class STATE {
 
 enum class D_A_OFF {
     DIR = 0,
-    SQUARE,
     SINE,
+    SQUARE,
     PULSE,
     SAWTOOTH,
     TRIANGLE,
     WIDTH,
     EXPO
     };
+
+#define TUNING_WAVES_SHAPE      (SHAPE::SAWTOOTH)
 
 }// end namespace OSC_N
 
@@ -77,6 +79,7 @@ private:
         } MIXER_T;
 
     MIXER_T     Mix[OSC_MIXER_COUNT];
+    byte        SawtoothDirChannel;
 
     void  ClearState (void);
 
@@ -88,6 +91,7 @@ public:
     void NoteSet         (byte key, uint8_t velocity);
     void NoteClear       ();
     void Clear           (void);
+    void SetSawReverse   (bool data);
     void SetAttackTime   (byte wave, float time);
     void SetDecayTime    (byte wave, float time);
     void SetSustainTime  (byte wave, float time);

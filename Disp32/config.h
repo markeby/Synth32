@@ -35,8 +35,8 @@ extern bool DebugGraphics;
 //#################################################
 //    Serial 1 MIDI echo in port
 //#################################################
-#define RXD1    35
-#define TXD1    22
+#define RXD1    18
+#define TXD1    17
 
 //#################################################
 //   Global system variables

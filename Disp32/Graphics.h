@@ -14,7 +14,7 @@ enum class CNTRL_TYPE_C: byte {
     POT,
     };
 
-//############################################
+//####################################...########
 class DISP_CTRL_C
     {
 private:
@@ -31,6 +31,7 @@ public:
          DISP_CTRL_C   (CNTRL_TYPE_C _t, int _x, int _y, float _range, int _color);
         ~DISP_CTRL_C   (void);
     void Set           (float val);
+    void ShowSawtooth  (bool data);
     };
 
 //############################################

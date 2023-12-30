@@ -98,6 +98,7 @@ public:
     void  Controller            (byte chan, byte type, byte value);
     void  PitchBend             (byte chan, int value);
     void  OscChannelSelect      (byte chan, bool state);
+    void  SetSawReverse         (bool data);
     void  SelectWaveLFO         (byte ch, byte state);
     void  FreqSelectLFO         (byte ch, byte data);
     void  LFOrange              (bool up);

@@ -35,6 +35,9 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        3,     0x60,     4,    0,      0,  "D/A #76, 77, 78, 79" },
       { 2,        4,     0x60,     4,    0,      0,  "D/A #80, 81, 82, 83" },
       { 2,        5,     0x60,     4,    0,      0,  "D/A #84, 85, 86, 87" },
+      { 2,        7,     0x20,     0,    0,     16,  "Dig #88  - 103     " },
+      { 2,        7,     0x21,     0,    0,     16,  "Dig #104 - 119     " },
+      { 2,        7,     0x22,     0,    0,     16,  "Dig #120 - 135     " },
       { -1,      -1,     -1,     -1,    -1,      -1,  nullptr },
     };
 
@@ -97,16 +100,24 @@ inline bool TickTime (void)
 //#######################################################################
 inline void TickState (void)
     {
-    static uint32_t counter = 1;
+    static uint32_t counter0 = 1;
+    static uint32_t counter1 = 1;
 
-    if ( --counter == 0 )
+    if ( --counter0 == 0 )
         {
         digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
-        counter = 10;
+        counter0 = 10;
+        }
+    if ( --counter1 == 0 )
+        {
+        I2cDevices.DigitalOut    (104, true);
+        I2cDevices.DigitalOut    (111, true);
+        I2cDevices.UpdateDigital ();    // Update Digital output ports
+        counter1 = 100;
         }
     if ( SystemError || SystemFail )
         {
-        if ( counter % 4 )
+        if ( counter0 % 4 )
             {
             digitalWrite (BEEP_PIN, LOW);       // Tone off
             digitalWrite (HEARTBEAT_PIN, LOW);  // LED off
@@ -117,8 +128,14 @@ inline void TickState (void)
             digitalWrite (HEARTBEAT_PIN, HIGH); // LED on
             }
         }
-    if ( counter == 9 )
+    if ( counter0 == 9 )
         digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
+    if ( counter1 == 50 )
+        {
+        I2cDevices.DigitalOut    (104, false);
+        I2cDevices.DigitalOut    (111, false);
+        I2cDevices.UpdateDigital ();    // Update Digital output ports
+        }
     }
 
 
@@ -232,6 +249,7 @@ void AnalogDiagnostics (void)
         I2cDevices.D2Analog (lastdevice, 4095);     // set next D/A
 
         printf("Analog diag:  Device %d  Board %d, Channel V%c\n", lastdevice, lastdevice / 4, (lastdevice % 4) + 'A');
+        I2cDevices.UpdateDigital ();    // Update Digital output ports
         I2cDevices.UpdateAnalog ();     // Update D/A ports
         }
     }

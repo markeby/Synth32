@@ -4,8 +4,6 @@
 // Creator:    markeby
 // Date:       9/4/2023
 //#######################################################################
-#include <Arduino.h>
-
 #include "config.h"
 #include "SynthData.h"
 #include "Graphics.h"
@@ -29,7 +27,7 @@ DISP_CTRL_C::DISP_CTRL_C (CNTRL_TYPE_C _t, int _x, int _y, float _range, int _co
             break;
         case CNTRL_TYPE_C::POT:
             TextY = _y + KNOB_TEXT_Y;
-            tft.fillCircle (_x, _y, 2, _color);
+            pGFX->fillCircle (_x, _y, 2, _color);
             break;
         default:
             break;
@@ -46,11 +44,27 @@ DISP_CTRL_C::~DISP_CTRL_C ()
             case CNTRL_TYPE_C::FADER:
                 break;
             case CNTRL_TYPE_C::POT:
-                tft.fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, BACKGRND);
+                pGFX->fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, BACKGRND);
                 break;
             default:
                 break;
             }
+        }
+    }
+
+//#######################################################################
+void DISP_CTRL_C::ShowSawtooth (bool data)
+    {
+    pGFX->fillRect (PosX + 30, PosY - 30, PosX + 85, PosY + 18, BACKGRND);
+    if ( data )
+        {
+        pGFX->drawLine (PosX + 30, PosY + 18, PosX + 30, PosY - 30, Color);
+        pGFX->drawLine (PosX + 30, PosY - 30, PosX + 85, PosY + 18, Color);
+        }
+    else
+        {
+        pGFX->drawLine (PosX + 30, PosY + 18, PosX + 85, PosY - 30, Color);
+        pGFX->drawLine (PosX + 85, PosY - 30, PosX + 85, PosY + 18, Color);
         }
     }
 
@@ -60,66 +74,70 @@ void DISP_CTRL_C::Set (float val)
     int data;
 
     Active = true;
-
-    tft.setFont(&fonts::Font2);
     val += 0.0003;
     switch ( Type )
         {
         case CNTRL_TYPE_C::FADER:
-            tft.fillRect (PosX - FADER_DEL_X, PosY - FADER_TOP, FADER_DEL_W, FADER_DEL_H, BACKGRND);  // Erase whole fader
-            tft.drawRect (PosX - FADER_WIDTH_OFFSET, PosY - FADER_TOP, FADER_WIDTH, FADER_HEIGHT, KNOB_OFF_COLOR);
-            tft.drawRect (PosX - (FADER_WIDTH_OFFSET - 1), PosY - (FADER_TOP - 1), FADER_WIDTH - 2, FADER_HEIGHT - 1, KNOB_OFF_COLOR);
+            // erase
+            pGFX->fillRect (PosX - FADER_DEL_X, PosY - FADER_TOP, FADER_DEL_W, FADER_DEL_H, BACKGRND);
+            // draw fader slot
+            pGFX->drawRect (PosX - FADER_WIDTH_OFFSET, PosY - FADER_TOP, FADER_WIDTH, FADER_HEIGHT, KNOB_OFF_COLOR);
+            pGFX->drawRect (PosX - (FADER_WIDTH_OFFSET - 1), PosY - (FADER_TOP - 1), FADER_WIDTH - 2, FADER_HEIGHT - 1, KNOB_OFF_COLOR);
 
             data = val * FADER_HEIGHT;
-            tft.fillRect (PosX - 2, (PosY + FADER_TOP) - data, 4, data, Color);
-            tft.fillRect (PosX - 7, PosY + (FADER_TOP) - data, 14, 2, Color);
+            // Fader filler
+            pGFX->fillRect (PosX - 2, (PosY + FADER_TOP) - data, 4, data, Color);
+            // fader knob
+            pGFX->fillRect (PosX - 7, PosY + (FADER_TOP) - data, 14, 2, Color);
             data = (int)(val * Range);
             break;
         case CNTRL_TYPE_C::POT:
-            tft.fillArc (PosX, PosY, KNOB_DIAMETER - 8, KNOB_DIAMETER + 8, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, BACKGRND);
-            tft.fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, KNOB_OFF_COLOR);
-            tft.fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
-            tft.fillArc (PosX, PosY, KNOB_DIAMETER - 8, KNOB_DIAMETER + 5, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
+            // erase
+            pGFX->fillArc (PosX, PosY, 0, KNOB_DIAMETER + 8, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, BACKGRND);
+            // Draw knob`
+            pGFX->fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, KNOB_FULL_ROTATION + KNOB_BASE_ANGLE, KNOB_OFF_COLOR);
+            // Value filler
+            pGFX->fillArc (PosX, PosY, KNOB_DIAMETER, KNOB_DIAMETER + KNOB_WIDTH, KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
+            // knob pointer
+            pGFX->fillArc (PosX, PosY, 1, KNOB_DIAMETER + 8, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, (val * KNOB_FULL_ROTATION) + KNOB_BASE_ANGLE, Color);
             data = (int)(val * Range);
             break;
         default:
             break;
         }
-    tft.drawString (BlankingString, TextX, TextY);
-    tft.drawString (String (data), TextX, TextY);
+    pGFX->setFont (KNOB_FONT);
+    pGFX->fillRect (TextX, TextY-24, 56, 25, BACKGRND);
+    pGFX->setCursor (TextX, TextY);
+    pGFX->print (String (data));
     }
 
 //#######################################################################
 GRPH_C::GRPH_C ()
     {
+    pinMode (GFX_BL, OUTPUT);
     }
 
 //#######################################################################
 void GRPH_C::Begin ()
     {
-    adc_power_acquire ();    // Bug fixes for GPIO39 and GPIO36
-
-    tft.begin ();
-    tft.setRotation (0);       // USB Right 1
-    tft.setBrightness (200);
-    tft.setSwapBytes (true);
-    lv_init();
-    lv_disp_draw_buf_init (&draw_buf, buf[0], buf[1], 480 * 29);
-    InitDisplay ();
-    tft.fillScreen (0x001F);
+    pGFX->begin();
+    pGFX->setUTF8Print (true);           // enable UTF8 support for the Arduino print() function
+    digitalWrite (GFX_BL, HIGH);
+    pGFX->fillScreen (BLUE);
     }
 
 //#######################################################################
 void GRPH_C::InitPageOsc1 ()
     {
-    tft.fillScreen (BACKGRND);
+    pGFX->fillScreen (BACKGRND);
 
-    tft.setFont(&fonts::Font2);
+    pGFX->setFont (LABEL_FONT);
 
     for ( int z = 0;  z < NUM_CNT_PAGE1;  z++ )
         {
         CONTROL_T& cnt = ControlPageOsc1[z];
-        tft.drawString (cnt.Label, cnt.LabelX, 10);
+        pGFX->setCursor (cnt.LabelX, 16);
+        pGFX->print (cnt.Label);
         }
     }
 
@@ -137,26 +155,28 @@ void GRPH_C::ShowADSR (byte ch)
             this->InitPageOsc1 ();
             for ( int z = 0;  z < (int)(SHAPE_C::ALL);  z++ )
                 {
-                tft.drawString (WaveShapes[z], 5, 65 + (z * 60));
+                pGFX->setFont (LABEL_FONT);
+                pGFX->setCursor (5, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y) + 3);
+                pGFX->print (WaveShapes[z]);
                 for ( int zc = 0;  zc < NUM_CNT_PAGE1;  zc++ )
                     {
                     CONTROL_T& cta = ControlPageOsc1[0];
-                    pd = new DISP_CTRL_C (cta.Type, cta.PosX, 65 + (z * 60), cta.Range, cta.Color);
+                    pd = new DISP_CTRL_C (cta.Type, cta.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), cta.Range, cta.Color);
                     SynthD.SetDispPDispAttackTime   (z, pd);
                     CONTROL_T& ctd = ControlPageOsc1[1];
-                    pd = new DISP_CTRL_C (ctd.Type, ctd.PosX, 65 + (z * 60), ctd.Range, ctd.Color);
+                    pd = new DISP_CTRL_C (ctd.Type, ctd.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), ctd.Range, ctd.Color);
                     SynthD.SetDispPDispADecayTime   (z, pd);
                     CONTROL_T& ctsl = ControlPageOsc1[2];
-                    pd = new DISP_CTRL_C (ctsl.Type, ctsl.PosX, 65 + (z * 60), ctsl.Range, ctsl.Color);
+                    pd = new DISP_CTRL_C (ctsl.Type, ctsl.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), ctsl.Range, ctsl.Color);
                     SynthD.SetDispPDispSustainLevel (z, pd);
                     CONTROL_T& cts = ControlPageOsc1[3];
-                    pd = new DISP_CTRL_C (cts.Type, cts.PosX, 65 + (z * 60), cts.Range, cts.Color);
+                    pd = new DISP_CTRL_C (cts.Type, cts.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), cts.Range, cts.Color);
                     SynthD.SetDispPDispSustainTime  (z, pd);
                     CONTROL_T& ctr = ControlPageOsc1[4];
-                    pd = new DISP_CTRL_C (ctr.Type, ctr.PosX, 65 + (z * 60), ctr.Range, ctr.Color);
+                    pd = new DISP_CTRL_C (ctr.Type, ctr.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), ctr.Range, ctr.Color);
                     SynthD.SetDispPDispReleaseTime  (z, pd);
                     CONTROL_T& ctm = ControlPageOsc1[5];
-                    pd = new DISP_CTRL_C (ctm.Type, ctm.PosX, 65 + (z * 60), ctm.Range, ctm.Color);
+                    pd = new DISP_CTRL_C (ctm.Type, ctm.PosX, KNOB_OFFSET_Y + (z * KNOB_SPACING_Y), ctm.Range, ctm.Color);
                     SynthD.SetDispPDispLimitLevel   (z, pd);
                     }
                 this->ShowADSR(z);
@@ -173,6 +193,8 @@ void GRPH_C::ShowADSR (byte ch)
             SynthD.GetDispPSustainTime  (ch)->Set (SynthD.GetSustainTime  (ch));
             SynthD.GetDispPReleaseTime  (ch)->Set (SynthD.GetReleaseTime  (ch));
             SynthD.GetDispPLimitLevel   (ch)->Set (SynthD.GetMaxLevel     (ch));
+            if ( ch == (byte)SHAPE_C::SAWTOOTH )
+                SynthD.GetDispPLimitLevel(ch)->ShowSawtooth(SynthD.GetSawtoothDirection ());
             }
             break;
         }

@@ -68,7 +68,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine=" make Disp32_Serial"/>
+                <Exec CmdLine=" ptime make Disp32_Serial"/>
             </Target>
             <Target
                 Name="Monitor"

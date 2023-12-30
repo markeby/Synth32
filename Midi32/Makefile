@@ -7,26 +7,27 @@
 # User supplied and default parameters
 ############################################
 # default platform
-DOIT          := 1
+DOIT := 1
+#S3  := 1
 # Base package name
-PROJECT       := Midi32.ino
+PROJECT := Midi32.ino
 
 # Shared files directory
-SHARED        := ../Common
+SHARED := ../Common
 
 # header files
-INCLUDES      := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h SynthChannel.h \
-		 Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+INCLUDES := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h SynthChannel.h \
+            Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 
 # source files
-SOURCES       := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp \
-		 SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
+SOURCES := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp \
+           SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
 
 # serial port for uploading
-DEFAULT_PORT  := COM3
+DEFAULT_PORT := COM3
 
 # IP address for uploading
-UPLOAD_OTA    := 192.168.1.3
+UPLOAD_OTA := 192.168.1.3
 
 ############################################
 # Configuration for Seeed Studio ESP32c3

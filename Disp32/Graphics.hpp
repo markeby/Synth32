@@ -4,125 +4,85 @@
 // Creator:    markeby
 // Date:       9/4/2023
 //#######################################################################
-#include <lvgl.h>
-#define LGFX_USE_V1
-#include <LovyanGFX.hpp>
+#define ESP32_4827S043
 
-int  OscMixerColor[OSC_MIXER_COUNT] = { TFT_GREEN, TFT_RED, TFT_PURPLE, TFT_CYAN, TFT_ORANGE };
+#include <U8g2lib.h>
+#include <Arduino_GFX_Library.h>
+
+int  OscMixerColor[OSC_MIXER_COUNT] = { GREEN, RED, PURPLE, CYAN, ORANGE };
 
 namespace GRPH_DISP_N
     {
-    static const uint32_t       screenWidth  = 320;
-    static const uint32_t       screenHeight = 480;
-    static lv_disp_draw_buf_t   draw_buf;
-    static lv_color_t           buf[2][480 * 29];
-
-    // Class for tft device
-    class LGFX : public lgfx::LGFX_Device
-        {
-        lgfx::Panel_ST7796  _panel_instance;
-        lgfx::Bus_SPI       _bus_instance;
-        lgfx::Light_PWM     _light_instance;
-        lgfx::Touch_XPT2046 _touch_instance;
-    //-------------------------------------------
-    public:
-        LGFX (void)
-            {
-                {
-                auto cfg = _bus_instance.config ();
-
-                cfg.spi_host    = SPI2_HOST;
-                cfg.spi_mode    = 0;
-                cfg.freq_write  = 80000000;
-                cfg.freq_read   = 16000000;
-                cfg.spi_3wire   = false;
-                cfg.use_lock    = true;
-                cfg.dma_channel =  1;
-                cfg.dma_channel = SPI_DMA_CH_AUTO;
-                cfg.pin_sclk    = 14;
-                cfg.pin_mosi    = 13;
-                cfg.pin_miso    = 12;
-                cfg.pin_dc      =  2;
-
-                _bus_instance.config (cfg);
-                _panel_instance.setBus (&_bus_instance);
-                }
-                {
-                auto cfg = _panel_instance.config ();
-                cfg.pin_cs           =    15; // CS  (-1 = disable)
-                cfg.pin_rst          =    -1; // RST (-1 = disable)
-                cfg.pin_busy         =    -1; // BUSY(-1 = disable)
-                cfg.memory_width     =   320;
-                cfg.memory_height    =   480;
-                cfg.panel_width      =   320;
-                cfg.panel_height     =   480;
-                cfg.offset_x         =     0;
-                cfg.offset_y         =     0;
-                cfg.offset_rotation  =     0; //  0~7
-                cfg.dummy_read_pixel =     8;
-                cfg.dummy_read_bits  =     1;
-                cfg.readable         = false;
-                cfg.invert           = false;
-                cfg.rgb_order        = false;
-                cfg.dlen_16bit       = false;
-                cfg.bus_shared       = false;
-                _panel_instance.config (cfg);
-                }
-                {
-                auto cfg        = _light_instance.config ();
-                cfg.pin_bl      = 27;             //  BL
-                cfg.invert      = false;
-                cfg.freq        = 44100;
-                cfg.pwm_channel = 7;
-                _light_instance.config (cfg);
-                _panel_instance.setLight (&_light_instance);
-                }
-                {
-                auto cfg = _touch_instance.config ();
-                cfg.x_min      = 222;    // 360  222
-                cfg.x_max      = 3367;   //  4200 3367
-                cfg.y_min      = 192;    //  180  192
-                cfg.y_max      = 3732;   //  3900 3732
-                cfg.pin_int    = -1;     // INT, TP IRQ
-                cfg.bus_shared = true;
-                cfg.offset_rotation = 6; //  0~7
-                // SPI
-                cfg.spi_host = SPI2_HOST; // HSPI_HOST or VSPI_HOST
-                cfg.freq = 1000000;      // SPI
-                cfg.pin_sclk = 14;       // SCLK, TP CLK
-                cfg.pin_mosi = 13;       // MOSI, TP DIN
-                cfg.pin_miso = 12;       // MISO, TP DOUT
-                cfg.pin_cs   = 33;       // CS, TP CS
-                _touch_instance.config (cfg);
-                _panel_instance.setTouch (&_touch_instance);
-                }
-            setPanel (&_panel_instance);
-            }
-        };
-
-    LGFX tft;
+    #define GFX_BL 2
+    Arduino_ESP32RGBPanel *bus = new Arduino_ESP32RGBPanel
+       (GFX_NOT_DEFINED,    // CS
+        GFX_NOT_DEFINED,    // SCK
+        GFX_NOT_DEFINED,    // SDA
+        40,                 // DE
+        41,                 // VSYNC
+        39,                 // HSYNC
+        42,                 // PCLK
+        45,                 // R0
+        48,                 // R1
+        47,                 // R2
+        21,                 // R3
+        14,                 // R4
+        5,                  // G0
+        6,                  // G1
+        7,                  // G2
+        15,                 // G3
+        16,                 // G4
+        4,                  // G5
+        8,                  // B0
+        3,                  // B1
+        46,                 // B2
+        9,                  // B3
+        1                   // B4
+    );
+    // option 1:
+    // ST7262 IPS LCD 800x480
+     Arduino_RPi_DPI_RGBPanel *pGFX = new Arduino_RPi_DPI_RGBPanel
+      (bus,
+       800,         // width
+       0,           // hsync_polarity
+       8,           // hsync_front_porch
+       4,           // hsync_pulse_width
+       8,           // hsync_back_porch
+       480,         // height
+       0,           // vsync_polarity
+       8,           // vsync_front_porch
+       4,           // vsync_pulse_width
+       8,           // vsync_back_porch
+       1,           // pclk_active_neg
+       16000000,    // prefer_speed
+       true         // auto_flush
+       );
 
     // display general parameters
-    #define MAX_Y       (480 - 1)
-    #define MAX_X       (320 - 1)
-    #define BACKGRND    TFT_BLACK
-    #define WTEXT       TFT_WHITE
+    #define MAX_Y       (800 - 1)
+    #define MAX_X       (480 - 1)
+    #define BACKGRND    BLACK
+    #define WTEXT       WHITE
 
-    #define KNOB_OFF_COLOR      TFT_DARKGREY
+    #define KNOB_OFF_COLOR      DARKGREY
+    #define KNOB_DIAMETER       22
+    #define KNOB_SPACING_Y      90
+    #define KNOB_OFFSET_Y       57
+    #define KNOB_WIDTH          3
+    #define KNOB_TEXT_Y         52
     #define KNOB_BASE_ANGLE     115.0
     #define KNOB_FULL_ROTATION  320.0
     #define KNOB_FULL_ANGLE     (KNOB_BASE_ANGLE + KNOB_FULL_ROTATION)
-    #define KNOB_DIAMETER       12
-    #define KNOB_WIDTH          3
-    #define KNOB_TEXT_Y         20
     #define FADER_TOP           (KNOB_DIAMETER + KNOB_WIDTH)
     #define FADER_HEIGHT        (FADER_TOP * 2)
     #define FADER_WIDTH         6
     #define FADER_WIDTH_OFFSET  (FADER_WIDTH / 2)
-    #define FADER_TEXT_Y        19
+    #define FADER_TEXT_Y        (FADER_TOP + 23)
     #define FADER_DEL_X         8
     #define FADER_DEL_W         18
     #define FADER_DEL_H         (FADER_HEIGHT + 2)
+    #define KNOB_FONT           u8g2_font_crox5h_tf
+    #define LABEL_FONT          u8g2_font_crox4tb_tf
 
     typedef struct
         {
@@ -136,46 +96,18 @@ namespace GRPH_DISP_N
 
     #define NUM_CNT_PAGE1   6
 
-    String WaveShapes[OSC_MIXER_COUNT] = { "Sine", "Triangle", "Square", "Sawtooth", "Pulse" };
+    String WaveShapes[OSC_MIXER_COUNT] = { "Sine", "Triangle", "Sawtooth", "Pulse", "Square" };
 
     CONTROL_T     ControlPageOsc1[] =
-        { {CNTRL_TYPE_C::POT,   "Attack",   61, TFT_GREEN,         84, 2540 },
-          {CNTRL_TYPE_C::POT,   "Decay",   113, TFT_GREENYELLOW,  132, 2540 },
-          {CNTRL_TYPE_C::FADER, "Sustain", 168, TFT_YELLOW,       175,  100 },
-          {CNTRL_TYPE_C::POT,   "",        182, TFT_YELLOW,       207, 2540 },
-          {CNTRL_TYPE_C::POT,   "Release", 234, TFT_RED,          255, 2540 },
-          {CNTRL_TYPE_C::FADER, "Max",     290, TFT_MAGENTA,      299,  100 },
+        { {CNTRL_TYPE_C::POT,   "Attack",   95, GREEN,        120, 2540 },
+          {CNTRL_TYPE_C::POT,   "Decay",   185, GREENYELLOW,  220, 2540 },
+          {CNTRL_TYPE_C::FADER, "Sustain", 310, YELLOW,       300,  100 },
+          {CNTRL_TYPE_C::POT,   "",        400, YELLOW,       380, 2540 },
+          {CNTRL_TYPE_C::POT,   "Release", 440, RED,          470, 2540 },
+          {CNTRL_TYPE_C::FADER, "Max",     533, MAGENTA,      550,  100 },
         };
 
-    String BlankingString = "      ";
-
-    //#######################################################################
-    void MyDispFlush (lv_disp_drv_t* disp, const lv_area_t* area, lv_color_t* color_p)
-        {
-        if ( tft.getStartCount () == 0 )  // Run if not already started
-            tft.startWrite();
-        tft.pushImageDMA (area->x1
-                          , area->y1
-                          , area->x2 - area->x1 + 1
-                          , area->y2 - area->y1 + 1
-                          , (lgfx::swap565_t *)&color_p->full);
-        lv_disp_flush_ready (disp);
-        }
-
-    //#######################################################################
-    void InitDisplay ()
-        {
-        static lv_disp_drv_t disp_drv;                      // Descriptor of a display driver
-
-        lv_disp_drv_init (&disp_drv);                       // Basic initialization
-        disp_drv.flush_cb = MyDispFlush;                    // Set your driver function
-        disp_drv.draw_buf = &draw_buf;                      // Assign the buffer
-        disp_drv.hor_res  = screenWidth;                    // horizontal resolution
-        disp_drv.ver_res  = screenHeight;                   // vertical resolution
-        lv_disp_drv_register (&disp_drv);                   // Finally register the driver
-        lv_disp_set_bg_color (NULL, lv_color_hex(0x0000));  // background black
-        }
+    String BlankingString = "        ";
 
     }// end namespace GRPH_DISP_N
-
 

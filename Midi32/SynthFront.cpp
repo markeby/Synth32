@@ -460,6 +460,14 @@ void SYNTH_FRONT_C::SetOscReleaseTime (byte data)
         }
     }
 
+//#######################################################################
+void SYNTH_FRONT_C::SetSawReverse (bool data)
+    {
+    for ( int z = 0;  z < CHAN_COUNT;  z++)
+        pChan[z]->pOsc()->SetSawReverse (data);
+    SendToDisp32(DISP_MESSAGE_N::CMD_C::CONTROL, (byte)DISP_MESSAGE_N::SHAPE_C::SAWTOOTH, DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_REVERSE, data);
+    }
+
 //#####################################################################
 void SYNTH_FRONT_C::DISP32UpdateAll ()
     {

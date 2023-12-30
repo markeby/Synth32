@@ -22,18 +22,20 @@ private:
         {
         I2C_LOCATION_T  Board;              // This board access info
         bool            Valid;              // This board is valid
-        uint64_t        LastDataDtoA;
-        uint64_t        LastDataAtoD;
         union
             {
-            byte        ByteDtoA[MAX_ANALOG_PER_BOARD * 2];
-            uint16_t    DtoA[MAX_ANALOG_PER_BOARD];
-            uint64_t    DataDtoA;
+            uint64_t        LastDataDtoA;
+            uint64_t        LastDataAtoD;
+            uint64_t        LastDataDigital;
             };
         union
             {
+            byte        ByteData[MAX_ANALOG_PER_BOARD * 2];
+            uint16_t    DtoA[MAX_ANALOG_PER_BOARD];
+            uint64_t    DataDtoA;
             uint16_t    AtoD[MAX_ANALOG_PER_BOARD];
             uint64_t    DataAtoD;
+            uint16_t    DataDigital;
             };
         } I2C_BOARD_T;
     typedef struct
@@ -41,19 +43,23 @@ private:
         I2C_BOARD_T*    pBoard;
         uint16_t*       pDtoA;
         uint16_t*       pAtoD;
+        uint16_t*       pDigital;
+        byte            Bit;
         } I2C_DEVICE_T;
 
     I2C_BOARD_T*    pBoard;
     I2C_DEVICE_T*   pDevice;
-    byte            DeviceCount;
-    byte            AnalogOutCount;
-    byte            BoardCount;
+    int             DeviceCount;
+    int             AnalogOutCount;
+    int             DigitalOutCount;
+    int             BoardCount;
     bool            SystemFail;
 
     void BusMux         (byte bus, byte channel);
     void EndBusMux      (byte bus);
     void Init4728       (I2C_LOCATION_T &loc);
     void Write4728      (I2C_BOARD_T& board);
+    void Write8575      (I2C_BOARD_T& board);
     void Write          (I2C_LOCATION_T& loc, byte* buff, byte length);
     bool ValidateDevice (byte board);
 
@@ -63,8 +69,10 @@ public:
     int  Begin           (void);
     void Zero            (void);
     void D2Analog        (byte converter, int value);
+    void DigitalOut      (byte device, bool value);
     void AnalogClear     (void);
     void UpdateAnalog    (void);
+    void UpdateDigital   (void);
     void Error           (void);
     int  NumBoards       (void)    { return (BoardCount); }
     int  NumAnalog       (void)    { return (AnalogOutCount); }

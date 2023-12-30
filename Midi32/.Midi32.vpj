@@ -21,7 +21,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="make Midi32_serial"/>
+                <Exec CmdLine="ptime make Midi32_serial"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -68,7 +68,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="make Midi32_OTA"/>
+                <Exec CmdLine="ptime make Midi32_OTA"/>
             </Target>
             <Target
                 Name="Monitor"

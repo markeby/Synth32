@@ -25,6 +25,7 @@ private:
         bool          Active;             // Status of in use
         bool          Selected;           // Currently in the selected state
         bool          NoSustainTime;      // set when SustainTime == 0.0
+        bool          SawtoothDirection;  // sawtooth direction
         float         LimitLevel;         // Maximum amplitude in percent 0.0 - 1.0
         float         AttackTime;         // Attack time 0.0 - 1.0
         float         DecayTime;          // Decay time 0.0 - 1.0
@@ -42,12 +43,14 @@ private:
         DISP_CTRL_C*  pDispLimitLevel;    // Pointer to display for level limit
         } MIXER_T;
     MIXER_T     Mix[OSC_MIXER_COUNT];
+    bool        SawtoothDirection;        // sawtooth direction
 
 public:
                         SYNTH_DATA_C                (void);
     inline bool         GetSelected                 (byte sel)                  { return (Mix[sel].Selected);          }
     inline bool         GetActive                   (byte sel)                  { return (Mix[sel].Active);            }
     inline bool         GetNoSustainTime            (byte sel)                  { return (Mix[sel].NoSustainTime);     }
+    inline bool         GetSawtoothDirection        (void)                      { return (SawtoothDirection);          }
     inline float        GetMaxLevel                 (byte sel)                  { return (Mix[sel].LimitLevel);        }
     inline float        GetSustainLevel             (byte sel)                  { return (Mix[sel].SustainLevel);      }
     inline float        GetAttackTime               (byte sel)                  { return (Mix[sel].AttackTime);        }
@@ -66,14 +69,16 @@ public:
     inline void         SetDecayTime                (byte sel, byte set)        { Mix[sel].DecayTime         = (float)set * PRS_SCALER; }
     inline void         SetSustainLevel             (byte sel, byte set)        { Mix[sel].SustainLevel      = (float)set * PRS_SCALER; }
     inline void         SetReleaseTime              (byte sel, byte set)        { Mix[sel].ReleaseTime       = (float)set * PRS_SCALER; }
-    inline void         SetSelected                 (byte sel, bool set)        { Mix[sel].Selected          = set;    }
-    inline void         SetDispPDispAttackTime      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispAttackTime   = p;      }
-    inline void         SetDispPDispADecayTime      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispADecayTime   = p;      }
-    inline void         SetDispPDispSustainLevel    (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispSustainLevel = p;      }
-    inline void         SetDispPDispSustainTime     (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispSustainTime  = p;      }
-    inline void         SetDispPDispReleaseTime     (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispReleaseTime  = p;      }
-    inline void         SetDispPDispLimitLevel      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispLimitLevel   = p;      }
-    inline void         InitSaveVectors             (byte sel)                  { Mix[sel].VectorCount = 0;            }
+
+    inline void         SetSawtoothDir              (byte set)                  { SawtoothDirection          = set; }
+    inline void         SetSelected                 (byte sel, bool set)        { Mix[sel].Selected          = set; }
+    inline void         SetDispPDispAttackTime      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispAttackTime   = p;   }
+    inline void         SetDispPDispADecayTime      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispADecayTime   = p;   }
+    inline void         SetDispPDispSustainLevel    (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispSustainLevel = p;   }
+    inline void         SetDispPDispSustainTime     (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispSustainTime  = p;   }
+    inline void         SetDispPDispReleaseTime     (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispReleaseTime  = p;   }
+    inline void         SetDispPDispLimitLevel      (byte sel, DISP_CTRL_C* p)  { Mix[sel].pDispLimitLevel   = p;   }
+    inline void         InitSaveVectors             (byte sel)                  { Mix[sel].VectorCount = 0;         }
 
     inline void SetSustainTime (byte sel, byte set)
         {

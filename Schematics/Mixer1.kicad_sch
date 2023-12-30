@@ -3679,9 +3679,9 @@
     (property "Datasheet" "~" (at 91.44 76.2 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
-    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b2f))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b45))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b45))
+    (pin "" (uuid 2c8f2644-6453-4194-874b-be6e3d583b45))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f5793a4-784d-4354-a923-086ce6f236aa"

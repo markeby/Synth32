@@ -164,6 +164,7 @@ void loop (void)
     // Wifi connection manager
     if ( !UpdateOta.WiFiStatus () )
         {
+        delay (2000);
         if ( UpdateOta.WaitWiFi () )
             {
             UpdateOta.Begin ();
