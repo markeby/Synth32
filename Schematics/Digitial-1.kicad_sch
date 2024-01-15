@@ -1162,7 +1162,7 @@
   (symbol (lib_id "ESP32-DEVKIT-V1:ESP32-DEVKIT-V1") (at 222.25 92.71 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0141e0a1-332f-47e5-ae88-104dcb55e077)
-    (property "Reference" "U22" (at 222.25 59.0804 0)
+    (property "Reference" "U21" (at 222.25 59.0804 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "ESP32-DEVKIT-V1" (at 222.25 61.6204 0)
@@ -1219,7 +1219,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5f23d779-3412-4b06-96f4-480c60744fb9"
-          (reference "U22") (unit 1)
+          (reference "U21") (unit 1)
         )
       )
     )
@@ -1424,7 +1424,7 @@
   (symbol (lib_id "Module-Max3421EE:USB Host Shield 2.0") (at 165.1 93.98 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid c769a380-b7a5-4701-8f51-1684b116bafc)
-    (property "Reference" "U21" (at 165.1 61.6712 0)
+    (property "Reference" "U20" (at 165.1 61.6712 0)
       (effects (font (size 1.016 1.016)))
     )
     (property "Value" "USB Host Shield 2.0" (at 165.1 64.2112 0)
@@ -1456,7 +1456,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5f23d779-3412-4b06-96f4-480c60744fb9"
-          (reference "U21") (unit 1)
+          (reference "U20") (unit 1)
         )
       )
     )

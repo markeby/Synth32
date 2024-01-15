@@ -3892,7 +3892,7 @@
   (symbol (lib_id "Interface_Expansion:PCA9548ADW") (at 36.195 81.28 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 05d4758b-05fa-4d0a-bb44-9099980ca7a0)
-    (property "Reference" "U23" (at 38.3794 59.3344 0)
+    (property "Reference" "U22" (at 38.3794 59.3344 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "TCA9548A" (at 37.5158 105.7656 0)
@@ -3931,7 +3931,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U23") (unit 1)
+          (reference "U22") (unit 1)
         )
       )
     )
@@ -4070,7 +4070,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 186.69 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 22ee9886-5c30-4b0d-973b-c67d1595a879)
-    (property "Reference" "U31" (at 106.045 180.34 0)
+    (property "Reference" "U30" (at 106.045 180.34 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 180.34 0)
@@ -4095,7 +4095,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U31") (unit 1)
+          (reference "U30") (unit 1)
         )
       )
     )
@@ -4104,7 +4104,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 118.11 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 269d7e14-13f6-4431-a2c1-ae82ca637718)
-    (property "Reference" "U46" (at 252.095 111.76 0)
+    (property "Reference" "U45" (at 252.095 111.76 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 111.76 0)
@@ -4129,7 +4129,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U46") (unit 1)
+          (reference "U45") (unit 1)
         )
       )
     )
@@ -4138,7 +4138,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x06") (at 331.47 139.7 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 29ac25ca-4dba-4a60-b2eb-f40b757b8f45)
-    (property "Reference" "JS4" (at 331.47 131.445 0)
+    (property "Reference" "JS2" (at 331.47 131.445 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "To Compute #1" (at 334.01 149.86 0)
@@ -4159,12 +4159,12 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "JS4") (unit 1)
+          (reference "JS2") (unit 1)
         )
       )
       (project "Analog-52channel"
         (path "/e36b28a4-7427-4708-a63e-3fe312e8d49f"
-          (reference "JS2") (unit 1)
+          (reference "JS?") (unit 1)
         )
       )
     )
@@ -4227,7 +4227,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 72.39 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 469289e5-1780-4248-8d5f-73a355220a6c)
-    (property "Reference" "U44" (at 252.095 66.04 0)
+    (property "Reference" "U43" (at 252.095 66.04 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 66.04 0)
@@ -4252,7 +4252,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U44") (unit 1)
+          (reference "U43") (unit 1)
         )
       )
     )
@@ -4261,7 +4261,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4fa42070-f17f-4596-be2c-1e3f464ee039)
-    (property "Reference" "U29" (at 106.045 134.62 0)
+    (property "Reference" "U28" (at 106.045 134.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 134.62 0)
@@ -4286,7 +4286,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U29") (unit 1)
+          (reference "U28") (unit 1)
         )
       )
     )
@@ -4349,7 +4349,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 49.53 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 540d03e0-7f1c-417f-8c2e-f9ff78937a08)
-    (property "Reference" "U43" (at 252.095 43.18 0)
+    (property "Reference" "U42" (at 252.095 43.18 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 43.18 0)
@@ -4374,7 +4374,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U43") (unit 1)
+          (reference "U42") (unit 1)
         )
       )
     )
@@ -4408,7 +4408,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 326.39 102.87 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5802d2ca-091b-4427-b13e-a758697f7f2e)
-    (property "Reference" "C39" (at 327.0504 101.3968 0)
+    (property "Reference" "C35" (at 327.0504 101.3968 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "10µF" (at 327.4568 104.6988 0)
@@ -4425,7 +4425,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C39") (unit 1)
+          (reference "C35") (unit 1)
         )
       )
     )
@@ -4460,7 +4460,7 @@
   (symbol (lib_id "Device:C_Small") (at 226.06 168.021 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6092cb28-be1f-4c7b-990f-98d773b676ef)
-    (property "Reference" "C38" (at 227.33 166.751 0)
+    (property "Reference" "C34" (at 227.33 166.751 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "0.1µF" (at 226.568 169.5958 0)
@@ -4477,7 +4477,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C38") (unit 1)
+          (reference "C34") (unit 1)
         )
       )
     )
@@ -4486,7 +4486,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 118.11 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 61445f6a-3610-4183-8eeb-ada889f5907f)
-    (property "Reference" "U28" (at 106.045 111.76 0)
+    (property "Reference" "U27" (at 106.045 111.76 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 111.76 0)
@@ -4511,7 +4511,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U28") (unit 1)
+          (reference "U27") (unit 1)
         )
       )
     )
@@ -4549,7 +4549,7 @@
   (symbol (lib_id "Regulator_Linear:LM1117-3.3") (at 212.725 162.941 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 62cefe1c-a005-4cdd-9a8a-7d480f5c5193)
-    (property "Reference" "U41" (at 212.725 156.591 0)
+    (property "Reference" "U40" (at 212.725 156.591 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "LM1117-3.3" (at 212.725 159.131 0)
@@ -4567,7 +4567,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U41") (unit 1)
+          (reference "U40") (unit 1)
         )
       )
     )
@@ -4601,7 +4601,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 118.11 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6b4a7893-d7d8-484d-a9a0-019a51054232)
-    (property "Reference" "U36" (at 142.24 111.76 0)
+    (property "Reference" "U35" (at 142.24 111.76 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 111.76 0)
@@ -4626,7 +4626,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U36") (unit 1)
+          (reference "U35") (unit 1)
         )
       )
     )
@@ -4660,7 +4660,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 26.67 143.51 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 76a0d2d9-312c-4167-aaa7-c740a182f4d1)
-    (property "Reference" "C32" (at 27.94 142.24 0)
+    (property "Reference" "C28" (at 27.94 142.24 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "10µF" (at 27.94 144.78 0)
@@ -4677,7 +4677,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C32") (unit 1)
+          (reference "C28") (unit 1)
         )
       )
     )
@@ -4686,7 +4686,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 95.25 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 78e2a907-b982-491a-a534-03917abb5c89)
-    (property "Reference" "U27" (at 106.045 88.9 0)
+    (property "Reference" "U26" (at 106.045 88.9 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 88.9 0)
@@ -4711,7 +4711,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U27") (unit 1)
+          (reference "U26") (unit 1)
         )
       )
     )
@@ -4749,7 +4749,7 @@
   (symbol (lib_id "Device:C_Small") (at 202.565 168.021 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8017685b-cc37-4260-a228-93a1218612e7)
-    (property "Reference" "C35" (at 203.835 166.751 0)
+    (property "Reference" "C31" (at 203.835 166.751 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "0.1µF" (at 203.2254 169.5958 0)
@@ -4766,7 +4766,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C35") (unit 1)
+          (reference "C31") (unit 1)
         )
       )
     )
@@ -4830,7 +4830,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 26.67 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 87512477-1c10-4a24-95c5-8aafccf94091)
-    (property "Reference" "U42" (at 252.095 20.32 0)
+    (property "Reference" "U41" (at 252.095 20.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 20.32 0)
@@ -4855,7 +4855,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U42") (unit 1)
+          (reference "U41") (unit 1)
         )
       )
     )
@@ -4864,7 +4864,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 186.69 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 87accb1a-c7fd-4399-96a5-4b2bc4fa0a98)
-    (property "Reference" "U39" (at 142.24 180.34 0)
+    (property "Reference" "U38" (at 142.24 180.34 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 180.34 0)
@@ -4889,7 +4889,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U39") (unit 1)
+          (reference "U38") (unit 1)
         )
       )
     )
@@ -4898,7 +4898,7 @@
   (symbol (lib_id "Interface_Expansion:PCA9548ADW") (at 194.31 96.52 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 89dd26b6-a485-40ee-9320-696d9e18e03c)
-    (property "Reference" "U40" (at 198.3232 74.3712 0)
+    (property "Reference" "U39" (at 198.3232 74.3712 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "TCA9548A" (at 203.1492 120.7008 0)
@@ -4937,7 +4937,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U40") (unit 1)
+          (reference "U39") (unit 1)
         )
       )
     )
@@ -4946,7 +4946,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 95.25 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 89f91c85-d452-42bd-9f15-ef2db6565b91)
-    (property "Reference" "U35" (at 142.24 88.9 0)
+    (property "Reference" "U34" (at 142.24 88.9 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 88.9 0)
@@ -4971,7 +4971,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U35") (unit 1)
+          (reference "U34") (unit 1)
         )
       )
     )
@@ -5062,7 +5062,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 163.83 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9c1e4f65-158c-4eb0-9c4c-a65ea4e86d4e)
-    (property "Reference" "U38" (at 142.24 157.48 0)
+    (property "Reference" "U37" (at 142.24 157.48 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 157.48 0)
@@ -5087,7 +5087,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U38") (unit 1)
+          (reference "U37") (unit 1)
         )
       )
     )
@@ -5176,7 +5176,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 219.075 102.87 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a1ac28c5-d977-46aa-a98f-5d1ea671835a)
-    (property "Reference" "C36" (at 219.7354 101.3968 0)
+    (property "Reference" "C32" (at 219.7354 101.3968 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "10µF" (at 220.1418 104.6988 0)
@@ -5193,7 +5193,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C36") (unit 1)
+          (reference "C32") (unit 1)
         )
       )
     )
@@ -5202,7 +5202,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 26.67 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a1b19d73-e5ad-414c-a25d-0d629e5de0ef)
-    (property "Reference" "U24" (at 106.045 20.32 0)
+    (property "Reference" "U23" (at 106.045 20.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 20.32 0)
@@ -5227,7 +5227,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U24") (unit 1)
+          (reference "U23") (unit 1)
         )
       )
     )
@@ -5236,7 +5236,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 95.25 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a69f479b-9e0e-48a2-9434-52fc9a9578e2)
-    (property "Reference" "U45" (at 252.095 88.9 0)
+    (property "Reference" "U44" (at 252.095 88.9 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 88.9 0)
@@ -5261,7 +5261,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U45") (unit 1)
+          (reference "U44") (unit 1)
         )
       )
     )
@@ -5270,7 +5270,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 260.985 140.97 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid af931320-30be-4103-88ad-361f5b2fb33d)
-    (property "Reference" "U47" (at 252.095 134.62 0)
+    (property "Reference" "U46" (at 252.095 134.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 273.685 134.62 0)
@@ -5295,7 +5295,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U47") (unit 1)
+          (reference "U46") (unit 1)
         )
       )
     )
@@ -5304,7 +5304,7 @@
   (symbol (lib_id "Connector_Generic:Conn_01x02") (at 16.51 142.24 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid afef51f9-8f40-4f0b-8ed1-24bff20a08d1)
-    (property "Reference" "JP3" (at 16.51 139.065 0)
+    (property "Reference" "JP1" (at 16.51 139.065 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "From 12v Analog" (at 16.51 147.4216 0)
@@ -5321,7 +5321,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "JP3") (unit 1)
+          (reference "JP1") (unit 1)
         )
       )
     )
@@ -5388,7 +5388,7 @@
   (symbol (lib_id "Interface_Expansion:PCA9548ADW") (at 302.895 96.52 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid bef51c29-5c6e-4160-ac7e-91e2c3fab23d)
-    (property "Reference" "U48" (at 306.9082 74.3712 0)
+    (property "Reference" "U47" (at 306.9082 74.3712 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "TCA9548A" (at 311.7342 120.7008 0)
@@ -5427,7 +5427,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U48") (unit 1)
+          (reference "U47") (unit 1)
         )
       )
     )
@@ -5548,7 +5548,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 49.53 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d32e63d4-0ec0-43db-9ec2-d7e587a90525)
-    (property "Reference" "U33" (at 142.24 43.18 0)
+    (property "Reference" "U32" (at 142.24 43.18 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 43.18 0)
@@ -5573,7 +5573,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U33") (unit 1)
+          (reference "U32") (unit 1)
         )
       )
     )
@@ -5582,7 +5582,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 72.39 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d7666751-cc80-4b1e-9ac7-ca26383fdbdb)
-    (property "Reference" "U34" (at 142.24 66.04 0)
+    (property "Reference" "U33" (at 142.24 66.04 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 66.04 0)
@@ -5607,7 +5607,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U34") (unit 1)
+          (reference "U33") (unit 1)
         )
       )
     )
@@ -5732,7 +5732,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 140.97 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid df0991f7-5f45-4935-9fe3-24ea1f17bced)
-    (property "Reference" "U37" (at 142.24 134.62 0)
+    (property "Reference" "U36" (at 142.24 134.62 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 134.62 0)
@@ -5757,7 +5757,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U37") (unit 1)
+          (reference "U36") (unit 1)
         )
       )
     )
@@ -5766,7 +5766,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 163.83 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid dfc35787-ea86-4988-ae38-87f6d9a08516)
-    (property "Reference" "U30" (at 106.045 157.48 0)
+    (property "Reference" "U29" (at 106.045 157.48 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 157.48 0)
@@ -5791,7 +5791,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U30") (unit 1)
+          (reference "U29") (unit 1)
         )
       )
     )
@@ -5800,7 +5800,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e5f97b85-fc42-4836-ac6d-2ab9cd6c3c25)
-    (property "Reference" "U25" (at 106.045 43.18 0)
+    (property "Reference" "U24" (at 106.045 43.18 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 43.18 0)
@@ -5825,7 +5825,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U25") (unit 1)
+          (reference "U24") (unit 1)
         )
       )
     )
@@ -5834,7 +5834,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 97.155 72.39 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e71ddb06-b3f6-456d-aa1d-cd304d1e09ea)
-    (property "Reference" "U26" (at 106.045 66.04 0)
+    (property "Reference" "U25" (at 106.045 66.04 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 84.455 66.04 0)
@@ -5859,7 +5859,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U26") (unit 1)
+          (reference "U25") (unit 1)
         )
       )
     )
@@ -5868,7 +5868,7 @@
   (symbol (lib_id "Device:C_Small") (at 33.02 143.51 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e7225149-e54a-4f89-a6e9-bb6bcc7d2558)
-    (property "Reference" "C33" (at 34.29 142.24 0)
+    (property "Reference" "C29" (at 34.29 142.24 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "0.1µF" (at 34.29 144.78 0)
@@ -5885,7 +5885,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C33") (unit 1)
+          (reference "C29") (unit 1)
         )
       )
     )
@@ -5949,7 +5949,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 197.485 168.021 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ec525d63-317a-4eaa-9fd5-04588cddb3f1)
-    (property "Reference" "C34" (at 198.755 166.751 0)
+    (property "Reference" "C30" (at 198.755 166.751 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "10µF" (at 197.9422 169.7482 0)
@@ -5966,7 +5966,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C34") (unit 1)
+          (reference "C30") (unit 1)
         )
       )
     )
@@ -5975,7 +5975,7 @@
   (symbol (lib_id "Analog_DAC:MCP4728") (at 151.13 26.67 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f4aa5883-371b-429e-ae61-560ecc5c639f)
-    (property "Reference" "U32" (at 142.24 20.32 0)
+    (property "Reference" "U31" (at 142.24 20.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "MCP4728" (at 163.83 20.32 0)
@@ -6000,7 +6000,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "U32") (unit 1)
+          (reference "U31") (unit 1)
         )
       )
     )
@@ -6067,7 +6067,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 220.345 168.021 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f87209a1-204f-4b9a-9626-fd9d41a14cbb)
-    (property "Reference" "C37" (at 221.615 166.751 0)
+    (property "Reference" "C33" (at 221.615 166.751 0)
       (effects (font (size 1.016 1.016)) (justify left))
     )
     (property "Value" "10µF" (at 220.8022 169.6974 0)
@@ -6084,7 +6084,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/5bc16b3a-a1cd-4002-8881-eefa1f194921"
-          (reference "C37") (unit 1)
+          (reference "C33") (unit 1)
         )
       )
     )

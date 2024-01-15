@@ -190,6 +190,7 @@ void setup (void)
             SynthFront.OscChannelSelect(z, false);
             }
         SynthFront.OscChannelSelect(0, true);
+        SynthFront.OscChannelSelect(5, true);
         SynthFront.SetOscAttackTime (3);
         SynthFront.SetOscDecayTime (12);
         SynthFront.SetOscReleaseTime (9);

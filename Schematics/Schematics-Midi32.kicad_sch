@@ -915,6 +915,23 @@
     )
   )
 
+  (sheet (at 154.94 105.41) (size 34.29 22.86)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid 9900b704-17c5-4f82-a2d6-a9158bccf03b)
+    (property "Sheetname" "NoiseFilter" (at 165.1 107.95 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "NoiseFilter.kicad_sch" (at 154.94 128.8546 0)
+      (effects (font (size 1.27 1.27)) (justify left top) hide)
+    )
+    (instances
+      (project "Schematics-Midi32"
+        (path "/718f017d-28fe-4e29-b548-40db8e21cec7" (page "12"))
+      )
+    )
+  )
+
   (sheet (at 87.63 67.31) (size 25.4 11.43)
     (stroke (width 0.1524) (type solid))
     (fill (color 0 0 0 0.0000))
