@@ -768,8 +768,8 @@
     (property "Datasheet" "~" (at 201.93 31.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "S" (uuid d1f3d9f0-bd53-4056-92b8-1b4cc21d321f))
-    (pin "T" (uuid 67753a30-8f7f-40f0-8d90-7ebfd086a028))
+    (pin "S" (uuid f05dcb1e-17c8-4a2b-b8ab-c0447d3ac37f))
+    (pin "T" (uuid 17ff4708-436e-4c1b-9dbd-f9d1d2a1ac75))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7"

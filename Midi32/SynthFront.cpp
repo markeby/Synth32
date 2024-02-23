@@ -12,6 +12,7 @@
 #include <DispMessages.h>
 #include "Osc.h"
 #include "LFOosc.h"
+#include "Noise.h"
 #include "SynthChannel.h"
 #include "SynthFront.h"
 
@@ -23,6 +24,7 @@ namespace ___StuffForThisModuleOnly___
     UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi);
 
     static SYNTH_CHANNEL_C*    pChan[CHAN_COUNT];
+    static NOISE_C             Noise;
     static LFO_N::SYNTH_LFO_C  Lfo;
 
     //###################################################################
@@ -57,7 +59,7 @@ namespace ___StuffForThisModuleOnly___
         {
         SynthFront.Controller (chan, type, value);
         if ( DebugMidi )
-            printf ("Chan %2.2X  type %2.2X  value %2.2X\n", chan, type, value);
+            printf ("\nChan %2.2X  type %2.2X  value %2.2X   ", chan, type, value);
         }
 
     //###################################################################
@@ -342,6 +344,8 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
         case 0x1E:
         case 0x1F:
             chan = type & 0x0F;
+            if ( DebugMidi )
+                printf (SwitchMap[chan].desc);
             if ( SwitchMap[chan].CallBack != nullptr )
                 SwitchMap[chan].CallBack (chan, value);
             break;
@@ -352,6 +356,8 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
         case 0x76:
         case 0x77:
             chan = type & 0x1F;
+            if ( DebugMidi )
+                printf (SwitchMap[chan].desc);
             if ( SwitchMap[chan].CallBack != nullptr )
                 SwitchMap[chan].CallBack (chan, value);
             break;
@@ -378,6 +384,22 @@ void SYNTH_FRONT_C::SetOscMaxLevel (byte ch, byte data)
         pChan[zc]->pOsc()->SetMaxLevel (ch, val);
     MidiAdsr[ch].MaxLevel = data;
     SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, data);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SetOscMaxLevel (byte data)
+    {
+    float dtime = data * TIME_MULT;
+    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
+        {
+        if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].AttackTime = data;
+            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
+                pChan[zc]->pOsc()->SetMaxLevel (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, data);
+            }
+        }
     }
 
 //#####################################################################
@@ -420,6 +442,22 @@ void SYNTH_FRONT_C::SetOscSustainLevel (byte ch, byte data)
         pChan[zc]->pOsc()->SetSustainLevel (ch, val);
     MidiAdsr[ch].SustainLevel = data;
     SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, data);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SetOscSustainLevel (byte data)
+    {
+    float dtime = data * TIME_MULT;
+    for ( int zs = 0;  zs < OSC_MIXER_COUNT;  zs++ )
+        {
+        if ( SelectWaveShapeVCO[zs] )
+            {
+            MidiAdsr[zs].DecayTime = data;
+            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
+                pChan[zc]->pOsc()->SetSustainLevel (zs, dtime);
+            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, data);
+            }
+        }
     }
 
 //#####################################################################
@@ -510,5 +548,29 @@ void SYNTH_FRONT_C::LFOrange (bool up)
 void SYNTH_FRONT_C::SetLevelLFO (byte data)
     {
     Lfo.Level (data * PERS_SCALER);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::BeginNoise (byte digital)
+    {
+    Noise.Begin (digital);
+    }
+
+//#######################################################################
+void  SYNTH_FRONT_C::NoiseFilter (byte bit, bool state)
+    {
+    Noise.FilterSelect (bit, state);
+    }
+
+//#######################################################################
+void  SYNTH_FRONT_C::NoiseFilter (byte val)
+    {
+    Noise.FilterValue (val);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::NoiceFilterBump ()
+    {
+    Noise.FilterSelect ((Noise.FilterIs () + 1) % 4);
     }
 

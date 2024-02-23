@@ -238,6 +238,7 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'Z':
+                    SynthFront.NoiceFilterBump ();
                     break;
                 default:
                     Serial << "       ??" << endl;

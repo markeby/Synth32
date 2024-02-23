@@ -120,6 +120,7 @@
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
             <F N="I2Cdevices.cpp"/>
             <F N="LFOosc.cpp"/>
+            <F N="Noise.cpp"/>
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
@@ -142,6 +143,7 @@
             <F N="config.h"/>
             <F N="I2Cdevices.h"/>
             <F N="LFOosc.h"/>
+            <F N="Noise.h"/>
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>

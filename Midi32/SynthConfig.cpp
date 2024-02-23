@@ -81,24 +81,38 @@ void SetMinusRangeLFO (byte ch, byte state)
     SynthFront.LFOrange (false);
     }
 
+void SetNoiseFilter0 (byte ch, byte state)
+    {
+    SynthFront.NoiseFilter (0, state > 120);
+    }
+
+void SetNoiseFilter1 (byte ch, byte state)
+    {
+    SynthFront.NoiseFilter (1, state > 120);
+    }
+void SetNoiseFilter (byte ch, byte state)
+    {
+    SynthFront.NoiseFilter (state);
+    }
+
 //########################################################
 MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
-    {   {  0, "Sine Max ",         SetOscMixers  },         // 0-100%
-        {  1, "Triangle Max ",     SetOscMixers  },
-        {  2, "Sqiare Max ",       SetOscMixers  },
-        {  3, "Sawtooth Max",      SetOscMixers  },
-        {  4, "Pulse Max",         SetOscMixers  },
-        {  5, "N ",                nullptr       },
-        {  6, "N ",                nullptr       },
-        {  7, "N ",                nullptr       },
-        {  8, "Sine Sustain ",     SetOscSustain },
-        {  9, "Triangle Sustain ", SetOscSustain },
-        { 10, "Sqiare Sustain ",   SetOscSustain },
-        { 11, "Sawtooth Sustain",  SetOscSustain },
-        { 12, "Pulse Sustain",     SetOscSustain },
-        { 13, "Max ",              nullptr       },
-        { 14, "Max ",              nullptr       },
-        { 15, "Max ",              nullptr       },
+    {   {  0, "Sine Max",          SetOscMixers   },         // 0-100%
+        {  1, "Triangle Max",      SetOscMixers   },
+        {  2, "Sqiare Max",        SetOscMixers   },
+        {  3, "Sawtooth Max",      SetOscMixers   },
+        {  4, "Pulse Max",         SetOscMixers   },
+        {  5, "N ",                nullptr        },
+        {  6, "N ",                nullptr        },
+        {  7, "Noise Filter",      SetNoiseFilter },
+        {  8, "Sine Sustain",      SetOscSustain  },
+        {  9, "Triangle Sustain",  SetOscSustain  },
+        { 10, "Sqiare Sustain",    SetOscSustain  },
+        { 11, "Sawtooth Sustain",  SetOscSustain  },
+        { 12, "Pulse Sustain",     SetOscSustain  },
+        { 13, "Max ",              nullptr        },
+        { 14, "Max ",              nullptr        },
+        { 15, "Max ",              nullptr        },
     };
 
 //########################################################
@@ -137,16 +151,16 @@ MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
         { 11, "Mod Pulse   ",       SetModSwitch     },
         { 12, "Mod Square",         SetModSwitch     },
         { 13, "Switch #14",         nullptr          },
-        { 14, "Switch #15",         nullptr          },
-        { 15, "Switch #16",         nullptr          },
+        { 14, "Switch #15",         SetNoiseFilter0  },
+        { 15, "Switch #16",         SetNoiseFilter1  },
         { 16, "Switch #17",         nullptr          },
         { 17, "Switch #18",         nullptr          },
-        { 18, "Switch #18",         nullptr          },
-        { 19, "Switch #18",         nullptr          },
+        { 18, "Switch #19",         nullptr          },
+        { 19, "Switch #20",         nullptr          },
         { 20, "LFO Range -",        SetPlusRangeLFO  },
         { 21, "LFO Range +",        SetMinusRangeLFO },
-        { 22, "Switch #18",         nullptr          },
-        { 23, "Switch #18",         nullptr          },
+        { 22, "Switch #23",         nullptr          },
+        { 23, "Switch #24",         nullptr          },
     };
 
 

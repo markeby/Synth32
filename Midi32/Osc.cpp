@@ -109,12 +109,6 @@ void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
     ClearState ();
     I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
 
-// FILTER TEST
-    I2cDevices.D2Analog (68, OctaveArray[note]);
-    I2cDevices.D2Analog (69, OctaveArray[note]);
-    I2cDevices.D2Analog (70, OctaveArray[note]);
-    I2cDevices.D2Analog (71, OctaveArray[note]);
-
     TriggerDown = true;
     }
 

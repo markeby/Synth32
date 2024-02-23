@@ -43,7 +43,7 @@ I2C_LOCATION_T  BusI2C[] =
 
 //#######################################################################
 I2C_INTERFACE_C I2cDevices (BusI2C);
-SYNTH_FRONT_C   SynthFront (0, FaderMapArray, KnobMapArray, SwitchMapArray);
+SYNTH_FRONT_C   SynthFront (START_OSC_ANALOG, FaderMapArray, KnobMapArray, SwitchMapArray);
 
 bool       SystemError         = false;
 bool       SystemFail          = false;
@@ -101,19 +101,11 @@ inline bool TickTime (void)
 inline void TickState (void)
     {
     static uint32_t counter0 = 1;
-    static uint32_t counter1 = 1;
 
     if ( --counter0 == 0 )
         {
         digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
-        counter0 = 10;
-        }
-    if ( --counter1 == 0 )
-        {
-        I2cDevices.DigitalOut    (104, true);
-        I2cDevices.DigitalOut    (111, true);
-        I2cDevices.UpdateDigital ();    // Update Digital output ports
-        counter1 = 100;
+        counter0 = 20;
         }
     if ( SystemError || SystemFail )
         {
@@ -130,12 +122,6 @@ inline void TickState (void)
         }
     if ( counter0 == 9 )
         digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
-    if ( counter1 == 50 )
-        {
-        I2cDevices.DigitalOut    (104, false);
-        I2cDevices.DigitalOut    (111, false);
-        I2cDevices.UpdateDigital ();    // Update Digital output ports
-        }
     }
 
 
@@ -184,18 +170,19 @@ void setup (void)
 
         // Setup initial state of synth
         SynthFront.Begin ();
+        SynthFront.BeginNoise (START_NOISE_DIG);
         for ( int z = 0;  z < 5;  z++ )
             {
-            SynthFront.SetOscSustainLevel (z, 100);
+            SynthFront.SetOscSustainLevel (z, MAX_MVAL);
             SynthFront.OscChannelSelect(z, false);
             }
-        SynthFront.OscChannelSelect(0, true);
-        SynthFront.OscChannelSelect(5, true);
-        SynthFront.SetOscAttackTime (3);
-        SynthFront.SetOscDecayTime (12);
-        SynthFront.SetOscReleaseTime (9);
+//        SynthFront.OscChannelSelect(0, true);
+        SynthFront.OscChannelSelect(4, true);
+        SynthFront.SetOscAttackTime (6);
+        SynthFront.SetOscDecayTime (0);
+        SynthFront.SetOscReleaseTime (35);
         SynthFront.SetOscSustainTime (0);
-        SynthFront.SetOscMaxLevel (0, 100);
+        SynthFront.SetOscMaxLevel (MAX_MVAL);
         printf("\t>>> Synth ready.\n");
         }
     }

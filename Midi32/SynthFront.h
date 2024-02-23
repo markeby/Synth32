@@ -70,6 +70,7 @@ private:
     int                 SetTuning;
     int                 SetDeviceIndex;
     bool                InDispReset;
+    byte                NoiseFilterSetting;     // 0 - 3
     uint64_t            DispMessageTimer;
     MIDI_VALUE_MAP*     FaderMap;
     MIDI_VALUE_MAP*     KnobMap;
@@ -104,12 +105,18 @@ public:
     void  LFOrange              (bool up);
     void  SetLevelLFO           (byte data);
     void  SetOscMaxLevel        (byte ch, byte data);
+    void  SetOscMaxLevel        (byte data);
     void  SetOscAttackTime      (byte data);
     void  SetOscDecayTime       (byte data);
     void  SetOscSustainLevel    (byte ch, byte data);
+    void  SetOscSustainLevel    (byte data);
     void  SetOscSustainTime     (byte data);
     void  SetOscReleaseTime     (byte data);
     void  DISP32UpdateAll       (void);
+    void  BeginNoise            (byte digital);
+    void  NoiseFilter           (byte bit, bool state);
+    void  NoiceFilterBump       (void);
+    void  NoiseFilter           (byte val);
 
     //#######################################################################
     inline void  KeyDown (byte chan, byte key, byte velocity)

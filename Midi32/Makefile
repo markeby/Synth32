@@ -17,10 +17,10 @@ SHARED := ../Common
 
 # header files
 INCLUDES := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h SynthChannel.h \
-            Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+            Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h Noise.h
 
 # source files
-SOURCES := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp \
+SOURCES := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp Noise.cpp\
            SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
 
 # serial port for uploading

@@ -6,6 +6,7 @@
 
 #include <Streaming.h>
 
+#include "SynthCommon.h"
 #include "I2Cdevices.h"
 
 //#####################################
@@ -41,6 +42,12 @@ extern int  AnalogDiagDevice;
 //#################################################
 #define RXD1    35
 #define TXD1    32
+
+//#################################################
+//  Synth I2C interface starting indexes
+//#################################################
+#define START_OSC_ANALOG        0
+#define START_NOISE_DIG         94
 
 //#################################################
 //   Global system variables
@@ -99,4 +106,5 @@ extern MIDI_SWITCH_MAP      SwitchMapArray[];
 //  I2C bus interfaces
 //#################################################
 extern  I2C_INTERFACE_C I2cDevices;
+
 

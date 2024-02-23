@@ -13,5 +13,5 @@ Disp32/output_esp32s3/
 Midi32/output_doit/
 Schematics-backups/
 Schematics/#auto_saved_files#
-Schematics/Drawings.pdf
+*.pdf
 Schematics/_autosave-*
