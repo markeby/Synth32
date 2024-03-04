@@ -551,9 +551,9 @@ void SYNTH_FRONT_C::SetLevelLFO (byte data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::BeginNoise (byte digital)
+void SYNTH_FRONT_C::BeginNoise (int digital, int analog)
     {
-    Noise.Begin (digital);
+    Noise.Begin (digital, analog);
     }
 
 //#######################################################################
@@ -568,9 +568,18 @@ void  SYNTH_FRONT_C::NoiseFilter (byte val)
     Noise.FilterValue (val);
     }
 
+void SYNTH_FRONT_C::NoiseSelect (byte val)
+    {
+    Noise.NoiseSelect (val);
+    }
 //#######################################################################
 void SYNTH_FRONT_C::NoiceFilterBump ()
     {
     Noise.FilterSelect ((Noise.FilterIs () + 1) % 4);
     }
-
+//#######################################################################
+void SYNTH_FRONT_C::SetNoiseMaxLevel (byte data)
+    {
+    float val = (float)data * PRS_SCALER;
+    Noise.SetMaxLevel (val);
+    }

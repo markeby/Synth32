@@ -17,6 +17,7 @@ public:
     bool WaitWiFi   (void);
     void Setup      (const char* pssid, const char* ppasswd);
     void Begin      (void);
+    String WhoAmI   (void)              { return (IPaddressString); }
 
     inline bool WiFiStatus (void)
         {

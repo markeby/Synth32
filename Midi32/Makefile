@@ -17,17 +17,17 @@ SHARED := ../Common
 
 # header files
 INCLUDES := config.h SerialMonitor.h I2Cdevices.h Settings.h WebOTA.h SynthFront.h SynthChannel.h \
-            Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h Noise.h
+            Osc.h LFOosc.h Test.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h Noise.h Envelope.h
 
 # source files
 SOURCES := $(PROJECT) I2Cdevices.cpp WebOTA.cpp Settings.cpp SerialMonitor.cpp Noise.cpp\
-           SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp
+           SynthFront.cpp SynthChannel.cpp Osc.cpp SynthConfig.cpp LFOosc.cpp Envelope.cpp
 
 # serial port for uploading
 DEFAULT_PORT := COM3
 
 # IP address for uploading
-UPLOAD_OTA := 192.168.1.3
+UPLOAD_OTA := 192.168.1.30
 
 ############################################
 # Configuration for Seeed Studio ESP32c3

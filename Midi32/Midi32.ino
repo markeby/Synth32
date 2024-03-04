@@ -105,7 +105,7 @@ inline void TickState (void)
     if ( --counter0 == 0 )
         {
         digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
-        counter0 = 20;
+        counter0 = 10;
         }
     if ( SystemError || SystemFail )
         {
@@ -170,7 +170,7 @@ void setup (void)
 
         // Setup initial state of synth
         SynthFront.Begin ();
-        SynthFront.BeginNoise (START_NOISE_DIG);
+        SynthFront.BeginNoise (START_NOISE_DIG, START_NOISE_ANALOG);
         for ( int z = 0;  z < 5;  z++ )
             {
             SynthFront.SetOscSustainLevel (z, MAX_MVAL);

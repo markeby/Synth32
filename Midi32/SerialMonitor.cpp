@@ -9,6 +9,7 @@
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "SynthFront.h"
+#include "WebOTA.h"
 
 using namespace SERIAL_MONITOR;
 
@@ -62,7 +63,8 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "      Flash size = " << ESP.getFlashChipSize () << endl;
     Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
     Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
+    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl;
+    Serial << hh << "      Update URL = " << UpdateOta.WhoAmI() << endl << endl;
     Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
     Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
     Serial << hh << "     Runing Time = ";

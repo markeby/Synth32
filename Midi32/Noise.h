@@ -12,15 +12,21 @@
 class NOISE_C
     {
 private:
-    int             FirstDigital;
-    byte            FilterSelected;
+    int     FirstDigital;
+    int     FirstAnallog;
+    byte    FilterSelected;
+    int     FilterDigital[3];
+    int     NoiseWhite;
 
 public:
-             NOISE_C            (void);
-    void     Begin              (int digital);
-    void     FilterValue        (byte val);
-    void     FilterSelect       (byte bit, bool state);
-    void     FilterSelect       (byte seleci);
-    byte     FilterIs           (void)              { return (FilterSelected); }
+            NOISE_C         (void);
+    void    Begin           (int digital, int analog);
+    void    FilterValue     (byte val);
+    void    FilterSelect    (byte bit, bool state);
+    void    FilterSelect    (byte seleci);
+    void    NoiseSelect     (byte sel);
+    void    SetMaxLevel     (float level_percent);
+    byte    FilterIs        (void)
+        { return (FilterSelected); }
     };
 

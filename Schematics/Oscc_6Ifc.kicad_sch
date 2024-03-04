@@ -915,6 +915,90 @@
         )
       )
     )
+    (symbol "LM358_1" (pin_names (offset 0.127)) (in_bom yes) (on_board yes)
+      (property "Reference" "U87" (at 3.0152 3.8654 0)
+        (effects (font (size 0.889 0.889)))
+      )
+      (property "Value" "LM358" (at 3.81 2.54 0)
+        (effects (font (size 0.889 0.889)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_locked" "" (at 0 0 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "ki_keywords" "dual opamp" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_description" "Low-Power, Dual Operational Amplifiers, DIP-8/SOIC-8/TO-99-8" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* TO*99* OnSemi*Micro8* TSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm* MSOP*3x3mm*P0.65mm* SSOP*3.9x4.9mm*P0.635mm* LFCSP*2x2mm*P0.5mm* *SIP* SOIC*5.3x6.2mm*P1.27mm*" (at 0 0 0)
+        (effects (font (size 1.27 1.27)) hide)
+      )
+      (symbol "LM358_1_1_1"
+        (polyline
+          (pts
+            (xy -5.08 5.08)
+            (xy 5.08 0)
+            (xy -5.08 -5.08)
+            (xy -5.08 5.08)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+        (pin output line (at 7.62 0 180) (length 2.54)
+          (name "~" (effects (font (size 0.889 0.889))))
+          (number "1" (effects (font (size 0.889 0.889))))
+        )
+        (pin input line (at -7.62 -2.54 0) (length 2.54)
+          (name "-" (effects (font (size 0.889 0.889))))
+          (number "2" (effects (font (size 0.889 0.889))))
+        )
+        (pin input line (at -7.62 2.54 0) (length 2.54)
+          (name "+" (effects (font (size 0.889 0.889))))
+          (number "3" (effects (font (size 0.889 0.889))))
+        )
+      )
+      (symbol "LM358_1_2_1"
+        (polyline
+          (pts
+            (xy -5.08 5.08)
+            (xy 5.08 0)
+            (xy -5.08 -5.08)
+            (xy -5.08 5.08)
+          )
+          (stroke (width 0.254) (type default))
+          (fill (type background))
+        )
+        (pin input line (at -7.62 2.54 0) (length 2.54)
+          (name "+" (effects (font (size 0.889 0.889))))
+          (number "5" (effects (font (size 0.889 0.889))))
+        )
+        (pin input line (at -7.62 -2.54 0) (length 2.54)
+          (name "-" (effects (font (size 0.889 0.889))))
+          (number "6" (effects (font (size 0.889 0.889))))
+        )
+        (pin output line (at 7.62 0 180) (length 2.54)
+          (name "~" (effects (font (size 0.889 0.889))))
+          (number "7" (effects (font (size 0.889 0.889))))
+        )
+      )
+      (symbol "LM358_1_3_1"
+        (pin power_in line (at -2.54 -7.62 90) (length 3.81)
+          (name "V-" (effects (font (size 1.27 1.27))))
+          (number "4" (effects (font (size 1.27 1.27))))
+        )
+        (pin power_in line (at -2.54 7.62 270) (length 3.81)
+          (name "V+" (effects (font (size 1.27 1.27))))
+          (number "8" (effects (font (size 1.27 1.27))))
+        )
+      )
+    )
     (symbol "Regulator_Linear:LM78L05_TO92" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
       (property "Reference" "U" (at -3.81 3.175 0)
         (effects (font (size 1.27 1.27)))
@@ -3647,7 +3731,7 @@
   (symbol (lib_id "power:-12V") (at 326.39 149.86 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 00f1e570-46e8-434f-9445-368abdb81524)
-    (property "Reference" "#PWR080" (at 328.93 149.86 0)
+    (property "Reference" "#PWR081" (at 328.93 149.86 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 328.93 149.86 90)
@@ -3663,7 +3747,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR080") (unit 1)
+          (reference "#PWR081") (unit 1)
         )
       )
     )
@@ -3698,7 +3782,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 309.88 57.15 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0273b31d-8b20-4e27-8ece-851eeb127245)
-    (property "Reference" "U95" (at 311.0992 51.816 0)
+    (property "Reference" "U97" (at 311.0992 51.816 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 312.42 53.34 0)
@@ -3721,7 +3805,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U95") (unit 2)
+          (reference "U97") (unit 2)
         )
       )
     )
@@ -3730,7 +3814,7 @@
   (symbol (lib_id "power:GNDA") (at 294.64 90.17 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 02cabae6-6482-43ba-abb0-5f010817b713)
-    (property "Reference" "#PWR072" (at 294.64 96.52 0)
+    (property "Reference" "#PWR073" (at 294.64 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 294.5892 93.6244 0)
@@ -3746,7 +3830,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR072") (unit 1)
+          (reference "#PWR073") (unit 1)
         )
       )
     )
@@ -3781,7 +3865,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 309.88 30.48 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 05105a3b-a4d7-4fb0-8ac6-ebbe4df8da49)
-    (property "Reference" "U93" (at 311.0992 25.146 0)
+    (property "Reference" "U95" (at 311.0992 25.146 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 312.42 26.67 0)
@@ -3804,7 +3888,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U93") (unit 2)
+          (reference "U95") (unit 2)
         )
       )
     )
@@ -3839,7 +3923,7 @@
   (symbol (lib_id "power:GNDA") (at 236.22 153.67 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 088e9f14-b346-4e08-bea7-a6ad17461e83)
-    (property "Reference" "#PWR068" (at 236.22 160.02 0)
+    (property "Reference" "#PWR069" (at 236.22 160.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 236.2708 157.1244 0)
@@ -3855,7 +3939,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR068") (unit 1)
+          (reference "#PWR069") (unit 1)
         )
       )
     )
@@ -3864,7 +3948,7 @@
   (symbol (lib_id "power:GNDA") (at 129.54 90.17 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 08a9ca38-34c2-426e-ac4c-aa604232f582)
-    (property "Reference" "#PWR045" (at 129.54 96.52 0)
+    (property "Reference" "#PWR046" (at 129.54 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 129.4892 93.6244 0)
@@ -3880,7 +3964,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR045") (unit 1)
+          (reference "#PWR046") (unit 1)
         )
       )
     )
@@ -3889,7 +3973,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 57.15 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0a8d5276-904f-4543-a993-5a5ea9bbeb24)
-    (property "Reference" "U86" (at 67.945 50.165 0)
+    (property "Reference" "U88" (at 67.945 50.165 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 69.215 51.435 0)
@@ -3912,7 +3996,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U86") (unit 1)
+          (reference "U88") (unit 1)
         )
       )
     )
@@ -3947,7 +4031,7 @@
   (symbol (lib_id "power:GNDA") (at 236.22 115.57 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0dbe9f09-230d-4598-a129-2839a6545827)
-    (property "Reference" "#PWR067" (at 236.22 121.92 0)
+    (property "Reference" "#PWR068" (at 236.22 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 236.2708 119.0244 0)
@@ -3963,7 +4047,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR067") (unit 1)
+          (reference "#PWR068") (unit 1)
         )
       )
     )
@@ -3972,7 +4056,7 @@
   (symbol (lib_id "power:-12V") (at 304.8 92.71 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0e55a6f5-0bf3-4098-8533-6ef6a6320e50)
-    (property "Reference" "#PWR075" (at 302.26 92.71 0)
+    (property "Reference" "#PWR076" (at 302.26 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 302.26 92.71 90)
@@ -3988,7 +4072,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR075") (unit 1)
+          (reference "#PWR076") (unit 1)
         )
       )
     )
@@ -4031,7 +4115,7 @@
   (symbol (lib_id "power:+12V") (at 222.25 87.63 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 10e9afc9-5590-4e43-ab23-4eee1f25d430)
-    (property "Reference" "#PWR060" (at 226.06 87.63 0)
+    (property "Reference" "#PWR061" (at 226.06 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 219.71 87.63 90)
@@ -4047,7 +4131,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR060") (unit 1)
+          (reference "#PWR061") (unit 1)
         )
       )
     )
@@ -4126,7 +4210,7 @@
   (symbol (lib_id "power:+2V5") (at 132.08 45.72 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 14217143-e520-45a2-b697-19e32d1a332f)
-    (property "Reference" "#PWR047" (at 135.89 45.72 0)
+    (property "Reference" "#PWR048" (at 135.89 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 129.1844 45.847 90)
@@ -4142,7 +4226,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR047") (unit 1)
+          (reference "#PWR048") (unit 1)
         )
       )
     )
@@ -4151,7 +4235,7 @@
   (symbol (lib_id "power:GNDA") (at 290.83 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1447d35c-cd76-4011-8960-939a0747613a)
-    (property "Reference" "#PWR070" (at 290.83 45.72 0)
+    (property "Reference" "#PWR071" (at 290.83 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 290.7792 42.8244 0)
@@ -4167,7 +4251,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR070") (unit 1)
+          (reference "#PWR071") (unit 1)
         )
       )
     )
@@ -4176,7 +4260,7 @@
   (symbol (lib_id "power:GNDA") (at 50.8 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 15ed56a0-02fa-463e-b693-6eb6533e8c9f)
-    (property "Reference" "#PWR019" (at 50.8 74.93 0)
+    (property "Reference" "#PWR020" (at 50.8 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 50.7492 72.0344 0)
@@ -4192,7 +4276,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR019") (unit 1)
+          (reference "#PWR020") (unit 1)
         )
       )
     )
@@ -4228,7 +4312,7 @@
   (symbol (lib_id "power:-12V") (at 63.5 67.31 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 17ae7b8b-1477-49d5-803c-f70bb4179671)
-    (property "Reference" "#PWR032" (at 60.96 67.31 0)
+    (property "Reference" "#PWR033" (at 60.96 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 60.96 67.31 90)
@@ -4244,7 +4328,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR032") (unit 1)
+          (reference "#PWR033") (unit 1)
         )
       )
     )
@@ -4289,7 +4373,7 @@
   (symbol (lib_id "power:GNDA") (at 101.6 54.61 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 19807557-ba8e-4edd-89e0-39e2c903bf4c)
-    (property "Reference" "#PWR039" (at 101.6 60.96 0)
+    (property "Reference" "#PWR040" (at 101.6 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 101.5492 58.0644 0)
@@ -4305,20 +4389,20 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR039") (unit 1)
+          (reference "#PWR040") (unit 1)
         )
       )
     )
   )
 
-  (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 57.15 0) (unit 3)
+  (symbol (lib_name "LM358_1") (lib_id "Amplifier_Operational:LM358") (at 67.31 57.15 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 1b8bb769-80cc-40c1-811b-3c7e71fa8048)
-    (property "Reference" "U87" (at 66.04 55.8799 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
+    (property "Reference" "U89" (at 70.3252 53.2846 0)
+      (effects (font (size 0.889 0.889)))
     )
-    (property "Value" "LM358" (at 66.04 57.1499 0)
-      (effects (font (size 1.27 1.27)) (justify left) hide)
+    (property "Value" "LM358" (at 71.12 54.61 0)
+      (effects (font (size 0.889 0.889)))
     )
     (property "Footprint" "" (at 67.31 57.15 0)
       (effects (font (size 1.27 1.27)) hide)
@@ -4337,7 +4421,10 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U87") (unit 3)
+          (reference "U89") (unit 3)
+        )
+        (path "/718f017d-28fe-4e29-b548-40db8e21cec7/8f652f48-b686-47eb-b073-a3ac3f4b2250"
+          (reference "U?") (unit 3)
         )
       )
     )
@@ -4396,7 +4483,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 265.43 134.62 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1dfa2964-f702-4fb2-85ee-472128cdb107)
-    (property "Reference" "C40" (at 265.811 133.0452 0)
+    (property "Reference" "C42" (at 265.811 133.0452 0)
       (effects (font (size 0.889 0.889)) (justify left))
     )
     (property "Value" "10µF" (at 265.9888 136.4488 0)
@@ -4413,7 +4500,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "C40") (unit 1)
+          (reference "C42") (unit 1)
         )
       )
     )
@@ -4446,7 +4533,7 @@
   (symbol (lib_id "power:-12V") (at 139.7 182.88 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1f0de230-2405-4a6c-9302-e2a0a7e84fb5)
-    (property "Reference" "#PWR052" (at 137.16 182.88 0)
+    (property "Reference" "#PWR053" (at 137.16 182.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 137.16 182.88 90)
@@ -4462,7 +4549,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR052") (unit 1)
+          (reference "#PWR053") (unit 1)
         )
       )
     )
@@ -4559,7 +4646,7 @@
   (symbol (lib_id "power:+2V5") (at 54.61 135.89 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 227b44b0-4b19-4d66-a0e5-b73e1a01fbc8)
-    (property "Reference" "#PWR024" (at 58.42 135.89 0)
+    (property "Reference" "#PWR025" (at 58.42 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 51.7144 136.017 90)
@@ -4575,7 +4662,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR024") (unit 1)
+          (reference "#PWR025") (unit 1)
         )
       )
     )
@@ -4584,7 +4671,7 @@
   (symbol (lib_id "Regulator_Linear:LM78L05_TO92") (at 288.29 129.54 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 24d00dbb-5a5b-40bb-a49d-36d0a4ae6d69)
-    (property "Reference" "U96" (at 287.8582 124.6124 0)
+    (property "Reference" "U98" (at 287.8582 124.6124 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LM78L05" (at 288.163 126.3396 0)
@@ -4602,7 +4689,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U96") (unit 1)
+          (reference "U98") (unit 1)
         )
       )
     )
@@ -4611,7 +4698,7 @@
   (symbol (lib_id "power:GNDA") (at 152.4 139.7 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 25b67c38-fbf3-45a0-8686-f8b99768ed2e)
-    (property "Reference" "#PWR054" (at 152.4 146.05 0)
+    (property "Reference" "#PWR055" (at 152.4 146.05 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 152.3492 143.1544 0)
@@ -4627,7 +4714,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR054") (unit 1)
+          (reference "#PWR055") (unit 1)
         )
       )
     )
@@ -4636,7 +4723,7 @@
   (symbol (lib_id "power:GNDA") (at 187.96 54.61 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2ae78c8d-c747-44b0-9f6a-bec646de0e89)
-    (property "Reference" "#PWR055" (at 187.96 60.96 0)
+    (property "Reference" "#PWR056" (at 187.96 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 187.9092 58.0644 0)
@@ -4652,7 +4739,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR055") (unit 1)
+          (reference "#PWR056") (unit 1)
         )
       )
     )
@@ -4661,7 +4748,7 @@
   (symbol (lib_id "power:GNDA") (at 266.7 54.61 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2b8047cd-87ac-4729-871e-08c541d84f65)
-    (property "Reference" "#PWR069" (at 266.7 60.96 0)
+    (property "Reference" "#PWR070" (at 266.7 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 266.6492 58.0644 0)
@@ -4677,7 +4764,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR069") (unit 1)
+          (reference "#PWR070") (unit 1)
         )
       )
     )
@@ -4686,7 +4773,7 @@
   (symbol (lib_id "power:+12V") (at 223.52 21.59 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2b906da1-9afa-40d8-a713-c7d2aad46047)
-    (property "Reference" "#PWR062" (at 227.33 21.59 0)
+    (property "Reference" "#PWR063" (at 227.33 21.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 220.98 21.59 90)
@@ -4702,7 +4789,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR062") (unit 1)
+          (reference "#PWR063") (unit 1)
         )
       )
     )
@@ -4711,7 +4798,7 @@
   (symbol (lib_id "power:+2V5") (at 132.08 135.89 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2dd36bd0-2fe2-4995-8d30-f4c0f80c5dcf)
-    (property "Reference" "#PWR048" (at 135.89 135.89 0)
+    (property "Reference" "#PWR049" (at 135.89 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 129.1844 136.017 90)
@@ -4727,7 +4814,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR048") (unit 1)
+          (reference "#PWR049") (unit 1)
         )
       )
     )
@@ -4786,7 +4873,7 @@
   (symbol (lib_id "power:-12V") (at 63.5 157.48 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 30dbba2d-3781-4b61-ab70-89d7e8576f6b)
-    (property "Reference" "#PWR036" (at 60.96 157.48 0)
+    (property "Reference" "#PWR037" (at 60.96 157.48 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 60.96 157.48 90)
@@ -4802,7 +4889,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR036") (unit 1)
+          (reference "#PWR037") (unit 1)
         )
       )
     )
@@ -4811,7 +4898,7 @@
   (symbol (lib_id "power:+12V") (at 223.52 46.99 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 31928a9d-8894-4019-8da3-7885e68cb95c)
-    (property "Reference" "#PWR064" (at 227.33 46.99 0)
+    (property "Reference" "#PWR065" (at 227.33 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 220.98 46.99 90)
@@ -4827,7 +4914,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR064") (unit 1)
+          (reference "#PWR065") (unit 1)
         )
       )
     )
@@ -4836,7 +4923,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 120.65 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 325441d8-563e-4e42-92aa-33b357c80689)
-    (property "Reference" "U88" (at 66.04 119.3799 0)
+    (property "Reference" "U90" (at 66.04 119.3799 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Value" "LM358" (at 66.04 120.6499 0)
@@ -4859,7 +4946,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U88") (unit 3)
+          (reference "U90") (unit 3)
         )
       )
     )
@@ -4896,7 +4983,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 147.32 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 36593aba-a72f-470e-b6b3-840a72850011)
-    (property "Reference" "U90" (at 67.945 140.335 0)
+    (property "Reference" "U92" (at 67.945 140.335 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 69.215 141.605 0)
@@ -4919,7 +5006,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U90") (unit 1)
+          (reference "U92") (unit 1)
         )
       )
     )
@@ -4940,9 +5027,9 @@
     (property "Datasheet" "~" (at 50.8 59.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e29fa))
-    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e29fa))
-    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e29fa))
+    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e2a06))
+    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e2a06))
+    (pin "" (uuid 26ed8b15-5dbd-45e8-b4a0-8e94682e2a06))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -4955,7 +5042,7 @@
   (symbol (lib_id "power:+2V5") (at 54.61 45.72 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 3c6d49cd-00bb-4018-86c4-d62da354f51d)
-    (property "Reference" "#PWR023" (at 58.42 45.72 0)
+    (property "Reference" "#PWR024" (at 58.42 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 51.7144 45.847 90)
@@ -4971,7 +5058,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR023") (unit 1)
+          (reference "#PWR024") (unit 1)
         )
       )
     )
@@ -5006,7 +5093,7 @@
   (symbol (lib_id "power:-12V") (at 62.23 92.71 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4211d707-8da4-4ced-87bf-0815185ac3b7)
-    (property "Reference" "#PWR026" (at 59.69 92.71 0)
+    (property "Reference" "#PWR027" (at 59.69 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 59.69 92.075 90)
@@ -5022,7 +5109,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR026") (unit 1)
+          (reference "#PWR027") (unit 1)
         )
       )
     )
@@ -5031,7 +5118,7 @@
   (symbol (lib_id "power:+12V") (at 139.7 177.8 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 42ebbd7f-2316-4644-bc7d-9e66bb59446a)
-    (property "Reference" "#PWR051" (at 143.51 177.8 0)
+    (property "Reference" "#PWR052" (at 143.51 177.8 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 137.16 177.8 90)
@@ -5047,7 +5134,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR051") (unit 1)
+          (reference "#PWR052") (unit 1)
         )
       )
     )
@@ -5056,7 +5143,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 120.65 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 44b76606-8bd0-4b81-9865-1151594c870d)
-    (property "Reference" "U89" (at 69.85 115.2398 0)
+    (property "Reference" "U91" (at 69.85 115.2398 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 71.12 116.84 0)
@@ -5079,7 +5166,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U89") (unit 1)
+          (reference "U91") (unit 1)
         )
       )
     )
@@ -5184,9 +5271,9 @@
     (property "Datasheet" "~" (at 128.27 59.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f760))
-    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f760))
-    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f760))
+    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f76c))
+    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f76c))
+    (pin "" (uuid 84fed339-b7d9-4eb4-90eb-bbb5f4c4f76c))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -5199,7 +5286,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 144.78 30.48 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4a8d4fd5-a997-478a-bfa7-658f726de58c)
-    (property "Reference" "U85" (at 145.9992 25.146 0)
+    (property "Reference" "U87" (at 145.9992 25.146 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 147.32 26.67 0)
@@ -5222,7 +5309,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U85") (unit 2)
+          (reference "U87") (unit 2)
         )
       )
     )
@@ -5231,7 +5318,7 @@
   (symbol (lib_id "power:GNDA") (at 27.94 54.61 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 4cc0cb64-11f4-4a22-b766-7bd76c3a6a76)
-    (property "Reference" "#PWR015" (at 27.94 60.96 0)
+    (property "Reference" "#PWR016" (at 27.94 60.96 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 27.8892 58.0644 0)
@@ -5247,7 +5334,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR015") (unit 1)
+          (reference "#PWR016") (unit 1)
         )
       )
     )
@@ -5282,7 +5369,7 @@
   (symbol (lib_id "power:GNDA") (at 48.26 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 50dc2cc7-6e74-4783-acef-72a31278720d)
-    (property "Reference" "#PWR017" (at 48.26 45.72 0)
+    (property "Reference" "#PWR018" (at 48.26 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 48.2092 42.8244 0)
@@ -5298,7 +5385,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR017") (unit 1)
+          (reference "#PWR018") (unit 1)
         )
       )
     )
@@ -5359,7 +5446,7 @@
   (symbol (lib_id "power:GNDA") (at 293.37 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5514f165-f4b5-4a1c-b0a6-a117319c926d)
-    (property "Reference" "#PWR071" (at 293.37 74.93 0)
+    (property "Reference" "#PWR072" (at 293.37 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 293.3192 72.0344 0)
@@ -5375,7 +5462,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR071") (unit 1)
+          (reference "#PWR072") (unit 1)
         )
       )
     )
@@ -5410,7 +5497,7 @@
   (symbol (lib_id "power:GNDA") (at 128.27 158.75 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 560f8df9-a1a1-42df-8851-30c868735c4b)
-    (property "Reference" "#PWR044" (at 128.27 165.1 0)
+    (property "Reference" "#PWR045" (at 128.27 165.1 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 128.2192 162.2044 0)
@@ -5426,7 +5513,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR044") (unit 1)
+          (reference "#PWR045") (unit 1)
         )
       )
     )
@@ -5435,7 +5522,7 @@
   (symbol (lib_id "power:-12V") (at 223.52 39.37 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 56aaf651-95b0-4cc6-8919-83ca7a0c5580)
-    (property "Reference" "#PWR063" (at 220.98 39.37 0)
+    (property "Reference" "#PWR064" (at 220.98 39.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 220.98 39.37 90)
@@ -5451,7 +5538,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR063") (unit 1)
+          (reference "#PWR064") (unit 1)
         )
       )
     )
@@ -5512,7 +5599,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 147.32 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 5ab446e2-67df-4639-9c5c-dfb4be36e37c)
-    (property "Reference" "U91" (at 66.04 146.0499 0)
+    (property "Reference" "U93" (at 66.04 146.0499 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Value" "LM358" (at 66.04 147.3199 0)
@@ -5535,7 +5622,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U91") (unit 3)
+          (reference "U93") (unit 3)
         )
       )
     )
@@ -5544,7 +5631,7 @@
   (symbol (lib_id "power:+12V") (at 139.7 87.63 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5fa30977-3929-4886-8fbb-9a7849f03605)
-    (property "Reference" "#PWR049" (at 143.51 87.63 0)
+    (property "Reference" "#PWR050" (at 143.51 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 137.16 87.63 90)
@@ -5560,7 +5647,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR049") (unit 1)
+          (reference "#PWR050") (unit 1)
         )
       )
     )
@@ -5569,7 +5656,7 @@
   (symbol (lib_id "power:+12V") (at 62.23 177.8 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5fbe8a83-b412-437b-b44f-e7a239f1ebf6)
-    (property "Reference" "#PWR027" (at 66.04 177.8 0)
+    (property "Reference" "#PWR028" (at 66.04 177.8 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 59.69 177.8 90)
@@ -5585,7 +5672,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR027") (unit 1)
+          (reference "#PWR028") (unit 1)
         )
       )
     )
@@ -5594,7 +5681,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 30.48 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 6373277d-6708-44a5-acd9-30f809286c2b)
-    (property "Reference" "U84" (at 66.04 29.2099 0)
+    (property "Reference" "U86" (at 66.04 29.2099 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Value" "LM358" (at 66.04 30.4799 0)
@@ -5617,7 +5704,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U84") (unit 3)
+          (reference "U86") (unit 3)
         )
       )
     )
@@ -5626,7 +5713,7 @@
   (symbol (lib_id "power:-12V") (at 139.7 92.71 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 640980b0-7cd8-4491-bd6a-77b726057fec)
-    (property "Reference" "#PWR050" (at 137.16 92.71 0)
+    (property "Reference" "#PWR051" (at 137.16 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 137.16 92.71 90)
@@ -5642,7 +5729,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR050") (unit 1)
+          (reference "#PWR051") (unit 1)
         )
       )
     )
@@ -5857,7 +5944,7 @@
   (symbol (lib_id "power:-12V") (at 222.25 92.71 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6f96d5ed-d133-4422-b541-d5bdc65a0863)
-    (property "Reference" "#PWR061" (at 219.71 92.71 0)
+    (property "Reference" "#PWR062" (at 219.71 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 219.71 92.075 90)
@@ -5873,7 +5960,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR061") (unit 1)
+          (reference "#PWR062") (unit 1)
         )
       )
     )
@@ -5882,7 +5969,7 @@
   (symbol (lib_id "power:+2V5") (at 214.63 45.72 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 70442ee7-4334-4897-af51-56d5b6b6438c)
-    (property "Reference" "#PWR059" (at 218.44 45.72 0)
+    (property "Reference" "#PWR060" (at 218.44 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 211.7344 45.847 90)
@@ -5898,7 +5985,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR059") (unit 1)
+          (reference "#PWR060") (unit 1)
         )
       )
     )
@@ -5907,7 +5994,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 227.33 57.15 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 71001819-289b-4f6b-8f92-366cdb97cc19)
-    (property "Reference" "U94" (at 226.06 55.8799 0)
+    (property "Reference" "U96" (at 226.06 55.8799 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Value" "LM358" (at 226.06 57.1499 0)
@@ -5930,7 +6017,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U94") (unit 3)
+          (reference "U96") (unit 3)
         )
       )
     )
@@ -6019,7 +6106,7 @@
   (symbol (lib_id "power:+12V") (at 63.5 46.99 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7789280a-322f-41e9-a2bb-ea08935baea1)
-    (property "Reference" "#PWR031" (at 67.31 46.99 0)
+    (property "Reference" "#PWR032" (at 67.31 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 60.96 46.99 90)
@@ -6035,7 +6122,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR031") (unit 1)
+          (reference "#PWR032") (unit 1)
         )
       )
     )
@@ -6108,9 +6195,9 @@
     (property "Datasheet" "~" (at 50.8 149.86 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c03))
-    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c03))
-    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c03))
+    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c0f))
+    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c0f))
+    (pin "" (uuid 80e41cbf-17f2-408d-9ed1-d064fc579c0f))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -6149,7 +6236,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 67.31 30.48 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7d5bfd68-312d-4a91-93e9-4ebcfaa09123)
-    (property "Reference" "U85" (at 69.85 25.0698 0)
+    (property "Reference" "U87" (at 69.85 25.0698 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 71.12 26.67 0)
@@ -6172,7 +6259,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U85") (unit 1)
+          (reference "U87") (unit 1)
         )
       )
     )
@@ -6219,9 +6306,9 @@
     (property "Datasheet" "~" (at 128.27 149.86 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5cf8))
-    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5cf8))
-    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5cf8))
+    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5d04))
+    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5d04))
+    (pin "" (uuid dfeb4be0-7d9a-4f90-9238-b0de3f4b5d04))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -6234,7 +6321,7 @@
   (symbol (lib_id "power:GNDA") (at 327.66 142.24 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7ee12c93-6251-4feb-9389-3432f7b735c1)
-    (property "Reference" "#PWR081" (at 327.66 148.59 0)
+    (property "Reference" "#PWR082" (at 327.66 148.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 327.6092 145.6944 0)
@@ -6250,7 +6337,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR081") (unit 1)
+          (reference "#PWR082") (unit 1)
         )
       )
     )
@@ -6335,7 +6422,7 @@
   (symbol (lib_id "power:GNDA") (at 53.34 90.17 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 896d544a-b6c7-43cd-8d96-76b680a50d0a)
-    (property "Reference" "#PWR021" (at 53.34 96.52 0)
+    (property "Reference" "#PWR022" (at 53.34 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 53.2892 93.6244 0)
@@ -6351,7 +6438,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR021") (unit 1)
+          (reference "#PWR022") (unit 1)
         )
       )
     )
@@ -6360,7 +6447,7 @@
   (symbol (lib_id "power:+12V") (at 63.5 111.76 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8a21484a-936d-4c3c-b044-2cbb6fe2614b)
-    (property "Reference" "#PWR033" (at 67.31 111.76 0)
+    (property "Reference" "#PWR034" (at 67.31 111.76 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 60.96 111.76 90)
@@ -6376,7 +6463,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR033") (unit 1)
+          (reference "#PWR034") (unit 1)
         )
       )
     )
@@ -6385,7 +6472,7 @@
   (symbol (lib_id "power:GNDA") (at 101.6 144.78 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8b03d16e-4d96-4aa4-b1af-d63d07986f02)
-    (property "Reference" "#PWR040" (at 101.6 151.13 0)
+    (property "Reference" "#PWR041" (at 101.6 151.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 101.5492 148.2344 0)
@@ -6401,7 +6488,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR040") (unit 1)
+          (reference "#PWR041") (unit 1)
         )
       )
     )
@@ -6410,7 +6497,7 @@
   (symbol (lib_id "power:GNDA") (at 50.8 158.75 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8b07a290-7aaf-46db-934c-0caad3777790)
-    (property "Reference" "#PWR020" (at 50.8 165.1 0)
+    (property "Reference" "#PWR021" (at 50.8 165.1 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 50.7492 162.2044 0)
@@ -6426,7 +6513,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR020") (unit 1)
+          (reference "#PWR021") (unit 1)
         )
       )
     )
@@ -6547,7 +6634,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 227.33 30.48 0) (unit 3)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 91dbef98-2264-45a0-8aa0-1a6e64d61be5)
-    (property "Reference" "U92" (at 226.06 29.2099 0)
+    (property "Reference" "U94" (at 226.06 29.2099 0)
       (effects (font (size 1.27 1.27)) (justify left) hide)
     )
     (property "Value" "LM358" (at 226.06 30.4799 0)
@@ -6570,7 +6657,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U92") (unit 3)
+          (reference "U94") (unit 3)
         )
       )
     )
@@ -6579,7 +6666,7 @@
   (symbol (lib_id "power:GNDA") (at 74.93 139.7 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 92795d7b-7e9d-4e32-a201-977a9e204a43)
-    (property "Reference" "#PWR038" (at 74.93 146.05 0)
+    (property "Reference" "#PWR039" (at 74.93 146.05 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 74.8792 143.1544 0)
@@ -6595,7 +6682,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR038") (unit 1)
+          (reference "#PWR039") (unit 1)
         )
       )
     )
@@ -6604,7 +6691,7 @@
   (symbol (lib_id "Device:C_Small") (at 275.59 134.62 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 956e91c3-b43f-4ec6-acce-4dfd2d9bd312)
-    (property "Reference" "C42" (at 272.6944 133.0198 0)
+    (property "Reference" "C44" (at 272.6944 133.0198 0)
       (effects (font (size 0.889 0.889)) (justify left))
     )
     (property "Value" "0.1µF" (at 270.9418 136.1694 0)
@@ -6621,7 +6708,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "C42") (unit 1)
+          (reference "C44") (unit 1)
         )
       )
     )
@@ -6630,7 +6717,7 @@
   (symbol (lib_id "power:GNDA") (at 317.5 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9dce3fa6-30f5-4044-b6cd-6be8756d827d)
-    (property "Reference" "#PWR076" (at 317.5 55.88 0)
+    (property "Reference" "#PWR077" (at 317.5 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 317.4492 52.9844 0)
@@ -6646,7 +6733,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR076") (unit 1)
+          (reference "#PWR077") (unit 1)
         )
       )
     )
@@ -6655,7 +6742,7 @@
   (symbol (lib_id "power:+5V") (at 326.39 125.73 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9e7ee7d0-6fb0-431e-9bce-c7f19dadf4f6)
-    (property "Reference" "#PWR078" (at 322.58 125.73 0)
+    (property "Reference" "#PWR079" (at 322.58 125.73 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+5V" (at 328.93 125.73 90)
@@ -6671,7 +6758,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR078") (unit 1)
+          (reference "#PWR079") (unit 1)
         )
       )
     )
@@ -6680,7 +6767,7 @@
   (symbol (lib_id "power:GNDA") (at 152.4 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 9ed46b9a-5bd8-4a3c-bf17-ba431c7a6fb0)
-    (property "Reference" "#PWR053" (at 152.4 55.88 0)
+    (property "Reference" "#PWR054" (at 152.4 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 152.3492 52.9844 0)
@@ -6696,7 +6783,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR053") (unit 1)
+          (reference "#PWR054") (unit 1)
         )
       )
     )
@@ -6731,7 +6818,7 @@
   (symbol (lib_id "power:GNDA") (at 208.28 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a0127e36-927b-4c25-89ec-bdf025f8e4a0)
-    (property "Reference" "#PWR056" (at 208.28 45.72 0)
+    (property "Reference" "#PWR057" (at 208.28 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 208.2292 42.8244 0)
@@ -6747,7 +6834,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR056") (unit 1)
+          (reference "#PWR057") (unit 1)
         )
       )
     )
@@ -6756,7 +6843,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 144.78 120.65 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a0561abc-9e76-422f-bf8d-f5b342903e37)
-    (property "Reference" "U89" (at 145.9992 115.316 0)
+    (property "Reference" "U91" (at 145.9992 115.316 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 147.32 116.84 0)
@@ -6779,7 +6866,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U89") (unit 2)
+          (reference "U91") (unit 2)
         )
       )
     )
@@ -6788,7 +6875,7 @@
   (symbol (lib_id "power:-12V") (at 62.23 182.88 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a06bf061-1f0b-415e-a5f1-4ded313be4e6)
-    (property "Reference" "#PWR028" (at 59.69 182.88 0)
+    (property "Reference" "#PWR029" (at 59.69 182.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 59.69 182.245 90)
@@ -6804,7 +6891,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR028") (unit 1)
+          (reference "#PWR029") (unit 1)
         )
       )
     )
@@ -6825,9 +6912,9 @@
     (property "Datasheet" "~" (at 210.82 59.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a23f))
-    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a23f))
-    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a23f))
+    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a24b))
+    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a24b))
+    (pin "" (uuid 33f2a3f4-db40-43d3-a0dc-ee275621a24b))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -6840,7 +6927,7 @@
   (symbol (lib_id "power:GNDA") (at 27.94 144.78 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a1dbd1fa-925b-4c92-a3c5-e0fbb1e56e3e)
-    (property "Reference" "#PWR016" (at 27.94 151.13 0)
+    (property "Reference" "#PWR017" (at 27.94 151.13 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 27.8892 148.2344 0)
@@ -6856,7 +6943,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR016") (unit 1)
+          (reference "#PWR017") (unit 1)
         )
       )
     )
@@ -6865,7 +6952,7 @@
   (symbol (lib_id "power:GNDA") (at 125.73 39.37 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a2031e11-b401-4630-9157-3760f1c565e9)
-    (property "Reference" "#PWR041" (at 125.73 45.72 0)
+    (property "Reference" "#PWR042" (at 125.73 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 125.6792 42.8244 0)
@@ -6881,7 +6968,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR041") (unit 1)
+          (reference "#PWR042") (unit 1)
         )
       )
     )
@@ -6916,7 +7003,7 @@
   (symbol (lib_id "power:GNDA") (at 48.26 129.54 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a36cf84f-b834-4f7d-b060-d28e92e0d2a8)
-    (property "Reference" "#PWR018" (at 48.26 135.89 0)
+    (property "Reference" "#PWR019" (at 48.26 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 48.2092 132.9944 0)
@@ -6932,7 +7019,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR018") (unit 1)
+          (reference "#PWR019") (unit 1)
         )
       )
     )
@@ -6941,7 +7028,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 144.78 147.32 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a38db30e-d95a-46f2-bb46-edf852ab8692)
-    (property "Reference" "U90" (at 145.9992 141.986 0)
+    (property "Reference" "U92" (at 145.9992 141.986 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 147.32 143.51 0)
@@ -6964,7 +7051,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U90") (unit 2)
+          (reference "U92") (unit 2)
         )
       )
     )
@@ -6985,9 +7072,9 @@
     (property "Datasheet" "~" (at 293.37 59.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b1d))
-    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b1d))
-    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b1d))
+    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b29))
+    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b29))
+    (pin "" (uuid 44e3085f-d3b4-4905-aab3-2288cfaf2b29))
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
@@ -7052,7 +7139,7 @@
   (symbol (lib_id "power:GNDA") (at 213.36 90.17 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b006298e-f5a7-4a5b-ba5c-c494f9594fdf)
-    (property "Reference" "#PWR058" (at 213.36 96.52 0)
+    (property "Reference" "#PWR059" (at 213.36 96.52 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 213.3092 93.6244 0)
@@ -7068,7 +7155,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR058") (unit 1)
+          (reference "#PWR059") (unit 1)
         )
       )
     )
@@ -7103,7 +7190,7 @@
   (symbol (lib_id "Device:C_Small") (at 302.26 134.62 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b4abffd7-9a97-483b-bc01-36684ff8208c)
-    (property "Reference" "C44" (at 299.3644 133.0198 0)
+    (property "Reference" "C46" (at 299.3644 133.0198 0)
       (effects (font (size 0.889 0.889)) (justify left))
     )
     (property "Value" "0.1µF" (at 297.6118 136.1694 0)
@@ -7120,7 +7207,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "C44") (unit 1)
+          (reference "C46") (unit 1)
         )
       )
     )
@@ -7129,7 +7216,7 @@
   (symbol (lib_id "Device:C_Small") (at 275.59 144.78 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b5253458-1d57-4fb2-afc5-c729a7d54701)
-    (property "Reference" "C43" (at 272.6944 143.1798 0)
+    (property "Reference" "C45" (at 272.6944 143.1798 0)
       (effects (font (size 0.889 0.889)) (justify left))
     )
     (property "Value" "0.1µF" (at 270.9418 146.3294 0)
@@ -7146,7 +7233,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "C43") (unit 1)
+          (reference "C45") (unit 1)
         )
       )
     )
@@ -7215,7 +7302,7 @@
   (symbol (lib_id "power:GNDA") (at 125.73 129.54 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b6c4df81-ee91-44af-8a2d-9fc2c85ab6f1)
-    (property "Reference" "#PWR042" (at 125.73 135.89 0)
+    (property "Reference" "#PWR043" (at 125.73 135.89 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 125.6792 132.9944 0)
@@ -7231,7 +7318,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR042") (unit 1)
+          (reference "#PWR043") (unit 1)
         )
       )
     )
@@ -7240,7 +7327,7 @@
   (symbol (lib_id "power:+12V") (at 62.23 87.63 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b6ea1d4b-e43c-4d30-9084-0a8d4ea5c7d4)
-    (property "Reference" "#PWR025" (at 66.04 87.63 0)
+    (property "Reference" "#PWR026" (at 66.04 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 59.69 87.63 90)
@@ -7256,7 +7343,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR025") (unit 1)
+          (reference "#PWR026") (unit 1)
         )
       )
     )
@@ -7265,7 +7352,7 @@
   (symbol (lib_id "power:+2V5") (at 326.39 129.54 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ba995895-4d3a-4955-abe6-66bd71057907)
-    (property "Reference" "#PWR079" (at 322.58 129.54 0)
+    (property "Reference" "#PWR080" (at 322.58 129.54 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 329.2856 129.667 90)
@@ -7281,7 +7368,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR079") (unit 1)
+          (reference "#PWR080") (unit 1)
         )
       )
     )
@@ -7342,7 +7429,7 @@
   (symbol (lib_id "power:+2V5") (at 297.18 45.72 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid bd250cf6-5c7b-4e06-a1c9-c9e5d998818a)
-    (property "Reference" "#PWR073" (at 300.99 45.72 0)
+    (property "Reference" "#PWR074" (at 300.99 45.72 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+2V5" (at 294.2844 45.847 90)
@@ -7358,7 +7445,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR073") (unit 1)
+          (reference "#PWR074") (unit 1)
         )
       )
     )
@@ -7367,7 +7454,7 @@
   (symbol (lib_id "power:-12V") (at 223.52 67.31 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid c63dd5fa-66df-4aa0-89fc-82f84f4ec356)
-    (property "Reference" "#PWR065" (at 220.98 67.31 0)
+    (property "Reference" "#PWR066" (at 220.98 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 220.98 67.31 90)
@@ -7383,7 +7470,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR065") (unit 1)
+          (reference "#PWR066") (unit 1)
         )
       )
     )
@@ -7392,7 +7479,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 227.33 30.48 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid c8cccce9-4535-4bf8-a735-2dc2b20cc9ad)
-    (property "Reference" "U93" (at 229.87 25.0698 0)
+    (property "Reference" "U95" (at 229.87 25.0698 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 231.14 26.67 0)
@@ -7415,7 +7502,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U93") (unit 1)
+          (reference "U95") (unit 1)
         )
       )
     )
@@ -7534,7 +7621,7 @@
   (symbol (lib_id "power:+12V") (at 304.8 87.63 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid cfd06f2b-15bb-4363-bd35-44c06e76e097)
-    (property "Reference" "#PWR074" (at 308.61 87.63 0)
+    (property "Reference" "#PWR075" (at 308.61 87.63 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 302.26 87.63 90)
@@ -7550,7 +7637,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR074") (unit 1)
+          (reference "#PWR075") (unit 1)
         )
       )
     )
@@ -7607,7 +7694,7 @@
   (symbol (lib_id "power:+12V") (at 63.5 137.16 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d81a248a-729a-4a5d-b952-96477f09bd96)
-    (property "Reference" "#PWR035" (at 67.31 137.16 0)
+    (property "Reference" "#PWR036" (at 67.31 137.16 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 60.96 137.16 90)
@@ -7623,7 +7710,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR035") (unit 1)
+          (reference "#PWR036") (unit 1)
         )
       )
     )
@@ -7632,7 +7719,7 @@
   (symbol (lib_id "power:-12V") (at 63.5 39.37 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid d93c789e-c7b4-43b5-893f-7caca6e59ace)
-    (property "Reference" "#PWR030" (at 60.96 39.37 0)
+    (property "Reference" "#PWR031" (at 60.96 39.37 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 60.96 39.37 90)
@@ -7648,7 +7735,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR030") (unit 1)
+          (reference "#PWR031") (unit 1)
         )
       )
     )
@@ -7657,7 +7744,7 @@
   (symbol (lib_id "power:GNDA") (at 234.95 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid da20da89-48ec-4b68-aa9a-f62685b79c67)
-    (property "Reference" "#PWR066" (at 234.95 55.88 0)
+    (property "Reference" "#PWR067" (at 234.95 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 234.8992 52.9844 0)
@@ -7673,7 +7760,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR066") (unit 1)
+          (reference "#PWR067") (unit 1)
         )
       )
     )
@@ -7682,7 +7769,7 @@
   (symbol (lib_id "power:+12V") (at 63.5 21.59 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid dc0bb1cd-c412-42b4-899a-27dd80f8da96)
-    (property "Reference" "#PWR029" (at 67.31 21.59 0)
+    (property "Reference" "#PWR030" (at 67.31 21.59 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 60.96 21.59 90)
@@ -7698,7 +7785,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR029") (unit 1)
+          (reference "#PWR030") (unit 1)
         )
       )
     )
@@ -7707,7 +7794,7 @@
   (symbol (lib_id "power:GNDA") (at 128.27 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid dc44ab50-afc3-4043-9e00-7ef2a10a23fb)
-    (property "Reference" "#PWR043" (at 128.27 74.93 0)
+    (property "Reference" "#PWR044" (at 128.27 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 128.2192 72.0344 0)
@@ -7723,7 +7810,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR043") (unit 1)
+          (reference "#PWR044") (unit 1)
         )
       )
     )
@@ -7768,7 +7855,7 @@
   (symbol (lib_id "power:GNDA") (at 74.93 49.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid df2b3749-1477-4b20-ae6d-e50a2a86c709)
-    (property "Reference" "#PWR037" (at 74.93 55.88 0)
+    (property "Reference" "#PWR038" (at 74.93 55.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 74.8792 52.9844 0)
@@ -7784,7 +7871,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR037") (unit 1)
+          (reference "#PWR038") (unit 1)
         )
       )
     )
@@ -7827,7 +7914,7 @@
   (symbol (lib_id "power:GNDA") (at 129.54 180.34 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e7d633ac-6a52-4896-b119-f212dc298f8a)
-    (property "Reference" "#PWR046" (at 129.54 186.69 0)
+    (property "Reference" "#PWR047" (at 129.54 186.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 129.4892 183.7944 0)
@@ -7843,7 +7930,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR046") (unit 1)
+          (reference "#PWR047") (unit 1)
         )
       )
     )
@@ -7878,7 +7965,7 @@
   (symbol (lib_id "Device:C_Polarized_Small_US") (at 265.43 144.78 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e8214367-0d3c-4ec7-9d20-79c18b4db41b)
-    (property "Reference" "C41" (at 265.811 143.2052 0)
+    (property "Reference" "C43" (at 265.811 143.2052 0)
       (effects (font (size 0.889 0.889)) (justify left))
     )
     (property "Value" "10µF" (at 265.9888 146.6088 0)
@@ -7895,7 +7982,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "C41") (unit 1)
+          (reference "C43") (unit 1)
         )
       )
     )
@@ -7904,7 +7991,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 227.33 57.15 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e850fee9-b109-425e-b206-bcc8f86036a8)
-    (property "Reference" "U95" (at 227.965 50.165 0)
+    (property "Reference" "U97" (at 227.965 50.165 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 229.235 51.435 0)
@@ -7927,7 +8014,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U95") (unit 1)
+          (reference "U97") (unit 1)
         )
       )
     )
@@ -7998,7 +8085,7 @@
   (symbol (lib_id "Amplifier_Operational:LM358") (at 144.78 57.15 0) (unit 2)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid eb8efa6a-71d8-4cd3-8b49-640ef3f62f39)
-    (property "Reference" "U86" (at 145.9992 51.816 0)
+    (property "Reference" "U88" (at 145.9992 51.816 0)
       (effects (font (size 0.889 0.889)))
     )
     (property "Value" "LMT358N" (at 147.32 53.34 0)
@@ -8021,7 +8108,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "U86") (unit 2)
+          (reference "U88") (unit 2)
         )
       )
     )
@@ -8030,7 +8117,7 @@
   (symbol (lib_id "power:GNDA") (at 53.34 180.34 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ebdf38fe-d8e0-416a-bc91-41d01962328b)
-    (property "Reference" "#PWR022" (at 53.34 186.69 0)
+    (property "Reference" "#PWR023" (at 53.34 186.69 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 53.2892 183.7944 0)
@@ -8046,7 +8133,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR022") (unit 1)
+          (reference "#PWR023") (unit 1)
         )
       )
     )
@@ -8055,7 +8142,7 @@
   (symbol (lib_id "power:+12V") (at 326.39 121.92 270) (mirror x) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f0ce27f9-1b31-4975-b38b-c56581df9dd9)
-    (property "Reference" "#PWR077" (at 322.58 121.92 0)
+    (property "Reference" "#PWR078" (at 322.58 121.92 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+12V" (at 328.93 121.92 90)
@@ -8071,7 +8158,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR077") (unit 1)
+          (reference "#PWR078") (unit 1)
         )
       )
     )
@@ -8130,7 +8217,7 @@
   (symbol (lib_id "power:-12V") (at 63.5 129.54 90) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid fcacf7a9-2024-4587-9487-1e7ebc620127)
-    (property "Reference" "#PWR034" (at 60.96 129.54 0)
+    (property "Reference" "#PWR035" (at 60.96 129.54 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "-12V" (at 60.96 129.54 90)
@@ -8146,7 +8233,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR034") (unit 1)
+          (reference "#PWR035") (unit 1)
         )
       )
     )
@@ -8155,7 +8242,7 @@
   (symbol (lib_id "power:GNDA") (at 210.82 68.58 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid fce10779-0052-454b-9435-2ec25c88a434)
-    (property "Reference" "#PWR057" (at 210.82 74.93 0)
+    (property "Reference" "#PWR058" (at 210.82 74.93 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GNDA" (at 210.7692 72.0344 0)
@@ -8171,7 +8258,7 @@
     (instances
       (project "Schematics-Midi32"
         (path "/718f017d-28fe-4e29-b548-40db8e21cec7/83c18e5e-80d6-4888-9fad-0f98ae45ba50"
-          (reference "#PWR057") (unit 1)
+          (reference "#PWR058") (unit 1)
         )
       )
     )

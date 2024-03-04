@@ -13,6 +13,7 @@
 void SetOscMixers (byte ch, byte data)
     {
     SynthFront.SetOscMaxLevel (ch, data);
+    SynthFront.SetNoiseMaxLevel (data);
     }
 
 //########################################################
@@ -81,18 +82,28 @@ void SetMinusRangeLFO (byte ch, byte state)
     SynthFront.LFOrange (false);
     }
 
+//########################################################
 void SetNoiseFilter0 (byte ch, byte state)
     {
     SynthFront.NoiseFilter (0, state > 120);
     }
 
+//########################################################
 void SetNoiseFilter1 (byte ch, byte state)
     {
     SynthFront.NoiseFilter (1, state > 120);
     }
+
+//########################################################
 void SetNoiseFilter (byte ch, byte state)
     {
     SynthFront.NoiseFilter (state);
+    }
+
+//########################################################
+void SetWhiteNoise (byte ch, byte state)
+    {
+    SynthFront.NoiseSelect(state);
     }
 
 //########################################################
@@ -150,9 +161,9 @@ MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
         { 10, "Mod Sawtooth",       SetModSwitch     },
         { 11, "Mod Pulse   ",       SetModSwitch     },
         { 12, "Mod Square",         SetModSwitch     },
-        { 13, "Switch #14",         nullptr          },
-        { 14, "Switch #15",         SetNoiseFilter0  },
-        { 15, "Switch #16",         SetNoiseFilter1  },
+        { 13, "White/!Pink noise",  SetWhiteNoise    },
+        { 14, "Noise filter 0",     SetNoiseFilter0  },
+        { 15, "Noise filter 1",     SetNoiseFilter1  },
         { 16, "Switch #17",         nullptr          },
         { 17, "Switch #18",         nullptr          },
         { 18, "Switch #19",         nullptr          },

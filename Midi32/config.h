@@ -47,7 +47,8 @@ extern int  AnalogDiagDevice;
 //  Synth I2C interface starting indexes
 //#################################################
 #define START_OSC_ANALOG        0
-#define START_NOISE_DIG         94
+#define START_NOISE_DIG         88
+#define START_NOISE_ANALOG      68
 
 //#################################################
 //   Global system variables
@@ -67,6 +68,7 @@ extern float    AverageDeltaTime;
 #define OSC_MIXER_COUNT     5
 #define FULL_KEYS           128
 #define DA_RANGE            4096
+#define MAX_DA              (DA_RANGE - 1)
 #define NOTES_PER_OCTAVE    12
 
 #define SM_FADER            16

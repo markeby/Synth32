@@ -118,6 +118,7 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="Envelope.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="LFOosc.cpp"/>
             <F N="Noise.cpp"/>
@@ -141,6 +142,7 @@
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
             <F N="config.h"/>
+            <F N="Envelope.h"/>
             <F N="I2Cdevices.h"/>
             <F N="LFOosc.h"/>
             <F N="Noise.h"/>

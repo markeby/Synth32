@@ -113,10 +113,12 @@ public:
     void  SetOscSustainTime     (byte data);
     void  SetOscReleaseTime     (byte data);
     void  DISP32UpdateAll       (void);
-    void  BeginNoise            (byte digital);
+    void  BeginNoise            (int digital, int analog);
     void  NoiseFilter           (byte bit, bool state);
+    void  NoiseSelect           (byte val);
     void  NoiceFilterBump       (void);
     void  NoiseFilter           (byte val);
+    void  SetNoiseMaxLevel      (byte data);
 
     //#######################################################################
     inline void  KeyDown (byte chan, byte key, byte velocity)
