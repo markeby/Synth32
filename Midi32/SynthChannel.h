@@ -12,14 +12,15 @@
 class SYNTH_CHANNEL_C
     {
 private:
-    SYNTH_OSC_C     Osc;                   // oscillator class
+    SYNTH_OSC_C*    OscP;                   // oscillator class
     byte            Key;
     int32_t         ActiveTimer;
     int             FirstDevice;
     int             Number;
+    byte            UseCount;
 
 public:
-             SYNTH_CHANNEL_C    (int num, int first_device);
+             SYNTH_CHANNEL_C    (int num, int first_device, ENVELOPE_GENERATOR_C& envgen);
     void     Begin              (void);
     void     Loop               (void);
     void     SetTuning          (void);
@@ -28,6 +29,6 @@ public:
     void     Clear              (void);
     bool     NoteClear          (byte key);
 
-    SYNTH_OSC_C* pOsc   (void)  { return (&Osc); }
+    SYNTH_OSC_C* pOsc   (void)  { return (OscP); }
     };
 

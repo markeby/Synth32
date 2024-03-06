@@ -10,8 +10,8 @@
 
 using namespace std;
 
-#define DEBUG(args...) {if (DebugSynth) { printf ("[ENV]{%s} - ", Name); printf (args); printf("\n");}}
-#define EDEBUG(args...) {if (DebugSynth) { printf ("[ENV]{%s} - %s - ",Name,StateLabel[(int)State]); printf (args); printf("\n");}}
+#define DEBUG(args...) {if (DebugSynth) { printf ("[ENV-%d]{%s} - ",Index,Name);printf(args);printf("\n");}}
+#define EDEBUG(args...) {if (DebugSynth) { printf ("[ENV=%d]{%s} - %s - ",Index,Name,StateLabel[(int)State]);printf(args);printf("\n");}}
 
 String StateLabel[] = { "IDLE", "START", "ATTACK", "DECAY", "SUSTAIN", "RELEASE" };
 #define TIME_THRESHOLD  10.0
@@ -19,27 +19,34 @@ String StateLabel[] = { "IDLE", "START", "ATTACK", "DECAY", "SUSTAIN", "RELEASE"
 //#######################################################################
 ENVELOPE_GENERATOR_C::ENVELOPE_GENERATOR_C ()
     {
-
     }
 
 //#######################################################################
-ENVELOPE_C&  ENVELOPE_GENERATOR_C::NewADSR (String name, uint16_t device)
+ENVELOPE_C*  ENVELOPE_GENERATOR_C::NewADSR (ETYPE etype, byte index, String name, uint16_t device, byte& usecount)
     {
-    ENVELOPE_C adsl (name, device);
+    ENVELOPE_C adsl (etype, index, name, device, usecount);
     Envelopes.push_back (adsl);
-    return (Envelopes.back ());
+    return (&(Envelopes.back ()));
     }
 
+//#######################################################################
 void  ENVELOPE_GENERATOR_C::Loop ()
     {
     for ( deque<ENVELOPE_C>::iterator it = Envelopes.begin ();  it != Envelopes.end();  ++it )
-    it->Process (DeltaTime);
+        {
+        it->Process (DeltaTime);
+        it->Update ();
+        }
+    I2cDevices.UpdateDigital ();
+    I2cDevices.UpdateAnalog  ();     // Update D/A ports
     }
 //#######################################################################
-ENVELOPE_C::ENVELOPE_C (String name, int16_t device)
+ENVELOPE_C::ENVELOPE_C (ETYPE etype, byte index, String name, int16_t device, byte& usecount) : UseCount (usecount)
     {
     Name            = name;
     DeviceChannel   = device;
+    Type            = etype;
+    Index           = index;
     CurrentLevel    = 0;
     BaseLevel       = 0;
     PeakLevel       = 0;
@@ -49,6 +56,12 @@ ENVELOPE_C::ENVELOPE_C (String name, int16_t device)
     SustainTime     = 0;
     ReleaseTime     = 0;
     ClearState  ();
+    }
+
+//#######################################################################
+byte ENVELOPE_C::GetChannel ()
+    {
+    return (DeviceChannel);
     }
 
 //#######################################################################
@@ -69,19 +82,21 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
             ReleaseTime = time;
             break;
         }
-    DEBUG ("%s - Time setting > %f uSec", StateLabel[(int)State], time );
+    DEBUG ("%s - Time setting > %f uSec", StateLabel[(int)state], time );
     }
 
 //#######################################################################
 void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     {
-    uint16_t da = percent * (DA_RANGE / 100);
+    uint16_t da = percent * DA_RANGE;
     if ( da > MAX_DA )
         da = MAX_DA;
 
     switch ( state )
         {
         case ESTATE::START:
+            if ( Type == ETYPE::VCA )
+                return;
             BaseLevel = da;
             break;
         case ESTATE::ATTACK:
@@ -97,7 +112,7 @@ void ENVELOPE_C::SetLevel (ESTATE state, float percent)
             BaseLevel = da;
             break;
         }
-    DEBUG ("%s - value setting setting > %f percent", StateLabel[(int)State], percent );
+    DEBUG ("%s - level setting > %d", StateLabel[(int)state], da );
     }
 
 //#######################################################################
@@ -125,7 +140,7 @@ void ENVELOPE_C::SetLevel (ESTATE state, uint16_t davalue)
             break;
         }
 
-    DEBUG ("%s - Time setting > %d", StateLabel[(int)State], davalue );
+    DEBUG ("%s - discrete level setting > %d", StateLabel[(int)state], davalue );
     }
 
 //#######################################################################
@@ -133,8 +148,11 @@ void ENVELOPE_C::Start ()
     {
     if ( Active )
         return;
+    if ( (Type == ETYPE::VCA) && (PeakLevel == 0) )
+        return;
     Active = true;
     State = ESTATE::START;
+    UseCount++;
     }
 
 //#######################################################################
@@ -143,6 +161,22 @@ void ENVELOPE_C::End ()
      if ( !Active )
          return;
      TriggerEnd = true;
+    }
+
+//#######################################################################
+void ENVELOPE_C::ClearState ()
+    {
+    Active        = false;
+    TriggerEnd    = false;
+    State         = ESTATE::IDLE;
+    CurrentLevel  = BaseLevel;
+    if ( UseCount )     UseCount--;
+    }
+
+//#######################################################################
+void ENVELOPE_C::Update ()
+    {
+    I2cDevices.D2Analog (DeviceChannel, CurrentLevel);
     }
 
 //#######################################################################
@@ -203,7 +237,7 @@ void ENVELOPE_C::Process (float deltaTime)
             {
             if ( Timer < TargetTime )
                 {
-                Timer  -= deltaTime;
+                Timer  += deltaTime;
                 CurrentLevel  = (Timer / AttackTime) * (PeakLevel - BaseLevel);
                 EDEBUG ("Timer > %f uSec at level %d\n", Timer, CurrentLevel);
                 return;
@@ -250,7 +284,7 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::SUSTAIN:
             {
-            if ( Timer < 0 )
+            if ( Timer <= 0 )
                 return;
             if ( Timer > 10 )
                 {
@@ -274,7 +308,7 @@ void ENVELOPE_C::Process (float deltaTime)
             if ( Timer > 10)
                 {
                 Timer -= deltaTime;
-                CurrentLevel = (Timer / ReleaseTime) * (BaseLevel - StartLevel);
+                CurrentLevel = (Timer / ReleaseTime) * (StartLevel - BaseLevel);
                 EDEBUG ("Timer > %f uSec at level %d\n", Timer, CurrentLevel);
                 return;
                 }
@@ -288,4 +322,5 @@ void ENVELOPE_C::Process (float deltaTime)
     EDEBUG ("DANGER! DANGER!We should have never gotten here during environment processing!");
     ClearState ();
     }
+
 

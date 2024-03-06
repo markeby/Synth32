@@ -108,11 +108,11 @@ void SetWhiteNoise (byte ch, byte state)
 
 //########################################################
 MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
-    {   {  0, "Sine Max",          SetOscMixers   },         // 0-100%
-        {  1, "Triangle Max",      SetOscMixers   },
-        {  2, "Sqiare Max",        SetOscMixers   },
-        {  3, "Sawtooth Max",      SetOscMixers   },
-        {  4, "Pulse Max",         SetOscMixers   },
+    {   {  0, "Sine Peak",         SetOscMixers   },         // 0-100%
+        {  1, "Triangle Peak",     SetOscMixers   },
+        {  2, "Sqiare Peak",       SetOscMixers   },
+        {  3, "Sawtooth Peak",     SetOscMixers   },
+        {  4, "Pulse Peak",        SetOscMixers   },
         {  5, "N ",                nullptr        },
         {  6, "N ",                nullptr        },
         {  7, "Noise Filter",      SetNoiseFilter },

@@ -14,43 +14,20 @@ using namespace OSC_N;
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
-SYNTH_OSC_C::SYNTH_OSC_C ()
+SYNTH_OSC_C::SYNTH_OSC_C (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
     Valid = false;
-    }
-
-//#######################################################################
-void SYNTH_OSC_C::Begin (int num, uint8_t first_device)
-    {
     Number = num;
     // D/A configuration
-    OscChannel = first_device + uint8_t(D_A_OFF::EXPO);
-    PwmChannel = first_device + uint8_t(D_A_OFF::WIDTH);
-    Mix[int(SHAPE::TRIANGLE)].Channel = first_device + uint8_t(D_A_OFF::TRIANGLE);
-    Mix[int(SHAPE::SAWTOOTH)].Channel = first_device + uint8_t(D_A_OFF::SAWTOOTH);
-    Mix[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
-    Mix[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
-    Mix[int(SHAPE::SQUARE)].Channel   = first_device + uint8_t(D_A_OFF::SQUARE);
-    SawtoothDirChannel                = first_device + uint8_t(D_A_OFF::DIR);
+    OscChannel                = first_device + uint8_t(D_A_OFF::EXPO);
+    PwmChannel                = first_device + uint8_t(D_A_OFF::WIDTH);
+    SawtoothDirChannel        = first_device + uint8_t(D_A_OFF::DIR);
+    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::TRIANGLE)], first_device + uint8_t(D_A_OFF::TRIANGLE), usecount);
+    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + uint8_t(D_A_OFF::SAWTOOTH), usecount);
+    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::PULSE)], first_device + uint8_t(D_A_OFF::PULSE), usecount);
+    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SINE)], first_device + uint8_t(D_A_OFF::SINE), usecount);
+    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
 
-    // Initialize mixer
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        {
-        MIXER_T& m = Mix[z];
-
-        m.Name             = MixerNames[z];
-        m.CurrentLevel     = 0;
-        m.LimitLevel       = 0;
-        m.AttackTime       = 0;
-        m.DecayTime        = 0;
-        m.DacayTargetLevel = 0;
-        m.SustainLevel     = 0;
-        m.SustainTime      = 0;
-        m.ReleaseTime      = 0;
-        m.Change           = false;
-        m.Active           = false;
-        m.State            = STATE::IDLE;
-        }
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));
     for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
@@ -73,16 +50,8 @@ void SYNTH_OSC_C::Begin (int num, uint8_t first_device)
 //#######################################################################
 void SYNTH_OSC_C::ClearState ()
     {
-    TriggerUp = false;
-    TriggerDown = false;
-
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-        {
-        MIXER_T& m = Mix[z];
-        m.Active   = false;
-        m.State    = STATE::IDLE;
-        I2cDevices.D2Analog(m.Channel, 0);
-        }
+        Mix[z]->Clear ();
     }
 
 //#######################################################################
@@ -95,7 +64,7 @@ void SYNTH_OSC_C::Clear ()
 //#######################################################################
 void SYNTH_OSC_C::SetTuning ()
     {
-    I2cDevices.D2Analog (Mix[(int)TUNING_WAVES_SHAPE].Channel, MAXDA);
+    I2cDevices.D2Analog (Mix[(int)TUNING_WAVES_SHAPE]->GetChannel (), MAXDA);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -109,13 +78,15 @@ void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
     ClearState ();
     I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
 
-    TriggerDown = true;
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        Mix[z]->Start ();
     }
 
 //#######################################################################
 void SYNTH_OSC_C::NoteClear ()
     {
-    TriggerUp = true;
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        Mix[z]->End ();
     }
 
 //#######################################################################
@@ -127,223 +98,36 @@ void SYNTH_OSC_C::SetSawReverse (bool data)
 //#######################################################################
 void SYNTH_OSC_C::SetAttackTime (uint8_t wave, float time)
     {
-    Mix[wave].AttackTime = time;
-    if ( DebugOsc )
-        printf("[VCO %d] %s Attack > %f\n", Number, Mix[wave].Name, time );
+    Mix[wave]->SetTime (ESTATE::ATTACK, time);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::SetDecayTime (uint8_t wave, float time)
     {
-    Mix[wave].DecayTime = time;
-    if ( DebugOsc )
-        printf("[VCO %d] %s Decay > %f\n", Number, Mix[wave].Name, time );
+     Mix[wave]->SetTime (ESTATE::DECAY, time);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::SetReleaseTime (uint8_t wave, float time)
     {
-    Mix[wave].ReleaseTime = time;
-    if ( DebugOsc )
-        printf("[VCO %d] %s Release > %f\n", Number, Mix[wave].Name, time );
+    Mix[wave]->SetTime (ESTATE::RELEASE, time);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::SetSustainLevel (uint8_t wave, float level_percent)
     {
-    Mix[wave].SustainLevel = (int)(level_percent * (float)MAXDA);
-    if ( DebugOsc )
-        printf("[VCO %d] %s Sustain level > %d\n", Number, Mix[wave].Name, Mix[wave].SustainLevel);
+    Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::SetSustainTime (uint8_t wave, float time)
     {
-    Mix[wave].SustainTime = time;
-    if ( DebugOsc )
-        printf("[VCO %d] %s Sustain > %f\n", Number, Mix[wave].Name, time );
+    Mix[wave]->SetTime (ESTATE::SUSTAIN, time);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::SetMaxLevel (uint8_t wave, float level_percent)
     {
-    Mix[wave].LimitLevel = (int)(level_percent * (float)MAXDA);
-    if ( DebugOsc )
-        printf("[VCO %d] %s Level limit > %d\n", Number, Mix[wave].Name, Mix[wave].LimitLevel );
-    }
-
-//#######################################################################
-//#######################################################################
-bool SYNTH_OSC_C::Loop ()
-    {
-    float deltaTime = DeltaTime;
-
-    //**************************************
-    //***** Process initial key press ******
-    //**************************************
-    if ( TriggerDown )
-        {
-        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-            {
-            MIXER_T& m = Mix[z];
-//            if ( m.LimitLevel > 0 )
-                {
-                m.Active    = true;
-                m.State     = STATE::ATTACK;
-                m.Timer     = m.AttackTime;
-                m.Change    = True;
-                if ( DebugOsc )
-                    printf ("[VCO %d] %s ATTACK  start > %f mSec to level %d\n", Number,  m.Name, m.AttackTime, m.LimitLevel);
-                deltaTime   = 0;
-                Active++;
-                }
-            }
-        }
-
-    if ( Active == 0 )
-        return true;
-
-    //***************************************
-    //***** Loop through mixer channels *****
-    //***************************************
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-        {
-        MIXER_T& m = Mix[z];
-
-//        if ( m.CurrentLevel > m.LimitLevel )
-//            m.CurrentLevel = m.LimitLevel;
-
-        if ( !m.Active )
-            continue;
-
-        if ( DebugOsc & m.Change )
-            printf ("[VCO %d] %s ", Number,  m.Name);
-
-        //*******************************
-        //**********   ATTACK  **********
-        //*******************************
-        if ( m.State == STATE::ATTACK )
-            {
-            if ( !TriggerUp )       // key is still down
-                {
-                if ( m.Timer > 10 )
-                    {
-                    m.Timer  -= deltaTime;
-                    m.CurrentLevel  = ((m.AttackTime - m.Timer) / m.AttackTime) * m.LimitLevel;
-                    if ( DebugOsc )
-                        printf ("ATTACK  timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
-
-                    continue;
-                    }
-                }
-            m.State        = STATE::DECAY;
-            m.Timer        = m.DecayTime;
-            m.CurrentLevel = m.LimitLevel;
-            if ( DebugOsc )
-               printf ("DECAY   start > %f  mSec from level %d to level %d\n", m.DecayTime, m.CurrentLevel, m.DacayTargetLevel);
-            }
-
-        //******************************
-        //**********  DECAY  ***********
-        //******************************
-        if ( m.State == STATE::DECAY )
-            {
-            if ( !TriggerUp )       // key is still down
-                {
-                m.DacayTargetLevel = (m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel;
-                if ( m.Timer > 10 )
-                    {
-                    m.Timer       -= deltaTime;
-                    m.CurrentLevel = m.DacayTargetLevel + (m.Timer / m.DecayTime) * (m.LimitLevel - m.DacayTargetLevel);
-                    if ( DebugOsc )
-                        printf ("DECAY   timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
-                    continue;
-                    }
-                }
-            m.State        = STATE::SUSTAIN;
-            m.Timer        = m.SustainTime;
-            if ( m.SustainTime > 0 )
-                {
-                if ( DebugOsc )
-                    printf ("SUSTAIN > %f mSec al level %d\n", m.Timer, m.CurrentLevel);
-                }
-            else
-                {
-                m.Change = false;
-                if ( DebugOsc )
-                    printf ("SUSTAIN > key down at level %d\n", m.CurrentLevel);
-                }
-            }
-
-        //*******************************
-        //**********  SUSTAIN  **********
-        //*******************************
-        if ( m.State == STATE::SUSTAIN )
-            {
-            if ( !TriggerUp )       // key is still down
-                {
-                if ( m.Timer < 0 )
-                    m.CurrentLevel = (m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel;
-                    continue;
-                if ( m.Timer > 10 )
-                    {
-                    m.Timer -= deltaTime;
-                    if ( DebugOsc )
-                        printf ("SUSTAIN timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
-                    continue;
-                    }
-                }
-            m.State  = STATE::RELEASE;
-            m.Timer  = m.ReleaseTime;
-            m.Change = true;
-            if ( DebugOsc )
-                printf ("[VCO %d] %s RELEASE start > %f\n", Number,  m.Name, m.Timer);
-            continue;
-            }
-
-        //*******************************
-        //**********  RELEASE  **********
-        //*******************************
-        if ( m.State == STATE::RELEASE )
-            {
-            if ( m.Timer > 10)
-                {
-                m.Timer -= deltaTime;
-                m.CurrentLevel = ((float)m.Timer / (float)m.ReleaseTime) * ((m.SustainLevel > m.LimitLevel ) ? m.LimitLevel : m.SustainLevel);
-                if ( DebugOsc )
-                    printf ("RELEASE timer > %f mSec at level %d\n", m.Timer, m.CurrentLevel);
-
-                continue;
-                }
-            m.CurrentLevel = 0;
-            m.Timer        = 0;
-            m.State        = STATE::IDLE;
-            }
-        }
-
-
-    //*******************************************
-    //**********  feed D/A converters  **********
-    //*******************************************
-    int active = 0;
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-        {
-        MIXER_T& m = Mix[z];
-        if ( m.Active)
-            {
-            I2cDevices.D2Analog(m.Channel, m.CurrentLevel);
-
-            if ( m.State == STATE::IDLE )
-                m.Active = false;
-            else
-                active++;
-            }
-        }
-
-    TriggerDown = false;            // If this was a key down, we don't need it anymore.
-    TriggerUp = false;              // If this was a key up, we don't need it anymore.
-    Active = active;                // Detect if Osc is still active
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
-    return (Active == 0);           // return true when oscillator is done
+    Mix[wave]->SetLevel(ESTATE::ATTACK, level_percent);
     }
 

@@ -149,7 +149,7 @@ void SYNTH_FRONT_C::Begin ()
 
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
-        pChan[z] = new SYNTH_CHANNEL_C (z, SetDeviceIndex);
+        pChan[z] = new SYNTH_CHANNEL_C (z, SetDeviceIndex, EnvADSL);
         SetDeviceIndex += 8;
         }
     Lfo.Begin (0, SetDeviceIndex);
@@ -214,7 +214,7 @@ void SYNTH_FRONT_C::Loop ()
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
                 {
                 SYNTH_CHANNEL_C& ch = *(pChan[z]);
-                if ( ch.Active () < 1 )
+                if ( !ch.Active () )
                     {
                     doit = z;
                     break;
@@ -238,7 +238,8 @@ void SYNTH_FRONT_C::Loop ()
                 printf ("\n[s]  Key down > %d   Velocity > %d  Osc > %d", DownKey, DownVelocity, doit);
             }
 
-        for ( int z = 0;  z < CHAN_COUNT;  z++ )             // Process all audio channels
+        EnvADSL.Loop ();                                    // process all envelope generators
+        for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
             pChan[z]->Loop ();
         }
     else

@@ -95,7 +95,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; make Midi32_OTA"/>
+                <Exec CmdLine="make clean &amp; ptime make Midi32_OTA"/>
             </Target>
         </Menu>
     </Config>

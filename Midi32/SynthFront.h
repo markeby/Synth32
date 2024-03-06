@@ -6,6 +6,8 @@
 //#######################################################################
 #pragma once
 
+#include "Envelope.h"
+
 namespace SYNTH_FRONT
     {
     void  KeyDown (byte channel, byte key, byte velocity);
@@ -58,23 +60,24 @@ namespace SYNTH_FRONT
 class   SYNTH_FRONT_C
     {
 private:
-    byte                DownKey;
-    byte                DownVelocity;
-    bool                DownTrigger;
-    byte                UpKey;
-    byte                UpVelocity;
-    bool                UpTrigger;
-    uint16_t            LastOp;
-    bool                SelectWaveShapeVCO[OSC_MIXER_COUNT];
-    int                 InTuning;
-    int                 SetTuning;
-    int                 SetDeviceIndex;
-    bool                InDispReset;
-    byte                NoiseFilterSetting;     // 0 - 3
-    uint64_t            DispMessageTimer;
-    MIDI_VALUE_MAP*     FaderMap;
-    MIDI_VALUE_MAP*     KnobMap;
-    MIDI_SWITCH_MAP*    SwitchMap;
+    byte                  DownKey;
+    byte                  DownVelocity;
+    bool                  DownTrigger;
+    byte                  UpKey;
+    byte                  UpVelocity;
+    bool                  UpTrigger;
+    uint16_t              LastOp;
+    bool                  SelectWaveShapeVCO[OSC_MIXER_COUNT];
+    int                   InTuning;
+    int                   SetTuning;
+    int                   SetDeviceIndex;
+    bool                  InDispReset;
+    byte                  NoiseFilterSetting;     // 0 - 3
+    uint64_t              DispMessageTimer;
+    MIDI_VALUE_MAP*       FaderMap;
+    MIDI_VALUE_MAP*       KnobMap;
+    MIDI_SWITCH_MAP*      SwitchMap;
+    ENVELOPE_GENERATOR_C  EnvADSL;
 
     typedef struct
         {

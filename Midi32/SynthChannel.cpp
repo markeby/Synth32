@@ -11,13 +11,14 @@
 #include "SynthChannel.h"
 
 //#####################################################################
-SYNTH_CHANNEL_C::SYNTH_CHANNEL_C (int num, int first_device)
+SYNTH_CHANNEL_C::SYNTH_CHANNEL_C (int num, int first_device, ENVELOPE_GENERATOR_C& envgen)
     {
     Number = num;
     FirstDevice = first_device;
     ActiveTimer = 0;
     Key = -1;
-    Osc.Begin (num, FirstDevice);
+    UseCount = 0;
+    OscP = new SYNTH_OSC_C (num, FirstDevice, UseCount, envgen);
     }
 
 //#######################################################################
@@ -27,14 +28,14 @@ void SYNTH_CHANNEL_C::Loop ()
         {
         ActiveTimer += DeltaTime;
 
-        if ( Osc.Loop () )
+        if ( UseCount == 0 )
             ActiveTimer = 0;
         }
     }
 //#######################################################################
 void SYNTH_CHANNEL_C::SetTuning (void)
     {
-    Osc.SetTuning ();
+    OscP->SetTuning ();
     }
 
 //#######################################################################
@@ -48,13 +49,13 @@ void SYNTH_CHANNEL_C::NoteSet (uint8_t key, uint8_t velocity)
     {
     ActiveTimer = 1;
     Key = key;
-    Osc.NoteSet (key, velocity);
+    OscP->NoteSet (key, velocity);
     }
 
 //#######################################################################
 void SYNTH_CHANNEL_C::Clear (void)
     {
-    Osc.Clear ();
+    OscP->Clear ();
     }
 
 //#######################################################################
@@ -62,7 +63,7 @@ bool SYNTH_CHANNEL_C::NoteClear (uint8_t key)
     {
     if ( key != Key )
         return false;
-    Osc.NoteClear ();
+    OscP->NoteClear ();
     Key = -1;
     return true;
     }
