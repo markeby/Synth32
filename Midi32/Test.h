@@ -5,6 +5,8 @@
 #define MAX_LVL     4095
 #define MIN_LVL     0
 #define CENTER_LVL  0
+#define STRCHAN       56
+#define NUMCHAN     2
 //#######################################################################
 //#######################################################################
 inline void TestSine (void)
@@ -24,7 +26,8 @@ inline void TestSine (void)
         {
         sn -= DELTA_LVL;
         if ( sn > CENTER_LVL - MIN_LVL )
-            I2cDevices.D2Analog (6, sn);
+            for ( int z = 0;  z < NUMCHAN;  z++ )
+                I2cDevices.D2Analog (STRCHAN + z, sn);
         else
             dir = dir ^ true;
         }
@@ -32,7 +35,8 @@ inline void TestSine (void)
         {
         sn += DELTA_LVL;
         if ( sn < CENTER_LVL + MAX_LVL )
-            I2cDevices.D2Analog (6, sn);
+            for ( int z = 0;  z < NUMCHAN;  z++ )
+                I2cDevices.D2Analog (STRCHAN + z, sn);
         else
             dir = dir ^ true;
         }

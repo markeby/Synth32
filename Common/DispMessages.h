@@ -26,6 +26,7 @@ namespace DISP_MESSAGE_N
     enum class EFFECT_C: byte {
       // Oscillator and VCA channels
         SELECTED = 0,
+        BASE_VOL,
         LIMIT_VOL,
         ATTACK_TIME,
         DECAY_TIME,

@@ -67,10 +67,13 @@ private:
     byte                  UpVelocity;
     bool                  UpTrigger;
     uint16_t              LastOp;
-    bool                  SelectWaveShapeVCO[OSC_MIXER_COUNT];
+    int                   NoiseColorDev;
+    bool                  SelectedEnvelope[ENVELOPE_COUNT];
     int                   InTuning;
     int                   SetTuning;
-    int                   SetDeviceIndex;
+    int                   InTuning2;
+    int                   SetTuning2;
+    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  InDispReset;
     byte                  NoiseFilterSetting;     // 0 - 3
     uint64_t              DispMessageTimer;
@@ -81,6 +84,7 @@ private:
 
     typedef struct
         {
+        byte    BaseLevel;
         byte    MaxLevel;
         byte    AttackTime;
         byte    DecayTime;
@@ -90,38 +94,39 @@ private:
         }
     MIDI_ADSR_T;
 
-    MIDI_ADSR_T     MidiAdsr[OSC_MIXER_COUNT];
+    MIDI_ADSR_T     MidiAdsr[ENVELOPE_COUNT];
+    MIDI_ADSR_T     Noise[2];
+    bool            NoiseFilterBits[2];
 
     String Selected (void);
 
 public:
-          SYNTH_FRONT_C         (int first_device, MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map);
-    void  Begin                 (void);
-    void  DispMessageHandler    (byte cmd);
-    void  Loop                  (void);
-    void  Controller            (byte chan, byte type, byte value);
-    void  PitchBend             (byte chan, int value);
-    void  OscChannelSelect      (byte chan, bool state);
-    void  SetSawReverse         (bool data);
-    void  SelectWaveLFO         (byte ch, byte state);
-    void  FreqSelectLFO         (byte ch, byte data);
-    void  LFOrange              (bool up);
-    void  SetLevelLFO           (byte data);
-    void  SetOscMaxLevel        (byte ch, byte data);
-    void  SetOscMaxLevel        (byte data);
-    void  SetOscAttackTime      (byte data);
-    void  SetOscDecayTime       (byte data);
-    void  SetOscSustainLevel    (byte ch, byte data);
-    void  SetOscSustainLevel    (byte data);
-    void  SetOscSustainTime     (byte data);
-    void  SetOscReleaseTime     (byte data);
-    void  DISP32UpdateAll       (void);
-    void  BeginNoise            (int digital, int analog);
-    void  NoiseFilter           (byte bit, bool state);
-    void  NoiseSelect           (byte val);
-    void  NoiceFilterBump       (void);
-    void  NoiseFilter           (byte val);
-    void  SetNoiseMaxLevel      (byte data);
+          SYNTH_FRONT_C      (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map);
+    void  Begin              (int osc_d_a, int noise_d_a, int noise_dig);
+    void  DispMessageHandler (byte cmd);
+    void  Loop               (void);
+    void  Controller         (byte chan, byte type, byte value);
+    void  PitchBend          (byte chan, int value);
+    void  ChannelSetSelect   (byte chan, bool state);
+    void  SetReverse         (bool data);
+    void  StartTuning        (int setting);
+    void  StartTuning2       (int setting);
+    void  SelectWaveLFO      (byte ch, byte state);
+    void  FreqSelectLFO      (byte ch, byte data);
+    void  LFOrange           (bool up);
+    void  SetLevelLFO        (byte data);
+    void  SetMaxLevel        (byte ch, byte data);
+    void  SetMBaselevel      (byte ch, byte data);
+    void  SetAttackTime      (byte data);
+    void  SetDecayTime       (byte data);
+    void  SetSustainLevel    (byte ch, byte data);
+    void  SetSustainTime     (byte data);
+    void  SetReleaseTime     (byte data);
+    void  DISP32UpdateAll    (void);
+    void  NoiseFilter        (byte bit, bool state);
+    void  NoiseColor         (byte val);
+    void  SetNoiseFilterMin  (byte data);
+    void  SetNoiseFilterMax  (byte data);
 
     //#######################################################################
     inline void  KeyDown (byte chan, byte key, byte velocity)
@@ -140,10 +145,11 @@ public:
         }
 
     //#######################################################################
-    inline void StartTuning (int setting)
+    inline int IsInTuning (void)
         {
-        SetTuning = setting;
+        return (InTuning);
         }
+
     };
 
 //#################################################

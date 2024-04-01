@@ -8,6 +8,11 @@
 #include <Wire.h>
 
 #include "config.h"
+#include "Debug.h"
+
+static const char* Label = "I2C";
+#define DBGDA(args...) {if(DebugI2C){ DebugMsg(Label,'A',args);}}
+#define DBGDIG(args...) {if(DebugI2C){ DebugMsg(Label,'D',args);}}
 
 //#######################################################################
 bool Error (void)
@@ -32,12 +37,12 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
         I2C_LOCATION_T& loc = ploc[z];
         if ( loc.NumberDtoA > MAX_ANALOG_PER_BOARD )
             {
-            Serial << "## ERROR: Allocating too many D to A on board #" << z << endl;
+            printf ("## ERROR: Allocating too many D to A on board #%d\n", z);
             Error ();
             }
         if ( loc.NumberAtoD > MAX_ANALOG_PER_BOARD )
             {
-            Serial << "## ERROR: Allocating too many A to D on board #" << z << endl;
+            printf ("## ERROR: Allocating too many A to D on board #%d\n", z);
             Error ();
             }
         pBoard[z].Board  = loc;
@@ -50,7 +55,7 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
         }
     if ( !DeviceCount )
         {
-        Serial << "## ERROR: No devices allocated for I2C" << endl;
+        printf ("## ERROR: No devices allocated for I2C\n");
         Error ();
         return;      // FIXME tone error here
         }
@@ -174,9 +179,7 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     uint8_t buf[8];
     I2C_LOCATION_T& loc =  board.Board;
 
-    if ( DebugDtoA )
-        printf("[i]%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d\n",
-               loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3]);
+    DBGDA ("%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d", loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3]);
 
     buf[0] = board.ByteData[1];
     buf[1] = board.ByteData[0];
@@ -194,6 +197,12 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
 void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
     {
     I2C_LOCATION_T& loc =  board.Board;
+    String str;
+
+    for ( byte z;  z < 16;  z++ )
+        str += ( ((board.BitWord >> z) & 1) ) ? " X" : " o";
+
+    DBGDIG ("%d:%d:%#3.3x  write  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str ());
 
     Write (loc, board.ByteData, 2);
     board.LastDataDigital = board.DataDigital;
@@ -249,10 +258,10 @@ int I2C_INTERFACE_C::Begin ()
     }
 
 //#######################################################################
-void I2C_INTERFACE_C::D2Analog (byte device, int value)
+void I2C_INTERFACE_C::D2Analog (uint16_t channel, int value)
     {
-    I2C_DEVICE_T& dev = pDevice[device];
-    *(dev.pDtoA)      = value;
+    I2C_DEVICE_T& dev = pDevice[channel];
+    *(dev.pDtoA) = value;
     }
 
 //#######################################################################

@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     SyntConfit.ino
+// Module:     SyntConfig.ino
 // Descrption: Synthesizer midi configuration
 // Creator:    markeby
 // Date:       5/17/2023
@@ -10,22 +10,21 @@
 #include "SynthFront.h"
 
 //########################################################
-void SetOscMixers (byte ch, byte data)
+void SetMaxLevel (byte ch, byte data)
     {
-    SynthFront.SetOscMaxLevel (ch, data);
-    SynthFront.SetNoiseMaxLevel (data);
+    SynthFront.SetMaxLevel (ch, data);
     }
 
 //########################################################
-void SetOscSustain (byte ch, byte data)
+void SetSustain (byte ch, byte data)
     {
-    SynthFront.SetOscSustainLevel (ch - 8, data);
+    SynthFront.SetSustainLevel (ch - 8, data);
     }
 
 //########################################################
-void SetOscTimeSwitch (byte ch, byte state)
+void SetTimeSetSelect (byte ch, byte state)
     {
-    SynthFront.OscChannelSelect (ch, state);
+    SynthFront.ChannelSetSelect (ch, state);
     }
 
 //########################################################
@@ -37,31 +36,31 @@ void SetModSwitch (byte ch, byte state)
 //########################################################
 void SetAttckTime (byte ch, byte data)
     {
-    SynthFront.SetOscAttackTime (data);
+    SynthFront.SetAttackTime (data);
     }
 
 //########################################################
 void SetDecayTime (byte ch, byte data)
     {
-    SynthFront.SetOscDecayTime (data);
+    SynthFront.SetDecayTime (data);
     }
 
 //########################################################
 void SetSustainTime (byte ch, byte data)
     {
-    SynthFront.SetOscSustainTime(data);
+    SynthFront.SetSustainTime (data);
     }
 
 //########################################################
 void SetReleaseTime (byte ch, byte data)
     {
-    SynthFront.SetOscReleaseTime (data);
+    SynthFront.SetReleaseTime (data);
     }
 
 //########################################################
-void SetSawReverse (byte ch, byte data)
+void SetReverse (byte ch, byte data)
     {
-    SynthFront.SetSawReverse (data != 0);
+    SynthFront.SetReverse (data != 0);
     }
 
 //########################################################
@@ -83,47 +82,47 @@ void SetMinusRangeLFO (byte ch, byte state)
     }
 
 //########################################################
-void SetNoiseFilter0 (byte ch, byte state)
-    {
-    SynthFront.NoiseFilter (0, state > 120);
-    }
-
-//########################################################
-void SetNoiseFilter1 (byte ch, byte state)
-    {
-    SynthFront.NoiseFilter (1, state > 120);
-    }
-
-//########################################################
 void SetNoiseFilter (byte ch, byte state)
     {
-    SynthFront.NoiseFilter (state);
+    SynthFront.NoiseFilter (ch - 14, state > 120);      // offset of SwitchMapArray to get 0 or 1
     }
 
 //########################################################
 void SetWhiteNoise (byte ch, byte state)
     {
-    SynthFront.NoiseSelect(state);
+    SynthFront.NoiseColor (state);
+    }
+
+//########################################################
+void SetNoisFilterMin (byte ch, byte data)
+    {
+    SynthFront.SetNoiseFilterMin(data);
+    }
+
+//########################################################
+void SetNoiseFilterMax (byte ch, byte data)
+    {
+    SynthFront.SetNoiseFilterMax (data);
     }
 
 //########################################################
 MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
-    {   {  0, "Sine Peak",         SetOscMixers   },         // 0-100%
-        {  1, "Triangle Peak",     SetOscMixers   },
-        {  2, "Sqiare Peak",       SetOscMixers   },
-        {  3, "Sawtooth Peak",     SetOscMixers   },
-        {  4, "Pulse Peak",        SetOscMixers   },
-        {  5, "N ",                nullptr        },
-        {  6, "N ",                nullptr        },
-        {  7, "Noise Filter",      SetNoiseFilter },
-        {  8, "Sine Sustain",      SetOscSustain  },
-        {  9, "Triangle Sustain",  SetOscSustain  },
-        { 10, "Sqiare Sustain",    SetOscSustain  },
-        { 11, "Sawtooth Sustain",  SetOscSustain  },
-        { 12, "Pulse Sustain",     SetOscSustain  },
-        { 13, "Max ",              nullptr        },
-        { 14, "Max ",              nullptr        },
-        { 15, "Max ",              nullptr        },
+    {   {  0, "Sine max level",         SetMaxLevel       },         // 0-100%
+        {  1, "Triangle max level",     SetMaxLevel       },
+        {  2, "Sqiare max level",       SetMaxLevel       },
+        {  3, "Sawtooth max level",     SetMaxLevel       },
+        {  4, "Pulse max level",        SetMaxLevel       },
+        {  5, "Noise max level",        SetMaxLevel       },
+        {  6, "Noise filter Min freq",  SetNoisFilterMin  },
+        {  7, "Noise filter Max freq",  SetNoiseFilterMax },
+        {  8, "Sine Sustain",           SetSustain        },
+        {  9, "Triangle Sustain",       SetSustain        },
+        { 10, "Sqiare Sustain",         SetSustain        },
+        { 11, "Sawtooth Sustain",       SetSustain        },
+        { 12, "Pulse Sustain",          SetSustain        },
+        { 13, "Noise Sustain",          SetSustain        },
+        { 14, "Noise filter Sustain",   SetSustain        },
+        { 15, "N ",                     nullptr           },
     };
 
 //########################################################
@@ -148,22 +147,22 @@ MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
 
 //########################################################
 MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
-    {   {  0, "Sine",               SetOscTimeSwitch },
-        {  1, "Triangle",           SetOscTimeSwitch },
-        {  2, "Sawtooth",           SetOscTimeSwitch },
-        {  3, "Pulse",              SetOscTimeSwitch },
-        {  4, "Square",             SetOscTimeSwitch },
-        {  5, "Sawtooth reverse",   SetSawReverse    },
-        {  6, "Switch #7",          nullptr          },
-        {  7, "Switch #8",          nullptr          },
+    {   {  0, "Sine",               SetTimeSetSelect },
+        {  1, "Triangle",           SetTimeSetSelect },
+        {  2, "Sawtooth",           SetTimeSetSelect },
+        {  3, "Pulse",              SetTimeSetSelect },
+        {  4, "Square",             SetTimeSetSelect },
+        {  5, "Noise VCA",          SetTimeSetSelect },
+        {  6, "Noise VCF",          SetTimeSetSelect },
+        {  7, "Sawtooth reverse",   SetReverse       },
         {  8, "Mod Sine",           SetModSwitch     },
         {  9, "Mod Triangle",       SetModSwitch     },
         { 10, "Mod Sawtooth",       SetModSwitch     },
         { 11, "Mod Pulse   ",       SetModSwitch     },
         { 12, "Mod Square",         SetModSwitch     },
         { 13, "White/!Pink noise",  SetWhiteNoise    },
-        { 14, "Noise filter 0",     SetNoiseFilter0  },
-        { 15, "Noise filter 1",     SetNoiseFilter1  },
+        { 14, "Noise filter 0",     SetNoiseFilter   },
+        { 15, "Noise filter 1",     SetNoiseFilter   },
         { 16, "Switch #17",         nullptr          },
         { 17, "Switch #18",         nullptr          },
         { 18, "Switch #19",         nullptr          },

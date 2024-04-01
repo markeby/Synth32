@@ -55,18 +55,19 @@ private:
     void  ClearState (void);
 
 public:
-         SYNTH_OSC_C     (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void SetTuning       (void);
-    void NoteSet         (byte key, uint8_t velocity);
-    void NoteClear       (void);
-    void Clear           (void);
-    void SetSawReverse   (bool data);
-    void SetAttackTime   (byte wave, float time);
-    void SetDecayTime    (byte wave, float time);
-    void SetSustainTime  (byte wave, float time);
-    void SetReleaseTime  (byte wave, float time);
-    void SetSustainLevel (byte wave, float level_percent);
-    void SetMaxLevel     (byte wave, float level_percent);
+         SYNTH_OSC_C        (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void SetTuningVolume    (byte select, float level);
+    void SetTuningNote      (uint8_t note);
+    void NoteSet            (byte key, uint8_t velocity);
+    void NoteClear          (void);
+    void Clear              (void);
+    void SetReverse         (bool data);
+    void SetAttackTime      (byte wave, float time);
+    void SetDecayTime       (byte wave, float time);
+    void SetSustainTime     (byte wave, float time);
+    void SetReleaseTime     (byte wave, float time);
+    void SetSustainLevel    (byte wave, float level_percent);
+    void SetMaxLevel        (byte wave, float level_percent);
     };
 
 

@@ -5,28 +5,49 @@
 // Date:       8/1/2022
 //#######################################################################
 #pragma once
+#include "Envelope.h"
+
+namespace NOISE_N
+{
+//#######################################################################
+enum class SELECT {
+    VCA = 0,
+    VCF,
+    };
+
+}// end namespace NOISE_N
 
 //#################################################
 //    Synthesizer noise control
 //#################################################
-class NOISE_C
+class SYNTH_NOISE_C
     {
 private:
-    int     FirstDigital;
-    int     FirstAnallog;
-    byte    FilterSelected;
-    int     FilterDigital[3];
-    int     NoiseWhite;
+    ENVELOPE_GENERATOR_C&   EnvGen;
+    byte                    Number;
+    int                     Analog[FILTER_ANALOG_COUNT];
+    int                     FilterDigital[2];
+    int                     ColorControl;
+    byte                    FilterSelected;
+    ENVELOPE_C*             Envelope[FILTER_ANALOG_COUNT];
+    byte                    CurrentNote;
 
+    void    ClearState      (void);
 public:
-            NOISE_C         (void);
-    void    Begin           (int digital, int analog);
-    void    FilterValue     (byte val);
-    void    FilterSelect    (byte bit, bool state);
-    void    FilterSelect    (byte seleci);
-    void    NoiseSelect     (byte sel);
-    void    SetMaxLevel     (float level_percent);
-    byte    FilterIs        (void)
-        { return (FilterSelected); }
+         SYNTH_NOISE_C      (byte num, int anaog, int digital, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void SetTuningVolume    (byte select, float level);
+    void Clear              (void);
+    void FilterSelect       (byte select);
+    void FilterCutoff       (float cutoff);
+    void SetLevel           (uint16_t level);
+    void SetAttackTime      (uint8_t sel, float time);
+    void SetDecayTime       (uint8_t sel, float time);
+    void SetReleaseTime     (uint8_t sel, float time);
+    void SetSustainLevel    (uint8_t sel, float level_percent);
+    void SetSustainTime     (uint8_t sel, float time);
+    void SetBaseLevel       (NOISE_N::SELECT sel, float level_percent);
+    void SetMaxLevel        (uint8_t sel, float level_percent);
+    void NoteSet            (uint8_t note, uint8_t velocity);
+    void NoteClear          (void);
     };
 

@@ -10,73 +10,134 @@
 #include "config.h"
 #include "LFOosc.h"
 #include "Noise.h"
+#include "Debug.h"
+static const char* Label = "NOI";
+#define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
+
+using namespace NOISE_N;
 
 //#######################################################################
-//#######################################################################
-void NOISE_C::Begin (int digital, int analog)
+    SYNTH_NOISE_C::SYNTH_NOISE_C (byte num, int analog, int digital, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen), Number (num)
     {
-    printf ("\t>>> Noise startup\n");
-    FilterDigital[0] = digital + 2;
-    FilterDigital[1] = digital + 4;
-    FilterDigital[2] = digital + 6;
-    NoiseWhite       = digital + 1;
-    FirstDigital     = digital;
-    }
+    Analog[(int)SELECT::VCA] = analog + 1;
+    Analog[(int)SELECT::VCF] = analog;
+    Envelope[(int)SELECT::VCF] = EnvGen.NewADSR (ETYPE::VCF, num, "Noise VCF", Analog[(int)SELECT::VCF], usecount);
+    Envelope[(int)SELECT::VCA] = EnvGen.NewADSR (ETYPE::VCA, num, "Noise VCA", Analog[(int)SELECT::VCA], usecount);
 
-//###################################################################
-    NOISE_C::NOISE_C ()
-    {
-    FilterSelected = 0;
-    }
-
-//#######################################################################
-void NOISE_C::FilterValue (byte val)
-    {
-    int z = (float)val * MIDI_MULTIPLIER;
-
-    I2cDevices.D2Analog (68, z);
-    I2cDevices.D2Analog (69, z);
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    FilterDigital[0] = digital - 1;
+    FilterDigital[1] = digital;
+    ClearState ();
+    printf("\t  >> Noise %d started for D/A %d  Dig %d\n", num, analog, digital);
     }
 
 //#######################################################################
-void NOISE_C::FilterSelect (byte bit, bool state)
+void SYNTH_NOISE_C::SetTuningVolume (byte select, float level)
     {
-    bit = 1 << bit;
-    if ( state )
-        FilterSelected |= bit;
-    else
-        FilterSelected &= ~bit;
-    FilterSelect (FilterSelected);
+    if ( select > 1 )
+        return;
+    byte chan = Envelope[select]->GetChannel ();
+    I2cDevices.D2Analog (chan, level * MAX_DA);
     }
 
 //#######################################################################
-void NOISE_C::NoiseSelect (byte sel)
+void SYNTH_NOISE_C::FilterCutoff (float cutoff)
     {
-    I2cDevices.DigitalOut (NoiseWhite, sel ? 1 : 0);
-    I2cDevices.UpdateDigital ();    // Update Digital output ports
+    DBG ("Filter cutoff %f", cutoff);
+    uint16_t val = cutoff * DA_RANGE;
+    I2cDevices.D2Analog (Analog[(int)SELECT::VCF], val);
     }
 
 //#######################################################################
-void NOISE_C::FilterSelect (byte select)
+void SYNTH_NOISE_C::FilterSelect (byte select)
     {
     FilterSelected = select;
 
-    for ( int z = 0;  z < 3;  z++ )
-        {
-        I2cDevices.DigitalOut (FilterDigital[z],     ((select >> 1) & 1) ^ 1);
-        I2cDevices.DigitalOut (FilterDigital[z] + 1, (select & 1) ^ 1);
-        }
-    if ( DebugSynth )
-        printf ("Noise Filster setting %d\n", select);
-    I2cDevices.UpdateDigital ();    // Update Digital output ports
+    DBG ("Filter select %d", select);
+    I2cDevices.DigitalOut (FilterDigital[0], ((select >> 1) & 1) ^ 1);
+    I2cDevices.DigitalOut (FilterDigital[1], (select & 1) ^ 1);
     }
+
 //#######################################################################
-void NOISE_C::SetMaxLevel (float level_percent)
+void SYNTH_NOISE_C::ClearState ()
     {
-    int z = (int)(level_percent * (float)MAXDA);
-    I2cDevices.D2Analog (70, z);
-    I2cDevices.D2Analog (71, z);
+    for ( int z = 0;  z < FILTER_ANALOG_COUNT;  z++)
+        Envelope[z]->Clear ();
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::Clear ()
+    {
+    ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetLevel (uint16_t level)
+    {
+    DBG ("Filter level %d", level);
+    I2cDevices.D2Analog (Analog[(int)SELECT::VCA], level);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetAttackTime (uint8_t sel, float time)
+    {
+    Envelope[sel]->SetTime (ESTATE::ATTACK, time);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetDecayTime (uint8_t sel, float time)
+    {
+    Envelope[sel]->SetTime (ESTATE::DECAY, time);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetReleaseTime (uint8_t sel, float time)
+    {
+    Envelope[sel]->SetTime (ESTATE::RELEASE, time);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetSustainLevel (uint8_t sel, float level_percent)
+    {
+    Envelope[sel]->SetLevel (ESTATE::SUSTAIN, level_percent);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetSustainTime (uint8_t sel, float time)
+    {
+    Envelope[sel]->SetTime (ESTATE::SUSTAIN, time);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetBaseLevel (NOISE_N::SELECT sel, float level_percent)
+    {
+    if ( sel == SELECT::VCF )
+        Envelope[(int)sel]->SetLevel(ESTATE::START, level_percent);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::SetMaxLevel (uint8_t sel, float level_percent)
+    {
+    Envelope[sel]->SetLevel(ESTATE::ATTACK, level_percent);
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::NoteSet (uint8_t note, uint8_t velocity)
+    {
+    CurrentNote = note;
+    DBG ("Note > %d   Vel > %d", note, velocity);
+
+    ClearState ();
+
+    for ( int z = 0;  z < 2;  z++ )
+        Envelope[z]->Start ();
+    }
+
+//#######################################################################
+void SYNTH_NOISE_C::NoteClear ()
+    {
+    for ( int z = 0;  z < 2;  z++ )
+        Envelope[z]->End ();
+    }
+
 

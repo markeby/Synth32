@@ -30,7 +30,11 @@ private:
             };
         union
             {
-            byte        ByteData[MAX_ANALOG_PER_BOARD * 2];
+            union
+                {
+                byte        ByteData[MAX_ANALOG_PER_BOARD * 2];
+                uint16_t    BitWord;
+                };
             uint16_t    DtoA[MAX_ANALOG_PER_BOARD];
             uint64_t    DataDtoA;
             uint16_t    AtoD[MAX_ANALOG_PER_BOARD];
@@ -68,7 +72,7 @@ public:
 //        ~I2C_INTERFACE_C (void);
     int  Begin           (void);
     void Zero            (void);
-    void D2Analog        (byte converter, int value);
+    void D2Analog        (uint16_t Channel, int value);
     void DigitalOut      (byte device, bool value);
     void AnalogClear     (void);
     void UpdateAnalog    (void);

@@ -25,7 +25,7 @@
 //   debug controls
 //#####################################
 extern bool DebugMidi;
-extern bool DebugDtoA;
+extern bool DebugI2C;
 extern bool DebugOsc;
 extern bool DebugSynth;
 extern bool AnalogDiagEnabled;
@@ -47,8 +47,8 @@ extern int  AnalogDiagDevice;
 //  Synth I2C interface starting indexes
 //#################################################
 #define START_OSC_ANALOG        0
-#define START_NOISE_DIG         88
-#define START_NOISE_ANALOG      68
+#define START_NOISE_ANALOG      56
+#define START_NOISE_DIGITAL     95
 
 //#################################################
 //   Global system variables
@@ -57,15 +57,15 @@ extern bool     SynthActive;
 
 extern bool     SystemError;
 extern bool     SystemFail;
-extern float    DeltaTime;
+extern float    DeltaTimeMilli;
+extern float    DeltaTimeMicro;
 extern uint64_t RunTime;
-extern float    AverageDeltaTime;
+extern float    DeltaTimeMicroAvg;
 
 //#################################################
 //    Synth specific constants
 //#################################################
 #define MIDI_PORT           0        // sometime referred to as cable number
-#define OSC_MIXER_COUNT     5
 #define FULL_KEYS           128
 #define DA_RANGE            4096
 #define MAX_DA              (DA_RANGE - 1)
@@ -75,8 +75,6 @@ extern float    AverageDeltaTime;
 #define SM_CONTROL          16
 #define SM_SWITCH           24
 #define SM_MOD              2
-
-#define MAXDA       4095
 
 //#################################################
 //    Midi control mapping

@@ -43,22 +43,21 @@ I2C_LOCATION_T  BusI2C[] =
 
 //#######################################################################
 I2C_INTERFACE_C I2cDevices (BusI2C);
-SYNTH_FRONT_C   SynthFront (START_OSC_ANALOG, FaderMapArray, KnobMapArray, SwitchMapArray);
+SYNTH_FRONT_C   SynthFront (FaderMapArray, KnobMapArray, SwitchMapArray);
 
-bool       SystemError         = false;
-bool       SystemFail          = false;
-bool       SynthActive         = false;
-float      DeltaTime           = 0;             // micro second interval.
-int        DeltaMicro          = 0;
-float      AverageDeltaTime    = 0;
-uint64_t   RunTime             = 0;
-bool       DebugMidi           = false;
-bool       DebugDtoA           = false;
-bool       DebugOsc            = false;
-bool       DebugSynth          = true;
-
-bool       AnalogDiagEnabled   = false;
-int        AnalogDiagDevice    = 0;
+bool       SystemError          = false;
+bool       SystemFail           = false;
+bool       SynthActive          = false;
+float      DeltaTimeMilli       = 0;             // micro second interval.
+float      DeltaTimeMicro       = 0;
+float      DeltaTimeMicroAvg    = 0;
+uint64_t   RunTime              = 0;
+bool       DebugMidi            = false;
+bool       DebugI2C             = false;
+bool       DebugOsc             = false;
+bool       DebugSynth           = false;
+bool       AnalogDiagEnabled    = false;
+int        AnalogDiagDevice     = 0;
 
 // this is used to add a task to core 0
 //TaskHandle_t  Core0TaskHnd;
@@ -73,6 +72,10 @@ inline int TimeDeltaMiicro (void)
 
     RunTime =  micros ();
     delta = (int)((uint64_t)RunTime - (uint64_t)strt);
+    if ( DeltaTimeMicroAvg == 0 )
+        DeltaTimeMicroAvg = delta;
+    else
+        DeltaTimeMicroAvg = (DeltaTimeMicroAvg + delta) / 2;
     strt = RunTime;
     return (delta);
     }
@@ -80,17 +83,16 @@ inline int TimeDeltaMiicro (void)
 //#######################################################################
 inline bool TickTime (void)
     {
-    static uint64_t loop_cnt_10hz = 0;
+    static uint64_t loop_cnt_100hz = 0;
     static uint64_t icount = 0;
 
-    RunTime       += DeltaMicro;
-    loop_cnt_10hz += DeltaMicro;
+    RunTime        += DeltaTimeMicro;
+    loop_cnt_100hz += DeltaTimeMicro;
     icount++;
 
-    if ( loop_cnt_10hz >= MILLI_TO_MICRO (100)  )
+    if ( loop_cnt_100hz >= MILLI_TO_MICRO (10)  )
         {
-        AverageDeltaTime = MICRO_TO_MILLI (loop_cnt_10hz / icount);
-        loop_cnt_10hz = 0;
+        loop_cnt_100hz = 0;
         icount = 0;
         return (true);
         }
@@ -105,7 +107,7 @@ inline void TickState (void)
     if ( --counter0 == 0 )
         {
         digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
-        counter0 = 10;
+        counter0 = 100;
         }
     if ( SystemError || SystemFail )
         {
@@ -120,7 +122,7 @@ inline void TickState (void)
             digitalWrite (HEARTBEAT_PIN, HIGH); // LED on
             }
         }
-    if ( counter0 == 9 )
+    if ( counter0 == 98 )
         digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
     }
 
@@ -169,20 +171,37 @@ void setup (void)
         SynthActive = true;
 
         // Setup initial state of synth
-        SynthFront.Begin ();
-        SynthFront.BeginNoise (START_NOISE_DIG, START_NOISE_ANALOG);
-        for ( int z = 0;  z < 5;  z++ )
+        SynthFront.Begin (START_OSC_ANALOG, START_NOISE_ANALOG, START_NOISE_DIGITAL);
+        for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
             {
-            SynthFront.SetOscSustainLevel (z, MAX_MVAL);
-            SynthFront.OscChannelSelect(z, false);
+            SynthFront.SetSustainLevel (z, MAX_MVAL);
+            SynthFront.ChannelSetSelect(z, false);
+            SynthFront.SetMaxLevel (z, 0);
             }
-//        SynthFront.OscChannelSelect(0, true);
-        SynthFront.OscChannelSelect(4, true);
-        SynthFront.SetOscAttackTime (6);
-        SynthFront.SetOscDecayTime (0);
-        SynthFront.SetOscReleaseTime (35);
-        SynthFront.SetOscSustainTime (0);
-        SynthFront.SetOscMaxLevel (MAX_MVAL);
+        SynthFront.ChannelSetSelect (4, true);
+        SynthFront.SetAttackTime (2);
+        SynthFront.SetDecayTime (0);
+        SynthFront.SetReleaseTime (22);
+        SynthFront.SetSustainTime (0);
+        SynthFront.SetMaxLevel (4, 100);
+        SynthFront.ChannelSetSelect (4, false);
+        SynthFront.ChannelSetSelect (6, true);
+        SynthFront.SetAttackTime (8);
+        SynthFront.SetDecayTime (8);
+        SynthFront.SetSustainLevel (6, 0);
+        SynthFront.SetReleaseTime (0);
+        SynthFront.SetSustainTime (0);
+        SynthFront.SetMaxLevel (4, 100);
+        SynthFront.ChannelSetSelect (6, false);
+        SynthFront.ChannelSetSelect (7, true);
+        SynthFront.SetAttackTime (3);
+//        SynthFront.SetDecayTime (11);
+//        SynthFront.SetSustainLevel (7, 20);
+//        SynthFront.SetReleaseTime (0);
+//        SynthFront.SetSustainTime (0);
+        SynthFront.SetMaxLevel (4, 100);
+        SynthFront.ChannelSetSelect (7, false);
+
         printf("\t>>> Synth ready.\n");
         }
     }
@@ -248,10 +267,12 @@ void AnalogDiagnostics (void)
 void loop (void)
     {
     // heartbeat and error alerts based on time intervals
-    DeltaMicro = TimeDeltaMiicro ();
-    DeltaTime = MICRO_TO_MILLI (DeltaMicro);
+    DeltaTimeMicro = TimeDeltaMiicro ();
+    DeltaTimeMilli = MICRO_TO_MILLI (DeltaTimeMicro);
     if ( TickTime () )
+        {
         TickState ();
+        }
 
     // Wifi connection manager
     if ( !UpdateOta.WiFiStatus () )

@@ -7,6 +7,9 @@
 #include <Arduino.h>
 #include "config.h"
 #include "Osc.h"
+#include "Debug.h"
+const char* Label = "VCO";
+#define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
 
 using namespace OSC_N;
 
@@ -33,12 +36,14 @@ SYNTH_OSC_C::SYNTH_OSC_C (byte num, uint8_t first_device, byte& usecount, ENVELO
     for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
         {
         OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
-        if ( OctaveArray[z] > MAXDA )
-            OctaveArray[z] = (uint16_t)((float)MAXDA * CONST_MULT);
+        if ( OctaveArray[z] > MAX_DA )
+            OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
         }
 
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
         {
+        I2cDevices.D2Analog (PwmChannel, 900);
+
         ClearState ();
         printf("\t  >> VCO %d started for device %d\n", num, first_device);
         Valid = true;
@@ -62,18 +67,25 @@ void SYNTH_OSC_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuning ()
+void SYNTH_OSC_C::SetTuningVolume (byte select, float level)
     {
-    I2cDevices.D2Analog (Mix[(int)TUNING_WAVES_SHAPE]->GetChannel (), MAXDA);
+    I2cDevices.D2Analog (Mix[select]->GetChannel (), level * MAX_DA);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
+    }
+
+//#######################################################################
+void SYNTH_OSC_C::SetTuningNote (uint8_t note)
+    {
+    CurrentNote = note;
+    DBG ("DownKey = %d\n", note);
+    I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
     }
 
 //#######################################################################
 void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
     {
     CurrentNote = note;
-    if ( DebugOsc )
-        printf("[VCO %d] Key > %d D/A > %d\n", Number, note, OctaveArray[note]);
+    DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
 
     ClearState ();
     I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
@@ -90,7 +102,7 @@ void SYNTH_OSC_C::NoteClear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSawReverse (bool data)
+void SYNTH_OSC_C::SetReverse (bool data)
     {
     I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? 4095 : 0);
     }
@@ -116,6 +128,7 @@ void SYNTH_OSC_C::SetReleaseTime (uint8_t wave, float time)
 //#######################################################################
 void SYNTH_OSC_C::SetSustainLevel (uint8_t wave, float level_percent)
     {
+
     Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
     }
 

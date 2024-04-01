@@ -9,6 +9,10 @@
 
 #include "config.h"
 #include "LFOosc.h"
+#include "Debug.h"
+static const char* Label = "LFO";
+#define DBG(args...) {if(DebugSynth){DebugMsg(Label,Number,args);}}
+#define EDBG(args...) {if(DebugOsc){DebugMsgN(Label,Number,Vca[ch].Name,args);}}
 
 using namespace LFO_N;
 
@@ -34,19 +38,18 @@ void SYNTH_LFO_C::ClearState ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetMaxLevel (byte wave, byte data)
+void SYNTH_LFO_C::SetMaxLevel (byte ch, byte data)
     {
-    int z = (int)((data * 0.007874) * (float)MAXDA);
-    Vca[wave].MaximumLevel =  (z > MAXDA ) ? MAXDA : z;
+    int z = (int)((data * 0.007874) * (float)MAX_DA);
+    Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
 
-    if ( DebugOsc )
-        Serial << "\r[LFO]" << Vca[wave].Name << "Level limit > " << Vca[wave].MaximumLevel;
+    DBG ("Level limit > %d", Vca[ch].MaximumLevel);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetLevel (byte ch, byte data)
     {
-    int z = (int)((data * 0.007874) * (float)MAXDA);
+    int z = (int)((data * 0.007874) * (float)MAX_DA);
     z = (z > Vca[ch].MaximumLevel ) ? Vca[ch].MaximumLevel : z;
 
     if ( z != Vca[ch].CurrentLevel )
@@ -54,8 +57,7 @@ void SYNTH_LFO_C::SetLevel (byte ch, byte data)
         Vca[ch].CurrentLevel = z;
         I2cDevices.D2Analog (Vca[ch].Channel,  z);
         Update = true;
-        if ( DebugOsc )
-            Serial << "\r[LFO]" << Vca[ch].Name << "set > " << z;
+        EDBG ("set > %d", z);
         }
     }
 
@@ -78,7 +80,7 @@ void SYNTH_LFO_C::Begin (int num, byte first_device)
         {
         Vca[z].Name         = MixerNames[z];
         Vca[z].CurrentLevel = 0;
-        Vca[z].MaximumLevel = MAXDA;
+        Vca[z].MaximumLevel = MAX_DA;
         }
 
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
@@ -119,21 +121,20 @@ void SYNTH_LFO_C::Range (bool up)
 void SYNTH_LFO_C::SetFreq (byte data)
     {
     CurrentPercent = data * PRS_SCALER;
-    int z = (CurrentPercent * MAXDA) / FreqDiv;
+    int z = (CurrentPercent * MAX_DA) / FreqDiv;
     I2cDevices.D2Analog (OscChannel, z);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
-    if ( DebugSynth )
-        printf ("\r[LFO] %f%", CurrentPercent);
+    DBG ("%f%", CurrentPercent);
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Select (uint8_t wave, bool sel)
+void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
     {
-    Vca[wave].Select = sel;
+    Vca[ch].Select = sel;
     if ( sel )
-        SetLevel (wave, CurrentLevel);
+        SetLevel (ch, CurrentLevel);
     else
-        SetLevel (wave, 0);
+        SetLevel (ch, 0);
 
     if ( Update )
         {
@@ -141,14 +142,13 @@ void SYNTH_LFO_C::Select (uint8_t wave, bool sel)
         Update = false;
         }
 
-    if ( DebugSynth )
-       printf ("\r[LFO] %s %s",Vca[wave].Name, ((sel) ? " ON " : " off"));
+    EDBG ("%s", ((sel) ? " ON " : " off"));
     }
 
 //#######################################################################
 void SYNTH_LFO_C::Level (byte data)
     {
-    CurrentLevel = data * PRS_SCALER * MAXDA;
+    CurrentLevel = data * PRS_SCALER * MAX_DA;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
         {
         if ( Vca[z].Select )
@@ -168,7 +168,7 @@ void SYNTH_LFO_C::PitchBend (float percent)
     {
     if ( percent < 1.0 )
         percent = 1.0;
-    I2cDevices.D2Analog(BendChannel, (percent * 0.01) * (float)MAXDA);
+    I2cDevices.D2Analog(BendChannel, (percent * 0.01) * (float)MAX_DA);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 

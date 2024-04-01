@@ -39,7 +39,7 @@ private:
     float       TargetTime;     // Timer is incrimented until this time is exceeded
     uint16_t    CurrentLevel;   // Current setting 12 bit D/A
     uint16_t    StartLevel;     // start level for current state
-    uint16_t    TargetLevel;    // Target for current state
+    uint16_t    DiffLevel;      // Difference to new level
     // State control settings
     uint16_t    BaseLevel;      // start and end levels as 12 bit D/A
     uint16_t    PeakLevel;      // Attacl value for channel as 12 bit D/A
@@ -51,24 +51,27 @@ private:
 
     // Fixed parameters
     String      Name;
-    byte        DeviceChannel;
-    ETYPE       Type;
     byte        Index;
+    uint16_t    DeviceChannel;
+    ETYPE       Type;
 
     void      ClearState     (void);
 
 public:
              ENVELOPE_C     (ETYPE etype, byte index, String name, int16_t device, byte& usecount);
             ~ENVELOPE_C     (void)      {}
-    void     Clear          (void)      { ClearState (); }
-    byte     GetChannel     (void);
-    void     Process        (float deltaTime);
+    void     Clear          (void);
+    uint16_t GetChannel     (void);
+    void     ProcessVCA     (float deltaTime);
+    void     ProcessVCF     (float deltaTime);
     void     Update         (void);
     void     Start          (void);
     void     End            (void);
     void     SetTime        (ESTATE state, float time);
     void     SetLevel       (ESTATE state, float percent);
     void     SetLevel       (ESTATE state, uint16_t davalue);
+    ETYPE    WhatType       (void)
+                { return (Type); }
     };  // end ENVELOPE_C
 
 //#######################################################################

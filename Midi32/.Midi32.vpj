@@ -68,7 +68,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="ptime make Midi32_OTA"/>
+                <Exec CmdLine="pbench make Midi32_OTA"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -95,7 +95,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; ptime make Midi32_OTA"/>
+                <Exec CmdLine="make clean &amp; pbench make Midi32_OTA"/>
             </Target>
         </Menu>
     </Config>
@@ -118,6 +118,7 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="Debug.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="LFOosc.cpp"/>
@@ -142,6 +143,7 @@
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
             <F N="config.h"/>
+            <F N="Debug.h"/>
             <F N="Envelope.h"/>
             <F N="I2Cdevices.h"/>
             <F N="LFOosc.h"/>

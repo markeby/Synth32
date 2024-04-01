@@ -37,7 +37,7 @@ inline static void DumpTitle (void)
 //#######################################################################
 const char* StateDebug (bool d)
     {
-    static const char* StateOn  = " <ON> ";
+    static const char* StateOn  = "  <ON>";
     static const char* StateOff = " <off>";
 
     if ( d )
@@ -63,10 +63,10 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "      Flash size = " << ESP.getFlashChipSize () << endl;
     Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
     Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl;
+    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
     Serial << hh << "      Update URL = " << UpdateOta.WhoAmI() << endl << endl;
-    Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
-    Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
+    Serial << hh << "Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
+    Serial << hh << "   Last interval = " << DeltaTimeMicro << " uSec" << endl;
     Serial << hh << "     Runing Time = ";
     DispRunTime ();
     Serial << endl;
@@ -101,9 +101,17 @@ void MONITOR_C::InputPrompt (int num, const char* text)
 //#######################################################################
 void MONITOR_C::Tuning (int num)
     {
-    Serial << endl << "  Tuning oscillator " << num << "...";
+    Serial << endl << " 1 Tuning Channel " << num << "...";
     SynthFront.StartTuning (num);
     }
+
+//#######################################################################
+void MONITOR_C::Tuning2 (int num)
+    {
+    Serial << endl << " 2 Tuning Channel " << num << "...";
+    SynthFront.StartTuning2 (num);
+    }
+
 //#######################################################################
 bool MONITOR_C::PromptZap (void)
     {
@@ -177,7 +185,6 @@ void MONITOR_C::MenuSel (void)
                     break;
                 }
             }
-//        Mode (MENU);
         return;
         }
 
@@ -197,8 +204,8 @@ void MONITOR_C::MenuSel (void)
                     Mode (MENU);
                     break;
                 case '2':
-                    DebugDtoA  = !DebugDtoA;
-                    Serial << "  D/A debugging " << (( DebugDtoA ) ? "Enabled" : "Disabled") << endl;
+                    DebugI2C  = !DebugI2C;
+                    Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '3':
@@ -240,7 +247,6 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'Z':
-                    SynthFront.NoiceFilterBump ();
                     break;
                 default:
                     Serial << "       ??" << endl;
@@ -260,9 +266,32 @@ void MONITOR_C::MenuSel (void)
                 case '6':
                     Tuning (s - '0');
                     break;
+                case 'q':
+                    Tuning2 (1);
+                    break;
+                case 'w':
+                    Tuning2 (2);
+                    break;
+                case 'e':
+                    Tuning2 (3);
+                    break;
+                case 'r':
+                    Tuning2 (4);
+                    break;
+                case 't':
+                    Tuning2 (5);
+                    break;
+                case 'y':
+                    Tuning2 (6);
+                    break;
+                case ' ':           // Just move the cursor down a couple of lines
+                    Serial << "...\n\n";
+                    break;
                 default:
                     break;
                 }
+        case NOISE_TUNING:
+            break;
         }
     }
 
@@ -271,8 +300,8 @@ void MONITOR_C::Menu (void)
     {
     DumpTitle ();
     Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
-    Serial << StateDebug (DebugDtoA)  << "\t2   - Debug D to A interface " << endl;
-    Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators      " << endl;
+    Serial << StateDebug (DebugI2C)  << "\t2   - Debug I2C interface " << endl;
+    Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
     Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
