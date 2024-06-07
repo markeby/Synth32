@@ -35,10 +35,10 @@ private:
     void    ClearState      (void);
 public:
          SYNTH_NOISE_C      (byte num, int anaog, int digital, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void SetTuningVolume    (byte select, float level);
+    void SetTuningVolume    (byte select, uint16_t level);
     void Clear              (void);
     void FilterSelect       (byte select);
-    void FilterCutoff       (float cutoff);
+    void TuningFilterCut       (float cutoff);
     void SetLevel           (uint16_t level);
     void SetAttackTime      (uint8_t sel, float time);
     void SetDecayTime       (uint8_t sel, float time);

@@ -16,8 +16,6 @@ private:
     bool Save        (SMODE m);
     void InputPrompt (int num, const char* text);
     bool PromptZap   (void);
-    void Tuning      (int num);
-    void Tuning2     (int num);
     void MenuSel     (void);
     void Menu        (void);
     void TextIn      (void);
@@ -28,6 +26,8 @@ public:
     bool Detect      (void);
     void Loop        (void);
     void Begin       (void);
+    void Tuning      (void);
+    void Reset       (void);
     };
 }
 

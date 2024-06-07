@@ -67,10 +67,9 @@ void SYNTH_OSC_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningVolume (byte select, float level)
+void SYNTH_OSC_C::SetTuningVolume (byte select, uint16_t level)
     {
-    I2cDevices.D2Analog (Mix[select]->GetChannel (), level * MAX_DA);
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.D2Analog (Mix[select]->GetChannel (), level);
     }
 
 //#######################################################################

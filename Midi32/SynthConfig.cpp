@@ -8,6 +8,7 @@
 #include <SynthCommon.h>
 #include "config.h"
 #include "SynthFront.h"
+#include "SerialMonitor.h"
 
 //########################################################
 void SetMaxLevel (byte ch, byte data)
@@ -105,6 +106,13 @@ void SetNoiseFilterMax (byte ch, byte data)
     SynthFront.SetNoiseFilterMax (data);
     }
 
+void TuneReset (byte ch, byte data)
+    {
+    if ( data )
+        Monitor.Tuning ();
+    else
+        Monitor.Reset ();
+    }
 //########################################################
 MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
     {   {  0, "Sine max level",         SetMaxLevel       },         // 0-100%
@@ -169,7 +177,7 @@ MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
         { 19, "Switch #20",         nullptr          },
         { 20, "LFO Range -",        SetPlusRangeLFO  },
         { 21, "LFO Range +",        SetMinusRangeLFO },
-        { 22, "Switch #23",         nullptr          },
+        { 22, "Tune/Reset",         TuneReset        },
         { 23, "Switch #24",         nullptr          },
     };
 

@@ -56,7 +56,7 @@ private:
 
 public:
          SYNTH_OSC_C        (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void SetTuningVolume    (byte select, float level);
+    void SetTuningVolume    (byte select, uint16_t level);
     void SetTuningNote      (uint8_t note);
     void NoteSet            (byte key, uint8_t velocity);
     void NoteClear          (void);

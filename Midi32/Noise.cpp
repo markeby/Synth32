@@ -31,16 +31,16 @@ using namespace NOISE_N;
     }
 
 //#######################################################################
-void SYNTH_NOISE_C::SetTuningVolume (byte select, float level)
+void SYNTH_NOISE_C::SetTuningVolume (byte select, uint16_t level)
     {
     if ( select > 1 )
         return;
     byte chan = Envelope[select]->GetChannel ();
-    I2cDevices.D2Analog (chan, level * MAX_DA);
+    I2cDevices.D2Analog (chan, level);
     }
 
 //#######################################################################
-void SYNTH_NOISE_C::FilterCutoff (float cutoff)
+void SYNTH_NOISE_C::TuningFilterCut (float cutoff)
     {
     DBG ("Filter cutoff %f", cutoff);
     uint16_t val = cutoff * DA_RANGE;

@@ -310,7 +310,7 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
         case ESTATE::RELEASE:
             {
             TriggerEnd = false;
-            if ( Timer > 10)
+            if ( Timer > 20)
                 {
                 Timer -= deltaTime;
                 CurrentLevel = (Timer / ReleaseTime) * (StartLevel - BaseLevel);

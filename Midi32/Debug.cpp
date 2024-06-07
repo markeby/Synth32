@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include <Streaming.h>
 #include <vector>
+#include "Debug.h"
 using namespace std;
 
 //#######################################################################
@@ -54,8 +55,12 @@ void DebugMsg (const char* label, byte index, const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
+    String str;
 
-    String str = "[" + String(label) + "-" + String(index) + "] ";
+    if ( index == DEBUG_NO_INDEX )
+        str = "[" + String(label) + "] ";
+    else
+        str = "[" + String(label) + "-" + String(index) + "] ";
     str += vsFormat (fmt, ap);
     Serial << str << endl;
     }

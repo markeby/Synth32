@@ -10,9 +10,10 @@
 #include "config.h"
 #include "Debug.h"
 
-static const char* Label = "I2C";
-#define DBGDA(args...) {if(DebugI2C){ DebugMsg(Label,'A',args);}}
-#define DBGDIG(args...) {if(DebugI2C){ DebugMsg(Label,'D',args);}}
+static const char* LabelA = "I2C-A";
+static const char* LabelD = "I2C-D";
+#define DBGDA(args...) {if(DebugI2C){ DebugMsg(LabelA,DEBUG_NO_INDEX,args);}}
+#define DBGDIG(args...) {if(DebugI2C){ DebugMsg(LabelD,DEBUG_NO_INDEX,args);}}
 
 //#######################################################################
 bool Error (void)
@@ -179,7 +180,7 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     uint8_t buf[8];
     I2C_LOCATION_T& loc =  board.Board;
 
-    DBGDA ("%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d", loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3]);
+    DBGDA ("%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d  %s", loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3], loc.Name);
 
     buf[0] = board.ByteData[1];
     buf[1] = board.ByteData[0];

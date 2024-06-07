@@ -60,14 +60,24 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
     Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
     Serial << hh << "SDK " << ESP.getSdkVersion () << endl;
-    Serial << hh << "      Flash size = " << ESP.getFlashChipSize () << endl;
-    Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
-    Serial << hh << "      Update URL = " << UpdateOta.WhoAmI() << endl << endl;
-    Serial << hh << "Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
-    Serial << hh << "   Last interval = " << DeltaTimeMicro << " uSec" << endl;
-    Serial << hh << "     Runing Time = ";
+    Serial << hh << "       Flash size = " << ESP.getFlashChipSize () << endl;
+    Serial << hh << "      Sketch size = " << ESP.getSketchSize () << endl;
+    Serial << hh << "        Heap size = " << ESP.getHeapSize () << endl;
+    Serial << hh << "Minimum heap size = " << ESP.getMinFreeHeap () << endl;
+    Serial << hh << " Max alloced Heap = " << ESP.getMaxAllocHeap () << endl;
+    Serial << hh << "        Free heap = " << ESP.getFreeHeap () << endl;
+    Serial << hh << "Free sketch space = " << ESP.getFreeSketchSpace () << endl;
+    Serial << hh << "   Min free Psram = " << ESP.getMinFreePsram () << endl;
+    Serial << hh << "Max alloced Psram = " << ESP.getMaxAllocPsram () << endl;
+    Serial << hh << "       Free Psram = " << ESP.getFreePsram () << endl;
+    Serial << hh << "  Flash chip size = " << ESP.getFlashChipSize () << endl;
+    Serial << hh << " Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
+    Serial << hh << "  Flash chip mode = " << ESP.getFlashChipMode() << endl;
+    Serial << endl;
+    Serial << hh << "       Update URL = " << UpdateOta.WhoAmI() << endl << endl;
+    Serial << hh << " Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
+    Serial << hh << "    Last interval = " << DeltaTimeMicro << " uSec" << endl;
+    Serial << hh << "      Runing Time = ";
     DispRunTime ();
     Serial << endl;
     }
@@ -99,17 +109,20 @@ void MONITOR_C::InputPrompt (int num, const char* text)
     }
 
 //#######################################################################
-void MONITOR_C::Tuning (int num)
+void MONITOR_C::Tuning ()
     {
-    Serial << endl << " 1 Tuning Channel " << num << "...";
-    SynthFront.StartTuning (num);
+    Serial << endl << "  ********** Tuning mode **********" << endl;
+    SynthFront.StartTuning ();
     }
 
 //#######################################################################
-void MONITOR_C::Tuning2 (int num)
+void MONITOR_C::Reset ()
     {
-    Serial << endl << " 2 Tuning Channel " << num << "...";
-    SynthFront.StartTuning2 (num);
+    Serial << endl << "  ********** Reset requested **********";
+    Serial << endl << endl;
+    Serial << endl << endl;
+    Serial << endl << endl;
+    ESP.restart ();
     }
 
 //#######################################################################
@@ -233,7 +246,7 @@ void MONITOR_C::MenuSel (void)
                     Mode (ZAP);
                     break;
                 case 't':
-                    Tuning (1);
+                    Tuning ();
                     Mode (TUNING);
                     break;
                 case 'q':
@@ -258,32 +271,6 @@ void MONITOR_C::MenuSel (void)
         case TUNING:
             switch ( s )
                 {
-                case '1':
-                case '2':
-                case '3':
-                case '4':
-                case '5':
-                case '6':
-                    Tuning (s - '0');
-                    break;
-                case 'q':
-                    Tuning2 (1);
-                    break;
-                case 'w':
-                    Tuning2 (2);
-                    break;
-                case 'e':
-                    Tuning2 (3);
-                    break;
-                case 'r':
-                    Tuning2 (4);
-                    break;
-                case 't':
-                    Tuning2 (5);
-                    break;
-                case 'y':
-                    Tuning2 (6);
-                    break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
@@ -310,7 +297,10 @@ void MONITOR_C::Menu (void)
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
     Serial << "\tC   - Clear Preferences" << endl;
-    Serial << "\tF12 - Reset" << endl << endl;
+    Serial << "\tF12 - Reset" << endl;
+    if ( SynthFront.IsInTuning () )
+        Serial << endl << "  ********** Tuning mode **********" << endl;
+    Serial << endl;
     }
 
 //#######################################################################

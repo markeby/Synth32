@@ -69,10 +69,7 @@ private:
     uint16_t              LastOp;
     int                   NoiseColorDev;
     bool                  SelectedEnvelope[ENVELOPE_COUNT];
-    int                   InTuning;
-    int                   SetTuning;
-    int                   InTuning2;
-    int                   SetTuning2;
+    bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  InDispReset;
     byte                  NoiseFilterSetting;     // 0 - 3
@@ -81,6 +78,7 @@ private:
     MIDI_VALUE_MAP*       KnobMap;
     MIDI_SWITCH_MAP*      SwitchMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
+    bool                  TuningOn[CHAN_COUNT];
 
     typedef struct
         {
@@ -109,8 +107,8 @@ public:
     void  PitchBend          (byte chan, int value);
     void  ChannelSetSelect   (byte chan, bool state);
     void  SetReverse         (bool data);
-    void  StartTuning        (int setting);
-    void  StartTuning2       (int setting);
+    void  Tuning             (void);
+    void  StartTuning        (void);
     void  SelectWaveLFO      (byte ch, byte state);
     void  FreqSelectLFO      (byte ch, byte data);
     void  LFOrange           (bool up);
@@ -129,6 +127,12 @@ public:
     void  SetNoiseFilterMax  (byte data);
 
     //#######################################################################
+    inline bool IsInTuning (void)
+        {
+        return (SetTuning);
+        }
+
+    //#######################################################################
     inline void  KeyDown (byte chan, byte key, byte velocity)
         {
         DownKey      = key;
@@ -143,13 +147,6 @@ public:
         UpVelocity = velocity;
         UpTrigger  = true;
         }
-
-    //#######################################################################
-    inline int IsInTuning (void)
-        {
-        return (InTuning);
-        }
-
     };
 
 //#################################################

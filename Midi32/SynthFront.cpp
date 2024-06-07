@@ -108,10 +108,7 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_ma
     UpKey            = 0;
     UpTrigger        = false;
     LastOp           = 0;
-    InTuning         = 0;
-    InTuning2        = 0;
     SetTuning        = 0;
-    SetTuning2       = 0;
     InDispReset      = false;
     }
 
@@ -183,6 +180,86 @@ void  SYNTH_FRONT_C::DispMessageHandler (byte cmd)
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
+    {
+    if ( DebugSynth )
+        {
+        uint16_t op = (type << sizeof (byte)) | chan;
+        if ( op != LastOp )       // issue a newline only if the op has changed
+            {
+            LastOp = op;
+            }
+        }
+    chan--;
+    switch ( type )
+        {
+        case 0x01:
+            // mod wheel
+            Lfo.Level (value);
+            DBG ("modulation = %f    ", (float)value * (float)PRS_SCALER);
+            break;
+        case 0x07:          // Faders controls
+            if ( FaderMap[chan].CallBack != nullptr )
+                {
+                FaderMap[chan].CallBack (chan, value);
+                DBG ("%s > %f    ", FaderMap[chan].desc, (float)value * (float)PRS_SCALER);
+                }
+            break;
+        case 0x0a:          // Rotatation controls
+            if ( KnobMap[chan].CallBack != nullptr )
+                {
+                KnobMap[chan].CallBack (chan, value);
+                DBG ("%s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, (float)value * (float)TIME_MULT);
+                }
+            break;
+        case 0x10:
+        case 0x11:
+        case 0x12:
+        case 0x13:
+        case 0x14:
+        case 0x15:
+        case 0x16:
+        case 0x17:
+        case 0x18:
+        case 0x19:
+        case 0x1A:
+        case 0x1B:
+        case 0x1C:
+        case 0x1D:
+        case 0x1E:
+        case 0x1F:
+            chan = type & 0x0F;
+            if ( SetTuning && (chan < 6) )
+                {
+                if ( value )
+                    TuningOn[chan] = true;
+                else
+                    TuningOn[chan] = false;
+                return;
+                }
+            if ( DebugMidi )
+                DBG (SwitchMap[chan].desc);
+            if ( SwitchMap[chan].CallBack != nullptr )
+                SwitchMap[chan].CallBack (chan, value);
+            break;
+        case 0x72:
+        case 0x73:
+        case 0x74:
+        case 0x75:
+        case 0x76:
+        case 0x77:
+            chan = type & 0x1F;
+            if ( DebugMidi )
+                DBG (SwitchMap[chan].desc);
+            if ( SwitchMap[chan].CallBack != nullptr )
+                SwitchMap[chan].CallBack (chan, value);
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
 void SYNTH_FRONT_C::Loop ()
     {
     int oldest = -1;
@@ -242,37 +319,7 @@ void SYNTH_FRONT_C::Loop ()
         I2cDevices.UpdateAnalog  ();     // Update D/A ports
         }
     else
-        {
-        if ( SetTuning2 != InTuning2 )
-            {
-            DBG ("Tuning 2 change select %d", SetTuning2)
-            if ( InTuning2 )
-                pChan[InTuning2]->Clear ();
-            InTuning2 = SetTuning2;
-            DownTrigger = true;
-            }
-        if ( SetTuning != InTuning )
-            {
-            DBG ("Tuning 2 change select %d", SetTuning)
-            for ( int z = 0;  z < CHAN_COUNT;  z++ )
-                pChan[z]->Clear ();
-            InTuning = SetTuning;
-            for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
-                SetMaxLevel (z, TuningLevel[z]);
-            SetNoiseFilterMin (TuningLevel[ENVELOPE_COUNT]);
-            InTuning2 = 0;
-            SetTuning2 = 0;
-            DownTrigger = true;
-            }
-        if ( DownTrigger )
-            {
-            for ( int z = 0;  z < CHAN_COUNT;  z++ )
-                pChan[z]->pOsc()->SetTuningNote (DownKey);
-            I2cDevices.UpdateDigital();
-            I2cDevices.UpdateAnalog  ();     // Update D/A ports
-            DownTrigger = false;
-            }
-        }
+        Tuning ();
 
     if ( Serial1.available () )
         {
@@ -297,92 +344,50 @@ void SYNTH_FRONT_C::Loop ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
+void SYNTH_FRONT_C::Tuning ()
     {
-    if ( DebugSynth )
+    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
         {
-        uint16_t op = (type << sizeof (byte)) | chan;
-        if ( op != LastOp )       // issue a newline only if the op has changed
+        if ( DownTrigger )
+            pChan[zc]->pOsc()->SetTuningNote(DownKey);
+        if ( TuningOn[zc] )
             {
-            LastOp = op;
+            for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+                {
+                if ( z < OSC_MIXER_COUNT )
+                    pChan[zc]->pOsc()->SetTuningVolume(z, TuningLevel[z]);
+                else
+                    pChan[zc]->pNoise()->SetTuningVolume(z - OSC_MIXER_COUNT, TuningLevel[z]);
+                }
+            }
+        else
+            {
+            for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+                {
+                if ( z < OSC_MIXER_COUNT )
+                    pChan[zc]->pOsc()->SetTuningVolume(z, 0);
+                else
+                    pChan[zc]->pNoise()->SetTuningVolume(z - OSC_MIXER_COUNT, 0);
+                }
             }
         }
-    chan--;
-    switch ( type )
-        {
-        case 0x01:
-            // mod wheel
-            Lfo.Level (value);
-            DBG ("modulation = %f    ", (float)value * (float)PRS_SCALER);
-            break;
-        case 0x07:          // Faders controls
-            if ( FaderMap[chan].CallBack != nullptr )
-                {
-                FaderMap[chan].CallBack (chan, value);
-                DBG ("%s > %f    ", FaderMap[chan].desc, (float)value * (float)PRS_SCALER);
-                }
-            break;
-        case 0x0a:          // Rotatation controls
-            if ( KnobMap[chan].CallBack != nullptr )
-                {
-                KnobMap[chan].CallBack (chan, value);
-                DBG ("%s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, (float)value * (float)TIME_MULT);
-                }
-            break;
-        case 0x10:
-        case 0x11:
-        case 0x12:
-        case 0x13:
-        case 0x14:
-        case 0x15:
-        case 0x16:
-        case 0x17:
-        case 0x18:
-        case 0x19:
-        case 0x1A:
-        case 0x1B:
-        case 0x1C:
-        case 0x1D:
-        case 0x1E:
-        case 0x1F:
-            chan = type & 0x0F;
-            if ( DebugMidi )
-                DBG (SwitchMap[chan].desc);
-            if ( SwitchMap[chan].CallBack != nullptr )
-                SwitchMap[chan].CallBack (chan, value);
-            break;
-        case 0x72:
-        case 0x73:
-        case 0x74:
-        case 0x75:
-        case 0x76:
-        case 0x77:
-            chan = type & 0x1F;
-            if ( DebugMidi )
-                DBG (SwitchMap[chan].desc);
-            if ( SwitchMap[chan].CallBack != nullptr )
-                SwitchMap[chan].CallBack (chan, value);
-            break;
-        default:
-            break;
-        }
+//    SetNoiseFilterMin (TuningLevel[ENVELOPE_COUNT]);
+    DownTrigger = false;
+    I2cDevices.UpdateDigital();
+    I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::StartTuning (int setting)
+void SYNTH_FRONT_C::StartTuning ()
     {
-    if ( InTuning == 0 )
+    if ( SetTuning == false )
         {
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             TuningLevel[z] = 0;
+        for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+            TuningOn[zc] = false;
         }
-    SetTuning = setting;
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::StartTuning2 (int setting)
-    {
-    SetTuning2 = setting;
+    SetTuning = true;
     }
 
 //#######################################################################
@@ -420,30 +425,19 @@ void SYNTH_FRONT_C::SetMBaselevel (byte ch, byte data)
 //#####################################################################
 void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     {
-    float val = (float)data * PRS_SCALER;
-    if ( InTuning )
+    if ( SetTuning )
         {
-        TuningLevel[ch] = data;
-        if ( ch < OSC_MIXER_COUNT )
-            pChan[InTuning - 1]->pOsc()->SetTuningVolume(ch, val);
-        else
-            pChan[InTuning - 1]->pNoise()->SetTuningVolume(ch - OSC_MIXER_COUNT, val);
-        if ( InTuning2 )
-            if ( ch < OSC_MIXER_COUNT )
-                pChan[InTuning2 - 1]->pOsc()->SetTuningVolume(ch, val);
-            else
-                pChan[InTuning2 - 1]->pNoise()->SetTuningVolume(ch - OSC_MIXER_COUNT, val);
-        I2cDevices.UpdateAnalog ();     // Update D/A ports
+        TuningLevel[ch] = data * MIDI_MULTIPLIER;
+        return;
         }
-    else
+
+    float val = (float)data * PRS_SCALER;
+    for (int zc = 0;  zc < CHAN_COUNT;  zc++)
         {
-        for (int zc = 0;  zc < CHAN_COUNT;  zc++)
-            {
-            if ( ch < OSC_MIXER_COUNT )
-                pChan[zc]->pOsc()->SetMaxLevel (ch, val);
-            else
-                pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
-            }
+        if ( ch < OSC_MIXER_COUNT )
+            pChan[zc]->pOsc()->SetMaxLevel (ch, val);
+        else
+            pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].MaxLevel = data;
     SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, data);
@@ -621,7 +615,8 @@ void  SYNTH_FRONT_C::NoiseFilter (byte bit, bool state)
         bits |= 1;
     if ( NoiseFilterBits[1] )
         bits |= 2;
-    pChan[0]->pNoise()->FilterSelect (bits);
+    for ( int z = 0;  z < (CHAN_COUNT / 2);  z++ )
+        pChan[z * 2]->pNoise ()->FilterSelect (bits);
     I2cDevices.UpdateDigital ();
     }
 
@@ -636,17 +631,11 @@ void SYNTH_FRONT_C::NoiseColor (byte val)
 //#######################################################################
 void SYNTH_FRONT_C::SetNoiseFilterMin (byte data)
     {
-    int z;
-    float val = (float)data * PRS_SCALER;
+    if ( SetTuning )
+        TuningLevel[ENVELOPE_COUNT - 1] = data * MIDI_MULTIPLIER;
 
-    if ( InTuning )
-        {
-        TuningLevel[ENVELOPE_COUNT] = data;
-        for ( z = 0;  z < CHAN_COUNT;  z++ )
-            pChan[z]->pNoise ()->FilterCutoff (val);
-        I2cDevices.UpdateAnalog  ();     // Update D/A ports
-        }
-    for ( z = 0;  z < CHAN_COUNT;  z++ )
+    float val = (float)data * PRS_SCALER;
+    for ( int z = 0;  z < CHAN_COUNT;  z++ )
         pChan[z]->pNoise ()->SetBaseLevel (NOISE_N::SELECT::VCF, val);
     }
 
