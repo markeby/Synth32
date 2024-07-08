@@ -14,7 +14,9 @@ enum class CNTRL_TYPE_C: byte {
     POT,
     };
 
-//####################################...########
+class ESP_Panel;
+
+//############################################
 class DISP_CTRL_C
     {
 private:
@@ -38,8 +40,9 @@ public:
 class GRPH_C
     {
 private:
-    bool    Active;
-    int     FullTime;
+    bool        Active;
+    int         FullTime;
+    ESP_Panel  *Panel;
 
     void    InitPageOsc1    (void);
 

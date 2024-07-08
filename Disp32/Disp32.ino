@@ -7,7 +7,6 @@
 #include "config.h"
 #include "Settings.h"
 #include "SerialMonitor.h"
-#include "WebOTA.h"
 #include "DispFrontEnd.h"
 #include "Graphics.h"
 
@@ -155,6 +154,7 @@ void Core0Task (void *parameter)
 //#######################################################################
 void loop (void)
     {
+    static bool firstpass = true;
     // heartbeat and error alerts based on time intervals
     DeltaMicro = TimeDeltaMiicro ();
     DeltaTime = MICRO_TO_MILLI (DeltaMicro);
@@ -162,12 +162,14 @@ void loop (void)
         TickState ();
 
     // Wifi connection manager
-    if ( !UpdateOta.WiFiStatus () )
+//    if ( !UpdateOta.WiFiStatus () )
+    if ( firstpass )
         {
+        firstpass = false;
         delay (2000);
-        if ( UpdateOta.WaitWiFi () )
+//        if ( UpdateOta.WaitWiFi () )
             {
-            UpdateOta.Begin ();
+//            UpdateOta.Begin ();
             DispFront.Begin ();
             DispFront.SendReset ();
             }

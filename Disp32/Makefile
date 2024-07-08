@@ -17,7 +17,7 @@ SHARED := ../Common
 
 # Shared files directory
 INCLUDES := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
-            Graphics.hpp $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+            $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
 SOURCES := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
 
@@ -41,6 +41,13 @@ ifdef S3
 # ESP32 := --fqbn esp32:esp32:esp32s3usbotg
   ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
   OUTPUT := output_esp32s3
+endif
+############################################
+# Configuration for Wrooom ESP32-S3-WROOM-1
+############################################
+ifdef S3DEV
+  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
+  OUTPUT := output_esp32s3dev
 endif
 ############################################
 # Configuration for Wrooom ESP32-WROOM

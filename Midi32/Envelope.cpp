@@ -1,8 +1,8 @@
 //#######################################################################
-// Module:     Osc.cpp
-// Descrption: Oscillator controls
+// Module:     Envelope.cpp
+// Descrption: Envelope processor
 // Creator:    markeby
-// Date:       9/4/2023
+// Date:       6/25/2024
 //#######################################################################
 #include <Arduino.h>
 #include "config.h"
@@ -23,49 +23,45 @@ ENVELOPE_GENERATOR_C::ENVELOPE_GENERATOR_C ()
     }
 
 //#######################################################################
-ENVELOPE_C*  ENVELOPE_GENERATOR_C::NewADSR (ETYPE etype, byte index, String name, uint16_t device, byte& usecount)
+ENVELOPE_C* ENVELOPE_GENERATOR_C::NewADSR (byte index, String name, uint16_t device, byte& usecount)
     {
-    ENVELOPE_C adsl (etype, index, name, device, usecount);
+    ENVELOPE_C adsl (index, name, device, usecount);
     Envelopes.push_back (adsl);
     return (&(Envelopes.back ()));
     }
 
 //#######################################################################
-void  ENVELOPE_GENERATOR_C::Loop ()
+void ENVELOPE_GENERATOR_C::Loop ()
     {
     for ( deque<ENVELOPE_C>::iterator it = Envelopes.begin ();  it != Envelopes.end();  ++it )
         {
-        switch ( it->WhatType () )
-            {
-            case ETYPE::VCA:
-                it->ProcessVCA (DeltaTimeMilli);
-                break;
-            case ETYPE::VCF:
-                it->ProcessVCF (DeltaTimeMilli);
-                break;
-            case ETYPE::VCO:
-                break;
-            }
+        it->Process (DeltaTimeMilli);
         it->Update ();
         }
     }
 
 //#######################################################################
-ENVELOPE_C::ENVELOPE_C (ETYPE etype, byte index, String name, int16_t device, byte& usecount) : UseCount (usecount)
+void ENVELOPE_C::SetRange (int16_t floor, int16_t ceiling)
+    {
+    Floor = floor;
+    Diff  = ceiling - floor;
+    }
+
+//#######################################################################
+ENVELOPE_C::ENVELOPE_C (byte index, String name, uint16_t device, byte& usecount) : UseCount(usecount)
     {
     Name            = name;
     DeviceChannel   = device;
-    Type            = etype;
     Index           = index;
-    CurrentLevel    = 0;
-    BaseLevel       = 0;
-    PeakLevel       = 0;
-    SustainLevel    = 0;
+    Current         = 0;
+    Peak            = 0;
+    Sustain         = 0;
     AttackTime      = 0;
     DecayTime       = 0;
     SustainTime     = 0;
     ReleaseTime     = 0;
-    ClearState  ();
+    SetRange (0, DA_MAX);        // Defualt to normal D/A converter settings
+    Clear ();
     }
 
 //#######################################################################
@@ -98,65 +94,29 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
 //#######################################################################
 void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     {
-    uint16_t da = percent * DA_RANGE;
-    if ( da > MAX_DA )
-        da = MAX_DA;
-
     switch ( state )
         {
         case ESTATE::START:
-            if ( Type == ETYPE::VCA )
-                return;
-            BaseLevel = da;
             break;
         case ESTATE::ATTACK:
-            PeakLevel = da;
+            Peak = percent;
             break;
         case ESTATE::DECAY:
-            SustainLevel = da;
+            Sustain = percent;
             break;
         case ESTATE::SUSTAIN:
-            SustainLevel = da;
+            Sustain = percent;
             break;
         case ESTATE::RELEASE:
-            BaseLevel = da;
             break;
         }
-    DBG ("setting > %d", da );
-    }
-
-//#######################################################################
-void ENVELOPE_C::SetLevel (ESTATE state, uint16_t davalue)
-    {
-    if ( davalue > MAX_DA )
-        davalue = MAX_DA;
-
-    switch ( state )
-        {
-        case ESTATE::START:
-            BaseLevel = davalue;
-            break;
-        case ESTATE::ATTACK:
-            PeakLevel = davalue;
-            break;
-        case ESTATE::DECAY:
-            SustainLevel = davalue;
-            break;
-        case ESTATE::SUSTAIN:
-            SustainLevel = davalue;
-            break;
-        case ESTATE::RELEASE:
-            BaseLevel = davalue;
-            break;
-        }
-
-    DBG ("discrete level setting > %d", davalue );
+    DBG ("setting %s > %f", StateLabel[(int)state], percent );
     }
 
 //#######################################################################
 void ENVELOPE_C::Start ()
     {
-    if ( Active || (PeakLevel == 0) )
+    if ( Active || (Peak == 0.0) )
         return;
     Active = true;
     State = ESTATE::START;
@@ -174,41 +134,37 @@ void ENVELOPE_C::End ()
     }
 
 //#######################################################################
-void ENVELOPE_C::ClearState ()
+void ENVELOPE_C::Clear ()
     {
     if ( Active && UseCount )   UseCount--;
     Active        = false;
     TriggerEnd    = false;
     State         = ESTATE::IDLE;
-    CurrentLevel  = BaseLevel;
+    Current       = 0.0;
+    Updated       = true;
     DBG ("clearing %d", Index);
     Update ();
     }
 
 //#######################################################################
-void ENVELOPE_C::Clear ()
-    {
-    ClearState ();
-    }
-
-//#######################################################################
 void ENVELOPE_C::Update ()
     {
-    I2cDevices.D2Analog (DeviceChannel, CurrentLevel);
+    if ( Updated )
+        {
+        if ( Current > Peak )
+            Current = Peak;
+        int16_t z = abs (Floor + (Diff * Current));
+        I2cDevices.D2Analog (DeviceChannel, z);
+        Updated = false;
+        }
     }
 
 //#######################################################################
 //#######################################################################
-void ENVELOPE_C::ProcessVCA (float deltaTime)
+void ENVELOPE_C::Process (float deltaTime)
     {
     if ( !Active )                      // if we ain't doing it then we don't need to run this.
         return;
-
-    //***************************************
-    //  Fix  level exceeding paramter
-    //***************************************
-    if ( CurrentLevel > PeakLevel )
-        CurrentLevel = PeakLevel;
 
     //***************************************
     //  Beginning of the end
@@ -216,7 +172,6 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
     if ( TriggerEnd && (State != ESTATE::RELEASE) )
         {
         State = ESTATE::RELEASE;
-        StartLevel = CurrentLevel;
         Timer = ReleaseTime;
         DBG ("Terminating");
         return;
@@ -229,11 +184,11 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
         //***************************************
         case ESTATE::START:
             {
-            CurrentLevel = 0;
-            Timer        = 0.0;
-            TargetTime   = AttackTime - TIME_THRESHOLD;
-            State        = ESTATE::ATTACK;
-            DBG ("Start > %f  uSec from level %d to %d", TargetTime, CurrentLevel, PeakLevel);
+            Current     = 0.0;
+            Timer       = 0.0;
+            TargetTime  = AttackTime - TIME_THRESHOLD;
+            State       = ESTATE::ATTACK;
+            DBG ("Start attact to %f uSec from level %f to %f", TargetTime, Current, Peak);
             return;
             }
         //***************************************
@@ -244,16 +199,18 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
             if ( Timer < TargetTime )
                 {
                 Timer  += deltaTime;
-                CurrentLevel  = (Timer / AttackTime) * PeakLevel;
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
+                Current  = (Timer / TargetTime) * Peak;
+                Updated = true;
+                DBG ("Timer > %f uSec at level %f", Timer, Current);
                 return;
                 }
-            CurrentLevel = PeakLevel;
-            Timer        = DecayTime - TIME_THRESHOLD;;
-            State        = ESTATE::DECAY;
-            DiffLevel    = PeakLevel - SustainLevel;
-            TargetTime   = 0.0;
-            DBG ("Start > %f  uSec from level %d to %d", Timer, CurrentLevel, SustainLevel);
+            Current     = Peak;
+            Updated     = true;
+            Timer       = DecayTime - TIME_THRESHOLD;;
+            State       = ESTATE::DECAY;
+            Target      = Peak - Sustain;
+            TargetTime  = 0.0;
+            DBG ("Start > %f  uSec from level %f to %f", Timer, Current, Sustain);
             return;
             }
 
@@ -265,23 +222,21 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
             if ( Timer > 10 )
                 {
                 Timer -= deltaTime;
-                CurrentLevel = SustainLevel + ((Timer / DecayTime) * DiffLevel);
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
+                Current = Sustain + ((Timer / DecayTime) * Target);
+                Updated = true;
+                DBG ("Timer > %f uSec at level %f", Timer, Current);
                 return;
                 }
-            CurrentLevel = SustainLevel;
-            Timer        = SustainTime - TIME_THRESHOLD;
-            State        = ESTATE::SUSTAIN;
+            Current = Sustain;
+            Updated = true;
+            Timer   = SustainTime - TIME_THRESHOLD;
+            State   = ESTATE::SUSTAIN;
             if ( DebugSynth )
                 {
                 if ( SustainTime < 0 )
-                    {
-                    DBG ("Staying at level %d", CurrentLevel);
-                    }
+                    { DBG ("Staying at level %f", Current); }
                 else
-                    {
-                    DBG ("%f uSec at level %d", Timer, CurrentLevel);
-                    }
+                    { DBG ("%f uSec at level %f", Timer, Current); }
                 }
             return;
             }
@@ -295,13 +250,12 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
             if ( Timer > TIME_THRESHOLD )
                 {
                 Timer -= deltaTime;
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
+                DBG ("Timer > %f uSec at level %f", Timer, Current);
                 return;
                 }
-            StartLevel = CurrentLevel;
             Timer      = ReleaseTime - TIME_THRESHOLD;
             State      = ESTATE::RELEASE;
-            DBG ("Start > %f  uSec from level %d to 0", Timer, CurrentLevel);
+            DBG ("Start > %f  uSec from level %f to 0", Timer, Current);
             return;
             }
         //***************************************
@@ -312,12 +266,13 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
             TriggerEnd = false;
             if ( Timer > 20)
                 {
-                Timer -= deltaTime;
-                CurrentLevel = (Timer / ReleaseTime) * (StartLevel - BaseLevel);
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
+                Timer  -= deltaTime;
+                Current = (Timer / ReleaseTime) * Sustain;
+                Updated = true;
+                DBG ("Timer > %f uSec at level %f", Timer, Current);
                 return;
                 }
-            ClearState ();          // We got to here so this envelope process in finished.
+            Clear ();          // We got to here so this envelope process in finished.
             return;
             }
         }
@@ -325,150 +280,6 @@ void ENVELOPE_C::ProcessVCA (float deltaTime)
     //  This should never happen
     //***************************************
     DBG ("DANGER! DANGER!We should have never gotten here during environment processing!");
-    ClearState ();
-    }
-
-//#######################################################################
-//#######################################################################
-void ENVELOPE_C::ProcessVCF (float deltaTime)
-    {
-    if ( !Active )                      // if we ain't doing it then we don't need to run this.
-        return;
-
-    //***************************************
-    //  Fix any levels exceeding paramters
-    //***************************************
-    if ( BaseLevel < PeakLevel )        // sanity checking
-        {
-        if ( CurrentLevel > PeakLevel )
-            CurrentLevel = PeakLevel;
-        if ( CurrentLevel < BaseLevel )
-            CurrentLevel = BaseLevel;
-        }
-    else
-        {
-        if ( CurrentLevel > BaseLevel )
-            CurrentLevel = BaseLevel;
-        if ( CurrentLevel < PeakLevel )
-            CurrentLevel = PeakLevel;
-        }
-
-    //***************************************
-    //  Beginning of the end
-    //***************************************
-    if ( TriggerEnd && (State != ESTATE::RELEASE) )
-        {
-        State = ESTATE::RELEASE;
-        StartLevel = CurrentLevel;
-        Timer = ReleaseTime;
-        DBG ("Terminating");
-        return;
-        }
-
-    switch ( State )
-        {
-        //***************************************
-        //  Start envelope
-        //***************************************
-        case ESTATE::START:
-            {
-            CurrentLevel = BaseLevel;
-            Timer        = 0.0;
-            TargetTime   = AttackTime - TIME_THRESHOLD;
-            State        = ESTATE::ATTACK;
-            DBG ("Starting");
-            return;
-            }
-        //***************************************
-        //  ATTACK
-        //***************************************
-        case ESTATE::ATTACK:
-            {
-            if ( Timer < TargetTime )
-                {
-                Timer  += deltaTime;
-                CurrentLevel  = (Timer / AttackTime) * (PeakLevel - BaseLevel);
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
-                return;
-                }
-            CurrentLevel = PeakLevel;
-            Timer        = DecayTime;
-            State        = ESTATE::DECAY;
-            TargetTime   = DecayTime - TIME_THRESHOLD;
-            DBG ("Start > %f  uSec from level %d to %d", DecayTime, CurrentLevel, SustainLevel);
-            return;
-            }
-
-        //***************************************
-        //  DECAY
-        //***************************************
-        case ESTATE::DECAY:
-            {
-            if ( Timer > 10 )
-                {
-                Timer -= deltaTime;
-                CurrentLevel = (Timer / DecayTime) * (PeakLevel - SustainLevel);
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
-                return;
-                }
-            CurrentLevel = SustainLevel;
-            TargetTime   = SustainTime - TIME_THRESHOLD;
-            Timer        = TargetTime;
-            State        = ESTATE::SUSTAIN;
-            if ( DebugSynth )
-                {
-                if ( SustainTime < 0 )
-                    {
-                    DBG ("Staying at level %d", CurrentLevel);
-                    }
-                else
-                    {
-                    DBG ("%f uSec at level %d", Timer, CurrentLevel);
-                    }
-                }
-            return;
-            }
-        //***************************************
-        //  SUSTAIN
-        //***************************************
-        case ESTATE::SUSTAIN:
-            {
-            if ( Timer <= 0 )
-                return;
-            if ( Timer > TIME_THRESHOLD )
-                {
-                Timer -= deltaTime;
-                DBG ("Timer > %f uSec at level %d\, Timer, CurrentLevel");
-                return;
-                }
-            StartLevel = CurrentLevel;
-            TargetTime = ReleaseTime - TIME_THRESHOLD;
-            Timer      = TargetTime;
-            State      = ESTATE::RELEASE;
-            DBG ("Start > %f, Timer");
-            return;
-            }
-        //***************************************
-        //  RELEASE
-        //***************************************
-        case ESTATE::RELEASE:
-            {
-            TriggerEnd = false;
-            if ( Timer > 10)
-                {
-                Timer -= deltaTime;
-                CurrentLevel = (Timer / ReleaseTime) * (StartLevel - BaseLevel);
-                DBG ("Timer > %f uSec at level %d", Timer, CurrentLevel);
-                return;
-                }
-            ClearState ();          // We got to here so this envelope process in finished.
-            return;
-            }
-        }
-    //***************************************
-    //  This should never happen
-    //***************************************
-    DBG ("DANGER! DANGER!We should have never gotten here during environment processing!");
-    ClearState ();
+    Clear ();
     }
 

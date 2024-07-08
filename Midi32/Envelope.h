@@ -1,8 +1,8 @@
 //#######################################################################
-// Module:     Osc.h
-// Descrption: Oscillator controls
+// Module:     Envelope.h
+// Descrption: Envelope processor
 // Creator:    markeby
-// Date:       3/23/2023
+// Date:       6/25/2024
 //#######################################################################
 #pragma once
 #include <deque>
@@ -18,12 +18,6 @@ enum class ESTATE {
     RELEASE
     };
 
-enum class ETYPE {
-    VCA = 0,
-    VCF,
-    VCO
-};
-
 //#######################################################################
 class ENVELOPE_C
     {
@@ -32,18 +26,19 @@ private:
     int         Active;
     bool        TriggerEnd;
 
-    // Current state
+    // Control state
     byte&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
     float       Timer;          // Timer loaded with state time and descrimented
     float       TargetTime;     // Timer is incrimented until this time is exceeded
-    uint16_t    CurrentLevel;   // Current setting 12 bit D/A
-    uint16_t    StartLevel;     // start level for current state
-    uint16_t    DiffLevel;      // Difference to new level
-    // State control settings
-    uint16_t    BaseLevel;      // start and end levels as 12 bit D/A
-    uint16_t    PeakLevel;      // Attacl value for channel as 12 bit D/A
-    uint16_t    SustainLevel;   // Sustain level in channel as 12 bit D/A
+    float       Current;        // Current level zero to one
+    float       Target;
+    float       Peak;           // Fraction of one (percent)
+    float       Sustain;        // Sustain level up to one
+    bool        Updated;        // Flag indicating update output
+
+    int16_t     DiffLevel;      // Difference to new level
+
     float       AttackTime;     // Attack time in uSec.
     float       DecayTime;      // Decay time to sustatin level in uSec.
     float       SustainTime;    // How long to hold the sustain level (-1 = hold while active)
@@ -53,25 +48,22 @@ private:
     String      Name;
     byte        Index;
     uint16_t    DeviceChannel;
-    ETYPE       Type;
+    float       Floor;
+    float       Diff;
 
-    void      ClearState     (void);
 
 public:
-             ENVELOPE_C     (ETYPE etype, byte index, String name, int16_t device, byte& usecount);
+             ENVELOPE_C     (byte index, String name, uint16_t device, byte& usecount);
             ~ENVELOPE_C     (void)      {}
     void     Clear          (void);
     uint16_t GetChannel     (void);
-    void     ProcessVCA     (float deltaTime);
-    void     ProcessVCF     (float deltaTime);
+    void     SetRange       (int16_t floor, int16_t ceiling);
+    void     Process        (float deltaTime);
     void     Update         (void);
     void     Start          (void);
     void     End            (void);
     void     SetTime        (ESTATE state, float time);
     void     SetLevel       (ESTATE state, float percent);
-    void     SetLevel       (ESTATE state, uint16_t davalue);
-    ETYPE    WhatType       (void)
-                { return (Type); }
     };  // end ENVELOPE_C
 
 //#######################################################################
@@ -83,7 +75,7 @@ private:
 public:
                 ENVELOPE_GENERATOR_C    (void);
                 ~ENVELOPE_GENERATOR_C   (void)   {}
-    ENVELOPE_C*  NewADSR                (ETYPE etype, byte index, String name, uint16_t device, byte& usecount);
+    ENVELOPE_C*  NewADSR                (byte index, String name, uint16_t device, byte& usecount);
     void         Loop                   (void);
     };
 

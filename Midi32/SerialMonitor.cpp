@@ -23,15 +23,7 @@ inline void DispRunTime (void)
     int   mhr = hr * 60.0;
     int   mn  = fmn - mhr;
     float sc  = fsc - ((float)(mhr + mn) * 60.0);
-    Serial << hr << ":" << mn << ":" << sc;
-    }
-
-//#######################################################################
-inline static void DumpTitle (void)
-    {
-    Serial << endl;
-    Serial << "\t####    Synth32 -- Midi32    ####" << endl;
-    Serial << "\t####  Midi eMusic Subsystem  ####" << endl;
+    Serial << hr << ":" << mn << ":" << sc << endl;
     }
 
 //#######################################################################
@@ -46,40 +38,30 @@ const char* StateDebug (bool d)
     }
 
 //#######################################################################
-void MONITOR_C::Mode (SMODE m)
-    {
-    InputMode = m;
-    }
-
-//#######################################################################
 void MONITOR_C::DumpStats (void)
     {
     static const char* hh = " ## ";
 
-    DumpTitle ();
     Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
     Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
-    Serial << hh << "SDK " << ESP.getSdkVersion () << endl;
-    Serial << hh << "       Flash size = " << ESP.getFlashChipSize () << endl;
-    Serial << hh << "      Sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << "        Heap size = " << ESP.getHeapSize () << endl;
-    Serial << hh << "Minimum heap size = " << ESP.getMinFreeHeap () << endl;
-    Serial << hh << " Max alloced Heap = " << ESP.getMaxAllocHeap () << endl;
-    Serial << hh << "        Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << "Free sketch space = " << ESP.getFreeSketchSpace () << endl;
-    Serial << hh << "   Min free Psram = " << ESP.getMinFreePsram () << endl;
-    Serial << hh << "Max alloced Psram = " << ESP.getMaxAllocPsram () << endl;
-    Serial << hh << "       Free Psram = " << ESP.getFreePsram () << endl;
-    Serial << hh << "  Flash chip size = " << ESP.getFlashChipSize () << endl;
-    Serial << hh << " Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
-    Serial << hh << "  Flash chip mode = " << ESP.getFlashChipMode() << endl;
-    Serial << endl;
-    Serial << hh << "       Update URL = " << UpdateOta.WhoAmI() << endl << endl;
-    Serial << hh << " Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
-    Serial << hh << "    Last interval = " << DeltaTimeMicro << " uSec" << endl;
-    Serial << hh << "      Runing Time = ";
-    DispRunTime ();
-    Serial << endl;
+    Serial << hh << " SDK " << ESP.getSdkVersion () << endl;
+    Serial << hh << "       Sketch size = " << ESP.getSketchSize () << endl;
+    Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
+    Serial << hh << " Minimum heap size = " << ESP.getMinFreeHeap () << endl;
+    Serial << hh << "  Max alloced Heap = " << ESP.getMaxAllocHeap () << endl;
+    Serial << hh << "         Free heap = " << ESP.getFreeHeap () << endl;
+    Serial << hh << " Free sketch space = " << ESP.getFreeSketchSpace () << endl;
+// Current part has no Psram
+//  Serial << hh << "    Min free Psram = " << ESP.getMinFreePsram () << endl;
+//  Serial << hh << " Max alloced Psram = " << ESP.getMaxAllocPsram () << endl;
+//  Serial << hh << "        Free Psram = " << ESP.getFreePsram () << endl;
+    Serial << hh << "   Flash chip size = " << ESP.getFlashChipSize () << endl;
+    Serial << hh << "  Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
+    Serial << hh << "   Flash chip mode = " << ESP.getFlashChipMode() << endl << endl;
+    Serial << hh << "        Update URL = " << UpdateOta.WhoAmI() << endl << endl;
+    Serial << hh << "       Runing Time = "; DispRunTime ();
+    Serial << hh << "     Last interval = " << DeltaTimeMicro << " uSec" << endl;
+    Serial << hh << "  Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
     }
 
 //#######################################################################
@@ -89,30 +71,30 @@ bool MONITOR_C::Save (SMODE m)
     switch ( m )
         {
         case INSSID:
-            Settings.PutSSID (InputString);
+            Settings.PutSSID (this->InputString);
             break;
         case INPWD:
-            Settings.PutPasswd (InputString);
+            Settings.PutPasswd (this->InputString);
             break;
         default:
             break;
         }
 
-    InputString.clear ();
+    this->InputString.clear ();
     return (true);
     }
 
 //#######################################################################
 void MONITOR_C::InputPrompt (int num, const char* text)
     {
-    Serial << num << "\n\n" << text << " >" << InputString;
+    Serial << num << "\n\n" << text << " >" << this->InputString;
     }
 
 //#######################################################################
 void MONITOR_C::Tuning ()
     {
-    Serial << endl << "  ********** Tuning mode **********" << endl;
     SynthFront.StartTuning ();
+    this->Menu ();
     }
 
 //#######################################################################
@@ -178,20 +160,20 @@ void MONITOR_C::MenuSel (void)
                         }
                     break;
                 case 0x41:          // arrow up
-                    if ( InputMode == ADIAG )
+                    if ( this->InputMode == ADIAG )
                         AnalogDiagDevice = ((AnalogDiagDevice / 4) * 4) - 4; // select first channel on previous chip
                     break;
                 case 0x42:          // arrow down
-                    if ( InputMode == ADIAG )
+                    if ( this->InputMode == ADIAG )
                         AnalogDiagDevice = ((AnalogDiagDevice / 4) * 4) + 4; // select first channel on next chip
                     break;
                 case 0x43:          // arrow right
                     Serial << "<<<<========\n\n";
-                    if ( InputMode == ADIAG )
+                    if ( this->InputMode == ADIAG )
                         AnalogDiagDevice++;                                  // advance to next channel
                     break;
                 case 0x44:          // arrow left
-                    if ( InputMode == ADIAG )
+                    if ( this->InputMode == ADIAG )
                         AnalogDiagDevice--;                                  // move to previous channel
                     break;
                 default:
@@ -201,60 +183,56 @@ void MONITOR_C::MenuSel (void)
         return;
         }
 
-    switch ( InputMode )
+    switch ( this->InputMode )
         {
         case CMD:
             switch ( s )
                 {
                 case 's':
                     Serial << endl;
-                    DumpStats ();
-                    Mode (MENU);
+                    this->DumpStats ();
+                    this->Mode (MENU);
                     break;
                 case '1':
                     DebugMidi  = !DebugMidi;
                     Serial << "  MIDI debugging " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
-                    Mode (MENU);
+                    this->Mode (MENU);
                     break;
                 case '2':
                     DebugI2C  = !DebugI2C;
                     Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
-                    Mode (MENU);
+                    this->Mode (MENU);
                     break;
                 case '3':
                     DebugOsc   = !DebugOsc;
                     Serial << "  Oscillator debugging " << (( DebugOsc ) ? "Enabled" : "Disabled") << endl;
-                    Mode (MENU);
+                    this->Mode (MENU);
                     break;
                 case '4':
                     DebugSynth = !DebugSynth;
                     Serial << "  Synth debugging1 " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
-                    Mode (MENU);
+                    this->Mode (MENU);
                     break;
                 case 'S':
-                    InputString = Settings.GetSSID ();
-                    InputPrompt (7, "  Enter SSID");
-                    Mode (INSSID);
+                    this->InputString = Settings.GetSSID ();
+                    this->InputPrompt (7, "  Enter SSID");
+                    this->Mode (INSSID);
                     break;
                 case 'P':
-                    InputString = Settings.GetPasswd ();
-                    InputPrompt (8, "  Enter PWD");
-                    Mode (INPWD);
+                    this->InputString = Settings.GetPasswd ();
+                    this->InputPrompt (8, "  Enter PWD");
+                    this->Mode (INPWD);
                     break;
                 case 'C':
-                    InputPrompt (9, "  Cleared preferences.");
-                    Mode (ZAP);
-                    break;
-                case 't':
-                    Tuning ();
-                    Mode (TUNING);
+                    this->InputPrompt (9, "  Cleared preferences.");
+                    this->Mode (ZAP);
                     break;
                 case 'q':
                     AnalogDiagEnabled = true;
                     SynthActive       = false;
                     AnalogDiagDevice  = 0;
                     Serial << endl << endl;
-                    Mode (ADIAG);
+                    this->Mode (ADIAG);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
@@ -263,21 +241,9 @@ void MONITOR_C::MenuSel (void)
                     break;
                 default:
                     Serial << "       ??" << endl;
-                    Mode (MENU);
+                    this->Mode (MENU);
                     break;
                 }
-            break;
-
-        case TUNING:
-            switch ( s )
-                {
-                case ' ':           // Just move the cursor down a couple of lines
-                    Serial << "...\n\n";
-                    break;
-                default:
-                    break;
-                }
-        case NOISE_TUNING:
             break;
         }
     }
@@ -285,21 +251,23 @@ void MONITOR_C::MenuSel (void)
 //#######################################################################
 void MONITOR_C::Menu (void)
     {
-    DumpTitle ();
+    Serial << endl;
+    Serial << "\t######   Synth32 -- Midi32  ######" << endl;
+    Serial << "\t######    Midi Subsystem    ######" << endl;
+    if (  SynthFront.IsInTuning () )
+        Serial << "\t******     Tuning mode      ******" << endl;
+
     Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
-    Serial << StateDebug (DebugI2C)  << "\t2   - Debug I2C interface " << endl;
+    Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
     Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
     Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
-    Serial << "\tt   - Tuning mode" << endl;
     Serial << "\tZ   - Test function" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
     Serial << "\tC   - Clear Preferences" << endl;
     Serial << "\tF12 - Reset" << endl;
-    if ( SynthFront.IsInTuning () )
-        Serial << endl << "  ********** Tuning mode **********" << endl;
     Serial << endl;
     }
 
@@ -310,32 +278,34 @@ void MONITOR_C::TextIn (void)
     switch ( in_char )
         {
         case '\r':              // return (enter)
-            if ( Save (InputMode) )
-                Mode (MENU);
+            if ( this->Save (this->InputMode) )
+                this->Mode (MENU);
             break;
         case (char)127:         // backspace
-            if ( InputString.length () )
+            if ( this->InputString.length () )
                 {
                 Serial << (char)8 << ' ' << (char)8;
-                InputString.remove (InputString.length () - 1);
+                this->InputString.remove (this->InputString.length () - 1);
                 }
             break;
         case (char)27:          // escape for exit with no change
-            Mode (MENU);
+            this->Mode (MENU);
             break;
         case '\t':              // Tab for special loops
-            Save (InputMode);
+            this->Save (this->InputMode);
             break;
         default:                // all other characters go into string
-            InputString += in_char;
+            this->InputString += in_char;
             Serial << in_char;
             break;
         }
     }
 
 //#######################################################################
-MONITOR_C::MONITOR_C (void) : InputMode (MENU), InputString ("")
+MONITOR_C::MONITOR_C (void)
     {
+    this->InputString = "";
+    this->InputMode   = MENU;
     }
 
 //#######################################################################
@@ -347,7 +317,7 @@ MONITOR_C::~MONITOR_C (void)
 void MONITOR_C::Begin (void)
     {
     Serial.begin (115200);
-    DumpStats ();
+    this->DumpStats ();
     Serial << "\n\n\nHow the hell did I get here man?\n\n\n";
     }
 
@@ -360,14 +330,13 @@ bool MONITOR_C::Detect (void)
 //#######################################################################
 void MONITOR_C::Loop (void)
     {
-    if ( InputMode != MENU )
+    if ( this->InputMode != MENU )
         {
         while ( Serial.available () )
             {
-            switch ( InputMode )
+            switch ( this->InputMode )
                 {
                 case CMD:
-                case TUNING:
                 case ADIAG:
                     this->MenuSel ();
                     break;
@@ -377,7 +346,7 @@ void MONITOR_C::Loop (void)
                     break;
                 case ZAP:
                     if ( this->PromptZap () )
-                        Mode(MENU);
+                        this->Mode(MENU);
                     break;
                 default:
                     break;
@@ -386,8 +355,8 @@ void MONITOR_C::Loop (void)
         }
     else
         {
-        Menu ();
-        Mode (CMD);
+        this->Menu ();
+        this->Mode (CMD);
         }
     }
 

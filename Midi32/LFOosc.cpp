@@ -22,9 +22,9 @@ static  const char*     MixerNames[] = { "sine", "triangle", "saw", "pulse" };
 //#######################################################################
 SYNTH_LFO_C::SYNTH_LFO_C ()
     {
-    Valid = false;
-    Update = 0;
-    FreqDiv = MAX_FREQ_DEV;
+    Valid       = false;
+    UpdateNeded = false;
+    FreqDiv     = MAX_FREQ_DEV;
     }
 
 //#######################################################################
@@ -56,7 +56,7 @@ void SYNTH_LFO_C::SetLevel (byte ch, byte data)
         {
         Vca[ch].CurrentLevel = z;
         I2cDevices.D2Analog (Vca[ch].Channel,  z);
-        Update = true;
+        UpdateNeded = true;
         EDBG ("set > %d", z);
         }
     }
@@ -136,10 +136,10 @@ void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
     else
         SetLevel (ch, 0);
 
-    if ( Update )
+    if ( UpdateNeded )
         {
         I2cDevices.UpdateAnalog ();     // Update D/A ports
-        Update = false;
+        UpdateNeded = false;
         }
 
     EDBG ("%s", ((sel) ? " ON " : " off"));
@@ -156,10 +156,10 @@ void SYNTH_LFO_C::Level (byte data)
         else
             SetLevel (z, 0);
         }
-    if ( Update )
+    if ( UpdateNeded )
         {
         I2cDevices.UpdateAnalog ();     // Update D/A ports
-        Update = false;
+        UpdateNeded = false;
         }
     }
 

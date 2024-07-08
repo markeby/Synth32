@@ -45,7 +45,7 @@ private:
     byte    OscChannel;
     byte    PwmChannel;
     byte    BendChannel;
-    bool    Update;
+    bool    UpdateNeded;
     int     CurrentLevel;
     int     FreqDiv;
     float   CurrentPercent;

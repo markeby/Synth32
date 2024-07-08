@@ -8,7 +8,7 @@
 #include "config.h"
 #include "Osc.h"
 #include "Debug.h"
-const char* Label = "VCO";
+static const char* Label = "VCO";
 #define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
 
 using namespace OSC_N;
@@ -25,11 +25,11 @@ SYNTH_OSC_C::SYNTH_OSC_C (byte num, uint8_t first_device, byte& usecount, ENVELO
     OscChannel                = first_device + uint8_t(D_A_OFF::EXPO);
     PwmChannel                = first_device + uint8_t(D_A_OFF::WIDTH);
     SawtoothDirChannel        = first_device + uint8_t(D_A_OFF::DIR);
-    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::TRIANGLE)], first_device + uint8_t(D_A_OFF::TRIANGLE), usecount);
-    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + uint8_t(D_A_OFF::SAWTOOTH), usecount);
-    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::PULSE)], first_device + uint8_t(D_A_OFF::PULSE), usecount);
-    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SINE)], first_device + uint8_t(D_A_OFF::SINE), usecount);
-    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (ETYPE::VCA, num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
+    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + uint8_t(D_A_OFF::TRIANGLE), usecount);
+    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + uint8_t(D_A_OFF::SAWTOOTH), usecount);
+    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + uint8_t(D_A_OFF::PULSE), usecount);
+    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + uint8_t(D_A_OFF::SINE), usecount);
+    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
 
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));
@@ -50,6 +50,13 @@ SYNTH_OSC_C::SYNTH_OSC_C (byte num, uint8_t first_device, byte& usecount, ENVELO
         }
     else
         printf("\t  ** VCO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
+    }
+
+//#######################################################################
+void SYNTH_OSC_C::TuningAdjust (bool up)
+    {
+    OctaveArray[this->CurrentNote] += ( up ) ? -1 : +1;
+    SetTuningNote (this->CurrentNote);
     }
 
 //#######################################################################
@@ -103,7 +110,7 @@ void SYNTH_OSC_C::NoteClear ()
 //#######################################################################
 void SYNTH_OSC_C::SetReverse (bool data)
     {
-    I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? 4095 : 0);
+    I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? DA_MAX : 0);
     }
 
 //#######################################################################

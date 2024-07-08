@@ -6,6 +6,9 @@
 //#######################################################################
 #pragma once
 
+// D/A converter maximum value
+#define DA_MAX              4095
+
 // number of synth oscillaotor/filter/control channels
 #define CHAN_COUNT          6
 

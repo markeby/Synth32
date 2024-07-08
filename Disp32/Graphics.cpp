@@ -2,14 +2,17 @@
 // Module:     Graphics.cpp
 // Descrption: Graphics module
 // Creator:    markeby
-// Date:       9/4/2023
+// Date:       7/7/2024
 //#######################################################################
 #include "config.h"
 #include "SynthData.h"
 #include "Graphics.h"
 #include "SynthData.h"
 #include "DispFrontEnd.h"
-#include "Graphics.hpp"
+
+#include <ESP_Panel_Library.h>
+#include <lvgl.h>
+#include "lvgl_port_v8.h"
 
 using namespace DISP_MESSAGE_N;
 using namespace GRPH_DISP_N;
@@ -114,16 +117,15 @@ void DISP_CTRL_C::Set (float val)
 //#######################################################################
 GRPH_C::GRPH_C ()
     {
-    pinMode (GFX_BL, OUTPUT);
     }
 
 //#######################################################################
 void GRPH_C::Begin ()
     {
-    pGFX->begin();
-    pGFX->setUTF8Print (true);           // enable UTF8 support for the Arduino print() function
-    digitalWrite (GFX_BL, HIGH);
-    pGFX->fillScreen (BLUE);
+    Panel = new ESP_Panel ();
+    panel->init ();
+    panel->begin ();
+    lvgl_port_init (panel->getLcd (), panel->getTouch ());
     }
 
 //#######################################################################

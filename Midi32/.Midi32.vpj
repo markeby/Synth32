@@ -126,6 +126,7 @@
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
+            <F N="SineWave.cpp"/>
             <F N="SynthChannel.cpp"/>
             <F N="SynthConfig.cpp"/>
             <F N="SynthFront.cpp"/>
@@ -151,6 +152,7 @@
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
+            <F N="SineWave.h"/>
             <F N="SynthChannel.h"/>
             <F N="SynthFront.h"/>
             <F N="Test.h"/>

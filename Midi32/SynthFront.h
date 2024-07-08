@@ -6,6 +6,7 @@
 //#######################################################################
 #pragma once
 
+#include "SineWave.h"
 #include "Envelope.h"
 
 namespace SYNTH_FRONT
@@ -78,6 +79,7 @@ private:
     MIDI_VALUE_MAP*       KnobMap;
     MIDI_SWITCH_MAP*      SwitchMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
+    SINEWAVE_C            SineWave;
     bool                  TuningOn[CHAN_COUNT];
 
     typedef struct

@@ -44,7 +44,8 @@ namespace ___StuffForThisModuleOnly___
     //###################################################################
     inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, byte index, DISP_MESSAGE_N::EFFECT_C effect, byte value)
         {
-        SendToDisp32 ((DISP_MESSAGE_N::CMD_C)((byte)status | index), effect, value);
+ //       if ( index < 5 )
+            SendToDisp32((DISP_MESSAGE_N::CMD_C)((byte)status | index), effect, value);
         }
 
     //###################################################################
@@ -312,6 +313,7 @@ void SYNTH_FRONT_C::Loop ()
             DBG ("Key down > %d   Velocity > %d  Channel > %d", DownKey, DownVelocity, doit);
             }
 
+        SineWave.SineWave(DeltaTimeMilli);                 // Process sine wave for envelope generator modulation
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
             pChan[z]->Loop ();
@@ -592,7 +594,15 @@ void SYNTH_FRONT_C::FreqSelectLFO (byte ch, byte data)
 //#######################################################################
 void SYNTH_FRONT_C::LFOrange (bool up)
     {
-    Lfo.Range (up);
+    if ( SetTuning )
+        {
+        for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+            {
+            if ( TuningOn[zc] )
+                pChan[zc]->pOsc()->TuningAdjust (up);
+            }
+        }
+    Lfo.Range(up);
     }
 
 //#######################################################################

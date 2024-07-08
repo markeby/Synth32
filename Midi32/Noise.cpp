@@ -21,8 +21,8 @@ using namespace NOISE_N;
     {
     Analog[(int)SELECT::VCA] = analog + 1;
     Analog[(int)SELECT::VCF] = analog;
-    Envelope[(int)SELECT::VCF] = EnvGen.NewADSR (ETYPE::VCF, num, "Noise VCF", Analog[(int)SELECT::VCF], usecount);
-    Envelope[(int)SELECT::VCA] = EnvGen.NewADSR (ETYPE::VCA, num, "Noise VCA", Analog[(int)SELECT::VCA], usecount);
+    Envelope[(int)SELECT::VCF] = EnvGen.NewADSR (num, "Noise VCF", Analog[(int)SELECT::VCF], usecount);
+    Envelope[(int)SELECT::VCA] = EnvGen.NewADSR (num, "Noise VCA", Analog[(int)SELECT::VCA], usecount);
 
     FilterDigital[0] = digital - 1;
     FilterDigital[1] = digital;

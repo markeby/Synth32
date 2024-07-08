@@ -9,8 +9,6 @@
 #include "config.h"
 #include "Envelope.h"
 
-#define A440                ((4 * NOTES_PER_OCTAVE) + 9)                // A440 = A4
-
 namespace OSC_N
 {
 //#######################################################################
@@ -68,6 +66,7 @@ public:
     void SetReleaseTime     (byte wave, float time);
     void SetSustainLevel    (byte wave, float level_percent);
     void SetMaxLevel        (byte wave, float level_percent);
+    void TuningAdjust       (bool up);
     };
 
 

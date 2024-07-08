@@ -48,8 +48,8 @@ SYNTH_FRONT_C   SynthFront (FaderMapArray, KnobMapArray, SwitchMapArray);
 bool       SystemError          = false;
 bool       SystemFail           = false;
 bool       SynthActive          = false;
-float      DeltaTimeMilli       = 0;             // micro second interval.
-float      DeltaTimeMicro       = 0;
+float      DeltaTimeMilli       = 0;             // Millisecond interval.
+float      DeltaTimeMicro       = 0;             // Microsecond interval
 float      DeltaTimeMicroAvg    = 0;
 uint64_t   RunTime              = 0;
 bool       DebugMidi            = false;
@@ -67,10 +67,10 @@ int        AnalogDiagDevice     = 0;
 //#######################################################################
 inline int TimeDeltaMiicro (void)
     {
-    static uint64_t strt = 0;
+    static uint64_t strt = 0;       // Starting time for next frame delta calculation
     int             delta;
 
-    RunTime =  micros ();
+    RunTime = micros ();
     delta = (int)((uint64_t)RunTime - (uint64_t)strt);
     if ( DeltaTimeMicroAvg == 0 )
         DeltaTimeMicroAvg = delta;
@@ -253,7 +253,7 @@ void AnalogDiagnostics (void)
 
         lastdevice = AnalogDiagDevice;
         I2cDevices.Zero ();                         // Clear all D/A
-        I2cDevices.D2Analog (lastdevice, 4095);     // set next D/A
+        I2cDevices.D2Analog (lastdevice, DA_MAX);   // set next D/A
 
         printf("Analog diag:  Device %d  Board %d, Channel V%c\n", lastdevice, lastdevice / 4, (lastdevice % 4) + 'A');
         I2cDevices.UpdateDigital ();    // Update Digital output ports

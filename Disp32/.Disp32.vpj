@@ -123,13 +123,6 @@
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
             <F N="SynthData.cpp"/>
-            <F N="WebOTA.cpp"/>
-        </Folder>
-        <Folder
-            Name="Source2"
-            Filters="*.hpp"
-            GUID="{755465D7-65A3-4189-9FE2-F8C4D402E79D}">
-            <F N="Graphics.hpp"/>
         </Folder>
         <Folder
             Name="Headers"
@@ -144,11 +137,14 @@
             </Folder>
             <F N="config.h"/>
             <F N="DispFrontEnd.h"/>
+            <F N="ESP_Panel_Board_Custom.h"/>
+            <F N="ESP_Panel_Board_Supported.h"/>
+            <F N="ESP_Panel_Conf.h"/>
             <F N="Graphics.h"/>
+            <F N="lvgl_port_v8.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
             <F N="SynthData.h"/>
-            <F N="WebOTA.h"/>
         </Folder>
         <Folder
             Name="Tools"
