@@ -118,11 +118,14 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="Debug.cpp"/>
             <F N="DispFrontEnd.cpp"/>
             <F N="Graphics.cpp"/>
+            <F N="lvgl_port_v8.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
-            <F N="SynthData.cpp"/>
+            <F N="WebOTA.cpp"/>
+            <F N="Widgets.cpp"/>
         </Folder>
         <Folder
             Name="Headers"
@@ -136,6 +139,7 @@
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
             <F N="config.h"/>
+            <F N="Debug.h"/>
             <F N="DispFrontEnd.h"/>
             <F N="ESP_Panel_Board_Custom.h"/>
             <F N="ESP_Panel_Board_Supported.h"/>
@@ -145,6 +149,8 @@
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
             <F N="SynthData.h"/>
+            <F N="WebOTA.h"/>
+            <F N="Widgets.h"/>
         </Folder>
         <Folder
             Name="Tools"

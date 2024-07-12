@@ -20,6 +20,7 @@ with open(File, 'rb') as fi:
 winsound.Beep (250, 300)
 winsound.Beep (350, 300)
 
+print (f'curl --compressed -L -X POST -F "MD5={md5}" -F "name=firmware" -F "data=@{File};filename=firmware" "{Url}"')
 p = subprocess.Popen(f'curl --compressed -L -X POST -F "MD5={md5}" -F "name=firmware" -F "data=@{File};filename=firmware" "{Url}"', shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 retval = p.wait()
 

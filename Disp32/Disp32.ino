@@ -1,7 +1,9 @@
-//
-// pinout of ESP32 DevKit found here:
-// https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
-//
+//#######################################################################
+// Module:     Disp32.cpp
+// Descrption: Display for Synt32
+// Creator:    markeby
+// Date:       7/11/2024
+//#######################################################################
 #include <Arduino.h>
 
 #include "config.h"
@@ -9,41 +11,33 @@
 #include "SerialMonitor.h"
 #include "DispFrontEnd.h"
 #include "Graphics.h"
+#include "WebOTA.h"
 
 //#######################################################################
 DISP_FRONT_END_C  DispFront;
 
-bool       SystemError         = false;
-bool       SystemFail          = false;
 float      DeltaTime           = 0;
 int        DeltaMicro          = 0;             // micro second interval.
 float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
+
 bool       DebugInterface      = true;
 bool       DebugGraphics       = true;
 
 // this is used to add a task to core 0
 //TaskHandle_t  Core0TaskHnd;
 
-#include "Test.h"
-
 //#######################################################################
-inline int TimeDeltaMiicro (void)
+inline void TimeDelta (void)
     {
     static uint64_t strt = 0;
-    int             delta;
-
-    RunTime =  micros ();
-    delta = (int)((uint64_t)RunTime - (uint64_t)strt);
-    strt = RunTime;
-    return (delta);
-    }
-
-//#######################################################################
-inline bool TickTime (void)
-    {
     static uint64_t loop_cnt_10hz = 0;
     static uint64_t icount = 0;
+
+    uint64_t current =  micros ();
+    DeltaMicro = (int)(current - strt);
+    strt = current;
+    DeltaTime = MICRO_TO_MILLI (DeltaMicro);
 
     RunTime       += DeltaMicro;
     loop_cnt_10hz += DeltaMicro;
@@ -54,36 +48,8 @@ inline bool TickTime (void)
         AverageDeltaTime = MICRO_TO_MILLI (loop_cnt_10hz / icount);
         loop_cnt_10hz = 0;
         icount = 0;
-        return (true);
         }
-    return (false);
     }
-
-//#######################################################################
-inline void TickState (void)
-    {
-    static uint32_t counter = 1;
-
-    if ( --counter == 0 )
-        {
-        digitalWrite (HEARTBEAT_PIN, LOW);       // LED on
-        counter = 10;
-        }
-    if ( SystemError || SystemFail )
-        {
-        if ( counter % 4 )
-            {
-            digitalWrite (HEARTBEAT_PIN, HIGH);  // LED off
-            }
-        else
-            {
-            digitalWrite (HEARTBEAT_PIN, LOW);   // LED on
-            }
-        }
-    if ( counter == 9 )
-        digitalWrite (HEARTBEAT_PIN, HIGH);      // LED off
-    }
-
 
 //#######################################################################
 //#######################################################################
@@ -92,28 +58,20 @@ void setup (void)
     bool fault = false;
     Serial.begin (115200);
 
-    Settings.Begin ();        // System settings
     printf ("\t>>> Start Settings config...\n");
     Settings.Begin ();
 
-    pinMode (HEARTBEAT_PIN, OUTPUT);
-    pinMode (RED_PIN,       OUTPUT);
-    pinMode (GREEN_PIN,     OUTPUT);
-    digitalWrite (RED_PIN, HIGH);           // Red off
-    digitalWrite (GREEN_PIN, HIGH);         // Green off
-    digitalWrite (HEARTBEAT_PIN, LOW);      // Blue hearbeat LED off
-
-
     printf ("\t>>> Startup OTA...\n");
-    UpdateOta.Setup (Settings.GetSSID (), Settings.GetPasswd ());
+    UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
     printf ("\t>>> Startup Graphics...\n");
     Graphics.Begin ();
+    DispFront.Begin ();
 
 
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
-
+    delay (1500);   // Give time for the Wifi to connect
     printf ("\t>>> System startup complete.\n\n");
     }
 
@@ -121,18 +79,12 @@ void setup (void)
 void Core0TaskSetup (void)
     {
     // init your stuff for core0 here
-#ifdef ADC_TO_MIDI_ENABLED
-    AdcMul_Init ();
-#endif //ADC_TO_MIDI_ENABLED
     }
 
 //#######################################################################
 void Core0TaskLoop (void)
     {
     // put your loop stuff for core0 here
-#ifdef ADC_TO_MIDI_ENABLED
-    AdcMul_Process ();
-#endif //ADC_TO_MIDI_ENABLED
     }
 
 //#######################################################################
@@ -150,32 +102,24 @@ void Core0Task (void *parameter)
         }
     }
 
+
 //#######################################################################
 //#######################################################################
 void loop (void)
     {
-    static bool firstpass = true;
-    // heartbeat and error alerts based on time intervals
-    DeltaMicro = TimeDeltaMiicro ();
-    DeltaTime = MICRO_TO_MILLI (DeltaMicro);
-    if ( TickTime () )
-        TickState ();
+    TimeDelta ();
 
-    // Wifi connection manager
-//    if ( !UpdateOta.WiFiStatus () )
-    if ( firstpass )
+    if ( !UpdateOTA.WiFiStatus () )
         {
-        firstpass = false;
-        delay (2000);
-//        if ( UpdateOta.WaitWiFi () )
+//        delay (2000);
+        if ( UpdateOTA.WaitWiFi () )
             {
-//            UpdateOta.Begin ();
-            DispFront.Begin ();
-            DispFront.SendReset ();
+            UpdateOTA.Begin ();
             }
-
         }
+
     DispFront.Loop ();
     Monitor.Loop ();
+    UpdateOTA.Loop ();
     }
 

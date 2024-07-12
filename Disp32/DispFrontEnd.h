@@ -14,7 +14,7 @@
 class   DISP_FRONT_END_C
     {
 private:
-    bool    DisplayInit;
+
 
 public:
     void  SendControl       (void);

@@ -13,7 +13,6 @@ Preferences Prefs;
 const char* PrefNameSpace   = "Synth";
 const char* PrefSSID        = "SSID";
 const char* PrefPSWD        = "PASSD";
-const char* prefTunning     = "TUNE";
 
 //#######################################################################
 void SETTINGS_RAM_C::ClearAll (void)
@@ -51,16 +50,6 @@ const char* SETTINGS_RAM_C::GetSSID (void)
 const char* SETTINGS_RAM_C::GetPasswd (void)
     {
     return (s_PSWD.c_str ());
-    }
-
-//#######################################################################
-uint16_t* SETTINGS_RAM_C::GetVCO (uint8_t num)
-    {
-    }
-
-//#######################################################################
-void SETTINGS_RAM_C::PutVCO (uint8_t num, uint16_t* pvco)
-    {
     }
 
 //#######################################################################

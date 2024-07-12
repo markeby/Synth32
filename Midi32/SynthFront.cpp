@@ -44,8 +44,7 @@ namespace ___StuffForThisModuleOnly___
     //###################################################################
     inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, byte index, DISP_MESSAGE_N::EFFECT_C effect, byte value)
         {
- //       if ( index < 5 )
-            SendToDisp32((DISP_MESSAGE_N::CMD_C)((byte)status | index), effect, value);
+        SendToDisp32((DISP_MESSAGE_N::CMD_C)((byte)status | index), effect, value);
         }
 
     //###################################################################

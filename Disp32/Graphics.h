@@ -7,49 +7,34 @@
 //
 #pragma once
 
+#include <ESP_Panel_Library.h>
+#include <lvgl.h>
+#include "lvgl_port_v8.h"
+#include "SynthData.h"
+#include <demos/lv_demos.h>
+#include <SynthCommon.h>
+
 //############################################
 enum class CNTRL_TYPE_C: byte {
     NONE   = 0,
-    FADER,
+    ADSR,
     POT,
-    };
-
-class ESP_Panel;
-
-//############################################
-class DISP_CTRL_C
-    {
-private:
-    CNTRL_TYPE_C Type;
-    int          PosX;
-    int          PosY;
-    int          TextY;
-    int          TextX;
-    float        Range;
-    int          Color;
-    bool         Active;
-
-public:
-         DISP_CTRL_C   (CNTRL_TYPE_C _t, int _x, int _y, float _range, int _color);
-        ~DISP_CTRL_C   (void);
-    void Set           (float val);
-    void ShowSawtooth  (bool data);
     };
 
 //############################################
 class GRPH_C
     {
 private:
-    bool        Active;
-    int         FullTime;
-    ESP_Panel  *Panel;
+    ESP_Panel* Panel;
 
-    void    InitPageOsc1    (void);
+    VCA_T     Oscillator[OSC_MIXER_COUNT];
+
+
 
 public:
             GRPH_C          (void);
     void    Begin           (void);
-    void    ShowADSR        (byte wave);
+    void    InitializePage1 (void);
     };
 
 extern GRPH_C  Graphics;

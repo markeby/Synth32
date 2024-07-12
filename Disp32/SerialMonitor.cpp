@@ -9,7 +9,6 @@
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "DispFrontEnd.h"
-#include "WebOTA.h"
 
 using namespace SERIAL_MONITOR;
 
@@ -64,8 +63,8 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
     Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
     Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
-    if ( UpdateOta.WiFiStatus () )
-        Serial << hh << "              IP = " << UpdateOta.GetIP () << endl;
+//    if ( UpdateOta.WiFiStatus () )
+ //       Serial << hh << "              IP = " << UpdateOta.GetIP () << endl;
     Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
     Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
     Serial << hh << "     Runing Time = ";
@@ -317,11 +316,8 @@ void MONITOR_C::Loop (void)
         }
     else
         {
-        if ( RunTime > MILLI_TO_MICRO (1000) )
-            {
-            Menu();
-            Mode (CMD);
-            }
+        Menu();
+        Mode (CMD);
         }
     }
 

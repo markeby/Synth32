@@ -23,8 +23,6 @@ public:
     void        PutPasswd   (String& str);
     const char* GetSSID     (void);
     const char* GetPasswd   (void);
-    uint16_t*   GetVCO      (uint8_t num);
-    void        PutVCO      (uint8_t num, uint16_t* pvco);
     void        Begin       (void);
     };
 

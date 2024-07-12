@@ -13,6 +13,7 @@
 #include "Graphics.h"
 #include <DispMessages.h>
 #include "SynthData.h"
+#include <Wire.h>
 
 using namespace DISP_MESSAGE_N;
 
@@ -27,14 +28,14 @@ void DISP_FRONT_END_C::SendReset ()
 //#####################################################################
 DISP_FRONT_END_C::DISP_FRONT_END_C ()
     {
-    DisplayInit = true;
     }
 
 //#######################################################################
 void DISP_FRONT_END_C::Begin ()
     {
-    printf ("\t>>> Starting serial echo port 1...  TX = %d  RX= %d\n", TXD1, RXD1);
-    Serial1.begin (115200, SERIAL_8N1, RXD1, TXD1);
+    printf ("\t>>> Starting serial echo port 1...  TX = %d  RX= %d\n", TXDM1, RXDM1);
+//    Serial1.begin (115200, SERIAL_8N1, RXDM1, TXDM1);
+//    Wire.begin(15, 16);
     }
 
 //#######################################################################
@@ -45,8 +46,6 @@ void DISP_FRONT_END_C::ChannelSelect (uint8_t chan, bool state)
 //#######################################################################
 void DISP_FRONT_END_C::Display (byte ch)
     {
-    if ( !DisplayInit )
-        Graphics.ShowADSR (ch);
     }
 
 //#######################################################################
@@ -82,13 +81,10 @@ void DISP_FRONT_END_C::Loop ()
                         case EFFECT_C::INIT:
                             if ( DebugInterface )
                                 printf("Initialize phase");
-                            DisplayInit = true;
                             break;
                         case EFFECT_C::RENDER_ADSR:
-                            DisplayInit = false;
                             if ( DebugInterface )
                                 printf("Render now\n");
-                            Graphics.ShowADSR (value);
                             break;
                         default:
                             break;
@@ -107,42 +103,42 @@ void DISP_FRONT_END_C::Controller (byte ch, byte effect, byte value)
     switch ( (EFFECT_C)effect )
         {
         case EFFECT_C::SELECTED:
-            SynthD.SetSelected (ch, (bool)value);
+//            SynthD.SetSelected (ch, (bool)value);
             if ( DebugInterface )
                 printf("Select");
             break;
         case EFFECT_C::LIMIT_VOL:
-            SynthD.SetMaxLevel (ch, value);
+//            SynthD.SetMaxLevel (ch, value);
             if ( DebugInterface )
                 printf("Max Level");
             break;
         case EFFECT_C::ATTACK_TIME:
-            SynthD.SetAttackTime (ch, value);
+//            SynthD.SetAttackTime (ch, value);
             if ( DebugInterface )
                 printf("Attack time");
             break;
         case EFFECT_C::DECAY_TIME:
-            SynthD.SetDecayTime (ch, value);
+//            SynthD.SetDecayTime (ch, value);
             if ( DebugInterface )
                 printf("Decay time");
             break;
         case EFFECT_C::SUSTAIN_TIME:
-            SynthD.SetSustainTime (ch, value);
+//            SynthD.SetSustainTime (ch, value);
             if ( DebugInterface )
                 printf("Sustain time");
             break;
         case EFFECT_C::RELEASE_TIME:
-            SynthD.SetReleaseTime (ch, value);
+ //           SynthD.SetReleaseTime (ch, value);
             if ( DebugInterface )
                 printf("Release time");
             break;
         case EFFECT_C::SUSTAIN_VOL:
-            SynthD.SetSustainLevel (ch, value);
+ //           SynthD.SetSustainLevel (ch, value);
             if ( DebugInterface )
                 printf("Sustain level");
             break;
         case EFFECT_C::SAWTOOTH_REVERSE:
-            SynthD.SetSawtoothDir (value);
+//            SynthD.SetSawtoothDir (value);
             if ( DebugInterface )
                 printf("Sawtooth Direction");
             break;

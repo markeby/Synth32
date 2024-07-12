@@ -26,65 +26,16 @@ extern bool DebugInterface;
 extern bool DebugGraphics;
 
 //#################################################
-//   Alarms and alerts
+//    Serial 1 Midi32->Disp32 communications
 //#################################################
-#define HEARTBEAT_PIN      17
-#define RED_PIN             4
-#define GREEN_PIN          16
-
-//#################################################
-//    Serial 1 MIDI echo in port
-//#################################################
-#define RXD1    18
-#define TXD1    17
+#define RXDM1    15  //12
+#define TXDM1    16  //13
 
 //#################################################
 //   Global system variables
 //#################################################
-extern bool     SystemError;
 extern float    DeltaTime;
 extern uint64_t RunTime;
 extern float    AverageDeltaTime;
-
-//#################################################
-//    Synth specific constants
-//#################################################
-#define MIDI_PORT           0                           // sometime referred to as cable number
-#define FULL_KEYS           128
-#define DA_RANGE            4096
-#define NOTES_PER_OCTAVE    12
-
-#define SM_FADER            16
-#define SM_CONTROL          16
-#define SM_SWITCH           24
-#define SM_MOD              2
-
-#define MAXDA       4095
-
-//#################################################
-//    Midi control mapping
-//#################################################
-typedef struct
-    {
-    uint8_t     Channel;
-    const char* desc;
-    void       (*CallBack)(uint8_t chan, float control);
-    float       Scaler;
-    }  MIDI_VALUE_MAP;
-
-typedef struct
-    {
-    uint8_t     Channel;
-    const char* desc;
-    void       (*CallBack)(uint8_t ch, uint8_t state);
-    } MIDI_SWITCH_MAP;
-
-
-//#################################################
-//  Synth interfaces
-//#################################################
-extern MIDI_VALUE_MAP       FaderMapArray[];
-extern MIDI_VALUE_MAP       KnobMapArray[];
-extern MIDI_VALUE_MAP       PitchMapArray[];
-extern MIDI_SWITCH_MAP      SwitchMapArray[];
+extern int      DeltaMicro;
 

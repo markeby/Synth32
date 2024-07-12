@@ -7,7 +7,7 @@
 # User supplied and default parameters
 ############################################
 # default platform
-S3 := 1
+S3DEV := 1
 
 # Base package name
 PROJECT := Disp32.ino
@@ -16,17 +16,21 @@ PROJECT := Disp32.ino
 SHARED := ../Common
 
 # Shared files directory
-INCLUDES := config.h SerialMonitor.h Settings.h WebOTA.h DispFrontEnd.h Graphics.h SynthData.h \
-            $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+INCLUDES := config.h SerialMonitor.h Settings.h DispFrontEnd.h Graphics.h SynthData.h Widgets.h \
+            ESP_Panel_Board_Custom.h ESP_Panel_Board_Supported.h ESP_Panel_Conf.h lvgl_port_v8.h \
+	    WebOTA.h Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
-SOURCES := $(PROJECT) WebOTA.cpp Settings.cpp SerialMonitor.cpp DispFrontEnd.cpp Graphics.cpp SynthData.cpp
+SOURCES := $(PROJECT) Debug.cpp Widgets.cpp Graphics.cpp lvgl_port_v8.cpp SerialMonitor.cpp \
+           Settings.cpp DispFrontEnd.cpp WebOTA.cpp 
 
 # serial port for uploading
-DEFAULT_PORT := COM5
+DEFAULT_PORT := COM4
 
 # IP address for uploading
-UPLOAD_OTA := 192.168.1.4
+UPLOAD_OTA := 192.168.1.31
 
+# ESP32 board options
+# PSRAM=disabled,PartitionScheme=default,CPUFreq=240,FlashMode=qio,FlashFreq=80,FlashSize=4M,UploadSpeed=921600,LoopCore=1,EventsCore=1,DebugLevel=none
 ############################################
 # Configuration for Seeed Studio ESP32c3
 ############################################
@@ -46,7 +50,7 @@ endif
 # Configuration for Wrooom ESP32-S3-WROOM-1
 ############################################
 ifdef S3DEV
-  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
+  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,FlashSize=8M,PartitionScheme=huge_app 
   OUTPUT := output_esp32s3dev
 endif
 ############################################
