@@ -118,13 +118,13 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="ClientI2C.cpp"/>
             <F N="Debug.cpp"/>
             <F N="DispFrontEnd.cpp"/>
             <F N="Graphics.cpp"/>
             <F N="lvgl_port_v8.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
-            <F N="WebOTA.cpp"/>
             <F N="Widgets.cpp"/>
         </Folder>
         <Folder
@@ -138,6 +138,7 @@
                 <F N="../Common/DispMessages.h"/>
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
+            <F N="ClientI2C.h"/>
             <F N="config.h"/>
             <F N="Debug.h"/>
             <F N="DispFrontEnd.h"/>
@@ -149,7 +150,6 @@
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
             <F N="SynthData.h"/>
-            <F N="WebOTA.h"/>
             <F N="Widgets.h"/>
         </Folder>
         <Folder
@@ -161,7 +161,6 @@
                 N="Makefile"
                 Type="Makefile"/>
             <F N="../README.md"/>
-            <F N="../tools/UploadOTA.py"/>
         </Folder>
     </Files>
     <List Name="RTE">

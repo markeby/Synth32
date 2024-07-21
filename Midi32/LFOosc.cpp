@@ -38,7 +38,7 @@ void SYNTH_LFO_C::ClearState ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetMaxLevel (byte ch, byte data)
+void SYNTH_LFO_C::SetMaxLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
     Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
@@ -47,7 +47,7 @@ void SYNTH_LFO_C::SetMaxLevel (byte ch, byte data)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetLevel (byte ch, byte data)
+void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
     z = (z > Vca[ch].MaximumLevel ) ? Vca[ch].MaximumLevel : z;
@@ -63,7 +63,7 @@ void SYNTH_LFO_C::SetLevel (byte ch, byte data)
 
 //#######################################################################
 //#######################################################################
-void SYNTH_LFO_C::Begin (int num, byte first_device)
+void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
     {
     Number = num;
     // D/A configuration
@@ -118,7 +118,7 @@ void SYNTH_LFO_C::Range (bool up)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetFreq (byte data)
+void SYNTH_LFO_C::SetFreq (uint8_t data)
     {
     CurrentPercent = data * PRS_SCALER;
     int z = (CurrentPercent * MAX_DA) / FreqDiv;
@@ -146,7 +146,7 @@ void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Level (byte data)
+void SYNTH_LFO_C::Level (uint8_t data)
     {
     CurrentLevel = data * PRS_SCALER * MAX_DA;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )

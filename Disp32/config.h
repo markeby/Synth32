@@ -5,7 +5,7 @@
 #pragma once
 
 #include <Streaming.h>
-#include "SynthCommon.h"
+#include "../Common/SynthCommon.h"
 
 //#####################################
 // Usefull constants

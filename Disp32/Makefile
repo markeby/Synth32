@@ -18,13 +18,13 @@ SHARED := ../Common
 # Shared files directory
 INCLUDES := config.h SerialMonitor.h Settings.h DispFrontEnd.h Graphics.h SynthData.h Widgets.h \
             ESP_Panel_Board_Custom.h ESP_Panel_Board_Supported.h ESP_Panel_Conf.h lvgl_port_v8.h \
-	    WebOTA.h Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+	    Debug.h ClientI2C.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
 SOURCES := $(PROJECT) Debug.cpp Widgets.cpp Graphics.cpp lvgl_port_v8.cpp SerialMonitor.cpp \
-           Settings.cpp DispFrontEnd.cpp WebOTA.cpp 
+           Settings.cpp DispFrontEnd.cpp ClientI2C.cpp
 
 # serial port for uploading
-DEFAULT_PORT := COM4
+DEFAULT_PORT := COM7
 
 # IP address for uploading
 UPLOAD_OTA := 192.168.1.31
@@ -111,6 +111,7 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
+	echo "$(UPLOAD)"
 	@$(UPLOAD)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)

@@ -17,6 +17,8 @@
     {
     lv_style_t style;
 
+    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+
     lv_style_init(&style);
     lv_style_set_text_font(&style, &lv_font_montserrat_18); // <--- you have to enable other font sizes in menuconfig
     lv_obj_t* label  = lv_label_create (lv_scr_act());
@@ -62,10 +64,13 @@
     lv_label_set_recolor (label_release, true);
 
 
-    SetAttack  (30);
-    SetDecay   (45);
-    SetSustain (100);
+    SetAttack  (60);
+    SetDecay   (60);
+    SetSustain (60);
     SetRelease (60);
+
+    lvgl_port_unlock ();    // Release the mutex
+
     }
 
 void ADSR_WIDGET_C::SetAttack (int val)

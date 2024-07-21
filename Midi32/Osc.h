@@ -44,28 +44,28 @@ private:
     uint16_t                OctaveArray[FULL_KEYS];
 
     bool                    Valid;          // Completed init and good for use
-    byte                    Number;
-    byte                    CurrentNote;
-    byte                    OscChannel;
-    byte                    PwmChannel;
-    byte                    SawtoothDirChannel;
+    uint8_t                    Number;
+    uint8_t                    CurrentNote;
+    uint8_t                    OscChannel;
+    uint8_t                    PwmChannel;
+    uint8_t                    SawtoothDirChannel;
 
     void  ClearState (void);
 
 public:
-         SYNTH_OSC_C        (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void SetTuningVolume    (byte select, uint16_t level);
+         SYNTH_OSC_C        (uint8_t num, uint8_t first_device, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void SetTuningVolume    (uint8_t select, uint16_t level);
     void SetTuningNote      (uint8_t note);
-    void NoteSet            (byte key, uint8_t velocity);
+    void NoteSet            (uint8_t key, uint8_t velocity);
     void NoteClear          (void);
     void Clear              (void);
     void SetReverse         (bool data);
-    void SetAttackTime      (byte wave, float time);
-    void SetDecayTime       (byte wave, float time);
-    void SetSustainTime     (byte wave, float time);
-    void SetReleaseTime     (byte wave, float time);
-    void SetSustainLevel    (byte wave, float level_percent);
-    void SetMaxLevel        (byte wave, float level_percent);
+    void SetAttackTime      (uint8_t wave, float time);
+    void SetDecayTime       (uint8_t wave, float time);
+    void SetSustainTime     (uint8_t wave, float time);
+    void SetReleaseTime     (uint8_t wave, float time);
+    void SetSustainLevel    (uint8_t wave, float level_percent);
+    void SetMaxLevel        (uint8_t wave, float level_percent);
     void TuningAdjust       (bool up);
     };
 

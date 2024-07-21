@@ -24,20 +24,20 @@ class SYNTH_NOISE_C
     {
 private:
     ENVELOPE_GENERATOR_C&   EnvGen;
-    byte                    Number;
+    uint8_t                    Number;
     int                     Analog[FILTER_ANALOG_COUNT];
     int                     FilterDigital[2];
     int                     ColorControl;
-    byte                    FilterSelected;
+    uint8_t                    FilterSelected;
     ENVELOPE_C*             Envelope[FILTER_ANALOG_COUNT];
-    byte                    CurrentNote;
+    uint8_t                    CurrentNote;
 
     void    ClearState      (void);
 public:
-         SYNTH_NOISE_C      (byte num, int anaog, int digital, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void SetTuningVolume    (byte select, uint16_t level);
+         SYNTH_NOISE_C      (uint8_t num, int anaog, int digital, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void SetTuningVolume    (uint8_t select, uint16_t level);
     void Clear              (void);
-    void FilterSelect       (byte select);
+    void FilterSelect       (uint8_t select);
     void TuningFilterCut       (float cutoff);
     void SetLevel           (uint16_t level);
     void SetAttackTime      (uint8_t sel, float time);

@@ -32,35 +32,35 @@ namespace ___StuffForThisModuleOnly___
     static LFO_N::SYNTH_LFO_C  Lfo;
 
     //###################################################################
-    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, DISP_MESSAGE_N::EFFECT_C effect, byte value)
+    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, DISP_MESSAGE_N::EFFECT_C effect, uint8_t value)
         {
-        byte snd[4];
+        uint8_t snd[4];
 
-        snd[0] = (byte)status;
-        snd[1] = (byte)effect;
+        snd[0] = (uint8_t)status;
+        snd[1] = (uint8_t)effect;
         snd[2] = value;
-        Serial1.write (snd, 3);
+//        Serial1.write (snd, 3);
         }
     //###################################################################
-    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, byte index, DISP_MESSAGE_N::EFFECT_C effect, byte value)
+    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, uint8_t index, DISP_MESSAGE_N::EFFECT_C effect, uint8_t value)
         {
-        SendToDisp32((DISP_MESSAGE_N::CMD_C)((byte)status | index), effect, value);
+        SendToDisp32((DISP_MESSAGE_N::CMD_C)((uint8_t)status | index), effect, value);
         }
 
     //###################################################################
-    static void  FuncKeyDown (byte chan, byte key, byte velocity)
+    static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
         {
         SynthFront.KeyDown (chan, key, velocity);
         }
 
     //###################################################################
-    static void  FuncKeyUp (byte chan, byte key, byte velocity)
+    static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
         {
         SynthFront.KeyUp (chan, key, velocity);
         }
 
     //###################################################################
-    static void FuncController (byte chan, byte type, byte value)
+    static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
         {
         SynthFront.Controller (chan, type, value);
         if ( DebugMidi )
@@ -68,7 +68,7 @@ namespace ___StuffForThisModuleOnly___
         }
 
     //###################################################################
-    static void FuncPitchBend (byte chan, int value)
+    static void FuncPitchBend (uint8_t chan, int value)
         {
         SynthFront.PitchBend (chan, value);
         }
@@ -148,7 +148,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     printf ("\t>>> Usb init done!\n");
 
     printf ("\t>>> Starting echo midi: Port = 1  TX = %d  RX= %d\n", TXD1, RXD1);
-    Serial1.begin (115200, SERIAL_8N1, RXD1, TXD1);
+ //   Serial1.begin (115200, SERIAL_8N1, RXD1, TXD1);
 
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
@@ -166,7 +166,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     }
 
 //###################################################################
-void  SYNTH_FRONT_C::DispMessageHandler (byte cmd)
+void  SYNTH_FRONT_C::DispMessageHandler (uint8_t cmd)
     {
     switch ( (DISP_MESSAGE_N::CMD_C)cmd )
         {
@@ -180,11 +180,11 @@ void  SYNTH_FRONT_C::DispMessageHandler (byte cmd)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
+void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
     {
     if ( DebugSynth )
         {
-        uint16_t op = (type << sizeof (byte)) | chan;
+        uint16_t op = (type << sizeof (uint8_t)) | chan;
         if ( op != LastOp )       // issue a newline only if the op has changed
             {
             LastOp = op;
@@ -322,26 +322,26 @@ void SYNTH_FRONT_C::Loop ()
     else
         Tuning ();
 
-    if ( Serial1.available () )
-        {
-        int  z;
-        byte buf[8];
-
-        for (z = 0;  Serial1.available() && (z < 3);  z++)
-            buf[z] = Serial1.read ();
-        if ( z >= 3 )
-            {
-            DispMessageHandler (buf[2]);
-            }
-        }
-    if ( InDispReset )
-        {
-        if ( (RunTime - DispMessageTimer) > MILLI_TO_MICRO(1000) )
-            {
-            InDispReset = false;
-            this->DISP32UpdateAll ();
-            }
-        }
+//    if ( Serial1.available () )
+//        {
+//        int  z;
+//        byte buf[8];
+//
+//        for (z = 0;  Serial1.available() && (z < 3);  z++)
+//            buf[z] = Serial1.read ();
+//        if ( z >= 3 )
+//            {
+//            DispMessageHandler (buf[2]);
+//            }
+//        }
+//    if ( InDispReset )
+//        {
+//        if ( (RunTime - DispMessageTimer) > MILLI_TO_MICRO(1000) )
+//            {
+//            InDispReset = false;
+//            this->DISP32UpdateAll ();
+//            }
+//        }
     }
 
 //#######################################################################
@@ -392,7 +392,7 @@ void SYNTH_FRONT_C::StartTuning ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::PitchBend (byte ch, int value)
+void SYNTH_FRONT_C::PitchBend (uint8_t ch, int value)
     {
     float scaler = (value + 16384) * BEND_SCALER;
     Lfo.PitchBend (scaler);
@@ -400,7 +400,7 @@ void SYNTH_FRONT_C::PitchBend (byte ch, int value)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
+void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
     {
 #ifdef TOGGLE
     SelectedEnvelope[chan] = !SelectedEnvelope[chan];
@@ -411,7 +411,7 @@ void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMBaselevel (byte ch, byte data)
+void SYNTH_FRONT_C::SetMBaselevel (uint8_t ch, uint8_t data)
     {
     float val = (float)data * PRS_SCALER;
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
@@ -424,7 +424,7 @@ void SYNTH_FRONT_C::SetMBaselevel (byte ch, byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
+void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
     {
     if ( SetTuning )
         {
@@ -445,7 +445,7 @@ void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetAttackTime (byte data)
+void SYNTH_FRONT_C::SetAttackTime (uint8_t data)
     {
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
@@ -466,7 +466,7 @@ void SYNTH_FRONT_C::SetAttackTime (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetDecayTime (byte data)
+void SYNTH_FRONT_C::SetDecayTime (uint8_t data)
     {
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
@@ -487,7 +487,7 @@ void SYNTH_FRONT_C::SetDecayTime (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
+void SYNTH_FRONT_C::SetSustainLevel (uint8_t ch, uint8_t data)
     {
     float val = (float)data * PRS_SCALER;
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
@@ -502,7 +502,7 @@ void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainTime (byte data)
+void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
     {
     float dtime;
 
@@ -530,7 +530,7 @@ void SYNTH_FRONT_C::SetSustainTime (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetReleaseTime (byte data)
+void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
     {
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
@@ -555,16 +555,16 @@ void SYNTH_FRONT_C::SetReverse (bool data)
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++)
         pChan[z]->pOsc()->SetReverse (data);
-    SendToDisp32(DISP_MESSAGE_N::CMD_C::CONTROL, (byte)DISP_MESSAGE_N::SHAPE_C::SAWTOOTH, DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_REVERSE, data);
+    SendToDisp32(DISP_MESSAGE_N::CMD_C::CONTROL, (uint8_t)DISP_MESSAGE_N::SHAPE_C::SAWTOOTH, DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_REVERSE, data);
     }
 
 //#####################################################################
 void SYNTH_FRONT_C::DISP32UpdateAll ()
     {
-    byte zd;
+    uint8_t zd;
 
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::INIT, (byte)(DISP_MESSAGE_N::SHAPE_C::ALL));
-    for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
+    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::INIT, (uint8_t)(DISP_MESSAGE_N::SHAPE_C::ALL));
+    for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SELECTED, SelectedEnvelope[z]);
         SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, MidiAdsr[z].MaxLevel);
@@ -574,18 +574,18 @@ void SYNTH_FRONT_C::DISP32UpdateAll ()
         SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, MidiAdsr[z].ReleaseTime);
         SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, MidiAdsr[z].SustainLevel);
         }
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::RENDER_ADSR, (byte)(DISP_MESSAGE_N::SHAPE_C::ALL));
+    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::RENDER_ADSR, (uint8_t)(DISP_MESSAGE_N::SHAPE_C::ALL));
     }
 
 
 //#####################################################################
-void SYNTH_FRONT_C::SelectWaveLFO (byte ch, byte state)
+void SYNTH_FRONT_C::SelectWaveLFO (uint8_t ch, uint8_t state)
     {
     Lfo.Select(ch, state);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::FreqSelectLFO (byte ch, byte data)
+void SYNTH_FRONT_C::FreqSelectLFO (uint8_t ch, uint8_t data)
     {
     Lfo.SetFreq (data);
     }
@@ -605,15 +605,15 @@ void SYNTH_FRONT_C::LFOrange (bool up)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetLevelLFO (byte data)
+void SYNTH_FRONT_C::SetLevelLFO (uint8_t data)
     {
     Lfo.Level (data * PERS_SCALER);
     }
 
 //#######################################################################
-void  SYNTH_FRONT_C::NoiseFilter (byte bit, bool state)
+void  SYNTH_FRONT_C::NoiseFilter (uint8_t bit, bool state)
     {
-    byte bits = 0;
+    uint8_t bits = 0;
 
     if ( state )
         NoiseFilterBits[bit] = true;
@@ -630,7 +630,7 @@ void  SYNTH_FRONT_C::NoiseFilter (byte bit, bool state)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::NoiseColor (byte val)
+void SYNTH_FRONT_C::NoiseColor (uint8_t val)
     {
     I2cDevices.DigitalOut (NoiseColorDev, val);
     I2cDevices.UpdateDigital ();
@@ -638,7 +638,7 @@ void SYNTH_FRONT_C::NoiseColor (byte val)
 
 
 //#######################################################################
-void SYNTH_FRONT_C::SetNoiseFilterMin (byte data)
+void SYNTH_FRONT_C::SetNoiseFilterMin (uint8_t data)
     {
     if ( SetTuning )
         TuningLevel[ENVELOPE_COUNT - 1] = data * MIDI_MULTIPLIER;
@@ -649,7 +649,7 @@ void SYNTH_FRONT_C::SetNoiseFilterMin (byte data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetNoiseFilterMax (byte data)
+void SYNTH_FRONT_C::SetNoiseFilterMax (uint8_t data)
     {
     }
 

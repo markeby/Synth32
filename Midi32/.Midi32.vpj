@@ -119,6 +119,7 @@
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
             <F N="Debug.cpp"/>
+            <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="LFOosc.cpp"/>
@@ -130,7 +131,7 @@
             <F N="SynthChannel.cpp"/>
             <F N="SynthConfig.cpp"/>
             <F N="SynthFront.cpp"/>
-            <F N="WebOTA.cpp"/>
+            <F N="UpdateOTA.cpp"/>
         </Folder>
         <Folder
             Name="Headers"
@@ -145,6 +146,7 @@
             </Folder>
             <F N="config.h"/>
             <F N="Debug.h"/>
+            <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>
             <F N="I2Cdevices.h"/>
             <F N="LFOosc.h"/>
@@ -155,8 +157,7 @@
             <F N="SineWave.h"/>
             <F N="SynthChannel.h"/>
             <F N="SynthFront.h"/>
-            <F N="Test.h"/>
-            <F N="WebOTA.h"/>
+            <F N="UpdateOTA.h"/>
         </Folder>
         <Folder
             Name="Tools"

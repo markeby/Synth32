@@ -33,7 +33,8 @@ void GRPH_C::Begin ()
     Panel = new ESP_Panel ();
     Panel->init ();
     Panel->begin ();
-    lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
+    lvgl_port_init (Panel->getLcd (), NULL);
+//    lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
     this->InitializePage1 ();
     }
 
@@ -43,7 +44,6 @@ void GRPH_C::InitializePage1 ()
     int x = 8;
     int y = 0;
 
-    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         VCA_T& v = Oscillator[z];
@@ -52,7 +52,6 @@ void GRPH_C::InitializePage1 ()
         x += 160;
         }
 
-    lvgl_port_unlock ();    // Release the mutex
     }
 
 GRPH_C  Graphics;

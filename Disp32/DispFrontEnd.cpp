@@ -8,10 +8,10 @@
 #include <Arduino.h>
 
 #include "config.h"
-#include <SynthCommon.h>
+#include "../Common/SynthCommon.h"
 #include "DispFrontEnd.h"
 #include "Graphics.h"
-#include <DispMessages.h>
+#include "../Common/DispMessages.h"
 #include "SynthData.h"
 #include <Wire.h>
 

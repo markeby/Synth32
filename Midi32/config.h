@@ -29,7 +29,6 @@ extern bool DebugI2C;
 extern bool DebugOsc;
 extern bool DebugSynth;
 extern bool AnalogDiagEnabled;
-extern int  AnalogDiagDevice;
 
 //#################################################
 //   Alarms and alerts
@@ -49,6 +48,7 @@ extern int  AnalogDiagDevice;
 #define START_OSC_ANALOG        0
 #define START_NOISE_ANALOG      56
 #define START_NOISE_DIGITAL     95
+#define D_A_COUNT               88
 
 //#################################################
 //   Global system variables
@@ -81,16 +81,16 @@ extern float    DeltaTimeMicroAvg;
 //#################################################
 typedef struct
     {
-    byte        Channel;
+    uint8_t        Channel;
     const char* desc;
-    void       (*CallBack)(byte chan, byte data);
+    void       (*CallBack)(uint8_t chan, uint8_t data);
     }  MIDI_VALUE_MAP;
 
 typedef struct
     {
-    byte        Channel;
+    uint8_t        Channel;
     const char* desc;
-    void       (*CallBack)(byte ch, byte state);
+    void       (*CallBack)(uint8_t ch, uint8_t state);
     } MIDI_SWITCH_MAP;
 
 

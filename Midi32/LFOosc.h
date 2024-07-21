@@ -42,9 +42,9 @@ private:
     bool    Valid;
     int     Active;
     int     Number;
-    byte    OscChannel;
-    byte    PwmChannel;
-    byte    BendChannel;
+    uint8_t    OscChannel;
+    uint8_t    PwmChannel;
+    uint8_t    BendChannel;
     bool    UpdateNeded;
     int     CurrentLevel;
     int     FreqDiv;
@@ -52,7 +52,7 @@ private:
 
     typedef struct
         {
-        byte        Channel;            // I2C device index
+        uint8_t        Channel;            // I2C device index
         uint16_t    CurrentLevel;       // Current setting 12 bit D/A
         uint16_t    MaximumLevel;       // No higher than this
         bool        Select;
@@ -62,16 +62,16 @@ private:
     VCA_T     Vca[OSC_MIXER_COUNT];
 
     void  ClearState (void);
-    void  SetLevel  (byte ch, byte data);
+    void  SetLevel  (uint8_t ch, uint8_t data);
 
 public:
          SYNTH_LFO_C     (void);
-    void Begin           (int num, byte first_device);
+    void Begin           (int num, uint8_t first_device);
     void Clear           (void);
-    void SetFreq         (byte data);
-    void SetMaxLevel     (byte ch, byte data);
-    void Level           (byte data);
-    void Select          (byte ch, bool sel);
+    void SetFreq         (uint8_t data);
+    void SetMaxLevel     (uint8_t ch, uint8_t data);
+    void Level           (uint8_t data);
+    void Select          (uint8_t ch, bool sel);
     void PitchBend       (float percent);
     void Range           (bool up);
 

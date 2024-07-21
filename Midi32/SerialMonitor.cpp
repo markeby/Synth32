@@ -9,8 +9,7 @@
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "SynthFront.h"
-#include "WebOTA.h"
-
+#include "UpdateOTA.h"
 using namespace SERIAL_MONITOR;
 
 //#######################################################################
@@ -58,7 +57,7 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "   Flash chip size = " << ESP.getFlashChipSize () << endl;
     Serial << hh << "  Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
     Serial << hh << "   Flash chip mode = " << ESP.getFlashChipMode() << endl << endl;
-    Serial << hh << "        Update URL = " << UpdateOta.WhoAmI() << endl << endl;
+    Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
     Serial << hh << "       Runing Time = "; DispRunTime ();
     Serial << hh << "     Last interval = " << DeltaTimeMicro << " uSec" << endl;
     Serial << hh << "  Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
@@ -160,21 +159,12 @@ void MONITOR_C::MenuSel (void)
                         }
                     break;
                 case 0x41:          // arrow up
-                    if ( this->InputMode == ADIAG )
-                        AnalogDiagDevice = ((AnalogDiagDevice / 4) * 4) - 4; // select first channel on previous chip
                     break;
                 case 0x42:          // arrow down
-                    if ( this->InputMode == ADIAG )
-                        AnalogDiagDevice = ((AnalogDiagDevice / 4) * 4) + 4; // select first channel on next chip
                     break;
                 case 0x43:          // arrow right
-                    Serial << "<<<<========\n\n";
-                    if ( this->InputMode == ADIAG )
-                        AnalogDiagDevice++;                                  // advance to next channel
                     break;
                 case 0x44:          // arrow left
-                    if ( this->InputMode == ADIAG )
-                        AnalogDiagDevice--;                                  // move to previous channel
                     break;
                 default:
                     break;
@@ -230,9 +220,7 @@ void MONITOR_C::MenuSel (void)
                 case 'q':
                     AnalogDiagEnabled = true;
                     SynthActive       = false;
-                    AnalogDiagDevice  = 0;
-                    Serial << endl << endl;
-                    this->Mode (ADIAG);
+                    this->Mode (MENU);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
@@ -256,8 +244,9 @@ void MONITOR_C::Menu (void)
     Serial << "\t######    Midi Subsystem    ######" << endl;
     if (  SynthFront.IsInTuning () )
         Serial << "\t******     Tuning mode      ******" << endl;
-
-    Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
+    if ( AnalogDiagEnabled )
+        Serial << "\t******    D/A Test mode     ******" << endl;
+    Serial << StateDebug(DebugMidi) << "\t1   - Debug MIDI interface   " << endl;
     Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
     Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
@@ -337,7 +326,6 @@ void MONITOR_C::Loop (void)
             switch ( this->InputMode )
                 {
                 case CMD:
-                case ADIAG:
                     this->MenuSel ();
                     break;
                 case INSSID:

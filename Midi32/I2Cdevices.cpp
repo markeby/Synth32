@@ -118,10 +118,10 @@ inline void I2C_INTERFACE_C::BusMux (uint8_t cluster, uint8_t slice)
     }
 
 //#######################################################################
-inline void I2C_INTERFACE_C::EndBusMux (uint8_t bus)
+inline void I2C_INTERFACE_C::EndBusMux (uint8_t cluster)
     {
-    Wire.beginTransmission (0x70 + bus);    // TCA9548A address
-    Wire.write (0);                         // send byte to deselect bus
+    Wire.beginTransmission (0x70 + cluster);    // TCA9548A address
+    Wire.write (0);                             // send byte to deselect bus
     Wire.endTransmission();
     }
 
@@ -200,7 +200,7 @@ void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
     I2C_LOCATION_T& loc =  board.Board;
     String str;
 
-    for ( byte z;  z < 16;  z++ )
+    for ( uint8_t z;  z < 16;  z++ )
         str += ( ((board.BitWord >> z) & 1) ) ? " X" : " o";
 
     DBGDIG ("%d:%d:%#3.3x  write  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str ());
@@ -266,7 +266,7 @@ void I2C_INTERFACE_C::D2Analog (uint16_t channel, int value)
     }
 
 //#######################################################################
-void I2C_INTERFACE_C::DigitalOut (byte device, bool value)
+void I2C_INTERFACE_C::DigitalOut (uint8_t device, bool value)
     {
     I2C_DEVICE_T& dev = pDevice[device];
     bitWrite (*(dev.pDigital) , dev.Bit, value);

@@ -6,7 +6,7 @@
 //#######################################################################
 #pragma once
 
-#include "DispMessages.h"
+#include "../Common/DispMessages.h"
 
 //#################################################
 //    Synthesizer Display Graphics front end class

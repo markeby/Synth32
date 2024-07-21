@@ -4,7 +4,7 @@
 // Creator:    markeby
 // Date:       3/17/2023
 //#######################################################################
-#include <Arduino.h>
+//#include <Arduino.h>
 #include <Streaming.h>
 #include <vector>
 #include "Debug.h"
@@ -51,7 +51,7 @@ const String vsFormat (const char *const zcFormat, va_list args)
     }
 
 //#######################################################################
-void DebugMsg (const char* label, byte index, const char *const fmt, ...)
+void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
@@ -66,7 +66,7 @@ void DebugMsg (const char* label, byte index, const char *const fmt, ...)
     }
 
 //#######################################################################
-void DebugMsgN (const char* label, byte index, String name,  const char *const fmt, ...)
+void DebugMsgN (const char* label, uint8_t index, String name,  const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
@@ -77,7 +77,7 @@ void DebugMsgN (const char* label, byte index, String name,  const char *const f
     }
 
 //#######################################################################
-void DebugMsgF (const char* label, byte index, String name, char* flag, const char *const fmt, ...)
+void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);

@@ -17,7 +17,7 @@ static const char* Label = "NOI";
 using namespace NOISE_N;
 
 //#######################################################################
-    SYNTH_NOISE_C::SYNTH_NOISE_C (byte num, int analog, int digital, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen), Number (num)
+    SYNTH_NOISE_C::SYNTH_NOISE_C (uint8_t num, int analog, int digital, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen), Number (num)
     {
     Analog[(int)SELECT::VCA] = analog + 1;
     Analog[(int)SELECT::VCF] = analog;
@@ -31,11 +31,11 @@ using namespace NOISE_N;
     }
 
 //#######################################################################
-void SYNTH_NOISE_C::SetTuningVolume (byte select, uint16_t level)
+void SYNTH_NOISE_C::SetTuningVolume (uint8_t select, uint16_t level)
     {
     if ( select > 1 )
         return;
-    byte chan = Envelope[select]->GetChannel ();
+    uint8_t chan = Envelope[select]->GetChannel ();
     I2cDevices.D2Analog (chan, level);
     }
 
@@ -48,7 +48,7 @@ void SYNTH_NOISE_C::TuningFilterCut (float cutoff)
     }
 
 //#######################################################################
-void SYNTH_NOISE_C::FilterSelect (byte select)
+void SYNTH_NOISE_C::FilterSelect (uint8_t select)
     {
     FilterSelected = select;
 

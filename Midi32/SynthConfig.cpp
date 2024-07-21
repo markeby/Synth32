@@ -11,102 +11,102 @@
 #include "SerialMonitor.h"
 
 //########################################################
-void SetMaxLevel (byte ch, byte data)
+void SetMaxLevel (uint8_t ch, uint8_t data)
     {
     SynthFront.SetMaxLevel (ch, data);
     }
 
 //########################################################
-void SetSustain (byte ch, byte data)
+void SetSustain (uint8_t ch, uint8_t data)
     {
     SynthFront.SetSustainLevel (ch - 8, data);
     }
 
 //########################################################
-void SetTimeSetSelect (byte ch, byte state)
+void SetTimeSetSelect (uint8_t ch, uint8_t state)
     {
     SynthFront.ChannelSetSelect (ch, state);
     }
 
 //########################################################
-void SetModSwitch (byte ch, byte state)
+void SetModSwitch (uint8_t ch, uint8_t state)
     {
     SynthFront.SelectWaveLFO (ch - 8, state);
     }
 
 //########################################################
-void SetAttckTime (byte ch, byte data)
+void SetAttckTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetAttackTime (data);
     }
 
 //########################################################
-void SetDecayTime (byte ch, byte data)
+void SetDecayTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetDecayTime (data);
     }
 
 //########################################################
-void SetSustainTime (byte ch, byte data)
+void SetSustainTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetSustainTime (data);
     }
 
 //########################################################
-void SetReleaseTime (byte ch, byte data)
+void SetReleaseTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetReleaseTime (data);
     }
 
 //########################################################
-void SetReverse (byte ch, byte data)
+void SetReverse (uint8_t ch, uint8_t data)
     {
     SynthFront.SetReverse (data != 0);
     }
 
 //########################################################
-void SetLfoFreq (byte ch, byte data)
+void SetLfoFreq (uint8_t ch, uint8_t data)
     {
     SynthFront.FreqSelectLFO (0, data);
     }
 
 //########################################################
-void SetPlusRangeLFO (byte ch, byte state)
+void SetPlusRangeLFO (uint8_t ch, uint8_t state)
     {
     SynthFront.LFOrange (true);
     }
 
 //########################################################
-void SetMinusRangeLFO (byte ch, byte state)
+void SetMinusRangeLFO (uint8_t ch, uint8_t state)
     {
     SynthFront.LFOrange (false);
     }
 
 //########################################################
-void SetNoiseFilter (byte ch, byte state)
+void SetNoiseFilter (uint8_t ch, uint8_t state)
     {
     SynthFront.NoiseFilter (ch - 14, state > 120);      // offset of SwitchMapArray to get 0 or 1
     }
 
 //########################################################
-void SetWhiteNoise (byte ch, byte state)
+void SetWhiteNoise (uint8_t ch, uint8_t state)
     {
     SynthFront.NoiseColor (state);
     }
 
 //########################################################
-void SetNoisFilterMin (byte ch, byte data)
+void SetNoisFilterMin (uint8_t ch, uint8_t data)
     {
     SynthFront.SetNoiseFilterMin(data);
     }
 
 //########################################################
-void SetNoiseFilterMax (byte ch, byte data)
+void SetNoiseFilterMax (uint8_t ch, uint8_t data)
     {
     SynthFront.SetNoiseFilterMax (data);
     }
 
-void TuneReset (byte ch, byte data)
+void TuneReset (uint8_t ch, uint8_t data)
     {
     if ( data )
         Monitor.Tuning ();

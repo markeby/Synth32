@@ -8,10 +8,10 @@
 
 #include "config.h"
 #include "Settings.h"
+#include "ClientI2C.h"
 #include "SerialMonitor.h"
 #include "DispFrontEnd.h"
 #include "Graphics.h"
-#include "WebOTA.h"
 
 //#######################################################################
 DISP_FRONT_END_C  DispFront;
@@ -61,13 +61,12 @@ void setup (void)
     printf ("\t>>> Start Settings config...\n");
     Settings.Begin ();
 
-    printf ("\t>>> Startup OTA...\n");
-    UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
-
     printf ("\t>>> Startup Graphics...\n");
     Graphics.Begin ();
     DispFront.Begin ();
 
+    printf("\t>>> Starting I2C Listener...\n");
+    Listener.Begin (LISTEN_ADDRESS);
 
  //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
@@ -109,17 +108,7 @@ void loop (void)
     {
     TimeDelta ();
 
-    if ( !UpdateOTA.WiFiStatus () )
-        {
-//        delay (2000);
-        if ( UpdateOTA.WaitWiFi () )
-            {
-            UpdateOTA.Begin ();
-            }
-        }
-
     DispFront.Loop ();
     Monitor.Loop ();
-    UpdateOTA.Loop ();
     }
 

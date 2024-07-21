@@ -8,7 +8,7 @@
 
 namespace DISP_MESSAGE_N
     {
-    enum class SHAPE_C: byte {
+    enum class SHAPE_C: uint8_t {
         SINE = 0,
         TRIANGLE,
         SAWTOOTH,
@@ -17,13 +17,13 @@ namespace DISP_MESSAGE_N
         ALL
         };
 
-    enum class CMD_C: byte {
+    enum class CMD_C: uint8_t {
         RENDER  = 0x20,
         CONTROL = 0xB0,
         RESET   = 0xFF,
         };
 
-    enum class EFFECT_C: byte {
+    enum class EFFECT_C: uint8_t {
       // Oscillator and VCA channels
         SELECTED = 0,
         BASE_VOL,

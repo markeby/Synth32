@@ -7,14 +7,15 @@
 #include "config.h"
 #include "Settings.h"
 #include "SerialMonitor.h"
-#include "WebOTA.h"
 #include "SynthFront.h"
+#include "Diagnostics.h"
+#include "UpdateOTA.h"
 
 //#######################################################################
 I2C_LOCATION_T  BusI2C[] =
 //    Cluster   Slice   Channel   DtoA  AtoD    Dig     Name
     { { 0,        0,     0x60,     4,    0,      0,  "D/A #00, 01, 02, 03" },
-      { 0,        1,     0x60,     4,    0,      0,  "D/A #04, 05, 06, 07" },
+      { 0,        1,     0x64,     4,    0,      0,  "D/A #04, 05, 06, 07" },
       { 0,        2,     0x60,     4,    0,      0,  "D/A #08, 09, 10, 11" },
       { 0,        3,     0x60,     4,    0,      0,  "D/A #12, 13, 14, 15" },
       { 0,        4,     0x60,     4,    0,      0,  "D/A #16, 17, 18, 19" },
@@ -144,7 +145,7 @@ void setup (void)
     digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
 
     printf ("\t>>> Startup OTA...\n");
-    UpdateOta.Setup (Settings.GetSSID (), Settings.GetPasswd ());
+    UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
     printf ("\t>>> Starting I2C & devices...\n");
     int errcnt = I2cDevices.Begin ();
@@ -240,30 +241,6 @@ void Core0Task (void *parameter)
     }
 
 //#######################################################################
-void AnalogDiagnostics (void)
-    {
-    static int lastdevice = -1;
-
-    if ( AnalogDiagDevice != lastdevice )
-        {
-        if ( AnalogDiagDevice < 0 )
-            AnalogDiagDevice = 0;
-        if ( AnalogDiagDevice >= I2cDevices.NumAnalog () )
-             AnalogDiagDevice = lastdevice;
-
-        lastdevice = AnalogDiagDevice;
-        I2cDevices.Zero ();                         // Clear all D/A
-        I2cDevices.D2Analog (lastdevice, DA_MAX);   // set next D/A
-
-        printf("Analog diag:  Device %d  Board %d, Channel V%c\n", lastdevice, lastdevice / 4, (lastdevice % 4) + 'A');
-        I2cDevices.UpdateDigital ();    // Update Digital output ports
-        I2cDevices.UpdateAnalog ();     // Update D/A ports
-        }
-    }
-
-//#######################################################################
-
-//#######################################################################
 void loop (void)
     {
     // heartbeat and error alerts based on time intervals
@@ -275,17 +252,14 @@ void loop (void)
         }
 
     // Wifi connection manager
-    if ( !UpdateOta.WiFiStatus () )
-        {
-        if ( UpdateOta.WaitWiFi () )
-            UpdateOta.Begin ();
-        }
+    if ( !UpdateOTA.WiFiStatus () )
+        UpdateOTA.WaitWiFi ();
 
     if ( SynthActive )
         SynthFront.Loop ();
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();
-    TestSine ();
+    UpdateOTA.Loop ();
     Monitor.Loop ();
     }
 

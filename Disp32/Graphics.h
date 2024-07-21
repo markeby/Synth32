@@ -12,7 +12,7 @@
 #include "lvgl_port_v8.h"
 #include "SynthData.h"
 #include <demos/lv_demos.h>
-#include <SynthCommon.h>
+#include "../Common/SynthCommon.h"
 
 //############################################
 enum class CNTRL_TYPE_C: byte {

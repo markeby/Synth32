@@ -11,11 +11,11 @@
 
 namespace SYNTH_FRONT
     {
-    void  KeyDown (byte channel, byte key, byte velocity);
-    void  KeyUp (byte channel, byte key, byte velocity);
+    void  KeyDown (uint8_t channel, uint8_t key, uint8_t velocity);
+    void  KeyUp (uint8_t channel, uint8_t key, uint8_t velocity);
 
         /*! Enumeration of MIDI types */
-    enum MidiType: byte
+    enum MidiType: uint8_t
         {
         InvalidType           = 0x00,    ///< For notifying errors
         NoteOff               = 0x80,    ///< Channel Message - Note Off
@@ -47,9 +47,9 @@ namespace SYNTH_FRONT
 
     typedef struct ACTION_C
         {
-        byte MidiValue;
-        byte MidiType;
-        byte MidiStatus;
+        uint8_t MidiValue;
+        uint8_t MidiType;
+        uint8_t MidiStatus;
         MIDI_VALUE_MAP* Params;
         } ACTION_TC;
 
@@ -61,11 +61,11 @@ namespace SYNTH_FRONT
 class   SYNTH_FRONT_C
     {
 private:
-    byte                  DownKey;
-    byte                  DownVelocity;
+    uint8_t                  DownKey;
+    uint8_t                  DownVelocity;
     bool                  DownTrigger;
-    byte                  UpKey;
-    byte                  UpVelocity;
+    uint8_t                  UpKey;
+    uint8_t                  UpVelocity;
     bool                  UpTrigger;
     uint16_t              LastOp;
     int                   NoiseColorDev;
@@ -73,7 +73,7 @@ private:
     bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  InDispReset;
-    byte                  NoiseFilterSetting;     // 0 - 3
+    uint8_t                  NoiseFilterSetting;     // 0 - 3
     uint64_t              DispMessageTimer;
     MIDI_VALUE_MAP*       FaderMap;
     MIDI_VALUE_MAP*       KnobMap;
@@ -84,13 +84,13 @@ private:
 
     typedef struct
         {
-        byte    BaseLevel;
-        byte    MaxLevel;
-        byte    AttackTime;
-        byte    DecayTime;
-        byte    SustainLevel;
-        byte    SustainTime;
-        byte    ReleaseTime;
+        uint8_t    BaseLevel;
+        uint8_t    MaxLevel;
+        uint8_t    AttackTime;
+        uint8_t    DecayTime;
+        uint8_t    SustainLevel;
+        uint8_t    SustainTime;
+        uint8_t    ReleaseTime;
         }
     MIDI_ADSR_T;
 
@@ -103,30 +103,30 @@ private:
 public:
           SYNTH_FRONT_C      (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map);
     void  Begin              (int osc_d_a, int noise_d_a, int noise_dig);
-    void  DispMessageHandler (byte cmd);
+    void  DispMessageHandler (uint8_t cmd);
     void  Loop               (void);
-    void  Controller         (byte chan, byte type, byte value);
-    void  PitchBend          (byte chan, int value);
-    void  ChannelSetSelect   (byte chan, bool state);
+    void  Controller         (uint8_t chan, uint8_t type, uint8_t value);
+    void  PitchBend          (uint8_t chan, int value);
+    void  ChannelSetSelect   (uint8_t chan, bool state);
     void  SetReverse         (bool data);
     void  Tuning             (void);
     void  StartTuning        (void);
-    void  SelectWaveLFO      (byte ch, byte state);
-    void  FreqSelectLFO      (byte ch, byte data);
+    void  SelectWaveLFO      (uint8_t ch, uint8_t state);
+    void  FreqSelectLFO      (uint8_t ch, uint8_t data);
     void  LFOrange           (bool up);
-    void  SetLevelLFO        (byte data);
-    void  SetMaxLevel        (byte ch, byte data);
-    void  SetMBaselevel      (byte ch, byte data);
-    void  SetAttackTime      (byte data);
-    void  SetDecayTime       (byte data);
-    void  SetSustainLevel    (byte ch, byte data);
-    void  SetSustainTime     (byte data);
-    void  SetReleaseTime     (byte data);
+    void  SetLevelLFO        (uint8_t data);
+    void  SetMaxLevel        (uint8_t ch, uint8_t data);
+    void  SetMBaselevel      (uint8_t ch, uint8_t data);
+    void  SetAttackTime      (uint8_t data);
+    void  SetDecayTime       (uint8_t data);
+    void  SetSustainLevel    (uint8_t ch, uint8_t data);
+    void  SetSustainTime     (uint8_t data);
+    void  SetReleaseTime     (uint8_t data);
     void  DISP32UpdateAll    (void);
-    void  NoiseFilter        (byte bit, bool state);
-    void  NoiseColor         (byte val);
-    void  SetNoiseFilterMin  (byte data);
-    void  SetNoiseFilterMax  (byte data);
+    void  NoiseFilter        (uint8_t bit, bool state);
+    void  NoiseColor         (uint8_t val);
+    void  SetNoiseFilterMin  (uint8_t data);
+    void  SetNoiseFilterMax  (uint8_t data);
 
     //#######################################################################
     inline bool IsInTuning (void)
@@ -135,7 +135,7 @@ public:
         }
 
     //#######################################################################
-    inline void  KeyDown (byte chan, byte key, byte velocity)
+    inline void  KeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
         {
         DownKey      = key;
         DownVelocity = velocity;
@@ -143,7 +143,7 @@ public:
         }
 
     //#######################################################################
-    inline void  KeyUp (byte chan, byte key, byte velocity)
+    inline void  KeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
         {
         UpKey      = key;
         UpVelocity = velocity;

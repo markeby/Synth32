@@ -27,7 +27,7 @@ private:
     bool        TriggerEnd;
 
     // Control state
-    byte&       UseCount;       // increment started and decriment as idle
+    uint8_t&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
     float       Timer;          // Timer loaded with state time and descrimented
     float       TargetTime;     // Timer is incrimented until this time is exceeded
@@ -46,14 +46,14 @@ private:
 
     // Fixed parameters
     String      Name;
-    byte        Index;
+    uint8_t        Index;
     uint16_t    DeviceChannel;
     float       Floor;
     float       Diff;
 
 
 public:
-             ENVELOPE_C     (byte index, String name, uint16_t device, byte& usecount);
+             ENVELOPE_C     (uint8_t index, String name, uint16_t device, uint8_t& usecount);
             ~ENVELOPE_C     (void)      {}
     void     Clear          (void);
     uint16_t GetChannel     (void);
@@ -75,7 +75,7 @@ private:
 public:
                 ENVELOPE_GENERATOR_C    (void);
                 ~ENVELOPE_GENERATOR_C   (void)   {}
-    ENVELOPE_C*  NewADSR                (byte index, String name, uint16_t device, byte& usecount);
+    ENVELOPE_C*  NewADSR                (uint8_t index, String name, uint16_t device, uint8_t& usecount);
     void         Loop                   (void);
     };
 

@@ -14,18 +14,18 @@ class SYNTH_CHANNEL_C
 private:
     SYNTH_OSC_C*    OscP;                   // oscillator class
     SYNTH_NOISE_C*  NoiseP;
-    byte            Key;
+    uint8_t            Key;
     int32_t         ActiveTimer;
     int             Number;
-    byte            UseCount;
+    uint8_t            UseCount;
 
 public:
              SYNTH_CHANNEL_C    (int num, int osc_d_a, int noise_d_a, int noise_dig, ENVELOPE_GENERATOR_C& envgen);
     void     Begin              (void);
     void     Loop               (void);
-    void     NoteSet            (byte key, byte velocity);
+    void     NoteSet            (uint8_t key, uint8_t velocity);
     void     Clear              (void);
-    bool     NoteClear          (byte key);
+    bool     NoteClear          (uint8_t key);
 
     uint32_t       IsActive (void)      { return (ActiveTimer); }
     SYNTH_OSC_C*   pOsc     (void)      { return (OscP); }

@@ -17,7 +17,7 @@ using namespace OSC_N;
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
-SYNTH_OSC_C::SYNTH_OSC_C (byte num, uint8_t first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
+SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
     Valid = false;
     Number = num;
@@ -74,7 +74,7 @@ void SYNTH_OSC_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningVolume (byte select, uint16_t level)
+void SYNTH_OSC_C::SetTuningVolume (uint8_t select, uint16_t level)
     {
     I2cDevices.D2Analog (Mix[select]->GetChannel (), level);
     }

@@ -17,14 +17,14 @@ SHARED := ../Common
 
 # header files
 INCLUDES := Debug.h config.h SerialMonitor.h I2Cdevices.h Settings.h SynthFront.h Sinewave.h \
-            WebOTA.h SynthChannel.h Osc.h LFOosc.h Test.h Noise.h Debug.h Envelope.h \
+            SynthChannel.h Osc.h LFOosc.h Noise.h Debug.h Envelope.h Diagnostics.h UpdateOTA.h \
 	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp WebOTA.cpp Debug.cpp Settings.cpp \
+SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp Debug.cpp Settings.cpp \
            SerialMonitor.cpp Noise.cpp SynthFront.cpp SynthChannel.cpp Osc.cpp \
-	   SynthConfig.cpp LFOosc.cpp Envelope.cpp
+	   SynthConfig.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
 # serial port for uploading
 DEFAULT_PORT := COM3
@@ -75,7 +75,7 @@ endif
 # Use Serial port or OTA to upload
 ############################################
 ifdef OTA
-  UPLOAD := python3 ../tools/UploadOTA.py $(TARGET) $(OTA)
+  UPLOAD := "C:\Users\markeby\AppData\Local\Arduino15\packages\esp32\hardware\esp32\3.0.2\tools\espota.exe" -r -i $(OTA) -p 3232 --auth=admin -f $(TARGET)
 else
   UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
 endif

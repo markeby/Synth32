@@ -23,7 +23,7 @@ ENVELOPE_GENERATOR_C::ENVELOPE_GENERATOR_C ()
     }
 
 //#######################################################################
-ENVELOPE_C* ENVELOPE_GENERATOR_C::NewADSR (byte index, String name, uint16_t device, byte& usecount)
+ENVELOPE_C* ENVELOPE_GENERATOR_C::NewADSR (uint8_t index, String name, uint16_t device, uint8_t& usecount)
     {
     ENVELOPE_C adsl (index, name, device, usecount);
     Envelopes.push_back (adsl);
@@ -48,7 +48,7 @@ void ENVELOPE_C::SetRange (int16_t floor, int16_t ceiling)
     }
 
 //#######################################################################
-ENVELOPE_C::ENVELOPE_C (byte index, String name, uint16_t device, byte& usecount) : UseCount(usecount)
+ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& usecount) : UseCount(usecount)
     {
     Name            = name;
     DeviceChannel   = device;

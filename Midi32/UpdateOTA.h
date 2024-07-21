@@ -12,9 +12,8 @@ private:
     bool   WiFi_On;
     String IPaddressString;
 public:
-    bool WaitWiFi       (void);
+    void WaitWiFi       (void);
     void Setup          (const char* pssid, const char* ppasswd);
-    void Begin          (void);
     void Loop           (void);
 
     const char* GetIP   (void)
