@@ -18,11 +18,11 @@ SHARED := ../Common
 # header files
 INCLUDES := Debug.h config.h SerialMonitor.h I2Cdevices.h Settings.h SynthFront.h Sinewave.h \
             SynthChannel.h Osc.h LFOosc.h Noise.h Debug.h Envelope.h Diagnostics.h UpdateOTA.h \
-	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+	    I2Cmessages.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp Debug.cpp Settings.cpp \
+SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
            SerialMonitor.cpp Noise.cpp SynthFront.cpp SynthChannel.cpp Osc.cpp \
 	   SynthConfig.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
@@ -60,7 +60,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED)
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 
@@ -75,7 +75,7 @@ endif
 # Use Serial port or OTA to upload
 ############################################
 ifdef OTA
-  UPLOAD := "C:\Users\markeby\AppData\Local\Arduino15\packages\esp32\hardware\esp32\3.0.2\tools\espota.exe" -r -i $(OTA) -p 3232 --auth=admin -f $(TARGET)
+  UPLOAD := espota.exe -d -r -i $(OTA) -p 3232 --auth=admin -f $(TARGET)
 else
   UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
 endif
@@ -106,7 +106,9 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
-	@$(UPLOAD)
+	@python3 ../Tools/Beep.py UPLOAD
+	$(UPLOAD)
+	@python3 ../Tools/Beep.py OK
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	if not exist $(OUTPUT) (mkdir $(OUTPUT))

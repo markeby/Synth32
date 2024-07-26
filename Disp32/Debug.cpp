@@ -51,7 +51,7 @@ const String vsFormat (const char *const zcFormat, va_list args)
     }
 
 //#######################################################################
-void DebugMsg (const char* label, int index, const char *const fmt, ...)
+void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
@@ -66,7 +66,7 @@ void DebugMsg (const char* label, int index, const char *const fmt, ...)
     }
 
 //#######################################################################
-void DebugMsgN (const char* label, int index, String name,  const char *const fmt, ...)
+void DebugMsgN (const char* label, uint8_t index, String name,  const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
@@ -77,7 +77,7 @@ void DebugMsgN (const char* label, int index, String name,  const char *const fm
     }
 
 //#######################################################################
-void DebugMsgF (const char* label, int index, String name, char* flag, const char *const fmt, ...)
+void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const char *const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);

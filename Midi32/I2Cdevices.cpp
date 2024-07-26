@@ -190,7 +190,7 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     buf[5] = board.ByteData[4];
     buf[6] = board.ByteData[7];
     buf[7] = board.ByteData[6];
-    Write (loc, buf, 8);
+    this->Write (loc, buf, 8);
     board.LastDataDtoA = board.DataDtoA;
     }
 
@@ -238,7 +238,7 @@ int I2C_INTERFACE_C::Begin ()
     int  ecount = 0;
 
     Wire.begin ();
-    Wire.setClock (800000UL);           //400kHz
+    Wire.setClock (800000UL);           //clock at 800kHz
     for (int z = 0;  z < BoardCount;  z++ )
         {
         I2C_LOCATION_T& board = pBoard[z].Board;

@@ -8,13 +8,11 @@
 
 #include "config.h"
 #include "Settings.h"
-#include "ClientI2C.h"
 #include "SerialMonitor.h"
-#include "DispFrontEnd.h"
 #include "Graphics.h"
+#include "../Common/DispMessages.h"
 
 //#######################################################################
-DISP_FRONT_END_C  DispFront;
 
 float      DeltaTime           = 0;
 int        DeltaMicro          = 0;             // micro second interval.
@@ -22,10 +20,7 @@ float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
 
 bool       DebugInterface      = true;
-bool       DebugGraphics       = true;
-
-// this is used to add a task to core 0
-//TaskHandle_t  Core0TaskHnd;
+bool       DebugGraphics       = false;
 
 //#######################################################################
 inline void TimeDelta (void)
@@ -63,42 +58,12 @@ void setup (void)
 
     printf ("\t>>> Startup Graphics...\n");
     Graphics.Begin ();
-    DispFront.Begin ();
 
-    printf("\t>>> Starting I2C Listener...\n");
-    Listener.Begin (LISTEN_ADDRESS);
+    printf ("\t>>> Startup I2C inputs...\n");
+    StartI2C (DISPLAY_I2C_ADDRESS);
+    delay (1500);   // Give time for the graphics subsystem threads to start
 
- //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
-
-    delay (1500);   // Give time for the Wifi to connect
     printf ("\t>>> System startup complete.\n\n");
-    }
-
-//#######################################################################
-void Core0TaskSetup (void)
-    {
-    // init your stuff for core0 here
-    }
-
-//#######################################################################
-void Core0TaskLoop (void)
-    {
-    // put your loop stuff for core0 here
-    }
-
-//#######################################################################
-void Core0Task (void *parameter)
-    {
-    Core0TaskSetup ();
-
-    while ( true )
-        {
-        Core0TaskLoop ();
-
-        /* this seems necessary to trigger the watchdog */
-        delay (1);
-        yield ();
-        }
     }
 
 
@@ -108,7 +73,6 @@ void loop (void)
     {
     TimeDelta ();
 
-    DispFront.Loop ();
     Monitor.Loop ();
     }
 

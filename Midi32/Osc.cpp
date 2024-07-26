@@ -108,7 +108,7 @@ void SYNTH_OSC_C::NoteClear ()
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetReverse (bool data)
+void SYNTH_OSC_C::SawtoothDirection (bool data)
     {
     I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? DA_MAX : 0);
     }

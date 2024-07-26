@@ -15744,7 +15744,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 162.56 45.72 0)
 		(unit 1)
@@ -18634,7 +18633,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 92.71 25.4 270)
 		(unit 1)

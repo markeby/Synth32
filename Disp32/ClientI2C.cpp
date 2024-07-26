@@ -1,69 +1,75 @@
 //#######################################################################
-// Module:     SyntFront.cpp
-// Descrption: Synthesizer front end controller
-//                 Midi->Front->SynthModules
+// Module:     ClientI2C.cpp
+// Descrption: Display command receiver
 // Creator:    markeby
-// Date:       5/17/2023
+// Date:       6/23/2024
 //#######################################################################
-#include <Arduino.h>
+#include <Wire.h>
 
 #include "config.h"
-#include "Wire.h"
-#include "ClientI2C.h"
+#include "Graphics.h"
+#include "Debug.h"
+#define   ALLOCATE_DISP_TEXT 1
+#include "../Common/DispMessages.h"
 
-#define I2C_DEV_ADDR 0x55
+static const char* LabelI = "I";
+#define DBGI(args...) {if(DebugInterface){ DebugMsg(LabelI,DEBUG_NO_INDEX,args);}}
 
-uint32_t i = 0;
+static  uint8_t     msgBuff[32];
 
+using namespace DISP_MESSAGE_N;
 
-static void onRequest ()
+static void DataOut ()
     {
-    Wire.print (i++);
+    printf("onRequest ??\n");
     Wire.print (" Packets.");
     }
 
-static void onReceive(int len)
+static void DataIn (int len)
     {
-    Listener.Fetch ();
+    short z = 0;
+
+    while ( Wire.available () )
+        msgBuff[z++] = Wire.read ();
+
+    switch ( len )
+        {
+        case MESSAGE_LENGTH_VCA:
+            {
+            z = msgBuff[4] | (msgBuff[3] << 8);
+            switch ( msgBuff[0] )
+                {
+                case (int)DISP_MESSAGE_N::CMD_C::CTRL_VCA:
+                    DBGI("{VCA} Channel: %s   Effect: %s   Value: %d", ClassADSR[msgBuff[1]], ClassEFFECT[msgBuff[2]], z);
+                    Graphics.UpdatePageVCA (msgBuff[1], msgBuff[2],  z);
+                    break;
+                default:
+                    break;
+                }
+            }
+        case MESSAGE_LENGTH_CNT:
+            {
+            switch ( msgBuff[0] )
+                {
+                case (int)DISP_MESSAGE_N::CMD_C::PAUSE:
+                    DBGI("{CNT} Command: %s", ClassCMD[2]);
+                    Graphics.Pause (true);
+                    break;
+                case (int)DISP_MESSAGE_N::CMD_C::UPDATE:
+                    DBGI("{CNT} Command: %s", ClassCMD[3]);
+                    Graphics.Pause (false);
+                    break;
+                }
+            }
+        }
     }
-
-
-
-
-
-
 
 //#######################################################################
- ClientI2C::ClientI2C ()
+//#######################################################################
+void StartI2C (uint8_t device_addr)
     {
-    Wire.onReceive(onReceive);
-    Wire.onRequest(onRequest);
-    }
-
-//#####################################################################
-void ClientI2C::Begin (uint8_t device_addr)
-    {
+    Wire.onReceive (DataIn);
+    Wire.onRequest (DataOut);
     Wire.begin (device_addr);
     }
 
-//#######################################################################
-void ClientI2C::Fetch ()
-    {
-    int count = 0;
-
-    while ( Wire.available () )
-        {
-        MessageBuffer[count++] = Wire.read ();
-        }
-
-    printf("Message in = ");
-
-    for ( int z = 0;  z < count;  z++ )
-        {
-        printf("%#02X ", MessageBuffer[z]);
-        }
-    printf("\n");
-    }
-
-
-ClientI2C Listener;

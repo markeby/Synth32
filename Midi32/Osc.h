@@ -59,7 +59,7 @@ public:
     void NoteSet            (uint8_t key, uint8_t velocity);
     void NoteClear          (void);
     void Clear              (void);
-    void SetReverse         (bool data);
+    void SawtoothDirection  (bool data);
     void SetAttackTime      (uint8_t wave, float time);
     void SetDecayTime       (uint8_t wave, float time);
     void SetSustainTime     (uint8_t wave, float time);

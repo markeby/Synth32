@@ -8,7 +8,6 @@
 #include "config.h"
 #include "settings.h"
 #include "SerialMonitor.h"
-#include "DispFrontEnd.h"
 
 using namespace SERIAL_MONITOR;
 
@@ -202,7 +201,7 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case '0':
-                    DispFront.SendReset ();
+//                    DispFront.SendReset ();
                     Mode (MENU);
                     break;
                 case 'Z':

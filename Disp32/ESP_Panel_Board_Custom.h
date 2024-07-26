@@ -205,7 +205,9 @@
 //////////////////////////// Please update the following macros to configure the touch panel ///////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /* Set to 1 when using an touch panel */
-#define ESP_PANEL_USE_TOUCH         (1)         // 0/1
+//#define ESP_PANEL_USE_TOUCH         (1)         // 0/1
+// for this application we need the I2C bus for intefacing and do not use touch screen
+#define ESP_PANEL_USE_TOUCH         (0)         // 0/1
 #if ESP_PANEL_USE_TOUCH
 /**
  * Touch controller name. Choose one of the following:

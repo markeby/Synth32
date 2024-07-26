@@ -8,18 +8,28 @@
 #include <lvgl.h>
 
 //############################################
+class ADSR_ELEMENT_C
+    {
+public:
+    lv_meter_indicator_t*   Gauge;
+    lv_obj_t*               Label;
+    };
+
+//############################################
 class ADSR_WIDGET_C
     {
 private:
-    lv_obj_t*               Meter;
-    lv_meter_indicator_t*   Attack;
-    lv_meter_indicator_t*   Decay;
-    lv_meter_indicator_t*   Sustain;
-    lv_meter_indicator_t*   Release;
+    lv_obj_t*       Meter;
+    lv_obj_t*       Led;
+    ADSR_ELEMENT_C  Attack;
+    ADSR_ELEMENT_C  Decay;
+    ADSR_ELEMENT_C  Sustain;
+    ADSR_ELEMENT_C  Release;
 
 public:
-            ADSR_WIDGET_C   (const char* s, int x, int y);
+            ADSR_WIDGET_C   (const char* s, short x, short y);
            ~ADSR_WIDGET_C   (void) {}
+    void    Select          (bool sel);
     void    SetAttack       (int val);
     void    SetDecay        (int val);
     void    SetSustain      (int val);

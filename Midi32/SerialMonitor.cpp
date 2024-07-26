@@ -200,7 +200,12 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case '4':
                     DebugSynth = !DebugSynth;
-                    Serial << "  Synth debugging1 " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
+                    Serial << "  Synth debugging " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
+                    this->Mode (MENU);
+                    break;
+                case '5':
+                    DebugSynth = !DebugSynth;
+                    Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
                 case 'S':
@@ -246,10 +251,11 @@ void MONITOR_C::Menu (void)
         Serial << "\t******     Tuning mode      ******" << endl;
     if ( AnalogDiagEnabled )
         Serial << "\t******    D/A Test mode     ******" << endl;
-    Serial << StateDebug(DebugMidi) << "\t1   - Debug MIDI interface   " << endl;
+    Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
     Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
     Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
+    Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
     Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << "\tZ   - Test function" << endl;

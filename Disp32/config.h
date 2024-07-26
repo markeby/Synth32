@@ -39,3 +39,8 @@ extern uint64_t RunTime;
 extern float    AverageDeltaTime;
 extern int      DeltaMicro;
 
+//#################################################
+//   Global system functions
+//#################################################
+void  StartI2C  (uint8_t device_addr);     // Set listening addresss and start listening
+

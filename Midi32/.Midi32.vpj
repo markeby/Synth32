@@ -122,6 +122,7 @@
             <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="I2Cdevices.cpp"/>
+            <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
             <F N="Noise.cpp"/>
             <F N="Osc.cpp"/>
@@ -149,6 +150,7 @@
             <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>
             <F N="I2Cdevices.h"/>
+            <F N="I2Cmessages.h"/>
             <F N="LFOosc.h"/>
             <F N="Noise.h"/>
             <F N="Osc.h"/>
@@ -164,11 +166,11 @@
             Filters="*.py"
             GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
             <F N="../.gitignore"/>
+            <F N="../tools/Beep.py"/>
             <F
                 N="Makefile"
                 Type="Makefile"/>
             <F N="../README.md"/>
-            <F N="../tools/UploadOTA.py"/>
         </Folder>
     </Files>
     <List Name="RTE">

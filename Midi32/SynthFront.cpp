@@ -8,14 +8,15 @@
 #include <Arduino.h>
 #include <UHS2-MIDI.h>
 
-#include <SynthCommon.h>
-#include <DispMessages.h>
+#include "../Common/SynthCommon.h"
+#include "../Common/DispMessages.h"
 #include "Osc.h"
 #include "LFOosc.h"
 #include "Noise.h"
-#include "SynthChannel.h"
 #include "SynthFront.h"
+#include "SynthChannel.h"
 #include "Debug.h"
+
 static const char* Label = "TOP";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,0,args);}}
 
@@ -30,22 +31,6 @@ namespace ___StuffForThisModuleOnly___
 
     static SYNTH_CHANNEL_C*    pChan[CHAN_COUNT];
     static LFO_N::SYNTH_LFO_C  Lfo;
-
-    //###################################################################
-    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, DISP_MESSAGE_N::EFFECT_C effect, uint8_t value)
-        {
-        uint8_t snd[4];
-
-        snd[0] = (uint8_t)status;
-        snd[1] = (uint8_t)effect;
-        snd[2] = value;
-//        Serial1.write (snd, 3);
-        }
-    //###################################################################
-    inline void SendToDisp32 (DISP_MESSAGE_N::CMD_C status, uint8_t index, DISP_MESSAGE_N::EFFECT_C effect, uint8_t value)
-        {
-        SendToDisp32((DISP_MESSAGE_N::CMD_C)((uint8_t)status | index), effect, value);
-        }
 
     //###################################################################
     static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
@@ -99,17 +84,17 @@ String SYNTH_FRONT_C::Selected ()
 //#####################################################################
 SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map)
     {
-    FaderMap         = fader_map;
-    KnobMap          = knob_map;
-    SwitchMap        = switch_map;
-    DownKey          = 0;
-    DownTrigger      = false;
-    DownVelocity     = 0;
-    UpKey            = 0;
-    UpTrigger        = false;
-    LastOp           = 0;
-    SetTuning        = 0;
-    InDispReset      = false;
+    FaderMap            = fader_map;
+    KnobMap             = knob_map;
+    SwitchMap           = switch_map;
+    DownKey             = 0;
+    DownTrigger         = false;
+    DownVelocity        = 0;
+    UpKey               = 0;
+    UpTrigger           = false;
+    LastOp              = 0;
+    SetTuning           = 0;
+    InDispReset         = false;
     }
 
 //#######################################################################
@@ -150,6 +135,8 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     printf ("\t>>> Starting echo midi: Port = 1  TX = %d  RX= %d\n", TXD1, RXD1);
  //   Serial1.begin (115200, SERIAL_8N1, RXD1, TXD1);
 
+
+    printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
         pChan[z] = new SYNTH_CHANNEL_C (z, osc_d_a, noise_d_a, noise_dig, EnvADSL);
@@ -161,22 +148,9 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     NoiseColorDev = noise_dig;
     Lfo.Begin (0, osc_d_a);
 
+    this->SawtoothDirection (false);
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         SelectedEnvelope[z] = false;
-    }
-
-//###################################################################
-void  SYNTH_FRONT_C::DispMessageHandler (uint8_t cmd)
-    {
-    switch ( (DISP_MESSAGE_N::CMD_C)cmd )
-        {
-        case DISP_MESSAGE_N::CMD_C::RESET:
-            DispMessageTimer = RunTime;
-            InDispReset = true;
-            break;
-        default:
-            break;
-        }
     }
 
 //#######################################################################
@@ -321,27 +295,6 @@ void SYNTH_FRONT_C::Loop ()
         }
     else
         Tuning ();
-
-//    if ( Serial1.available () )
-//        {
-//        int  z;
-//        byte buf[8];
-//
-//        for (z = 0;  Serial1.available() && (z < 3);  z++)
-//            buf[z] = Serial1.read ();
-//        if ( z >= 3 )
-//            {
-//            DispMessageHandler (buf[2]);
-//            }
-//        }
-//    if ( InDispReset )
-//        {
-//        if ( (RunTime - DispMessageTimer) > MILLI_TO_MICRO(1000) )
-//            {
-//            InDispReset = false;
-//            this->DISP32UpdateAll ();
-//            }
-//        }
     }
 
 //#######################################################################
@@ -407,6 +360,7 @@ void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
 #else
     SelectedEnvelope[chan] = state;
 #endif
+    DisplayMessage.Selected (chan, SelectedEnvelope[chan]);
     DBG ("%s %s", SwitchMap[chan].desc,  (SelectedEnvelope[chan]) ? " ON" : " off");
     }
 
@@ -420,7 +374,6 @@ void SYNTH_FRONT_C::SetMBaselevel (uint8_t ch, uint8_t data)
             pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].BaseLevel = data;
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::BASE_VOL, data);
     }
 
 //#####################################################################
@@ -441,7 +394,7 @@ void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
             pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].MaxLevel = data;
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, data);
+    DisplayMessage.MaxLevel (ch, data);
     }
 
 //#####################################################################
@@ -460,7 +413,7 @@ void SYNTH_FRONT_C::SetAttackTime (uint8_t data)
                 else
                     pChan[zc]->pNoise()->SetAttackTime (zs - OSC_MIXER_COUNT, dtime);
                 }
-            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, data);
+            DisplayMessage.AttackTime (zs, data);
             }
         }
     }
@@ -481,7 +434,7 @@ void SYNTH_FRONT_C::SetDecayTime (uint8_t data)
                 else
                     pChan[zc]->pNoise()->SetDecayTime (zs - OSC_MIXER_COUNT, dtime);
                 }
-            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, data);
+            DisplayMessage.DecayTime (zs, data);
             }
         }
     }
@@ -498,7 +451,7 @@ void SYNTH_FRONT_C::SetSustainLevel (uint8_t ch, uint8_t data)
             pChan[zc]->pNoise()->SetSustainLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].SustainLevel = data;
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, ch, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, data);
+    DisplayMessage.SustainLevel (ch, data);
     }
 
 //#####################################################################
@@ -523,8 +476,7 @@ void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
                 else
                     pChan[zc]->pNoise()->SetSustainTime (zs - OSC_MIXER_COUNT, dtime);
                 }
-
-            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, data);
+            DisplayMessage.SustainTime (zs, data);
             }
         }
     }
@@ -545,17 +497,18 @@ void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
                 else
                     pChan[zc]->pNoise()->SetReleaseTime (zs - OSC_MIXER_COUNT, dtime);
                 }
-            SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, zs, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,  data);
+            DisplayMessage.ReleaseTime (zs, data);
             }
         }
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetReverse (bool data)
+void SYNTH_FRONT_C::SawtoothDirection (bool data)
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++)
-        pChan[z]->pOsc()->SetReverse (data);
-    SendToDisp32(DISP_MESSAGE_N::CMD_C::CONTROL, (uint8_t)DISP_MESSAGE_N::SHAPE_C::SAWTOOTH, DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_REVERSE, data);
+        pChan[z]->pOsc()->SawtoothDirection (data);
+    this->SawToothDirection = data;
+    DisplayMessage.SawtoothDirection (data);
     }
 
 //#####################################################################
@@ -563,20 +516,20 @@ void SYNTH_FRONT_C::DISP32UpdateAll ()
     {
     uint8_t zd;
 
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::INIT, (uint8_t)(DISP_MESSAGE_N::SHAPE_C::ALL));
+    DisplayMessage.Pause (true);
     for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SELECTED, SelectedEnvelope[z]);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::LIMIT_VOL, MidiAdsr[z].MaxLevel);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, MidiAdsr[z].AttackTime);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, MidiAdsr[z].DecayTime);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, MidiAdsr[z].SustainTime);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, MidiAdsr[z].ReleaseTime);
-        SendToDisp32 (DISP_MESSAGE_N::CMD_C::CONTROL, z, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_VOL, MidiAdsr[z].SustainLevel);
+        DisplayMessage.Selected (z, SelectedEnvelope[z]);
+        DisplayMessage.MaxLevel (z, MidiAdsr[z].MaxLevel);
+        DisplayMessage.AttackTime (z, MidiAdsr[z].AttackTime);
+        DisplayMessage.DecayTime (z, MidiAdsr[z].DecayTime);
+        DisplayMessage.SustainTime (z, MidiAdsr[z].SustainTime);
+        DisplayMessage.ReleaseTime (z, MidiAdsr[z].ReleaseTime);
+        DisplayMessage.SustainLevel (z, MidiAdsr[z].SustainLevel);
         }
-    SendToDisp32 (DISP_MESSAGE_N::CMD_C::RENDER, DISP_MESSAGE_N::EFFECT_C::RENDER_ADSR, (uint8_t)(DISP_MESSAGE_N::SHAPE_C::ALL));
+    DisplayMessage.SawtoothDirection (this->SawToothDirection);
+    DisplayMessage.Pause (false);
     }
-
 
 //#####################################################################
 void SYNTH_FRONT_C::SelectWaveLFO (uint8_t ch, uint8_t state)

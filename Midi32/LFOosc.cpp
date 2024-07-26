@@ -5,8 +5,7 @@
 // Date:       9/18/2023
 //#######################################################################
 #include <Arduino.h>
-#include <SynthCommon.h>
-
+#include "../Common/SynthCommon.h"
 #include "config.h"
 #include "LFOosc.h"
 #include "Debug.h"

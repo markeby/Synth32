@@ -57,6 +57,7 @@ bool       DebugMidi            = false;
 bool       DebugI2C             = false;
 bool       DebugOsc             = false;
 bool       DebugSynth           = false;
+bool       DebugDisp            = true;
 bool       AnalogDiagEnabled    = false;
 int        AnalogDiagDevice     = 0;
 
@@ -70,6 +71,7 @@ inline int TimeDeltaMiicro (void)
     {
     static uint64_t strt = 0;       // Starting time for next frame delta calculation
     int             delta;
+
 
     RunTime = micros ();
     delta = (int)((uint64_t)RunTime - (uint64_t)strt);
@@ -87,7 +89,6 @@ inline bool TickTime (void)
     static uint64_t loop_cnt_100hz = 0;
     static uint64_t icount = 0;
 
-    RunTime        += DeltaTimeMicro;
     loop_cnt_100hz += DeltaTimeMicro;
     icount++;
 
@@ -173,7 +174,17 @@ void setup (void)
 
         // Setup initial state of synth
         SynthFront.Begin (START_OSC_ANALOG, START_NOISE_ANALOG, START_NOISE_DIGITAL);
-        for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+
+        printf ("\t>>> Starting display communications port SDA = %d  SCL = %d\n", MSG_SDA, MSG_SCL);
+        DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
+
+        delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect
+
+        SynthFront.DISP32UpdateAll ();
+
+        // initial test settings
+        DisplayMessage.Pause (true);
+        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
             {
             SynthFront.SetSustainLevel (z, MAX_MVAL);
             SynthFront.ChannelSetSelect(z, false);
@@ -186,22 +197,7 @@ void setup (void)
         SynthFront.SetSustainTime (0);
         SynthFront.SetMaxLevel (4, 100);
         SynthFront.ChannelSetSelect (4, false);
-        SynthFront.ChannelSetSelect (6, true);
-        SynthFront.SetAttackTime (8);
-        SynthFront.SetDecayTime (8);
-        SynthFront.SetSustainLevel (6, 0);
-        SynthFront.SetReleaseTime (0);
-        SynthFront.SetSustainTime (0);
-        SynthFront.SetMaxLevel (4, 100);
-        SynthFront.ChannelSetSelect (6, false);
-        SynthFront.ChannelSetSelect (7, true);
-        SynthFront.SetAttackTime (3);
-//        SynthFront.SetDecayTime (11);
-//        SynthFront.SetSustainLevel (7, 20);
-//        SynthFront.SetReleaseTime (0);
-//        SynthFront.SetSustainTime (0);
-        SynthFront.SetMaxLevel (4, 100);
-        SynthFront.ChannelSetSelect (7, false);
+        DisplayMessage.Pause (false);
 
         printf("\t>>> Synth ready.\n");
         }
@@ -256,7 +252,10 @@ void loop (void)
         UpdateOTA.WaitWiFi ();
 
     if ( SynthActive )
+        {
         SynthFront.Loop ();
+        DisplayMessage.PauseLapse ();
+        }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();
     UpdateOTA.Loop ();

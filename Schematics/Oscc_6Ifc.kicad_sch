@@ -12832,7 +12832,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 50.8 59.69 270)
 		(unit 1)
@@ -13480,7 +13479,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 128.27 59.69 270)
 		(unit 1)
@@ -15938,7 +15936,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 50.8 149.86 270)
 		(unit 1)
@@ -16230,7 +16227,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 128.27 149.86 270)
 		(unit 1)
@@ -17836,7 +17832,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 210.82 59.69 270)
 		(unit 1)
@@ -18256,7 +18251,6 @@
 		)
 	)
 	(symbol
-		(lib_name "Device:R_Potentiometer_US")
 		(lib_id "Device:R_Potentiometer_US")
 		(at 293.37 59.69 270)
 		(unit 1)

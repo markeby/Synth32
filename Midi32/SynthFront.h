@@ -8,6 +8,7 @@
 
 #include "SineWave.h"
 #include "Envelope.h"
+#include "I2Cmessages.h"
 
 namespace SYNTH_FRONT
     {
@@ -61,11 +62,11 @@ namespace SYNTH_FRONT
 class   SYNTH_FRONT_C
     {
 private:
-    uint8_t                  DownKey;
-    uint8_t                  DownVelocity;
+    uint8_t               DownKey;
+    uint8_t               DownVelocity;
     bool                  DownTrigger;
-    uint8_t                  UpKey;
-    uint8_t                  UpVelocity;
+    uint8_t               UpKey;
+    uint8_t               UpVelocity;
     bool                  UpTrigger;
     uint16_t              LastOp;
     int                   NoiseColorDev;
@@ -73,8 +74,9 @@ private:
     bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  InDispReset;
-    uint8_t                  NoiseFilterSetting;     // 0 - 3
+    uint8_t               NoiseFilterSetting;     // 0 - 3
     uint64_t              DispMessageTimer;
+    bool                  SawToothDirection;
     MIDI_VALUE_MAP*       FaderMap;
     MIDI_VALUE_MAP*       KnobMap;
     MIDI_SWITCH_MAP*      SwitchMap;
@@ -103,12 +105,11 @@ private:
 public:
           SYNTH_FRONT_C      (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map);
     void  Begin              (int osc_d_a, int noise_d_a, int noise_dig);
-    void  DispMessageHandler (uint8_t cmd);
     void  Loop               (void);
     void  Controller         (uint8_t chan, uint8_t type, uint8_t value);
     void  PitchBend          (uint8_t chan, int value);
     void  ChannelSetSelect   (uint8_t chan, bool state);
-    void  SetReverse         (bool data);
+    void  SawtoothDirection  (bool data);
     void  Tuning             (void);
     void  StartTuning        (void);
     void  SelectWaveLFO      (uint8_t ch, uint8_t state);

@@ -6,7 +6,7 @@
 
 #include <Streaming.h>
 
-#include "SynthCommon.h"
+#include "../Common/SynthCommon.h"
 #include "I2Cdevices.h"
 
 //#####################################
@@ -28,6 +28,7 @@ extern bool DebugMidi;
 extern bool DebugI2C;
 extern bool DebugOsc;
 extern bool DebugSynth;
+extern bool DebugDisp;
 extern bool AnalogDiagEnabled;
 
 //#################################################
@@ -39,8 +40,15 @@ extern bool AnalogDiagEnabled;
 //#################################################
 //    Serial 1 MIDI echo out port
 //#################################################
-#define RXD1    35
-#define TXD1    32
+#define RXD1        35
+#define TXD1        32
+
+//#################################################
+//    I2C bus 1 ports for display messages
+//#################################################
+#define MSG_SDA     26
+#define MSG_SCL     25
+#define MSG_ADRS    0x51
 
 //#################################################
 //  Synth I2C interface starting indexes

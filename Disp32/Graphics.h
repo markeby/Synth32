@@ -1,4 +1,10 @@
-//
+//#######################################################################
+// Module:     Graphics.cpp
+// Descrption: Graphics processing class
+// Creator:    markeby
+// Date:       7/23/2024
+//#######################################################################
+
 //   Graphics.h
 //
 //  Graphics for control displays
@@ -7,19 +13,10 @@
 //
 #pragma once
 
-#include <ESP_Panel_Library.h>
-#include <lvgl.h>
-#include "lvgl_port_v8.h"
-#include "SynthData.h"
-#include <demos/lv_demos.h>
 #include "../Common/SynthCommon.h"
 
-//############################################
-enum class CNTRL_TYPE_C: byte {
-    NONE   = 0,
-    ADSR,
-    POT,
-    };
+class ESP_Panel;
+class ADSR_WIDGET_C;
 
 //############################################
 class GRPH_C
@@ -27,14 +24,14 @@ class GRPH_C
 private:
     ESP_Panel* Panel;
 
-    VCA_T     Oscillator[OSC_MIXER_COUNT];
-
-
+    ADSR_WIDGET_C*     MeterADSR[OSC_MIXER_COUNT];
 
 public:
             GRPH_C          (void);
     void    Begin           (void);
+    void    Pause           (bool state);
     void    InitializePage1 (void);
+    void    UpdatePageVCA   (byte ch, byte effect, short value);
     };
 
 extern GRPH_C  Graphics;

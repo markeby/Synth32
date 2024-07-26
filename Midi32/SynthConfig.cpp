@@ -5,7 +5,7 @@
 // Date:       5/17/2023
 //#######################################################################
 #include <Arduino.h>
-#include <SynthCommon.h>
+#include "../Common/SynthCommon.h"
 #include "config.h"
 #include "SynthFront.h"
 #include "SerialMonitor.h"
@@ -59,9 +59,9 @@ void SetReleaseTime (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-void SetReverse (uint8_t ch, uint8_t data)
+void SawtoothDirection (uint8_t ch, uint8_t data)
     {
-    SynthFront.SetReverse (data != 0);
+    SynthFront.SawtoothDirection (data != 0);
     }
 
 //########################################################
@@ -155,30 +155,30 @@ MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
 
 //########################################################
 MIDI_SWITCH_MAP SwitchMapArray[SM_SWITCH] =
-    {   {  0, "Sine",               SetTimeSetSelect },
-        {  1, "Triangle",           SetTimeSetSelect },
-        {  2, "Sawtooth",           SetTimeSetSelect },
-        {  3, "Pulse",              SetTimeSetSelect },
-        {  4, "Square",             SetTimeSetSelect },
-        {  5, "Noise VCA",          SetTimeSetSelect },
-        {  6, "Noise VCF",          SetTimeSetSelect },
-        {  7, "Sawtooth reverse",   SetReverse       },
-        {  8, "Mod Sine",           SetModSwitch     },
-        {  9, "Mod Triangle",       SetModSwitch     },
-        { 10, "Mod Sawtooth",       SetModSwitch     },
-        { 11, "Mod Pulse   ",       SetModSwitch     },
-        { 12, "Mod Square",         SetModSwitch     },
-        { 13, "White/!Pink noise",  SetWhiteNoise    },
-        { 14, "Noise filter 0",     SetNoiseFilter   },
-        { 15, "Noise filter 1",     SetNoiseFilter   },
-        { 16, "Switch #17",         nullptr          },
-        { 17, "Switch #18",         nullptr          },
-        { 18, "Switch #19",         nullptr          },
-        { 19, "Switch #20",         nullptr          },
-        { 20, "LFO Range -",        SetPlusRangeLFO  },
-        { 21, "LFO Range +",        SetMinusRangeLFO },
-        { 22, "Tune/Reset",         TuneReset        },
-        { 23, "Switch #24",         nullptr          },
+    {   {  0, "Sine",              SetTimeSetSelect  },
+        {  1, "Triangle",          SetTimeSetSelect  },
+        {  2, "Sawtooth",          SetTimeSetSelect  },
+        {  3, "Pulse",             SetTimeSetSelect  },
+        {  4, "Square",            SetTimeSetSelect  },
+        {  5, "Noise VCA",         SetTimeSetSelect  },
+        {  6, "Noise VCF",         SetTimeSetSelect  },
+        {  7, "Sawtooth Dir",      SawtoothDirection },
+        {  8, "Mod Sine",          SetModSwitch      },
+        {  9, "Mod Triangle",      SetModSwitch      },
+        { 10, "Mod Sawtooth",      SetModSwitch      },
+        { 11, "Mod Pulse   ",      SetModSwitch      },
+        { 12, "Mod Square",        SetModSwitch      },
+        { 13, "White/!Pink noise", SetWhiteNoise     },
+        { 14, "Noise filter 0",    SetNoiseFilter    },
+        { 15, "Noise filter 1",    SetNoiseFilter    },
+        { 16, "Switch #17",        nullptr           },
+        { 17, "Switch #18",        nullptr           },
+        { 18, "Switch #19",        nullptr           },
+        { 19, "Switch #20",        nullptr           },
+        { 20, "LFO Range -",       SetPlusRangeLFO   },
+        { 21, "LFO Range +",       SetMinusRangeLFO  },
+        { 22, "Tune/Reset",        TuneReset         },
+        { 23, "Switch #24",        nullptr           },
     };
 
 

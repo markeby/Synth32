@@ -7775,7 +7775,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 234.95 148.59 0)
 		(unit 1)
@@ -7916,7 +7915,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 177.8 137.16 0)
 		(unit 1)
@@ -8412,7 +8410,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 233.68 73.66 0)
 		(unit 1)
@@ -9494,7 +9491,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 101.6 0)
 		(unit 1)
@@ -9565,7 +9561,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 233.68 62.23 0)
 		(unit 1)
@@ -10466,7 +10461,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 234.95 101.6 0)
 		(unit 1)
@@ -10606,7 +10600,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 234.95 113.03 0)
 		(unit 1)
@@ -10820,7 +10813,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 177.8 148.59 0)
 		(unit 1)
@@ -10891,7 +10883,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 62.23 0)
 		(unit 1)
@@ -12048,7 +12039,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 73.66 0)
 		(unit 1)
@@ -12324,7 +12314,6 @@
 		)
 	)
 	(symbol
-		(lib_name "ScrewTerminal:Screw_Terminal")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 113.03 0)
 		(unit 1)

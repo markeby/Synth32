@@ -6,7 +6,7 @@
 // Date:       5/17/2023
 //#######################################################################
 #include <Arduino.h>
-#include <DispMessages.h>
+#include "../Common/DispMessages.h"
 #include "config.h"
 #include "LFOosc.h"
 #include "Noise.h"
