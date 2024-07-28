@@ -15,6 +15,8 @@ class I2C_MESSAGE_C
 private:
     bool        Ready;
     bool        Paused;
+    bool        ResetState;
+    uint64_t    ResetStart;
     uint64_t    LastTime;
 
     uint8_t     DisplayAddress;
@@ -47,17 +49,32 @@ public:
          this->LastTime = RunTime;
         }
 
-    void  PauseLapse (void)
+    bool  Loop (void)
         {
         if (  this->Paused )
             {
-            if ( (RunTime - this->LastTime) > 100000)
+            if ( (RunTime - this->LastTime) > DISPLAY_SETTLE_TIME )
                 {
                 this->Pause (false);
                 this->Paused = false;
                 }
             }
 
+        bool z = digitalRead (RESET_STROBE_IO);
+        if ( z != this->ResetState )
+            {
+            this->ResetState = z;
+            if ( z )
+                {
+                if ( (RunTime - this->ResetStart) < (RESET_TRIGGER_TIME + 50) )
+                    return (true);
+                else
+                    return (false);
+                return (false);
+                }
+            else
+                this->ResetStart = RunTime;
+            }
         }
     };
 

@@ -19,6 +19,8 @@ namespace DISP_MESSAGE_N
 #define MESSAGE_LENGTH_CNT  2
 #define MESSAGE_LENGTH_VCA  5
 
+#define RESET_TRIGGER_TIME  100000
+
 //######################################
 //  Control bytes
 //######################################

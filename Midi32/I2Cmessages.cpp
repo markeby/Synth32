@@ -19,12 +19,15 @@ static const char* LabelD = "D";
 
 I2C_MESSAGE_C::I2C_MESSAGE_C () : Ready (false)
     {
+    ResetState = false;
+    Paused = false;
     }
 
 //#######################################################################
 void I2C_MESSAGE_C::Begin (uint8_t display, uint8_t sda, uint8_t scl)
     {
-    Paused = false;
+    pinMode (RESET_STROBE_IO, INPUT);
+
     this->DisplayAddress = display;
     Wire1.begin (sda, scl, 400000UL);   // Clock at 400kHz
     this->Ready = true;

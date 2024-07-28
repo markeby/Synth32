@@ -2194,12 +2194,6 @@
 		(uuid "abebce0a-89bd-45e6-9a90-b3ddea487287")
 	)
 	(junction
-		(at 234.95 135.89)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "ad17d9b3-9bb9-4e2c-8b88-3bbb83ba7434")
-	)
-	(junction
 		(at 232.41 58.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -2262,6 +2256,16 @@
 			(type default)
 		)
 		(uuid "0cc9cb32-dc81-4c3a-8abc-ed485e4dd43a")
+	)
+	(wire
+		(pts
+			(xy 204.47 107.95) (xy 218.44 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0dbd4070-3734-4a36-b7bd-b28e535e18ec")
 	)
 	(wire
 		(pts
@@ -2405,13 +2409,23 @@
 	)
 	(polyline
 		(pts
-			(xy 158.75 132.08) (xy 218.44 132.08)
+			(xy 158.75 132.08) (xy 223.52 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "47c70e5c-7c67-4857-9e14-62310d37b337")
+	)
+	(wire
+		(pts
+			(xy 218.44 107.95) (xy 218.44 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "48df7691-8281-4f00-b4e5-d86c14ee2b62")
 	)
 	(wire
 		(pts
@@ -2445,7 +2459,7 @@
 	)
 	(polyline
 		(pts
-			(xy 218.44 119.38) (xy 218.44 132.08)
+			(xy 223.52 119.38) (xy 223.52 132.08)
 		)
 		(stroke
 			(width 0)
@@ -2482,6 +2496,16 @@
 			(type default)
 		)
 		(uuid "76288e9a-6a76-47b3-aa01-f6b80528d11b")
+	)
+	(wire
+		(pts
+			(xy 218.44 138.43) (xy 238.76 138.43)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "782f85d2-4421-40f1-8b97-ee7e2dd554f0")
 	)
 	(wire
 		(pts
@@ -2522,16 +2546,6 @@
 			(type default)
 		)
 		(uuid "816b7fc6-fb76-4196-b00b-4f905f4742a8")
-	)
-	(wire
-		(pts
-			(xy 234.95 138.43) (xy 238.76 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "8503f989-214e-4576-9e4b-e12551a3a8f3")
 	)
 	(wire
 		(pts
@@ -2745,23 +2759,13 @@
 	)
 	(polyline
 		(pts
-			(xy 158.75 36.83) (xy 218.44 36.83)
+			(xy 158.75 36.83) (xy 223.52 36.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "c3a3bc05-2a73-4f54-8e24-d30d714424cc")
-	)
-	(wire
-		(pts
-			(xy 234.95 135.89) (xy 234.95 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ce876c64-d1b1-4eb2-a72f-02d68368884a")
 	)
 	(wire
 		(pts
@@ -2815,7 +2819,7 @@
 	)
 	(polyline
 		(pts
-			(xy 218.44 36.83) (xy 218.44 119.38)
+			(xy 223.52 36.83) (xy 223.52 119.38)
 		)
 		(stroke
 			(width 0)
@@ -3028,6 +3032,17 @@
 			(justify left bottom)
 		)
 		(uuid "4aebb803-611e-43d2-b714-0c7ba8bf056d")
+	)
+	(text "Startup Strobe"
+		(exclude_from_sim no)
+		(at 219.202 138.43 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "552f8491-bec2-467b-b9f4-0c67db7cfdfd")
 	)
 	(text "TX2\n"
 		(exclude_from_sim no)

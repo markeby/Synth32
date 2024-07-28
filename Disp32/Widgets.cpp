@@ -79,10 +79,11 @@
     this->Release.Label = lv_label_create (lv_scr_act());
     lv_obj_set_pos (this->Release.Label, xoff, y);
 
-    this->SetAttack  (30);
-    this->SetDecay   (60);
-    this->SetSustain (20);
-    this->SetRelease (80);
+    // Initial positions
+    this->SetAttack  (0);
+    this->SetDecay   (0);
+    this->SetSustain (0);
+    this->SetRelease (0);
     this->Select     (false);
 
     lvgl_port_unlock ();    // Release the mutex

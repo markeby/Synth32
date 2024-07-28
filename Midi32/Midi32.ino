@@ -57,7 +57,7 @@ bool       DebugMidi            = false;
 bool       DebugI2C             = false;
 bool       DebugOsc             = false;
 bool       DebugSynth           = false;
-bool       DebugDisp            = true;
+bool       DebugDisp            = false;
 bool       AnalogDiagEnabled    = false;
 int        AnalogDiagDevice     = 0;
 
@@ -254,7 +254,8 @@ void loop (void)
     if ( SynthActive )
         {
         SynthFront.Loop ();
-        DisplayMessage.PauseLapse ();
+        if ( DisplayMessage.Loop () )
+            SynthFront.DISP32UpdateAll ();
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();

@@ -19,7 +19,7 @@ int        DeltaMicro          = 0;             // micro second interval.
 float      AverageDeltaTime    = 0;
 uint64_t   RunTime             = 0;
 
-bool       DebugInterface      = true;
+bool       DebugInterface      = false;
 bool       DebugGraphics       = false;
 
 //#######################################################################
@@ -64,6 +64,14 @@ void setup (void)
     delay (1500);   // Give time for the graphics subsystem threads to start
 
     printf ("\t>>> System startup complete.\n\n");
+
+    // Trigger Midi side to send all settings
+    pinMode (6, OUTPUT);
+    digitalWrite (6, LOW);
+    delay (RESET_TRIGGER_TIME / 1000);
+    digitalWrite (6, HIGH);
+    delay (50);
+    digitalWrite (6, LOW);
     }
 
 

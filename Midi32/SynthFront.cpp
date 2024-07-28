@@ -516,7 +516,6 @@ void SYNTH_FRONT_C::DISP32UpdateAll ()
     {
     uint8_t zd;
 
-    DisplayMessage.Pause (true);
     for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         DisplayMessage.Selected (z, SelectedEnvelope[z]);
@@ -528,7 +527,6 @@ void SYNTH_FRONT_C::DISP32UpdateAll ()
         DisplayMessage.SustainLevel (z, MidiAdsr[z].SustainLevel);
         }
     DisplayMessage.SawtoothDirection (this->SawToothDirection);
-    DisplayMessage.Pause (false);
     }
 
 //#####################################################################
@@ -588,7 +586,6 @@ void SYNTH_FRONT_C::NoiseColor (uint8_t val)
     I2cDevices.DigitalOut (NoiseColorDev, val);
     I2cDevices.UpdateDigital ();
     }
-
 
 //#######################################################################
 void SYNTH_FRONT_C::SetNoiseFilterMin (uint8_t data)

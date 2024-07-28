@@ -6,6 +6,7 @@
 //#######################################################################
 #define ALLOCATE_DISP_TEXT_REF 1
 
+#include <Arduino.h>
 #include <ESP_Panel_Library.h>
 #include <lvgl.h>
 #include "lvgl_port_v8.h"
@@ -30,7 +31,7 @@ void GRPH_C::Begin ()
     Panel = new ESP_Panel ();
     Panel->init ();
     Panel->begin ();
-    lvgl_port_init (Panel->getLcd (), NULL);
+    lvgl_port_init (Panel->getLcd (), Panel->getTouch());
     this->InitializePage1 ();
     }
 

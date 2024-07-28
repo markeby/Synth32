@@ -44,11 +44,13 @@ extern bool AnalogDiagEnabled;
 #define TXD1        32
 
 //#################################################
-//    I2C bus 1 ports for display messages
+//    Display message parameters and I2C
 //#################################################
-#define MSG_SDA     26
-#define MSG_SCL     25
-#define MSG_ADRS    0x51
+#define MSG_ADRS                0x51
+#define MSG_SCL                 25
+#define MSG_SDA                 26
+#define RESET_STROBE_IO         27
+#define DISPLAY_SETTLE_TIME     200000
 
 //#################################################
 //  Synth I2C interface starting indexes
