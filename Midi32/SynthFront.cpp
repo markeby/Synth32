@@ -93,8 +93,7 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_ma
     UpKey               = 0;
     UpTrigger           = false;
     LastOp              = 0;
-    SetTuning           = 0;
-    InDispReset         = false;
+    SetTuning           = false;
     }
 
 //#######################################################################
@@ -336,6 +335,7 @@ void SYNTH_FRONT_C::StartTuning ()
     {
     if ( SetTuning == false )
         {
+        DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             TuningLevel[z] = 0;
         for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
@@ -512,10 +512,15 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::DISP32UpdateAll ()
+void SYNTH_FRONT_C::DisplayUpdate ()
     {
     uint8_t zd;
 
+    if ( SetTuning )
+        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
+    else
+        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_OSC);
+    delay (200);
     for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         DisplayMessage.Selected (z, SelectedEnvelope[z]);

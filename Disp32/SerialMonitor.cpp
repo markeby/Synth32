@@ -7,6 +7,8 @@
 #include <Arduino.h>
 #include "config.h"
 #include "settings.h"
+#include "ClientI2C.h"
+#include "Graphics.h"
 #include "SerialMonitor.h"
 
 using namespace SERIAL_MONITOR;
@@ -90,9 +92,9 @@ bool MONITOR_C::Save (SMODE m)
     }
 
 //#######################################################################
-void MONITOR_C::InputPrompt (int num, const char* text)
+void MONITOR_C::InputPrompt (const char* text)
     {
-    Serial << num << "\n\n" << text << " >" << InputString;
+    Serial << "\n\n" << text << " >" << InputString;
     }
 
 //#######################################################################
@@ -185,23 +187,27 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case 'S':
                     InputString = Settings.GetSSID ();
-                    InputPrompt (7, "  Enter SSID");
+                    InputPrompt ("  Enter SSID");
                     Mode (INSSID);
+                    break;
+                case 'p':
+                    Serial << "\n\n << Enter single digit page number >";
+                    Mode (PAGE);
                     break;
                 case 'P':
                     InputString = Settings.GetPasswd ();
-                    InputPrompt (8, "  Enter PWD");
+                    InputPrompt ("  Enter PWD");
                     Mode (INPWD);
                     break;
                 case 'C':
-                    InputPrompt (9, "  Cleared preferences.");
+                    InputPrompt ("  Cleared preferences.");
                     Mode (ZAP);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
                 case '0':
-//                    DispFront.SendReset ();
+                    SendTriggerToMidi ();
                     Mode (MENU);
                     break;
                 case 'Z':
@@ -223,6 +229,7 @@ void MONITOR_C::Menu (void)
     DumpTitle ();
     Serial << StateDebug (DebugInterface) << "\t1 - Debug interface        " << endl;
     Serial << StateDebug (DebugGraphics)  << "\t2 - Debug graphics         " << endl;
+    Serial << "\tp - Page selet" << endl;
     Serial << "\ts - Dump process Stats" << endl;
     Serial << "\t0 - Update request" << endl;
     Serial << "\tZ - Test function" << endl;
@@ -260,6 +267,18 @@ void MONITOR_C::TextIn (void)
             Serial << in_char;
             break;
         }
+    }
+
+//#######################################################################
+void MONITOR_C::PageSelect (void)
+    {
+    char in_char = (char)(Serial.read () & 0xFF);
+    Serial << in_char;
+
+    byte z = in_char - '0';
+    if ( (z >= 0) && (z <=9) )
+        Graphics.PageSelect (z);
+    Mode (MENU);
     }
 
 //#######################################################################
@@ -301,6 +320,9 @@ void MONITOR_C::Loop (void)
                 case INSSID:
                 case INPWD:
                     this->TextIn ();
+                    break;
+                case PAGE:
+                    PageSelect ();
                     break;
                 case ZAP:
                     if ( this->PromptZap () )

@@ -11,6 +11,7 @@
 #include "SerialMonitor.h"
 #include "Graphics.h"
 #include "../Common/DispMessages.h"
+#include "ClientI2C.h"
 
 //#######################################################################
 
@@ -65,13 +66,8 @@ void setup (void)
 
     printf ("\t>>> System startup complete.\n\n");
 
-    // Trigger Midi side to send all settings
-    pinMode (6, OUTPUT);
-    digitalWrite (6, LOW);
-    delay (RESET_TRIGGER_TIME / 1000);
-    digitalWrite (6, HIGH);
-    delay (50);
-    digitalWrite (6, LOW);
+    pinMode (MIDI_TRIGGER_PORT, OUTPUT);
+    SendTriggerToMidi ();
     }
 
 

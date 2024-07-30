@@ -16,20 +16,21 @@ namespace DISP_MESSAGE_N
 //######################################
 //  Message length
 //######################################
-#define MESSAGE_LENGTH_CNT  2
-#define MESSAGE_LENGTH_VCA  5
+#define MESSAGE_LENGTH_CNTL     2
+#define MESSAGE_LENGTH_PAGE     3
+#define MESSAGE_LENGTH_OSC      5
 
-#define RESET_TRIGGER_TIME  100000
+#define RESET_TRIGGER_TIME  30000
 
 //######################################
 //  Control bytes
 //######################################
 enum class CMD_C: uint8_t
     {
-    CTRL_VCA    = 0xB0,
-    CRTL_PAGE   = 0xF0,
-    PAUSE       = 0x00,
-    UPDATE      = 0xFF,
+    UPDATE  = 0xB0,
+    PAGE    = 0xF0,
+    PAUSE   = 0x00,
+    GO      = 0xFF,
     };
 
 //######################################
@@ -38,10 +39,10 @@ enum class CMD_C: uint8_t
 #ifdef ALLOCATE_DISP_TEXT
 char* ClassCMD[] =
     {
-    "CONTROL",
-    "CRTL_PAGE",
-    "PAUSE",
     "UPDATE",
+    "PAGE",
+    "PAUSE",
+    "GO",
     "NONE",
     "NONE",
     "NONE",
@@ -116,6 +117,35 @@ char* ClassEFFECT[] =
     "RELEASE_TIME",
     "SUSTAIN_LEVEL",
     "SAWTOOTH_DIRECTION",
+    "NONE",
+    "NONE",
+    "NONE",
+    "NONE",
+    };
+#elif ALLOCATE_DISP_TEXT_REF
+extern char* ClassEFFECT[];
+#endif
+
+//######################################
+// Function/Page select bytes
+//######################################
+enum class PAGE_C: uint8_t
+    {
+    PAGE_OSC = 0,
+    PAGE_FILTER,
+    PAGE_TUNING,
+    NONE,
+    };
+
+//######################################
+// Function/Effects bytes text
+//######################################
+#ifdef ALLOCATE_DISP_TEXT
+char* ClassPAGE[] =
+    {
+    "OSCILLATOR",
+    "FILTER",
+    "TUNING",
     "NONE",
     "NONE",
     "NONE",

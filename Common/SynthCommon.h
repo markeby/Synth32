@@ -21,7 +21,7 @@
 // number of total envelopes to process
 #define ENVELOPE_COUNT      OSC_MIXER_COUNT + FILTER_ANALOG_COUNT
 
-// Detent multiplier for midi
+// Detent multiplier for midi at 10mSec intervals
 #define TIME_MULT           10
 
 // Maximum value from MIDI

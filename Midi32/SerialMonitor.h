@@ -16,7 +16,7 @@ private:
 
     void DumpStats   (void);
     bool Save        (SMODE m);
-    void InputPrompt (int num, const char* text);
+    void InputPrompt (const char* text);
     bool PromptZap   (void);
     void MenuSel     (void);
     void Menu        (void);

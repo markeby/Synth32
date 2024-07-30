@@ -137,6 +137,7 @@
                 <F N="../Common/DispMessages.h"/>
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
+            <F N="ClientI2C.h"/>
             <F N="config.h"/>
             <F N="Debug.h"/>
             <F N="ESP_Panel_Board_Custom.h"/>

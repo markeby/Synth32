@@ -9,11 +9,8 @@ if len (sys.argv) > 1:
 match status:
     case 'UPLOAD':
         winsound.Beep (250, 250)
-        winsound.Beep (250, 250)
         winsound.Beep (520, 400)
     case 'OK':
-        winsound.Beep (250, 250)
-        winsound.Beep (350, 250)
         winsound.Beep (450, 250)
         winsound.Beep (550, 250)
         winsound.Beep (650, 250)

@@ -6,7 +6,7 @@ namespace SERIAL_MONITOR
 class MONITOR_C
     {
 private:
-    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, ZAP };
+    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, PAGE, ZAP };
 
     SMODE  InputMode;
     String InputString;
@@ -14,11 +14,12 @@ private:
     void Mode        (SMODE m);
     void DumpStats   (void);
     bool Save        (SMODE m);
-    void InputPrompt (int num, const char* text);
+    void InputPrompt (const char* text);
     bool PromptZap   (void);
     void MenuSel     (void);
     void Menu        (void);
     void TextIn      (void);
+    void PageSelect  (void);
 
 public:
     MONITOR_C        (void);

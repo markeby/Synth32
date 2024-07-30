@@ -88,7 +88,7 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
             ReleaseTime = time;
             break;
         }
-    DBG ("%s - Time setting > %f uSec", StateLabel[(int)state], time );
+    DBG ("%s - Time setting > %f mSec", StateLabel[(int)state], time );
     }
 
 //#######################################################################
@@ -188,7 +188,7 @@ void ENVELOPE_C::Process (float deltaTime)
             Timer       = 0.0;
             TargetTime  = AttackTime - TIME_THRESHOLD;
             State       = ESTATE::ATTACK;
-            DBG ("Start attact to %f uSec from level %f to %f", TargetTime, Current, Peak);
+            DBG ("Start attact to %f mSec from level %f to %f", TargetTime, Current, Peak);
             return;
             }
         //***************************************
@@ -201,7 +201,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 Timer  += deltaTime;
                 Current  = (Timer / TargetTime) * Peak;
                 Updated = true;
-                DBG ("Timer > %f uSec at level %f", Timer, Current);
+                DBG ("Timer > %f mSec at level %f", Timer, Current);
                 return;
                 }
             Current     = Peak;
@@ -210,7 +210,7 @@ void ENVELOPE_C::Process (float deltaTime)
             State       = ESTATE::DECAY;
             Target      = Peak - Sustain;
             TargetTime  = 0.0;
-            DBG ("Start > %f  uSec from level %f to %f", Timer, Current, Sustain);
+            DBG ("Start > %f  mSec from level %f to %f", Timer, Current, Sustain);
             return;
             }
 
@@ -224,7 +224,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 Timer -= deltaTime;
                 Current = Sustain + ((Timer / DecayTime) * Target);
                 Updated = true;
-                DBG ("Timer > %f uSec at level %f", Timer, Current);
+                DBG ("Timer > %f mSec at level %f", Timer, Current);
                 return;
                 }
             Current = Sustain;
@@ -236,7 +236,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 if ( SustainTime < 0 )
                     { DBG ("Staying at level %f", Current); }
                 else
-                    { DBG ("%f uSec at level %f", Timer, Current); }
+                    { DBG ("%f mSec at level %f", Timer, Current); }
                 }
             return;
             }
@@ -250,12 +250,12 @@ void ENVELOPE_C::Process (float deltaTime)
             if ( Timer > TIME_THRESHOLD )
                 {
                 Timer -= deltaTime;
-                DBG ("Timer > %f uSec at level %f", Timer, Current);
+                DBG ("Timer > %f mSec at level %f", Timer, Current);
                 return;
                 }
             Timer      = ReleaseTime - TIME_THRESHOLD;
             State      = ESTATE::RELEASE;
-            DBG ("Start > %f  uSec from level %f to 0", Timer, Current);
+            DBG ("Start > %f  mSec from level %f to 0", Timer, Current);
             return;
             }
         //***************************************
@@ -269,7 +269,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 Timer  -= deltaTime;
                 Current = (Timer / ReleaseTime) * Sustain;
                 Updated = true;
-                DBG ("Timer > %f uSec at level %f", Timer, Current);
+                DBG ("Timer > %f mSec at level %f", Timer, Current);
                 return;
                 }
             Clear ();          // We got to here so this envelope process in finished.

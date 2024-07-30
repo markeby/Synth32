@@ -34,20 +34,21 @@ static void DataIn (int len)
 
     switch ( len )
         {
-        case MESSAGE_LENGTH_VCA:
+        case MESSAGE_LENGTH_OSC:
             {
             z = msgBuff[4] | (msgBuff[3] << 8);
             switch ( msgBuff[0] )
                 {
-                case (int)DISP_MESSAGE_N::CMD_C::CTRL_VCA:
+                case (int)DISP_MESSAGE_N::CMD_C::UPDATE:
                     DBGI("{VCA} Channel: %s   Effect: %s   Value: %d", ClassADSR[msgBuff[1]], ClassEFFECT[msgBuff[2]], z);
-                    Graphics.UpdatePageVCA (msgBuff[1], msgBuff[2],  z);
+                    Graphics.UpdatePage (msgBuff[1], msgBuff[2],  z);
                     break;
                 default:
                     break;
                 }
             }
-        case MESSAGE_LENGTH_CNT:
+            break;
+        case MESSAGE_LENGTH_CNTL:
             {
             switch ( msgBuff[0] )
                 {
@@ -55,12 +56,30 @@ static void DataIn (int len)
                     DBGI("{CNT} Command: %s", ClassCMD[2]);
                     Graphics.Pause (true);
                     break;
-                case (int)DISP_MESSAGE_N::CMD_C::UPDATE:
+                case (int)DISP_MESSAGE_N::CMD_C::GO:
                     DBGI("{CNT} Command: %s", ClassCMD[3]);
                     Graphics.Pause (false);
                     break;
+                default:
+                    break;
                 }
             }
+            break;
+        case MESSAGE_LENGTH_PAGE:
+            {
+            switch ( msgBuff[0] )
+                {
+                case (int)DISP_MESSAGE_N::CMD_C::PAGE:
+                    DBGI("{PAGE} Command: %s", ClassPAGE[msgBuff[2]]);
+                    Graphics.PageSelect (msgBuff[2]);
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
+        default:
+            break;
         }
     }
 

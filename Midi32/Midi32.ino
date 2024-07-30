@@ -180,7 +180,7 @@ void setup (void)
 
         delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect
 
-        SynthFront.DISP32UpdateAll ();
+        SynthFront.DisplayUpdate ();
 
         // initial test settings
         DisplayMessage.Pause (true);
@@ -255,7 +255,7 @@ void loop (void)
         {
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
-            SynthFront.DISP32UpdateAll ();
+            SynthFront.DisplayUpdate ();
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();

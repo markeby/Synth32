@@ -16,7 +16,7 @@ PROJECT := Disp32.ino
 SHARED := ../Common
 
 # Shared files directory
-INCLUDES := config.h SerialMonitor.h Settings.h Graphics.h Widgets.h \
+INCLUDES := config.h SerialMonitor.h Settings.h Graphics.h Widgets.h ClientI2C.h\
             ESP_Panel_Board_Custom.h ESP_Panel_Board_Supported.h ESP_Panel_Conf.h lvgl_port_v8.h \
 	    Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files

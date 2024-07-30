@@ -13,127 +13,173 @@
 #include "Widgets.h"
 
 //#######################################################################
-    ADSR_WIDGET_C::ADSR_WIDGET_C (const char* s, short x, short y)
+    ADSR_WIDGET_C::ADSR_WIDGET_C (lv_obj_t* base, const char* s, short x, short y)
     {
-    lv_obj_t*  label;
-    lv_style_t style;
-    short      xoff = x + 64;
+    lv_obj_t * panel = lv_obj_create (base);
+    lv_obj_set_size (panel, 176, LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_top (panel, 1, 0);
+    lv_obj_set_style_pad_left (panel, 5, 0);
+    lv_obj_set_pos (panel, x, y);
 
-    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+    lv_style_init (&LabelStyle);
+    lv_style_set_text_font (&LabelStyle, &lv_font_montserrat_18);
+    Label  = lv_label_create (panel);
+    lv_obj_set_align (Label, LV_ALIGN_TOP_MID);
+    lv_obj_set_pos (Label, 3, 0);
+    lv_label_set_text (Label, s);
+    lv_obj_add_style (Label, &LabelStyle, 0);
 
-    lv_style_init (&style);
-    lv_style_set_text_font (&style, &lv_font_montserrat_18); // <--- you have to enable other font sizes in menuconfig
-    label  = lv_label_create (lv_scr_act());
-    lv_obj_add_style (label, &style, 0);
-    lv_obj_set_pos (label, x + (70 - (strlen (s) * 5)), y);
-    lv_label_set_text (label, s);
-
-    this->Meter = lv_meter_create (lv_scr_act());
-    y += 20;
-    lv_obj_set_pos (this->Meter, x, y);
-    lv_obj_set_size (this->Meter, 140, 140);
+    Meter = lv_meter_create (panel);
+    lv_obj_set_align (Meter, LV_ALIGN_TOP_MID);
+    lv_obj_set_pos (Meter, 0, 20);
+    lv_obj_set_size (Meter, 140, 140);
 
     /*Remove the circle from the middle*/
     lv_obj_remove_style (Meter, NULL, LV_PART_INDICATOR);
 
-    lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
-    lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
+    lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
+    lv_meter_set_scale_ticks (Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
-    this->Attack.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 22);
-    this->Decay.Gauge   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 14);
-    this->Sustain.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_PURPLE), 6);
-    this->Release.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), -2);
+    Attack.Gauge  = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
+    Decay.Gauge   = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 12);
+    Sustain.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_PURPLE), 4);
+    Release.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), -4);
 
-    this->Led  = lv_led_create (lv_scr_act ());
-    lv_obj_align (this->Led, LV_ALIGN_TOP_LEFT, x + 58, y + 58);
+    Led  = lv_led_create (Meter);
+    lv_obj_align (Led, LV_ALIGN_CENTER, 0, 0);
 
-    label = lv_label_create (lv_scr_act());
-    y += 141;
-    lv_obj_set_pos (label, x, y);
-    lv_label_set_text (label, "#008000   Attack#:");
-    lv_label_set_recolor (label, true);
-    this->Attack.Label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (this->Attack.Label, xoff, y);
+    y = 162;
+    Attack.Label = lv_label_create (panel);
+    lv_obj_set_align (Attack.Label, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Attack.Label, 0, y);
+    lv_label_set_text (Attack.Label, " Attack:");
+    lv_style_init (&Attack.Style);
+    lv_style_set_text_font (&Attack.Style, &lv_font_montserrat_14);
+    lv_style_set_text_color(&Attack.Style, lv_color_hex(0x008000));
+    lv_obj_add_style (Attack.Label, &Attack.Style, 0);
 
-    y += 12;
-    label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (label, x, y);
-    lv_label_set_text (label, "#0000ff   Decay#:");
-    lv_label_set_recolor (label, true);
-    this->Decay.Label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (this->Decay.Label, xoff, y);
+    Attack.Value = lv_label_create (panel);
+    lv_obj_set_align (Attack.Value, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Attack.Value, 68, y);
+    lv_obj_add_style (Attack.Value, &Attack.Style, 0);
 
-    y += 12;
-    label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (label, x, y);
-    lv_label_set_text (label, "#800080 Sustain#:");
-    lv_label_set_recolor (label, true);
-    this->Sustain.Label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (this->Sustain.Label, xoff, y);
+    Attack.Unit = lv_label_create (panel);
+    lv_obj_set_align (Attack.Unit, LV_ALIGN_TOP_RIGHT);
+    lv_obj_set_pos (Attack.Unit, 0, y);
+    lv_label_set_text (Attack.Unit, "mSec");
+    lv_obj_add_style (Attack.Unit, &Attack.Style, 0);
 
-    y += 12;
-    label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (label, x, y);
-    lv_label_set_text (label, "#ff0000 Release#:");
-    lv_label_set_recolor (label, true);
-    this->Release.Label = lv_label_create (lv_scr_act());
-    lv_obj_set_pos (this->Release.Label, xoff, y);
+    y += 16;
+    Decay.Label = lv_label_create (panel);
+    lv_obj_set_align (Decay.Label, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Decay.Label, 0, y);
+    lv_label_set_text (Decay.Label, "  Decay:");
+    lv_style_init (&Decay.Style);
+    lv_style_set_text_font (&Decay.Style, &lv_font_montserrat_14);
+    lv_style_set_text_color(&Decay.Style, lv_color_hex(0x0000ff));
+    lv_obj_add_style (Decay.Label, &Decay.Style, 0);
+
+    Decay.Value = lv_label_create (panel);
+    lv_obj_set_align (Decay.Value, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Decay.Value, 68, y);
+    lv_obj_add_style (Decay.Value, &Decay.Style, 0);
+
+    Decay.Unit = lv_label_create (panel);
+    lv_obj_set_align (Decay.Unit, LV_ALIGN_TOP_RIGHT);
+    lv_obj_set_pos (Decay.Unit, 0, y);
+    lv_label_set_text (Decay.Unit, "mSec");
+    lv_obj_add_style (Decay.Unit, &Decay.Style, 0);
+
+    y += 16;
+    Sustain.Label = lv_label_create (panel);
+    lv_obj_set_align (Sustain.Label, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Sustain.Label, 0, y);
+    lv_label_set_text (Sustain.Label, "Sustain:");
+    lv_style_init (&Sustain.Style);
+    lv_style_set_text_font (&Sustain.Style, &lv_font_montserrat_14);
+    lv_style_set_text_color(&Sustain.Style, lv_color_hex(0x800080));
+    lv_obj_add_style (Sustain.Label, &Sustain.Style, 0);
+
+    Sustain.Value = lv_label_create (panel);
+    lv_obj_set_align (Sustain.Value, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Sustain.Value, 68, y);
+    lv_obj_add_style (Sustain.Value, &Sustain.Style, 0);
+
+    Sustain.Unit = lv_label_create (panel);
+    lv_obj_set_align (Sustain.Unit, LV_ALIGN_TOP_RIGHT);
+    lv_obj_set_pos (Sustain.Unit, 0, y);
+    lv_label_set_text (Sustain.Unit, "mSec");
+    lv_obj_add_style (Sustain.Unit, &Sustain.Style, 0);
+
+    y += 16;
+    Release.Label = lv_label_create (panel);
+    lv_obj_set_align (Release.Label, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Release.Label, 0, y);
+    lv_label_set_text (Release.Label, "Release:");
+    lv_style_init (&Release.Style);
+    lv_style_set_text_font (&Release.Style, &lv_font_montserrat_14);
+    lv_style_set_text_color(&Release.Style, lv_color_hex(0xff0000));
+    lv_obj_add_style (Release.Label, &Release.Style, 0);
+
+    Release.Value = lv_label_create (panel);
+    lv_obj_set_align (Release.Value, LV_ALIGN_TOP_LEFT);
+    lv_obj_set_pos (Release.Value, 68, y);
+    lv_obj_add_style (Release.Value, &Release.Style, 0);
+
+    Release.Unit = lv_label_create (panel);
+    lv_obj_set_align (Release.Unit, LV_ALIGN_TOP_RIGHT);
+    lv_obj_set_pos (Release.Unit, 0, y);
+    lv_label_set_text (Release.Unit, "mSec");
+    lv_obj_add_style (Release.Unit, &Release.Style, 0);
 
     // Initial positions
-    this->SetAttack  (0);
-    this->SetDecay   (0);
-    this->SetSustain (0);
-    this->SetRelease (0);
-    this->Select     (false);
-
-    lvgl_port_unlock ();    // Release the mutex
+    SetAttack  (0);
+    SetDecay   (0);
+    SetSustain (0);
+    SetRelease (0);
+    Select     (false);
     }
 
+//#######################################################################
 void ADSR_WIDGET_C::Select (bool sel)
     {
-//    lvgl_port_lock (-1);
     if ( sel )
         {
-        lv_led_set_color (this->Led, lv_palette_main (LV_PALETTE_RED));
-        lv_led_on (this->Led);
+        lv_led_set_color (Led, lv_palette_main (LV_PALETTE_RED));
+        lv_led_on (Led);
         }
     else
         {
-        lv_led_set_color (this->Led,  lv_color_white());
-        lv_led_on (this->Led);
+        lv_led_set_color (Led,  lv_color_white());
+        lv_led_on (Led);
         }
-//    lvgl_port_unlock ();
     }
 
+//#######################################################################
 void ADSR_WIDGET_C::SetAttack (int val)
     {
-//    lvgl_port_lock (-1);
-    lv_meter_set_indicator_end_value (this->Meter, this->Attack.Gauge, val);
-    lv_label_set_text_fmt (this->Attack.Label, "%d", val);
-//    lvgl_port_unlock ();
+    lv_meter_set_indicator_end_value (Meter, Attack.Gauge, val);
+    lv_label_set_text_fmt (Attack.Value, "%d", val * TIME_MULT);
     }
 
+//#######################################################################
 void ADSR_WIDGET_C::SetDecay (int val)
     {
-//    lvgl_port_lock (-1);
-    lv_meter_set_indicator_end_value (this->Meter, this->Decay.Gauge, val);
-    lv_label_set_text_fmt (this->Decay.Label, "%d", val);
-//    lvgl_port_unlock ();
+    lv_meter_set_indicator_end_value (Meter, Decay.Gauge, val);
+    lv_label_set_text_fmt (Decay.Value, "%d", val * TIME_MULT);
     }
 
+//#######################################################################
 void ADSR_WIDGET_C::SetSustain (int val)
     {
-//    lvgl_port_lock (-1);
-    lv_meter_set_indicator_end_value (this->Meter, this->Sustain.Gauge, val);
-    lv_label_set_text_fmt (this->Sustain.Label, "%d", val);
-//    lvgl_port_unlock ();
+    lv_meter_set_indicator_end_value (Meter, Sustain.Gauge, val);
+    lv_label_set_text_fmt (Sustain.Value, "%d", val * TIME_MULT);
     }
 
+//#######################################################################
 void ADSR_WIDGET_C::SetRelease (int val)
     {
-//    lvgl_port_lock (-1);
-    lv_meter_set_indicator_end_value (this->Meter, this->Release.Gauge, val);
-    lv_label_set_text_fmt (this->Release.Label, "%d", val);
-//    lvgl_port_unlock ();
+    lv_meter_set_indicator_end_value (Meter, Release.Gauge, val);
+    lv_label_set_text_fmt (Release.Value, "%d", val * TIME_MULT);
     }
 

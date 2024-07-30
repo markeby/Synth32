@@ -29,6 +29,7 @@ public:
           I2C_MESSAGE_C     (void);
     void  Begin             (uint8_t display, uint8_t sda, uint8_t scl);
     void  Pause             (bool state);
+    void  Page              (DISP_MESSAGE_N::PAGE_C page);
     void  Selected          (uint8_t channel, bool select);
     void  AttackTime        (uint8_t channel, uint16_t value);
     void  MaxLevel          (uint8_t channel, uint16_t value);
@@ -39,7 +40,8 @@ public:
     void  SelectADSR        (uint8_t channel, bool select);
     void  SawtoothDirection (bool select);
 
-    void  Throttle (void)
+//#################################################
+    inline void Throttle (void)
         {
         if ( !Paused )
             {
@@ -49,7 +51,8 @@ public:
          this->LastTime = RunTime;
         }
 
-    bool  Loop (void)
+//#################################################
+    inline bool Loop (void)
         {
         if (  this->Paused )
             {
@@ -76,6 +79,25 @@ public:
                 this->ResetStart = RunTime;
             }
         }
+
+//#################################################
+    inline void PageOsc (void)
+        {
+        this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_OSC);
+        }
+
+//#################################################
+    inline void PageTuning (void)
+        {
+        this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
+        }
+
+//#################################################
+    inline void PageFilter (void)
+        {
+        this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_FILTER);
+        }
+
     };
 
 extern I2C_MESSAGE_C DisplayMessage;

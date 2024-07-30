@@ -32,33 +32,87 @@ void GRPH_C::Begin ()
     Panel->init ();
     Panel->begin ();
     lvgl_port_init (Panel->getLcd (), Panel->getTouch());
-    this->InitializePage1 ();
+
+//    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+    Pages = lv_tabview_create( lv_scr_act(), LV_DIR_LEFT, 0);
+
+    PageOsc = lv_tabview_add_tab (Pages, "");
+    PageFilter = lv_tabview_add_tab (Pages, "");
+    PageTuning = lv_tabview_add_tab( Pages, "");
+
+    InitPageOsc (PageOsc);
+    InitPageFilter (PageFilter);
+    InitPageTuning (PageTuning);
+
+//    lvgl_port_unlock ();    // Release the mutex
+
+    PageSelect (0);
     }
 
 //#######################################################################
-void GRPH_C::InitializePage1 ()
+void GRPH_C::InitPageOsc (lv_obj_t* base)
     {
-    int x = 8;
+    int x = 0;
     int y = 0;
+
+//    lvgl_port_lock (-1);
+//    lv_obj_set_flex_flow(base, LV_FLEX_FLOW_ROW_WRAP);
+    lv_obj_set_style_pad_top (base, 0, 0);
+    lv_obj_set_style_pad_left (base, 0, 0);
+    lv_obj_set_style_pad_bottom (base, 0, 0);
+    lv_obj_set_style_pad_right (base, 0, 0);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        MeterADSR[z] = new ADSR_WIDGET_C (ClassADSR[z], x, y);
-        x += 160;
+        MeterADSR[z] = new ADSR_WIDGET_C(base, ClassADSR[z], x, y);
+        x += 155;
         }
+//    lvgl_port_unlock ();
+    }
+
+
+//#######################################################################
+void GRPH_C::InitPageFilter (lv_obj_t* base)
+    {
+
+
+
+    }
+
+//#######################################################################
+void GRPH_C::InitPageTuning (lv_obj_t* base)
+    {
+    Tuningfont = &lv_font_montserrat_48;
+
+    lv_style_init (&TuningStyle);
+    lv_style_set_text_font (&TuningStyle, Tuningfont);
+    lv_style_set_text_color(&TuningStyle, lv_color_hex(0xF00000));
+
+    TuningTitle = lv_label_create(base);
+    lv_obj_set_pos (TuningTitle, 180, 180);
+    lv_label_set_text(TuningTitle, "TUNING MODE");
+    lv_obj_add_style(TuningTitle, &TuningStyle, 0);
     }
 
 //#######################################################################
 void GRPH_C::Pause (bool state)
     {
     if ( state )
-        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+//        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+        lvgl_port_unlock ();    // Release the mutex
     else
         lvgl_port_unlock ();    // Release the mutex
     }
 
 //#######################################################################
-void GRPH_C::UpdatePageVCA (byte ch, byte effect, short value)
+void GRPH_C::PageSelect (byte page)
+    {
+    lv_tabview_set_act (Pages, page, LV_ANIM_ON);
+//    lv_tabview_set_act (Pages, page, LV_ANIM_OFF);
+    }
+
+//#######################################################################
+void GRPH_C::UpdatePage (byte ch, byte effect, short value)
     {
     switch ( (EFFECT_C)effect )
         {

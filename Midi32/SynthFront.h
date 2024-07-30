@@ -71,9 +71,6 @@ private:
     uint16_t              LastOp;
     int                   NoiseColorDev;
     bool                  SelectedEnvelope[ENVELOPE_COUNT];
-    bool                  SetTuning;
-    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
-    bool                  InDispReset;
     uint8_t               NoiseFilterSetting;     // 0 - 3
     uint64_t              DispMessageTimer;
     bool                  SawToothDirection;
@@ -82,7 +79,9 @@ private:
     MIDI_SWITCH_MAP*      SwitchMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
     SINEWAVE_C            SineWave;
+    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  TuningOn[CHAN_COUNT];
+    bool                  SetTuning;
 
     typedef struct
         {
@@ -123,32 +122,32 @@ public:
     void  SetSustainLevel    (uint8_t ch, uint8_t data);
     void  SetSustainTime     (uint8_t data);
     void  SetReleaseTime     (uint8_t data);
-    void  DISP32UpdateAll    (void);
     void  NoiseFilter        (uint8_t bit, bool state);
     void  NoiseColor         (uint8_t val);
     void  SetNoiseFilterMin  (uint8_t data);
     void  SetNoiseFilterMax  (uint8_t data);
+    void  DisplayUpdate      (void);
 
     //#######################################################################
     inline bool IsInTuning (void)
         {
-        return (SetTuning);
+        return (this->SetTuning);
         }
 
     //#######################################################################
-    inline void  KeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
+    inline void KeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
         {
-        DownKey      = key;
-        DownVelocity = velocity;
-        DownTrigger  = true;
+        this->DownKey      = key;
+        this->DownVelocity = velocity;
+        this->DownTrigger  = true;
         }
 
     //#######################################################################
-    inline void  KeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
+    inline void KeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
         {
-        UpKey      = key;
-        UpVelocity = velocity;
-        UpTrigger  = true;
+        this->UpKey      = key;
+        this->UpVelocity = velocity;
+        this->UpTrigger  = true;
         }
     };
 

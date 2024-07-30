@@ -26,21 +26,10 @@ extern bool DebugInterface;
 extern bool DebugGraphics;
 
 //#################################################
-//    Serial 1 Midi32->Disp32 communications
-//#################################################
-#define RXDM1    15  //12
-#define TXDM1    16  //13
-
-//#################################################
 //   Global system variables
 //#################################################
 extern float    DeltaTime;
 extern uint64_t RunTime;
 extern float    AverageDeltaTime;
 extern int      DeltaMicro;
-
-//#################################################
-//   Global system functions
-//#################################################
-void  StartI2C  (uint8_t device_addr);     // Set listening addresss and start listening
 

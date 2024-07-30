@@ -44,18 +44,32 @@ void I2C_MESSAGE_C::SendComplete (byte length)
     }
 
 //###################################################################
+void I2C_MESSAGE_C::Page (DISP_MESSAGE_N::PAGE_C page)
+    {
+    if ( this->Ready )
+        {
+        Pause (true);
+        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::PAGE;
+        this->SendBuffer[1] = 0;
+        this->SendBuffer[2] = (uint8_t)page;
+        SendComplete (MESSAGE_LENGTH_PAGE);
+        Pause (false);
+        }
+    }
+
+//###################################################################
 void I2C_MESSAGE_C::SendVCA (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
     {
     if ( this->Ready )
         {
         this->Throttle ();
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::CTRL_VCA;
+        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::UPDATE;
         this->SendBuffer[1] = channel;
         this->SendBuffer[2] = (uint8_t)effect;
         this->SendBuffer[3] = (uint8_t)(value >> 8);
         this->SendBuffer[4] = (uint8_t)(value & 0x00FF);
         DBGM ("{VCA-1} channel: %d   effect: %d   Value: %d", this->SendBuffer[1], this->SendBuffer[2], value);
-        this->SendComplete (MESSAGE_LENGTH_VCA);
+        this->SendComplete (MESSAGE_LENGTH_OSC);
         }
     }
 
@@ -65,10 +79,10 @@ void I2C_MESSAGE_C::Pause (bool state)
     if ( state )
         this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::PAUSE;
     else
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::UPDATE;
+        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::GO;
     this->SendBuffer[1] = 0;
     DBGM ("{CMD} command: %d\n", this->SendBuffer[0]);
-    this->SendComplete (MESSAGE_LENGTH_CNT);
+    this->SendComplete (MESSAGE_LENGTH_CNTL);
     }
 
 //#####################################################################

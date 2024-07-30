@@ -84,9 +84,9 @@ bool MONITOR_C::Save (SMODE m)
     }
 
 //#######################################################################
-void MONITOR_C::InputPrompt (int num, const char* text)
+void MONITOR_C::InputPrompt (const char* text)
     {
-    Serial << num << "\n\n" << text << " >" << this->InputString;
+    Serial << "\n\n" << text << " >" << this->InputString;
     }
 
 //#######################################################################
@@ -204,22 +204,22 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (MENU);
                     break;
                 case '5':
-                    DebugSynth = !DebugSynth;
+                    DebugDisp = !DebugDisp;
                     Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
                 case 'S':
                     this->InputString = Settings.GetSSID ();
-                    this->InputPrompt (7, "  Enter SSID");
+                    this->InputPrompt ("  Enter SSID");
                     this->Mode (INSSID);
                     break;
                 case 'P':
                     this->InputString = Settings.GetPasswd ();
-                    this->InputPrompt (8, "  Enter PWD");
+                    this->InputPrompt ("  Enter PWD");
                     this->Mode (INPWD);
                     break;
                 case 'C':
-                    this->InputPrompt (9, "  Cleared preferences.");
+                    this->InputPrompt ("  Cleared preferences.");
                     this->Mode (ZAP);
                     break;
                 case 'q':
