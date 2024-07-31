@@ -22,7 +22,16 @@ Any midi controller will work.  I am using an inexpensive Smason Graphite 49.  I
 
 The design is for 6 simultanous notes whether they be all of the same effect or split the keyboard to have dual effects but still be able to play cords.
 
-This project is been on going for over a year now and will likely be a few more years of effort.
+This project has been on going for over a year now and will likely be a few more years of effort.
 
-I have full schematics included as well as some of the experimental work I have done.  This is an unconventional modular design so as to maintain complete digital control. 
+I have full schematics included as well as some of the experimental work I have done.  This is an unconventio02222nal modular design so as to maintain complete digital control. 
+
+The tools used are:
+
+- Visual SlickEdit IDE - I have used this for over 30 years and have tried others but found them either missing features or a colossal amount of plugins to figure out.
+- Arduino-cli 
+- Gnu make for Windows (could be used in Linux as well)
+- Arduino IDE - I only am using the loader tool for OTA updates of the primary processor
+- SimplySerial - The best serial terminal software I have ever seen for this application debugging.  Thanks Edward Wright (fasteddy516).
+
 
