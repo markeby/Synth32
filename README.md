@@ -1,42 +1,28 @@
-# esp32_usb_midi
-ESP32 USB MIDI add-on for arduino synthesizer projects
+# Synth32
 
-- video presentation of the initial state of this project https://youtu.be/Mt3rT-SVZww
-- little quick start guide to get started with arduino synthesizer / music projects: https://youtu.be/ZNxGCB-d68g
+This project was begun as a darivative of much simpler projects.
 
-This project has the purpose to combine different MIDI interfaces, especially USB-MIDI
-You can forward MIDI from USB to DIN for example.
-Also the ADC readings can be used to generate control messages (for DIY MIDI controller)
+The goal is a psudo polyphonic analog and/or multi-timbral synthesizer that is digitally controlled.  
 
----
-The project has been tested on
-- ESP32 DEVKIT - DOIT (actually only supporting esp32\1.0.4 library)
+Utilizing components from the following manufacturers:
 
-# ESP32 DEVKIT - DOIT
-To compile set the board to: DOIT ESP32 DEVKIT V1
-Ensure that "#define ESP32_AUDIO_KIT" has been removed from config.h
+- Espressif 
+  - ESP32 processors
+- Sound Semiconductor, FatKeys™
+  - VCO, VCF, VCA
+- Adafruit
+  - D/A Converter modules, I/O Expanders
+- HiLetgo
+  - 2.0 ADK Mini USB Host Shield
+- Waveshare
+  - Display module
 
-## MIDI via USB
-MIDI can be received via USB activating the MACRO "MIDI_VIA_USB_ENABLED" in config.h.
+The core of the system is an ESP-WROOM-32 ESP32 ESP-32S development board with a  USB development shield to interface a midi keyboard.
+Any midi controller will work.  I am using an inexpensive Smason Graphite 49.  I intend to add bluetooth and serial midi inputs as well.
 
-Default PIN Mapping is:
-- CS: IO5
-- INT: IO17 (not used)
-- SCK: IO18
-- MISO: IO19
-- MOSI: IO23
+The design is for 6 simultanous notes whether they be all of the same effect or split the keyboard to have dual effects but still be able to play cords.
 
-### MIDI USB Mapping
-A MIDI USB mapping can be setup in z_config.ino
-This allows to forward incoming messages to different outputs or an internal application running on the ESP32.
+This project is been on going for over a year now and will likely be a few more years of effort.
 
-## Using an ADC multiplexer
-Connection of the ADC multiplexer:
-- EN -> Ground
-- S0 -> IO33
-- S1 -> IO32
-- S2 -> IO13
-- S3 -> Ground
-- Sig -> IO12
-Here is the related video: https://youtu.be/l8GrNxElRkc
+I have full schematics included as well as some of the experimental work I have done.  This is an unconventional modular design so as to maintain complete digital control. 
 
