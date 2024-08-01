@@ -33,20 +33,20 @@ void GRPH_C::Begin ()
     Panel->begin ();
     lvgl_port_init (Panel->getLcd (), Panel->getTouch());
 
-//    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
-    Pages = lv_tabview_create( lv_scr_act(), LV_DIR_LEFT, 0);
+    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+    Pages = lv_tabview_create ( lv_scr_act(), LV_DIR_LEFT, 0);
 
     PageOsc = lv_tabview_add_tab (Pages, "");
     PageFilter = lv_tabview_add_tab (Pages, "");
-    PageTuning = lv_tabview_add_tab( Pages, "");
+    PageTuning = lv_tabview_add_tab (Pages, "");
 
-    InitPageOsc (PageOsc);
+    InitPageOsc    (PageOsc);
     InitPageFilter (PageFilter);
     InitPageTuning (PageTuning);
 
-//    lvgl_port_unlock ();    // Release the mutex
-
     PageSelect (0);
+
+    lvgl_port_unlock ();    // Release the mutex
     }
 
 //#######################################################################
@@ -55,19 +55,27 @@ void GRPH_C::InitPageOsc (lv_obj_t* base)
     int x = 0;
     int y = 0;
 
-//    lvgl_port_lock (-1);
-//    lv_obj_set_flex_flow(base, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_style_pad_top (base, 0, 0);
-    lv_obj_set_style_pad_left (base, 0, 0);
+    lv_obj_set_style_pad_left (base, 3, 0);
     lv_obj_set_style_pad_bottom (base, 0, 0);
-    lv_obj_set_style_pad_right (base, 0, 0);
+    lv_obj_set_style_pad_right (base, 3, 0);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        MeterADSR[z] = new ADSR_WIDGET_C(base, ClassADSR[z], x, y);
+        lv_obj_t * panel = lv_obj_create (base);
+        lv_obj_set_size (panel, 161, 450);
+        lv_obj_set_pos (panel, x, y);
+        lv_obj_set_style_pad_top (panel, 1, 0);
+        lv_obj_set_style_pad_left (panel, 2, 0);
+        lv_obj_set_style_pad_right (panel, 2, 0);
+
+        TitleControl[z] = new TITLE_WIDGET_C(panel, ClassADSR[z]);
+        MeterADSR[z]    = new ADSR_WIDGET_C(panel, ClassADSR[z], 0, 18);
+        SustainLevel[z] = new LEVEL_WIDGET_C(panel, "SUSTAIN", 0, 228, LV_PALETTE_ORANGE);
+        MaxLevel[z]     = new LEVEL_WIDGET_C(panel, "MAX", 73, 228, LV_PALETTE_INDIGO);
+
         x += 155;
         }
-//    lvgl_port_unlock ();
     }
 
 
@@ -98,8 +106,7 @@ void GRPH_C::InitPageTuning (lv_obj_t* base)
 void GRPH_C::Pause (bool state)
     {
     if ( state )
-//        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
-        lvgl_port_unlock ();    // Release the mutex
+        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
     else
         lvgl_port_unlock ();    // Release the mutex
     }
@@ -122,6 +129,7 @@ void GRPH_C::UpdatePage (byte ch, byte effect, short value)
         case EFFECT_C::BASE_VOL:
             break;
         case EFFECT_C::MAX_LEVEL:
+            MaxLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::ATTACK_TIME:
             MeterADSR[ch]->SetAttack (value);
@@ -136,6 +144,7 @@ void GRPH_C::UpdatePage (byte ch, byte effect, short value)
             MeterADSR[ch]->SetRelease (value);
             break;
         case EFFECT_C::SUSTAIN_LEVEL:
+            SustainLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::SAWTOOTH_DIRECTION:
             break;

@@ -28,11 +28,13 @@ I have full schematics included as well as some of the experimental work I have 
 
 The tools used are:
 
+- KiCad
 - Visual SlickEdit IDE - I have used this for over 20 years and have tried others but found them either missing features or a colossal amount of plugins to figure out.
 - Arduino-cli 
 - Gnu make for Windows (could be used in Linux as well)
 - Arduino IDE - I only am using the loader tool for OTA updates of the primary processor
 - SimplySerial - The best serial terminal software I have seen for this application debugging.  
   Thanks Edward Wright (fasteddy516).
+
 
 

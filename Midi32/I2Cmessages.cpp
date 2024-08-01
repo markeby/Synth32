@@ -62,7 +62,6 @@ void I2C_MESSAGE_C::SendVCA (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, u
     {
     if ( this->Ready )
         {
-        this->Throttle ();
         this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::UPDATE;
         this->SendBuffer[1] = channel;
         this->SendBuffer[2] = (uint8_t)effect;

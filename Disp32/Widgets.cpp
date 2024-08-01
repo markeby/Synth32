@@ -13,29 +13,26 @@
 #include "Widgets.h"
 
 //#######################################################################
+//#######################################################################
+    TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s)
+    {
+    lv_style_init (&Style);
+    lv_style_set_text_font (&Style, &lv_font_montserrat_18);
+    Label  = lv_label_create (base);
+    lv_obj_align (Label, LV_ALIGN_TOP_MID, 3, 0);
+    lv_label_set_text (Label, s);
+    lv_obj_add_style (Label, &Style, 0);
+    }
+
+//#######################################################################
+//#######################################################################
     ADSR_WIDGET_C::ADSR_WIDGET_C (lv_obj_t* base, const char* s, short x, short y)
     {
-    lv_obj_t * panel = lv_obj_create (base);
-    lv_obj_set_size (panel, 176, LV_SIZE_CONTENT);
-    lv_obj_set_style_pad_top (panel, 1, 0);
-    lv_obj_set_style_pad_left (panel, 5, 0);
-    lv_obj_set_pos (panel, x, y);
-
-    lv_style_init (&LabelStyle);
-    lv_style_set_text_font (&LabelStyle, &lv_font_montserrat_18);
-    Label  = lv_label_create (panel);
-    lv_obj_set_align (Label, LV_ALIGN_TOP_MID);
-    lv_obj_set_pos (Label, 3, 0);
-    lv_label_set_text (Label, s);
-    lv_obj_add_style (Label, &LabelStyle, 0);
-
-    Meter = lv_meter_create (panel);
-    lv_obj_set_align (Meter, LV_ALIGN_TOP_MID);
-    lv_obj_set_pos (Meter, 0, 20);
+    Meter = lv_meter_create (base);
+    lv_obj_align (Meter, LV_ALIGN_TOP_MID, x, y);
     lv_obj_set_size (Meter, 140, 140);
 
-    /*Remove the circle from the middle*/
-    lv_obj_remove_style (Meter, NULL, LV_PART_INDICATOR);
+    lv_obj_remove_style (Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
     lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
     lv_meter_set_scale_ticks (Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
@@ -49,95 +46,41 @@
     lv_obj_align (Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 162;
-    Attack.Label = lv_label_create (panel);
-    lv_obj_set_align (Attack.Label, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Attack.Label, 0, y);
-    lv_label_set_text (Attack.Label, " Attack:");
-    lv_style_init (&Attack.Style);
-    lv_style_set_text_font (&Attack.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color(&Attack.Style, lv_color_hex(0x008000));
-    lv_obj_add_style (Attack.Label, &Attack.Style, 0);
-
-    Attack.Value = lv_label_create (panel);
-    lv_obj_set_align (Attack.Value, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Attack.Value, 68, y);
-    lv_obj_add_style (Attack.Value, &Attack.Style, 0);
-
-    Attack.Unit = lv_label_create (panel);
-    lv_obj_set_align (Attack.Unit, LV_ALIGN_TOP_RIGHT);
-    lv_obj_set_pos (Attack.Unit, 0, y);
-    lv_label_set_text (Attack.Unit, "mSec");
-    lv_obj_add_style (Attack.Unit, &Attack.Style, 0);
-
+    InfoLine (base, Attack, " Attack:", y, 0x008000);
     y += 16;
-    Decay.Label = lv_label_create (panel);
-    lv_obj_set_align (Decay.Label, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Decay.Label, 0, y);
-    lv_label_set_text (Decay.Label, "  Decay:");
-    lv_style_init (&Decay.Style);
-    lv_style_set_text_font (&Decay.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color(&Decay.Style, lv_color_hex(0x0000ff));
-    lv_obj_add_style (Decay.Label, &Decay.Style, 0);
-
-    Decay.Value = lv_label_create (panel);
-    lv_obj_set_align (Decay.Value, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Decay.Value, 68, y);
-    lv_obj_add_style (Decay.Value, &Decay.Style, 0);
-
-    Decay.Unit = lv_label_create (panel);
-    lv_obj_set_align (Decay.Unit, LV_ALIGN_TOP_RIGHT);
-    lv_obj_set_pos (Decay.Unit, 0, y);
-    lv_label_set_text (Decay.Unit, "mSec");
-    lv_obj_add_style (Decay.Unit, &Decay.Style, 0);
-
+    InfoLine (base, Decay, "  Decay:", y, 0x0000ff);
     y += 16;
-    Sustain.Label = lv_label_create (panel);
-    lv_obj_set_align (Sustain.Label, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Sustain.Label, 0, y);
-    lv_label_set_text (Sustain.Label, "Sustain:");
-    lv_style_init (&Sustain.Style);
-    lv_style_set_text_font (&Sustain.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color(&Sustain.Style, lv_color_hex(0x800080));
-    lv_obj_add_style (Sustain.Label, &Sustain.Style, 0);
-
-    Sustain.Value = lv_label_create (panel);
-    lv_obj_set_align (Sustain.Value, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Sustain.Value, 68, y);
-    lv_obj_add_style (Sustain.Value, &Sustain.Style, 0);
-
-    Sustain.Unit = lv_label_create (panel);
-    lv_obj_set_align (Sustain.Unit, LV_ALIGN_TOP_RIGHT);
-    lv_obj_set_pos (Sustain.Unit, 0, y);
-    lv_label_set_text (Sustain.Unit, "mSec");
-    lv_obj_add_style (Sustain.Unit, &Sustain.Style, 0);
-
+    InfoLine (base, Sustain, "Sustain:", y, 0x800080);
     y += 16;
-    Release.Label = lv_label_create (panel);
-    lv_obj_set_align (Release.Label, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Release.Label, 0, y);
-    lv_label_set_text (Release.Label, "Release:");
-    lv_style_init (&Release.Style);
-    lv_style_set_text_font (&Release.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color(&Release.Style, lv_color_hex(0xff0000));
-    lv_obj_add_style (Release.Label, &Release.Style, 0);
-
-    Release.Value = lv_label_create (panel);
-    lv_obj_set_align (Release.Value, LV_ALIGN_TOP_LEFT);
-    lv_obj_set_pos (Release.Value, 68, y);
-    lv_obj_add_style (Release.Value, &Release.Style, 0);
-
-    Release.Unit = lv_label_create (panel);
-    lv_obj_set_align (Release.Unit, LV_ALIGN_TOP_RIGHT);
-    lv_obj_set_pos (Release.Unit, 0, y);
-    lv_label_set_text (Release.Unit, "mSec");
-    lv_obj_add_style (Release.Unit, &Release.Style, 0);
+    InfoLine (base, Release, "Release:", y, 0xff0000);
 
     // Initial positions
-    SetAttack  (0);
-    SetDecay   (0);
-    SetSustain (0);
-    SetRelease (0);
-    Select     (false);
+    this->SetAttack  (0);
+    this->SetDecay   (0);
+    this->SetSustain (0);
+    this->SetRelease (0);
+    this->Select     (false);
+    }
+
+//#######################################################################
+void ADSR_WIDGET_C::InfoLine (lv_obj_t* base, ADSR_ELEMENT_T &element, const char* s, short y, uint32_t color)
+    {
+    element.Label = lv_label_create (base);
+    lv_obj_align (element.Label, LV_ALIGN_TOP_LEFT, 0, y);
+    lv_label_set_text (element.Label, s);
+    lv_style_init (&element.Style);
+    lv_style_set_text_font (&element.Style, &lv_font_montserrat_14);
+    lv_style_set_text_color (&element.Style, lv_color_hex (color));
+    lv_obj_add_style (element.Label, &element.Style, 0);
+
+    element.Value = lv_label_create (base);
+    lv_obj_align (element.Value, LV_ALIGN_TOP_LEFT, 62, y);
+    lv_obj_add_style (element.Value, &element.Style, 0);
+
+    element.Unit = lv_label_create (base);
+    lv_obj_align (element.Unit, LV_ALIGN_TOP_RIGHT, -11, y);
+    lv_label_set_text (element.Unit, "mSec");
+    lv_obj_add_style (element.Unit, &element.Style, 0);
     }
 
 //#######################################################################
@@ -181,5 +124,72 @@ void ADSR_WIDGET_C::SetRelease (int val)
     {
     lv_meter_set_indicator_end_value (Meter, Release.Gauge, val);
     lv_label_set_text_fmt (Release.Value, "%d", val * TIME_MULT);
+    }
+
+//#######################################################################
+//#######################################################################
+    LEVEL_WIDGET_C::LEVEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, lv_palette_t p)
+    {
+    short size = 127;
+
+    lv_obj_t* panel = lv_obj_create (base);
+    lv_obj_set_size (panel, 75, size + 50);
+    lv_obj_set_pos (panel, x, y);
+    lv_obj_set_style_pad_top (panel, 1, 0);
+    lv_obj_set_style_pad_left (panel, 2, 0);
+    lv_obj_set_style_pad_right (panel, 2, 0);
+    lv_obj_set_style_pad_bottom (panel, 1, 0);
+
+    lv_style_init (&StyleLabel);
+    lv_style_set_text_font (&StyleLabel, &lv_font_montserrat_12);
+    lv_style_set_text_color (&StyleLabel, lv_palette_main(p));
+    Label  = lv_label_create (panel);
+    lv_obj_align (Label, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text (Label, s);
+    lv_obj_add_style (Label, &StyleLabel, 0);
+
+    lv_style_init (&StyleMain);
+    lv_style_set_bg_opa (&StyleMain, LV_OPA_COVER);
+    lv_style_set_bg_color (&StyleMain, lv_color_hex3(0x999));
+    lv_style_set_radius (&StyleMain, LV_RADIUS_CIRCLE);
+    lv_style_set_width (&StyleMain, 5);
+    lv_style_set_height (&StyleMain, size);
+
+    lv_style_init (&StyleIndicator);
+    lv_style_set_bg_opa (&StyleIndicator, LV_OPA_COVER);
+    lv_style_set_bg_color (&StyleIndicator, lv_palette_lighten(p, 3));
+
+    lv_style_init (&StyleKnob);
+    lv_style_set_bg_opa (&StyleKnob, LV_OPA_COVER);
+    lv_style_set_bg_color (&StyleKnob, lv_palette_main(p));
+    lv_style_set_border_color (&StyleKnob, lv_palette_main(LV_PALETTE_BLUE_GREY));
+    lv_style_set_pad_hor (&StyleKnob, 8);
+    lv_style_set_pad_ver (&StyleKnob, 1);
+
+    Slider = lv_slider_create (panel);
+    lv_obj_remove_style_all (Slider);        // Remove the styles coming from the theme
+    lv_slider_set_range (Slider, 0, size);
+    lv_obj_align (Slider, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_add_style (Slider, &StyleMain, LV_PART_MAIN);
+    lv_obj_add_style (Slider, &StyleIndicator, LV_PART_INDICATOR);
+    lv_obj_add_style (Slider, &StyleKnob, LV_PART_KNOB);
+
+    Value = lv_label_create (panel);
+    lv_obj_align (Value, LV_ALIGN_BOTTOM_MID, 0, -2);
+    lv_style_init (&StyleValue);
+    lv_style_set_text_font (&StyleValue, &lv_font_montserrat_14);
+    lv_style_set_text_color (&StyleValue, lv_palette_main(p));
+    lv_obj_add_style (Value, &StyleValue, 0);
+
+    Multiplier = (float)size / 127.0;
+    // Initial position
+    this->SetLevel (0);
+    }
+
+//#######################################################################
+void LEVEL_WIDGET_C::SetLevel (int val)
+    {
+    lv_slider_set_value (Slider, (int32_t)((float)val * Multiplier), LV_ANIM_OFF);
+    lv_label_set_text_fmt (Value, "%d%%", (int)(val / 1.27));
     }
 

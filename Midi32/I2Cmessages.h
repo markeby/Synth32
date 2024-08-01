@@ -17,7 +17,6 @@ private:
     bool        Paused;
     bool        ResetState;
     uint64_t    ResetStart;
-    uint64_t    LastTime;
 
     uint8_t     DisplayAddress;
     uint8_t     SendBuffer[16];
@@ -41,28 +40,8 @@ public:
     void  SawtoothDirection (bool select);
 
 //#################################################
-    inline void Throttle (void)
-        {
-        if ( !Paused )
-            {
-             this->Pause (true);
-             this->Paused = true;
-            }
-         this->LastTime = RunTime;
-        }
-
-//#################################################
     inline bool Loop (void)
         {
-        if (  this->Paused )
-            {
-            if ( (RunTime - this->LastTime) > DISPLAY_SETTLE_TIME )
-                {
-                this->Pause (false);
-                this->Paused = false;
-                }
-            }
-
         bool z = digitalRead (RESET_STROBE_IO);
         if ( z != this->ResetState )
             {
