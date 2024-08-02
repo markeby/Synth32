@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
 #include "config.h"
-#include "SynthFront.h"
+#include "FrontEnd.h"
 #include "SerialMonitor.h"
 
 //########################################################

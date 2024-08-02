@@ -7,7 +7,7 @@
 #include "config.h"
 #include "Settings.h"
 #include "SerialMonitor.h"
-#include "SynthFront.h"
+#include "FrontEnd.h"
 #include "Diagnostics.h"
 #include "UpdateOTA.h"
 

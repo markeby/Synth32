@@ -13,7 +13,7 @@
 #include "Osc.h"
 #include "LFOosc.h"
 #include "Noise.h"
-#include "SynthFront.h"
+#include "FrontEnd.h"
 #include "SynthChannel.h"
 #include "Debug.h"
 

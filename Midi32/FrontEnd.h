@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     SynthFront.h
+// Module:     FrontEnd.h
 // Descrption: Interface to the synth channels
 // Creator:    markeby
 // Date:       8/25/2023

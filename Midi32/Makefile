@@ -16,15 +16,15 @@ PROJECT := Midi32.ino
 SHARED := ../Common
 
 # header files
-INCLUDES := Debug.h config.h SerialMonitor.h I2Cdevices.h Settings.h SynthFront.h Sinewave.h \
+INCLUDES := Debug.h config.h SerialMonitor.h I2Cdevices.h Settings.h FrontEnd.h Sinewave.h \
             SynthChannel.h Osc.h LFOosc.h Noise.h Debug.h Envelope.h Diagnostics.h UpdateOTA.h \
 	    I2Cmessages.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
 SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
-           SerialMonitor.cpp Noise.cpp SynthFront.cpp SynthChannel.cpp Osc.cpp \
-	   SynthConfig.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
+           SerialMonitor.cpp Noise.cpp FrontEnd.cpp SynthChannel.cpp Osc.cpp \
+	   Controls.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
 # serial port for uploading
 DEFAULT_PORT := COM3

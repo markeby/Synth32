@@ -8,7 +8,7 @@
 #include "config.h"
 #include "settings.h"
 #include "SerialMonitor.h"
-#include "SynthFront.h"
+#include "FrontEnd.h"
 #include "UpdateOTA.h"
 using namespace SERIAL_MONITOR;
 
