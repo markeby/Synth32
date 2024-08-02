@@ -27,7 +27,7 @@ private:
     bool        TriggerEnd;
 
     // Control state
-    uint8_t&       UseCount;       // increment started and decriment as idle
+    uint8_t&    UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
     float       Timer;          // Timer loaded with state time and descrimented
     float       TargetTime;     // Timer is incrimented until this time is exceeded
@@ -35,7 +35,9 @@ private:
     float       Target;
     float       Peak;           // Fraction of one (percent)
     float       Sustain;        // Sustain level up to one
+    float       ReleaseSt;      // Start of release volume level
     bool        Updated;        // Flag indicating update output
+    bool        PeakLevel;      // Flag indicating sustain and peak are the same
 
     int16_t     DiffLevel;      // Difference to new level
 

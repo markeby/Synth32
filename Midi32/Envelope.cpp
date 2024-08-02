@@ -171,8 +171,9 @@ void ENVELOPE_C::Process (float deltaTime)
     //***************************************
     if ( TriggerEnd && (State != ESTATE::RELEASE) )
         {
-        State = ESTATE::RELEASE;
-        Timer = ReleaseTime;
+        State     = ESTATE::RELEASE;
+        Timer     = ReleaseTime;
+        ReleaseSt = Current;
         DBG ("Terminating");
         return;
         }
@@ -186,6 +187,7 @@ void ENVELOPE_C::Process (float deltaTime)
             {
             Current     = 0.0;
             Timer       = 0.0;
+            PeakLevel   = false;
             TargetTime  = AttackTime - TIME_THRESHOLD;
             State       = ESTATE::ATTACK;
             DBG ("Start attact to %f mSec from level %f to %f", TargetTime, Current, Peak);
@@ -231,6 +233,9 @@ void ENVELOPE_C::Process (float deltaTime)
             Updated = true;
             Timer   = SustainTime - TIME_THRESHOLD;
             State   = ESTATE::SUSTAIN;
+            if ( Sustain >= Peak )
+                PeakLevel = true;
+
             if ( DebugSynth )
                 {
                 if ( SustainTime < 0 )
@@ -246,7 +251,18 @@ void ENVELOPE_C::Process (float deltaTime)
         case ESTATE::SUSTAIN:
             {
             if ( Timer <= 0 )
+                {           // At this level if the max volume is to change, then all volume changes
+                if ( PeakLevel )
+                    {
+                    if ( Current != Peak )
+                        {
+                        Current = Peak;
+                        Updated = true;
+                        }
+                    }
+
                 return;
+                }
             if ( Timer > TIME_THRESHOLD )
                 {
                 Timer -= deltaTime;
@@ -255,6 +271,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 }
             Timer      = ReleaseTime - TIME_THRESHOLD;
             State      = ESTATE::RELEASE;
+            ReleaseSt  = Current;
             DBG ("Start > %f  mSec from level %f to 0", Timer, Current);
             return;
             }
@@ -267,7 +284,7 @@ void ENVELOPE_C::Process (float deltaTime)
             if ( Timer > 20)
                 {
                 Timer  -= deltaTime;
-                Current = (Timer / ReleaseTime) * Sustain;
+                Current = (Timer / ReleaseTime) * ReleaseSt;
                 Updated = true;
                 DBG ("Timer > %f mSec at level %f", Timer, Current);
                 return;
