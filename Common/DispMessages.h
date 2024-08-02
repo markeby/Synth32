@@ -100,6 +100,7 @@ enum class EFFECT_C: uint8_t
     RELEASE_TIME,
     SUSTAIN_LEVEL,
     SAWTOOTH_DIRECTION,
+    PULSE_WIDTH,
     };
 
 //######################################
@@ -117,7 +118,7 @@ char* ClassEFFECT[] =
     "RELEASE_TIME",
     "SUSTAIN_LEVEL",
     "SAWTOOTH_DIRECTION",
-    "NONE",
+    "PULSE_WIDTH",
     "NONE",
     "NONE",
     "NONE",

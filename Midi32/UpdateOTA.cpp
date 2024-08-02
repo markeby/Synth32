@@ -25,9 +25,9 @@ void OTA_C::WaitWiFi ()
                 {
                 String type;
                 if ( ArduinoOTA.getCommand() == U_FLASH )
-                    type = "sketch";
+                    type = "pgm";
                 else  // U_SPIFFS
-                    type = "filesystem";
+                    type = "file";
 
                 // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
                 Serial.println("Start updating " + type);

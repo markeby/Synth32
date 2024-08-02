@@ -72,3 +72,39 @@ public:
     void SetLevel (int val);
     };
 
+//############################################
+class SAWTOOTH_WIDGET_C
+    {
+private:
+    lv_obj_t*   SlopeFore;
+    lv_style_t  StyleFore;
+    lv_obj_t*   SlopeBack;
+    lv_style_t  StyleBack;
+
+
+
+public:
+         SAWTOOTH_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+    void SetDir (bool dir);
+    };
+
+//############################################
+class PULSE_WIDGET_C
+    {
+private:
+    #define     SQUARE_SIZE 10
+    lv_point_t  Pulse[SQUARE_SIZE];
+    lv_obj_t*   Wave;
+    lv_style_t  Style;
+private:
+    lv_obj_t*   SlopeFore;
+    lv_style_t  StyleFore;
+
+
+public:
+         PULSE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+    void SetWidth (short width);
+
+
+    };
+

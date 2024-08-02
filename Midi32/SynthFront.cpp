@@ -511,6 +511,16 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
     DisplayMessage.SawtoothDirection (data);
     }
 
+//#######################################################################
+void SYNTH_FRONT_C::SetPulseWidth (byte data)
+    {
+    float percent = data * PRS_SCALER;
+    for ( int z = 0;  z < CHAN_COUNT;  z++)
+        pChan[z]->pOsc()->PulseWidth (percent);
+    this->PulseWidth = data;
+    DisplayMessage.PulseWidth (data);
+    }
+
 //#####################################################################
 void SYNTH_FRONT_C::DisplayUpdate ()
     {
@@ -532,6 +542,7 @@ void SYNTH_FRONT_C::DisplayUpdate ()
         DisplayMessage.SustainLevel (z, MidiAdsr[z].SustainLevel);
         }
     DisplayMessage.SawtoothDirection (this->SawToothDirection);
+    DisplayMessage.PulseWidth (this->PulseWidth);
     }
 
 //#####################################################################

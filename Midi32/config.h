@@ -69,8 +69,9 @@ extern bool     SystemError;
 extern bool     SystemFail;
 extern float    DeltaTimeMilli;
 extern float    DeltaTimeMicro;
+extern float    LongestTimeMilli;
+extern float    DeltaTimeMilliAvg;
 extern uint64_t RunTime;
-extern float    DeltaTimeMicroAvg;
 
 //#################################################
 //    Synth specific constants

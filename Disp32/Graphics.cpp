@@ -44,6 +44,9 @@ void GRPH_C::Begin ()
     InitPageFilter (PageFilter);
     InitPageTuning (PageTuning);
 
+    lv_style_init (&TitleStyle);       // for page titles
+    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_36);
+
     PageSelect (0);
 
     lvgl_port_unlock ();    // Release the mutex
@@ -53,28 +56,40 @@ void GRPH_C::Begin ()
 void GRPH_C::InitPageOsc (lv_obj_t* base)
     {
     int x = 0;
-    int y = 0;
+    int y = 40;
 
-    lv_obj_set_style_pad_top (base, 0, 0);
-    lv_obj_set_style_pad_left (base, 3, 0);
+    lv_obj_set_style_pad_top    (base, 0, 0);
+    lv_obj_set_style_pad_left   (base, 3, 0);
     lv_obj_set_style_pad_bottom (base, 0, 0);
-    lv_obj_set_style_pad_right (base, 3, 0);
+    lv_obj_set_style_pad_right  (base, 3, 0);
+
+    TitleOsc = lv_label_create (base);
+    lv_obj_align      (TitleOsc, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text (TitleOsc, "OSCILLATORS");
+    lv_obj_add_style  (TitleOsc, &TitleStyle, 0);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         lv_obj_t * panel = lv_obj_create (base);
-        lv_obj_set_size (panel, 161, 450);
+        lv_obj_set_size (panel, 159, 440);
         lv_obj_set_pos (panel, x, y);
-        lv_obj_set_style_pad_top (panel, 1, 0);
+        lv_obj_set_style_pad_top (panel, 0, 0);
+        lv_obj_set_style_pad_bottom (panel, 0, 0);
         lv_obj_set_style_pad_left (panel, 2, 0);
         lv_obj_set_style_pad_right (panel, 2, 0);
 
         TitleControl[z] = new TITLE_WIDGET_C(panel, ClassADSR[z]);
         MeterADSR[z]    = new ADSR_WIDGET_C(panel, ClassADSR[z], 0, 18);
-        SustainLevel[z] = new LEVEL_WIDGET_C(panel, "SUSTAIN", 0, 228, LV_PALETTE_ORANGE);
-        MaxLevel[z]     = new LEVEL_WIDGET_C(panel, "MAX", 73, 228, LV_PALETTE_INDIGO);
+        SustainLevel[z] = new LEVEL_WIDGET_C(panel, "SUSTAIN", 0, 225, LV_PALETTE_ORANGE);
+        MaxLevel[z]     = new LEVEL_WIDGET_C(panel, "MAX", 73, 225, LV_PALETTE_INDIGO);
 
-        x += 155;
+        if ( z == 2 )
+            SawtoothDir = new SAWTOOTH_WIDGET_C(panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+
+        if ( z == 3 )
+            PulseWidth = new PULSE_WIDGET_C(panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+
+        x += 158;
         }
     }
 
@@ -82,8 +97,15 @@ void GRPH_C::InitPageOsc (lv_obj_t* base)
 //#######################################################################
 void GRPH_C::InitPageFilter (lv_obj_t* base)
     {
+    lv_obj_set_style_pad_top    (base, 0, 0);
+    lv_obj_set_style_pad_left   (base, 3, 0);
+    lv_obj_set_style_pad_bottom (base, 0, 0);
+    lv_obj_set_style_pad_right  (base, 3, 0);
 
-
+    TitleFlt = lv_label_create (base);
+    lv_obj_align      (TitleFlt, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text (TitleFlt, "FILTERS");
+    lv_obj_add_style  (TitleFlt, &TitleStyle, 0);
 
     }
 
@@ -93,13 +115,13 @@ void GRPH_C::InitPageTuning (lv_obj_t* base)
     Tuningfont = &lv_font_montserrat_48;
 
     lv_style_init (&TuningStyle);
-    lv_style_set_text_font (&TuningStyle, Tuningfont);
-    lv_style_set_text_color(&TuningStyle, lv_color_hex(0xF00000));
+    lv_style_set_text_font  (&TuningStyle, Tuningfont);
+    lv_style_set_text_color (&TuningStyle, lv_color_hex(0xF00000));
 
     TuningTitle = lv_label_create(base);
-    lv_obj_set_pos (TuningTitle, 180, 180);
-    lv_label_set_text(TuningTitle, "TUNING MODE");
-    lv_obj_add_style(TuningTitle, &TuningStyle, 0);
+    lv_obj_set_pos    (TuningTitle, 180, 180);
+    lv_label_set_text (TuningTitle, "TUNING MODE");
+    lv_obj_add_style  (TuningTitle, &TuningStyle, 0);
     }
 
 //#######################################################################
@@ -114,8 +136,7 @@ void GRPH_C::Pause (bool state)
 //#######################################################################
 void GRPH_C::PageSelect (byte page)
     {
-    lv_tabview_set_act (Pages, page, LV_ANIM_ON);
-//    lv_tabview_set_act (Pages, page, LV_ANIM_OFF);
+    lv_tabview_set_act (Pages, page, LV_ANIM_OFF);
     }
 
 //#######################################################################
@@ -147,6 +168,10 @@ void GRPH_C::UpdatePage (byte ch, byte effect, short value)
             SustainLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::SAWTOOTH_DIRECTION:
+            SawtoothDir->SetDir (value);
+            break;
+        case EFFECT_C::PULSE_WIDTH:
+            PulseWidth->SetWidth (value);
             break;
         default:
             break;

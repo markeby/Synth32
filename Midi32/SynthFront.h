@@ -74,6 +74,7 @@ private:
     uint8_t               NoiseFilterSetting;     // 0 - 3
     uint64_t              DispMessageTimer;
     bool                  SawToothDirection;
+    byte                  PulseWidth;
     MIDI_VALUE_MAP*       FaderMap;
     MIDI_VALUE_MAP*       KnobMap;
     MIDI_SWITCH_MAP*      SwitchMap;
@@ -109,6 +110,7 @@ public:
     void  PitchBend          (uint8_t chan, int value);
     void  ChannelSetSelect   (uint8_t chan, bool state);
     void  SawtoothDirection  (bool data);
+    void  SetPulseWidth      (byte data);
     void  Tuning             (void);
     void  StartTuning        (void);
     void  SelectWaveLFO      (uint8_t ch, uint8_t state);

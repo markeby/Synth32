@@ -59,8 +59,10 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "   Flash chip mode = " << ESP.getFlashChipMode() << endl << endl;
     Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
     Serial << hh << "       Runing Time = "; DispRunTime ();
-    Serial << hh << "     Last interval = " << DeltaTimeMicro << " uSec" << endl;
-    Serial << hh << "  Average interval = " << DeltaTimeMicroAvg << " uSec" << endl;
+    Serial << hh << "     Last interval = " << DeltaTimeMilli << " mSec" << endl;
+    Serial << hh << "  Average interval = " << DeltaTimeMilliAvg << " mSec" << endl;
+    Serial << hh << "  Longest interval = " << LongestTimeMilli << " mSec" << endl;
+    LongestTimeMilli = 0;
     }
 
 //#######################################################################

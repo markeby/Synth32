@@ -37,6 +37,7 @@ public:
     void  SustainLevel      (uint8_t channel, uint16_t value);
     void  ReleaseTime       (uint8_t channel, uint16_t value);
     void  SelectADSR        (uint8_t channel, bool select);
+    void  PulseWidth        (uint8_t width);
     void  SawtoothDirection (bool select);
 
 //#################################################

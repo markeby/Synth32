@@ -48,12 +48,10 @@ void I2C_MESSAGE_C::Page (DISP_MESSAGE_N::PAGE_C page)
     {
     if ( this->Ready )
         {
-        Pause (true);
         this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::PAGE;
         this->SendBuffer[1] = 0;
         this->SendBuffer[2] = (uint8_t)page;
         SendComplete (MESSAGE_LENGTH_PAGE);
-        Pause (false);
         }
     }
 
@@ -136,6 +134,11 @@ void I2C_MESSAGE_C::SelectADSR (uint8_t channel, bool select)
 void I2C_MESSAGE_C::SawtoothDirection (bool select)
     {
     this->SendVCA ((uint8_t)(DISP_MESSAGE_N::ADSR_C::SAWTOOTH), DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION, (( select ) ? 1 : 0));
+    }
+
+void I2C_MESSAGE_C::PulseWidth (uint8_t width)
+    {
+    this->SendVCA ((uint8_t)(DISP_MESSAGE_N::ADSR_C::PULSE), DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH, width);
     }
 
 I2C_MESSAGE_C DisplayMessage;

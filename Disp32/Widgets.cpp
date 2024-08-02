@@ -38,14 +38,14 @@
     lv_meter_set_scale_ticks (Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
     Attack.Gauge  = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
-    Decay.Gauge   = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 12);
-    Sustain.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_PURPLE), 4);
-    Release.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), -4);
+    Decay.Gauge   = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 13);
+    Sustain.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_PURPLE), 6);
+    Release.Gauge = lv_meter_add_arc (Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), -1);
 
     Led  = lv_led_create (Meter);
     lv_obj_align (Led, LV_ALIGN_CENTER, 0, 0);
 
-    y = 162;
+    y = 160;
     InfoLine (base, Attack, " Attack:", y, 0x008000);
     y += 16;
     InfoLine (base, Decay, "  Decay:", y, 0x0000ff);
@@ -191,5 +191,84 @@ void LEVEL_WIDGET_C::SetLevel (int val)
     {
     lv_slider_set_value (Slider, (int32_t)((float)val * Multiplier), LV_ANIM_OFF);
     lv_label_set_text_fmt (Value, "%d%%", (int)(val / 1.27));
+    }
+
+//#######################################################################
+//#######################################################################
+static lv_point_t slopeBack[] = { {0, 20}, {0, 0}, {40, 20}, {40, 0}, {80, 20}};
+static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}};
+
+    SAWTOOTH_WIDGET_C::SAWTOOTH_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    {
+    lv_style_init (&StyleFore);
+    lv_style_set_line_width (&StyleFore, 3);
+    lv_style_set_line_color (&StyleFore, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_line_opa (&StyleFore, LV_OPA_TRANSP);
+    lv_style_set_line_rounded (&StyleFore, true);
+
+    lv_style_init (&StyleBack);
+    lv_style_set_line_width (&StyleBack, 3);
+    lv_style_set_line_color (&StyleBack, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_line_opa (&StyleBack, LV_OPA_TRANSP);
+    lv_style_set_line_rounded (&StyleBack, true);
+
+    SlopeFore = lv_line_create (base);
+    lv_line_set_points (SlopeFore, slopeFore, 5);
+    lv_obj_align (SlopeFore, align, x, y);
+    lv_obj_add_style (SlopeFore, &StyleFore, 0);
+
+    SlopeBack = lv_line_create (base);
+    lv_line_set_points (SlopeBack, slopeBack, 5);
+    lv_obj_align (SlopeBack, align, x, y);
+    lv_obj_add_style (SlopeBack, &StyleBack, 0);
+    }
+
+//#######################################################################
+void SAWTOOTH_WIDGET_C::SetDir (bool dir)
+    {
+    if ( dir )
+        {
+        lv_style_set_line_opa (&StyleFore, LV_OPA_TRANSP);
+        lv_obj_add_style (SlopeFore, &StyleFore, 0);
+        lv_style_set_line_opa (&StyleBack, LV_OPA_100);
+        lv_obj_add_style (SlopeBack, &StyleBack, 0);
+        }
+    else
+        {
+        lv_style_set_line_opa (&StyleFore, LV_OPA_100);
+        lv_obj_add_style (SlopeFore, &StyleFore, 0);
+        lv_style_set_line_opa (&StyleBack, LV_OPA_TRANSP);
+        lv_obj_add_style (SlopeBack, &StyleBack, 0);
+        }
+    }
+
+//#######################################################################
+//#######################################################################
+static lv_point_t squareWave[SQUARE_SIZE] = { {0, 0}, {0, 20}, {0, 20}, {0, 0}, {40, 0}, {40, 20}, {40, 20}, {40, 0}, {80, 0}, {80, 20}};
+
+    PULSE_WIDGET_C::PULSE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    {
+    lv_style_init (&Style);
+    lv_style_set_line_width (&Style, 2);
+    lv_style_set_line_color (&Style, lv_palette_main(LV_PALETTE_BLUE));
+    lv_style_set_line_rounded (&Style, true);
+
+    memcpy (&Pulse, &squareWave, sizeof (lv_point_t) * SQUARE_SIZE);
+
+    Wave = lv_line_create (base);
+    lv_line_set_points (Wave, Pulse, SQUARE_SIZE);
+    lv_obj_align (Wave, align, x, y);
+    lv_obj_add_style (Wave, &Style, 0);
+    }
+
+void PULSE_WIDGET_C::SetWidth (short width)
+    {
+    float percent = (float)width / 127.0;
+    width = (short)(40.0 * percent);
+    Pulse[2].x = squareWave[2].x + width;
+    Pulse[3].x = squareWave[3].x + width;
+    Pulse[6].x = squareWave[6].x + width;
+    Pulse[7].x = squareWave[7].x + width;
+    lv_line_set_points (Wave, Pulse, SQUARE_SIZE);
     }
 

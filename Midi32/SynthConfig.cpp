@@ -65,6 +65,14 @@ void SawtoothDirection (uint8_t ch, uint8_t data)
     }
 
 //########################################################
+void PulseWidth (uint8_t ch, uint8_t data)
+    {
+    if ( data == 0 )
+        data = 1;
+    SynthFront.SetPulseWidth (data);
+    }
+
+//########################################################
 void SetLfoFreq (uint8_t ch, uint8_t data)
     {
     SynthFront.FreqSelectLFO (0, data);
@@ -135,22 +143,22 @@ MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
 
 //########################################################
 MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
-    {   {  0, "Attack",     SetAttckTime   },
-        {  1, "Decay",      SetDecayTime   },
-        {  2, "Sustain",    SetSustainTime },
-        {  3, "Release",    SetReleaseTime },
-        {  4, "N ",         nullptr        },
-        {  5, "N ",         nullptr        },
-        {  6, "N ",         nullptr        },
-        {  7, "LFO Freq ",  SetLfoFreq     },
-        {  8, "N ",         nullptr        },
-        {  9, "N ",         nullptr        },
-        { 10, "N ",         nullptr        },
-        { 11, "N ",         nullptr        },
-        { 12, "N ",         nullptr        },
-        { 14, "N ",         nullptr        },
-        { 14, "N ",         nullptr        },
-        { 15, "N ",         nullptr        },
+    {   {  0, "Attack",         SetAttckTime   },
+        {  1, "Decay",          SetDecayTime   },
+        {  2, "Sustain",        SetSustainTime },
+        {  3, "Release",        SetReleaseTime },
+        {  4, "N ",             nullptr        },
+        {  5, "N ",             nullptr        },
+        {  6, "Pulse Width",    PulseWidth     },
+        {  7, "LFO Freq ",      SetLfoFreq     },
+        {  8, "N ",             nullptr        },
+        {  9, "N ",             nullptr        },
+        { 10, "N ",             nullptr        },
+        { 11, "N ",             nullptr        },
+        { 12, "N ",             nullptr        },
+        { 14, "N ",             nullptr        },
+        { 14, "N ",             nullptr        },
+        { 15, "N ",             nullptr        },
     };
 
 //########################################################

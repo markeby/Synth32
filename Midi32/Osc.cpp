@@ -114,6 +114,12 @@ void SYNTH_OSC_C::SawtoothDirection (bool data)
     }
 
 //#######################################################################
+void SYNTH_OSC_C::PulseWidth (float percent)
+    {
+    I2cDevices.D2Analog (PwmChannel, (percent * (float)DA_MAX));
+    }
+
+//#######################################################################
 void SYNTH_OSC_C::SetAttackTime (uint8_t wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::ATTACK, time);

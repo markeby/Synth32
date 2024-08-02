@@ -60,6 +60,7 @@ public:
     void NoteClear          (void);
     void Clear              (void);
     void SawtoothDirection  (bool data);
+    void PulseWidth         (float percent);
     void SetAttackTime      (uint8_t wave, float time);
     void SetDecayTime       (uint8_t wave, float time);
     void SetSustainTime     (uint8_t wave, float time);

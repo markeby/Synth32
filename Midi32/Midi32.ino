@@ -51,7 +51,8 @@ bool       SystemFail           = false;
 bool       SynthActive          = false;
 float      DeltaTimeMilli       = 0;             // Millisecond interval.
 float      DeltaTimeMicro       = 0;             // Microsecond interval
-float      DeltaTimeMicroAvg    = 0;
+float      DeltaTimeMilliAvg    = 0;
+float      LongestTimeMilli     = 0;
 uint64_t   RunTime              = 0;
 bool       DebugMidi            = false;
 bool       DebugI2C             = false;
@@ -67,20 +68,22 @@ int        AnalogDiagDevice     = 0;
 #include "Test.h"
 
 //#######################################################################
-inline int TimeDeltaMiicro (void)
+inline void TimeDelta (void)
     {
     static uint64_t strt = 0;       // Starting time for next frame delta calculation
-    int             delta;
-
 
     RunTime = micros ();
-    delta = (int)((uint64_t)RunTime - (uint64_t)strt);
-    if ( DeltaTimeMicroAvg == 0 )
-        DeltaTimeMicroAvg = delta;
+    DeltaTimeMicro = (int)((uint64_t)RunTime - (uint64_t)strt);
+    DeltaTimeMilli = MICRO_TO_MILLI (DeltaTimeMicro);
+    if ( DeltaTimeMilliAvg == 0 )
+        DeltaTimeMilliAvg = DeltaTimeMilli;
     else
-        DeltaTimeMicroAvg = (DeltaTimeMicroAvg + delta) / 2;
+        DeltaTimeMilliAvg = (DeltaTimeMilliAvg + DeltaTimeMilli) / 2;
     strt = RunTime;
-    return (delta);
+    if ( DeltaTimeMilli > 210 )     // throw out long serial debug outputs
+        return;
+    if ( DeltaTimeMilli > LongestTimeMilli )
+        LongestTimeMilli = DeltaTimeMilli;
     }
 
 //#######################################################################
@@ -183,7 +186,6 @@ void setup (void)
         SynthFront.DisplayUpdate ();
 
         // initial test settings
-        DisplayMessage.Pause (true);
         for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
             {
             SynthFront.SetSustainLevel (z, MAX_MVAL);
@@ -197,7 +199,6 @@ void setup (void)
         SynthFront.SetSustainTime (0);
         SynthFront.SetMaxLevel (4, 100);
         SynthFront.ChannelSetSelect (4, false);
-        DisplayMessage.Pause (false);
 
         printf("\t>>> Synth ready.\n");
         }
@@ -239,13 +240,9 @@ void Core0Task (void *parameter)
 //#######################################################################
 void loop (void)
     {
-    // heartbeat and error alerts based on time intervals
-    DeltaTimeMicro = TimeDeltaMiicro ();
-    DeltaTimeMilli = MICRO_TO_MILLI (DeltaTimeMicro);
+    TimeDelta ();
     if ( TickTime () )
-        {
         TickState ();
-        }
 
     // Wifi connection manager
     if ( !UpdateOTA.WiFiStatus () )
