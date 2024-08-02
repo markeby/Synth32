@@ -285,7 +285,7 @@ void SYNTH_FRONT_C::Loop ()
             DBG ("Key down > %d   Velocity > %d  Channel > %d", DownKey, DownVelocity, doit);
             }
 
-        SineWave.SineWave(DeltaTimeMilli);                 // Process sine wave for envelope generator modulation
+        SineWave.Loop (DeltaTimeMilli);                     // Process sine wave for envelope generator modulation
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
             pChan[z]->Loop ();
@@ -522,30 +522,6 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::DisplayUpdate ()
-    {
-    uint8_t zd;
-
-    if ( SetTuning )
-        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
-    else
-        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_OSC);
-    delay (200);
-    for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        {
-        DisplayMessage.Selected (z, SelectedEnvelope[z]);
-        DisplayMessage.MaxLevel (z, MidiAdsr[z].MaxLevel);
-        DisplayMessage.AttackTime (z, MidiAdsr[z].AttackTime);
-        DisplayMessage.DecayTime (z, MidiAdsr[z].DecayTime);
-        DisplayMessage.SustainTime (z, MidiAdsr[z].SustainTime);
-        DisplayMessage.ReleaseTime (z, MidiAdsr[z].ReleaseTime);
-        DisplayMessage.SustainLevel (z, MidiAdsr[z].SustainLevel);
-        }
-    DisplayMessage.SawtoothDirection (this->SawToothDirection);
-    DisplayMessage.PulseWidth (this->PulseWidth);
-    }
-
-//#####################################################################
 void SYNTH_FRONT_C::SelectWaveLFO (uint8_t ch, uint8_t state)
     {
     Lfo.Select(ch, state);
@@ -569,6 +545,12 @@ void SYNTH_FRONT_C::LFOrange (bool up)
             }
         }
     Lfo.Range(up);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SetSoftSineLFO (uint8_t data)
+    {
+    Lfo.Level (data * PERS_SCALER);
     }
 
 //#######################################################################
@@ -617,6 +599,30 @@ void SYNTH_FRONT_C::SetNoiseFilterMin (uint8_t data)
 //#######################################################################
 void SYNTH_FRONT_C::SetNoiseFilterMax (uint8_t data)
     {
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::DisplayUpdate ()
+    {
+    uint8_t zd;
+
+    if ( SetTuning )
+        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
+    else
+        DisplayMessage.Page(DISP_MESSAGE_N::PAGE_C::PAGE_OSC);
+    delay (200);
+    for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        {
+        DisplayMessage.Selected (z, SelectedEnvelope[z]);
+        DisplayMessage.MaxLevel (z, MidiAdsr[z].MaxLevel);
+        DisplayMessage.AttackTime (z, MidiAdsr[z].AttackTime);
+        DisplayMessage.DecayTime (z, MidiAdsr[z].DecayTime);
+        DisplayMessage.SustainTime (z, MidiAdsr[z].SustainTime);
+        DisplayMessage.ReleaseTime (z, MidiAdsr[z].ReleaseTime);
+        DisplayMessage.SustainLevel (z, MidiAdsr[z].SustainLevel);
+        }
+    DisplayMessage.SawtoothDirection (this->SawToothDirection);
+    DisplayMessage.PulseWidth (this->PulseWidth);
     }
 
 

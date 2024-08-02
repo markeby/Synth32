@@ -116,6 +116,7 @@ public:
     void  SelectWaveLFO      (uint8_t ch, uint8_t state);
     void  FreqSelectLFO      (uint8_t ch, uint8_t data);
     void  LFOrange           (bool up);
+    void  SetSoftSineLFO     (uint8_t data);
     void  SetLevelLFO        (uint8_t data);
     void  SetMaxLevel        (uint8_t ch, uint8_t data);
     void  SetMBaselevel      (uint8_t ch, uint8_t data);

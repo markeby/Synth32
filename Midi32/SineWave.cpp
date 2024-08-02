@@ -20,14 +20,14 @@ void SINEWAVE_C::SetFrequency (int freq)
     }
 
 //#######################################################################
-void SINEWAVE_C::SineWave (float deltaTime)
+void SINEWAVE_C::Loop (float deltaTime)
     {
-    Current += WaveLength / deltaTime;
+    Current += WaveLength / deltaTime;  // process zero to one
 
-    if ( Current > WaveLength )
+    if ( Current > WaveLength )         // remove overflow
         Current -= WaveLength;
 
-    Sine = sin (Current * 6.28);      // calculate in radians
+    Sine = sin (Current * 6.28);        // Current is zero to one so convert to radians
     }
 
 

@@ -16,11 +16,11 @@ private:
     float   Sine;
 
 public:
-         SINEWAVE_C (void);
-        ~SINEWAVE_C ()  {}
+         SINEWAVE_C     (void);
+        ~SINEWAVE_C     ()  {}
 
-    void SetFrequency (int freq);
-    void SineWave (float deltaTime);
+    void SetFrequency   (int freq);
+    void Loop           (float deltaTime);
 
     };;
 

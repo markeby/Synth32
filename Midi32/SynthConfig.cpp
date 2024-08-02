@@ -11,61 +11,61 @@
 #include "SerialMonitor.h"
 
 //########################################################
-void SetMaxLevel (uint8_t ch, uint8_t data)
+static void SetMaxLevel (uint8_t ch, uint8_t data)
     {
     SynthFront.SetMaxLevel (ch, data);
     }
 
 //########################################################
-void SetSustain (uint8_t ch, uint8_t data)
+static void SetSustain (uint8_t ch, uint8_t data)
     {
     SynthFront.SetSustainLevel (ch - 8, data);
     }
 
 //########################################################
-void SetTimeSetSelect (uint8_t ch, uint8_t state)
+static void SetTimeSetSelect (uint8_t ch, uint8_t state)
     {
     SynthFront.ChannelSetSelect (ch, state);
     }
 
 //########################################################
-void SetModSwitch (uint8_t ch, uint8_t state)
+static void SetModSwitch (uint8_t ch, uint8_t state)
     {
     SynthFront.SelectWaveLFO (ch - 8, state);
     }
 
 //########################################################
-void SetAttckTime (uint8_t ch, uint8_t data)
+static void SetAttckTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetAttackTime (data);
     }
 
 //########################################################
-void SetDecayTime (uint8_t ch, uint8_t data)
+static void SetDecayTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetDecayTime (data);
     }
 
 //########################################################
-void SetSustainTime (uint8_t ch, uint8_t data)
+static void SetSustainTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetSustainTime (data);
     }
 
 //########################################################
-void SetReleaseTime (uint8_t ch, uint8_t data)
+static void SetReleaseTime (uint8_t ch, uint8_t data)
     {
     SynthFront.SetReleaseTime (data);
     }
 
 //########################################################
-void SawtoothDirection (uint8_t ch, uint8_t data)
+static void SawtoothDirection (uint8_t ch, uint8_t data)
     {
     SynthFront.SawtoothDirection (data != 0);
     }
 
 //########################################################
-void PulseWidth (uint8_t ch, uint8_t data)
+static void PulseWidth (uint8_t ch, uint8_t data)
     {
     if ( data == 0 )
         data = 1;
@@ -73,54 +73,62 @@ void PulseWidth (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-void SetLfoFreq (uint8_t ch, uint8_t data)
+static void SoftLfoFreq(uint8_t ch, uint8_t data)
+    {
+    SynthFront.SetSoftSineLFO (data);
+    }
+
+//########################################################
+static void SetLfoFreq (uint8_t ch, uint8_t data)
     {
     SynthFront.FreqSelectLFO (0, data);
     }
 
 //########################################################
-void SetPlusRangeLFO (uint8_t ch, uint8_t state)
+static void SetPlusRangeLFO (uint8_t ch, uint8_t state)
     {
     SynthFront.LFOrange (true);
     }
 
 //########################################################
-void SetMinusRangeLFO (uint8_t ch, uint8_t state)
+static void SetMinusRangeLFO (uint8_t ch, uint8_t state)
     {
     SynthFront.LFOrange (false);
     }
 
 //########################################################
-void SetNoiseFilter (uint8_t ch, uint8_t state)
+static void SetNoiseFilter (uint8_t ch, uint8_t state)
     {
     SynthFront.NoiseFilter (ch - 14, state > 120);      // offset of SwitchMapArray to get 0 or 1
     }
 
 //########################################################
-void SetWhiteNoise (uint8_t ch, uint8_t state)
+static void SetWhiteNoise (uint8_t ch, uint8_t state)
     {
     SynthFront.NoiseColor (state);
     }
 
 //########################################################
-void SetNoisFilterMin (uint8_t ch, uint8_t data)
+static void SetNoisFilterMin (uint8_t ch, uint8_t data)
     {
     SynthFront.SetNoiseFilterMin(data);
     }
 
 //########################################################
-void SetNoiseFilterMax (uint8_t ch, uint8_t data)
+static void SetNoiseFilterMax (uint8_t ch, uint8_t data)
     {
     SynthFront.SetNoiseFilterMax (data);
     }
 
-void TuneReset (uint8_t ch, uint8_t data)
+//########################################################
+static void TuneReset (uint8_t ch, uint8_t data)
     {
     if ( data )
         Monitor.Tuning ();
     else
         Monitor.Reset ();
     }
+
 //########################################################
 MIDI_VALUE_MAP    FaderMapArray[SM_FADER] =
     {   {  0, "Sine max level",         SetMaxLevel       },         // 0-100%
@@ -147,9 +155,9 @@ MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
         {  1, "Decay",          SetDecayTime   },
         {  2, "Sustain",        SetSustainTime },
         {  3, "Release",        SetReleaseTime },
-        {  4, "N ",             nullptr        },
+        {  4, "Pulse Width",    PulseWidth     },
         {  5, "N ",             nullptr        },
-        {  6, "Pulse Width",    PulseWidth     },
+        {  6, "SoftLFO Freq",   SoftLfoFreq    },
         {  7, "LFO Freq ",      SetLfoFreq     },
         {  8, "N ",             nullptr        },
         {  9, "N ",             nullptr        },
