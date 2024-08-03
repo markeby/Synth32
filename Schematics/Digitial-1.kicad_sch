@@ -2979,7 +2979,7 @@
 	)
 	(text "RX1"
 		(exclude_from_sim no)
-		(at 224.79 100.33 0)
+		(at 225.806 102.87 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -3013,7 +3013,7 @@
 	)
 	(text "RX2\n"
 		(exclude_from_sim no)
-		(at 224.79 85.09 0)
+		(at 225.806 87.63 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -3046,7 +3046,7 @@
 	)
 	(text "TX2\n"
 		(exclude_from_sim no)
-		(at 224.79 87.63 0)
+		(at 225.806 85.09 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -3057,7 +3057,7 @@
 	)
 	(text "TX1"
 		(exclude_from_sim no)
-		(at 224.79 102.87 0)
+		(at 225.806 100.33 0)
 		(effects
 			(font
 				(size 1.016 1.016)

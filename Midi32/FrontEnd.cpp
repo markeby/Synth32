@@ -131,10 +131,6 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     delay (200);
     printf ("\t>>> Usb init done!\n");
 
-    printf ("\t>>> Starting echo midi: Port = 1  TX = %d  RX= %d\n", TXD1, RXD1);
- //   Serial1.begin (115200, SERIAL_8N1, RXD1, TXD1);
-
-
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
@@ -168,7 +164,8 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
         {
         case 0x01:
             // mod wheel
-            Lfo.Level (value);
+//            Lfo.Level (value);
+            SineWave.Multiplier ((float)value * PRS_SCALER * 0.4);
             DBG ("modulation = %f    ", (float)value * (float)PRS_SCALER);
             break;
         case 0x07:          // Faders controls
@@ -285,7 +282,6 @@ void SYNTH_FRONT_C::Loop ()
             DBG ("Key down > %d   Velocity > %d  Channel > %d", DownKey, DownVelocity, doit);
             }
 
-        SineWave.Loop (DeltaTimeMilli);                     // Process sine wave for envelope generator modulation
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
             pChan[z]->Loop ();
@@ -524,7 +520,9 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
 //#####################################################################
 void SYNTH_FRONT_C::SelectWaveLFO (uint8_t ch, uint8_t state)
     {
-    Lfo.Select(ch, state);
+//    Lfo.Select(ch, state);
+    for ( int z = 0;  z < CHAN_COUNT;  z++)
+        pChan[z]->pOsc()->SoftLFO (ch, state);
     }
 
 //#####################################################################
@@ -545,12 +543,6 @@ void SYNTH_FRONT_C::LFOrange (bool up)
             }
         }
     Lfo.Range(up);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::SetSoftSineLFO (uint8_t data)
-    {
-    Lfo.Level (data * PERS_SCALER);
     }
 
 //#######################################################################

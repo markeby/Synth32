@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "Envelope.h"
+#include "SineWave.h"
 
 using namespace std;
 
@@ -60,14 +61,9 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     DecayTime       = 0;
     SustainTime     = 0;
     ReleaseTime     = 0;
+    UseSoftLFO      = false;
     SetRange (0, DA_MAX);        // Defualt to normal D/A converter settings
     Clear ();
-    }
-
-//#######################################################################
-uint16_t ENVELOPE_C::GetChannel ()
-    {
-    return (DeviceChannel);
     }
 
 //#######################################################################
@@ -149,11 +145,18 @@ void ENVELOPE_C::Clear ()
 //#######################################################################
 void ENVELOPE_C::Update ()
     {
+    float output;
+
     if ( Updated )
         {
         if ( Current > Peak )
             Current = Peak;
-        int16_t z = abs (Floor + (Diff * Current));
+
+        output = Current * Multiplier;
+        if ( UseSoftLFO && (output > 0.05) )
+            output += SineWave.GetSin ();
+
+        int16_t z = abs(Floor + (Diff * output));
         I2cDevices.D2Analog (DeviceChannel, z);
         Updated = false;
         }
@@ -165,6 +168,9 @@ void ENVELOPE_C::Process (float deltaTime)
     {
     if ( !Active )                      // if we ain't doing it then we don't need to run this.
         return;
+
+    if ( UseSoftLFO )
+        Updated = true;
 
     //***************************************
     //  Beginning of the end

@@ -9,6 +9,7 @@
 #include "config.h"
 #include "FrontEnd.h"
 #include "SerialMonitor.h"
+#include "SineWave.h"
 
 //########################################################
 static void SetMaxLevel (uint8_t ch, uint8_t data)
@@ -75,7 +76,7 @@ static void PulseWidth (uint8_t ch, uint8_t data)
 //########################################################
 static void SoftLfoFreq(uint8_t ch, uint8_t data)
     {
-    SynthFront.SetSoftSineLFO (data);
+    SineWave.SetFrequency (data);
     }
 
 //########################################################
@@ -156,8 +157,8 @@ MIDI_VALUE_MAP    KnobMapArray[SM_CONTROL] =
         {  2, "Sustain",        SetSustainTime },
         {  3, "Release",        SetReleaseTime },
         {  4, "Pulse Width",    PulseWidth     },
-        {  5, "N ",             nullptr        },
-        {  6, "SoftLFO Freq",   SoftLfoFreq    },
+        {  5, "SoftLFO Freq",   SoftLfoFreq    },
+        {  6, "N ",             nullptr        },
         {  7, "LFO Freq ",      SetLfoFreq     },
         {  8, "N ",             nullptr        },
         {  9, "N ",             nullptr        },

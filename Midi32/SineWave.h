@@ -14,6 +14,7 @@ private:
     float   WaveLength;
     float   Current;
     float   Sine;
+    float   Modulation;
 
 public:
          SINEWAVE_C     (void);
@@ -21,7 +22,10 @@ public:
 
     void SetFrequency   (int freq);
     void Loop           (float deltaTime);
+    void Multiplier     (float value);
 
-    };;
+    float GetSin        (void)          { return (this->Sine); }
+    };
 
+extern SINEWAVE_C SineWave;
 

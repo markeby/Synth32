@@ -38,6 +38,7 @@ private:
     float       ReleaseSt;      // Start of release volume level
     bool        Updated;        // Flag indicating update output
     bool        PeakLevel;      // Flag indicating sustain and peak are the same
+    bool        UseSoftLFO;     // Flag to enable sofware LFO
 
     int16_t     DiffLevel;      // Difference to new level
 
@@ -45,10 +46,11 @@ private:
     float       DecayTime;      // Decay time to sustatin level in uSec.
     float       SustainTime;    // How long to hold the sustain level (-1 = hold while active)
     float       ReleaseTime;    // How long to end back at base level in uSec.
+    float       Multiplier;     // Final output adjustmet
 
     // Fixed parameters
     String      Name;
-    uint8_t        Index;
+    uint8_t     Index;
     uint16_t    DeviceChannel;
     float       Floor;
     float       Diff;
@@ -58,7 +60,6 @@ public:
              ENVELOPE_C     (uint8_t index, String name, uint16_t device, uint8_t& usecount);
             ~ENVELOPE_C     (void)      {}
     void     Clear          (void);
-    uint16_t GetChannel     (void);
     void     SetRange       (int16_t floor, int16_t ceiling);
     void     Process        (float deltaTime);
     void     Update         (void);
@@ -66,6 +67,10 @@ public:
     void     End            (void);
     void     SetTime        (ESTATE state, float time);
     void     SetLevel       (ESTATE state, float percent);
+
+    inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
+    inline void     SoftLFO          (bool state)       { UseSoftLFO = state; }         // Enable software sine wave application
+    inline uint16_t GetChannel       (void)             { return (DeviceChannel); }     // Return D/A channel number
     };  // end ENVELOPE_C
 
 //#######################################################################

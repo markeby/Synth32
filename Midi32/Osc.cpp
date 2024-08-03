@@ -31,6 +31,9 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
     Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + uint8_t(D_A_OFF::SINE), usecount);
     Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
 
+    for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
+        Mix[z]->OutputMultiplier (0.60);
+
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));
     for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
@@ -117,6 +120,12 @@ void SYNTH_OSC_C::SawtoothDirection (bool data)
 void SYNTH_OSC_C::PulseWidth (float percent)
     {
     I2cDevices.D2Analog (PwmChannel, (percent * (float)DA_MAX));
+    }
+
+//#######################################################################
+void SYNTH_OSC_C::SoftLFO (uint8_t wave, bool state)
+    {
+    Mix[wave]->SoftLFO (state);
     }
 
 //#######################################################################

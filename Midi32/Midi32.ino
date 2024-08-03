@@ -192,13 +192,13 @@ void setup (void)
             SynthFront.ChannelSetSelect(z, false);
             SynthFront.SetMaxLevel (z, 0);
             }
-        SynthFront.ChannelSetSelect (4, true);
-        SynthFront.SetAttackTime (2);
-        SynthFront.SetDecayTime (0);
-        SynthFront.SetReleaseTime (22);
-        SynthFront.SetSustainTime (0);
-        SynthFront.SetMaxLevel (4, 100);
-        SynthFront.ChannelSetSelect (4, false);
+//        SynthFront.ChannelSetSelect (4, true);
+//        SynthFront.SetAttackTime (2);
+//        SynthFront.SetDecayTime (0);
+//        SynthFront.SetReleaseTime (22);
+//        SynthFront.SetSustainTime (0);
+//        SynthFront.SetMaxLevel (4, 100);
+//        SynthFront.ChannelSetSelect (4, false);
 
         printf("\t>>> Synth ready.\n");
         }
@@ -250,6 +250,7 @@ void loop (void)
 
     if ( SynthActive )
         {
+        SineWave.Loop (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
             SynthFront.DisplayUpdate ();
