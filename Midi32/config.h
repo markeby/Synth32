@@ -46,8 +46,8 @@ extern bool AnalogDiagEnabled;
 //#################################################
 //    Serial 2 MIDI echo out port
 //#################################################
-#define RXD1        6
-#define TXD1        7
+#define RXD2        16
+#define TXD2        17
 
 //#################################################
 //    Display message parameters and I2C

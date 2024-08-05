@@ -5,7 +5,6 @@
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
-#include <Arduino.h>
 #include <UHS2-MIDI.h>
 
 #include "../Common/SynthCommon.h"
@@ -28,6 +27,7 @@ namespace ___StuffForThisModuleOnly___
     {
     static USB Usb;
     UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi);
+    MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi2);
 
     static SYNTH_CHANNEL_C*    pChan[CHAN_COUNT];
     static LFO_N::SYNTH_LFO_C  Lfo;
@@ -99,8 +99,6 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_ma
 //#######################################################################
 void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
     {
-    printf ("\t>>> Usb Midi startup\n");
-
 //  Midi.setHandleMessage              (void (*fptr)(const MidiMessage&));
 //  Midi.setHandleError                (ErrorCallback fptr);
     Midi.setHandleNoteOn               (FuncKeyDown);
@@ -123,13 +121,40 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
 //  Midi.setHandleActiveSensing        (ActiveSensingCallback fptr);
 //  Midi.setHandleSystemReset          (SystemResetCallback fptr);
 
+//  Midi2.setHandleMessage              (void (*fptr)(const MidiMessage&));
+//  Midi2.setHandleError                (ErrorCallback fptr);
+    Midi2.setHandleNoteOn               (FuncKeyDown);
+    Midi2.setHandleNoteOff              (FuncKeyUp);
+//  Midi2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+    Midi2.setHandleControlChange        (FuncController);
+//  Midi2.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi2.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+    Midi2.setHandlePitchBend            (FuncPitchBend);
+//  Midi2.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
+//  Midi2.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi2.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi2.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi2.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi2.setHandleClock                (ClockCallback fptr);
+//  Midi2.setHandleStart                (StartCallback fptr);
+//  Midi2.setHandleTick                 (TickCallback fptr);
+//  Midi2.setHandleContinue             (ContinueCallback fptr);
+//  Midi2.setHandleStop                 (StopCallback fptr);
+//  Midi2.setHandleActiveSensing        (ActiveSensingCallback fptr);
+//  Midi2.setHandleSystemReset          (SystemResetCallback fptr);
+
+    printf ("\t>>> Midi interfaces startup\n");
     while ( Usb.Init () == -1 )
         {
         delay (200);
-        printf ("Usb init retry!\n");
+        printf ("Usb midi init retry!\n");
         }
+    printf ("\t>>> Usb midi init done!\n");
+    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+
+    Midi2.begin (MIDI_CHANNEL_OMNI);
     delay (200);
-    printf ("\t>>> Usb init done!\n");
+    printf ("\t>>> Serial2 midi init done!\n");
 
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
@@ -237,6 +262,7 @@ void SYNTH_FRONT_C::Loop ()
 
     Usb.Task ();
     Midi.read ();
+    Midi2.read ();
 
     if ( !SetTuning )
         {
