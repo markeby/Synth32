@@ -6,6 +6,7 @@
 //#######################################################################
 #include <Arduino.h>
 #include "config.h"
+#include "Settings.h"
 #include "Osc.h"
 #include "Debug.h"
 static const char* Label = "VCO";
@@ -36,11 +37,14 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
 
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));
-    for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
-        {
-        OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
-        if ( OctaveArray[z] > MAX_DA )
-            OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
+    if ( Settings.GetOscBank (num, OctaveArray) )                   // If key/note array not in storage
+        {                                                           //   initialize at even intervals.
+        for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
+            {
+            OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
+            if ( OctaveArray[z] > MAX_DA )
+                OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
+            }
         }
 
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )

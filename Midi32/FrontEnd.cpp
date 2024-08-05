@@ -12,6 +12,7 @@
 #include "Osc.h"
 #include "LFOosc.h"
 #include "Noise.h"
+#include "Settings.h"
 #include "FrontEnd.h"
 #include "SynthChannel.h"
 #include "Debug.h"
@@ -643,11 +644,11 @@ void SYNTH_FRONT_C::DisplayUpdate ()
     DisplayMessage.PulseWidth (this->PulseWidth);
     }
 
-
-
-
-
-
-
+//#######################################################################
+void SYNTH_FRONT_C::SaveAllSettings ()
+    {
+    for ( int z = 0;  z < CHAN_COUNT;  z++ )
+        Settings.PutOscBank (z, pChan[z]->pOsc ()->GetBankAddr ());
+    }
 
 

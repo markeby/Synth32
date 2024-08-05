@@ -128,6 +128,7 @@ public:
     void  SetNoiseFilterMin  (uint8_t data);
     void  SetNoiseFilterMax  (uint8_t data);
     void  DisplayUpdate      (void);
+    void  SaveAllSettings    (void);
 
     //#######################################################################
     inline bool IsInTuning (void)

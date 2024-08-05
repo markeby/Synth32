@@ -148,6 +148,8 @@ void setup (void)
     digitalWrite (BEEP_PIN, LOW);           // Tone off
     digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
 
+    Settings.RestoreDebugFlags ();
+
     printf ("\t>>> Startup OTA...\n");
     UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
@@ -178,7 +180,7 @@ void setup (void)
         // Setup initial state of synth
         SynthFront.Begin (START_OSC_ANALOG, START_NOISE_ANALOG, START_NOISE_DIGITAL);
 
-        printf ("\t>>> Starting display communications port SDA = %d  SCL = %d\n", MSG_SDA, MSG_SCL);
+        printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
 
         delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect

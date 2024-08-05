@@ -14,22 +14,22 @@ private:
     //#######################################################################
     void Mode (SMODE m)         { this->InputMode = m; }
 
-    void DumpStats   (void);
-    bool Save        (SMODE m);
-    void InputPrompt (const char* text);
-    bool PromptZap   (void);
-    void MenuSel     (void);
-    void Menu        (void);
-    void TextIn      (void);
+    void DumpStats      (void);
+    bool Save           (SMODE m);
+    void InputPrompt    (const char* text);
+    bool PromptZap      (void);
+    void MenuSel        (void);
+    void Menu           (void);
+    void TextIn         (void);
 
 public:
-    MONITOR_C        (void);
-    ~MONITOR_C       (void);
-    void Tuning      (void);
-    bool Detect      (void);
-    void Loop        (void);
-    void Begin       (void);
-    void Reset       (void);
+    MONITOR_C           (void);
+    ~MONITOR_C          (void);
+    void Tuning         (void);
+    bool Detect         (void);
+    void Loop           (void);
+    void Begin          (void);
+    void Reset          (void);
     };
 }
 

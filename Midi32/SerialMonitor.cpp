@@ -117,8 +117,8 @@ bool MONITOR_C::PromptZap (void)
         {
         case 'y':
         case 'Y':
-            Settings.ClearAll ();
-            Serial << 9 << endl << "\nCleared preferences." << endl;
+            Settings.ClearAllSynth ();
+            Serial << 9 << endl << "\nCleared Synth settings." << endl;
             ESP.restart ();
         case 'n':
         case 'N':
@@ -210,10 +210,19 @@ void MONITOR_C::MenuSel (void)
                     Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
+                case 'd':
+                    Settings.SaveDebugFlags ();
+                    this->Mode (MENU);
+                    break;
                 case 'S':
                     this->InputString = Settings.GetSSID ();
                     this->InputPrompt ("  Enter SSID");
                     this->Mode (INSSID);
+                    break;
+                case 'X':
+                    SynthFront.SaveAllSettings ();
+                    Serial << "  Saving synth keyboard arrays" << endl;
+                    this->Mode (MENU);
                     break;
                 case 'P':
                     this->InputString = Settings.GetPasswd ();
@@ -221,7 +230,7 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (INPWD);
                     break;
                 case 'C':
-                    this->InputPrompt ("  Cleared preferences.");
+                    this->InputPrompt ("  Clearing Synth settings.");
                     this->Mode (ZAP);
                     break;
                 case 'q':
@@ -260,10 +269,13 @@ void MONITOR_C::Menu (void)
     Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
     Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
+    Serial << "\tX   - Save synth oscillatore tunning" << endl;
+    Serial << "\td   - Save debug flags" << endl;
+    Serial << "\n";
     Serial << "\tZ   - Test function" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
-    Serial << "\tC   - Clear Preferences" << endl;
+    Serial << "\tC   - Clear Synth settings" << endl;
     Serial << "\tF12 - Reset" << endl;
     Serial << endl;
     }
@@ -356,5 +368,6 @@ void MONITOR_C::Loop (void)
         }
     }
 
+//#######################################################################
 MONITOR_C Monitor;
 

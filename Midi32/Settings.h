@@ -16,16 +16,40 @@ private:
     String    s_SSID;
     String    s_PSWD;
 
+    bool        GetDebugSwitch      (uint8_t num);
+    void        PutDebugSwitch      (uint8_t num, bool state);
+
 public:
-    SETTINGS_RAM_C          (void);
-    void        ClearAll    (void);
-    void        PutSSID     (String& str);
-    void        PutPasswd   (String& str);
-    const char* GetSSID     (void);
-    const char* GetPasswd   (void);
-    uint16_t*   GetVCO      (uint8_t num);
-    void        PutVCO      (uint8_t num, uint16_t* pvco);
-    void        Begin       (void);
+                SETTINGS_RAM_C  (void);
+    void        Begin           (void);
+
+    //----------------------------------------
+    // SYS model storage
+    //----------------------------------------
+    void        ClearAllSys         (void);
+    void        PutSSID             (String& str);
+    void        PutPasswd           (String& str);
+    void        SaveDebugFlags      (void);
+    void        RestoreDebugFlags   (void);
+
+    //------------------------------------
+    inline const char* GetPasswd (void)
+        {
+        return (s_PSWD.c_str ());
+        }
+
+    //------------------------------------
+    inline const char* GetSSID (void)
+        {
+        return (s_SSID.c_str ());
+        }
+
+    //----------------------------------------
+    // Synth model storage
+    //----------------------------------------
+    void        ClearAllSynth   (void);
+    bool        GetOscBank      (uint8_t num, uint16_t* pbank);
+    void        PutOscBank      (uint8_t num, uint16_t* pbank);
     };
 
 //#######################################################################
