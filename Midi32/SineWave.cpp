@@ -15,7 +15,10 @@ static const char* Label = "SINE";
 
 void SINEWAVE_C::SetFrequency (int freq)
     {
-    this->WaveLength = 2000 / freq;      // frequency / 2
+    if ( freq < 1 )
+        freq = 1;
+
+    this->WaveLength = 4000.0 / (float)freq;      // frequency / 2
     DBG ("Frequency = %d   Wavelength = %f", freq, this->WaveLength);
     }
 

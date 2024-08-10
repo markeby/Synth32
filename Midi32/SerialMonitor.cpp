@@ -130,6 +130,11 @@ bool MONITOR_C::PromptZap (void)
     }
 
 //#######################################################################
+void SendTest1 (void);
+void SendTest2 (void);
+void SendTest3 (void);
+
+//#######################################################################
 void MONITOR_C::MenuSel (void)
     {
     char s = Serial.read ();
@@ -212,6 +217,7 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case 'd':
                     Settings.SaveDebugFlags ();
+                    Serial << "  Saving debug flags" << endl;
                     this->Mode (MENU);
                     break;
                 case 'S':
@@ -241,7 +247,17 @@ void MONITOR_C::MenuSel (void)
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
-                case 'Z':
+                case 'z':           // Test function #1
+                    SynthFront.ResetXL ();
+                    break;
+                case 'x':           // Test function #2
+                    SendTest1 ();
+                    break;
+                case 'c':           // Test function #3
+                    SendTest2 ();
+                    break;
+                case 'v':           // Test function #4
+                    SendTest3 ();
                     break;
                 default:
                     Serial << "       ??" << endl;
@@ -272,7 +288,10 @@ void MONITOR_C::Menu (void)
     Serial << "\tX   - Save synth oscillatore tunning" << endl;
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\n";
-    Serial << "\tZ   - Test function" << endl;
+    Serial << "\tz   - Test function #1" << endl;
+    Serial << "\tx   - Test function #2" << endl;
+    Serial << "\tc   - Test function #3" << endl;
+    Serial << "\tv   - Test function #4" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
     Serial << "\tC   - Clear Synth settings" << endl;

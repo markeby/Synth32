@@ -33,7 +33,10 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
     Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
 
     for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
+        {
         Mix[z]->OutputMultiplier (0.60);
+        Mix[z]->SetLevel (ESTATE::SUSTAIN, 1.0);
+        }
 
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));

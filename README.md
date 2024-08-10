@@ -18,7 +18,8 @@ Utilizing components from the following manufacturers:
   - Display module
 
 The core of the system is an ESP-WROOM-32 ESP32 ESP-32S development board with a  USB development shield to interface a midi keyboard.
-Any midi controller will work.  I am using an inexpensive Smason Graphite 49.  I intend to add bluetooth and serial midi inputs as well.
+Any midi controller will work.  I am using an inexpensive Smason Graphite 49 on the serial MIDI and a Novation LaunchControl XL on the USB MIDI.
+I intend to add bluetooth MIDI input as well.
 
 The design is for 6 simultanous notes whether they be all of the same effect or split the keyboard to have dual effects but still be able to play cords.
 

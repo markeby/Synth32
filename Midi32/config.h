@@ -88,36 +88,39 @@ extern uint64_t RunTime;
 #define MAX_DA              (DA_RANGE - 1)
 #define NOTES_PER_OCTAVE    12
 
-#define SM_FADER            16
-#define SM_CONTROL          16
-#define SM_SWITCH           24
-#define SM_MOD              2
-
 //#################################################
 //    Midi control mapping
 //#################################################
 typedef struct
     {
-    uint8_t        Channel;
-    const char* desc;
+    uint8_t     Index;
+    const char* Desc;
     void       (*CallBack)(uint8_t chan, uint8_t data);
-    }  MIDI_VALUE_MAP;
-
+    }  MIDI_MAP;
 typedef struct
     {
-    uint8_t        Channel;
-    const char* desc;
-    void       (*CallBack)(uint8_t ch, uint8_t state);
-    } MIDI_SWITCH_MAP;
+    uint8_t     Index;
+    uint8_t     Color;
+    const char* Desc;
+    void       (*CallBack)(uint8_t chan, uint8_t data);
+    }  MIDI_XL_MAP;
 
+
+typedef uint8_t  LED_NOTE_MAP;
 
 //#################################################
 //  Synth interfaces
 //#################################################
-extern MIDI_VALUE_MAP       FaderMapArray[];
-extern MIDI_VALUE_MAP       KnobMapArray[];
-extern MIDI_VALUE_MAP       PitchMapArray[];
-extern MIDI_SWITCH_MAP      SwitchMapArray[];
+extern MIDI_MAP       FaderMapArray[];
+extern MIDI_MAP       KnobMapArray[];
+extern MIDI_MAP       SwitchMapArray[];
+extern MIDI_MAP       SwitchMapArray[];
+#define SIZE_CL_MAP   56
+#define SIZE_S_LED    24
+extern MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP];
+extern LED_NOTE_MAP   SendA[];
+extern LED_NOTE_MAP   SendB[];
+extern LED_NOTE_MAP   PanDevice[];
 
 //#################################################
 //  I2C bus interfaces

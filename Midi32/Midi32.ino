@@ -44,7 +44,7 @@ I2C_LOCATION_T  BusI2C[] =
 
 //#######################################################################
 I2C_INTERFACE_C I2cDevices (BusI2C);
-SYNTH_FRONT_C   SynthFront (FaderMapArray, KnobMapArray, SwitchMapArray);
+SYNTH_FRONT_C   SynthFront (FaderMapArray, KnobMapArray, SwitchMapArray, XlMapArray);
 
 bool       SystemError          = false;
 bool       SystemFail           = false;
@@ -188,19 +188,6 @@ void setup (void)
         SynthFront.DisplayUpdate ();
 
         // initial test settings
-        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-            {
-            SynthFront.SetSustainLevel (z, MAX_MVAL);
-            SynthFront.ChannelSetSelect(z, false);
-            SynthFront.SetMaxLevel (z, 0);
-            }
-//        SynthFront.ChannelSetSelect (4, true);
-//        SynthFront.SetAttackTime (2);
-//        SynthFront.SetDecayTime (0);
-//        SynthFront.SetReleaseTime (22);
-//        SynthFront.SetSustainTime (0);
-//        SynthFront.SetMaxLevel (4, 100);
-//        SynthFront.ChannelSetSelect (4, false);
 
         printf("\t>>> Synth ready.\n");
         }
@@ -242,6 +229,8 @@ void Core0Task (void *parameter)
 //#######################################################################
 void loop (void)
     {
+    static bool first = true;
+
     TimeDelta ();
     if ( TickTime () )
         TickState ();
@@ -259,6 +248,16 @@ void loop (void)
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();
+
+    if ( first )
+        {
+        if ( RunTime > 5000000 )
+            {
+            first = false;
+            SynthFront.ResetXL ();
+            }
+        }
+
     UpdateOTA.Loop ();
     Monitor.Loop ();
     }

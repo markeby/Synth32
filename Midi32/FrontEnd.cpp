@@ -22,51 +22,97 @@ static const char* Label = "TOP";
 
 //#define TOGGLE          // use if channel select switches are to be alternate action
 
-using namespace SYNTH_FRONT;
+static      USB Usb;
+static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi);
+static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi2);
 
-namespace ___StuffForThisModuleOnly___
+#define     SENDnote(k,c) Midi.sendNoteOn (k, c, 1); printf("Note 0x%X  Color = 0x%X\n", k, c);
+#define     SENDcc(k, c)  Midi.send (midi::MidiType::ControlChange, k, c, 1); printf("code 0x%X Color = 0x%X from <%s>\n", k, c, __FUNCTION__);
+
+static      SYNTH_CHANNEL_C*    pChan[CHAN_COUNT];
+static      LFO_N::SYNTH_LFO_C  Lfo;
+
+//###################################################################
+static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
     {
-    static USB Usb;
-    UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi);
-    MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi2);
+    SynthFront.KeyDown (chan, key, velocity);
+    }
 
-    static SYNTH_CHANNEL_C*    pChan[CHAN_COUNT];
-    static LFO_N::SYNTH_LFO_C  Lfo;
+//###################################################################
+static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
+    {
+    SynthFront.KeyUp (chan, key, velocity);
+    }
 
-    //###################################################################
-    static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
-        {
-        SynthFront.KeyDown (chan, key, velocity);
-        }
+//###################################################################
+static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
+    {
+    SynthFront.Controller (chan, type, value);
+    if ( DebugMidi )
+        printf ("Chan %2.2X  type %2.2X  value %2.2X\n", chan, type, value);
+    }
 
-    //###################################################################
-    static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
-        {
-        SynthFront.KeyUp (chan, key, velocity);
-        }
-
-    //###################################################################
-    static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
-        {
-        SynthFront.Controller (chan, type, value);
-        if ( DebugMidi )
-            printf ("Chan %2.2X  type %2.2X  value %2.2X\n", chan, type, value);
-        }
-
-    //###################################################################
-    static void FuncPitchBend (uint8_t chan, int value)
-        {
-        SynthFront.PitchBend (chan, value);
-        }
-}// end namespace USB_MIDI_NOT_OUTSIDE_THIS_MODULE
+//###################################################################
+static void FuncPitchBend (uint8_t chan, int value)
+    {
+    SynthFront.PitchBend (chan, value);
+    }
 
 //#######################################################################
 //#######################################################################
-using namespace ___StuffForThisModuleOnly___;
+void SendTest1 (void)
+    {
+    static byte devtest = 0x50;
+    printf("Sending 0x01, %X, 0x3F\n", devtest);
+    SENDcc (devtest, 0x3C);
+    devtest += 1;
+    if ( devtest > 0x67 )
+        devtest = 0x50;
+    }
+
+void SendTest2 (void)
+    {
+    static byte val = 0xFF;
+    printf("Sending note data %d\n", val);
+    SENDcc (val, 0x3B);
+    val += 1;
+    }
+
+void SendTest3 (void)
+    {
+    static byte devtest = 0x50;
+    printf("Sending 0x01, %X, 0x3F\n", devtest);
+    SENDcc (devtest, 0x2E);
+    devtest += 1;
+    if ( devtest > 0x67 )
+        devtest = 0x50;
+    }
 
 //#######################################################################
 //#######################################################################
+void SYNTH_FRONT_C::ResetXL ()
+    {
+    SENDcc (0, 0);
+    delay (50);
+    for ( int z = 0;  z < SIZE_CL_MAP;  z++ )
+        {
+        if ( XlMap[z].Color != 0 )
+            {
+            printf("code %d[0x%X]  Color = 0x%X\n", XlMap[z].Index, XlMap[z].Index, XlMap[z].Color);
+            if ( z < SIZE_S_LED )
+                {
+                SENDnote (XlMap[z].Index, XlMap[z].Color);
+                }
+            else
+                {
+                SENDcc (XlMap[z].Index, XlMap[z].Color);
+                }
+            delay (20);
+            }
+        }
+    }
 
+//#######################################################################
 String SYNTH_FRONT_C::Selected ()
     {
     String str = "";
@@ -75,7 +121,7 @@ String SYNTH_FRONT_C::Selected ()
         {
         if ( SelectedEnvelope[z] )
             {
-            str += SwitchMapArray[z].desc;
+            str += SwitchMapArray[z].Desc;
             str += "  ";
             }
         }
@@ -83,18 +129,20 @@ String SYNTH_FRONT_C::Selected ()
     }
 
 //#####################################################################
-SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_VALUE_MAP* fader_map, MIDI_VALUE_MAP* knob_map, MIDI_SWITCH_MAP* switch_map)
+SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map)
     {
-    FaderMap            = fader_map;
-    KnobMap             = knob_map;
-    SwitchMap           = switch_map;
-    DownKey             = 0;
-    DownTrigger         = false;
-    DownVelocity        = 0;
-    UpKey               = 0;
-    UpTrigger           = false;
-    LastOp              = 0;
-    SetTuning           = false;
+    FaderMap        = fader_map;
+    KnobMap         = knob_map;
+    SwitchMap       = switch_map;
+    XlMap           = xl_map;
+    DownKey         = 0;
+    DownTrigger     = false;
+    DownVelocity    = 0;
+    UpKey           = 0;
+    UpTrigger       = false;
+    SetTuning       = false;
+    ClearEntryRed   = 0;
+    ClearEntryRedL  = 0;
     }
 
 //#######################################################################
@@ -177,15 +225,8 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
 //#######################################################################
 void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
     {
-    if ( DebugSynth )
-        {
-        uint16_t op = (type << sizeof (uint8_t)) | chan;
-        if ( op != LastOp )       // issue a newline only if the op has changed
-            {
-            LastOp = op;
-            }
-        }
     chan--;
+
     switch ( type )
         {
         case 0x01:
@@ -195,17 +236,11 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
             DBG ("modulation = %f    ", (float)value * (float)PRS_SCALER);
             break;
         case 0x07:          // Faders controls
-            if ( FaderMap[chan].CallBack != nullptr )
-                {
-                FaderMap[chan].CallBack (chan, value);
-                DBG ("%s > %f    ", FaderMap[chan].desc, (float)value * (float)PRS_SCALER);
-                }
-            break;
         case 0x0a:          // Rotatation controls
             if ( KnobMap[chan].CallBack != nullptr )
                 {
+                DBG ("%s %s > %d    ", Selected ().c_str (), KnobMap[chan].Desc, value);
                 KnobMap[chan].CallBack (chan, value);
-                DBG ("%s %s > %f    ", Selected ().c_str (), KnobMap[chan].desc, (float)value * (float)TIME_MULT);
                 }
             break;
         case 0x10:
@@ -233,10 +268,11 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
                     TuningOn[chan] = false;
                 return;
                 }
-            if ( DebugMidi )
-                DBG (SwitchMap[chan].desc);
             if ( SwitchMap[chan].CallBack != nullptr )
+                {
+                DBG ("%s %s", SwitchMap[chan].Desc, (( value ) ? "ON" : "Off"));
                 SwitchMap[chan].CallBack (chan, value);
+                }
             break;
         case 0x72:
         case 0x73:
@@ -245,10 +281,81 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
         case 0x76:
         case 0x77:
             chan = type & 0x1F;
-            if ( DebugMidi )
-                DBG (SwitchMap[chan].desc);
             if ( SwitchMap[chan].CallBack != nullptr )
+                {
+                DBG ("%s %s", SwitchMap[chan].Desc, (( value ) ? "ON" : "Off"));
                 SwitchMap[chan].CallBack (chan, value);
+                }
+            break;
+        case 0x30:
+        case 0x31:
+        case 0x32:
+        case 0x33:
+        case 0x34:
+        case 0x35:
+        case 0x36:
+        case 0x37:
+        case 0x38:
+        case 0x39:
+        case 0x3A:
+        case 0x3B:
+        case 0x3C:
+        case 0x3D:
+        case 0x3E:
+        case 0x3F:
+        case 0x40:
+        case 0x41:
+        case 0x42:
+        case 0x43:
+        case 0x44:
+        case 0x45:
+        case 0x46:
+        case 0x47:
+        case 0x48:
+        case 0x49:
+        case 0x4A:
+        case 0x4B:
+        case 0x4C:
+        case 0x4D:
+        case 0x4E:
+        case 0x4F:
+            chan = type - 0x30;
+            if ( XlMap[chan].CallBack != nullptr )
+                {
+                DBG ("%s %s > %d    ", Selected ().c_str (), XlMap[chan].Desc, value);
+                XlMap[chan].CallBack (XlMap[chan].Index, value);
+                }
+            break;
+        case 0x50:
+        case 0x51:
+        case 0x52:
+        case 0x53:
+        case 0x54:
+        case 0x55:
+        case 0x56:
+        case 0x57:
+        case 0x58:
+        case 0x59:
+        case 0x5A:
+        case 0x5B:
+        case 0x5C:
+        case 0x5D:
+        case 0x5E:
+        case 0x5F:
+        case 0x60:
+        case 0x61:
+        case 0x62:
+        case 0x63:
+        case 0x64:
+        case 0x65:
+        case 0x66:
+        case 0x67:
+            chan = type - 0x30;
+            if ( XlMap[chan].CallBack != nullptr )
+                {
+                DBG ("%s %s", XlMap[chan].Desc, (( value ) ? "ON" : "Off"));
+                XlMap[chan].CallBack (XlMap[chan].Index, value);
+                }
             break;
         default:
             break;
@@ -260,6 +367,17 @@ void SYNTH_FRONT_C::Loop ()
     {
     int oldest = -1;
     int doit   = -1;
+
+    if ( ClearEntryRed )
+        {
+        SENDcc (ClearEntryRed, 0x3F);
+        ClearEntryRed = 0;
+        }
+    if ( ClearEntryRedL )
+        {
+        SENDcc (ClearEntryRedL, 0x0D);
+        ClearEntryRedL = 0;
+        }
 
     Usb.Task ();
     Midi.read ();
@@ -384,7 +502,21 @@ void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
     SelectedEnvelope[chan] = state;
 #endif
     DisplayMessage.Selected (chan, SelectedEnvelope[chan]);
-    DBG ("%s %s", SwitchMap[chan].desc,  (SelectedEnvelope[chan]) ? " ON" : " off");
+    DBG ("%s %s", SwitchMap[chan].Desc,  ( SelectedEnvelope[chan] ) ? " ON" : " off");
+
+    byte val = 0x0C;
+    for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
+        {
+        if ( SelectedEnvelope[z] )
+            val = 0x3C;
+        }
+    Midi.sendNoteOn (PanDevice[0], val, 1);
+    delay (20);
+    Midi.sendNoteOn (PanDevice[1], val, 1);
+    delay (20);
+    Midi.sendNoteOn (PanDevice[2], val, 1);
+    delay (20);
+    Midi.sendNoteOn (PanDevice[3], val, 1);
     }
 
 //#####################################################################
@@ -532,6 +664,8 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
         pChan[z]->pOsc()->SawtoothDirection (data);
     this->SawToothDirection = data;
     DisplayMessage.SawtoothDirection (data);
+    if ( !data )
+        ClearEntryRedL = XlMap[37].Index;
     }
 
 //#######################################################################
@@ -545,11 +679,16 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SelectWaveLFO (uint8_t ch, uint8_t state)
+void SYNTH_FRONT_C::SelectWaveVCA (uint8_t ch, uint8_t state)
     {
-//    Lfo.Select(ch, state);
     for ( int z = 0;  z < CHAN_COUNT;  z++)
         pChan[z]->pOsc()->SoftLFO (ch, state);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SelectWaveVCF (uint8_t ch, uint8_t state)
+    {
+    Lfo.Select (ch, state);
     }
 
 //#####################################################################
@@ -559,7 +698,7 @@ void SYNTH_FRONT_C::FreqSelectLFO (uint8_t ch, uint8_t data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::LFOrange (bool up)
+void SYNTH_FRONT_C::LFOrange (bool up, bool button)
     {
     if ( SetTuning )
         {
@@ -569,7 +708,15 @@ void SYNTH_FRONT_C::LFOrange (bool up)
                 pChan[zc]->pOsc()->TuningAdjust (up);
             }
         }
-    Lfo.Range(up);
+    if ( button )
+        Lfo.Range(up);
+    else
+        {
+        if ( up )
+            ClearEntryRed = XlMap[48].Index;
+        else
+            ClearEntryRed = XlMap[49].Index;
+        }
     }
 
 //#######################################################################
@@ -598,10 +745,12 @@ void  SYNTH_FRONT_C::NoiseFilter (uint8_t bit, bool state)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::NoiseColor (uint8_t val)
+void SYNTH_FRONT_C::NoiseColor (bool data)
     {
-    I2cDevices.DigitalOut (NoiseColorDev, val);
+    I2cDevices.DigitalOut (NoiseColorDev, data);
     I2cDevices.UpdateDigital ();
+    if ( !data )
+        ClearEntryRedL = XlMap[38].Index;
     }
 
 //#######################################################################
