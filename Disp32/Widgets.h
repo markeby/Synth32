@@ -8,6 +8,18 @@
 #include <lvgl.h>
 
 //############################################
+typedef struct MELEMENT_S
+    {
+    lv_meter_indicator_t*   Gauge;
+    lv_obj_t*               Label;
+    lv_obj_t*               Unit;
+    lv_obj_t*               Value;
+    lv_style_t              Style;
+        MELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
+        {  }
+    } METER_ELEMENT_S;
+
+//############################################
 class TITLE_WIDGET_C
     {
 private:
@@ -19,36 +31,25 @@ public:
     };
 
 //############################################
-class ADSR_WIDGET_C
+class ADSR_METER_WIDGET_C
     {
 private:
-    lv_obj_t*   Meter;
-    lv_obj_t*   Led;
-    lv_obj_t*   MaxLevel;
+    lv_obj_t*        Meter;
+    lv_obj_t*        Led;
+    METER_ELEMENT_S  Attack;
+    METER_ELEMENT_S  Decay;
+    METER_ELEMENT_S  Sustain;
+    METER_ELEMENT_S  Release;
 
-    typedef struct
-        {
-        lv_meter_indicator_t*   Gauge;
-        lv_obj_t*               Label;
-        lv_obj_t*               Unit;
-        lv_obj_t*               Value;
-        lv_style_t              Style;
-        } ADSR_ELEMENT_T;
-
-    ADSR_ELEMENT_T  Attack;
-    ADSR_ELEMENT_T  Decay;
-    ADSR_ELEMENT_T  Sustain;
-    ADSR_ELEMENT_T  Release;
-
-    void    InfoLine        (lv_obj_t* base, ADSR_ELEMENT_T &element, const char* s, short y, uint32_t color);
+    void  InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, short y, uint32_t color);
 public:
-            ADSR_WIDGET_C   (lv_obj_t* base, const char* s, short x, short y);
-    void    Volume          (lv_obj_t* base);
-    void    Select          (bool sel);
-    void    SetAttack       (int val);
-    void    SetDecay        (int val);
-    void    SetSustain      (int val);
-    void    SetRelease      (int val);
+          ADSR_METER_WIDGET_C (lv_obj_t* base, short x, short y);
+    void  Volume              (lv_obj_t* base);
+    void  Select              (bool sel);
+    void  SetAttack           (int val);
+    void  SetDecay            (int val);
+    void  SetSustain          (int val);
+    void  SetRelease          (int val);
     };
 
 //############################################
@@ -69,7 +70,7 @@ private:
 
 public:
          LEVEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, lv_palette_t p);
-    void SetLevel (int val);
+    void SetLevel       (int val);
     };
 
 //############################################
@@ -81,11 +82,9 @@ private:
     lv_obj_t*   SlopeBack;
     lv_style_t  StyleBack;
 
-
-
 public:
          SAWTOOTH_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
-    void SetDir (bool dir);
+    void SetDir            (bool dir);
     };
 
 //############################################
@@ -103,8 +102,22 @@ private:
 
 public:
          PULSE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
-    void SetWidth (short width);
-
-
+    void SetWidth       (short width);
     };
+
+//############################################
+class LFO_METER_WIDGET_C
+    {
+private:
+    lv_obj_t*       Meter;
+    METER_ELEMENT_S MeterFreq;
+    bool            SoftwareLFO;
+
+    void InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, const char* su, short y, uint32_t color);
+
+public:
+         LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software);
+    void SetFreq            (short val);
+    };
+
 

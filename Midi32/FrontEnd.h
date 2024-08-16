@@ -6,9 +6,11 @@
 //#######################################################################
 #pragma once
 
-#include "SineWave.h"
+#include "LFOosc.h"
+#include "SoftLFO.h"
+#include "Noise.h"
+#include "SynthChannel.h"
 #include "Envelope.h"
-#include "I2Cmessages.h"
 
 //#################################################
 //    Synthesizer front end class
@@ -38,6 +40,8 @@ private:
     bool                  SetTuning;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
+    SYNTH_CHANNEL_C*      pChan[CHAN_COUNT];
+    SYNTH_LFO_C           Lfo;
 
     typedef struct
         {
@@ -50,7 +54,6 @@ private:
         uint8_t    ReleaseTime;
         }
     MIDI_ADSR_T;
-
     MIDI_ADSR_T     MidiAdsr[ENVELOPE_COUNT];
     MIDI_ADSR_T     Noise[2];
     bool            NoiseFilterBits[2];
@@ -68,11 +71,12 @@ public:
     void  SawtoothDirection  (bool data);
     void  SetPulseWidth      (byte data);
     void  Tuning             (void);
+    void  TuningAdjust       (bool up);
     void  StartTuning        (void);
     void  SelectWaveVCA      (uint8_t ch, uint8_t state);
     void  SelectWaveVCF      (uint8_t ch, uint8_t state);
-    void  FreqSelectLFO      (uint8_t ch, uint8_t data);
-    void  LFOrange           (bool up, bool button);
+    void  FreqLFO            (byte ch, byte data);
+
     void  SetLevelLFO        (uint8_t data);
     void  SetMaxLevel        (uint8_t ch, uint8_t data);
     void  SetMBaselevel      (uint8_t ch, uint8_t data);
@@ -87,6 +91,12 @@ public:
     void  SetNoiseFilterMax  (uint8_t data);
     void  DisplayUpdate      (void);
     void  SaveAllSettings    (void);
+
+    //#######################################################################
+    inline void SetClearKeyRed (byte key)
+        {
+        ClearEntryRed = key;
+        }
 
     //#######################################################################
     inline bool IsInTuning (void)

@@ -122,7 +122,9 @@
             <F N="Debug.cpp"/>
             <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
+            <F N="Files.cpp"/>
             <F N="FrontEnd.cpp"/>
+            <F N="FrontEndLFO.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
@@ -130,7 +132,7 @@
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
-            <F N="SineWave.cpp"/>
+            <F N="SoftLFO.cpp"/>
             <F N="SynthChannel.cpp"/>
             <F N="UpdateOTA.cpp"/>
         </Folder>
@@ -149,6 +151,7 @@
             <F N="Debug.h"/>
             <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>
+            <F N="Files.h"/>
             <F N="FrontEnd.h"/>
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
@@ -157,7 +160,7 @@
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
-            <F N="SineWave.h"/>
+            <F N="SoftLFO.h"/>
             <F N="SynthChannel.h"/>
             <F N="UpdateOTA.h"/>
         </Folder>

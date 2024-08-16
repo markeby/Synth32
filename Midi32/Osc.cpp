@@ -41,8 +41,9 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
     // Configure keyboard MIDI frequencies
     memset (OctaveArray, 0, sizeof (OctaveArray));
     if ( Settings.GetOscBank (num, OctaveArray) )                   // If key/note array not in storage
-        {                                                           //   initialize at even intervals.
-        for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )
+        {
+        printf ("\t  **** Tunning data failed to load.\n\t  **** Inializing default tunning.\n");
+        for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )          // initialize at even intervals.
             {
             OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
             if ( OctaveArray[z] > MAX_DA )
@@ -55,7 +56,8 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
         I2cDevices.D2Analog (PwmChannel, 900);
 
         ClearState ();
-        printf("\t  >> VCO %d started for device %d\n", num, first_device);
+        if ( DebugOsc )
+            printf("\t  >> VCO %d started for device %d\n", num, first_device);
         Valid = true;
         }
     else
@@ -130,9 +132,9 @@ void SYNTH_OSC_C::PulseWidth (float percent)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SoftLFO (uint8_t wave, bool state)
+void SYNTH_OSC_C::SetSoftLFO (uint8_t wave, bool state)
     {
-    Mix[wave]->SoftLFO (state);
+    Mix[wave]->SetSoftLFO (state);
     }
 
 //#######################################################################

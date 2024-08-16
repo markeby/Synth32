@@ -7,13 +7,11 @@
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
 #include "config.h"
+#include "I2Cmessages.h"
 #include "LFOosc.h"
 #include "Debug.h"
 static const char* Label = "LFO";
-#define DBG(args...) {if(DebugSynth){DebugMsg(Label,Number,args);}}
-#define EDBG(args...) {if(DebugOsc){DebugMsgN(Label,Number,Vca[ch].Name,args);}}
-
-using namespace LFO_N;
+#define DBG(args...) {if(DebugOsc){DebugMsg(Label,Number,args);}}
 
 #define CONST_MULT      (DA_RANGE / FULL_KEYS)
 static  const char*     MixerNames[] = { "sine", "triangle", "saw", "pulse" };
@@ -21,9 +19,9 @@ static  const char*     MixerNames[] = { "sine", "triangle", "saw", "pulse" };
 //#######################################################################
 SYNTH_LFO_C::SYNTH_LFO_C ()
     {
-    Valid       = false;
-    UpdateNeded = false;
-    FreqDiv     = MAX_FREQ_DEV;
+    Valid         = false;
+    UpdateNeded   = false;
+    CurrentLevel  = 0;
     }
 
 //#######################################################################
@@ -32,7 +30,7 @@ void SYNTH_LFO_C::ClearState ()
     for ( int z = 0;  z < LFO_VCA_COUNT;  z++)
         {
         VCA_T& m = Vca[z];
-        I2cDevices.D2Analog(m.Channel, 0);
+        I2cDevices.D2Analog (m.Channel, 0);
         }
     }
 
@@ -56,7 +54,7 @@ void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
         Vca[ch].CurrentLevel = z;
         I2cDevices.D2Analog (Vca[ch].Channel,  z);
         UpdateNeded = true;
-        EDBG ("set > %d", z);
+        DBG ("%s level > %d", Vca[ch].Name, z);
         }
     }
 
@@ -87,7 +85,8 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
         Valid = true;
         PitchBend (50.0);
         ClearState ();
-        printf ("\t  >> LFO %d started for device %d\n", Number, first_device);
+        if ( DebugOsc )
+            printf("\t  >> LFO %d started for device %d\n", Number, first_device);
         }
     else
         printf("\t  ** LFO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
@@ -101,29 +100,13 @@ void SYNTH_LFO_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Range (bool up)
+void SYNTH_LFO_C::SetFreq (float percent)
     {
-    if ( up )
-        {
-        if ( FreqDiv < MAX_FREQ_DEV )
-                 FreqDiv <<= 1;
-        }
-    else
-        {
-        if ( FreqDiv > 1 )
-                 FreqDiv >>= 1;
-        }
-    SetFreq (CurrentPercent);
-    }
-
-//#######################################################################
-void SYNTH_LFO_C::SetFreq (uint8_t data)
-    {
-    CurrentPercent = data * PRS_SCALER;
-    int z = (CurrentPercent * MAX_DA) / FreqDiv;
+    CurrentPercent = percent;
+    int z = CurrentPercent * MAX_DA;
+    DBG ("Set frequency %d", z);
     I2cDevices.D2Analog (OscChannel, z);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
-    DBG ("%f%", CurrentPercent);
     }
 
 //#######################################################################
@@ -141,17 +124,17 @@ void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
         UpdateNeded = false;
         }
 
-    EDBG ("%s", ((sel) ? " ON " : " off"));
+    DBG ("%s(%d) selected %s", Vca[ch].Name, ch, ((sel) ? "ON" : "off"));
     }
 
 //#######################################################################
 void SYNTH_LFO_C::Level (uint8_t data)
     {
-    CurrentLevel = data * PRS_SCALER * MAX_DA;
+    CurrentLevel = data;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
         {
         if ( Vca[z].Select )
-            SetLevel (z, CurrentLevel);
+            SetLevel (z, data);
         else
             SetLevel (z, 0);
         }

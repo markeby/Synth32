@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     Settings.h.hpp
+// Module:     Settings.h
 // Descrption: Load and save setting and message settings
 // Creator:    markeby
 // Date:       8/1/2022
@@ -10,17 +10,18 @@
 #include "config.h"
 
 //#######################################################################
-class   SETTINGS_RAM_C
+class SETTINGS_C
     {
 private:
     String    s_SSID;
     String    s_PSWD;
+    bool      DebugFlags;
 
     bool        GetDebugSwitch      (uint8_t num);
     void        PutDebugSwitch      (uint8_t num, bool state);
 
 public:
-                SETTINGS_RAM_C  (void);
+                SETTINGS_C  (void);
     void        Begin           (void);
 
     //----------------------------------------
@@ -53,5 +54,5 @@ public:
     };
 
 //#######################################################################
-extern SETTINGS_RAM_C Settings;        // System settings
+extern SETTINGS_C Settings;        // System settings
 

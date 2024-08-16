@@ -61,22 +61,29 @@ void setup (void)
     Graphics.Begin ();
 
     printf ("\t>>> Startup I2C inputs...\n");
-    StartI2C (DISPLAY_I2C_ADDRESS);
+    Client.Begin (DISPLAY_I2C_ADDRESS);
     delay (1500);   // Give time for the graphics subsystem threads to start
 
     printf ("\t>>> System startup complete.\n\n");
 
     pinMode (MIDI_TRIGGER_PORT, OUTPUT);
-    SendTriggerToMidi ();
     }
-
 
 //#######################################################################
 //#######################################################################
 void loop (void)
     {
+    static bool first = true;
+
     TimeDelta ();
 
+    Client.Process ();
+
     Monitor.Loop ();
+    if ( first )
+        {
+        Client.TriggerInitialMsgs ();
+        first = false;
+        }
     }
 

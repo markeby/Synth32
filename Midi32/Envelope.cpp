@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include "config.h"
 #include "Envelope.h"
-#include "SineWave.h"
+#include "SoftLFO.h"
 
 using namespace std;
 
@@ -154,7 +154,7 @@ void ENVELOPE_C::Update ()
 
         output = Current * Multiplier;
         if ( UseSoftLFO && (output > 0.05) )
-            output += SineWave.GetSin ();
+            output += SoftLFO.GetSin ();
 
         int16_t z = abs(Floor + (Diff * output));
         I2cDevices.D2Analog (DeviceChannel, z);

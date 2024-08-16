@@ -69,7 +69,7 @@ public:
     void     SetLevel       (ESTATE state, float percent);
 
     inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
-    inline void     SoftLFO          (bool state)       { UseSoftLFO = state; }         // Enable software sine wave application
+    inline void     SetSoftLFO       (bool state)       { UseSoftLFO = state; }         // Enable software sine wave application
     inline uint16_t GetChannel       (void)             { return (DeviceChannel); }     // Return D/A channel number
     };  // end ENVELOPE_C
 

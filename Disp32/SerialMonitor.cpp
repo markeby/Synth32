@@ -10,8 +10,10 @@
 #include "ClientI2C.h"
 #include "Graphics.h"
 #include "SerialMonitor.h"
+#include "../Common/DispMessages.h"
 
 using namespace SERIAL_MONITOR;
+using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 inline void DispRunTime (void)
@@ -170,11 +172,6 @@ void MONITOR_C::MenuSel (void)
         case CMD:
             switch ( s )
                 {
-                case 's':
-                    Serial << endl;
-                    DumpStats ();
-                    Mode (MENU);
-                    break;
                 case '1':
                     DebugInterface  = !DebugInterface;
                     Serial << "  INTF debugging " << (( DebugInterface ) ? "Enabled" : "Disabled") << endl;
@@ -185,14 +182,35 @@ void MONITOR_C::MenuSel (void)
                     Serial << "  GRPH debugging " << (( DebugGraphics ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
-                case 'S':
-                    InputString = Settings.GetSSID ();
-                    InputPrompt ("  Enter SSID");
-                    Mode (INSSID);
+                case 's':
+                    Serial << endl;
+                    DumpStats ();
+                    Mode (MENU);
+                    break;
+                case 'd':
+                    Settings.SaveDebugFlags ();
+                    Serial << "  Saving debug flags" << endl;
+                    this->Mode (MENU);
                     break;
                 case 'p':
                     Serial << "\n\n << Enter single digit page number >";
                     Mode (PAGE);
+                    break;
+                case ' ':           // Just move the cursor down a couple of lines
+                    Serial << "...\n\n";
+                    break;
+                case '0':
+                    Client.TriggerInitialMsgs ();
+                    Mode (MENU);
+                    break;
+                case 'Z':
+                    Serial << "        TEST" << endl;
+                    Mode (MENU);
+                    break;
+                case 'S':
+                    InputString = Settings.GetSSID ();
+                    InputPrompt ("  Enter SSID");
+                    Mode (INSSID);
                     break;
                 case 'P':
                     InputString = Settings.GetPasswd ();
@@ -202,17 +220,6 @@ void MONITOR_C::MenuSel (void)
                 case 'C':
                     InputPrompt ("  Cleared preferences.");
                     Mode (ZAP);
-                    break;
-                case ' ':           // Just move the cursor down a couple of lines
-                    Serial << "...\n\n";
-                    break;
-                case '0':
-                    SendTriggerToMidi ();
-                    Mode (MENU);
-                    break;
-                case 'Z':
-                    Serial << "        TEST" << endl;
-                    Mode (MENU);
                     break;
                 default:
                     Serial << "        ??" << endl;
@@ -229,12 +236,15 @@ void MONITOR_C::Menu (void)
     DumpTitle ();
     Serial << StateDebug (DebugInterface) << "\t1 - Debug interface        " << endl;
     Serial << StateDebug (DebugGraphics)  << "\t2 - Debug graphics         " << endl;
-    Serial << "\tp - Page selet" << endl;
+    Serial << "\td - Save debug flags" << endl;
     Serial << "\ts - Dump process Stats" << endl;
+    Serial << "\n";
+    Serial << "\tp - Page selet" << endl;
     Serial << "\t0 - Update request" << endl;
     Serial << "\tZ - Test function" << endl;
-    Serial << "\tS - SSID" << endl;
-    Serial << "\tP - Password" << endl;
+    Serial << "\n";
+//    Serial << "\tS - SSID" << endl;
+//    Serial << "\tP - Password" << endl;
     Serial << "\tC - Clear Preferences" << endl;
     Serial << "      F12 - Reset" << endl << endl;
     }
@@ -277,7 +287,7 @@ void MONITOR_C::PageSelect (void)
 
     byte z = in_char - '0';
     if ( (z >= 0) && (z <=9) )
-        Graphics.PageSelect (z);
+        Graphics.PageSelect ((PAGE_C)z);
     Mode (MENU);
     }
 

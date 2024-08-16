@@ -1,6 +1,6 @@
 //#######################################################################
-// Module:     Settings.ino
-// Descrption: Load and save setting and message settings
+// Module:     Settings.cpp
+// Descrption: Load and save settings for system and synth
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
@@ -23,7 +23,7 @@ static const char* synthKeySpace  = "SynthP";
 static const char* synthKeyBank   = "BANK";
 
 //#######################################################################
-void SETTINGS_RAM_C::ClearAllSys (void)
+void SETTINGS_C::ClearAllSys (void)
     {
     Prefs.begin (sysKeySpace, false);
     Prefs.clear ();
@@ -31,7 +31,7 @@ void SETTINGS_RAM_C::ClearAllSys (void)
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutSSID (String& str)
+void SETTINGS_C::PutSSID (String& str)
     {
     Prefs.begin (sysKeySpace, false);
     Prefs.putString (sysKeySSID, str);
@@ -40,7 +40,7 @@ void SETTINGS_RAM_C::PutSSID (String& str)
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutPasswd (String& str)
+void SETTINGS_C::PutPasswd (String& str)
     {
     Prefs.begin (sysKeySpace, false);
     Prefs.putString (sysKeyPSWD, str);
@@ -49,7 +49,7 @@ void SETTINGS_RAM_C::PutPasswd (String& str)
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutDebugSwitch (uint8_t num, bool state)
+void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
     {
     char buf[8];
 
@@ -60,19 +60,21 @@ void SETTINGS_RAM_C::PutDebugSwitch (uint8_t num, bool state)
     }
 
 //#######################################################################
-bool SETTINGS_RAM_C::GetDebugSwitch (uint8_t num)
+bool SETTINGS_C::GetDebugSwitch (uint8_t num)
     {
     char buf[8];
 
     sprintf (buf, "%s%d", sysKeyDBG, num);
     Prefs.begin (sysKeySpace, false);
+    if (  !Prefs.isKey ((const char *)buf) )
+        this->DebugFlags = false;
     bool zb = Prefs.getBool ((const char *)buf);
     Prefs.end ();
     return (zb);
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::SaveDebugFlags ()
+void SETTINGS_C::SaveDebugFlags ()
     {
     this->PutDebugSwitch (0, DebugMidi);
     this->PutDebugSwitch (1, DebugI2C);
@@ -82,22 +84,27 @@ void SETTINGS_RAM_C::SaveDebugFlags ()
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::RestoreDebugFlags ()
+void SETTINGS_C::RestoreDebugFlags ()
     {
+    this->DebugFlags = true;
     DebugMidi   = this->GetDebugSwitch (0);
     DebugI2C    = this->GetDebugSwitch (1);
     DebugOsc    = this->GetDebugSwitch (2);
     DebugSynth  = this->GetDebugSwitch (3);
     DebugDisp   = this->GetDebugSwitch (4);
+    if ( this->DebugFlags )
+        printf ("\t>>> Debug setup.\n");
+    else
+        printf ("\t  **** Debug flags failed to load\n");
     }
 
 //#######################################################################
-SETTINGS_RAM_C::SETTINGS_RAM_C (void)
+SETTINGS_C::SETTINGS_C (void)
     {
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::Begin (void)
+void SETTINGS_C::Begin (void)
     {
     Prefs.begin (sysKeySpace, false);
         {
@@ -105,20 +112,20 @@ void SETTINGS_RAM_C::Begin (void)
         s_PSWD = Prefs.getString (sysKeyPSWD);
         }
     Prefs.end ();
+    Settings.RestoreDebugFlags ();
     }
 
 //#######################################################################
 //#######################################################################
-void SETTINGS_RAM_C::ClearAllSynth (void)
+void SETTINGS_C::ClearAllSynth (void)
     {
     Prefs.begin (synthKeySpace, false);
     Prefs.clear ();
     Prefs.end ();
     }
 
-
 //#######################################################################
-bool SETTINGS_RAM_C::GetOscBank (uint8_t num, uint16_t* pbank)
+bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
     {
     char buf[8];
     bool exist = true;
@@ -135,7 +142,7 @@ bool SETTINGS_RAM_C::GetOscBank (uint8_t num, uint16_t* pbank)
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutOscBank (uint8_t num, uint16_t* pbank)
+void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
     {
     char buf[8];
 
@@ -146,5 +153,5 @@ void SETTINGS_RAM_C::PutOscBank (uint8_t num, uint16_t* pbank)
     }
 
 //#######################################################################
-SETTINGS_RAM_C Settings;        // System settings
+SETTINGS_C Settings;        // System settings
 

@@ -16,48 +16,42 @@ static const char* LabelD = "I2C-D";
 #define DBGDIG(args...) {if(DebugI2C){ DebugMsg(LabelD,DEBUG_NO_INDEX,args);}}
 
 //#######################################################################
-bool Error (void)
-    {
-    SystemError = true;
-    }
-
-//#######################################################################
 I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
     {
     I2C_LOCATION_T* zploc = ploc;
 
-    for ( BoardCount = 0;  zploc->Channel != -1;  BoardCount++, zploc++ );
+    for ( this->BoardCount = 0;  zploc->Channel != -1;  this->BoardCount++, zploc++ );
 
     SystemFail     = false;
-    pBoard         = new I2C_BOARD_T[BoardCount];
-    DeviceCount    = 0;
-    AnalogOutCount = 0;
+    this->pBoard         = new I2C_BOARD_T[this->BoardCount];
+    this->DeviceCount    = 0;
+    this->AnalogOutCount = 0;
 
-    for ( int z = 0;  z < BoardCount;  z++ )
+    for ( int z = 0;  z < this->BoardCount;  z++ )
         {
         I2C_LOCATION_T& loc = ploc[z];
         if ( loc.NumberDtoA > MAX_ANALOG_PER_BOARD )
             {
             printf ("## ERROR: Allocating too many D to A on board #%d\n", z);
-            Error ();
+            this->Error ();
             }
         if ( loc.NumberAtoD > MAX_ANALOG_PER_BOARD )
             {
             printf ("## ERROR: Allocating too many A to D on board #%d\n", z);
-            Error ();
+            this->Error ();
             }
-        pBoard[z].Board  = loc;
-        pBoard[z].Valid  = false;
-        AnalogOutCount  += loc.NumberDtoA;
-        DeviceCount     += loc.NumberDtoA;
-        DeviceCount     += loc.NumberAtoD;
-        DeviceCount     += loc.NumberDigital;
-        DigitalOutCount += loc.NumberDigital;
+        this->pBoard[z].Board  = loc;
+        this->pBoard[z].Valid  = false;
+        this->AnalogOutCount  += loc.NumberDtoA;
+        this->DeviceCount     += loc.NumberDtoA;
+        this->DeviceCount     += loc.NumberAtoD;
+        this->DeviceCount     += loc.NumberDigital;
+        this->DigitalOutCount += loc.NumberDigital;
         }
     if ( !DeviceCount )
         {
         printf ("## ERROR: No devices allocated for I2C\n");
-        Error ();
+        this->Error ();
         return;      // FIXME tone error here
         }
     pDevice = new I2C_DEVICE_T[DeviceCount];
@@ -65,7 +59,7 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
     int at_dev = 0;
     for ( int zb = 0;  zb < BoardCount;  zb++ )
         {
-        I2C_BOARD_T& brd = pBoard[zb];
+        I2C_BOARD_T& brd = this->pBoard[zb];
         if ( brd.Board.NumberDtoA )
             {
             brd.DataDtoA = 0;
@@ -95,19 +89,12 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
             {
             for ( int zd = 0;  zd < brd.Board.NumberAtoD;  zd++, at_dev++ )
                 {
-                pDevice[at_dev].pBoard = &(pBoard[zb]);
-                pDevice[at_dev].pAtoD  = &(brd.AtoD[zd]);
+                this->pDevice[at_dev].pBoard = &(pBoard[zb]);
+                this->pDevice[at_dev].pAtoD  = &(brd.AtoD[zd]);
                 }
             }
         }
     }
-
-//#######################################################################
-//I2C_INTERFACE_C::~I2C_INTERFACE_C ()
-//    {
-//    delete[] pBoard;
-//    delete[] pDevice;
-//    }
 
 //#######################################################################
 inline void I2C_INTERFACE_C::BusMux (uint8_t cluster, uint8_t slice)
@@ -147,19 +134,19 @@ void I2C_INTERFACE_C::Init4728 (I2C_LOCATION_T &loc)
     rval = Wire.write (g);
     rval = Wire.endTransmission (true);
 
-    EndBusMux (loc.Cluster);
+    this->EndBusMux (loc.Cluster);
     }
 
 //#######################################################################
 bool I2C_INTERFACE_C::ValidateDevice (uint8_t board)
     {
-    I2C_BOARD_T& brd = pBoard[board];
+    I2C_BOARD_T& brd = this->pBoard[board];
     brd.Valid = false;
-    BusMux (brd.Board.Cluster, brd.Board.Slice);
+    this->BusMux (brd.Board.Cluster, brd.Board.Slice);
     Wire.beginTransmission(brd.Board.Channel);
     if ( Wire.endTransmission (true) == 0 )
        brd.Valid = true;
-    EndBusMux (brd.Board.Cluster);
+    this->EndBusMux (brd.Board.Cluster);
     return (!brd.Valid);
     }
 
@@ -167,11 +154,11 @@ bool I2C_INTERFACE_C::ValidateDevice (uint8_t board)
 void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
     {
     int rval;
-    BusMux (loc.Cluster, loc.Slice);
+    this->BusMux (loc.Cluster, loc.Slice);
     Wire.beginTransmission(loc.Channel);
     rval = Wire.write (buff, length);
     rval = Wire.endTransmission (true);
-    EndBusMux (loc.Cluster);
+    this->EndBusMux (loc.Cluster);
     }
 
 //#######################################################################
@@ -205,7 +192,7 @@ void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
 
     DBGDIG ("%d:%d:%#3.3x  write  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str ());
 
-    Write (loc, board.ByteData, 2);
+    this->Write (loc, board.ByteData, 2);
     board.LastDataDigital = board.DataDigital;
     }
 
@@ -214,18 +201,18 @@ void I2C_INTERFACE_C::Zero ()
     {
     for ( int z = 0;  z < BoardCount;  z++ )
         {
-        I2C_BOARD_T& bd = pBoard[z];
+        I2C_BOARD_T& bd = this->pBoard[z];
         if ( bd.Valid )
             {
             if ( bd.Board.NumberDtoA == 4 )         // check for 4728 D/A
                 {
                 bd.DataDtoA = 0;
-                Write4728 (bd);
+                this->Write4728 (bd);
                 }
             if ( bd.Board.NumberDigital )           // Check for 8575 16 channel digital
                 {
                 bd.DataDigital = 0;
-                Write8575 (bd);
+                this->Write8575 (bd);
                 }
             }
         }
@@ -242,19 +229,21 @@ int I2C_INTERFACE_C::Begin ()
     for (int z = 0;  z < BoardCount;  z++ )
         {
         I2C_LOCATION_T& board = pBoard[z].Board;
-        printf ("\t  >> Init: Cluster = %d  Slice = %d  Chan = 0x%X  %s    ", board.Cluster, board.Slice, board.Channel,  board.Name);
+        if ( DebugI2C )
+            printf("\t  >> Init: Cluster = %d  Slice = %d  Chan = 0x%X  %s    ", board.Cluster, board.Slice, board.Channel,  board.Name);
         if ( this->ValidateDevice (z) )
             {
-            printf ("**** Failure to access cluster\n");
+            printf ("**** Failure to access I2C cluster %d\n",  board.Cluster);
             ecount++;
             }
         else
             {
             Init4728 (board);
-            printf ("Complete.\n");
+            if ( DebugI2C )
+                printf ("Complete.\n");
             }
         }
-    Zero ();
+    this->Zero ();
     return (ecount);
     }
 

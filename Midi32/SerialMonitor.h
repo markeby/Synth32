@@ -6,7 +6,7 @@ namespace SERIAL_MONITOR
 class MONITOR_C
     {
 private:
-    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, ZAP };
+    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, ZAP1, ZAP2 };
 
     SMODE  InputMode;
     String InputString;

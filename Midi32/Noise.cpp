@@ -27,7 +27,8 @@ using namespace NOISE_N;
     FilterDigital[0] = digital - 1;
     FilterDigital[1] = digital;
     ClearState ();
-    printf("\t  >> Noise %d started for D/A %d  Dig %d\n", num, analog, digital);
+    if ( DebugOsc )
+        printf("\t  >> Noise %d started for D/A %d  Dig %d\n", num, analog, digital);
     }
 
 //#######################################################################

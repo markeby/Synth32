@@ -1,31 +1,29 @@
 //#######################################################################
 #include "config.h"
-#include "SineWave.h"
+#include "SoftLFO.h"
 #include "Debug.h"
-static const char* Label = "SINE";
+static const char* Label = "LFO-S";
 #define DBG(args...) {if(DebugOsc){ DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 
 //#######################################################################
 //#######################################################################
-    SINEWAVE_C::SINEWAVE_C ()
+    SOFT_LFO_C::SOFT_LFO_C ()
     {
     SetFrequency (10);
     Current = 0.0;
     }
 
-void SINEWAVE_C::SetFrequency (int freq)
+void SOFT_LFO_C::SetFrequency (float freqpercent)
     {
-    if ( freq < 1 )
-        freq = 1;
-
-    this->WaveLength = 4000.0 / (float)freq;      // frequency / 2
-    DBG ("Frequency = %d   Wavelength = %f", freq, this->WaveLength);
+    this->WaveLength = 31.25 / (float)freqpercent;      // frequency / 2
+    this->HalfWaveLength = this->WaveLength * 0.5;
+    DBG ("Frequency = %f   Wavelength = %f", 1.0 / this->WaveLength, this->WaveLength);
     }
 
 //#######################################################################
-void SINEWAVE_C::Loop (float deltaTime)
+void SOFT_LFO_C::Loop (float millisec)
     {
-    Current += deltaTime / WaveLength;  // process zero to one
+    Current += millisec / WaveLength;  // process zero to one
 
     if ( Current > WaveLength )         // remove overflow
         Current -= WaveLength;
@@ -35,11 +33,11 @@ void SINEWAVE_C::Loop (float deltaTime)
     }
 
 //#######################################################################
-void SINEWAVE_C::Multiplier (float value)
+void SOFT_LFO_C::Multiplier (float value)
     {
     Modulation = value;
     DBG ("Modulation = %f", Modulation);
     }
 
-SINEWAVE_C SineWave;
+SOFT_LFO_C SoftLFO;
 

@@ -16,14 +16,14 @@ PROJECT := Midi32.ino
 SHARED := ../Common
 
 # header files
-INCLUDES := Debug.h config.h SerialMonitor.h I2Cdevices.h Settings.h FrontEnd.h Sinewave.h \
-            SynthChannel.h Osc.h LFOosc.h Noise.h Debug.h Envelope.h Diagnostics.h UpdateOTA.h \
-	    I2Cmessages.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+INCLUDES := config.h Debug.h Diagnostics.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Files.h \
+            LFOosc.h Noise.h Osc.h SerialMonitor.h Settings.h SoftLFO.h SynthChannel.h UpdateOTA.h \
+	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) SineWave.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
-           SerialMonitor.cpp Noise.cpp FrontEnd.cpp SynthChannel.cpp Osc.cpp \
+SOURCES := $(PROJECT) SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Files.cpp \
+           SerialMonitor.cpp Noise.cpp FrontEnd.cpp FrontEndLFO.cpp SynthChannel.cpp Osc.cpp \
 	   Controls.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
 # serial port for uploading

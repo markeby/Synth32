@@ -7,9 +7,13 @@
 #include "config.h"
 #include "Settings.h"
 #include "SerialMonitor.h"
+#include "I2Cmessages.h"
 #include "FrontEnd.h"
 #include "Diagnostics.h"
+#include "Files.h"
 #include "UpdateOTA.h"
+
+// SET_LOOP_TASK_STACK_SIZE(16 * 1024);  // 16KB
 
 //#######################################################################
 I2C_LOCATION_T  BusI2C[] =
@@ -61,11 +65,6 @@ bool       DebugSynth           = false;
 bool       DebugDisp            = false;
 bool       AnalogDiagEnabled    = false;
 int        AnalogDiagDevice     = 0;
-
-// this is used to add a task to core 0
-//TaskHandle_t  Core0TaskHnd;
-
-#include "Test.h"
 
 //#######################################################################
 inline void TimeDelta (void)
@@ -139,16 +138,13 @@ void setup (void)
     bool fault = false;
     Serial.begin (115200);
 
-    Settings.Begin ();        // System settings
     printf ("\t>>> Start Settings config...\n");
-    Settings.Begin ();
+    Settings.Begin ();    // System settings
 
     pinMode (HEARTBEAT_PIN, OUTPUT);
     pinMode (BEEP_PIN,      OUTPUT);
     digitalWrite (BEEP_PIN, LOW);           // Tone off
     digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
-
-    Settings.RestoreDebugFlags ();
 
     printf ("\t>>> Startup OTA...\n");
     UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
@@ -165,7 +161,6 @@ void setup (void)
     if ( SystemFail )
         Serial << "*******  Synth interface is not operational *******" << endl << endl << endl;
 
- //   xTaskCreatePinnedToCore (Core0Task, "Core0Task", 8000, NULL, 999, &Core0TaskHnd, 0);
 
     printf ("\t>>> System startup complete.\n");
     if ( SystemError )
@@ -187,42 +182,9 @@ void setup (void)
 
         SynthFront.DisplayUpdate ();
 
-        // initial test settings
+        Files.Begin ();
 
         printf("\t>>> Synth ready.\n");
-        }
-    }
-
-//#######################################################################
-void Core0TaskSetup (void)
-    {
-    // init your stuff for core0 here
-#ifdef ADC_TO_MIDI_ENABLED
-    AdcMul_Init ();
-#endif //ADC_TO_MIDI_ENABLED
-    }
-
-//#######################################################################
-void Core0TaskLoop (void)
-    {
-    // put your loop stuff for core0 here
-#ifdef ADC_TO_MIDI_ENABLED
-    AdcMul_Process ();
-#endif //ADC_TO_MIDI_ENABLED
-    }
-
-//#######################################################################
-void Core0Task (void *parameter)
-    {
-    Core0TaskSetup ();
-
-    while ( true )
-        {
-        Core0TaskLoop ();
-
-        /* this seems necessary to trigger the watchdog */
-        delay (1);
-        yield ();
         }
     }
 
@@ -241,7 +203,7 @@ void loop (void)
 
     if ( SynthActive )
         {
-        SineWave.Loop (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
+        SoftLFO.Loop (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
             SynthFront.DisplayUpdate ();

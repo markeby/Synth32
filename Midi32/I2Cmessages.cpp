@@ -11,8 +11,12 @@
 #include "I2Cmessages.h"
 #include "Debug.h"
 
+using namespace DISP_MESSAGE_N;
+
 static const char* LabelD = "D";
 #define DBGM(args...) {if(DebugDisp){ DebugMsg(LabelD,DEBUG_NO_INDEX,args);}}
+
+static byte sendBuffer[16];
 
 //#######################################################################
 //#######################################################################
@@ -28,6 +32,7 @@ void I2C_MESSAGE_C::Begin (uint8_t display, uint8_t sda, uint8_t scl)
     {
     pinMode (RESET_STROBE_IO, INPUT);
 
+    memset (sendBuffer, 0, 16);
     this->DisplayAddress = display;
     Wire1.begin (sda, scl, 400000UL);   // Clock at 400kHz
     this->Ready = true;
@@ -37,36 +42,39 @@ void I2C_MESSAGE_C::Begin (uint8_t display, uint8_t sda, uint8_t scl)
 void I2C_MESSAGE_C::SendComplete (byte length)
     {
     Wire1.beginTransmission (DisplayAddress);
-    int written = Wire1.write ((const uint8_t*)SendBuffer, length);
+    int written = Wire1.write ((const uint8_t*)sendBuffer, length);
     Wire1.endTransmission();
     if ( written != length )
         printf("[DISP] ### ERROR ### Attempt to send %d byte message but shows %d", length, written);
+//    delay (30);
     }
 
 //###################################################################
-void I2C_MESSAGE_C::Page (DISP_MESSAGE_N::PAGE_C page)
+void I2C_MESSAGE_C::Page (PAGE_C page)
     {
     if ( this->Ready )
         {
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::PAGE;
-        this->SendBuffer[1] = 0;
-        this->SendBuffer[2] = (uint8_t)page;
+        sendBuffer[0] = (uint8_t)CMD_C::PAGE_SHOW;
+        sendBuffer[1] = 0;
+        sendBuffer[2] = (uint8_t)page;
+        DBGM ("Page %d", (uint8_t)page);
         SendComplete (MESSAGE_LENGTH_PAGE);
         }
     }
 
 //###################################################################
-void I2C_MESSAGE_C::SendVCA (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+// CMD_C chan EFFECT_C high low
+void I2C_MESSAGE_C::SendUpdate (CMD_C page, uint8_t channel, EFFECT_C effect, uint16_t value)
     {
     if ( this->Ready )
         {
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::UPDATE;
-        this->SendBuffer[1] = channel;
-        this->SendBuffer[2] = (uint8_t)effect;
-        this->SendBuffer[3] = (uint8_t)(value >> 8);
-        this->SendBuffer[4] = (uint8_t)(value & 0x00FF);
-        DBGM ("{VCA-1} channel: %d   effect: %d   Value: %d", this->SendBuffer[1], this->SendBuffer[2], value);
-        this->SendComplete (MESSAGE_LENGTH_OSC);
+        sendBuffer[0] = (uint8_t)page;
+        sendBuffer[1] = channel;
+        sendBuffer[2] = (uint8_t)effect;
+        sendBuffer[3] = (uint8_t)(value >> 8);
+        sendBuffer[4] = (uint8_t)(value & 0x00FF);
+        DBGM ("Update: %X  channel: %X   effect: %X   Value: %X", sendBuffer[0], sendBuffer[1], sendBuffer[2], value);
+        this->SendComplete (MESSAGE_LENGTH_UPDATE);
         }
     }
 
@@ -74,71 +82,12 @@ void I2C_MESSAGE_C::SendVCA (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, u
 void I2C_MESSAGE_C::Pause (bool state)
     {
     if ( state )
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::PAUSE;
+        sendBuffer[0] = (uint8_t)CMD_C::PAUSE;
     else
-        this->SendBuffer[0] = (uint8_t)DISP_MESSAGE_N::CMD_C::GO;
-    this->SendBuffer[1] = 0;
-    DBGM ("{CMD} command: %d\n", this->SendBuffer[0]);
+        sendBuffer[0] = (uint8_t)CMD_C::GO;
+    sendBuffer[1] = 0;
+    DBGM ("Command: %d\n", sendBuffer[0]);
     this->SendComplete (MESSAGE_LENGTH_CNTL);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::Selected (uint8_t channel, bool select)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::AttackTime (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::MaxLevel (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::DecayTime (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::SustainTime (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::ReleaseTime (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::SustainLevel (uint8_t channel, uint16_t value)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::SelectADSR (uint8_t channel, bool select)
-    {
-    this->SendVCA (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::SawtoothDirection (bool select)
-    {
-    this->SendVCA ((uint8_t)(DISP_MESSAGE_N::ADSR_C::SAWTOOTH), DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION, (( select ) ? 1 : 0));
-    }
-
-void I2C_MESSAGE_C::PulseWidth (uint8_t width)
-    {
-    this->SendVCA ((uint8_t)(DISP_MESSAGE_N::ADSR_C::PULSE), DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH, width);
     }
 
 I2C_MESSAGE_C DisplayMessage;

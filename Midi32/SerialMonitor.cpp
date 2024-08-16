@@ -9,6 +9,7 @@
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "FrontEnd.h"
+#include "Files.h"
 #include "UpdateOTA.h"
 using namespace SERIAL_MONITOR;
 
@@ -56,7 +57,10 @@ void MONITOR_C::DumpStats (void)
 //  Serial << hh << "        Free Psram = " << ESP.getFreePsram () << endl;
     Serial << hh << "   Flash chip size = " << ESP.getFlashChipSize () << endl;
     Serial << hh << "  Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
-    Serial << hh << "   Flash chip mode = " << ESP.getFlashChipMode() << endl << endl;
+    Serial << hh << "      Total SPIFFS = " << SPIFFS.totalBytes () << endl;
+    Serial << hh << "       free SPIFFS = " << SPIFFS.totalBytes () - SPIFFS.usedBytes () << endl;
+    Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize() << endl;
+    Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark(NULL) << endl << endl;
     Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
     Serial << hh << "       Runing Time = "; DispRunTime ();
     Serial << hh << "     Last interval = " << DeltaTimeMilli << " mSec" << endl;
@@ -111,15 +115,27 @@ void MONITOR_C::Reset ()
 //#######################################################################
 bool MONITOR_C::PromptZap (void)
     {
+    Serial << " y/N >";
     char in_char = (char)(Serial.read () & 0xFF);
     Serial << in_char << "\n\n";
     switch ( in_char )
         {
         case 'y':
         case 'Y':
-            Settings.ClearAllSynth ();
-            Serial << 9 << endl << "\nCleared Synth settings." << endl;
-            ESP.restart ();
+            switch ( this->InputMode )
+                {
+                case ZAP1:
+                    Settings.ClearAllSynth();
+                    Serial << 9 << endl << "\nCleared Synth settings." << endl;
+                    ESP.restart ();
+                    break;
+                case ZAP2:
+                    Files.Format ();
+                    break;
+                default:
+                    break;
+                }
+            break;
         case 'n':
         case 'N':
         default:
@@ -235,9 +251,13 @@ void MONITOR_C::MenuSel (void)
                     this->InputPrompt ("  Enter PWD");
                     this->Mode (INPWD);
                     break;
+                case 'F':
+                    this->InputPrompt ("  Formatting file system");
+                    this->Mode (ZAP2);
+                    break;
                 case 'C':
-                    this->InputPrompt ("  Clearing Synth settings.");
-                    this->Mode (ZAP);
+                    this->InputPrompt ("  Clearing Synth settings");
+                    this->Mode (ZAP1);
                     break;
                 case 'q':
                     AnalogDiagEnabled = true;
@@ -294,6 +314,7 @@ void MONITOR_C::Menu (void)
     Serial << "\tv   - Test function #4" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
+    Serial << "\tF   - Format file system" << endl;
     Serial << "\tC   - Clear Synth settings" << endl;
     Serial << "\tF12 - Reset" << endl;
     Serial << endl;
@@ -371,7 +392,8 @@ void MONITOR_C::Loop (void)
                 case INPWD:
                     this->TextIn ();
                     break;
-                case ZAP:
+                case ZAP1:
+                case ZAP2:
                     if ( this->PromptZap () )
                         this->Mode(MENU);
                     break;

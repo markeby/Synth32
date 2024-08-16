@@ -7,154 +7,167 @@
 #pragma once
 
 namespace DISP_MESSAGE_N
-{
-//######################################
-//  Display device I2C addresss
-//######################################
-#define DISPLAY_I2C_ADDRESS     0x50
-
-//######################################
-//  Message length
-//######################################
-#define MESSAGE_LENGTH_CNTL     2
-#define MESSAGE_LENGTH_PAGE     3
-#define MESSAGE_LENGTH_OSC      5
-
-#define RESET_TRIGGER_TIME  30000
-
-//######################################
-//  Control bytes
-//######################################
-enum class CMD_C: uint8_t
     {
-    UPDATE  = 0xB0,
-    PAGE    = 0xF0,
-    PAUSE   = 0x00,
-    GO      = 0xFF,
-    };
+    //###########################################
+    //  Display device I2C addresss
+    //###########################################
+    #define DISPLAY_I2C_ADDRESS     0x50
+    #define RESET_TRIGGER_TIME      30000
 
-//######################################
-//  Control bytes text
-//######################################
-#ifdef ALLOCATE_DISP_TEXT
-char* ClassCMD[] =
-    {
-    "UPDATE",
-    "PAGE",
-    "PAUSE",
-    "GO",
-    "NONE",
-    "NONE",
-    "NONE",
-    };
-#elif ALLOCATE_DISP_TEXT_REF
-extern char* ClassCMD[];
-#endif
+    //###########################################
+    //  Message packets
+    //###########################################
 
-//######################################
-// Envelope selection bytes
-//######################################
-enum class ADSR_C: uint8_t
-    {
-    SINE = 0,
-    TRIANGLE,
-    SAWTOOTH,
-    PULSE,
-    SQUARE,
-    NOISE,
-    ALL
-    };
+    //###########################################
+    //           Update packet
+    #define MESSAGE_LENGTH_UPDATE 5
+    //           =============
+    //            index             16 bit value
+    //    CMD_C - chan - EFFECT_C - high - low
+    //###########################################
 
-//######################################
-// Envelope selection text
-//######################################
-#ifdef ALLOCATE_DISP_TEXT
-char* ClassADSR[] =
-    {
-    "SINE",
-    "TRIANGLE",
-    "SAWTOOTH",
-    "PULSE",
-    "SQUARE",
-    "ALL",
-    "NONE",
-    "NONE",
-    "NONE",
-    "NONE",
-    };
-#elif ALLOCATE_DISP_TEXT_REF
-extern char* ClassADSR[];
-#endif
+    //###########################################
+    //        Page show packet
+    #define MESSAGE_LENGTH_PAGE 3
+    //        ================
+    //  PAGE_SHOW - 0 - PAGE_C
+    //###########################################
 
-//######################################
-// Function/Effects bytes
-//######################################
-enum class EFFECT_C: uint8_t
-    {
-    SELECTED = 0,
-    BASE_VOL,
-    MAX_LEVEL,
-    ATTACK_TIME,
-    DECAY_TIME,
-    SUSTAIN_TIME,
-    RELEASE_TIME,
-    SUSTAIN_LEVEL,
-    SAWTOOTH_DIRECTION,
-    PULSE_WIDTH,
-    };
+    //###########################################
+    //        Pause/Go packets
+    #define MESSAGE_LENGTH_CNTL 2
+    //        =============
+    //  CMD_C - 0
+    //###########################################
 
-//######################################
-// Function/Effects bytes text
-//######################################
-#ifdef ALLOCATE_DISP_TEXT
-char* ClassEFFECT[] =
-    {
-    "SELECTED",
-    "BASE_VOL",
-    "MAX_LEVEL",
-    "ATTACK_TIME",
-    "DECAY_TIME",
-    "SUSTAIN_TIME",
-    "RELEASE_TIME",
-    "SUSTAIN_LEVEL",
-    "SAWTOOTH_DIRECTION",
-    "PULSE_WIDTH",
-    "NONE",
-    "NONE",
-    "NONE",
-    };
-#elif ALLOCATE_DISP_TEXT_REF
-extern char* ClassEFFECT[];
-#endif
+    //###########################################
+    //  Control bytes
+    //###########################################
+    enum class CMD_C: uint8_t
+        {
+        UPDATE_PAGE_OSC      = 0xB0,
+        UPDATE_PAGE_MOD,
+        UPDATE_PAGE_FILTER,
+        UPDATE_PAGE_TUNING,
+        PAGE_SHOW            = 0x20,
+        PAUSE                = 0x00,
+        GO                   = 0xFF,
+        };
 
-//######################################
-// Function/Page select bytes
-//######################################
-enum class PAGE_C: uint8_t
-    {
-    PAGE_OSC = 0,
-    PAGE_FILTER,
-    PAGE_TUNING,
-    NONE,
-    };
+    //###########################################
+    // Function/Page select bytes
+    //###########################################
+    enum class PAGE_C: uint8_t
+        {
+        PAGE_OSC = 0,
+        PAGE_MOD,
+        PAGE_FILTER,
+        PAGE_TUNING,
+        NONE,
+        PAGE_ADVANCE = 255
+        };
 
-//######################################
-// Function/Effects bytes text
-//######################################
-#ifdef ALLOCATE_DISP_TEXT
-char* ClassPAGE[] =
-    {
-    "OSCILLATOR",
-    "FILTER",
-    "TUNING",
-    "NONE",
-    "NONE",
-    "NONE",
-    "NONE",
-    };
-#elif ALLOCATE_DISP_TEXT_REF
-extern char* ClassEFFECT[];
-#endif
+    //###########################################
+    // Function/Effects bytes text
+    //###########################################
+    #ifdef ALLOCATE_DISP_MESSAGES
+    char* PageText[] =
+        {
+        "OSCILLATOR",
+        "MODULATION",
+        "FILTER",
+        "TUNING",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        };
+    #else
+    extern char* PageText[];
+    #endif
 
-}
+    //###########################################
+    // Envelope selection bytes
+    //###########################################
+    enum class CHANNEL_C: uint8_t
+        {
+        SINE = 0,
+        TRIANGLE,
+        SAWTOOTH,
+        PULSE,
+        SQUARE,
+        NOISE,
+        ALL,
+        HARDWARE_LFO,
+        SOFTWARE_LFO,
+        };
+
+    //###########################################
+    // Envelope selection text
+    //###########################################
+    #ifdef ALLOCATE_DISP_MESSAGES
+    char* ChannelText[] =
+        {
+        "SINE",
+        "TRIANGLE",
+        "SAWTOOTH",
+        "PULSE",
+        "SQUARE",
+        "ALL",
+        "HARDWARE_LFO",
+        "SOFTWARE_LFO",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        };
+    #else
+    extern char* ChannelText[];
+    #endif
+
+    //###########################################
+    // Function/Effects bytes
+    //###########################################
+    enum class EFFECT_C: uint8_t
+        {
+        SELECTED = 0,
+        BASE_VOL,
+        MAX_LEVEL,
+        ATTACK_TIME,
+        DECAY_TIME,
+        SUSTAIN_TIME,
+        RELEASE_TIME,
+        SUSTAIN_LEVEL,
+        SAWTOOTH_DIRECTION,
+        PULSE_WIDTH,
+        FREQ_LFO,
+        };
+
+    //###########################################
+    // Function/Effects bytes text
+    //###########################################
+    #ifdef ALLOCATE_DISP_MESSAGES
+    char* EffectText[] =
+        {
+        "SELECTED",
+        "BASE_VOL",
+        "MAX_LEVEL",
+        "ATTACK_TIME",
+        "DECAY_TIME",
+        "SUSTAIN_TIME",
+        "RELEASE_TIME",
+        "SUSTAIN_LEVEL",
+        "SAWTOOTH_DIRECTION",
+        "PULSE_WIDTH",
+        "FREQ_COURSE",
+        "FREQ_FINE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        };
+    #else
+    extern char* EffectText[];
+    #endif
+    }
 

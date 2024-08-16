@@ -8,87 +8,104 @@
 
 #include "config.h"
 #include "Graphics.h"
+#include "ClientI2C.h"
 #include "Debug.h"
-#define   ALLOCATE_DISP_TEXT 1
 #include "../Common/DispMessages.h"
 
-static const char* LabelI = "I";
-#define DBGI(args...) {if(DebugInterface){ DebugMsg(LabelI,DEBUG_NO_INDEX,args);}}
-
-static  uint8_t     msgBuff[32];
+static const char* Label = "I";
+#define DBG(args...) {if(DebugInterface){ DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 
 using namespace DISP_MESSAGE_N;
 
+//################ Data to client #######################################
 static void DataOut ()
     {
-    printf("onRequest ??\n");
-    Wire.print (" Packets.");
+    printf("We aren't doing I2C output\n");
+    Wire.print ("Nothing");
     }
 
+//################ Data from client #####################################
 static void DataIn (int len)
     {
-    short z = 0;
+    byte* bptr = Client.GetNextBuffer ();
+    int   z    = 0;
 
     while ( Wire.available () )
-        msgBuff[z++] = Wire.read ();
+        bptr[z++] = Wire.read ();
+    if ( z == len )
+        Client.NextBufferGood ();
+    }
 
-    switch ( len )
+//#######################################################################
+//#######################################################################
+    MESSAGE_CLIENT_C::MESSAGE_CLIENT_C   ()
+    {
+    this->NextBufferIndex   = 0;
+    this->CuurentBufferTop  = 0;
+    this->CountBuffersInUse = 0;
+    memset (this->Buffers, 0, BUFFER_COUNT * sizeof (BUFFER_T));
+    };
+
+//#######################################################################
+void MESSAGE_CLIENT_C::Begin (uint8_t device_addr)
+    {
+    // Set listening addresss and start listening
+    Wire.onReceive (DataIn);
+    Wire.onRequest (DataOut);
+    Wire.setClock(400000);
+    Wire.begin (device_addr);
+    }
+
+//#######################################################################
+// Trigger Midi side to send Current settings
+void MESSAGE_CLIENT_C::TriggerInitialMsgs  ()
+    {
+    digitalWrite (MIDI_TRIGGER_PORT, LOW);
+    delay (RESET_TRIGGER_TIME / 1000);
+    digitalWrite (MIDI_TRIGGER_PORT, HIGH);
+    delay (50);
+    digitalWrite (MIDI_TRIGGER_PORT, LOW);
+    }
+
+//#######################################################################
+void MESSAGE_CLIENT_C::Process ()
+    {
+    if ( this->CountBuffersInUse )
         {
-        case MESSAGE_LENGTH_OSC:
+        BUFFER_T& ptop = this->Buffers[this->CuurentBufferTop];
+        DBG ("MSG:  %X %X %X %X %X", ptop.Bytes[0], ptop.Bytes[1], ptop.Bytes[2], ptop.Bytes[3], ptop.Bytes[4]);
+        switch ( ptop.Command )
             {
-            z = msgBuff[4] | (msgBuff[3] << 8);
-            switch ( msgBuff[0] )
-                {
-                case (int)DISP_MESSAGE_N::CMD_C::UPDATE:
-                    DBGI("{VCA} Channel: %s   Effect: %s   Value: %d", ClassADSR[msgBuff[1]], ClassEFFECT[msgBuff[2]], z);
-                    Graphics.UpdatePage (msgBuff[1], msgBuff[2],  z);
-                    break;
-                default:
-                    break;
-                }
+            case CMD_C::UPDATE_PAGE_OSC:
+                Graphics.UpdatePageOsc ((uint8_t)ptop.Channel, ptop.Effect, ptop.Value);
+                Graphics.PageSelect (PAGE_C::PAGE_OSC);
+                break;
+            case CMD_C::UPDATE_PAGE_MOD:
+                Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, ptop.Value);
+                Graphics.PageSelect (PAGE_C::PAGE_MOD);
+                break;
+            case CMD_C::UPDATE_PAGE_FILTER:
+                Graphics.PageSelect (PAGE_C::PAGE_FILTER);
+                break;
+            case CMD_C::UPDATE_PAGE_TUNING:
+                break;
+            case CMD_C::PAUSE:
+                Graphics.Pause (true);
+                break;
+            case CMD_C::GO:
+                Graphics.Pause (false);
+                break;
+            case CMD_C::PAGE_SHOW:
+                Graphics.PageSelect ((PAGE_C)ptop.Bytes[2]);
+                break;
+            default:
+                break;
             }
-            break;
-        case MESSAGE_LENGTH_CNTL:
-            {
-            switch ( msgBuff[0] )
-                {
-                case (int)DISP_MESSAGE_N::CMD_C::PAUSE:
-                    DBGI("{CNT} Command: %s", ClassCMD[2]);
-                    Graphics.Pause (true);
-                    break;
-                case (int)DISP_MESSAGE_N::CMD_C::GO:
-                    DBGI("{CNT} Command: %s", ClassCMD[3]);
-                    Graphics.Pause (false);
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
-        case MESSAGE_LENGTH_PAGE:
-            {
-            switch ( msgBuff[0] )
-                {
-                case (int)DISP_MESSAGE_N::CMD_C::PAGE:
-                    DBGI("{PAGE} Command: %s", ClassPAGE[msgBuff[2]]);
-                    Graphics.PageSelect (msgBuff[2]);
-                    break;
-                default:
-                    break;
-                }
-            }
-            break;
-        default:
-            break;
+        if ( ++this->CuurentBufferTop == BUFFER_COUNT )
+            this->CuurentBufferTop = 0;
+        this->CountBuffersInUse--;
         }
     }
 
 //#######################################################################
-//#######################################################################
-void StartI2C (uint8_t device_addr)
-    {
-    Wire.onReceive (DataIn);
-    Wire.onRequest (DataOut);
-    Wire.begin (device_addr);
-    }
-
+MESSAGE_CLIENT_C    Client;

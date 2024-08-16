@@ -14,48 +14,50 @@
 //#######################################################################
 void OTA_C::WaitWiFi ()
     {
-    if ( WiFi.status() == WL_CONNECTED )
+    if ( WiFi.status () == WL_CONNECTED )
         {
-        IPaddressString = WiFi.localIP().toString();
-        printf("\t>>> OTA available.  IP: %s\n", IPaddressString);
+        IPaddressString = WiFi.localIP ().toString ();
+        printf ("\t>>> OTA available.  IP: %s\n", IPaddressString);
         WiFi_On = true;
 
         ArduinoOTA
             .onStart([] ()
                 {
                 String type;
-                if ( ArduinoOTA.getCommand() == U_FLASH )
+                if ( ArduinoOTA.getCommand () == U_FLASH )
                     type = "pgm";
                 else  // U_SPIFFS
                     type = "file";
 
                 // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
-                Serial.println("Start updating " + type);
+                printf  ("\n\nStart updating %s\n", type.c_str ());
                 })
             .onEnd([] ()
                 {
-                Serial.println("\nEnd");
+                printf ("\nEnd\n");
                 })
             .onProgress([] (unsigned int progress, unsigned int total)
                 {
-                Serial.printf("Progress: %u%%\r", (progress / (total / 100)));
+                static byte z = 0;
+                if ( ++z & 1 )
+                    printf ("Progress: %u%%\r", (progress / (total / 100)));
                 })
             .onError([] (ota_error_t error)
                 {
-                Serial.printf("Error[%u]: ", error);
+                printf (" Error[%u]: ", error);
                 if ( error == OTA_AUTH_ERROR )
-                    Serial.println("Auth Failed");
+                    printf (" Auth Failed");
                 else if ( error == OTA_BEGIN_ERROR )
-                    Serial.println("Begin Failed");
+                    printf (" Begin Failed");
                 else if ( error == OTA_CONNECT_ERROR )
-                    Serial.println("Connect Failed");
+                    printf (" Connect Failed");
                 else if ( error == OTA_RECEIVE_ERROR )
-                    Serial.println("Receive Failed");
+                    printf (" Receive Failed");
                 else if ( error == OTA_END_ERROR )
-                    Serial.println("End Failed");
+                    printf (" End Failed");
                 });
 
-        ArduinoOTA.begin();
+        ArduinoOTA.begin ();
         }
     }
 

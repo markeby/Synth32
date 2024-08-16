@@ -10,22 +10,39 @@
 #include "config.h"
 
 //#######################################################################
-class   SETTINGS_RAM_C
+class   SETTINGS_C
     {
 private:
     String    s_SSID;
     String    s_PSWD;
 
+    bool        GetDebugSwitch      (uint8_t num);
+    void        PutDebugSwitch      (uint8_t num, bool state);
+
 public:
-    SETTINGS_RAM_C          (void);
+    SETTINGS_C          (void);
     void        ClearAll    (void);
     void        PutSSID     (String& str);
     void        PutPasswd   (String& str);
-    const char* GetSSID     (void);
-    const char* GetPasswd   (void);
     void        Begin       (void);
+
+    void        SaveDebugFlags      (void);
+    void        RestoreDebugFlags   (void);
+
+    //------------------------------------
+    inline const char* GetPasswd (void)
+        {
+        return (s_PSWD.c_str ());
+        }
+
+    //------------------------------------
+    inline const char* GetSSID (void)
+        {
+        return (s_SSID.c_str ());
+        }
+
     };
 
 //#######################################################################
-extern SETTINGS_RAM_C Settings;        // System settings
+extern SETTINGS_C Settings;        // System settings
 

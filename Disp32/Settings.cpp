@@ -1,6 +1,6 @@
 //#######################################################################
 // Module:     Settings.cpp
-// Descrption: Load and save setting and message settings
+// Descrption: Load and save settings
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
@@ -10,65 +10,91 @@
 
 //#######################################################################
 Preferences Prefs;
-const char* PrefNameSpace   = "Synth";
-const char* PrefSSID        = "SSID";
-const char* PrefPSWD        = "PASSD";
+static const char* sysKeySpace  = "SysP";
+static const char* sysKeySSID   = "SSID";
+static const char* sysKeyPSWD   = "PASSD";
+static const char* sysKeyDBG    = "DBG";
 
 //#######################################################################
-void SETTINGS_RAM_C::ClearAll (void)
+void SETTINGS_C::ClearAll (void)
     {
-    Prefs.begin (PrefNameSpace, false);
+    Prefs.begin (sysKeySpace, false);
     Prefs.clear ();
     Prefs.end ();
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutSSID (String& str)
+void SETTINGS_C::PutSSID (String& str)
     {
-    Prefs.begin (PrefNameSpace, false);
-    Prefs.putString (PrefSSID, str);
+    Prefs.begin (sysKeySpace, false);
+    Prefs.putString (sysKeySSID, str);
     s_SSID = str;
     Prefs.end ();
     }
 
 //#######################################################################
-void SETTINGS_RAM_C::PutPasswd (String& str)
+void SETTINGS_C::PutPasswd (String& str)
     {
-    Prefs.begin (PrefNameSpace, false);
-    Prefs.putString (PrefPSWD, str);
+    Prefs.begin (sysKeySpace, false);
+    Prefs.putString (sysKeyPSWD, str);
     s_PSWD = str;
     Prefs.end ();
     }
 
 //#######################################################################
-const char* SETTINGS_RAM_C::GetSSID (void)
+void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
     {
-    return (s_SSID.c_str ());
-    }
+    char buf[8];
 
-//#######################################################################
-const char* SETTINGS_RAM_C::GetPasswd (void)
-    {
-    return (s_PSWD.c_str ());
-    }
-
-//#######################################################################
-SETTINGS_RAM_C::SETTINGS_RAM_C (void)
-    {
-    }
-
-//#######################################################################
-void SETTINGS_RAM_C::Begin (void)
-    {
-    Prefs.begin (PrefNameSpace, false);
-        {
-        s_SSID       = Prefs.getString (PrefSSID);
-        s_PSWD       = Prefs.getString (PrefPSWD);
-        }
-
+    sprintf (buf, "%s%d", sysKeyDBG, num);
+    Prefs.begin(sysKeySpace, false);
+    Prefs.putBool ((const char *)buf, state);
     Prefs.end ();
     }
 
 //#######################################################################
-SETTINGS_RAM_C Settings;        // System settings
+bool SETTINGS_C::GetDebugSwitch (uint8_t num)
+    {
+    char buf[8];
+
+    sprintf (buf, "%s%d", sysKeyDBG, num);
+    Prefs.begin (sysKeySpace, false);
+    bool zb = Prefs.getBool ((const char *)buf);
+    Prefs.end ();
+    return (zb);
+    }
+
+//#######################################################################
+void SETTINGS_C::SaveDebugFlags ()
+    {
+    this->PutDebugSwitch (0, DebugInterface);
+    this->PutDebugSwitch (1, DebugGraphics);
+    }
+
+//#######################################################################
+void SETTINGS_C::RestoreDebugFlags ()
+    {
+    DebugInterface = this->GetDebugSwitch (0);
+    DebugGraphics  = this->GetDebugSwitch (1);
+    }
+
+//#######################################################################
+SETTINGS_C::SETTINGS_C (void)
+    {
+    }
+
+//#######################################################################
+void SETTINGS_C::Begin (void)
+    {
+    Prefs.begin (sysKeySpace, false);
+        {
+        s_SSID = Prefs.getString (sysKeySSID);
+        s_PSWD = Prefs.getString (sysKeyPSWD);
+        }
+    Prefs.end ();
+    Settings.RestoreDebugFlags ();
+    }
+
+//#######################################################################
+SETTINGS_C Settings;        // System settings
 
