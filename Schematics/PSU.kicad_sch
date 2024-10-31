@@ -9868,7 +9868,7 @@
 				)
 			)
 		)
-		(property "Value" "Upper Cannon "
+		(property "Value" "Upper Cannon"
 			(at 190.5 22.86 90)
 			(effects
 				(font
