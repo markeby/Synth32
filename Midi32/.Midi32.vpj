@@ -122,7 +122,6 @@
             <F N="Debug.cpp"/>
             <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
-            <F N="Files.cpp"/>
             <F N="FrontEnd.cpp"/>
             <F N="FrontEndLFO.cpp"/>
             <F N="I2Cdevices.cpp"/>
@@ -150,7 +149,6 @@
             <F N="Debug.h"/>
             <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>
-            <F N="Files.h"/>
             <F N="FrontEnd.h"/>
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
