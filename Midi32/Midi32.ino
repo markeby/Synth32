@@ -10,7 +10,6 @@
 #include "I2Cmessages.h"
 #include "FrontEnd.h"
 #include "Diagnostics.h"
-#include "Files.h"
 #include "UpdateOTA.h"
 
 // SET_LOOP_TASK_STACK_SIZE(16 * 1024);  // 16KB
@@ -179,8 +178,6 @@ void setup (void)
         delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect
 
         SynthFront.DisplayUpdate ();
-
-        Files.Begin ();
 
         printf("\t>>> Synth ready.\n");
         }

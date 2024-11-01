@@ -16,13 +16,13 @@ PROJECT := Midi32.ino
 SHARED := ../Common
 
 # header files
-INCLUDES := config.h Debug.h Diagnostics.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Files.h \
+INCLUDES := config.h Debug.h Diagnostics.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h \
             LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h SynthChannel.h UpdateOTA.h \
 	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Files.cpp \
+SOURCES := $(PROJECT) SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
            SerialMonitor.cpp FrontEnd.cpp FrontEndLFO.cpp SynthChannel.cpp Osc.cpp \
 	   Controls.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 

@@ -10,7 +10,6 @@
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "FrontEnd.h"
-#include "Files.h"
 #include "UpdateOTA.h"
 using namespace SERIAL_MONITOR;
 
@@ -120,7 +119,6 @@ bool MONITOR_C::PromptZap (void)
                     ESP.restart ();
                     break;
                 case ZAP2:
-                    Files.Format ();
                     break;
                 default:
                     break;
