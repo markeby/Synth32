@@ -29,7 +29,7 @@ void SOFT_LFO_C::Loop (float millisec)
         Current -= WaveLength;
 
     Sine = sin (Current * 6.28) * Modulation;        // Current is zero to one so convert to radians then generate -1.0 to 1.0
-    I2cDevices.D2Analog (84, (uint16_t)((1.0 + Sine) * 2047.0));
+//    I2cDevices.D2Analog (84, (uint16_t)((1.0 + Sine) * 2047.0));
     }
 
 //#######################################################################

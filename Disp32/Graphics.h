@@ -25,6 +25,7 @@ class SAWTOOTH_WIDGET_C;
 class PULSE_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class LFO_METER_WIDGET_C;
+class NOTE_WIDGET_C;
 
 //############################################
 class GRPH_C
@@ -66,6 +67,9 @@ private:
     const lv_font_t*        Tuningfont;
     lv_style_t              TuningStyle;
     lv_obj_t*               TuningTitle;
+    NOTE_WIDGET_C*           Note;
+    TITLE_WIDGET_C*         TitleTuning[OSC_MIXER_COUNT];
+    LEVEL_WIDGET_C*         LevelTuning[OSC_MIXER_COUNT];
 
 public:
             GRPH_C              (void);
@@ -78,6 +82,7 @@ public:
     void    InitPageTuning      (lv_obj_t* base);
     void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     void    UpdatePageOsc       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };
 
 extern GRPH_C  Graphics;

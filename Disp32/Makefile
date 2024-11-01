@@ -24,7 +24,7 @@ SOURCES := $(PROJECT) Debug.cpp Widgets.cpp lvgl_port_v8.cpp SerialMonitor.cpp \
            Settings.cpp ClientI2C.cpp Graphics.cpp
 
 # serial port for uploading
-DEFAULT_PORT := COM7
+DEFAULT_PORT := COM5
 
 # IP address for uploading
 UPLOAD_OTA := 192.168.1.31

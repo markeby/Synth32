@@ -40,10 +40,8 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        3,     0x60,     4,    0,      0,  "D/A #76, 77, 78, 79" },
       { 2,        4,     0x60,     4,    0,      0,  "D/A #80, 81, 82, 83" },
       { 2,        5,     0x60,     4,    0,      0,  "D/A #84, 85, 86, 87" },
-      { 2,        7,     0x20,     0,    0,     16,  "Dig #88  - 103     " },
-      { 2,        7,     0x21,     0,    0,     16,  "Dig #104 - 119     " },
-      { 2,        7,     0x22,     0,    0,     16,  "Dig #120 - 135     " },
-      { -1,      -1,     -1,     -1,    -1,      -1,  nullptr },
+      { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },
+      {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
 //#######################################################################
@@ -173,7 +171,7 @@ void setup (void)
         SynthActive = true;
 
         // Setup initial state of synth
-        SynthFront.Begin (START_OSC_ANALOG, START_NOISE_ANALOG, START_NOISE_DIGITAL);
+        SynthFront.Begin (START_OSC_ANALOG);
 
         printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);

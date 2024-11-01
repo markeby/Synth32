@@ -69,6 +69,7 @@ public:
     void        SetReleaseTime     (uint8_t wave, float time);
     void        SetSustainLevel    (uint8_t wave, float level_percent);
     void        SetMaxLevel        (uint8_t wave, float level_percent);
+    float       GetMaxLevel        (uint8_t wave);
     void        TuningAdjust       (bool up);
 
     uint16_t* GetBankAddr (void)            { return (OctaveArray); }

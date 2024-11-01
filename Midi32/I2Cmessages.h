@@ -59,6 +59,20 @@ public:
         }
 
     //#################################################
+    inline void TuningNote (uint8_t value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING, 0, DISP_MESSAGE_N::EFFECT_C::NOTE, value);
+        this->Lock = true;
+        }
+
+    //#################################################
+    inline void TuningLevel (uint8_t channel, uint8_t value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING, channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
+        this->Lock = true;
+        }
+
+    //#################################################
     inline void PageAdvance (void)
         {
         this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_ADVANCE);

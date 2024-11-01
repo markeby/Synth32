@@ -73,21 +73,23 @@ void MESSAGE_CLIENT_C::Process ()
     if ( this->CountBuffersInUse )
         {
         BUFFER_T& ptop = this->Buffers[this->CuurentBufferTop];
-        DBG ("MSG:  %X %X %X %X %X", ptop.Bytes[0], ptop.Bytes[1], ptop.Bytes[2], ptop.Bytes[3], ptop.Bytes[4]);
+        uint16_t value = ptop.Value0 | (ptop.Value1 << 8);
+        DBG ("Update: %X  channel: %X   effect: %X   Value: %X", (uint8_t)ptop.Command, (uint8_t)ptop.Channel, (uint8_t)ptop.Effect, value);
         switch ( ptop.Command )
             {
             case CMD_C::UPDATE_PAGE_OSC:
-                Graphics.UpdatePageOsc ((uint8_t)ptop.Channel, ptop.Effect, ptop.Value);
+                Graphics.UpdatePageOsc ((uint8_t)ptop.Channel, ptop.Effect, value);
                 Graphics.PageSelect (PAGE_C::PAGE_OSC);
                 break;
             case CMD_C::UPDATE_PAGE_MOD:
-                Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, ptop.Value);
+                Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, value);
                 Graphics.PageSelect (PAGE_C::PAGE_MOD);
                 break;
             case CMD_C::UPDATE_PAGE_FILTER:
                 Graphics.PageSelect (PAGE_C::PAGE_FILTER);
                 break;
             case CMD_C::UPDATE_PAGE_TUNING:
+                Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
             case CMD_C::PAUSE:
                 Graphics.Pause (true);

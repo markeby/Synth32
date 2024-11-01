@@ -8,7 +8,6 @@
 
 #include "LFOosc.h"
 #include "SoftLFO.h"
-#include "Noise.h"
 #include "SynthChannel.h"
 #include "Envelope.h"
 
@@ -55,16 +54,15 @@ private:
         }
     MIDI_ADSR_T;
     MIDI_ADSR_T     MidiAdsr[ENVELOPE_COUNT];
-    MIDI_ADSR_T     Noise[2];
-    bool            NoiseFilterBits[2];
 
     String Selected (void);
 
 public:
           SYNTH_FRONT_C      (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map);
-    void  Begin              (int osc_d_a, int noise_d_a, int noise_dig);
+    void  Begin              (int osc_d_a);
     void  ResetXL            (void);
     void  Loop               (void);
+    void  Clear              (void);
     void  Controller         (uint8_t chan, uint8_t type, uint8_t value);
     void  PitchBend          (uint8_t chan, int value);
     void  ChannelSetSelect   (uint8_t chan, bool state);
@@ -85,10 +83,6 @@ public:
     void  SetSustainLevel    (uint8_t ch, uint8_t data);
     void  SetSustainTime     (uint8_t data);
     void  SetReleaseTime     (uint8_t data);
-    void  NoiseFilter        (uint8_t bit, bool state);
-    void  NoiseColor         (bool data);
-    void  SetNoiseFilterMin  (uint8_t data);
-    void  SetNoiseFilterMax  (uint8_t data);
     void  DisplayUpdate      (void);
     void  SaveAllSettings    (void);
 

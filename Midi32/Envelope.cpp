@@ -110,6 +110,30 @@ void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     }
 
 //#######################################################################
+float ENVELOPE_C::GetLevel (ESTATE state)
+    {
+    float val = 0.0;
+
+    switch ( state )
+        {
+        case ESTATE::START:
+            break;
+        case ESTATE::ATTACK:
+            val = Peak;
+            break;
+        case ESTATE::DECAY:
+            val = Sustain;
+            break;
+        case ESTATE::SUSTAIN:
+            val = Sustain;
+            break;
+        case ESTATE::RELEASE:
+            break;
+        }
+    return (val);
+    }
+
+//#######################################################################
 void ENVELOPE_C::Start ()
     {
     if ( Active || (Peak == 0.0) )

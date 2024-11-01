@@ -12,13 +12,14 @@
 
 typedef union
     {
-    uint8_t     Bytes[8];
+    uint8_t     Bytes[5];
     struct
         {
         DISP_MESSAGE_N::CMD_C       Command;
         DISP_MESSAGE_N::CHANNEL_C   Channel;
         DISP_MESSAGE_N::EFFECT_C    Effect;
-        uint16_t                    Value;
+        uint8_t                     Value0;
+        uint8_t                     Value1;
         };
     }  BUFFER_T;
 

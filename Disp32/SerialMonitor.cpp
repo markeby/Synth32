@@ -5,6 +5,7 @@
 // Date:       9/4/2023
 //#######################################################################
 #include <Arduino.h>
+#include <chip-debug-report.h>
 #include "config.h"
 #include "settings.h"
 #include "ClientI2C.h"
@@ -25,7 +26,7 @@ inline void DispRunTime (void)
     int   mhr = hr * 60.0;
     int   mn  = fmn - mhr;
     float sc  = fsc - ((float)(mhr + mn) * 60.0);
-    Serial << hr << ":" << mn << ":" << sc;
+    Serial << hr << ":" << mn << ":" << sc << endl;
     }
 
 //#######################################################################
@@ -58,19 +59,17 @@ void MONITOR_C::DumpStats (void)
     {
     static const char* hh = " ## ";
 
-    DumpTitle ();
-    Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
-    Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
-    Serial << hh << "SDK " << ESP.getSdkVersion () << endl;
-    Serial << hh << "      Flash size = " << ESP.getFlashChipSize () << endl;
-    Serial << hh << "     Sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << "       Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << "      Free space = " << ESP.getFreeSketchSpace () << endl << endl;
+    Serial << "==========================================" << endl;
+    printBeforeSetupInfo ();
+    Serial << "==========================================" << endl << endl;
+    Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize () << endl;
+    Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
+    printAfterSetupInfo ();
+    Serial << "==========================================" << endl << endl;
+    Serial << hh << "       Runing Time = ";
+    DispRunTime ();
     Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
     Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;
-    Serial << hh << "     Runing Time = ";
-    DispRunTime ();
-    Serial << endl;
     }
 
 //#######################################################################

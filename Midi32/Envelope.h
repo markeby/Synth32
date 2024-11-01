@@ -67,6 +67,7 @@ public:
     void     End            (void);
     void     SetTime        (ESTATE state, float time);
     void     SetLevel       (ESTATE state, float percent);
+    float    GetLevel       (ESTATE state);
 
     inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
     inline void     SetSoftLFO       (bool state)       { UseSoftLFO = state; }         // Enable software sine wave application

@@ -5,6 +5,7 @@
 // Date:       9/4/2023
 //#######################################################################
 #include <Arduino.h>
+#include <chip-debug-report.h>
 #include "config.h"
 #include "settings.h"
 #include "SerialMonitor.h"
@@ -42,27 +43,16 @@ void MONITOR_C::DumpStats (void)
     {
     static const char* hh = " ## ";
 
-    Serial << hh << ESP.getChipModel () << " rev " << ESP.getChipRevision () << ", ";
-    Serial << hh << ESP.getChipCores () << " cores.  " << ESP.getCpuFreqMHz () << " MHz" << endl;
-    Serial << hh << " SDK " << ESP.getSdkVersion () << endl;
-    Serial << hh << "       Sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
-    Serial << hh << " Minimum heap size = " << ESP.getMinFreeHeap () << endl;
-    Serial << hh << "  Max alloced Heap = " << ESP.getMaxAllocHeap () << endl;
-    Serial << hh << "         Free heap = " << ESP.getFreeHeap () << endl;
-    Serial << hh << " Free sketch space = " << ESP.getFreeSketchSpace () << endl;
-// Current part has no Psram
-//  Serial << hh << "    Min free Psram = " << ESP.getMinFreePsram () << endl;
-//  Serial << hh << " Max alloced Psram = " << ESP.getMaxAllocPsram () << endl;
-//  Serial << hh << "        Free Psram = " << ESP.getFreePsram () << endl;
-    Serial << hh << "   Flash chip size = " << ESP.getFlashChipSize () << endl;
-    Serial << hh << "  Flash chip speed = " << ESP.getFlashChipSpeed() << endl;
-    Serial << hh << "      Total SPIFFS = " << SPIFFS.totalBytes () << endl;
-    Serial << hh << "       free SPIFFS = " << SPIFFS.totalBytes () - SPIFFS.usedBytes () << endl;
-    Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize() << endl;
-    Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark(NULL) << endl << endl;
+    Serial << "==========================================" << endl;
+    printBeforeSetupInfo ();
+    Serial << "==========================================" << endl << endl;
+    Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize () << endl;
+    Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
+    printAfterSetupInfo ();
+    Serial << "==========================================" << endl << endl;
     Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
-    Serial << hh << "       Runing Time = "; DispRunTime ();
+    Serial << hh << "       Runing Time = ";
+    DispRunTime ();
     Serial << hh << "     Last interval = " << DeltaTimeMilli << " mSec" << endl;
     Serial << hh << "  Average interval = " << DeltaTimeMilliAvg << " mSec" << endl;
     Serial << hh << "  Longest interval = " << LongestTimeMilli << " mSec" << endl;

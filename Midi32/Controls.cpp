@@ -87,33 +87,12 @@ static void FreqLFO (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-static void SetNoiseFilter (uint8_t ch, uint8_t state)
-    {
-    SynthFront.NoiseFilter (ch - 14, state > 120);      // offset of SwitchMapArray to get 0 or 1
-    }
-
-//########################################################
-static void SetWhiteNoise (uint8_t ch, uint8_t state)
-    {
-    SynthFront.NoiseColor (state);
-    }
-
-//########################################################
-static void SetNoisFilterMin (uint8_t ch, uint8_t data)
-    {
-    SynthFront.SetNoiseFilterMin(data);
-    }
-
-//########################################################
-static void SetNoiseFilterMax (uint8_t ch, uint8_t data)
-    {
-    SynthFront.SetNoiseFilterMax (data);
-    }
-
-//########################################################
 static void TuneReset (uint8_t ch, uint8_t data)
     {
-    Monitor.Tuning ();
+    if ( data )
+        Monitor.Tuning ();
+    else
+        Monitor.Reset ();
     }
 
 //########################################################
@@ -165,7 +144,7 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {    3,    0, "Pulse",                  SetTimeSetSelect  },    // 01  53  xx
         {    4,    0, "Square",                 SetTimeSetSelect  },    // 01  54  xx
         { 0x55, 0x0D, "Sawtooth Dir",           SawtoothDirection },    // 01  55  xx
-        { 0x56, 0x0D, "White/!Pink noise",      SetWhiteNoise     },    // 01  56  xx
+        { 0x56, 0x0D, "White/!Pink noise",      nullptr           },    // 01  56  xx
         {   39,    0, "N ",                     nullptr           },    // 01  57  xx
         {   40,    0, "N ",                     nullptr           },    // 01  58  xx
         {   41,    0, "N ",                     nullptr           },    // 01  59  xx
@@ -236,7 +215,7 @@ MIDI_MAP SwitchMapArray[] =
         {  1, "VCA Mod Triangle",         SetModVCA         },          //  01  11  xx
         {  2, "VCA Mod Sawtooth",         SetModVCA         },          //  01  12  xx
         {  3, "VCA Mod Pulse   ",         SetModVCA         },          //  01  13  xx
-        {  4, "VCA Mod Square",           SetModVCA         },          //  01  14  xx
+        {  4, "VCA Mod Noise",            SetModVCA         },          //  01  14  xx
         {  5, "Switch f6",                nullptr           },          //  01  15  xx
         {  6, "Switch f7",                nullptr           },          //  01  16  xx
         {  7, "Switch f8",                nullptr           },          //  01  17  xx
@@ -244,7 +223,7 @@ MIDI_MAP SwitchMapArray[] =
         {  1, "VCF Src Mod Triangle",     SetSrcVCF         },          //  01  19  xx
         {  2, "VCF Src Mod Sawtooth",     SetSrcVCF         },          //  01  1A  xx
         {  3, "VCF Src Mod Pulse   ",     SetSrcVCF         },          //  01  1B  xx
-        {  4, "VCF Src Mod Square",       SetSrcVCF         },          //  01  1C  xx
+        {  4, "VCF Src Mod Noise",        SetSrcVCF         },          //  01  1C  xx
         { 13, "Switch #14",               nullptr           },          //  01  1D  xx
         { 14, "Switch #15",               nullptr           },          //  01  1E  xx
         { 15, "Switch #16",               nullptr           },          //  01  1F  xx

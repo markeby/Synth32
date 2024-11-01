@@ -171,6 +171,12 @@ void SYNTH_OSC_C::SetSustainTime (uint8_t wave, float time)
 //#######################################################################
 void SYNTH_OSC_C::SetMaxLevel (uint8_t wave, float level_percent)
     {
-    Mix[wave]->SetLevel(ESTATE::ATTACK, level_percent);
+    Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent);
+    }
+
+//#######################################################################
+float SYNTH_OSC_C::GetMaxLevel (uint8_t wave)
+    {
+    return (Mix[wave]->GetLevel (ESTATE::ATTACK));
     }
 

@@ -106,6 +106,18 @@ public:
     };
 
 //############################################
+class NOTE_WIDGET_C
+    {
+private:
+    lv_style_t  StyleValue;
+    lv_obj_t*   Value;
+
+public:
+         NOTE_WIDGET_C (lv_obj_t* base, short x, short y);
+    void SetValue      (short val);
+    };
+
+//############################################
 class LFO_METER_WIDGET_C
     {
 private:

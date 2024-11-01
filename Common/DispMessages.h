@@ -95,7 +95,6 @@ namespace DISP_MESSAGE_N
         TRIANGLE,
         SAWTOOTH,
         PULSE,
-        SQUARE,
         NOISE,
         ALL,
         HARDWARE_LFO,
@@ -112,7 +111,7 @@ namespace DISP_MESSAGE_N
         "TRIANGLE",
         "SAWTOOTH",
         "PULSE",
-        "SQUARE",
+        "NOISE",
         "ALL",
         "HARDWARE_LFO",
         "SOFTWARE_LFO",
@@ -141,6 +140,7 @@ namespace DISP_MESSAGE_N
         SAWTOOTH_DIRECTION,
         PULSE_WIDTH,
         FREQ_LFO,
+        NOTE,
         };
 
     //###########################################

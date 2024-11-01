@@ -24,11 +24,12 @@ static const char* LabelM = "M";
 //#define TOGGLE          // use if channel select switches are to be alternate action
 
 static      USB Usb;
-static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi);
-static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi2);
+static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
+static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
+//static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 
-#define SENDnote(k,c) {Midi.sendNoteOn(k,c,1);DBGM("Note 0x%X  Color = 0x%X  [%s]", k, c,__PRETTY_FUNCTION__);}
-#define SENDcc(k,c) {Midi.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
+#define SENDnote(k,c) {Midi_0.sendNoteOn(k,c,1);DBGM("Note 0x%X  Color = 0x%X  [%s]", k, c,__PRETTY_FUNCTION__);}
+#define SENDcc(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
 
 using namespace MIDI_NAMESPACE;
 typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
@@ -39,15 +40,18 @@ void FuncMessage (const MidiMessage& msg)
     DBGM ("valid = %X   type = %X   channel = %X   data1 = %X   data2 = %X   length = %X",
           msg.valid, msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
+
 //###################################################################
 static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
     {
+    DBGM ("Key down  channel: %d  key: %d  velocity: %d", chan, key, velocity);
     SynthFront.KeyDown (chan, key, velocity);
     }
 
 //###################################################################
 static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
     {
+    DBGM ("Key up  channel: %d  key: %d  velocity: %d", chan, key, velocity);
     SynthFront.KeyUp (chan, key, velocity);
     }
 
@@ -55,14 +59,16 @@ static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
 static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
     {
     SynthFront.Controller (chan, type, value);
-    if ( DebugMidi )
-        printf ("Chan %2.2X  type %2.2X  value %2.2X\n", chan, type, value);
+    DBGM ("Controller  Chan %2.2X  type %2.2X  value %2.2X", chan, type, value);
     }
 
 //###################################################################
 static void FuncPitchBend (uint8_t chan, int value)
     {
-    SynthFront.PitchBend (chan, value);
+//    if ( SynthFront.IsInTuning () )
+//        value = 0;
+    SynthFront.PitchBend(chan, value);
+    DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
     }
 
 //#######################################################################
@@ -150,56 +156,75 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP*
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
+void SYNTH_FRONT_C::Begin (int osc_d_a)
     {
-//    Midi.setHandleMessage              (FuncMessage);
-    Midi.setHandleNoteOn               (FuncKeyDown);
-    Midi.setHandleNoteOff              (FuncKeyUp);
-    Midi.setHandleControlChange        (FuncController);
-    Midi.setHandlePitchBend            (FuncPitchBend);
+//  Midi_0.setHandleMessage              (FuncMessage);
+    Midi_0.setHandleNoteOn               (FuncKeyDown);
+    Midi_0.setHandleNoteOff              (FuncKeyUp);
+    Midi_0.setHandleControlChange        (FuncController);
+    Midi_0.setHandlePitchBend            (FuncPitchBend);
+//  Midi_0.setHandleError                (ErrorCallback fptr);
+//  Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//  Midi_0.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi_0.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//  Midi_0.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
+//  Midi_0.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi_0.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi_0.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi_0.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi_0.setHandleClock                (ClockCallback fptr);
+//  Midi_0.setHandleStart                (StartCallback fptr);
+//  Midi_0.setHandleTick                 (TickCallback fptr);
+//  Midi_0.setHandleContinue             (ContinueCallback fptr);
+//  Midi_0.setHandleStop                 (StopCallback fptr);
+//  Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr);
+//  Midi_0.setHandleSystemReset          (SystemResetCallback fptr);
+
+//  Midi_1.setHandleMessage              (FuncMessage);
+    Midi_1.setHandleNoteOn               (FuncKeyDown);
+    Midi_1.setHandleNoteOff              (FuncKeyUp);
+    Midi_1.setHandleControlChange        (FuncController);
+    Midi_1.setHandlePitchBend            (FuncPitchBend);
+//  Midi_1.setHandleError                (ErrorCallback fptr);
+//  Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//  Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//  Midi_1.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
+//  Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi_1.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi_1.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi_1.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi_1.setHandleClock                (ClockCallback fptr);
+//  Midi_1.setHandleStart                (StartCallback fptr);
+//  Midi_1.setHandleTick                 (TickCallback fptr);
+//  Midi_1.setHandleContinue             (ContinueCallback fptr);
+//  Midi_1.setHandleStop                 (StopCallback fptr);
+//  Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
+//  Midi_1.setHandleSystemReset          (SystemResetCallback fptr);
 
 
 
-//  Midi.setHandleError                (ErrorCallback fptr);
-//  Midi.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//  Midi.setHandleProgramChange        (ProgramChangeCallback fptr);
-//  Midi.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-//  Midi.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
-//  Midi.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//  Midi.setHandleSongPosition         (SongPositionCallback fptr);
-//  Midi.setHandleSongSelect           (SongSelectCallback fptr);
-//  Midi.setHandleTuneRequest          (TuneRequestCallback fptr);
-//  Midi.setHandleClock                (ClockCallback fptr);
-//  Midi.setHandleStart                (StartCallback fptr);
-//  Midi.setHandleTick                 (TickCallback fptr);
-//  Midi.setHandleContinue             (ContinueCallback fptr);
-//  Midi.setHandleStop                 (StopCallback fptr);
-//  Midi.setHandleActiveSensing        (ActiveSensingCallback fptr);
-//  Midi.setHandleSystemReset          (SystemResetCallback fptr);
-
-//    Midi2.setHandleMessage              (FuncMessage);
-    Midi2.setHandleNoteOn               (FuncKeyDown);
-    Midi2.setHandleNoteOff              (FuncKeyUp);
-    Midi2.setHandleControlChange        (FuncController);
-    Midi2.setHandlePitchBend            (FuncPitchBend);
-
-
-//  Midi2.setHandleError                (ErrorCallback fptr);
-//  Midi2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//  Midi2.setHandleProgramChange        (ProgramChangeCallback fptr);
-//  Midi2.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-//  Midi2.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
-//  Midi2.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//  Midi2.setHandleSongPosition         (SongPositionCallback fptr);
-//  Midi2.setHandleSongSelect           (SongSelectCallback fptr);
-//  Midi2.setHandleTuneRequest          (TuneRequestCallback fptr);
-//  Midi2.setHandleClock                (ClockCallback fptr);
-//  Midi2.setHandleStart                (StartCallback fptr);
-//  Midi2.setHandleTick                 (TickCallback fptr);
-//  Midi2.setHandleContinue             (ContinueCallback fptr);
-//  Midi2.setHandleStop                 (StopCallback fptr);
-//  Midi2.setHandleActiveSensing        (ActiveSensingCallback fptr);
-//  Midi2.setHandleSystemReset          (SystemResetCallback fptr);
+//  Midi_2.setHandleMessage              (FuncMessage);
+//    Midi_2.setHandleNoteOn               (FuncKeyDown);
+//    Midi_2.setHandleNoteOff              (FuncKeyUp);
+//    Midi_2.setHandleControlChange        (FuncController);
+//    Midi_2.setHandlePitchBend            (FuncPitchBend);
+//  Midi_2.setHandleError                (ErrorCallback fptr);
+//  Midi_2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//  Midi_2.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi_2.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//  Midi_2.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
+//  Midi_2.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi_2.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi_2.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi_2.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi_2.setHandleClock                (ClockCallback fptr);
+//  Midi_2.setHandleStart                (StartCallback fptr);
+//  Midi_2.setHandleTick                 (TickCallback fptr);
+//  Midi_2.setHandleContinue             (ContinueCallback fptr);
+//  Midi_2.setHandleStop                 (StopCallback fptr);
+//  Midi_2.setHandleActiveSensing        (ActiveSensingCallback fptr);
+//  Midi_2.setHandleSystemReset          (SystemResetCallback fptr);
 
     printf ("\t>>> Midi interfaces startup\n");
     while ( Usb.Init () == -1 )
@@ -207,28 +232,35 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int noise_d_a, int noise_dig)
         delay (200);
         printf ("Usb midi init retry!\n");
         }
-    printf ("\t>>> Usb midi init done!\n");
-    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+    printf ("\t>>> Usb midi ready\n");
 
-    Midi2.begin (MIDI_CHANNEL_OMNI);
-    delay (200);
-    printf ("\t>>> Serial2 midi init done!\n");
+    Serial1.begin (31250, SERIAL_8N1, RXD1, TXD1, false);
+    Midi_1.begin (MIDI_CHANNEL_OMNI);
+    printf ("\t>>> Serial1 midi ready\n");
+
+//    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+//    Midi_2.begin (MIDI_CHANNEL_OMNI);
+//    printf ("\t>>> Serial2 midi ready\n");
 
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
-        pChan[z] = new SYNTH_CHANNEL_C (z, osc_d_a, noise_d_a, noise_dig, EnvADSL);
+        pChan[z] = new SYNTH_CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
-        noise_d_a += 2;
-        if ( !(z & 1) )
-            noise_dig -= 2;
         }
-    NoiseColorDev = noise_dig;
+
     Lfo.Begin (0, osc_d_a);
 
     this->SawtoothDirection (false);
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         SelectedEnvelope[z] = false;
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::Clear ()
+    {
+    for ( int z = 0;  z < CHAN_COUNT; z++ )
+        pChan[z]->Clear ();
     }
 
 //#######################################################################
@@ -258,24 +290,9 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
                 KnobMap[chan].CallBack (KnobMap[chan].Index, value);
                 }
             break;
-        case 0x10:
-        case 0x11:
-        case 0x12:
-        case 0x13:
-        case 0x14:
-        case 0x15:
-        case 0x16:
-        case 0x17:
-        case 0x18:
-        case 0x19:
-        case 0x1A:
-        case 0x1B:
-        case 0x1C:
-        case 0x1D:
-        case 0x1E:
-        case 0x1F:
+        case 0x10 ... 0x1F:
             chan = type & 0x0F;
-            if ( SetTuning && (chan < 6) )
+            if ( SetTuning && (chan < 8) )
                 {
                 if ( value )
                     TuningOn[chan] = true;
@@ -294,45 +311,14 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
         case 0x75:
         case 0x76:
         case 0x77:
-            chan = type - (72 - 16);
+            chan = type - (0x72 - 16);
             if ( SwitchMap[chan].CallBack != nullptr )
                 {
                 DBG ("%s %s", SwitchMap[chan].Desc, (( value ) ? "ON" : "Off"));
                 SwitchMap[chan].CallBack (SwitchMap[chan].Index, value);
                 }
             break;
-        case 0x30:
-        case 0x31:
-        case 0x32:
-        case 0x33:
-        case 0x34:
-        case 0x35:
-        case 0x36:
-        case 0x37:
-        case 0x38:
-        case 0x39:
-        case 0x3A:
-        case 0x3B:
-        case 0x3C:
-        case 0x3D:
-        case 0x3E:
-        case 0x3F:
-        case 0x40:
-        case 0x41:
-        case 0x42:
-        case 0x43:
-        case 0x44:
-        case 0x45:
-        case 0x46:
-        case 0x47:
-        case 0x48:
-        case 0x49:
-        case 0x4A:
-        case 0x4B:
-        case 0x4C:
-        case 0x4D:
-        case 0x4E:
-        case 0x4F:
+        case 0x30 ... 0x4F:
             chan = type - 0x30;
             if ( XlMap[chan].CallBack != nullptr )
                 {
@@ -340,30 +326,7 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
                 XlMap[chan].CallBack (XlMap[chan].Index, value);
                 }
             break;
-        case 0x50:
-        case 0x51:
-        case 0x52:
-        case 0x53:
-        case 0x54:
-        case 0x55:
-        case 0x56:
-        case 0x57:
-        case 0x58:
-        case 0x59:
-        case 0x5A:
-        case 0x5B:
-        case 0x5C:
-        case 0x5D:
-        case 0x5E:
-        case 0x5F:
-        case 0x60:
-        case 0x61:
-        case 0x62:
-        case 0x63:
-        case 0x64:
-        case 0x65:
-        case 0x66:
-        case 0x67:
+        case 0x50 ... 0x67:
             chan = type - 0x30;
             if ( XlMap[chan].CallBack != nullptr )
                 {
@@ -371,6 +334,11 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
                 XlMap[chan].CallBack (XlMap[chan].Index, value);
                 }
             break;
+
+        case 120 ... 127:           // all notes stop
+            this->Clear ();
+            break;
+
         default:
             break;
         }
@@ -393,9 +361,10 @@ void SYNTH_FRONT_C::Loop ()
         ClearEntryRedL = 0;
         }
 
-    Usb.Task ();
-    Midi.read ();
-    Midi2.read ();
+    Usb.Task    ();
+    Midi_0.read ();
+    Midi_1.read ();
+//    Midi_2.read ();
 
     if ( !SetTuning )
         {
@@ -457,15 +426,19 @@ void SYNTH_FRONT_C::Tuning ()
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
         {
         if ( DownTrigger )
+            {
             pChan[zc]->pOsc()->SetTuningNote(DownKey);
+            DisplayMessage.TuningNote (DownKey);
+            }
         if ( TuningOn[zc] )
             {
             for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
                 {
                 if ( z < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetTuningVolume(z, TuningLevel[z]);
-                else
-                    pChan[zc]->pNoise()->SetTuningVolume(z - OSC_MIXER_COUNT, TuningLevel[z]);
+                    {
+                    pChan[zc]->pOsc()->SetTuningVolume (z, TuningLevel[z]);
+                    DisplayMessage.TuningLevel (z, TuningLevel[z] * PRS_UNSCALER);
+                    }
                 }
             }
         else
@@ -474,8 +447,6 @@ void SYNTH_FRONT_C::Tuning ()
                 {
                 if ( z < OSC_MIXER_COUNT )
                     pChan[zc]->pOsc()->SetTuningVolume(z, 0);
-                else
-                    pChan[zc]->pNoise()->SetTuningVolume(z - OSC_MIXER_COUNT, 0);
                 }
             }
         }
@@ -492,7 +463,10 @@ void SYNTH_FRONT_C::StartTuning ()
         {
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
-            TuningLevel[z] = 0;
+            {
+            TuningLevel[z] = pChan[0]->pOsc()->GetMaxLevel (z) * PRS_UNSCALER;
+            DisplayMessage.TuningLevel (z, TuningLevel[z]);
+            }
         for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
             TuningOn[zc] = false;
         }
@@ -526,24 +500,18 @@ void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
         if ( SelectedEnvelope[z] )
             val = 0x3C;
         }
-    Midi.sendNoteOn (PanDevice[0], val, 1);
+    Midi_0.sendNoteOn (PanDevice[0], val, 1);
     delay (20);
-    Midi.sendNoteOn (PanDevice[1], val, 1);
+    Midi_0.sendNoteOn (PanDevice[1], val, 1);
     delay (20);
-    Midi.sendNoteOn (PanDevice[2], val, 1);
+    Midi_0.sendNoteOn (PanDevice[2], val, 1);
     delay (20);
-    Midi.sendNoteOn (PanDevice[3], val, 1);
+    Midi_0.sendNoteOn (PanDevice[3], val, 1);
     }
 
 //#####################################################################
 void SYNTH_FRONT_C::SetMBaselevel (uint8_t ch, uint8_t data)
     {
-    float val = (float)data * PRS_SCALER;
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-        {
-        if ( ch >= OSC_MIXER_COUNT )
-            pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
-        }
     MidiAdsr[ch].BaseLevel = data;
     }
 
@@ -553,6 +521,7 @@ void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
     if ( SetTuning )
         {
         TuningLevel[ch] = data * MIDI_MULTIPLIER;
+        DisplayMessage.TuningLevel (ch, data);
         return;
         }
 
@@ -561,8 +530,6 @@ void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
         {
         if ( ch < OSC_MIXER_COUNT )
             pChan[zc]->pOsc()->SetMaxLevel (ch, val);
-        else
-            pChan[zc]->pNoise()->SetMaxLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].MaxLevel = data;
     DisplayMessage.OscMaxLevel (ch, data);
@@ -581,8 +548,6 @@ void SYNTH_FRONT_C::SetAttackTime (uint8_t data)
                 {
                 if ( zs < OSC_MIXER_COUNT )
                     pChan[zc]->pOsc()->SetAttackTime (zs, dtime);
-                else
-                    pChan[zc]->pNoise()->SetAttackTime (zs - OSC_MIXER_COUNT, dtime);
                 }
             DisplayMessage.OscAttackTime (zs, data);
             }
@@ -602,8 +567,6 @@ void SYNTH_FRONT_C::SetDecayTime (uint8_t data)
                 {
                 if ( zs < OSC_MIXER_COUNT )
                     pChan[zc]->pOsc()->SetDecayTime (zs, dtime);
-                else
-                    pChan[zc]->pNoise()->SetDecayTime (zs - OSC_MIXER_COUNT, dtime);
                 }
             DisplayMessage.OscDecayTime (zs, data);
             }
@@ -618,8 +581,6 @@ void SYNTH_FRONT_C::SetSustainLevel (uint8_t ch, uint8_t data)
         {
         if ( ch < OSC_MIXER_COUNT )
             pChan[zc]->pOsc()->SetSustainLevel (ch, val);
-        else
-            pChan[zc]->pNoise()->SetSustainLevel (ch - OSC_MIXER_COUNT, val);
         }
     MidiAdsr[ch].SustainLevel = data;
     DisplayMessage.OscSustainLevel (ch, data);
@@ -644,8 +605,6 @@ void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
                 {
                 if ( zs < OSC_MIXER_COUNT )
                     pChan[zc]->pOsc()->SetSustainTime (zs, dtime);
-                else
-                    pChan[zc]->pNoise()->SetSustainTime (zs - OSC_MIXER_COUNT, dtime);
                 }
             DisplayMessage.OscSustainTime (zs, data);
             }
@@ -665,8 +624,6 @@ void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
                 {
                 if ( zs < OSC_MIXER_COUNT )
                     pChan[zc]->pOsc()->SetReleaseTime (zs, dtime);
-                else
-                    pChan[zc]->pNoise()->SetReleaseTime (zs - OSC_MIXER_COUNT, dtime);
                 }
             DisplayMessage.OscReleaseTime (zs, data);
             }
@@ -692,50 +649,6 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
         pChan[z]->pOsc()->PulseWidth (percent);
     this->PulseWidth = data;
     DisplayMessage.OscPulseWidth (data);
-    }
-
-//#######################################################################
-void  SYNTH_FRONT_C::NoiseFilter (uint8_t bit, bool state)
-    {
-    uint8_t bits = 0;
-
-    if ( state )
-        NoiseFilterBits[bit] = true;
-    else
-        NoiseFilterBits[bit] = false;
-
-    if ( NoiseFilterBits[0] )
-        bits |= 1;
-    if ( NoiseFilterBits[1] )
-        bits |= 2;
-    for ( int z = 0;  z < (CHAN_COUNT / 2);  z++ )
-        pChan[z * 2]->pNoise ()->FilterSelect (bits);
-    I2cDevices.UpdateDigital ();
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::NoiseColor (bool data)
-    {
-    I2cDevices.DigitalOut (NoiseColorDev, data);
-    I2cDevices.UpdateDigital ();
-    if ( !data )
-        ClearEntryRedL = XlMap[38].Index;
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::SetNoiseFilterMin (uint8_t data)
-    {
-    if ( SetTuning )
-        TuningLevel[ENVELOPE_COUNT - 1] = data * MIDI_MULTIPLIER;
-
-    float val = (float)data * PRS_SCALER;
-    for ( int z = 0;  z < CHAN_COUNT;  z++ )
-        pChan[z]->pNoise ()->SetBaseLevel (NOISE_N::SELECT::VCF, val);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::SetNoiseFilterMax (uint8_t data)
-    {
     }
 
 //#####################################################################
