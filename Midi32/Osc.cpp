@@ -9,8 +9,13 @@
 #include "Settings.h"
 #include "Osc.h"
 #include "Debug.h"
+
+#ifdef DEBUG_ON
 static const char* Label = "VCO";
 #define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
+#else
+#define DBG(args...)
+#endif
 
 using namespace OSC_N;
 

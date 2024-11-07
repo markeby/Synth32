@@ -62,6 +62,7 @@ extern bool AnalogDiagEnabled;
 //  Synth I2C interface starting indexes
 //#################################################
 #define START_OSC_ANALOG        0
+#define START_MULT_DIGITAL      88
 #define START_NOISE_ANALOG      56
 #define START_NOISE_DIGITAL     95
 #define D_A_COUNT               88

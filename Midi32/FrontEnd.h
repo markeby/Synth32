@@ -10,6 +10,7 @@
 #include "SoftLFO.h"
 #include "SynthChannel.h"
 #include "Envelope.h"
+#include "multiplex.h"
 
 //#################################################
 //    Synthesizer front end class
@@ -34,8 +35,10 @@ private:
     MIDI_MAP*             SwitchMap;
     MIDI_XL_MAP*          XlMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
+    MULTIPLEX_C*          Multiplexer;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  TuningOn[CHAN_COUNT];
+    bool                  TuningChange;
     bool                  SetTuning;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
@@ -59,7 +62,7 @@ private:
 
 public:
           SYNTH_FRONT_C      (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map);
-    void  Begin              (int osc_d_a);
+    void  Begin              (int osc_d_a, int mult_digital);
     void  ResetXL            (void);
     void  Loop               (void);
     void  Clear              (void);
@@ -85,6 +88,9 @@ public:
     void  SetReleaseTime     (uint8_t data);
     void  DisplayUpdate      (void);
     void  SaveAllSettings    (void);
+
+    //#######################################################################
+    MULTIPLEX_C* Multiplex (void);
 
     //#######################################################################
     inline void SetClearKeyRed (byte key)

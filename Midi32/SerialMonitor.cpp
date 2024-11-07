@@ -134,11 +134,6 @@ bool MONITOR_C::PromptZap (void)
     }
 
 //#######################################################################
-void SendTest1 (void);
-void SendTest2 (void);
-void SendTest3 (void);
-
-//#######################################################################
 void MONITOR_C::MenuSel (void)
     {
     char s = Serial.read ();
@@ -256,16 +251,15 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
-                    SynthFront.ResetXL ();
+                    SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::ONE, MULT_N::MULT_OUTPUT::DIRECT);
                     break;
                 case 'x':           // Test function #2
-                    SendTest1 ();
+                    SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::TWO, MULT_N::MULT_OUTPUT::DIRECT);
                     break;
                 case 'c':           // Test function #3
-                    SendTest2 ();
+                    SynthFront.Multiplex ()->Clear ();
                     break;
                 case 'v':           // Test function #4
-                    SendTest3 ();
                     break;
                 default:
                     Serial << "       ??" << endl;

@@ -170,7 +170,7 @@ void setup (void)
         SynthActive = true;
 
         // Setup initial state of synth
-        SynthFront.Begin (START_OSC_ANALOG);
+        SynthFront.Begin (START_OSC_ANALOG, START_MULT_DIGITAL);
 
         printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
@@ -179,6 +179,7 @@ void setup (void)
 
         SynthFront.DisplayUpdate ();
 
+        SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::ALL, MULT_N::MULT_OUTPUT::DIRECT);
         printf("\t>>> Synth ready.\n");
         }
     }

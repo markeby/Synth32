@@ -6,6 +6,8 @@
 //#######################################################################
 #pragma once
 
+#define DEBUG_ON            1
+
 #define DEBUG_NO_INDEX      255
 
 const String vFormat (const char *const zcFormat, ...);

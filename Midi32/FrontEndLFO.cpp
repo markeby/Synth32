@@ -14,10 +14,15 @@
 #include "FrontEnd.h"
 #include "Debug.h"
 
+#ifdef DEBUG_ON
 static const char* Label  = "TOP";
 static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,DEBUG_NO_INDEX,args);}}
+#else
+#define DBG(args...)
+#define DBGM(args...)
+#endif
 
 //#######################################################################
 void SYNTH_FRONT_C::PitchBend (uint8_t ch, int value)

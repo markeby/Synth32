@@ -9,7 +9,8 @@
 #include "config.h"
 
 //#######################################################################
-enum class ESTATE {
+enum class ESTATE
+    {
     IDLE = 0,
     START,
     ATTACK,

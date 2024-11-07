@@ -10,10 +10,15 @@
 #include "config.h"
 #include "Debug.h"
 
+#ifdef DEBUG_ON
 static const char* LabelA = "I2C-A";
 static const char* LabelD = "I2C-D";
 #define DBGDA(args...) {if(DebugI2C){ DebugMsg(LabelA,DEBUG_NO_INDEX,args);}}
 #define DBGDIG(args...) {if(DebugI2C){ DebugMsg(LabelD,DEBUG_NO_INDEX,args);}}
+#else
+#define DBGDA(args...)
+#define DBGDIG(args...)
+#endif
 
 //#######################################################################
 I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
@@ -188,9 +193,9 @@ void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
     String str;
 
     for ( uint8_t z;  z < 16;  z++ )
-        str += ( ((board.BitWord >> z) & 1) ) ? " X" : " o";
+        str += ( ((board.BitWord >> z) & 1) ) ? " 1" : " 0";
 
-    DBGDIG ("%d:%d:%#3.3x  write  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str ());
+    DBGDIG ("%d:%d:%#3.3x  write %s  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str (), loc.Name);
 
     this->Write (loc, board.ByteData, 2);
     board.LastDataDigital = board.DataDigital;

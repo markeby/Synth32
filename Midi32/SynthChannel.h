@@ -1,6 +1,6 @@
 //#######################################################################
 // Module:     SynthChannel.h
-// Descrption: Load and save setting and message settings
+// Descrption: Synth channel instance class
 // Creator:    markeby
 // Date:       8/1/2022
 //#######################################################################

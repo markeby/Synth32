@@ -10,8 +10,13 @@
 #include "I2Cmessages.h"
 #include "LFOosc.h"
 #include "Debug.h"
+
+#ifdef DEBUG_ON
 static const char* Label = "LFO";
 #define DBG(args...) {if(DebugOsc){DebugMsg(Label,Number,args);}}
+#else
+#define DBG(args...)
+#endif
 
 #define CONST_MULT      (DA_RANGE / FULL_KEYS)
 static  const char*     MixerNames[] = { "sine", "triangle", "saw", "pulse" };

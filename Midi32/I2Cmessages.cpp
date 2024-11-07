@@ -72,7 +72,7 @@ void I2C_MESSAGE_C::SendUpdate (CMD_C page, uint8_t channel, EFFECT_C effect, ui
         sendBuffer[2] = (uint8_t)effect;
         sendBuffer[3] = (uint8_t)(value & 0x00FF);
         sendBuffer[4] = (uint8_t)(value >> 8);
-        DBGM ("Update: %X  channel: %X   effect: %X   Value: %X", sendBuffer[0], sendBuffer[1], sendBuffer[2], value);
+        DBGM ("Page: %X  channel: %X   effect: %X   Value: %X", sendBuffer[0], sendBuffer[1], sendBuffer[2], value);
         this->SendComplete (MESSAGE_LENGTH_UPDATE);
         }
     }

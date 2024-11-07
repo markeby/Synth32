@@ -290,7 +290,6 @@ void GRPH_C::UpdatePageTuning (byte ch, EFFECT_C effect, short value)
         {
         case EFFECT_C::MAX_LEVEL:
             this->LevelTuning[ch]->SetLevel (value);
-            printf("+++ ch = %d  level = %d\n", ch, value);
             break;
         case EFFECT_C::NOTE:
             Note->SetValue (value);

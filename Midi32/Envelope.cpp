@@ -12,8 +12,13 @@
 using namespace std;
 
 #include "Debug.h"
+
+#ifdef DEBUG_ON
 static const char* Label = "ENV";
 #define DBG(args...)  {if (DebugSynth){DebugMsgF(Label,Index,Name,StateLabel[(int)State],args); } }
+#else
+#define DBG(args...)
+#endif
 
 char* StateLabel[] = { "IDLE", "START", "ATTACK", "DECAY", "SUSTAIN", "RELEASE" };
 #define TIME_THRESHOLD  10.0

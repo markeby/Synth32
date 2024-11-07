@@ -2,8 +2,13 @@
 #include "config.h"
 #include "SoftLFO.h"
 #include "Debug.h"
+
+#ifdef DEBUG_ON
 static const char* Label = "LFO-S";
 #define DBG(args...) {if(DebugOsc){ DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#else
+#define DBG(args...)
+#endif
 
 //#######################################################################
 //#######################################################################

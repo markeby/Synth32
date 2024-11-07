@@ -12,7 +12,8 @@
 namespace OSC_N
 {
 //#######################################################################
-enum class SHAPE {
+enum class SHAPE
+    {
     SINE = 0,
     TRIANGLE,
     SAWTOOTH,
@@ -21,7 +22,8 @@ enum class SHAPE {
     ALL
     };
 
-enum class D_A_OFF {
+enum class D_A_OFF
+    {
     DIR = 0,
     SINE,
     SQUARE,

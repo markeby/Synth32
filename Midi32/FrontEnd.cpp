@@ -16,11 +16,17 @@
 #include "FrontEnd.h"
 #include "Debug.h"
 
+#ifdef DEBUG_ON
 static const char* Label  = "TOP";
 static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,DEBUG_NO_INDEX,args);}}
+#else
+#define DBG(args...)
+#define DBGM(args...)
+#endif
 
+//###################################################################
 //#define TOGGLE          // use if channel select switches are to be alternate action
 
 static      USB Usb;
@@ -33,6 +39,7 @@ static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
 
 using namespace MIDI_NAMESPACE;
 typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
+
 //###################################################################
 //void FuncMessage (const MidiInterface::MidiMessage& msg)
 void FuncMessage (const MidiMessage& msg)
@@ -65,40 +72,8 @@ static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
 //###################################################################
 static void FuncPitchBend (uint8_t chan, int value)
     {
-//    if ( SynthFront.IsInTuning () )
-//        value = 0;
     SynthFront.PitchBend(chan, value);
     DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
-    }
-
-//#######################################################################
-//#######################################################################
-void SendTest1 (void)
-    {
-    static byte devtest = 0x50;
-    printf("Sending 0x01, %X, 0x3F\n", devtest);
-    SENDcc (devtest, 0x0F);
-    devtest += 1;
-    if ( devtest > 0x67 )
-        devtest = 0x50;
-    }
-
-void SendTest2 (void)
-    {
-    static byte val = 0x80;
-    printf("Sending note data %d\n", val);
-    SENDcc (val, 0x3B);
-    val += 1;
-    }
-
-void SendTest3 (void)
-    {
-    static byte devtest = 0x50;
-    printf("Sending 0x01, %X, 0x1B\n", devtest);
-    SENDcc (devtest, 0x2E);
-    devtest += 1;
-    if ( devtest > 0x67 )
-        devtest = 0x50;
     }
 
 //#######################################################################
@@ -120,6 +95,12 @@ void SYNTH_FRONT_C::ResetXL ()
             delay (20);
             }
         }
+    }
+
+//#######################################################################
+MULTIPLEX_C* SYNTH_FRONT_C::Multiplex ()
+    {
+    return (this->Multiplexer);
     }
 
 //#######################################################################
@@ -151,13 +132,17 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP*
     UpKey           = 0;
     UpTrigger       = false;
     SetTuning       = false;
+    TuningChange    = false;
     ClearEntryRed   = 0;
     ClearEntryRedL  = 0;
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Begin (int osc_d_a)
+void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital)
     {
+
+    Multiplexer = new MULTIPLEX_C (mult_digital);
+
 //  Midi_0.setHandleMessage              (FuncMessage);
     Midi_0.setHandleNoteOn               (FuncKeyDown);
     Midi_0.setHandleNoteOff              (FuncKeyUp);
@@ -201,8 +186,6 @@ void SYNTH_FRONT_C::Begin (int osc_d_a)
 //  Midi_1.setHandleStop                 (StopCallback fptr);
 //  Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
 //  Midi_1.setHandleSystemReset          (SystemResetCallback fptr);
-
-
 
 //  Midi_2.setHandleMessage              (FuncMessage);
 //    Midi_2.setHandleNoteOn               (FuncKeyDown);
@@ -292,12 +275,14 @@ void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
             break;
         case 0x10 ... 0x1F:
             chan = type & 0x0F;
-            if ( SetTuning && (chan < 8) )
+            if ( this->SetTuning && (chan < 8) )
                 {
+                DBG ("Tuning channel %s", (( value ) ? "ON" : "Off"));
                 if ( value )
-                    TuningOn[chan] = true;
+                    this->TuningOn[chan] = true;
                 else
-                    TuningOn[chan] = false;
+                    this->TuningOn[chan] = false;
+                this->TuningChange = true;
                 return;
                 }
             if ( SwitchMap[chan].CallBack != nullptr )
@@ -350,15 +335,15 @@ void SYNTH_FRONT_C::Loop ()
     int oldest = -1;
     int doit   = -1;
 
-    if ( ClearEntryRed )
+    if ( this->ClearEntryRed )
         {
-        SENDcc (ClearEntryRed, 0x3F);
-        ClearEntryRed = 0;
+        SENDcc (this->ClearEntryRed, 0x3F);
+        this->ClearEntryRed = 0;
         }
-    if ( ClearEntryRedL )
+    if ( this->ClearEntryRedL )
         {
-        SENDcc (ClearEntryRedL, 0x0D);
-        ClearEntryRedL = 0;
+        SENDcc (this->ClearEntryRedL, 0x0D);
+        this->ClearEntryRedL = 0;
         }
 
     Usb.Task    ();
@@ -368,20 +353,20 @@ void SYNTH_FRONT_C::Loop ()
 
     if ( !SetTuning )
         {
-        if ( UpTrigger )
+        if ( this->UpTrigger )
             {
             UpTrigger = false;
 
             DBG ("Key up > %d", UpKey);
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
-                if ( pChan[z]->NoteClear (UpKey) )
+                if ( this->pChan[z]->NoteClear (UpKey) )
                     {
                     if ( DebugSynth )
                         printf ("  Osc > %d", z);
                     }
             }
 
-        if ( DownTrigger )                          // Key went down so look for a channel to use
+        if ( this->DownTrigger )                          // Key went down so look for a channel to use
             {
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
                 {
@@ -405,19 +390,19 @@ void SYNTH_FRONT_C::Loop ()
                 }
             if ( doit < 0 )                                 // no unused channel so we will capture the one used the longest
                 doit = oldest;
-            DownTrigger = false;                            // release the trigger
-            pChan[doit]->NoteSet (DownKey, DownVelocity);   // set the channel
+            this->DownTrigger = false;                            // release the trigger
+            this->pChan[doit]->NoteSet (DownKey, DownVelocity);   // set the channel
             DBG ("Key down > %d   Velocity > %d  Channel > %d", DownKey, DownVelocity, doit);
             }
 
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
-            pChan[z]->Loop ();
+            this->pChan[z]->Loop ();
         I2cDevices.UpdateDigital ();
         I2cDevices.UpdateAnalog  ();     // Update D/A ports
         }
     else
-        Tuning ();
+        this->Tuning ();
     }
 
 //#######################################################################
@@ -425,33 +410,37 @@ void SYNTH_FRONT_C::Tuning ()
     {
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
         {
-        if ( DownTrigger )
+        if ( this->DownTrigger )
             {
-            pChan[zc]->pOsc()->SetTuningNote(DownKey);
+            this->pChan[zc]->pOsc()->SetTuningNote(DownKey);
             DisplayMessage.TuningNote (DownKey);
             }
-        if ( TuningOn[zc] )
+        if ( this->TuningChange )
             {
-            for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+            if ( this->TuningOn[zc] )
                 {
-                if ( z < OSC_MIXER_COUNT )
+                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
                     {
-                    pChan[zc]->pOsc()->SetTuningVolume (z, TuningLevel[z]);
-                    DisplayMessage.TuningLevel (z, TuningLevel[z] * PRS_UNSCALER);
+                    if ( z < OSC_MIXER_COUNT )
+                        {
+                        this->pChan[zc]->pOsc()->SetTuningVolume (z, TuningLevel[z]);
+                        DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
+                        }
                     }
                 }
-            }
-        else
-            {
-            for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+            else
                 {
-                if ( z < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetTuningVolume(z, 0);
+                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+                    {
+                    if ( z < OSC_MIXER_COUNT )
+                        this->pChan[zc]->pOsc()->SetTuningVolume(z, 0);
+                    }
                 }
             }
         }
 //    SetNoiseFilterMin (TuningLevel[ENVELOPE_COUNT]);
-    DownTrigger = false;
+    this->TuningChange = false;
+    this->DownTrigger = false;
     I2cDevices.UpdateDigital();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
@@ -464,11 +453,14 @@ void SYNTH_FRONT_C::StartTuning ()
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            TuningLevel[z] = pChan[0]->pOsc()->GetMaxLevel (z) * PRS_UNSCALER;
-            DisplayMessage.TuningLevel (z, TuningLevel[z]);
+            TuningLevel[z] = (uint16_t)(pChan[0]->pOsc()->GetMaxLevel (z) * MAX_DA);
+            DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
             }
         for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+            {
             TuningOn[zc] = false;
+            TuningChange = true;
+            }
         }
     SetTuning = true;
     }
@@ -518,10 +510,11 @@ void SYNTH_FRONT_C::SetMBaselevel (uint8_t ch, uint8_t data)
 //#####################################################################
 void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
     {
-    if ( SetTuning )
+    if ( this->SetTuning )
         {
-        TuningLevel[ch] = data * MIDI_MULTIPLIER;
+        this->TuningLevel[ch] = data * MIDI_MULTIPLIER;
         DisplayMessage.TuningLevel (ch, data);
+        this->TuningChange = true;
         return;
         }
 
@@ -529,9 +522,9 @@ void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
     for (int zc = 0;  zc < CHAN_COUNT;  zc++)
         {
         if ( ch < OSC_MIXER_COUNT )
-            pChan[zc]->pOsc()->SetMaxLevel (ch, val);
+            this->pChan[zc]->pOsc()->SetMaxLevel (ch, val);
         }
-    MidiAdsr[ch].MaxLevel = data;
+    this->MidiAdsr[ch].MaxLevel = data;
     DisplayMessage.OscMaxLevel (ch, data);
     }
 
@@ -541,13 +534,13 @@ void SYNTH_FRONT_C::SetAttackTime (uint8_t data)
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
         {
-        if ( SelectedEnvelope[zs] )
+        if ( this->SelectedEnvelope[zs] )
             {
-            MidiAdsr[zs].AttackTime = data;
+            this->MidiAdsr[zs].AttackTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
                 {
                 if ( zs < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetAttackTime (zs, dtime);
+                    this->pChan[zc]->pOsc()->SetAttackTime (zs, dtime);
                 }
             DisplayMessage.OscAttackTime (zs, data);
             }
@@ -560,13 +553,13 @@ void SYNTH_FRONT_C::SetDecayTime (uint8_t data)
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
         {
-        if ( SelectedEnvelope[zs] )
+        if ( this->SelectedEnvelope[zs] )
             {
-            MidiAdsr[zs].DecayTime = data;
+            this->MidiAdsr[zs].DecayTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
                 {
                 if ( zs < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetDecayTime (zs, dtime);
+                    this->pChan[zc]->pOsc()->SetDecayTime (zs, dtime);
                 }
             DisplayMessage.OscDecayTime (zs, data);
             }
@@ -580,9 +573,9 @@ void SYNTH_FRONT_C::SetSustainLevel (uint8_t ch, uint8_t data)
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
         {
         if ( ch < OSC_MIXER_COUNT )
-            pChan[zc]->pOsc()->SetSustainLevel (ch, val);
+            this->pChan[zc]->pOsc()->SetSustainLevel (ch, val);
         }
-    MidiAdsr[ch].SustainLevel = data;
+    this->MidiAdsr[ch].SustainLevel = data;
     DisplayMessage.OscSustainLevel (ch, data);
     }
 
@@ -598,13 +591,13 @@ void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
 
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
         {
-        if ( SelectedEnvelope[zs] )
+        if ( this->SelectedEnvelope[zs] )
             {
-            MidiAdsr[zs].SustainTime = data;
+            this->MidiAdsr[zs].SustainTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
                 {
                 if ( zs < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetSustainTime (zs, dtime);
+                    this->pChan[zc]->pOsc()->SetSustainTime (zs, dtime);
                 }
             DisplayMessage.OscSustainTime (zs, data);
             }
@@ -617,13 +610,13 @@ void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
     float dtime = data * TIME_MULT;
     for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
         {
-        if ( SelectedEnvelope[zs] )
+        if ( this->SelectedEnvelope[zs] )
             {
-            MidiAdsr[zs].ReleaseTime = data;
+            this->MidiAdsr[zs].ReleaseTime = data;
             for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
                 {
                 if ( zs < OSC_MIXER_COUNT )
-                    pChan[zc]->pOsc()->SetReleaseTime (zs, dtime);
+                    this->pChan[zc]->pOsc()->SetReleaseTime (zs, dtime);
                 }
             DisplayMessage.OscReleaseTime (zs, data);
             }
@@ -634,11 +627,11 @@ void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
 void SYNTH_FRONT_C::SawtoothDirection (bool data)
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++)
-        pChan[z]->pOsc()->SawtoothDirection (data);
+        this->pChan[z]->pOsc()->SawtoothDirection (data);
     this->SawToothDirection = data;
     DisplayMessage.OscSawtoothDirection (data);
     if ( !data )
-        ClearEntryRedL = XlMap[37].Index;
+        this->ClearEntryRedL = XlMap[37].Index;
     }
 
 //#######################################################################
@@ -658,13 +651,13 @@ void SYNTH_FRONT_C::DisplayUpdate ()
 
     for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        DisplayMessage.OscSelected (z, SelectedEnvelope[z]);
-        DisplayMessage.OscMaxLevel (z, MidiAdsr[z].MaxLevel);
-        DisplayMessage.OscAttackTime (z, MidiAdsr[z].AttackTime);
-        DisplayMessage.OscDecayTime (z, MidiAdsr[z].DecayTime);
-        DisplayMessage.OscSustainTime (z, MidiAdsr[z].SustainTime);
-        DisplayMessage.OscReleaseTime (z, MidiAdsr[z].ReleaseTime);
-        DisplayMessage.OscSustainLevel (z, MidiAdsr[z].SustainLevel);
+        DisplayMessage.OscSelected (z, this->SelectedEnvelope[z]);
+        DisplayMessage.OscMaxLevel (z, this->MidiAdsr[z].MaxLevel);
+        DisplayMessage.OscAttackTime (z, this->MidiAdsr[z].AttackTime);
+        DisplayMessage.OscDecayTime (z, this->MidiAdsr[z].DecayTime);
+        DisplayMessage.OscSustainTime (z, this->MidiAdsr[z].SustainTime);
+        DisplayMessage.OscReleaseTime (z, this->MidiAdsr[z].ReleaseTime);
+        DisplayMessage.OscSustainLevel (z, this->MidiAdsr[z].SustainLevel);
         }
     DisplayMessage.OscSawtoothDirection (this->SawToothDirection);
     DisplayMessage.OscPulseWidth (this->PulseWidth);
@@ -674,6 +667,6 @@ void SYNTH_FRONT_C::DisplayUpdate ()
 void SYNTH_FRONT_C::SaveAllSettings ()
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
-        Settings.PutOscBank (z, pChan[z]->pOsc ()->GetBankAddr ());
+        Settings.PutOscBank (z, this->pChan[z]->pOsc ()->GetBankAddr ());
     }
 
