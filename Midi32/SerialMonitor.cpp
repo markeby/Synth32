@@ -118,8 +118,6 @@ bool MONITOR_C::PromptZap (void)
                     Serial << 9 << endl << "\nCleared Synth settings." << endl;
                     ESP.restart ();
                     break;
-                case ZAP2:
-                    break;
                 default:
                     break;
                 }
@@ -234,10 +232,6 @@ void MONITOR_C::MenuSel (void)
                     this->InputPrompt ("  Enter PWD");
                     this->Mode (INPWD);
                     break;
-                case 'F':
-                    this->InputPrompt ("  Formatting file system");
-                    this->Mode (ZAP2);
-                    break;
                 case 'C':
                     this->InputPrompt ("  Clearing Synth settings");
                     this->Mode (ZAP1);
@@ -250,17 +244,38 @@ void MONITOR_C::MenuSel (void)
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
+
+                //###############  Debug control keys  #################
                 case 'z':           // Test function #1
-                    SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::ONE, MULT_N::MULT_OUTPUT::DIRECT);
+                    SynthFront.Noise ()->Reset ();
+                    SynthFront.Noise ()->Select (0, 0, true);
+                    SynthFront.Noise ()->Select (1, 0, true);
+                    SynthFront.Noise ()->Select (2, 0, true);
+                    SynthFront.Noise ()->Select (3, 0, true);
                     break;
                 case 'x':           // Test function #2
-                    SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::TWO, MULT_N::MULT_OUTPUT::DIRECT);
+                    SynthFront.Noise ()->Reset ();
+                    SynthFront.Noise ()->Select (0, 1, true);
+                    SynthFront.Noise ()->Select (1, 1, true);
+                    SynthFront.Noise ()->Select (2, 1, true);
+                    SynthFront.Noise ()->Select (3, 1, true);
                     break;
                 case 'c':           // Test function #3
-                    SynthFront.Multiplex ()->Clear ();
+                    SynthFront.Noise ()->Reset ();
+                    SynthFront.Noise ()->Select (0, 2, true);
+                    SynthFront.Noise ()->Select (1, 2, true);
+                    SynthFront.Noise ()->Select (2, 2, true);
+                    SynthFront.Noise ()->Select (3, 2, true);
                     break;
                 case 'v':           // Test function #4
+                    SynthFront.Noise ()->Reset ();
+                    SynthFront.Noise ()->Select (0, 3, true);
+                    SynthFront.Noise ()->Select (1, 3, true);
+                    SynthFront.Noise ()->Select (2, 3, true);
+                    SynthFront.Noise ()->Select (3, 3, true);
                     break;
+
+                //############  Dummy hit the wrong key?  ##############
                 default:
                     Serial << "       ??" << endl;
                     this->Mode (MENU);
@@ -296,7 +311,6 @@ void MONITOR_C::Menu (void)
     Serial << "\tv   - Test function #4" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
-    Serial << "\tF   - Format file system" << endl;
     Serial << "\tC   - Clear Synth settings" << endl;
     Serial << "\tF12 - Reset" << endl;
     Serial << endl;

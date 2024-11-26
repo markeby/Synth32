@@ -49,7 +49,7 @@ void SETTINGS_C::PutPasswd (String& str)
     }
 
 //#######################################################################
-void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
+void SETTINGS_C::PutDebugSwitch (byte num, bool state)
     {
     char buf[8];
 
@@ -60,7 +60,7 @@ void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
     }
 
 //#######################################################################
-bool SETTINGS_C::GetDebugSwitch (uint8_t num)
+bool SETTINGS_C::GetDebugSwitch (byte num)
     {
     char buf[8];
 
@@ -125,7 +125,7 @@ void SETTINGS_C::ClearAllSynth (void)
     }
 
 //#######################################################################
-bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
+bool SETTINGS_C::GetOscBank (byte num, uint16_t* pbank)
     {
     char buf[8];
     bool exist = true;
@@ -142,7 +142,7 @@ bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
     }
 
 //#######################################################################
-void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
+void SETTINGS_C::PutOscBank (byte num, uint16_t* pbank)
     {
     char buf[8];
 

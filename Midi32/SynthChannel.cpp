@@ -30,7 +30,7 @@ void SYNTH_CHANNEL_C::Loop ()
         }
     }
 //#######################################################################
-void SYNTH_CHANNEL_C::NoteSet (uint8_t key, uint8_t velocity)
+void SYNTH_CHANNEL_C::NoteSet (byte key, byte velocity)
     {
     ActiveTimer = 1;
     Key = key;
@@ -38,13 +38,7 @@ void SYNTH_CHANNEL_C::NoteSet (uint8_t key, uint8_t velocity)
     }
 
 //#######################################################################
-void SYNTH_CHANNEL_C::Clear (void)
-    {
-    OscP->Clear ();
-    }
-
-//#######################################################################
-bool SYNTH_CHANNEL_C::NoteClear (uint8_t key)
+bool SYNTH_CHANNEL_C::NoteClear (byte key)
     {
     if ( key != Key )
         return false;
@@ -52,5 +46,4 @@ bool SYNTH_CHANNEL_C::NoteClear (uint8_t key)
     Key = -1;
     return true;
     }
-
 

@@ -17,8 +17,8 @@ private:
     String    s_PSWD;
     bool      DebugFlags;
 
-    bool        GetDebugSwitch      (uint8_t num);
-    void        PutDebugSwitch      (uint8_t num, bool state);
+    bool        GetDebugSwitch      (byte num);
+    void        PutDebugSwitch      (byte num, bool state);
 
 public:
                 SETTINGS_C  (void);
@@ -49,8 +49,8 @@ public:
     // Synth model storage
     //----------------------------------------
     void        ClearAllSynth   (void);
-    bool        GetOscBank      (uint8_t num, uint16_t* pbank);
-    void        PutOscBank      (uint8_t num, uint16_t* pbank);
+    bool        GetOscBank      (byte num, uint16_t* pbank);
+    void        PutOscBank      (byte num, uint16_t* pbank);
     };
 
 //#######################################################################

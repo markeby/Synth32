@@ -25,7 +25,7 @@ static const char* LabelM = "M";
 #endif
 
 //#######################################################################
-void SYNTH_FRONT_C::PitchBend (uint8_t ch, int value)
+void SYNTH_FRONT_C::PitchBend (byte ch, int value)
     {
     float scaler = (value + 16384) * BEND_SCALER;
     this->Lfo.PitchBend (scaler);
@@ -33,20 +33,20 @@ void SYNTH_FRONT_C::PitchBend (uint8_t ch, int value)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SelectWaveVCA (uint8_t ch, uint8_t state)
+void SYNTH_FRONT_C::SelectWaveVCA (byte ch, byte state)
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++)
         this->pChan[z]->pOsc()->SetSoftLFO (ch, state);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SelectWaveVCF (uint8_t ch, uint8_t state)
+void SYNTH_FRONT_C::SelectWaveVCF (byte ch, byte state)
     {
     this->Lfo.Select (ch, state);
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetLevelLFO (uint8_t data)
+void SYNTH_FRONT_C::SetLevelLFO (byte data)
     {
     this->Lfo.Level (data * PERS_SCALER);
     }

@@ -40,7 +40,7 @@ void SYNTH_LFO_C::ClearState ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetMaxLevel (uint8_t ch, uint8_t data)
+void SYNTH_LFO_C::SetMaxLevel (byte ch, byte data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
     Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
@@ -49,7 +49,7 @@ void SYNTH_LFO_C::SetMaxLevel (uint8_t ch, uint8_t data)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
+void SYNTH_LFO_C::SetLevel (byte ch, byte data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
     z = (z > Vca[ch].MaximumLevel ) ? Vca[ch].MaximumLevel : z;
@@ -65,17 +65,17 @@ void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
 
 //#######################################################################
 //#######################################################################
-void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
+void SYNTH_LFO_C::Begin (int num, byte first_device)
     {
     Number = num;
     // D/A configuration
-    OscChannel = first_device + uint8_t(D_A_OFF::FREQ);
-    PwmChannel = first_device + uint8_t(D_A_OFF::WIDTH);
-    BendChannel = first_device + uint8_t(D_A_OFF::BEND);
-    Vca[int(SHAPE::TRIANGLE)].Channel = first_device + uint8_t(D_A_OFF::TRIANGLE);
-    Vca[int(SHAPE::SAWTOOTH)].Channel = first_device + uint8_t(D_A_OFF::SAWTOOTH);
-    Vca[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
-    Vca[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
+    OscChannel = first_device + byte(D_A_OFF::FREQ);
+    PwmChannel = first_device + byte(D_A_OFF::WIDTH);
+    BendChannel = first_device + byte(D_A_OFF::BEND);
+    Vca[int(SHAPE::TRIANGLE)].Channel = first_device + byte(D_A_OFF::TRIANGLE);
+    Vca[int(SHAPE::SAWTOOTH)].Channel = first_device + byte(D_A_OFF::SAWTOOTH);
+    Vca[int(SHAPE::PULSE)].Channel    = first_device + byte(D_A_OFF::PULSE);
+    Vca[int(SHAPE::SINE)].Channel     = first_device + byte(D_A_OFF::SINE);
 
     // Initialize mixer
     for ( int z = 0;  z < LFO_VCA_COUNT;  z++ )
@@ -115,7 +115,7 @@ void SYNTH_LFO_C::SetFreq (float percent)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
+void SYNTH_LFO_C::Select (byte ch, bool sel)
     {
     Vca[ch].Select = sel;
     if ( sel )
@@ -133,7 +133,7 @@ void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Level (uint8_t data)
+void SYNTH_LFO_C::Level (byte data)
     {
     CurrentLevel = data;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )

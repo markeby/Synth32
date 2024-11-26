@@ -102,7 +102,7 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
     }
 
 //#######################################################################
-inline void I2C_INTERFACE_C::BusMux (uint8_t cluster, uint8_t slice)
+inline void I2C_INTERFACE_C::BusMux (byte cluster, byte slice)
     {
     Wire.beginTransmission (0x70 + cluster);    // TCA9548A address
     Wire.write (1 << slice);                    // send byte to select bus
@@ -110,7 +110,7 @@ inline void I2C_INTERFACE_C::BusMux (uint8_t cluster, uint8_t slice)
     }
 
 //#######################################################################
-inline void I2C_INTERFACE_C::EndBusMux (uint8_t cluster)
+inline void I2C_INTERFACE_C::EndBusMux (byte cluster)
     {
     Wire.beginTransmission (0x70 + cluster);    // TCA9548A address
     Wire.write (0);                             // send byte to deselect bus
@@ -143,7 +143,7 @@ void I2C_INTERFACE_C::Init4728 (I2C_LOCATION_T &loc)
     }
 
 //#######################################################################
-bool I2C_INTERFACE_C::ValidateDevice (uint8_t board)
+bool I2C_INTERFACE_C::ValidateDevice (byte board)
     {
     I2C_BOARD_T& brd = this->pBoard[board];
     brd.Valid = false;
@@ -156,7 +156,7 @@ bool I2C_INTERFACE_C::ValidateDevice (uint8_t board)
     }
 
 //#######################################################################
-void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
+void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, byte* buff, byte length)
     {
     int rval;
     this->BusMux (loc.Cluster, loc.Slice);
@@ -169,7 +169,7 @@ void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
 //#######################################################################
 void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     {
-    uint8_t buf[8];
+    byte buf[8];
     I2C_LOCATION_T& loc =  board.Board;
 
     DBGDA ("%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d  %s", loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3], loc.Name);
@@ -192,7 +192,7 @@ void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
     I2C_LOCATION_T& loc =  board.Board;
     String str;
 
-    for ( uint8_t z;  z < 16;  z++ )
+    for ( byte z;  z < 16;  z++ )
         str += ( ((board.BitWord >> z) & 1) ) ? " 1" : " 0";
 
     DBGDIG ("%d:%d:%#3.3x  write %s  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str (), loc.Name);
@@ -260,7 +260,7 @@ void I2C_INTERFACE_C::D2Analog (uint16_t channel, int value)
     }
 
 //#######################################################################
-void I2C_INTERFACE_C::DigitalOut (uint8_t device, bool value)
+void I2C_INTERFACE_C::DigitalOut (byte device, bool value)
     {
     I2C_DEVICE_T& dev = pDevice[device];
     bitWrite (*(dev.pDigital) , dev.Bit, value);

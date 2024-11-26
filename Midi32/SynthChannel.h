@@ -15,20 +15,30 @@ class SYNTH_CHANNEL_C
     {
 private:
     SYNTH_OSC_C*    OscP;                   // oscillator class
-    uint8_t         Key;
+    byte            Key;
     int32_t         ActiveTimer;
     int             Number;
-    uint8_t         UseCount;
+    byte            UseCount;
+
+    bool            SawToothDirectionSet;
+    float           PulseWidthSet;
 
 public:
+    bool            SelectedEnvelope[ENVELOPE_COUNT];
+
              SYNTH_CHANNEL_C    (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen);
     void     Begin              (void);
     void     Loop               (void);
-    void     NoteSet            (uint8_t key, uint8_t velocity);
-    void     Clear              (void);
-    bool     NoteClear          (uint8_t key);
+    void     NoteSet            (byte key, byte velocity);
+    bool     NoteClear          (byte key);
 
-    uint32_t       IsActive (void)      { return (this->ActiveTimer); }
-    SYNTH_OSC_C*   pOsc     (void)      { return (this->OscP); }
+    void           Clear                (void)                  { this->OscP->Clear (); }
+    void           SawToothDirection    (bool data)             { this->OscP->SawtoothDirection (data);  this->SawToothDirectionSet = data; }
+    bool           GetSawToothDirection (void)                  { return (this->SawToothDirectionSet); }
+    void           PulseWidth           (float percent)         { this->OscP->PulseWidth (percent);  this->PulseWidthSet = percent; }
+    float          GetPulseWidth        (void)                  { return (this->PulseWidthSet); }
+    void           SetMaxLevel          (byte ch, float level)  { this->OscP->SetMaxLevel (ch, level); }
+    uint32_t       IsActive             (void)                  { return (this->ActiveTimer); }
+    SYNTH_OSC_C*   pOsc                 (void)                  { return (this->OscP); }
     };
 

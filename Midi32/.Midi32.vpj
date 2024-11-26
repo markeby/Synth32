@@ -128,6 +128,7 @@
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
             <F N="Multiplex.cpp"/>
+            <F N="Noise.cpp"/>
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
@@ -155,6 +156,7 @@
             <F N="I2Cmessages.h"/>
             <F N="LFOosc.h"/>
             <F N="Multiplex.h"/>
+            <F N="Noise.h"/>
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>

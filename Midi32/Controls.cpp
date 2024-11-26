@@ -13,67 +13,67 @@
 #include "SoftLFO.h"
 
 //########################################################
-static void SetMaxLevel (uint8_t ch, uint8_t data)
+static void SetMaxLevel (byte ch, byte data)
     {
     SynthFront.SetMaxLevel (ch, data);
     }
 
 //########################################################
-static void SetSustain (uint8_t ch, uint8_t data)
+static void SetSustain (byte ch, byte data)
     {
     SynthFront.SetSustainLevel (ch, data);
     }
 
 //########################################################
-static void SetTimeSetSelect (uint8_t ch, uint8_t state)
+static void SetTimeSetSelect (byte ch, byte state)
     {
     SynthFront.ChannelSetSelect (ch, state);
     }
 
 //########################################################
-static void SetModVCA (uint8_t ch, uint8_t state)
+static void SetModVCA (byte ch, byte state)
     {
     SynthFront.SelectWaveVCA (ch, state);
     }
 
 //########################################################
-static void SetSrcVCF (uint8_t ch, uint8_t state)
+static void SetSrcVCF (byte ch, byte state)
     {
     SynthFront.SelectWaveVCF (ch, state);
     }
 
 //########################################################
-static void SetAttckTime (uint8_t ch, uint8_t data)
+static void SetAttckTime (byte ch, byte data)
     {
     SynthFront.SetAttackTime (data);
     }
 
 //########################################################
-static void SetDecayTime (uint8_t ch, uint8_t data)
+static void SetDecayTime (byte ch, byte data)
     {
     SynthFront.SetDecayTime (data);
     }
 
 //########################################################
-static void SetSustainTime (uint8_t ch, uint8_t data)
+static void SetSustainTime (byte ch, byte data)
     {
     SynthFront.SetSustainTime (data);
     }
 
 //########################################################
-static void SetReleaseTime (uint8_t ch, uint8_t data)
+static void SetReleaseTime (byte ch, byte data)
     {
     SynthFront.SetReleaseTime (data);
     }
 
 //########################################################
-static void SawtoothDirection (uint8_t ch, uint8_t data)
+static void SawtoothDirection (byte ch, byte data)
     {
     SynthFront.SawtoothDirection (data != 0);
     }
 
 //########################################################
-static void PulseWidth (uint8_t ch, uint8_t data)
+static void PulseWidth (byte ch, byte data)
     {
     if ( data == 0 )
         data = 1;
@@ -81,13 +81,13 @@ static void PulseWidth (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-static void FreqLFO (uint8_t ch, uint8_t data)
+static void FreqLFO (byte ch, byte data)
     {
     SynthFront.FreqLFO (ch, data);
     }
 
 //########################################################
-static void TuneReset (uint8_t ch, uint8_t data)
+static void TuneReset (byte ch, byte data)
     {
     if ( data )
         Monitor.Tuning ();
@@ -96,7 +96,7 @@ static void TuneReset (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-static void PageAdvance (uint8_t ch, uint8_t data)
+static void PageAdvance (byte ch, byte data)
     {
     if ( data )
         DisplayMessage.PageAdvance();
@@ -173,11 +173,11 @@ LED_NOTE_MAP PanDevice[] = { 15, 31, 47, 63, 79, 95, 111, 127 };
 MIDI_MAP    FaderMapArray[] =
     {   {  0, "Sine Sustain",             SetSustain        },          // 01  07  xx
         {  1, "Triangle Sustain",         SetSustain        },          // 02  07  xx
-        {  2, "Sqiare Sustain",           SetSustain        },          // 03  07  xx
-        {  3, "Sawtooth Sustain",         SetSustain        },          // 04  07  xx
-        {  4, "Pulse Sustain",            SetSustain        },          // 05  07  xx
-        {  5, "Noise max level",          SetMaxLevel       },          // 06  07  xx
-        {  6, "Noise Sustain",            SetSustain        },          // 07  07  xx
+        {  2, "Sawtooth Sustain",         SetSustain        },          // 03  07  xx
+        {  3, "Pulse Sustain",            SetSustain        },          // 04  07  xx
+        {  4, "Noise Sustain",            SetSustain       },           // 05  07  xx
+        {  5, "N ",                       nullptr           },          // 06  07  xx
+        {  6, "N ",                       nullptr           },          // 07  07  xx
         {  7, "N ",                       nullptr           },          // 08  07  xx
         {  8, "N ",                       nullptr           },          // 09  07  xx
         {  9, "N ",                       nullptr           },          // 0A  07  xx

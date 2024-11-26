@@ -5,6 +5,7 @@
 // Date:       6/25/2024
 //#######################################################################
 #pragma once
+#include <Arduino.h>
 #include <deque>
 #include "config.h"
 
@@ -28,7 +29,7 @@ private:
     bool        TriggerEnd;
 
     // Control state
-    uint8_t&    UseCount;       // increment started and decriment as idle
+    byte&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
     float       Timer;          // Timer loaded with state time and descrimented
     float       TargetTime;     // Timer is incrimented until this time is exceeded
@@ -51,7 +52,7 @@ private:
 
     // Fixed parameters
     String      Name;
-    uint8_t     Index;
+    byte        Index;
     uint16_t    DeviceChannel;
     float       Floor;
     float       Diff;
@@ -67,6 +68,7 @@ public:
     void     Start          (void);
     void     End            (void);
     void     SetTime        (ESTATE state, float time);
+    float    GetTime        (ESTATE state);
     void     SetLevel       (ESTATE state, float percent);
     float    GetLevel       (ESTATE state);
 

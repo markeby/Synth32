@@ -12,14 +12,12 @@ private:
     bool   WiFi_On;
     String IPaddressString;
 public:
-    void WaitWiFi       (void);
-    void Setup          (const char* pssid, const char* ppasswd);
-    void Loop           (void);
+    void WaitWiFi           (void);
+    void Setup              (const char* pssid, const char* ppasswd);
+    void Loop               (void);
 
-    const char* GetIP   (void)
-        { return (IPaddressString.c_str ()); }
-    bool WiFiStatus     (void)
-        { return (WiFi_On); }
+    const char* GetIP       (void)      { return (IPaddressString.c_str ()); }
+    bool       WiFiStatus   (void)      { return (WiFi_On); }
     };
 
 extern OTA_C UpdateOTA;

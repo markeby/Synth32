@@ -93,6 +93,29 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
     }
 
 //#######################################################################
+float ENVELOPE_C::GetTime (ESTATE state)
+    {
+    float val = 0.0;
+
+    switch (state )
+        {
+        case ESTATE::ATTACK:
+            val = AttackTime;
+            break;
+        case ESTATE::DECAY:
+            val = DecayTime;
+            break;
+        case ESTATE::SUSTAIN:
+            val = SustainTime;
+            break;
+        case ESTATE::RELEASE:
+            val = ReleaseTime;
+            break;
+        }
+    return (val);
+    }
+
+//#######################################################################
 void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     {
     switch ( state )

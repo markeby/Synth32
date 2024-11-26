@@ -39,7 +39,11 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        3,     0x60,     4,    0,      0,  "D/A #76, 77, 78, 79" },
       { 2,        4,     0x60,     4,    0,      0,  "D/A #80, 81, 82, 83" },
       { 2,        5,     0x60,     4,    0,      0,  "D/A #84, 85, 86, 87" },
-      { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },
+      { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },   // Multiplexer
+      { 2,        6,     0x21,     0,    0,     16,  "Dig #104 - 119     " },   // Noise output
+      { 2,        7,     0x20,     0,    0,     16,  "Dig #120 - 135     " },   // Digital 48
+      { 2,        7,     0x21,     0,    0,     16,  "Dig #136 - 151     " },   // Digital 48
+      { 2,        7,     0x22,     0,    0,     16,  "Dig #152 - 167     " },   // Digital 48
       {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
@@ -170,14 +174,14 @@ void setup (void)
         SynthActive = true;
 
         // Setup initial state of synth
-        SynthFront.Begin (START_OSC_ANALOG, START_MULT_DIGITAL);
+        SynthFront.Begin (START_OSC_ANALOG, START_MULT_DIGITAL, START_NOISE_DIGITAL);
 
         printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
 
         delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect
 
-        SynthFront.DisplayUpdate ();
+        SynthFront.DisplayUpdate (SynthFront.CurrentZone);
 
         SynthFront.Multiplex ()->SetOn(MULT_N::MULT_SOURCE::OSC, MULT_N::MULT_GROUP::ALL, MULT_N::MULT_OUTPUT::DIRECT);
         printf("\t>>> Synth ready.\n");
@@ -202,7 +206,7 @@ void loop (void)
         SoftLFO.Loop (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
-            SynthFront.DisplayUpdate ();
+            SynthFront.DisplayUpdate (SynthFront.CurrentZone);
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();
