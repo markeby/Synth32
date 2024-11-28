@@ -22,55 +22,27 @@ static const char* Label = "G";
 
 using namespace DISP_MESSAGE_N;
 
-//#######################################################################
-    GRPH_C::GRPH_C ()
+    PAGE_TITLE_C::PAGE_TITLE_C (lv_obj_t* base, const char* str)
     {
-    }
-
-//#######################################################################
-void GRPH_C::Begin ()
-    {
-    Panel = new ESP_Panel ();
-    Panel->init ();
-    Panel->begin ();
-    lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
-
-    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
-    Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
-
-    PageOsc    = lv_tabview_add_tab (Pages, "");
-    PageMod    = lv_tabview_add_tab (Pages, "");
-    PageFilter = lv_tabview_add_tab (Pages, "");
-    PageTuning = lv_tabview_add_tab (Pages, "");
-
-    InitPageOsc    (PageOsc);
-    InitPageMod    (PageMod);
-    InitPageFilter (PageFilter);
-    InitPageTuning (PageTuning);
-
-    lv_style_init (&TitleStyle);       // for page titles
-    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_36);
-
-    PageSelect (PAGE_C::PAGE_OSC);
-
-    lvgl_port_unlock ();    // Release the mutex
-    }
-
-//#######################################################################
-void GRPH_C::InitPageOsc (lv_obj_t* base)
-    {
-    int x = 0;
-    int y = 40;
-
     lv_obj_set_style_pad_top    (base, 0, 0);
     lv_obj_set_style_pad_left   (base, 3, 0);
     lv_obj_set_style_pad_bottom (base, 0, 0);
     lv_obj_set_style_pad_right  (base, 3, 0);
 
-    TitleOsc = lv_label_create (base);
-    lv_obj_align      (TitleOsc, LV_ALIGN_TOP_MID, 0, 0);
-    lv_label_set_text (TitleOsc, "OSCILLATORS");
-    lv_obj_add_style  (TitleOsc, &TitleStyle, 0);
+    Title = lv_label_create (base);
+    lv_obj_align      (Title, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text (Title, str);
+    lv_style_init (&TitleStyle);       // for page titles
+    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_36);
+    lv_obj_add_style  (Title, &TitleStyle, 0);
+    }
+
+//#######################################################################
+//#######################################################################
+    PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base, const char* str) : PAGE_TITLE_C (base, str)
+    {
+    int x = 0;
+    int y = 40;
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
@@ -98,154 +70,7 @@ void GRPH_C::InitPageOsc (lv_obj_t* base)
     }
 
 //#######################################################################
-void GRPH_C::InitPageMod (lv_obj_t* base)
-    {
-    lv_obj_t*   panel;
-    int         x = 0;
-    int         y = 40;
-
-    lv_obj_set_style_pad_top    (base, 0, 0);
-    lv_obj_set_style_pad_left   (base, 3, 0);
-    lv_obj_set_style_pad_bottom (base, 0, 0);
-    lv_obj_set_style_pad_right  (base, 3, 0);
-
-    TitleMod = lv_label_create (base);
-    lv_obj_align      (TitleMod, LV_ALIGN_TOP_MID, 0, 0);
-    lv_label_set_text (TitleMod, "Modulators");
-    lv_obj_add_style  (TitleMod, &TitleStyle, 0);
-
-    panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 159, 440);
-    lv_obj_set_pos              (panel, x, y);
-    lv_obj_set_style_pad_top    (panel, 0, 0);
-    lv_obj_set_style_pad_bottom (panel, 0, 0);
-    lv_obj_set_style_pad_left   (panel, 2, 0);
-    lv_obj_set_style_pad_right  (panel, 2, 0);
-
-    TitleSoftware = new TITLE_WIDGET_C (panel, "Software");
-    MeterSoftware = new LFO_METER_WIDGET_C (panel, 0, 18, true);
-
-    x += 158;
-
-    panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 159, 440);
-    lv_obj_set_pos              (panel, x, y);
-    lv_obj_set_style_pad_top    (panel, 0, 0);
-    lv_obj_set_style_pad_bottom (panel, 0, 0);
-    lv_obj_set_style_pad_left   (panel, 2, 0);
-    lv_obj_set_style_pad_right  (panel, 2, 0);
-
-    TitleHardware = new TITLE_WIDGET_C (panel, "Hardware");
-    MeterHardware = new LFO_METER_WIDGET_C (panel, 0, 18, false);
-    }
-
-//#######################################################################
-void GRPH_C::InitPageFilter (lv_obj_t* base)
-    {
-    lv_obj_set_style_pad_top    (base, 0, 0);
-    lv_obj_set_style_pad_left   (base, 3, 0);
-    lv_obj_set_style_pad_bottom (base, 0, 0);
-    lv_obj_set_style_pad_right  (base, 3, 0);
-
-    TitleFlt = lv_label_create (base);
-    lv_obj_align      (TitleFlt, LV_ALIGN_TOP_MID, 0, 0);
-    lv_label_set_text (TitleFlt, "FILTERS");
-    lv_obj_add_style  (TitleFlt, &TitleStyle, 0);
-    }
-
-//#######################################################################
-void GRPH_C::InitPageTuning (lv_obj_t* base)
-    {
-    int x = 155;
-    int y = 140;
-
-    Tuningfont = &lv_font_montserrat_48;
-    lv_style_init (&TuningStyle);
-    lv_style_set_text_font  (&TuningStyle, Tuningfont);
-    lv_style_set_text_color (&TuningStyle, lv_color_hex(0xF00000));
-
-    TuningTitle = lv_label_create (base);
-    lv_obj_set_pos    (TuningTitle, x + 45, 20);
-    lv_label_set_text (TuningTitle, "TUNING MODE");
-    lv_obj_add_style  (TuningTitle, &TuningStyle, 0);
-
-    Note = new NOTE_WIDGET_C (base, x + 125, 80);
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        {
-        LevelTuning[z] = new LEVEL_WIDGET_C (base, ChannelText[z], x, y, LV_PALETTE_INDIGO);
-
-        x += 90;
-        }
-    }
-
-//#######################################################################
-void GRPH_C::Pause (bool state)
-    {
-    if ( state )
-        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
-    else
-        lvgl_port_unlock ();    // Release the mutex
-    }
-
-//#######################################################################
-void GRPH_C::PageSelect (PAGE_C page)
-    {
-    if ( page == PAGE_C::PAGE_ADVANCE )
-        {
-        page = (PAGE_C)((byte)this->CurrentPage + 1);
-        if ( page == PAGE_C::PAGE_TUNING )
-            page = PAGE_C::PAGE_OSC;
-        }
-    if ( CurrentPage != page )
-        {
-        CurrentPage = page;
-        DBG ("Page Select %s (%d)", PageText[(byte)page], (byte)page);
-        lv_tabview_set_act(Pages, (byte)page, LV_ANIM_OFF);
-        }
-    }
-
-//#######################################################################
-void GRPH_C::UpdatePageMod (byte ch, EFFECT_C effect, short value)
-    {
-    switch ( (CHANNEL_C)ch )
-        {
-        case CHANNEL_C::HARDWARE_LFO:
-            switch ( effect )
-                {
-                case EFFECT_C::SELECTED:
-                    break;
-                case EFFECT_C::FREQ_LFO:
-                    this->MeterHardware->SetFreq (value);
-                    break;
-                case EFFECT_C::SAWTOOTH_DIRECTION:
-                    break;
-                case EFFECT_C::PULSE_WIDTH:
-                    break;
-                default:
-                    break;
-                }
-            break;
-        case CHANNEL_C::SOFTWARE_LFO:
-            switch ( effect )
-                {
-                case EFFECT_C::SELECTED:
-                    break;
-                case EFFECT_C::FREQ_LFO:
-                    this->MeterSoftware->SetFreq (value);
-                    break;
-                default:
-                    break;
-                }
-            break;
-        default:
-            break;
-        }
-
-
-    }
-
-//#######################################################################
-void GRPH_C::UpdatePageOsc (byte ch, EFFECT_C effect, short value)
+void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
     switch ( effect )
         {
@@ -284,7 +109,103 @@ void GRPH_C::UpdatePageOsc (byte ch, EFFECT_C effect, short value)
     }
 
 //#######################################################################
-void GRPH_C::UpdatePageTuning (byte ch, EFFECT_C effect, short value)
+//#######################################################################
+     PAGE_MOD_C::PAGE_MOD_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Modulators")
+    {
+    lv_obj_t*   panel;
+    int         x = 0;
+    int         y = 40;
+
+    panel = lv_obj_create (base);
+    lv_obj_set_size             (panel, 159, 440);
+    lv_obj_set_pos              (panel, x, y);
+    lv_obj_set_style_pad_top    (panel, 0, 0);
+    lv_obj_set_style_pad_bottom (panel, 0, 0);
+    lv_obj_set_style_pad_left   (panel, 2, 0);
+    lv_obj_set_style_pad_right  (panel, 2, 0);
+
+    TitleSoftware = new TITLE_WIDGET_C (panel, "Software");
+    MeterSoftware = new LFO_METER_WIDGET_C (panel, 0, 18, true);
+
+    x += 158;
+
+    panel = lv_obj_create (base);
+    lv_obj_set_size             (panel, 159, 440);
+    lv_obj_set_pos              (panel, x, y);
+    lv_obj_set_style_pad_top    (panel, 0, 0);
+    lv_obj_set_style_pad_bottom (panel, 0, 0);
+    lv_obj_set_style_pad_left   (panel, 2, 0);
+    lv_obj_set_style_pad_right  (panel, 2, 0);
+
+    TitleHardware = new TITLE_WIDGET_C (panel, "Hardware");
+    MeterHardware = new LFO_METER_WIDGET_C (panel, 0, 18, false);
+    }
+
+//#######################################################################
+void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
+    {
+    switch ( (CHANNEL_C)ch )
+        {
+        case CHANNEL_C::HARDWARE_LFO:
+            switch ( effect )
+                {
+                case EFFECT_C::SELECTED:
+                    break;
+                case EFFECT_C::FREQ_LFO:
+                    this->MeterHardware->SetFreq (value);
+                    break;
+                case EFFECT_C::SAWTOOTH_DIRECTION:
+                    break;
+                case EFFECT_C::PULSE_WIDTH:
+                    break;
+                default:
+                    break;
+                }
+            break;
+        case CHANNEL_C::SOFTWARE_LFO:
+            switch ( effect )
+                {
+                case EFFECT_C::SELECTED:
+                    break;
+                case EFFECT_C::FREQ_LFO:
+                    this->MeterSoftware->SetFreq (value);
+                    break;
+                default:
+                    break;
+                }
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
+//#######################################################################
+    PAGE_TUNE_C::PAGE_TUNE_C (lv_obj_t* base)
+    {
+    int x = 155;
+    int y = 140;
+
+    Tuningfont = &lv_font_montserrat_48;
+    lv_style_init (&TuningStyle);
+    lv_style_set_text_font  (&TuningStyle, Tuningfont);
+    lv_style_set_text_color (&TuningStyle, lv_color_hex(0xF00000));
+
+    TuningTitle = lv_label_create (base);
+    lv_obj_set_pos    (TuningTitle, x + 45, 20);
+    lv_label_set_text (TuningTitle, "TUNING MODE");
+    lv_obj_add_style  (TuningTitle, &TuningStyle, 0);
+
+    Note = new NOTE_WIDGET_C (base, x + 125, 80);
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        {
+        LevelTuning[z] = new LEVEL_WIDGET_C (base, ChannelText[z], x, y, LV_PALETTE_INDIGO);
+        x += 90;
+        }
+    }
+
+//#######################################################################
+void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
     switch ( effect )
         {
@@ -296,6 +217,75 @@ void GRPH_C::UpdatePageTuning (byte ch, EFFECT_C effect, short value)
             break;
         default:
             break;
+        }
+    }
+
+//#######################################################################
+//#######################################################################
+    PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "FILTERS")
+    {
+    }
+
+//#######################################################################
+//#######################################################################
+    GRPH_C::GRPH_C ()
+    {
+    }
+
+//#######################################################################
+void GRPH_C::Begin ()
+    {
+    Panel = new ESP_Panel ();
+    Panel->init ();
+    Panel->begin ();
+    lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
+
+    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+    Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
+
+    BasePageOsc0   = lv_tabview_add_tab (Pages, "");
+    PageOsc0       = new PAGE_OSC_C     (BasePageOsc0, " 0 OSCILLATORS");
+    BasePageOsc1   = lv_tabview_add_tab (Pages, "");
+    PageOsc1       = new PAGE_OSC_C     (BasePageOsc1, " 1 OSCILLATORS");
+    BasePageOsc2   = lv_tabview_add_tab (Pages, "");
+    PageOsc2       = new PAGE_OSC_C     (BasePageOsc2, " 2 OSCILLATORS");
+    BasePageMod    = lv_tabview_add_tab (Pages, "");
+    PageMod        = new PAGE_MOD_C     (BasePageMod);
+    BasePageFilter = lv_tabview_add_tab (Pages, "");
+    PageFilter     = new PAGE_FILTER_C  (BasePageFilter);
+    BasePageTuning = lv_tabview_add_tab (Pages, "");
+    PageTune       = new PAGE_TUNE_C    (BasePageTuning);
+
+    PageSelect (PAGE_C::PAGE_OSC);
+
+    lvgl_port_unlock ();    // Release the mutex
+    }
+
+//#######################################################################
+
+//#######################################################################
+void GRPH_C::Pause (bool state)
+    {
+    if ( state )
+        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+    else
+        lvgl_port_unlock ();    // Release the mutex
+    }
+
+//#######################################################################
+void GRPH_C::PageSelect (PAGE_C page)
+    {
+    if ( page == PAGE_C::PAGE_ADVANCE )
+        {
+        page = (PAGE_C)((byte)this->CurrentPage + 1);
+        if ( page == PAGE_C::PAGE_TUNING )
+            page = PAGE_C::PAGE_OSC;
+        }
+    if ( CurrentPage != page )
+        {
+        CurrentPage = page;
+        DBG ("Page Select %s (%d)", PageText[(byte)page], (byte)page);
+        lv_tabview_set_act(Pages, (byte)page, LV_ANIM_OFF);
         }
     }
 
