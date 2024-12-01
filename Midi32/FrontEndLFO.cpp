@@ -1,7 +1,6 @@
 //#######################################################################
-// Module:     SyntFront.ino
-// Descrption: Synthesizer front end controller
-//                 Midi->Front->SynthModules
+// Module:     SyntFrontLFO.cpp
+// Descrption: Synthesizer hardware LFO control
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################

@@ -23,7 +23,7 @@ using namespace OSC_N;
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
-SYNTH_OSC_C::SYNTH_OSC_C (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
+    OSC_C::OSC_C (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
     Valid = false;
     Number = num;
@@ -70,34 +70,34 @@ SYNTH_OSC_C::SYNTH_OSC_C (byte num, byte first_device, byte& usecount, ENVELOPE_
     }
 
 //#######################################################################
-void SYNTH_OSC_C::TuningAdjust (bool up)
+void OSC_C::TuningAdjust (bool up)
     {
     OctaveArray[this->CurrentNote] += ( up ) ? -1 : +1;
     SetTuningNote (this->CurrentNote);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::ClearState ()
+void OSC_C::ClearState ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
         Mix[z]->Clear ();
     }
 
 //#######################################################################
-void SYNTH_OSC_C::Clear ()
+void OSC_C::Clear ()
     {
     ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningVolume (byte select, uint16_t level)
+void OSC_C::SetTuningVolume (byte select, uint16_t level)
     {
     I2cDevices.D2Analog (Mix[select]->GetChannel (), level);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningNote (byte note)
+void OSC_C::SetTuningNote (byte note)
     {
     CurrentNote = note;
     DBG ("DownKey = %d\n", note);
@@ -105,7 +105,7 @@ void SYNTH_OSC_C::SetTuningNote (byte note)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::NoteSet (byte note, byte velocity)
+void OSC_C::NoteSet (byte note, byte velocity)
     {
     CurrentNote = note;
     DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
@@ -118,63 +118,62 @@ void SYNTH_OSC_C::NoteSet (byte note, byte velocity)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::NoteClear ()
+void OSC_C::NoteClear ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         Mix[z]->End ();
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SawtoothDirection (bool data)
+void OSC_C::SawtoothDirection (bool data)
     {
     I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? DA_MAX : 0);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::PulseWidth (float percent)
+void OSC_C::PulseWidth (float percent)
     {
     I2cDevices.D2Analog (PwmChannel, (percent * (float)DA_MAX));
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSoftLFO (byte wave, bool state)
+void OSC_C::SetSoftLFO (byte wave, bool state)
     {
     Mix[wave]->SetSoftLFO (state);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetAttackTime (byte wave, float time)
+void OSC_C::SetAttackTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::ATTACK, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetDecayTime (byte wave, float time)
+void OSC_C::SetDecayTime (byte wave, float time)
     {
-     Mix[wave]->SetTime (ESTATE::DECAY, time);
+    Mix[wave]->SetTime (ESTATE::DECAY, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetReleaseTime (byte wave, float time)
+void OSC_C::SetReleaseTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::RELEASE, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSustainLevel (byte wave, float level_percent)
+void OSC_C::SetSustainLevel (byte wave, float level_percent)
     {
-
     Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSustainTime (byte wave, float time)
+void OSC_C::SetSustainTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::SUSTAIN, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetMaxLevel (byte wave, float level_percent)
+void OSC_C::SetMaxLevel (byte wave, float level_percent)
     {
     Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent);
     }

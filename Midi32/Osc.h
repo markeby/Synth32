@@ -39,7 +39,7 @@ enum class D_A_OFF
 }// end namespace OSC_N
 
 //#######################################################################
-class   SYNTH_OSC_C
+class   OSC_C
     {
 private:
     ENVELOPE_GENERATOR_C&   EnvGen;
@@ -56,7 +56,7 @@ private:
     void  ClearState (void);
 
 public:
-                SYNTH_OSC_C        (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+                OSC_C              (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
     void        SetTuningVolume    (byte select, uint16_t level);
     void        SetTuningNote      (byte note);
     void        NoteSet            (byte key, byte velocity);

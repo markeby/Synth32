@@ -59,11 +59,20 @@ using namespace DISP_MESSAGE_N;
         SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 225, LV_PALETTE_ORANGE);
         MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 225, LV_PALETTE_INDIGO);
 
-        if ( z == 2 )
-            SawtoothDir = new SAWTOOTH_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
-
-        if ( z == 3 )
-            PulseWidth = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+        switch ( z )
+            {
+            case 2:
+                SawtoothDir = new SAWTOOTH_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+                break;
+            case 3:
+                PulseWidth = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+                break;
+            case 4:
+                Noise = new NOISE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -8);
+                break;
+            default:
+                break;
+            }
 
         x += 158;
         }
@@ -102,6 +111,9 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             break;
         case EFFECT_C::PULSE_WIDTH:
             this->PulseWidth->SetWidth (value);
+            break;
+        case EFFECT_C::NOISE:
+            this->Noise->Set (value & 0x0F, value >> 7);
             break;
         default:
             break;
@@ -181,6 +193,12 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
+    PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "FILTERS")
+    {
+    }
+
+//#######################################################################
+//#######################################################################
     PAGE_TUNE_C::PAGE_TUNE_C (lv_obj_t* base)
     {
     int x = 155;
@@ -222,12 +240,6 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
-    PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "FILTERS")
-    {
-    }
-
-//#######################################################################
-//#######################################################################
     GRPH_C::GRPH_C ()
     {
     }
@@ -244,11 +256,11 @@ void GRPH_C::Begin ()
     Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
 
     BasePageOsc0   = lv_tabview_add_tab (Pages, "");
-    PageOsc0       = new PAGE_OSC_C     (BasePageOsc0, " 0 OSCILLATORS");
+    PageOsc0       = new PAGE_OSC_C     (BasePageOsc0, "Oscillators      zone 0 -- 8x");
     BasePageOsc1   = lv_tabview_add_tab (Pages, "");
-    PageOsc1       = new PAGE_OSC_C     (BasePageOsc1, " 1 OSCILLATORS");
+    PageOsc1       = new PAGE_OSC_C     (BasePageOsc1, "Oscillators      zone 1 -- 4x");
     BasePageOsc2   = lv_tabview_add_tab (Pages, "");
-    PageOsc2       = new PAGE_OSC_C     (BasePageOsc2, " 2 OSCILLATORS");
+    PageOsc2       = new PAGE_OSC_C     (BasePageOsc2, "Oscillators      zone 2 -- 4x");
     BasePageMod    = lv_tabview_add_tab (Pages, "");
     PageMod        = new PAGE_MOD_C     (BasePageMod);
     BasePageFilter = lv_tabview_add_tab (Pages, "");
@@ -256,7 +268,7 @@ void GRPH_C::Begin ()
     BasePageTuning = lv_tabview_add_tab (Pages, "");
     PageTune       = new PAGE_TUNE_C    (BasePageTuning);
 
-    PageSelect (PAGE_C::PAGE_OSC);
+    PageSelect (PAGE_C::PAGE_OSC0);
 
     lvgl_port_unlock ();    // Release the mutex
     }
@@ -279,7 +291,7 @@ void GRPH_C::PageSelect (PAGE_C page)
         {
         page = (PAGE_C)((byte)this->CurrentPage + 1);
         if ( page == PAGE_C::PAGE_TUNING )
-            page = PAGE_C::PAGE_OSC;
+            page = PAGE_C::PAGE_OSC0;
         }
     if ( CurrentPage != page )
         {

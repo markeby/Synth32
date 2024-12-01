@@ -77,9 +77,17 @@ void MESSAGE_CLIENT_C::Process ()
         DBG ("Update: %X  channel: %X   effect: %X   Value: %X", (uint8_t)ptop.Command, (uint8_t)ptop.Channel, (uint8_t)ptop.Effect, value);
         switch ( ptop.Command )
             {
-            case CMD_C::UPDATE_PAGE_OSC:
-                Graphics.UpdatePageOsc ((uint8_t)ptop.Channel, ptop.Effect, value);
-                Graphics.PageSelect (PAGE_C::PAGE_OSC);
+            case CMD_C::UPDATE_PAGE_OSC0:
+                Graphics.UpdatePageOsc0 ((uint8_t)ptop.Channel, ptop.Effect, value);
+                Graphics.PageSelect (PAGE_C::PAGE_OSC0);
+                break;
+            case CMD_C::UPDATE_PAGE_OSC1:
+                Graphics.UpdatePageOsc1 ((uint8_t)ptop.Channel, ptop.Effect, value);
+                Graphics.PageSelect (PAGE_C::PAGE_OSC1);
+                break;
+            case CMD_C::UPDATE_PAGE_OSC2:
+                Graphics.UpdatePageOsc2 ((uint8_t)ptop.Channel, ptop.Effect, value);
+                Graphics.PageSelect (PAGE_C::PAGE_OSC2);
                 break;
             case CMD_C::UPDATE_PAGE_MOD:
                 Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, value);

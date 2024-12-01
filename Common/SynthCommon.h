@@ -11,6 +11,7 @@
 
 // number of synth oscillaotor/filter/control channels
 #define CHAN_COUNT      8
+#define NUM_ZONES       2
 #define ZONE_COUNT      4
 
 // number of mixer channels in each oscillator

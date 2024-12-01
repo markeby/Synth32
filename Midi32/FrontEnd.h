@@ -8,7 +8,7 @@
 
 #include "LFOosc.h"
 #include "SoftLFO.h"
-#include "SynthChannel.h"
+#include "Channel.h"
 #include "Envelope.h"
 #include "multiplex.h"
 #include "Noise.h"
@@ -33,7 +33,6 @@ private:
     byte                  UpVelocity;
     uint64_t              DispMessageTimer;
     bool                  UpTrigger;
-    bool                  Zone2Bank;
 
     MIDI_MAP*             FaderMap;
     MIDI_MAP*             KnobMap;
@@ -41,32 +40,18 @@ private:
     MIDI_XL_MAP*          XlMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
     MULTIPLEX_C*          pMultiplexer;
+    SYNTH_LFO_C           Lfo;
+    NOISE_C*              pNoise;
 
-    SYNTH_CHANNEL_C*      pChan[CHAN_COUNT];
-    SYNTH_CHANNEL_C*      pZone[3];
+    CHANNEL_C*            pChan[CHAN_COUNT];
+    CHANNEL_C*            pZone[3];
 
     bool                  SetTuning;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
-    SYNTH_LFO_C           Lfo;
-    NOISE_C*              pNoise;
-    // Tuning controls
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  TuningOn[CHAN_COUNT];
     bool                  TuningChange;
-
-    typedef struct
-        {
-        byte    BaseLevel;
-        byte    MaxLevel;
-        byte    AttackTime;
-        byte    DecayTime;
-        byte    SustainLevel;
-        byte    SustainTime;
-        byte    ReleaseTime;
-        }
-    MIDI_ADSR_T;
-    MIDI_ADSR_T     MidiAdsr[ENVELOPE_COUNT];
 
     String Selected (void);
 
@@ -84,6 +69,7 @@ public:
     void  ChannelSetSelect   (byte chan, bool state);
     void  SawtoothDirection  (bool data);
     void  SetPulseWidth      (byte data);
+    void  SetNoise           (byte ch, bool state);
     void  Tuning             (void);
     void  TuningAdjust       (bool up);
     void  StartTuning        (void);
@@ -93,7 +79,6 @@ public:
 
     void  SetLevelLFO        (byte data);
     void  SetMaxLevel        (byte ch, byte data);
-    void  SetMBaselevel      (byte ch, byte data);
     void  SetAttackTime      (byte data);
     void  SetDecayTime       (byte data);
     void  SetSustainLevel    (byte ch, byte data);

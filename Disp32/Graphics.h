@@ -26,6 +26,7 @@ class PULSE_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class NOTE_WIDGET_C;
+class NOISE_WIDGET_C;
 
 class PAGE_TITLE_C
     {
@@ -46,6 +47,7 @@ private:
     LEVEL_WIDGET_C*         SustainLevel[OSC_MIXER_COUNT];
     SAWTOOTH_WIDGET_C*      SawtoothDir;
     PULSE_WIDGET_C*         PulseWidth;
+    NOISE_WIDGET_C*         Noise;
 
 public:
               PAGE_OSC_C (lv_obj_t* base, const char* str);
@@ -129,7 +131,9 @@ public:
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
     void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageMod->UpdatePage (ch, effect, value); }
     void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageTune->UpdatePage (ch, effect, value); }
-    void    UpdatePageOsc       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc0->UpdatePage (ch, effect, value); }
+    void    UpdatePageOsc0      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc0->UpdatePage (ch, effect, value); }
+    void    UpdatePageOsc1      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc1->UpdatePage (ch, effect, value); }
+    void    UpdatePageOsc2      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc2->UpdatePage (ch, effect, value); }
     };
 
 extern GRPH_C  Graphics;

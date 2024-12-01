@@ -132,4 +132,21 @@ public:
     void SetFreq            (short val);
     };
 
+//############################################
+class NOISE_WIDGET_C
+    {
+    private:
+        lv_style_t  StyleBlue;
+        lv_style_t  StyleWhite;
+        lv_style_t  StylePink;
+        lv_style_t  StyleRed;
+        lv_obj_t*   Blue;
+        lv_obj_t*   White;
+        lv_obj_t*   Pink;
+        lv_obj_t*   Red;
+
+    public:
+             NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+        void Set            (short val, bool state);
+    };
 

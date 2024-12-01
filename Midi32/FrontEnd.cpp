@@ -44,8 +44,8 @@ typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
 //void FuncMessage (const MidiInterface::MidiMessage& msg)
 void FuncMessage (const MidiMessage& msg)
     {
-    DBGM ("valid = %X   type = %X   channel = %X   data1 = %X   data2 = %X   length = %X",
-          msg.valid, msg.type, msg.channel, msg.data1, msg.data2, msg.length);
+//    DBGM ("valid = %X   type = %X   channel = %X   data1 = %X   data2 = %X   length = %X",
+//          msg.valid, msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 
 //###################################################################
@@ -66,7 +66,7 @@ static void  FuncKeyUp (byte chan, byte key, byte velocity)
 static void FuncController (byte chan, byte type, byte value)
     {
     SynthFront.Controller (chan, type, value);
-    DBGM ("Controller  Chan %2.2X  type %2.2X  value %2.2X", chan, type, value);
+    DBGM ("Controller Chan %2.2X  type %2.2X  value %2.2X", chan, type, value);
     }
 
 //###################################################################
@@ -193,7 +193,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
     pMultiplexer = new MULTIPLEX_C (mult_digital);
     pNoise       = new NOISE_C     (noise_digital);
 
-    Midi_0.setHandleMessage              (FuncMessage);
+//    Midi_0.setHandleMessage              (FuncMessage);
     Midi_0.setHandleNoteOn               (FuncKeyDown);
     Midi_0.setHandleNoteOff              (FuncKeyUp);
     Midi_0.setHandleControlChange        (FuncController);
@@ -215,7 +215,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
 //  Midi_0.setHandleActiveSensing        (ActiveSensingCallback);
 //  Midi_0.setHandleSystemReset          (SystemResetCallback);
 
-    Midi_1.setHandleMessage              (FuncMessage);
+//    Midi_1.setHandleMessage              (FuncMessage);
     Midi_1.setHandleNoteOn               (FuncKeyDown);
     Midi_1.setHandleNoteOff              (FuncKeyUp);
     Midi_1.setHandleControlChange        (FuncController);
@@ -278,7 +278,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
-        pChan[z] = new SYNTH_CHANNEL_C (z, osc_d_a, EnvADSL);
+        pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
     pZone[0]     = pChan[0];
@@ -427,7 +427,7 @@ void SYNTH_FRONT_C::Loop ()
             {
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
                 {
-                SYNTH_CHANNEL_C& ch = *(pChan[z]);
+                CHANNEL_C& ch = *(pChan[z]);
 
                 if ( !ch.IsActive () )              // grab the first channel not in use
                     {
@@ -559,12 +559,6 @@ void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMBaselevel (byte ch, byte data)
-    {
-    MidiAdsr[ch].BaseLevel = data;
-    }
-
-//#####################################################################
 void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     {
     if ( this->SetTuning )
@@ -621,7 +615,6 @@ void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < ZoneCount;  z++ )
         this->pChan[CurrentZone + z]->pOsc()->SetSustainLevel (ch, val);
-    this->MidiAdsr[ch].SustainLevel = data;
     DisplayMessage.OscSustainLevel (CurrentZone, ch, data);
     }
 
@@ -681,12 +674,40 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
     DisplayMessage.OscPulseWidth (CurrentZone, data);
     }
 
+//#######################################################################
+void SYNTH_FRONT_C::SetNoise (byte ch, bool state)
+    {
+    int z;
+
+    switch (  CurrentZone )
+        {
+        case ZONE0:
+            for ( z = 0;  z < DUCT_NUM;  z++ )
+                this->pNoise->Select (z, ch, state);
+            DisplayMessage.OscNoise (ZONE0, ch, state);
+        default:
+            if ( ch & 0x80 )
+                {
+                ch &= 0x0F;
+                for ( z = 0;  z < (DUCT_NUM / NUM_ZONES);  z++ )
+                    this->pNoise->Select (z + 2, ch, state);
+                DisplayMessage.OscNoise (ZONE2, ch, state);
+                }
+            else
+                {
+                for ( int z = 0;  z < (DUCT_NUM / NUM_ZONES);  z ++)
+                    this->pNoise->Select (z, ch, state);
+                DisplayMessage.OscNoise (ZONE1, ch, state);
+                }
+        }
+    }
+
 //#####################################################################
 void SYNTH_FRONT_C::DisplayUpdate (int zone)
     {
     int zcount;
-    SYNTH_CHANNEL_C& ch = *(this->pZone[zone]);
-    SYNTH_OSC_C& osc = *(ch.pOsc ());
+    CHANNEL_C& ch = *(this->pZone[zone]);
+    OSC_C& osc    = *(ch.pOsc ());
 
     switch ( zone )
         {
@@ -705,18 +726,18 @@ void SYNTH_FRONT_C::DisplayUpdate (int zone)
 
     for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        SYNTH_OSC_C& osc = *(this->pZone[zone]->pOsc ());
+        OSC_C& osc = *(this->pZone[zone]->pOsc ());
 
-        DisplayMessage.OscSelected (zone, z, ch.SelectedEnvelope[z]);
-        DisplayMessage.OscMaxLevel (zone, z, osc.GetMaxLevel (z));
-        DisplayMessage.OscAttackTime (zone, z, osc.GetAttackTime (z));
-        DisplayMessage.OscDecayTime (zone, z,   osc.GetDecayTime (z));
-        DisplayMessage.OscSustainTime (zone, z, osc.GetSustainTime (z));
-        DisplayMessage.OscReleaseTime (zone, z, osc.GetReleaseTime (z));
+        DisplayMessage.OscSelected     (zone, z, ch.SelectedEnvelope[z]);
+        DisplayMessage.OscMaxLevel     (zone, z, osc.GetMaxLevel (z));
+        DisplayMessage.OscAttackTime   (zone, z, osc.GetAttackTime (z));
+        DisplayMessage.OscDecayTime    (zone, z,   osc.GetDecayTime (z));
+        DisplayMessage.OscSustainTime  (zone, z, osc.GetSustainTime (z));
+        DisplayMessage.OscReleaseTime  (zone, z, osc.GetReleaseTime (z));
         DisplayMessage.OscSustainLevel (zone, z,osc.GetSustainLevel (z));
         }
     DisplayMessage.OscSawtoothDirection (zone, this->pZone[zone]->GetSawToothDirection ());
-    DisplayMessage.OscPulseWidth (zone, this->pZone[zone]->GetPulseWidth ());
+    DisplayMessage.OscPulseWidth        (zone, this->pZone[zone]->GetPulseWidth ());
     }
 
 //#######################################################################
