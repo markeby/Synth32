@@ -1,6 +1,6 @@
 //#######################################################################
-// Module:     SyntConfig.ino
-// Descrption: Synthesizer midi configuration
+// Module:     Controls.cpp
+// Descrption: Synthesizer midi control routing
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
@@ -13,67 +13,67 @@
 #include "SoftLFO.h"
 
 //########################################################
-static void SetMaxLevel (uint8_t ch, uint8_t data)
+static void SetMaxLevel (byte ch, byte data)
     {
     SynthFront.SetMaxLevel (ch, data);
     }
 
 //########################################################
-static void SetSustain (uint8_t ch, uint8_t data)
+static void SetSustain (byte ch, byte data)
     {
     SynthFront.SetSustainLevel (ch, data);
     }
 
 //########################################################
-static void SetTimeSetSelect (uint8_t ch, uint8_t state)
+static void SetTimeSetSelect (byte ch, byte state)
     {
     SynthFront.ChannelSetSelect (ch, state);
     }
 
 //########################################################
-static void SetModVCA (uint8_t ch, uint8_t state)
+static void SetModVCA (byte ch, byte state)
     {
     SynthFront.SelectWaveVCA (ch, state);
     }
 
 //########################################################
-static void SetSrcVCF (uint8_t ch, uint8_t state)
+static void SetSrcVCF (byte ch, byte state)
     {
     SynthFront.SelectWaveVCF (ch, state);
     }
 
 //########################################################
-static void SetAttckTime (uint8_t ch, uint8_t data)
+static void SetAttckTime (byte ch, byte data)
     {
     SynthFront.SetAttackTime (data);
     }
 
 //########################################################
-static void SetDecayTime (uint8_t ch, uint8_t data)
+static void SetDecayTime (byte ch, byte data)
     {
     SynthFront.SetDecayTime (data);
     }
 
 //########################################################
-static void SetSustainTime (uint8_t ch, uint8_t data)
+static void SetSustainTime (byte ch, byte data)
     {
     SynthFront.SetSustainTime (data);
     }
 
 //########################################################
-static void SetReleaseTime (uint8_t ch, uint8_t data)
+static void SetReleaseTime (byte ch, byte data)
     {
     SynthFront.SetReleaseTime (data);
     }
 
 //########################################################
-static void SawtoothDirection (uint8_t ch, uint8_t data)
+static void SawtoothDirection (byte ch, byte data)
     {
     SynthFront.SawtoothDirection (data != 0);
     }
 
 //########################################################
-static void PulseWidth (uint8_t ch, uint8_t data)
+static void PulseWidth (byte ch, byte data)
     {
     if ( data == 0 )
         data = 1;
@@ -81,13 +81,13 @@ static void PulseWidth (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-static void FreqLFO (uint8_t ch, uint8_t data)
+static void FreqLFO (byte ch, byte data)
     {
     SynthFront.FreqLFO (ch, data);
     }
 
 //########################################################
-static void TuneReset (uint8_t ch, uint8_t data)
+static void TuneReset (byte ch, byte data)
     {
     if ( data )
         Monitor.Tuning ();
@@ -96,12 +96,19 @@ static void TuneReset (uint8_t ch, uint8_t data)
     }
 
 //########################################################
-static void PageAdvance (uint8_t ch, uint8_t data)
+static void PageAdvance (byte ch, byte data)
     {
     if ( data )
         DisplayMessage.PageAdvance();
     else
         SynthFront.SetClearKeyRed (0x64);
+    }
+
+//########################################################
+static void NoiseSet (byte ch, byte data)
+    {
+   printf("NOISE -> %X  %X\n", ch, data);
+    SynthFront.SetNoise (ch, data);
     }
 
 //########################################################
@@ -144,16 +151,16 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {    3,    0, "Pulse",                  SetTimeSetSelect  },    // 01  53  xx
         {    4,    0, "Square",                 SetTimeSetSelect  },    // 01  54  xx
         { 0x55, 0x0D, "Sawtooth Dir",           SawtoothDirection },    // 01  55  xx
-        { 0x56, 0x0D, "White/!Pink noise",      nullptr           },    // 01  56  xx
+        { 0x56,                0, "Dual Zone",          nullptr           },    // 01  56  xx
         {   39,    0, "N ",                     nullptr           },    // 01  57  xx
-        {   40,    0, "N ",                     nullptr           },    // 01  58  xx
-        {   41,    0, "N ",                     nullptr           },    // 01  59  xx
-        {   42,    0, "N ",                     nullptr           },    // 01  5A  xx
-        {   43,    0, "N ",                     nullptr           },    // 01  5B  xx
-        {   44,    0, "N ",                     nullptr           },    // 01  5C  xx
-        {   45,    0, "N ",                     nullptr           },    // 01  5D  xx
-        {   46,    0, "N ",                     nullptr           },    // 01  5E  xx
-        {   47,    0, "N ",                     nullptr           },    // 01  5F  xx
+        {   DUCT_BLUE,         0, "0-1 Blue ",          NoiseSet          },    // 01  58  xx
+        {   DUCT_WHITE,        0, "0-1 White",          NoiseSet          },    // 01  59  xx
+        {   DUCT_PINK,         0, "0-1 Pink ",          NoiseSet          },    // 01  5A  xx
+        {   DUCT_RED,          0, "0-1 Red  ",          NoiseSet          },    // 01  5B  xx
+        {   0x80 | DUCT_BLUE,  0, "2 Blue ",            NoiseSet          },    // 01  5C  xx
+        {   0x80 | DUCT_WHITE, 0, "2 White",            NoiseSet          },    // 01  5D  xx
+        {   0x80 | DUCT_PINK,  0, "2 Pink ",            NoiseSet          },    // 01  5E  xx
+        {   0x80 | DUCT_RED,   0, "2 Red  ",            NoiseSet          },    // 01  5F  xx
         {   47,    0, "N ",                     nullptr           },    // 01  60  xx
         {   47,    0, "N ",                     nullptr           },    // 01  61  xx
         {   50,    0, "N ",                     nullptr           },    // 01  62  xx
@@ -173,11 +180,11 @@ LED_NOTE_MAP PanDevice[] = { 15, 31, 47, 63, 79, 95, 111, 127 };
 MIDI_MAP    FaderMapArray[] =
     {   {  0, "Sine Sustain",             SetSustain        },          // 01  07  xx
         {  1, "Triangle Sustain",         SetSustain        },          // 02  07  xx
-        {  2, "Sqiare Sustain",           SetSustain        },          // 03  07  xx
-        {  3, "Sawtooth Sustain",         SetSustain        },          // 04  07  xx
-        {  4, "Pulse Sustain",            SetSustain        },          // 05  07  xx
-        {  5, "Noise max level",          SetMaxLevel       },          // 06  07  xx
-        {  6, "Noise Sustain",            SetSustain        },          // 07  07  xx
+        {  2, "Sawtooth Sustain",         SetSustain        },          // 03  07  xx
+        {  3, "Pulse Sustain",            SetSustain        },          // 04  07  xx
+        {  4, "Noise Sustain",            SetSustain       },           // 05  07  xx
+        {  5, "N ",                       nullptr           },          // 06  07  xx
+        {  6, "N ",                       nullptr           },          // 07  07  xx
         {  7, "N ",                       nullptr           },          // 08  07  xx
         {  8, "N ",                       nullptr           },          // 09  07  xx
         {  9, "N ",                       nullptr           },          // 0A  07  xx
