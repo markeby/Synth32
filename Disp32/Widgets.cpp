@@ -362,8 +362,6 @@ static const float FreqTable[128] =
 //#######################################################################
     NOTE_WIDGET_C::NOTE_WIDGET_C (lv_obj_t* base, short x, short y)
     {
-    short size = 127;
-
     lv_obj_t* panel = lv_obj_create (base);
     lv_obj_set_size (panel, 190, 26);
     lv_obj_set_pos (panel, x, y);
@@ -387,5 +385,80 @@ void NOTE_WIDGET_C::SetValue (short val)
     {
     val %= 128;
     lv_label_set_text_fmt (Value, "%s  %d = %.2f Hz", FreqNote[val % 12], val, FreqTable[val]);
+    }
+
+//#######################################################################
+    NOISE_WIDGET_C::NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    {
+    x += -45;
+    Blue = lv_label_create (base);
+    lv_obj_align (Blue, align, x, y);
+    lv_style_init (&StyleBlue);
+    lv_style_set_text_font (&StyleBlue, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StyleBlue, lv_color_hex3(0xFFFFFF));
+    lv_obj_add_style (Blue, &StyleBlue, 0);
+    lv_label_set_text(Blue, "B");
+    x += 30;
+
+    White = lv_label_create (base);
+    lv_obj_align (White, align, x, y);
+    lv_style_init (&StyleWhite);
+    lv_style_set_text_font (&StyleWhite, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StyleWhite, lv_color_hex3(0xFFFFFF));
+    lv_obj_add_style (White, &StyleWhite, 0);
+    lv_label_set_text(White, "W");
+    x += 30;
+
+    Pink = lv_label_create (base);
+    lv_obj_align (Pink, align, x, y);
+    lv_style_init (&StylePink);
+    lv_style_set_text_font (&StylePink, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StylePink, lv_color_hex3(0xFFFFFF));
+    lv_obj_add_style (Pink, &StylePink, 0);
+    lv_label_set_text(Pink, "P");
+    x += 30;
+
+    Red = lv_label_create (base);
+    lv_obj_align (Red, align, x, y);
+    lv_style_init (&StyleRed);
+    lv_style_set_text_font (&StyleRed, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StyleRed, lv_color_hex3(0xFFFFFF));
+    lv_obj_add_style (Red, &StyleRed, 0);
+    lv_label_set_text(Red, "R");
+    }
+
+//#######################################################################
+void NOISE_WIDGET_C::Set (short color, bool state)
+    {
+    switch ( color )
+        {
+        case DUCT_BLUE:
+            if ( state )
+                lv_style_set_text_color(&StyleBlue, lv_palette_main(LV_PALETTE_BLUE));
+            else
+                lv_style_set_text_color(&StyleBlue, lv_color_hex3(0xFFFFFF));
+            break;
+        case DUCT_WHITE:
+            if ( state )
+                lv_style_set_text_color (&StyleWhite, lv_palette_main (LV_PALETTE_LIGHT_BLUE));
+            else
+                lv_style_set_text_color(&StyleWhite, lv_color_hex3(0xFFFFFF));
+            break;
+        case DUCT_PINK:
+            if ( state )
+                lv_style_set_text_color (&StylePink, lv_palette_main (LV_PALETTE_PINK));
+            else
+                lv_style_set_text_color(&StylePink, lv_color_hex3(0xFFFFFF));
+            break;
+        case DUCT_RED:
+            if ( state )
+                lv_style_set_text_color (&StyleRed, lv_palette_main (LV_PALETTE_RED));
+            else
+                lv_style_set_text_color(&StyleRed, lv_color_hex3(0xFFFFFF));
+            break;
+        default:
+            return;
+        }
+
     }
 

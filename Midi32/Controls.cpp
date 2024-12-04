@@ -107,7 +107,6 @@ static void PageAdvance (byte ch, byte data)
 //########################################################
 static void NoiseSet (byte ch, byte data)
     {
-   printf("NOISE -> %X  %X\n", ch, data);
     SynthFront.SetNoise (ch, data);
     }
 
