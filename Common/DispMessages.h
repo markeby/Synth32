@@ -43,9 +43,11 @@ namespace DISP_MESSAGE_N
     //###########################################
     //  Control bytes
     //###########################################
-    enum class CMD_C: uint8_t
+    enum class CMD_C: byte
         {
-        UPDATE_PAGE_OSC      = 0xB0,
+        UPDATE_PAGE_OSC0      = 0xB0,
+        UPDATE_PAGE_OSC1,
+        UPDATE_PAGE_OSC2,
         UPDATE_PAGE_MOD,
         UPDATE_PAGE_FILTER,
         UPDATE_PAGE_TUNING,
@@ -57,9 +59,11 @@ namespace DISP_MESSAGE_N
     //###########################################
     // Function/Page select bytes
     //###########################################
-    enum class PAGE_C: uint8_t
+    enum class PAGE_C: byte
         {
-        PAGE_OSC = 0,
+        PAGE_OSC0 = 0,
+        PAGE_OSC1,
+        PAGE_OSC2,
         PAGE_MOD,
         PAGE_FILTER,
         PAGE_TUNING,
@@ -73,7 +77,9 @@ namespace DISP_MESSAGE_N
     #ifdef ALLOCATE_DISP_MESSAGES
     char* PageText[] =
         {
-        "OSCILLATOR",
+        "0 OSCILLATOR",
+        "1 OSCILLATOR",
+        "2 OSCILLATOR",
         "MODULATION",
         "FILTER",
         "TUNING",
@@ -89,7 +95,7 @@ namespace DISP_MESSAGE_N
     //###########################################
     // Envelope selection bytes
     //###########################################
-    enum class CHANNEL_C: uint8_t
+    enum class CHANNEL_C: byte
         {
         SINE = 0,
         TRIANGLE,
@@ -127,7 +133,7 @@ namespace DISP_MESSAGE_N
     //###########################################
     // Function/Effects bytes
     //###########################################
-    enum class EFFECT_C: uint8_t
+    enum class EFFECT_C: byte
         {
         SELECTED = 0,
         BASE_VOL,
@@ -141,6 +147,7 @@ namespace DISP_MESSAGE_N
         PULSE_WIDTH,
         FREQ_LFO,
         NOTE,
+        NOISE,
         };
 
     //###########################################
@@ -159,9 +166,9 @@ namespace DISP_MESSAGE_N
         "SUSTAIN_LEVEL",
         "SAWTOOTH_DIRECTION",
         "PULSE_WIDTH",
-        "FREQ_COURSE",
-        "FREQ_FINE",
-        "NONE",
+        "FREQ_LFO",
+        "NOTE",
+        "NOISE",
         "NONE",
         "NONE",
         "NONE",
@@ -169,5 +176,6 @@ namespace DISP_MESSAGE_N
     #else
     extern char* EffectText[];
     #endif
-    }
+
+    }   // namespace DISP_MESSAGE_N
 

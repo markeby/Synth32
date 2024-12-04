@@ -8,9 +8,17 @@
 
 #include "LFOosc.h"
 #include "SoftLFO.h"
-#include "SynthChannel.h"
+#include "Channel.h"
 #include "Envelope.h"
 #include "multiplex.h"
+#include "Noise.h"
+
+
+enum {
+     ZONE0 = 0,
+     ZONE1,
+     ZONE2
+     };
 
 //#################################################
 //    Synthesizer front end class
@@ -18,79 +26,70 @@
 class   SYNTH_FRONT_C
     {
 private:
-    uint8_t               DownKey;
-    uint8_t               DownVelocity;
+    byte                  DownKey;
+    byte                  DownVelocity;
     bool                  DownTrigger;
-    uint8_t               UpKey;
-    uint8_t               UpVelocity;
-    bool                  UpTrigger;
-    int                   NoiseColorDev;
-    bool                  SelectedEnvelope[ENVELOPE_COUNT];
-    uint8_t               NoiseFilterSetting;     // 0 - 3
+    byte                  UpKey;
+    byte                  UpVelocity;
     uint64_t              DispMessageTimer;
-    bool                  SawToothDirection;
-    byte                  PulseWidth;
+    bool                  UpTrigger;
+
     MIDI_MAP*             FaderMap;
     MIDI_MAP*             KnobMap;
     MIDI_MAP*             SwitchMap;
     MIDI_XL_MAP*          XlMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
-    MULTIPLEX_C*          Multiplexer;
-    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
-    bool                  TuningOn[CHAN_COUNT];
-    bool                  TuningChange;
+    MULTIPLEX_C*          pMultiplexer;
+    SYNTH_LFO_C           Lfo;
+    NOISE_C*              pNoise;
+
+    CHANNEL_C*            pChan[CHAN_COUNT];
+    CHANNEL_C*            pZone[3];
+
     bool                  SetTuning;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
-    SYNTH_CHANNEL_C*      pChan[CHAN_COUNT];
-    SYNTH_LFO_C           Lfo;
-
-    typedef struct
-        {
-        uint8_t    BaseLevel;
-        uint8_t    MaxLevel;
-        uint8_t    AttackTime;
-        uint8_t    DecayTime;
-        uint8_t    SustainLevel;
-        uint8_t    SustainTime;
-        uint8_t    ReleaseTime;
-        }
-    MIDI_ADSR_T;
-    MIDI_ADSR_T     MidiAdsr[ENVELOPE_COUNT];
+    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
+    bool                  TuningOn[CHAN_COUNT];
+    bool                  TuningChange;
 
     String Selected (void);
 
 public:
+    byte  CurrentZone;
+    byte  ZoneCount;
+
           SYNTH_FRONT_C      (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map);
-    void  Begin              (int osc_d_a, int mult_digital);
+    void  Begin              (int osc_d_a, int mult_digital, int noise_digital);
     void  ResetXL            (void);
     void  Loop               (void);
     void  Clear              (void);
-    void  Controller         (uint8_t chan, uint8_t type, uint8_t value);
-    void  PitchBend          (uint8_t chan, int value);
-    void  ChannelSetSelect   (uint8_t chan, bool state);
+    void  Controller         (byte chan, byte type, byte value);
+    void  PitchBend          (byte chan, int value);
+    void  ChannelSetSelect   (byte chan, bool state);
     void  SawtoothDirection  (bool data);
     void  SetPulseWidth      (byte data);
+    void  SetNoise           (byte ch, bool state);
     void  Tuning             (void);
     void  TuningAdjust       (bool up);
     void  StartTuning        (void);
-    void  SelectWaveVCA      (uint8_t ch, uint8_t state);
-    void  SelectWaveVCF      (uint8_t ch, uint8_t state);
+    void  SelectWaveVCA      (byte ch, byte state);
+    void  SelectWaveVCF      (byte ch, byte state);
     void  FreqLFO            (byte ch, byte data);
 
-    void  SetLevelLFO        (uint8_t data);
-    void  SetMaxLevel        (uint8_t ch, uint8_t data);
-    void  SetMBaselevel      (uint8_t ch, uint8_t data);
-    void  SetAttackTime      (uint8_t data);
-    void  SetDecayTime       (uint8_t data);
-    void  SetSustainLevel    (uint8_t ch, uint8_t data);
-    void  SetSustainTime     (uint8_t data);
-    void  SetReleaseTime     (uint8_t data);
-    void  DisplayUpdate      (void);
+    void  SetLevelLFO        (byte data);
+    void  SetMaxLevel        (byte ch, byte data);
+    void  SetAttackTime      (byte data);
+    void  SetDecayTime       (byte data);
+    void  SetSustainLevel    (byte ch, byte data);
+    void  SetSustainTime     (byte data);
+    void  SetReleaseTime     (byte data);
+    void  DisplayUpdate      (int zone);
     void  SaveAllSettings    (void);
 
     //#######################################################################
     MULTIPLEX_C* Multiplex (void);
+    NOISE_C*     Noise     (void);
 
     //#######################################################################
     inline void SetClearKeyRed (byte key)
@@ -105,7 +104,7 @@ public:
         }
 
     //#######################################################################
-    inline void KeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
+    inline void KeyDown (byte chan, byte key, byte velocity)
         {
         this->DownKey      = key;
         this->DownVelocity = velocity;
@@ -113,7 +112,7 @@ public:
         }
 
     //#######################################################################
-    inline void KeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
+    inline void KeyUp (byte chan, byte key, byte velocity)
         {
         this->UpKey      = key;
         this->UpVelocity = velocity;

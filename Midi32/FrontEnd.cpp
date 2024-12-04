@@ -100,7 +100,13 @@ void SYNTH_FRONT_C::ResetXL ()
 //#######################################################################
 MULTIPLEX_C* SYNTH_FRONT_C::Multiplex ()
     {
-    return (this->Multiplexer);
+    return (this->pMultiplexer);
+    }
+
+//#######################################################################
+NOISE_C* SYNTH_FRONT_C::Noise ()
+    {
+    return (this->pNoise);
     }
 
 //#######################################################################
@@ -110,7 +116,7 @@ String SYNTH_FRONT_C::Selected ()
 
     for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
         {
-        if ( SelectedEnvelope[z] )
+        if ( this->pZone[this->CurrentZone]->SelectedEnvelope[z] )
             {
             str += SwitchMapArray[z].Desc;
             str += "  ";
@@ -138,10 +144,10 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP*
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital)
+void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
     {
-
-    Multiplexer = new MULTIPLEX_C (mult_digital);
+    pMultiplexer = new MULTIPLEX_C (mult_digital);
+    pNoise       = new NOISE_C     (noise_digital);
 
 //  Midi_0.setHandleMessage              (FuncMessage);
     Midi_0.setHandleNoteOn               (FuncKeyDown);
@@ -228,15 +234,22 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital)
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
-        pChan[z] = new SYNTH_CHANNEL_C (z, osc_d_a, EnvADSL);
+        pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
-
+    pZone[0]     = pChan[0];
+    pZone[1]     = pChan[0];
+    pZone[2]     = pChan[4];
+    CurrentZone  = ZONE0;
+    ZoneCount    = CHAN_COUNT;
     Lfo.Begin (0, osc_d_a);
 
     this->SawtoothDirection (false);
+    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+        {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        SelectedEnvelope[z] = false;
+            pChan[zc]->SelectedEnvelope[z] = false;
+        }
     }
 
 //#######################################################################
@@ -247,7 +260,7 @@ void SYNTH_FRONT_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Controller (uint8_t chan, uint8_t type, uint8_t value)
+void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
     {
     chan--;
 
@@ -370,7 +383,7 @@ void SYNTH_FRONT_C::Loop ()
             {
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
                 {
-                SYNTH_CHANNEL_C& ch = *(pChan[z]);
+                CHANNEL_C& ch = *(pChan[z]);
 
                 if ( !ch.IsActive () )              // grab the first channel not in use
                     {
@@ -476,20 +489,20 @@ void SYNTH_FRONT_C::TuningAdjust (bool up)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
+void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
     {
 #ifdef TOGGLE
-    SelectedEnvelope[chan] = !SelectedEnvelope[chan];
+    pZone[CurrentZone]->SelectedEnvelope[chan] = !pZone[CurrentZone]->SelectedEnvelope[chan];
 #else
-    SelectedEnvelope[chan] = state;
+    pZone[CurrentZone]->SelectedEnvelope[chan] = state;
 #endif
-    DisplayMessage.OscSelected (chan, SelectedEnvelope[chan]);
-    DBG ("%s %s ", SwitchMap[chan].Desc,  ( SelectedEnvelope[chan] ) ? "ON" : "off");
+    DisplayMessage.OscSelected (CurrentZone, chan, pZone[CurrentZone]->SelectedEnvelope[chan]);
+    DBG ("%s %s ", SwitchMap[chan].Desc,  ( pZone[CurrentZone]->SelectedEnvelope[chan] ) ? "ON" : "off");
 
     byte val = 0x0C;
     for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
         {
-        if ( SelectedEnvelope[z] )
+        if ( pZone[CurrentZone]->SelectedEnvelope[z] )
             val = 0x3C;
         }
     Midi_0.sendNoteOn (PanDevice[0], val, 1);
@@ -502,13 +515,7 @@ void SYNTH_FRONT_C::ChannelSetSelect (uint8_t chan, bool state)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMBaselevel (uint8_t ch, uint8_t data)
-    {
-    MidiAdsr[ch].BaseLevel = data;
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
+void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     {
     if ( this->SetTuning )
         {
@@ -519,68 +526,56 @@ void SYNTH_FRONT_C::SetMaxLevel (uint8_t ch, uint8_t data)
         }
 
     float val = (float)data * PRS_SCALER;
-    for (int zc = 0;  zc < CHAN_COUNT;  zc++)
-        {
-        if ( ch < OSC_MIXER_COUNT )
-            this->pChan[zc]->pOsc()->SetMaxLevel (ch, val);
-        }
-    this->MidiAdsr[ch].MaxLevel = data;
-    DisplayMessage.OscMaxLevel (ch, data);
+
+    for ( int z = 0;  z < ZoneCount;  z++ )
+        this->pChan[CurrentZone + z]->SetMaxLevel (ch, val);
+
+    DisplayMessage.OscMaxLevel (CurrentZone, ch, data);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetAttackTime (uint8_t data)
+void SYNTH_FRONT_C::SetAttackTime (byte data)
     {
     float dtime = data * TIME_MULT;
-    for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
+
+    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SelectedEnvelope[zs] )
+        if ( pZone[CurrentZone]->SelectedEnvelope[ch] )
             {
-            this->MidiAdsr[zs].AttackTime = data;
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                {
-                if ( zs < OSC_MIXER_COUNT )
-                    this->pChan[zc]->pOsc()->SetAttackTime (zs, dtime);
-                }
-            DisplayMessage.OscAttackTime (zs, data);
+            for ( int z = 0;  z < ZoneCount;  z++ )
+                this->pChan[CurrentZone + z]->pOsc()->SetAttackTime (ch, dtime);
+            DisplayMessage.OscAttackTime (CurrentZone, ch, data);
             }
         }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetDecayTime (uint8_t data)
+void SYNTH_FRONT_C::SetDecayTime (byte data)
     {
     float dtime = data * TIME_MULT;
-    for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
+
+    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SelectedEnvelope[zs] )
+        if ( this->pZone[CurrentZone]->SelectedEnvelope[ch] )
             {
-            this->MidiAdsr[zs].DecayTime = data;
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                {
-                if ( zs < OSC_MIXER_COUNT )
-                    this->pChan[zc]->pOsc()->SetDecayTime (zs, dtime);
-                }
-            DisplayMessage.OscDecayTime (zs, data);
+            for ( int z = 0;  z < ZoneCount;  z++)
+                this->pChan[CurrentZone + z]->pOsc()->SetDecayTime (ch, dtime);
+            DisplayMessage.OscDecayTime (CurrentZone, ch, data);
             }
         }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainLevel (uint8_t ch, uint8_t data)
+void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
     {
     float val = (float)data * PRS_SCALER;
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-        {
-        if ( ch < OSC_MIXER_COUNT )
-            this->pChan[zc]->pOsc()->SetSustainLevel (ch, val);
-        }
-    this->MidiAdsr[ch].SustainLevel = data;
-    DisplayMessage.OscSustainLevel (ch, data);
+    for ( int z = 0;  z < ZoneCount;  z++ )
+        this->pChan[CurrentZone + z]->pOsc()->SetSustainLevel (ch, val);
+    DisplayMessage.OscSustainLevel (CurrentZone, ch, data);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
+void SYNTH_FRONT_C::SetSustainTime (byte data)
     {
     float dtime;
 
@@ -589,36 +584,29 @@ void SYNTH_FRONT_C::SetSustainTime (uint8_t data)
     else
         dtime = data * TIME_MULT;
 
-    for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
+    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SelectedEnvelope[zs] )
+        if ( this->pZone[CurrentZone]->SelectedEnvelope[ch] )
             {
-            this->MidiAdsr[zs].SustainTime = data;
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                {
-                if ( zs < OSC_MIXER_COUNT )
-                    this->pChan[zc]->pOsc()->SetSustainTime (zs, dtime);
-                }
-            DisplayMessage.OscSustainTime (zs, data);
+            for ( int z = 0;  z < ZoneCount;  z++)
+                this->pChan[CurrentZone + z]->pOsc()->SetSustainTime (ch, dtime);
+            DisplayMessage.OscSustainTime (CurrentZone, ch, data);
             }
         }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetReleaseTime (uint8_t data)
+void SYNTH_FRONT_C::SetReleaseTime (byte data)
     {
     float dtime = data * TIME_MULT;
-    for ( int zs = 0;  zs < ENVELOPE_COUNT;  zs++ )
+
+    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SelectedEnvelope[zs] )
+        if ( this->pZone[CurrentZone]->SelectedEnvelope[ch] )
             {
-            this->MidiAdsr[zs].ReleaseTime = data;
-            for ( int zc = 0;  zc < CHAN_COUNT;  zc++)
-                {
-                if ( zs < OSC_MIXER_COUNT )
-                    this->pChan[zc]->pOsc()->SetReleaseTime (zs, dtime);
-                }
-            DisplayMessage.OscReleaseTime (zs, data);
+            for ( int z = 0;  z < ZoneCount;  z++)
+                this->pChan[CurrentZone + z]->pOsc()->SetReleaseTime (ch, dtime);
+            DisplayMessage.OscReleaseTime (CurrentZone, ch, data);
             }
         }
     }
@@ -628,8 +616,7 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
     {
     for ( int z = 0;  z < CHAN_COUNT;  z++)
         this->pChan[z]->pOsc()->SawtoothDirection (data);
-    this->SawToothDirection = data;
-    DisplayMessage.OscSawtoothDirection (data);
+    DisplayMessage.OscSawtoothDirection (CurrentZone, data);
     if ( !data )
         this->ClearEntryRedL = XlMap[37].Index;
     }
@@ -638,29 +625,75 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
 void SYNTH_FRONT_C::SetPulseWidth (byte data)
     {
     float percent = data * PRS_SCALER;
-    for ( int z = 0;  z < CHAN_COUNT;  z++)
-        pChan[z]->pOsc()->PulseWidth (percent);
-    this->PulseWidth = data;
-    DisplayMessage.OscPulseWidth (data);
+    for ( int z = 0;  z < ZoneCount;  z++)
+        this->pChan[CurrentZone + z]->pOsc()->PulseWidth (percent);
+    DisplayMessage.OscPulseWidth (CurrentZone, data);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SetNoise (byte ch, bool state)
+    {
+    int z;
+
+    switch (  CurrentZone )
+        {
+        case ZONE0:
+            for ( z = 0;  z < DUCT_NUM;  z++ )
+                this->pNoise->Select (z, ch, state);
+            DisplayMessage.OscNoise (ZONE0, ch, state);
+        default:
+            if ( ch & 0x80 )
+                {
+                ch &= 0x0F;
+                for ( z = 0;  z < (DUCT_NUM / NUM_ZONES);  z++ )
+                    this->pNoise->Select (z + 2, ch, state);
+                DisplayMessage.OscNoise (ZONE2, ch, state);
+                }
+            else
+                {
+                for ( int z = 0;  z < (DUCT_NUM / NUM_ZONES);  z ++)
+                    this->pNoise->Select (z, ch, state);
+                DisplayMessage.OscNoise (ZONE1, ch, state);
+                }
+        }
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::DisplayUpdate ()
+void SYNTH_FRONT_C::DisplayUpdate (int zone)
     {
-    uint8_t zd;
+    int zcount;
+    CHANNEL_C& ch = *(this->pZone[zone]);
+    OSC_C& osc    = *(ch.pOsc ());
 
-    for ( uint8_t z = 0;  z < OSC_MIXER_COUNT;  z++ )
+    switch ( zone )
         {
-        DisplayMessage.OscSelected (z, this->SelectedEnvelope[z]);
-        DisplayMessage.OscMaxLevel (z, this->MidiAdsr[z].MaxLevel);
-        DisplayMessage.OscAttackTime (z, this->MidiAdsr[z].AttackTime);
-        DisplayMessage.OscDecayTime (z, this->MidiAdsr[z].DecayTime);
-        DisplayMessage.OscSustainTime (z, this->MidiAdsr[z].SustainTime);
-        DisplayMessage.OscReleaseTime (z, this->MidiAdsr[z].ReleaseTime);
-        DisplayMessage.OscSustainLevel (z, this->MidiAdsr[z].SustainLevel);
+        case ZONE0:
+            zcount = 8;
+            break;
+        case ZONE1:
+            zcount = 4;
+            break;
+        case ZONE2:
+            zcount = 4;
+            break;
+        default:
+            return;
         }
-    DisplayMessage.OscSawtoothDirection (this->SawToothDirection);
-    DisplayMessage.OscPulseWidth (this->PulseWidth);
+
+    for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        {
+        OSC_C& osc = *(this->pZone[zone]->pOsc ());
+
+        DisplayMessage.OscSelected     (zone, z, ch.SelectedEnvelope[z]);
+        DisplayMessage.OscMaxLevel     (zone, z, osc.GetMaxLevel (z));
+        DisplayMessage.OscAttackTime   (zone, z, osc.GetAttackTime (z));
+        DisplayMessage.OscDecayTime    (zone, z,   osc.GetDecayTime (z));
+        DisplayMessage.OscSustainTime  (zone, z, osc.GetSustainTime (z));
+        DisplayMessage.OscReleaseTime  (zone, z, osc.GetReleaseTime (z));
+        DisplayMessage.OscSustainLevel (zone, z,osc.GetSustainLevel (z));
+        }
+    DisplayMessage.OscSawtoothDirection (zone, this->pZone[zone]->GetSawToothDirection ());
+    DisplayMessage.OscPulseWidth        (zone, this->pZone[zone]->GetPulseWidth ());
     }
 
 //#######################################################################

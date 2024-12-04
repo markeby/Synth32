@@ -118,6 +118,7 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="Channel.cpp"/>
             <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
             <F N="Diagnostics.cpp"/>
@@ -132,7 +133,6 @@
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
             <F N="SoftLFO.cpp"/>
-            <F N="SynthChannel.cpp"/>
             <F N="UpdateOTA.cpp"/>
         </Folder>
         <Folder
@@ -146,6 +146,7 @@
                 <F N="../Common/DispMessages.h"/>
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
+            <F N="Channel.h"/>
             <F N="config.h"/>
             <F N="Debug.h"/>
             <F N="Diagnostics.h"/>
@@ -159,7 +160,6 @@
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
             <F N="SoftLFO.h"/>
-            <F N="SynthChannel.h"/>
             <F N="UpdateOTA.h"/>
         </Folder>
         <Folder

@@ -63,8 +63,7 @@ extern bool AnalogDiagEnabled;
 //#################################################
 #define START_OSC_ANALOG        0
 #define START_MULT_DIGITAL      88
-#define START_NOISE_ANALOG      56
-#define START_NOISE_DIGITAL     95
+#define START_NOISE_DIGITAL     104
 #define D_A_COUNT               88
 
 //#################################################
@@ -94,27 +93,26 @@ extern uint64_t RunTime;
 //#################################################
 typedef struct
     {
-    uint8_t     Index;
+    byte        Index;
     const char* Desc;
-    void       (*CallBack)(uint8_t chan, uint8_t data);
+    void       (*CallBack)(byte chan, byte data);
     }  MIDI_MAP;
 typedef struct
     {
-    uint8_t     Index;
-    uint8_t     Color;
+    byte        Index;
+    byte        Color;
     const char* Desc;
-    void       (*CallBack)(uint8_t chan, uint8_t data);
+    void       (*CallBack)(byte chan, byte data);
     }  MIDI_XL_MAP;
 
 
-typedef uint8_t  LED_NOTE_MAP;
+typedef byte  LED_NOTE_MAP;
 
 //#################################################
 //  Synth interfaces
 //#################################################
 extern MIDI_MAP       FaderMapArray[];
 extern MIDI_MAP       KnobMapArray[];
-extern MIDI_MAP       SwitchMapArray[];
 extern MIDI_MAP       SwitchMapArray[];
 #define SIZE_CL_MAP   56
 #define SIZE_S_LED    24

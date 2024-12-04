@@ -20,14 +20,14 @@ private:
     bool        Lock;
     uint64_t    ResetStart;
 
-    uint8_t     DisplayAddress;
+    byte        DisplayAddress;
 
     void  SendComplete  (byte length);
-    void  SendUpdate (DISP_MESSAGE_N::CMD_C page, uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value);
+    void  SendUpdate (DISP_MESSAGE_N::CMD_C page, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value);
 
 public:
           I2C_MESSAGE_C     (void);
-    void  Begin             (uint8_t display, uint8_t sda, uint8_t scl);
+    void  Begin             (byte display, byte sda, byte scl);
     void  Pause             (bool state);
     void  Page              (DISP_MESSAGE_N::PAGE_C page);
 
@@ -59,14 +59,14 @@ public:
         }
 
     //#################################################
-    inline void TuningNote (uint8_t value)
+    inline void TuningNote (byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING, 0, DISP_MESSAGE_N::EFFECT_C::NOTE, value);
         this->Lock = true;
         }
 
     //#################################################
-    inline void TuningLevel (uint8_t channel, uint8_t value)
+    inline void TuningLevel (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING, channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         this->Lock = true;
@@ -79,102 +79,125 @@ public:
         }
 
     //#################################################
-    inline void SendUpdateOsc (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SendUpdateOsc (byte zone, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         if ( !Lock )
-            this->SendUpdate(DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC, channel, effect, value);
+            {
+            DISP_MESSAGE_N::CMD_C page;
+            switch ( zone )
+                {
+                case 0:
+                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC0;
+                    break;
+                case 1:
+                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC1;
+                    break;
+                case 2:
+                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC2;
+                    break;
+                default:
+                    return;
+                }
+            this->SendUpdate (page, channel, effect, value);
+            }
         }
 
     //#################################################
-    inline void SendUpdateMod (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SendUpdateMod (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         if ( !Lock )
             this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD, channel, effect, value);
         }
 
     //#################################################
-    inline void SendUpdateFilter (uint8_t channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SendUpdateFilter (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         if ( !Lock )
             this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER, channel, effect, value);
         }
 
     //#################################################
-    inline void OscSelected (uint8_t channel, bool select)
+    inline void OscSelected (byte zone, byte channel, bool select)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
         }
 
     //#################################################
-    inline void OscAttackTime (uint8_t channel, uint16_t value)
+    inline void OscAttackTime (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
         }
 
     //#################################################
-    inline void OscMaxLevel (uint8_t channel, uint16_t value)
+    inline void OscMaxLevel (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         }
 
     //#################################################
-    inline void OscDecayTime (uint8_t channel, uint16_t value)
+    inline void OscDecayTime (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
         }
 
     //#################################################
-    inline void OscSustainTime (uint8_t channel, uint16_t value)
+    inline void OscSustainTime (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, value);
         }
 
     //#################################################
-    inline void OscReleaseTime (uint8_t channel, uint16_t value)
+    inline void OscReleaseTime (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
         }
 
     //#################################################
-    inline void OscSustainLevel (uint8_t channel, uint16_t value)
+    inline void OscSustainLevel (byte zone, byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
         }
 
     //#################################################
-    inline void OscSelectADSR (uint8_t channel, bool select)
+    inline void OscSelectADSR (byte zone, byte channel, bool select)
         {
-        this->SendUpdateOsc (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
+        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
         }
 
     //#################################################
-    inline void OscSawtoothDirection (bool select)
+    inline void OscSawtoothDirection (byte zone, bool select)
         {
-        this->SendUpdateOsc ((uint8_t)(DISP_MESSAGE_N::CHANNEL_C::SAWTOOTH), DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION, (( select ) ? 1 : 0));
+        this->SendUpdateOsc (zone, (byte)(DISP_MESSAGE_N::CHANNEL_C::SAWTOOTH), DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION, (( select ) ? 1 : 0));
         }
 
     //#################################################
-    inline void OscPulseWidth (uint8_t width)
+    inline void OscPulseWidth (byte zone, byte width)
         {
-        this->SendUpdateOsc ((uint8_t)(DISP_MESSAGE_N::CHANNEL_C::PULSE), DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH, width);
+        this->SendUpdateOsc (zone, (byte)(DISP_MESSAGE_N::CHANNEL_C::PULSE), DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH, width);
         }
 
     //#################################################
-    inline void LFOSelected (uint8_t channel, bool select)
+    inline void OscNoise (byte zone, byte color, bool state)
+        {
+        this->SendUpdateOsc (zone, (byte)(DISP_MESSAGE_N::CHANNEL_C::NOISE), DISP_MESSAGE_N::EFFECT_C::NOISE, color | ( (state) ? 0x80 : 0x00 ));
+        }
+
+    //#################################################
+    inline void LFOSelected (byte channel, bool select)
         {
         this->SendUpdateMod (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
         }
 
     //#################################################
-    inline void HardwareFreqLFO (uint8_t value)
+    inline void HardwareFreqLFO (byte value)
         {
-        this->SendUpdateMod ((uint8_t)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
         }
 
     //#################################################
-    inline void SoftwareFreqLFO (uint8_t value)
+    inline void SoftwareFreqLFO (byte value)
         {
-        this->SendUpdateMod ((uint8_t)(DISP_MESSAGE_N::CHANNEL_C::SOFTWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::SOFTWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
         }
     };
 

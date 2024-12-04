@@ -23,19 +23,19 @@ using namespace OSC_N;
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
-SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
+    OSC_C::OSC_C (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
     Valid = false;
     Number = num;
     // D/A configuration
-    OscChannel                = first_device + uint8_t(D_A_OFF::EXPO);
-    PwmChannel                = first_device + uint8_t(D_A_OFF::WIDTH);
-    SawtoothDirChannel        = first_device + uint8_t(D_A_OFF::DIR);
-    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + uint8_t(D_A_OFF::TRIANGLE), usecount);
-    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + uint8_t(D_A_OFF::SAWTOOTH), usecount);
-    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + uint8_t(D_A_OFF::PULSE), usecount);
-    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + uint8_t(D_A_OFF::SINE), usecount);
-    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + uint8_t(D_A_OFF::SQUARE), usecount);
+    OscChannel                = first_device + byte(D_A_OFF::EXPO);
+    PwmChannel                = first_device + byte(D_A_OFF::WIDTH);
+    SawtoothDirChannel        = first_device + byte(D_A_OFF::DIR);
+    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
+    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + byte(D_A_OFF::SAWTOOTH), usecount);
+    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
+    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), usecount);
+    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + byte(D_A_OFF::SQUARE), usecount);
 
     for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
         {
@@ -70,34 +70,34 @@ SYNTH_OSC_C::SYNTH_OSC_C (uint8_t num, uint8_t first_device, uint8_t& usecount, 
     }
 
 //#######################################################################
-void SYNTH_OSC_C::TuningAdjust (bool up)
+void OSC_C::TuningAdjust (bool up)
     {
     OctaveArray[this->CurrentNote] += ( up ) ? -1 : +1;
     SetTuningNote (this->CurrentNote);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::ClearState ()
+void OSC_C::ClearState ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
         Mix[z]->Clear ();
     }
 
 //#######################################################################
-void SYNTH_OSC_C::Clear ()
+void OSC_C::Clear ()
     {
     ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningVolume (uint8_t select, uint16_t level)
+void OSC_C::SetTuningVolume (byte select, uint16_t level)
     {
     I2cDevices.D2Analog (Mix[select]->GetChannel (), level);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetTuningNote (uint8_t note)
+void OSC_C::SetTuningNote (byte note)
     {
     CurrentNote = note;
     DBG ("DownKey = %d\n", note);
@@ -105,7 +105,7 @@ void SYNTH_OSC_C::SetTuningNote (uint8_t note)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
+void OSC_C::NoteSet (byte note, byte velocity)
     {
     CurrentNote = note;
     DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
@@ -118,70 +118,63 @@ void SYNTH_OSC_C::NoteSet (uint8_t note, uint8_t velocity)
     }
 
 //#######################################################################
-void SYNTH_OSC_C::NoteClear ()
+void OSC_C::NoteClear ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         Mix[z]->End ();
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SawtoothDirection (bool data)
+void OSC_C::SawtoothDirection (bool data)
     {
     I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? DA_MAX : 0);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::PulseWidth (float percent)
+void OSC_C::PulseWidth (float percent)
     {
     I2cDevices.D2Analog (PwmChannel, (percent * (float)DA_MAX));
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSoftLFO (uint8_t wave, bool state)
+void OSC_C::SetSoftLFO (byte wave, bool state)
     {
     Mix[wave]->SetSoftLFO (state);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetAttackTime (uint8_t wave, float time)
+void OSC_C::SetAttackTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::ATTACK, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetDecayTime (uint8_t wave, float time)
+void OSC_C::SetDecayTime (byte wave, float time)
     {
      Mix[wave]->SetTime (ESTATE::DECAY, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetReleaseTime (uint8_t wave, float time)
+void OSC_C::SetReleaseTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::RELEASE, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSustainLevel (uint8_t wave, float level_percent)
+void OSC_C::SetSustainLevel (byte wave, float level_percent)
     {
-
     Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetSustainTime (uint8_t wave, float time)
+void OSC_C::SetSustainTime (byte wave, float time)
     {
     Mix[wave]->SetTime (ESTATE::SUSTAIN, time);
     }
 
 //#######################################################################
-void SYNTH_OSC_C::SetMaxLevel (uint8_t wave, float level_percent)
+void OSC_C::SetMaxLevel (byte wave, float level_percent)
     {
     Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent);
-    }
-
-//#######################################################################
-float SYNTH_OSC_C::GetMaxLevel (uint8_t wave)
-    {
-    return (Mix[wave]->GetLevel (ESTATE::ATTACK));
     }
 

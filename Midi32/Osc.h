@@ -39,7 +39,7 @@ enum class D_A_OFF
 }// end namespace OSC_N
 
 //#######################################################################
-class   SYNTH_OSC_C
+class   OSC_C
     {
 private:
     ENVELOPE_GENERATOR_C&   EnvGen;
@@ -47,34 +47,41 @@ private:
     uint16_t                OctaveArray[FULL_KEYS];
 
     bool                    Valid;          // Completed init and good for use
-    uint8_t                 Number;
-    uint8_t                 CurrentNote;
-    uint8_t                 OscChannel;
-    uint8_t                 PwmChannel;
-    uint8_t                 SawtoothDirChannel;
+    byte                    Number;
+    byte                    CurrentNote;
+    byte                    OscChannel;
+    byte                    PwmChannel;
+    byte                    SawtoothDirChannel;
 
     void  ClearState (void);
 
 public:
-                SYNTH_OSC_C        (uint8_t num, uint8_t first_device, uint8_t& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void        SetTuningVolume    (uint8_t select, uint16_t level);
-    void        SetTuningNote      (uint8_t note);
-    void        NoteSet            (uint8_t key, uint8_t velocity);
+                OSC_C              (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void        SetTuningVolume    (byte select, uint16_t level);
+    void        SetTuningNote      (byte note);
+    void        NoteSet            (byte key, byte velocity);
     void        NoteClear          (void);
     void        Clear              (void);
     void        SawtoothDirection  (bool data);
     void        PulseWidth         (float percent);
-    void        SetSoftLFO         (uint8_t wave, bool state);
-    void        SetAttackTime      (uint8_t wave, float time);
-    void        SetDecayTime       (uint8_t wave, float time);
-    void        SetSustainTime     (uint8_t wave, float time);
-    void        SetReleaseTime     (uint8_t wave, float time);
-    void        SetSustainLevel    (uint8_t wave, float level_percent);
-    void        SetMaxLevel        (uint8_t wave, float level_percent);
-    float       GetMaxLevel        (uint8_t wave);
+    void        SetSoftLFO         (byte wave, bool state);
+    void        SetAttackTime      (byte wave, float time);
+    void        SetDecayTime       (byte wave, float time);
+    void        SetSustainTime     (byte wave, float time);
+    void        SetReleaseTime     (byte wave, float time);
+    void        SetSustainLevel    (byte wave, float level_percent);
+    void        SetMaxLevel        (byte wave, float level_percent);
     void        TuningAdjust       (bool up);
 
-    uint16_t* GetBankAddr (void)            { return (OctaveArray); }
+
+    //#######################################################################
+    inline float     GetMaxLevel     (byte wave)       { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
+    inline float     GetSustainLevel (byte wave)       { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
+    inline float     GetAttackTime   (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::ATTACK)); }
+    inline float     GetDecayTime    (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::DECAY)); }
+    inline float     GetSustainTime  (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::SUSTAIN)); }
+    inline float     GetReleaseTime  (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::RELEASE)); }
+    inline uint16_t* GetBankAddr     (void)            { return (this->OctaveArray); }
     };
 
 

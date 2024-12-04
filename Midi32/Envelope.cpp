@@ -49,26 +49,26 @@ void ENVELOPE_GENERATOR_C::Loop ()
 //#######################################################################
 void ENVELOPE_C::SetRange (int16_t floor, int16_t ceiling)
     {
-    Floor = floor;
-    Diff  = ceiling - floor;
+    this->Floor = floor;
+    this->Diff  = ceiling - floor;
     }
 
 //#######################################################################
 ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& usecount) : UseCount(usecount)
     {
-    Name            = name;
-    DeviceChannel   = device;
-    Index           = index;
-    Current         = 0;
-    Peak            = 0;
-    Sustain         = 0;
-    AttackTime      = 0;
-    DecayTime       = 0;
-    SustainTime     = 0;
-    ReleaseTime     = 0;
-    UseSoftLFO      = false;
-    SetRange (0, DA_MAX);        // Defualt to normal D/A converter settings
-    Clear ();
+    this->Name          = name;
+    this->DeviceChannel = device;
+    this->Index         = index;
+    this->Current       = 0;
+    this->Peak          = 0;
+    this->Sustain       = 0;
+    this->AttackTime    = 0;
+    this->DecayTime     = 0;
+    this->SustainTime   = 0;
+    this->ReleaseTime   = 0;
+    this->UseSoftLFO    = false;
+    this->SetRange (0, DA_MAX);        // Defualt to normal D/A converter settings
+    this->Clear    ();
     }
 
 //#######################################################################
@@ -77,19 +77,42 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
     switch (state )
         {
         case ESTATE::ATTACK:
-            AttackTime = time;
+            this->AttackTime = time;
             break;
         case ESTATE::DECAY:
-            DecayTime = time;
+            this->DecayTime = time;
             break;
         case ESTATE::SUSTAIN:
-            SustainTime = time;
+            this->SustainTime = time;
             break;
         case ESTATE::RELEASE:
-            ReleaseTime = time;
+            this->ReleaseTime = time;
             break;
         }
     DBG ("%s - Time setting > %f mSec", StateLabel[(int)state], time );
+    }
+
+//#######################################################################
+float ENVELOPE_C::GetTime (ESTATE state)
+    {
+    float val = 0.0;
+
+    switch (state )
+        {
+        case ESTATE::ATTACK:
+            val = this->AttackTime;
+            break;
+        case ESTATE::DECAY:
+            val = this->DecayTime;
+            break;
+        case ESTATE::SUSTAIN:
+            val = this->SustainTime;
+            break;
+        case ESTATE::RELEASE:
+            val = this->ReleaseTime;
+            break;
+        }
+    return (val);
     }
 
 //#######################################################################
@@ -100,13 +123,13 @@ void ENVELOPE_C::SetLevel (ESTATE state, float percent)
         case ESTATE::START:
             break;
         case ESTATE::ATTACK:
-            Peak = percent;
+            this->Peak = percent;
             break;
         case ESTATE::DECAY:
-            Sustain = percent;
+            this->Sustain = percent;
             break;
         case ESTATE::SUSTAIN:
-            Sustain = percent;
+            this->Sustain = percent;
             break;
         case ESTATE::RELEASE:
             break;
@@ -124,13 +147,13 @@ float ENVELOPE_C::GetLevel (ESTATE state)
         case ESTATE::START:
             break;
         case ESTATE::ATTACK:
-            val = Peak;
+            val = this->Peak;
             break;
         case ESTATE::DECAY:
-            val = Sustain;
+            val = this->Sustain;
             break;
         case ESTATE::SUSTAIN:
-            val = Sustain;
+            val = this->Sustain;
             break;
         case ESTATE::RELEASE:
             break;
@@ -141,34 +164,34 @@ float ENVELOPE_C::GetLevel (ESTATE state)
 //#######################################################################
 void ENVELOPE_C::Start ()
     {
-    if ( Active || (Peak == 0.0) )
+    if ( this->Active || (this->Peak == 0.0) )
         return;
-    Active = true;
-    State = ESTATE::START;
-    UseCount++;
-    DBG ("starting %d", Index);
+    this->Active = true;
+    this->State = ESTATE::START;
+    this->UseCount++;
+    DBG ("starting %d", this->Index);
     }
 
 //#######################################################################
 void ENVELOPE_C::End ()
     {
-    if ( !Active )
+    if ( !this->Active )
         return;
-    TriggerEnd = true;
-    State = ESTATE::IDLE;
+    this->TriggerEnd = true;
+    this->State = ESTATE::IDLE;
     }
 
 //#######################################################################
 void ENVELOPE_C::Clear ()
     {
-    if ( Active && UseCount )   UseCount--;
-    Active        = false;
-    TriggerEnd    = false;
-    State         = ESTATE::IDLE;
-    Current       = 0.0;
-    Updated       = true;
+    if ( this->Active && this->UseCount )   this->UseCount--;
+    this->Active        = false;
+    this->TriggerEnd    = false;
+    this->State         = ESTATE::IDLE;
+    this->Current       = 0.0;
+    this->Updated       = true;
     DBG ("clearing %d", Index);
-    Update ();
+    this->Update ();
     }
 
 //#######################################################################
@@ -176,18 +199,18 @@ void ENVELOPE_C::Update ()
     {
     float output;
 
-    if ( Updated )
+    if ( this->Updated )
         {
-        if ( Current > Peak )
-            Current = Peak;
+        if ( this->Current > this->Peak )
+            this->Current = this->Peak;
 
-        output = Current * Multiplier;
-        if ( UseSoftLFO && (output > 0.05) )
+        output = this->Current * this->Multiplier;
+        if ( this->UseSoftLFO && (output > 0.05) )
             output += SoftLFO.GetSin ();
 
-        int16_t z = abs(Floor + (Diff * output));
-        I2cDevices.D2Analog (DeviceChannel, z);
-        Updated = false;
+        int16_t z = abs(this->Floor + (this->Diff * output));
+        I2cDevices.D2Analog (this->DeviceChannel, z);
+        this->Updated = false;
         }
     }
 
@@ -195,36 +218,36 @@ void ENVELOPE_C::Update ()
 //#######################################################################
 void ENVELOPE_C::Process (float deltaTime)
     {
-    if ( !Active )                      // if we ain't doing it then we don't need to run this.
+    if ( !this->Active )                      // if we ain't doing it then we don't need to run this.
         return;
 
-    if ( UseSoftLFO )
-        Updated = true;
+    if ( this->UseSoftLFO )
+        this->Updated = true;
 
     //***************************************
     //  Beginning of the end
     //***************************************
-    if ( TriggerEnd && (State != ESTATE::RELEASE) )
+    if ( this->TriggerEnd && (this->State != ESTATE::RELEASE) )
         {
-        State     = ESTATE::RELEASE;
-        Timer     = ReleaseTime;
-        ReleaseSt = Current;
+        this->State     = ESTATE::RELEASE;
+        this->Timer     = this->ReleaseTime;
+        this->ReleaseSt = this->Current;
         DBG ("Terminating");
         return;
         }
 
-    switch ( State )
+    switch ( this->State )
         {
         //***************************************
         //  Start envelope
         //***************************************
         case ESTATE::START:
             {
-            Current     = 0.0;
-            Timer       = 0.0;
-            PeakLevel   = false;
-            TargetTime  = AttackTime - TIME_THRESHOLD;
-            State       = ESTATE::ATTACK;
+            this->Current     = 0.0;
+            this->Timer       = 0.0;
+            this->PeakLevel   = false;
+            this->TargetTime  = this->AttackTime - TIME_THRESHOLD;
+            this->State       = ESTATE::ATTACK;
             DBG ("Start attact to %f mSec from level %f to %f", TargetTime, Current, Peak);
             return;
             }
