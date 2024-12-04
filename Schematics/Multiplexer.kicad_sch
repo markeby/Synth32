@@ -4678,6 +4678,12 @@
 		(uuid "82f7ec0e-00e5-4714-ac5a-12bdcda8d636")
 	)
 	(junction
+		(at 68.58 146.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "83806f66-11a7-4363-812d-f2652a64bdd6")
+	)
+	(junction
 		(at 33.02 38.1)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4850,6 +4856,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "bdc2cb17-7bc3-4cfd-885a-93fce15d5cef")
+	)
+	(junction
+		(at 80.01 154.94)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "bf08520e-e6a1-4732-8030-c38280ddab79")
 	)
 	(junction
 		(at 71.12 38.1)
@@ -5090,6 +5102,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f5c3c750-3064-4204-83cf-f043c0a12f3d")
+	)
+	(junction
+		(at 91.44 146.05)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f6903e07-5976-4bd1-b9fe-ab58e283e8e8")
 	)
 	(junction
 		(at 73.66 40.64)
@@ -5643,6 +5661,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 146.05) (xy 96.52 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1862c401-984a-4b08-a09b-d4b6c75f3207")
+	)
+	(wire
+		(pts
 			(xy 181.61 142.24) (xy 199.39 142.24)
 		)
 		(stroke
@@ -6050,6 +6078,16 @@
 			(type default)
 		)
 		(uuid "30e47f9b-cac0-4f69-9e24-39f0735b89f0")
+	)
+	(wire
+		(pts
+			(xy 68.58 147.32) (xy 68.58 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3169e0fd-341d-4237-815e-b62bd30e7f2c")
 	)
 	(wire
 		(pts
@@ -6793,6 +6831,16 @@
 	)
 	(wire
 		(pts
+			(xy 63.5 146.05) (xy 68.58 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ce95248-f3f1-4194-8559-762cf059e4e9")
+	)
+	(wire
+		(pts
 			(xy 146.05 35.56) (xy 139.7 35.56)
 		)
 		(stroke
@@ -7040,6 +7088,16 @@
 			(type default)
 		)
 		(uuid "6866531a-67c1-4d12-935b-e1aaf6d8d9d3")
+	)
+	(wire
+		(pts
+			(xy 68.58 146.05) (xy 72.39 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6886a73c-d30a-471b-aeb1-25f9dc897ef2")
 	)
 	(wire
 		(pts
@@ -7430,6 +7488,16 @@
 			(type default)
 		)
 		(uuid "7fe2c89e-b9fe-462e-9548-85812be357b5")
+	)
+	(wire
+		(pts
+			(xy 68.58 154.94) (xy 80.01 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "802ec190-0ec2-4e95-8b28-3e5959ade0b8")
 	)
 	(wire
 		(pts
@@ -8000,6 +8068,16 @@
 			(type default)
 		)
 		(uuid "a44b2ae5-8ab8-4e0b-8218-30ac829af14b")
+	)
+	(wire
+		(pts
+			(xy 68.58 152.4) (xy 68.58 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4726ff8-74c7-4f81-b731-156b74350655")
 	)
 	(wire
 		(pts
@@ -8583,6 +8661,16 @@
 	)
 	(wire
 		(pts
+			(xy 87.63 146.05) (xy 91.44 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cb39bf88-8f02-4eef-a821-a50fcb947f22")
+	)
+	(wire
+		(pts
 			(xy 209.55 55.88) (xy 218.44 55.88)
 		)
 		(stroke
@@ -8730,6 +8818,16 @@
 			(type default)
 		)
 		(uuid "d2053dc0-3035-4e59-8025-f7f0e3b3a6b6")
+	)
+	(wire
+		(pts
+			(xy 80.01 153.67) (xy 80.01 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2e0921b-5914-4b50-aba1-58b70f3a0ed7")
 	)
 	(wire
 		(pts
@@ -8983,6 +9081,16 @@
 	)
 	(wire
 		(pts
+			(xy 91.44 154.94) (xy 91.44 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e2fed788-f43d-4afc-b6c1-8d7e2b6af7c2")
+	)
+	(wire
+		(pts
 			(xy 135.89 167.64) (xy 140.97 167.64)
 		)
 		(stroke
@@ -8990,6 +9098,16 @@
 			(type default)
 		)
 		(uuid "e3d2fe21-4c1a-4142-b098-1017b27385ec")
+	)
+	(wire
+		(pts
+			(xy 91.44 147.32) (xy 91.44 146.05)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e423af95-da17-4ff0-9d93-7c6b9fc31123")
 	)
 	(wire
 		(pts
@@ -9113,6 +9231,16 @@
 	)
 	(wire
 		(pts
+			(xy 80.01 154.94) (xy 91.44 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef194919-5493-4f1e-8a39-a505857c8c0d")
+	)
+	(wire
+		(pts
 			(xy 135.89 142.24) (xy 140.97 142.24)
 		)
 		(stroke
@@ -9170,6 +9298,16 @@
 			(type default)
 		)
 		(uuid "f14d394e-d0e9-476d-bfd0-e1b9e6f24b74")
+	)
+	(wire
+		(pts
+			(xy 80.01 154.94) (xy 80.01 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f24e856c-1aa3-4776-b411-d42717831bb4")
 	)
 	(wire
 		(pts
@@ -12772,6 +12910,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:+12V")
+		(at 96.52 146.05 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2c4c6047-39cf-47d3-89b2-e3cb300a6351")
+		(property "Reference" "#PWR0110"
+			(at 92.71 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+3.3V"
+			(at 99.06 146.05 90)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 96.52 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 96.52 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 96.52 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "fd6392f6-6d9d-4375-a166-eebae1bde16d")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "#PWR0110")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_name "TL072_1")
 		(lib_id "Amplifier_Operational:TL072")
 		(at 330.2 163.83 0)
@@ -13059,6 +13263,72 @@
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
 					(reference "C137")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5VD")
+		(at 63.5 146.05 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "333e0305-4ab5-4c4e-9c1b-287ece652aff")
+		(property "Reference" "#PWR0111"
+			(at 67.31 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "+5V"
+			(at 57.658 146.05 90)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 63.5 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "9ceffc3f-e2e1-43ae-bb8b-b0ac5a563758")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "#PWR0111")
 					(unit 1)
 				)
 			)
@@ -14460,6 +14730,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 80.01 157.48 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "5a99905f-3361-47cc-9784-519cf2f7f64a")
+		(property "Reference" "#PWR0109"
+			(at 80.01 163.83 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 79.9592 160.9344 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 80.01 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 80.01 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 80.01 157.48 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3ea99bf9-9979-43cb-8e98-ba2732ad4cba")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "#PWR0109")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5VD")
 		(at 242.57 100.33 90)
 		(unit 1)
@@ -14477,8 +14812,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3"
-			(at 236.728 100.33 90)
+		(property "Value" "+3.3V"
+			(at 235.7465 100.421 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14869,6 +15204,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 91.44 149.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "804e4d90-6e98-440e-a437-47973ce8b352")
+		(property "Reference" "C143"
+			(at 91.694 148.082 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" ".1µF"
+			(at 91.694 151.638 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 91.44 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 91.44 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 91.44 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a5b8ca2d-ad83-4e57-83e6-74e5c6cc4f58")
+		)
+		(pin "2"
+			(uuid "4f8a8aa1-506f-43f7-a38f-bf96f4482502")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "C143")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+12V")
 		(at 273.05 91.44 270)
 		(unit 1)
@@ -15029,8 +15433,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3"
-			(at 165.608 35.56 90)
+		(property "Value" "+3.3V"
+			(at 164.5301 35.705 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15363,8 +15767,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3"
-			(at 165.608 100.33 90)
+		(property "Value" "+3.3V"
+			(at 164.5649 100.4572 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15991,7 +16395,7 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3V"
+		(property "Value" "+5V"
 			(at 69.85 170.18 90)
 			(effects
 				(font
@@ -17877,6 +18281,75 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Small")
+		(at 68.58 149.86 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cbcc92b2-8229-4a07-b11e-8022cb810386")
+		(property "Reference" "C142"
+			(at 69.088 148.336 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" ".1µF"
+			(at 68.58 151.638 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 68.58 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 68.58 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 68.58 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "c329e16b-93ef-4487-8f71-3dc639b90e13")
+		)
+		(pin "2"
+			(uuid "f2c6f618-55b9-4e4b-bf90-b2374328c22f")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "C142")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:+5VD")
 		(at 41.91 97.79 90)
 		(unit 1)
@@ -17894,8 +18367,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3"
-			(at 36.068 97.79 90)
+		(property "Value" "+3.3V"
+			(at 34.8672 97.8534 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -18163,8 +18636,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "+3.3"
-			(at 236.728 35.56 90)
+		(property "Value" "+3.3V"
+			(at 235.7759 35.5778 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -18665,7 +19138,7 @@
 				)
 			)
 		)
-		(property "Value" "LM1117-3.3"
+		(property "Value" "LM1117-5"
 			(at 50.824 167.2565 0)
 			(effects
 				(font
@@ -19539,6 +20012,76 @@
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
 					(reference "R152")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Regulator_Linear:LM1117-3.3")
+		(at 80.01 146.05 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "ffc1dc82-e943-4583-8cb6-bd6cff98577f")
+		(property "Reference" "U72"
+			(at 79.7053 141.7025 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+			)
+		)
+		(property "Value" "LM1117-3.3"
+			(at 80.034 143.1265 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 80.01 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm1117.pdf"
+			(at 80.01 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 80.01 146.05 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "04c583d2-df67-474f-a612-51be441b307d")
+		)
+		(pin "2"
+			(uuid "8fdc2815-f21e-4744-b487-7ba5934b19e8")
+		)
+		(pin "3"
+			(uuid "67b7635c-ab73-455c-93aa-3ed67fef278b")
+		)
+		(instances
+			(project "Schematics-Midi32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5"
+					(reference "U72")
 					(unit 1)
 				)
 			)
