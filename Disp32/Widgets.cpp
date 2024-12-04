@@ -440,13 +440,13 @@ void NOISE_WIDGET_C::Set (short color, bool state)
             break;
         case DUCT_WHITE:
             if ( state )
-                lv_style_set_text_color (&StyleWhite, lv_palette_main (LV_PALETTE_LIGHT_BLUE));
+                lv_style_set_text_color (&StyleWhite, lv_palette_main (LV_PALETTE_GREY));
             else
                 lv_style_set_text_color(&StyleWhite, lv_color_hex3(0xFFFFFF));
             break;
         case DUCT_PINK:
             if ( state )
-                lv_style_set_text_color (&StylePink, lv_palette_main (LV_PALETTE_PINK));
+                lv_style_set_text_color (&StylePink, lv_palette_main (LV_PALETTE_ORANGE));
             else
                 lv_style_set_text_color(&StylePink, lv_color_hex3(0xFFFFFF));
             break;
