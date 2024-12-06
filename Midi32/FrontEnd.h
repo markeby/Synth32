@@ -44,7 +44,7 @@ private:
     NOISE_C*              pNoise;
 
     CHANNEL_C*            pChan[CHAN_COUNT];
-    CHANNEL_C*            pZone[3];
+    byte                  Zone[3];
 
     bool                  SetTuning;
     byte                  ClearEntryRed;
@@ -53,7 +53,8 @@ private:
     bool                  TuningOn[CHAN_COUNT];
     bool                  TuningChange;
 
-    String Selected (void);
+    String Selected         (void);
+    void   ShowChannelXL    (int val);
 
 public:
     byte  CurrentZone;
@@ -64,28 +65,35 @@ public:
     void  ResetXL            (void);
     void  Loop               (void);
     void  Clear              (void);
+    void  DualZone           (byte chan, bool state);
     void  Controller         (byte chan, byte type, byte value);
+
+    // FrontEndLFO.cpp
     void  PitchBend          (byte chan, int value);
-    void  ChannelSetSelect   (byte chan, bool state);
-    void  SawtoothDirection  (bool data);
-    void  SetPulseWidth      (byte data);
-    void  SetNoise           (byte ch, bool state);
-    void  Tuning             (void);
-    void  TuningAdjust       (bool up);
-    void  StartTuning        (void);
     void  SelectWaveVCA      (byte ch, byte state);
     void  SelectWaveVCF      (byte ch, byte state);
+    void  SetLevelLFO        (byte data);
     void  FreqLFO            (byte ch, byte data);
 
-    void  SetLevelLFO        (byte data);
+    // FrontEndOscCtrl.cpp
+    void  ChannelSetSelect   (byte chan, bool state);
     void  SetMaxLevel        (byte ch, byte data);
     void  SetAttackTime      (byte data);
     void  SetDecayTime       (byte data);
     void  SetSustainLevel    (byte ch, byte data);
     void  SetSustainTime     (byte data);
     void  SetReleaseTime     (byte data);
-    void  DisplayUpdate      (int zone);
+    void  SawtoothDirection  (bool data);
+    void  SetPulseWidth      (byte data);
+    void  SetNoise           (byte ch, bool state);
     void  SaveAllSettings    (void);
+
+
+    void  Tuning             (void);
+    void  TuningAdjust       (bool up);
+    void  StartTuning        (void);
+
+    void  DisplayUpdate      (int zone);
 
     //#######################################################################
     MULTIPLEX_C* Multiplex (void);

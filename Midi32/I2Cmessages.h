@@ -59,6 +59,12 @@ public:
         }
 
     //#################################################
+    inline void PageOsc (byte value)
+        {
+        this->Page ((DISP_MESSAGE_N::PAGE_C)value);
+        }
+
+    //#################################################
     inline void TuningNote (byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING, 0, DISP_MESSAGE_N::EFFECT_C::NOTE, value);
