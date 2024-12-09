@@ -1,9 +1,8 @@
 //#######################################################################
-// Module:     SyntFront.ino
+// Module:     FrontEnd.cpp
 // Descrption: Synthesizer front end controller
-//                 Midi->Front->SynthModules
 // Creator:    markeby
-// Date:       5/17/2023
+// Date:       12/9/2024
 //#######################################################################
 #include <UHS2-MIDI.h>
 #include <MIDI.h>
@@ -444,76 +443,6 @@ void SYNTH_FRONT_C::Loop ()
         }
     else
         this->Tuning ();
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::Tuning ()
-    {
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
-        {
-        if ( this->DownTrigger )
-            {
-            this->pChan[zc]->pOsc()->SetTuningNote(DownKey);
-            DisplayMessage.TuningNote (DownKey);
-            }
-        if ( this->TuningChange )
-            {
-            if ( this->TuningOn[zc] )
-                {
-                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
-                    {
-                    if ( z < OSC_MIXER_COUNT )
-                        {
-                        this->pChan[zc]->pOsc()->SetTuningVolume (z, TuningLevel[z]);
-                        DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
-                        }
-                    }
-                }
-            else
-                {
-                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
-                    {
-                    if ( z < OSC_MIXER_COUNT )
-                        this->pChan[zc]->pOsc()->SetTuningVolume(z, 0);
-                    }
-                }
-            }
-        }
-//    SetNoiseFilterMin (TuningLevel[ENVELOPE_COUNT]);
-    this->TuningChange = false;
-    this->DownTrigger = false;
-    I2cDevices.UpdateDigital();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::StartTuning ()
-    {
-    if ( SetTuning == false )
-        {
-        DisplayMessage.PageTuning ();
-        for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
-            {
-            TuningLevel[z] = (uint16_t)(pChan[0]->pOsc()->GetMaxLevel (z) * MAX_DA);
-            DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
-            }
-        for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
-            {
-            TuningOn[zc] = false;
-            TuningChange = true;
-            }
-        }
-    SetTuning = true;
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::TuningAdjust (bool up)
-    {
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
-        {
-        if ( TuningOn[zc] )
-            pChan[zc]->pOsc()->TuningAdjust (up);
-        }
     }
 
 //#####################################################################

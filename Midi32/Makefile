@@ -23,7 +23,7 @@ INCLUDES := config.h Debug.h Diagnostics.h Envelope.h  FrontEnd.h I2Cdevices.h I
 
 # source files
 SOURCES := $(PROJECT) SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Noise.cpp \
-           Multiplex.cpp SerialMonitor.cpp FrontEnd.cpp FrontEndOscCtrl.cpp FrontEndLFO.cpp Channel.cpp \
+           Multiplex.cpp SerialMonitor.cpp FrontEnd.cpp FrontEndOscCtrl.cpp FrontEndLFO.cpp FrontEndTuning.cpp Channel.cpp \
 	   Osc.cpp Controls.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
 # serial port for uploading

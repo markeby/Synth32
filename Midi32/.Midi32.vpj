@@ -126,6 +126,7 @@
             <F N="FrontEnd.cpp"/>
             <F N="FrontEndLFO.cpp"/>
             <F N="FrontEndOscCtrl.cpp"/>
+            <F N="FrontEndTuning.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
