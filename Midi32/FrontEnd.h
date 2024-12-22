@@ -13,7 +13,6 @@
 #include "multiplex.h"
 #include "Noise.h"
 
-
 enum {
      ZONE0 = 0,
      ZONE1,
@@ -26,13 +25,18 @@ enum {
 class   SYNTH_FRONT_C
     {
 private:
-    byte                  DownKey;
-    byte                  DownVelocity;
-    bool                  DownTrigger;
-    byte                  UpKey;
-    byte                  UpVelocity;
+
+    typedef struct
+        {
+        byte    Channel;
+        byte    Key;
+        byte    Velocity;
+        bool    Trigger;
+        } KEY_T;
+
+    KEY_T                 Down;
+    KEY_T                 Up;
     uint64_t              DispMessageTimer;
-    bool                  UpTrigger;
 
     MIDI_MAP*             FaderMap;
     MIDI_MAP*             KnobMap;
@@ -45,6 +49,7 @@ private:
 
     CHANNEL_C*            pChan[CHAN_COUNT];
     byte                  Zone[3];
+    byte                  ZoneBase;
 
     bool                  SetTuning;
     byte                  ClearEntryRed;
@@ -114,17 +119,19 @@ public:
     //#######################################################################
     inline void KeyDown (byte chan, byte key, byte velocity)
         {
-        this->DownKey      = key;
-        this->DownVelocity = velocity;
-        this->DownTrigger  = true;
+        this->Down.Channel  = chan;
+        this->Down.Key      = key;
+        this->Down.Velocity = velocity;
+        this->Down.Trigger  = true;
         }
 
     //#######################################################################
     inline void KeyUp (byte chan, byte key, byte velocity)
         {
-        this->UpKey      = key;
-        this->UpVelocity = velocity;
-        this->UpTrigger  = true;
+        this->Up.Channel  = chan;
+        this->Up.Key      = key;
+        this->Up.Velocity = velocity;
+        this->Up.Trigger  = true;
         }
     };
 

@@ -56,15 +56,19 @@ void SYNTH_FRONT_C::FreqLFO (byte ch, byte data)
     {
     float zf = (float)data * PRS_SCALER;
 
-    if ( ch )
+    switch ( ch )
         {
-        DisplayMessage.HardwareFreqLFO (data);
-        this->Lfo.SetFreq (zf);
-        }
-    else
-        {
-        DisplayMessage.SoftwareFreqLFO (data);
-        SoftLFO.SetFrequency (zf);
+        case 2:
+            this->Lfo.SetPulseWidth (zf);
+            break;
+        case 1:
+            DisplayMessage.HardwareFreqLFO (data);
+            this->Lfo.SetFreq (zf);
+            break;
+        case 0:
+            DisplayMessage.SoftwareFreqLFO (data);
+            SoftLFO.SetFrequency (zf);
+            break;
         }
     }
 

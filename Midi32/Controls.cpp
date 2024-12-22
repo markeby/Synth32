@@ -204,9 +204,9 @@ MIDI_MAP    FaderMapArray[] =
 //########################################################
 MIDI_MAP    KnobMapArray[] =
     {   {  0, "Soft LFO freq",            FreqLFO          },           //  01  0A  xx
-        {  0, "Hard LFO freq",            FreqLFO          },           //  02  0A  xx
-        {  1, "N ",                       nullptr          },           //  03  0A  xx
-        {  1, "N ",                       nullptr          },           //  04  0A  xx
+        {  1, "Hard LFO freq",            FreqLFO          },           //  02  0A  xx
+        {  2, "Hard LFO pulse width",     FreqLFO          },           //  03  0A  xx
+        {  3, "N ",                       nullptr          },           //  04  0A  xx
         {  4, "N ",                       nullptr          },           //  05  0A  xx
         {  5, "N ",                       nullptr          },           //  06  0A  xx
         {  6, "N ",                       nullptr          },           //  07  0A  xx

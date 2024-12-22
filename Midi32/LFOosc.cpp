@@ -27,6 +27,7 @@ SYNTH_LFO_C::SYNTH_LFO_C ()
     Valid         = false;
     UpdateNeded   = false;
     CurrentLevel  = 0;
+    CurrentFreq   = 0.0;
     }
 
 //#######################################################################
@@ -107,10 +108,20 @@ void SYNTH_LFO_C::Clear ()
 //#######################################################################
 void SYNTH_LFO_C::SetFreq (float percent)
     {
-    CurrentPercent = percent;
-    int z = CurrentPercent * MAX_DA;
+    CurrentFreq = percent;
+    int z = CurrentFreq * MAX_DA;
     DBG ("Set frequency %d", z);
     I2cDevices.D2Analog (OscChannel, z);
+    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    }
+
+//#######################################################################
+void SYNTH_LFO_C::SetPulseWidth (float percent)
+    {
+    CurrentWidth = percent;
+    int z = CurrentWidth * MAX_DA;
+    DBG ("Set pulse width %d", z);
+    I2cDevices.D2Analog (PwmChannel, z);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 

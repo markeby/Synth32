@@ -39,12 +39,13 @@ private:
     bool    Valid;
     int     Active;
     int     Number;
-    uint8_t    OscChannel;
-    uint8_t    PwmChannel;
-    uint8_t    BendChannel;
+    byte    OscChannel;
+    byte    PwmChannel;
+    byte    BendChannel;
     bool    UpdateNeded;
-    float   CurrentPercent;
-    uint8_t CurrentLevel;
+    float   CurrentFreq;
+    float   CurrentWidth;
+    byte    CurrentLevel;
 
     typedef struct
         {
@@ -65,6 +66,7 @@ public:
     void Begin           (int num, uint8_t first_device);
     void Clear           (void);
     void SetFreq         (float percent);
+    void SetPulseWidth   (float percent);
     void SetMaxLevel     (uint8_t ch, uint8_t data);
     void Level           (uint8_t data);
     void Select          (uint8_t ch, bool sel);

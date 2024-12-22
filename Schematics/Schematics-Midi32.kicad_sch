@@ -1923,7 +1923,7 @@
 		)
 		(uuid "a5d122bf-ee8c-4daf-b9c8-448136bc8d6c")
 	)
-	(hierarchical_label "LFO1"
+	(hierarchical_label "LFO2"
 		(shape output)
 		(at 78.994 82.55 0)
 		(fields_autoplaced yes)
@@ -2055,7 +2055,7 @@
 		)
 		(uuid "d063ecee-163c-4a09-9845-ca33b6c5a04a")
 	)
-	(hierarchical_label "LFO1"
+	(hierarchical_label "LFO2"
 		(shape input)
 		(at 78.74 73.66 0)
 		(fields_autoplaced yes)
@@ -2549,7 +2549,7 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "a9be884e-6408-488d-9c6f-d8fb5b76e961")
-		(property "Sheetname" "LFO-1"
+		(property "Sheetname" "LFO-2"
 			(at 85.344 81.28 0)
 			(effects
 				(font
@@ -2558,7 +2558,7 @@
 				(justify left bottom)
 			)
 		)
-		(property "Sheetfile" "LFO-1.kicad_sch"
+		(property "Sheetfile" "LFO-2.kicad_sch"
 			(at 77.724 97.8666 0)
 			(effects
 				(font

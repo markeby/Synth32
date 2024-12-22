@@ -26,8 +26,6 @@ static const char* LabelM = "M";
 #endif
 
 //###################################################################
-//#define TOGGLE          // use if channel select switches are to be alternate action
-
 static      USB Usb;
 static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
@@ -115,7 +113,7 @@ String SYNTH_FRONT_C::Selected ()
 
     for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
         {
-        if ( pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[z] )
+        if ( pChan[this->ZoneBase]->SelectedEnvelope[z] )
             {
             str += SwitchMapArray[z].Desc;
             str += "  ";
@@ -127,19 +125,26 @@ String SYNTH_FRONT_C::Selected ()
 //#####################################################################
 SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map)
     {
-    FaderMap        = fader_map;
-    KnobMap         = knob_map;
-    SwitchMap       = switch_map;
-    XlMap           = xl_map;
-    DownKey         = 0;
-    DownTrigger     = false;
-    DownVelocity    = 0;
-    UpKey           = 0;
-    UpTrigger       = false;
-    SetTuning       = false;
-    TuningChange    = false;
-    ClearEntryRed   = 0;
-    ClearEntryRedL  = 0;
+    this->FaderMap        = fader_map;
+    this->KnobMap         = knob_map;
+    this->SwitchMap       = switch_map;
+    this->XlMap           = xl_map;
+    this->Down.Key        = 0;
+    this->Down.Trigger    = false;
+    this->Down.Velocity   = 0;
+    this->Up.Key          = 0;
+    this->Up.Trigger      = false;
+    this->Up.Velocity     = 0;
+    this->CurrentZone     = ZONE0;
+    this->ZoneBase        = 0;
+    Zone[0]               = 0;
+    Zone[1]               = 0;
+    Zone[2]               = 4;
+    ZoneCount             = CHAN_COUNT;
+    this->SetTuning       = false;
+    this->TuningChange    = false;
+    this->ClearEntryRed   = 0;
+    this->ClearEntryRedL  = 0;
     }
 
 //#######################################################################
@@ -236,11 +241,6 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
         pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
-    Zone[0]     = 0;
-    Zone[1]     = 0;
-    Zone[2]     = 4;
-    CurrentZone  = ZONE0;
-    ZoneCount    = CHAN_COUNT;
     Lfo.Begin (0, osc_d_a);
 
     this->SawtoothDirection (false);
@@ -261,29 +261,38 @@ void SYNTH_FRONT_C::Clear ()
 //#######################################################################
 void SYNTH_FRONT_C::DualZone (byte chan, bool state)
     {
+    if ( chan == 0 )
+        return;
+
     if ( state )
         {
-        if ( (CurrentZone == 0) && (chan == 2) )
+        if ( (this->CurrentZone == 0) && (chan == 2) )
             return;
-        CurrentZone = chan;
-        ZoneCount   = ZONE_COUNT;
+        this->CurrentZone = chan;
+        this->ZoneCount   = ZONE_COUNT;
+        this->ZoneBase    = ( chan == 2 ) ? ZONE_COUNT : 0;
         }
     else
         {
         switch ( chan )
             {
             case ZONE1:
-                CurrentZone = ZONE0;
-                ZoneCount   = CHAN_COUNT;
+                this->CurrentZone = ZONE0;
+                this->ZoneCount   = CHAN_COUNT;
+                this->ZoneBase    = 0;
                 break;
             case ZONE2:
-                CurrentZone = ZONE1;
+                if ( this->CurrentZone == ZONE2 )
+                    {
+                    this->CurrentZone = ZONE1;
+                    this->ZoneBase    = 0;
+                    }
                 break;
             default:
                 break;
             }
         }
-    DisplayMessage.PageOsc (CurrentZone);
+    DisplayMessage.PageOsc (this->CurrentZone);
     }
 
 //#######################################################################
@@ -393,46 +402,50 @@ void SYNTH_FRONT_C::Loop ()
 
     if ( !SetTuning )
         {
-        if ( this->UpTrigger )
+        if ( this->Up.Trigger )
             {
-            UpTrigger = false;
+            this->Up.Trigger = false;
 
-            DBG ("Key up > %d", UpKey);
+            DBG ("Key up > %d", this->Up.Key);
             for ( int z = 0;  z < CHAN_COUNT;  z++ )
-                if ( this->pChan[z]->NoteClear (UpKey) )
+                if ( this->pChan[z]->NoteClear (this->Up.Key) )
                     {
                     if ( DebugSynth )
                         printf ("  Osc > %d", z);
                     }
             }
 
-        if ( this->DownTrigger )                          // Key went down so look for a channel to use
+        if ( this->Down.Trigger )                          // Key went down so look for a channel to use
             {
-            for ( int z = 0;  z < CHAN_COUNT;  z++ )
+            for (int z = 0;  z <  this->ZoneCount;  z++)
                 {
-                CHANNEL_C& ch = *(pChan[z]);
+                int offset = 0;
+                if ( (this->CurrentZone != ZONE0) && (this->Down.Channel == 2) )
+                    offset = 4;
+                int index = z + offset;
+                CHANNEL_C& ch = *(pChan[index]);
 
                 if ( !ch.IsActive () )              // grab the first channel not in use
                     {
-                    doit = z;
+                    doit = index;
                     break;
                     }
                 else
                     {
                     if ( oldest < 0 )               // channel is inu use so this is the first one to check for oldest
-                        oldest = z;
+                        oldest = index;
                     else
                         {
                         if ( ch.IsActive () > pChan[oldest]->IsActive () )      // check if current channel older than the oldest so far
-                            oldest = z;
+                            oldest = index;
                         }
                     }
                 }
             if ( doit < 0 )                                 // no unused channel so we will capture the one used the longest
                 doit = oldest;
-            this->DownTrigger = false;                            // release the trigger
-            this->pChan[doit]->NoteSet (DownKey, DownVelocity);   // set the channel
-            DBG ("Key down > %d   Velocity > %d  Channel > %d", DownKey, DownVelocity, doit);
+            this->Down.Trigger = false;                            // release the trigger
+            this->pChan[doit]->NoteSet (this->Down.Key, this->Down.Velocity);   // set the channel
+            DBG ("Key down > %d   Velocity > %d  Channel > %d", this->Down.Key, this->Down.Velocity, doit);
             }
 
         EnvADSL.Loop ();                                    // process all envelope generators

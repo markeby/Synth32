@@ -29,18 +29,14 @@ static const char* LabelM = "M";
 //#######################################################################
 void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
     {
-#ifdef TOGGLE
-    pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[chan] = !pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[chan];
-#else
-    pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[chan] = state;
-#endif
-    DisplayMessage.OscSelected (CurrentZone, chan, pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[chan]);
-    DBG ("%s %s ", SwitchMap[chan].Desc, ( pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[chan] ) ? "ON" : "off");
+    pChan[this->ZoneBase]->SelectedEnvelope[chan] = state;
+    DisplayMessage.OscSelected (CurrentZone, chan, pChan[this->ZoneBase]->SelectedEnvelope[chan]);
+    DBG ("%s %s ", SwitchMap[chan].Desc, ( pChan[this->ZoneBase]->SelectedEnvelope[chan] ) ? "ON" : "off");
 
     byte val = 0x0C;
     for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
         {
-        if ( pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[z] )
+        if ( pChan[this->ZoneBase]->SelectedEnvelope[z] )
             val = 0x3C;
         }
     this->ShowChannelXL (val);
@@ -60,7 +56,7 @@ void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     float val = (float)data * PRS_SCALER;
 
     for ( int z = 0;  z < ZoneCount;  z++ )
-        this->pChan[CurrentZone + z]->SetMaxLevel (ch, val);
+        this->pChan[this->ZoneBase + z]->SetMaxLevel (ch, val);
 
     DisplayMessage.OscMaxLevel (CurrentZone, ch, data);
     }
@@ -72,10 +68,10 @@ void SYNTH_FRONT_C::SetAttackTime (byte data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[ch] )
+        if ( this->pChan[this->ZoneBase]->SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < ZoneCount;  z++ )
-                this->pChan[CurrentZone + z]->pOsc()->SetAttackTime (ch, dtime);
+                this->pChan[this->ZoneBase + z]->pOsc()->SetAttackTime (ch, dtime);
             DisplayMessage.OscAttackTime (CurrentZone, ch, data);
             }
         }
@@ -88,10 +84,10 @@ void SYNTH_FRONT_C::SetDecayTime (byte data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[ch] )
+        if ( this->pChan[this->ZoneBase]->SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < ZoneCount;  z++)
-                this->pChan[CurrentZone + z]->pOsc()->SetDecayTime (ch, dtime);
+                this->pChan[this->ZoneBase + z]->pOsc()->SetDecayTime (ch, dtime);
             DisplayMessage.OscDecayTime (CurrentZone, ch, data);
             }
         }
@@ -102,7 +98,7 @@ void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
     {
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < ZoneCount;  z++ )
-        this->pChan[CurrentZone + z]->pOsc()->SetSustainLevel (ch, val);
+        this->pChan[this->ZoneBase + z]->pOsc()->SetSustainLevel (ch, val);
     DisplayMessage.OscSustainLevel (CurrentZone, ch, data);
     }
 
@@ -118,10 +114,10 @@ void SYNTH_FRONT_C::SetSustainTime (byte data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[ch] )
+        if ( this->pChan[this->ZoneBase]->SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < ZoneCount;  z++)
-                this->pChan[CurrentZone + z]->pOsc()->SetSustainTime (ch, dtime);
+                this->pChan[this->ZoneBase + z]->pOsc()->SetSustainTime (ch, dtime);
             DisplayMessage.OscSustainTime (CurrentZone, ch, data);
             }
         }
@@ -134,10 +130,10 @@ void SYNTH_FRONT_C::SetReleaseTime (byte data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->pChan[this->Zone[this->CurrentZone]]->SelectedEnvelope[ch] )
+        if ( this->pChan[this->ZoneBase]->SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < ZoneCount;  z++)
-                this->pChan[CurrentZone + z]->pOsc()->SetReleaseTime (ch, dtime);
+                this->pChan[this->ZoneBase + z]->pOsc()->SetReleaseTime (ch, dtime);
             DisplayMessage.OscReleaseTime (CurrentZone, ch, data);
             }
         }
@@ -146,8 +142,8 @@ void SYNTH_FRONT_C::SetReleaseTime (byte data)
 //#######################################################################
 void SYNTH_FRONT_C::SawtoothDirection (bool data)
     {
-    for ( int z = 0;  z < CHAN_COUNT;  z++)
-        this->pChan[z]->pOsc()->SawtoothDirection (data);
+    for ( int z = 0;  z < ZoneCount;  z++)
+        this->pChan[this->ZoneBase + z]->pOsc()->SawtoothDirection (data);
     DisplayMessage.OscSawtoothDirection (CurrentZone, data);
     if ( !data )
         this->ClearEntryRedL = XlMap[37].Index;
@@ -158,7 +154,7 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
     {
     float percent = data * PRS_SCALER;
     for ( int z = 0;  z < ZoneCount;  z++)
-        this->pChan[CurrentZone + z]->pOsc()->PulseWidth (percent);
+        this->pChan[this->ZoneBase + z]->pOsc()->PulseWidth (percent);
     DisplayMessage.OscPulseWidth (CurrentZone, data);
     }
 
@@ -167,26 +163,27 @@ void SYNTH_FRONT_C::SetNoise (byte ch, bool state)
     {
     int z;
 
-    switch (  CurrentZone )
+    if ( this->CurrentZone == ZONE0 )
         {
-        case ZONE0:
-            for ( z = 0;  z < DUCT_NUM;  z++ )
+        for ( z = 0;  z < DUCT_NUM;  z++ )
+            this->pNoise->Select (z, ch, state);
+        DisplayMessage.OscNoise (ZONE0, ch, state);
+        }
+    else
+        {
+        if ( ch & 0x80 )
+            {
+            ch &= 0x0F;
+            for ( z = 0;  z < (DUCT_NUM / NUM_ZONES);  z++ )
+                this->pNoise->Select (z + 2, ch, state);
+            DisplayMessage.OscNoise (ZONE2, ch, state);
+            }
+        else
+            {
+            for ( int z = 0;  z < (DUCT_NUM / NUM_ZONES);  z ++)
                 this->pNoise->Select (z, ch, state);
-            DisplayMessage.OscNoise (ZONE0, ch, state);
-        default:
-            if ( ch & 0x80 )
-                {
-                ch &= 0x0F;
-                for ( z = 0;  z < (DUCT_NUM / NUM_ZONES);  z++ )
-                    this->pNoise->Select (z + 2, ch, state);
-                DisplayMessage.OscNoise (ZONE2, ch, state);
-                }
-            else
-                {
-                for ( int z = 0;  z < (DUCT_NUM / NUM_ZONES);  z ++)
-                    this->pNoise->Select (z, ch, state);
-                DisplayMessage.OscNoise (ZONE1, ch, state);
-                }
+            DisplayMessage.OscNoise (ZONE1, ch, state);
+            }
         }
     }
 

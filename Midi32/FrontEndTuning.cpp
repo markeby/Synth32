@@ -16,10 +16,10 @@ void SYNTH_FRONT_C::Tuning ()
     {
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
         {
-        if ( this->DownTrigger )
+        if ( this->Down.Trigger )
             {
-            this->pChan[zc]->pOsc()->SetTuningNote(DownKey);
-            DisplayMessage.TuningNote (DownKey);
+            this->pChan[zc]->pOsc()->SetTuningNote(this->Down.Key);
+            DisplayMessage.TuningNote (this->Down.Key);
             }
         if ( this->TuningChange )
             {
@@ -45,7 +45,7 @@ void SYNTH_FRONT_C::Tuning ()
             }
         }
     this->TuningChange = false;
-    this->DownTrigger = false;
+    this->Down.Trigger = false;
     I2cDevices.UpdateDigital();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
