@@ -116,13 +116,6 @@ public:
         }
 
     //#################################################
-    inline void SendUpdateFilter (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
-        {
-        if ( !Lock )
-            this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER, channel, effect, value);
-        }
-
-    //#################################################
     inline void OscSelected (byte zone, byte channel, bool select)
         {
         this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
@@ -144,12 +137,6 @@ public:
     inline void OscDecayTime (byte zone, byte channel, uint16_t value)
         {
         this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
-        }
-
-    //#################################################
-    inline void OscSustainTime (byte zone, byte channel, uint16_t value)
-        {
-        this->SendUpdateOsc (zone, channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_TIME, value);
         }
 
     //#################################################
@@ -189,21 +176,45 @@ public:
         }
 
     //#################################################
-    inline void LFOSelected (byte channel, bool select)
+    inline void LfoSoftwareFreq (byte value)
         {
-        this->SendUpdateMod (channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( select ) ? 1 : 0));
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::SOFTWARE_LFO), DISP_MESSAGE_N::EFFECT_C::LFO_FREQ, value / 32);
         }
 
     //#################################################
-    inline void HardwareFreqLFO (byte value)
+    inline void LfoSoftwareSelect (byte value)
         {
-        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::SOFTWARE_LFO), DISP_MESSAGE_N::EFFECT_C::SELECTED, value);
         }
 
     //#################################################
-    inline void SoftwareFreqLFO (byte value)
+    inline void LfoHardwareFreq (byte value)
         {
-        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::SOFTWARE_LFO), DISP_MESSAGE_N::EFFECT_C::FREQ_LFO, value);
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::LFO_FREQ, value / 32);
+        }
+
+    //#################################################
+    inline void LfoHardwareLevel (byte value)
+        {
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
+        }
+
+    //#################################################
+    inline void LfoHardwarePulseWidth (short value)
+        {
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH, value / 32 );
+        }
+
+    //#################################################
+    inline void LfoHardwareRampSlope (byte value)
+        {
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION, value);
+        }
+
+    //#################################################
+    inline void LfoHardwareSelect (short value)
+        {
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::CHANNEL_C::HARDWARE_LFO), DISP_MESSAGE_N::EFFECT_C::SELECTED, value);
         }
     };
 

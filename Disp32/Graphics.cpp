@@ -62,7 +62,7 @@ using namespace DISP_MESSAGE_N;
         switch ( z )
             {
             case 2:
-                SawtoothDir = new SAWTOOTH_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+                RampDir = new RAMP_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             case 3:
                 PulseWidth = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
@@ -97,9 +97,6 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case EFFECT_C::DECAY_TIME:
             this->MeterADSR[ch]->SetDecay (value);
             break;
-        case EFFECT_C::SUSTAIN_TIME:
-            this->MeterADSR[ch]->SetSustain (value);
-            break;
         case EFFECT_C::RELEASE_TIME:
             this->MeterADSR[ch]->SetRelease (value);
             break;
@@ -107,7 +104,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             this->SustainLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::SAWTOOTH_DIRECTION:
-            this->SawtoothDir->SetDir (value);
+            this->RampDir->SetDir (value);
             break;
         case EFFECT_C::PULSE_WIDTH:
             this->PulseWidth->SetWidth (value);
@@ -129,7 +126,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int         y = 40;
 
     panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 159, 440);
+    lv_obj_set_size             (panel, 159, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -142,7 +139,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     x += 158;
 
     panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 159, 440);
+    lv_obj_set_size             (panel, 159, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -151,6 +148,12 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
     TitleHardware = new TITLE_WIDGET_C (panel, "Hardware");
     MeterHardware = new LFO_METER_WIDGET_C (panel, 0, 18, false);
+    RampDir       = new RAMP_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -36);
+    PulseWidth    = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+
+    SelectSine  = false;
+    SelectRamp  = false;
+    SelectPulse = false;
     }
 
 //#######################################################################
@@ -161,25 +164,60 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case CHANNEL_C::HARDWARE_LFO:
             switch ( effect )
                 {
-                case EFFECT_C::SELECTED:
+                case EFFECT_C::MAX_LEVEL:
                     break;
-                case EFFECT_C::FREQ_LFO:
+                case EFFECT_C::SELECTED:
+                    switch ( ch )
+                        {
+                        case 0:
+                            SelectSine = value;
+                            break;
+                        case 1:
+                            SelectRamp = value;
+                            break;
+                        case 2:
+                            SelectPulse = value;
+                            break;
+                        default:
+                            break;
+                        }
+                    if ( SelectSine )
+                        this->MeterHardware->SetSine (Level);
+                    else
+                        this->MeterHardware->SetSine (0);
+                    if ( SelectRamp )
+                        this->MeterHardware->SetRamp (Level);
+                    else
+                        this->MeterHardware->SetRamp (0);
+                    if ( SelectPulse )
+                        this->MeterHardware->SetPulse (Level);
+                    else
+                        this->MeterHardware->SetPulse (0);
+                    break;
+                case EFFECT_C::LFO_FREQ:
                     this->MeterHardware->SetFreq (value);
                     break;
                 case EFFECT_C::SAWTOOTH_DIRECTION:
+                    this->RampDir->SetDir (value);
                     break;
                 case EFFECT_C::PULSE_WIDTH:
+                    this->PulseWidth->SetWidth (value);
                     break;
                 default:
                     break;
                 }
+
+            if ( SelectSine || SelectRamp || SelectPulse )
+                this->MeterHardware->Select (true);
+            else
+                this->MeterHardware->Select (false);
             break;
         case CHANNEL_C::SOFTWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
                     break;
-                case EFFECT_C::FREQ_LFO:
+                case EFFECT_C::LFO_FREQ:
                     this->MeterSoftware->SetFreq (value);
                     break;
                 default:

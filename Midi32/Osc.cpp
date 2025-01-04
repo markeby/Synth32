@@ -28,8 +28,8 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     Valid = false;
     Number = num;
     // D/A configuration
-    OscChannel                = first_device + byte(D_A_OFF::EXPO);
-    PwmChannel                = first_device + byte(D_A_OFF::WIDTH);
+    OscChannelIO                = first_device + byte(D_A_OFF::EXPO);
+    PwmChannelIO                = first_device + byte(D_A_OFF::WIDTH);
     SawtoothDirChannel        = first_device + byte(D_A_OFF::DIR);
     Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
     Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + byte(D_A_OFF::SAWTOOTH), usecount);
@@ -58,7 +58,7 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
 
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
         {
-        I2cDevices.D2Analog (PwmChannel, 900);
+        I2cDevices.D2Analog (PwmChannelIO, 900);
 
         ClearState ();
         if ( DebugOsc )
@@ -101,7 +101,7 @@ void OSC_C::SetTuningNote (byte note)
     {
     CurrentNote = note;
     DBG ("DownKey = %d\n", note);
-    I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
+    I2cDevices.D2Analog (OscChannelIO, OctaveArray[note]);
     }
 
 //#######################################################################
@@ -111,7 +111,7 @@ void OSC_C::NoteSet (byte note, byte velocity)
     DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
 
     ClearState ();
-    I2cDevices.D2Analog (OscChannel, OctaveArray[note]);
+    I2cDevices.D2Analog (OscChannelIO, OctaveArray[note]);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         Mix[z]->Start ();
@@ -133,13 +133,13 @@ void OSC_C::SawtoothDirection (bool data)
 //#######################################################################
 void OSC_C::PulseWidth (float percent)
     {
-    I2cDevices.D2Analog (PwmChannel, (percent * (float)DA_MAX));
+    I2cDevices.D2Analog (PwmChannelIO, (percent * (float)DA_MAX));
     }
 
 //#######################################################################
-void OSC_C::SetSoftLFO (byte wave, bool state)
+void OSC_C::ToggleSoftLFO (short wave)
     {
-    Mix[wave]->SetSoftLFO (state);
+    Mix[wave]->ToggleSoftLFO ();
     }
 
 //#######################################################################
@@ -164,12 +164,6 @@ void OSC_C::SetReleaseTime (byte wave, float time)
 void OSC_C::SetSustainLevel (byte wave, float level_percent)
     {
     Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
-    }
-
-//#######################################################################
-void OSC_C::SetSustainTime (byte wave, float time)
-    {
-    Mix[wave]->SetTime (ESTATE::SUSTAIN, time);
     }
 
 //#######################################################################

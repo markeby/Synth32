@@ -35,10 +35,15 @@
 
     lv_obj_remove_style (this->Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
-    lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
+    lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
-    this->MeterFreq.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 20);
+    this->Sine.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
+    this->Ramp.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
+    this->Pulse.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
+
+    this->Led  = lv_led_create (Meter);
+    lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
     InfoLine (base, MeterFreq, " Freq:", "Hz", y, 0x0000F0);
@@ -50,6 +55,8 @@
 //#######################################################################
 void LFO_METER_WIDGET_C::InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, const char* su, short y, uint32_t color)
     {
+    short x = 2;
+
     element.Label = lv_label_create (base);
     lv_obj_align (element.Label, LV_ALIGN_TOP_LEFT, 0, y);
     lv_label_set_text (element.Label, s);
@@ -93,6 +100,41 @@ void LFO_METER_WIDGET_C::SetFreq (short val)
     }
 
 //#######################################################################
+void LFO_METER_WIDGET_C::Select (bool sel)
+    {
+ return;
+    if ( sel )
+        {
+        lv_led_set_color (Led, lv_palette_main (LV_PALETTE_RED));
+        lv_led_on (Led);
+        }
+    else
+        {
+        lv_led_set_color (Led,  lv_color_white());
+        lv_led_on (Led);
+        }
+    }
+
+//#######################################################################
+void LFO_METER_WIDGET_C::SetSine (int val)
+    {
+    lv_meter_set_indicator_end_value (Meter, Sine.Gauge, val);
+    }
+
+//#######################################################################
+void LFO_METER_WIDGET_C::SetRamp (int val)
+    {
+    lv_meter_set_indicator_end_value (Meter, Ramp.Gauge, val);
+    }
+
+//#######################################################################
+void LFO_METER_WIDGET_C::SetPulse (int val)
+    {
+    lv_meter_set_indicator_end_value (Meter, Pulse.Gauge, val);
+    }
+
+
+//#######################################################################
 //#######################################################################
     ADSR_METER_WIDGET_C::ADSR_METER_WIDGET_C (lv_obj_t* base, short x, short y)
     {
@@ -106,9 +148,8 @@ void LFO_METER_WIDGET_C::SetFreq (short val)
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
     this->Attack.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
-    this->Decay.Gauge   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 13);
-    this->Sustain.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_PURPLE), 6);
-    this->Release.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), -1);
+    this->Decay.Gauge   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
+    this->Release.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
 
     this->Led  = lv_led_create (Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
@@ -118,14 +159,11 @@ void LFO_METER_WIDGET_C::SetFreq (short val)
     y += 16;
     InfoLine (base, this->Decay, "  Decay:", y, 0x0000ff);
     y += 16;
-    InfoLine (base, this->Sustain, "Sustain:", y, 0x800080);
-    y += 16;
     InfoLine (base, this->Release, "Release:", y, 0xff0000);
 
     // Initial positions
     this->SetAttack  (0);
     this->SetDecay   (0);
-    this->SetSustain (0);
     this->SetRelease (0);
     this->Select     (false);
     }
@@ -178,13 +216,6 @@ void ADSR_METER_WIDGET_C::SetDecay (int val)
     {
     lv_meter_set_indicator_end_value (Meter, Decay.Gauge, val);
     lv_label_set_text_fmt (Decay.Value, "%d", val * TIME_MULT);
-    }
-
-//#######################################################################
-void ADSR_METER_WIDGET_C::SetSustain (int val)
-    {
-    lv_meter_set_indicator_end_value (Meter, Sustain.Gauge, val);
-    lv_label_set_text_fmt (Sustain.Value, "%d", val * TIME_MULT);
     }
 
 //#######################################################################
@@ -266,7 +297,7 @@ void LEVEL_WIDGET_C::SetLevel (int val)
 static lv_point_t slopeBack[] = { {0, 20}, {0, 0}, {40, 20}, {40, 0}, {80, 20}};
 static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}};
 
-    SAWTOOTH_WIDGET_C::SAWTOOTH_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    RAMP_WIDGET_C::RAMP_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
     {
     lv_style_init (&StyleFore);
     lv_style_set_line_width (&StyleFore, 3);
@@ -289,10 +320,12 @@ static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}}
     lv_line_set_points (SlopeBack, slopeBack, 5);
     lv_obj_align (SlopeBack, align, x, y);
     lv_obj_add_style (SlopeBack, &StyleBack, 0);
+
+    this->SetDir (false);
     }
 
 //#######################################################################
-void SAWTOOTH_WIDGET_C::SetDir (bool dir)
+void RAMP_WIDGET_C::SetDir (bool dir)
     {
     if ( dir )
         {

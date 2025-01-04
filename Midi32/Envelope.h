@@ -30,7 +30,7 @@ private:
     // Control state
     byte&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
-    float       Timer;          // Timer loaded with state time and descrimented
+    float       Timer;          // Timer loaded with state time
     float       TargetTime;     // Timer is incrimented until this time is exceeded
     float       Current;        // Current level zero to one
     float       Target;
@@ -45,7 +45,6 @@ private:
 
     float       AttackTime;     // Attack time in uSec.
     float       DecayTime;      // Decay time to sustatin level in uSec.
-    float       SustainTime;    // How long to hold the sustain level (-1 = hold while active)
     float       ReleaseTime;    // How long to end back at base level in uSec.
     float       Multiplier;     // Final output adjustmet
 
@@ -70,9 +69,9 @@ public:
     float    GetTime        (ESTATE state);
     void     SetLevel       (ESTATE state, float percent);
     float    GetLevel       (ESTATE state);
+    void     ToggleSoftLFO  (void);
 
     inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
-    inline void     SetSoftLFO       (bool state)       { UseSoftLFO = state; }         // Enable software sine wave application
     inline uint16_t GetChannel       (void)             { return (DeviceChannel); }     // Return D/A channel number
     };  // end ENVELOPE_C
 

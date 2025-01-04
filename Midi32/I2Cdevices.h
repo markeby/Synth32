@@ -10,7 +10,7 @@ typedef struct
     int8_t      Channel;        // I2C address of device
     int8_t      NumberDtoA;     // Device count on channel: 1 = MCP4725, 4 = MCP4728
     int8_t      NumberAtoD;
-    int8_t      NumberDigital;  // number of I/O channels
+    int8_t      NumberDigital;  // number of digital I/O channeld: 8 / 16
     const char* Name;
     } I2C_LOCATION_T;
 

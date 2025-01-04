@@ -18,9 +18,10 @@ static const char* Label = "LFO-S";
     Current = 0.0;
     }
 
-void SOFT_LFO_C::SetFrequency (float freqpercent)
+//#######################################################################
+void SOFT_LFO_C::SetFrequency (short value)
     {
-    this->WaveLength = 31.25 / (float)freqpercent;      // frequency / 2
+    this->WaveLength = value;      // frequency / 2
     this->HalfWaveLength = this->WaveLength * 0.5;
     DBG ("Frequency = %f   Wavelength = %f", 1.0 / this->WaveLength, this->WaveLength);
     }

@@ -64,7 +64,6 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     this->Sustain       = 0;
     this->AttackTime    = 0;
     this->DecayTime     = 0;
-    this->SustainTime   = 0;
     this->ReleaseTime   = 0;
     this->UseSoftLFO    = false;
     this->SetRange (0, DA_MAX);        // Defualt to normal D/A converter settings
@@ -81,9 +80,6 @@ void ENVELOPE_C::SetTime (ESTATE state, float time)
             break;
         case ESTATE::DECAY:
             this->DecayTime = time;
-            break;
-        case ESTATE::SUSTAIN:
-            this->SustainTime = time;
             break;
         case ESTATE::RELEASE:
             this->ReleaseTime = time;
@@ -104,9 +100,6 @@ float ENVELOPE_C::GetTime (ESTATE state)
             break;
         case ESTATE::DECAY:
             val = this->DecayTime;
-            break;
-        case ESTATE::SUSTAIN:
-            val = this->SustainTime;
             break;
         case ESTATE::RELEASE:
             val = this->ReleaseTime;
@@ -160,6 +153,14 @@ float ENVELOPE_C::GetLevel (ESTATE state)
         }
     return (val);
     }
+
+//#######################################################################
+void ENVELOPE_C::ToggleSoftLFO ()
+    {
+    this->UseSoftLFO = !this->UseSoftLFO;   // Toggle oscillator VCA modulation
+    DBG ("Toggle %s > %s",this->Name, (( this->UseSoftLFO ) ? "ON" : "Off") );
+    }
+
 
 //#######################################################################
 void ENVELOPE_C::Start ()
@@ -289,18 +290,12 @@ void ENVELOPE_C::Process (float deltaTime)
                 }
             Current = Sustain;
             Updated = true;
-            Timer   = SustainTime - TIME_THRESHOLD;
+            Timer   = 0.0;
             State   = ESTATE::SUSTAIN;
             if ( Sustain >= Peak )
                 PeakLevel = true;
 
-            if ( DebugSynth )
-                {
-                if ( SustainTime < 0 )
-                    { DBG ("Staying at level %f", Current); }
-                else
-                    { DBG ("%f mSec at level %f", Timer, Current); }
-                }
+            DBG ("sustained at level %f", Current);
             return;
             }
         //***************************************
@@ -308,29 +303,11 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::SUSTAIN:
             {
-            if ( Timer <= 0 )
-                {           // At this level if the max volume is to change, then all volume changes
-                if ( PeakLevel )
-                    {
-                    if ( Current != Peak )
-                        {
-                        Current = Peak;
-                        Updated = true;
-                        }
-                    }
-
-                return;
-                }
-            if ( Timer > TIME_THRESHOLD )
+            if ( PeakLevel && (Current != Peak) )
                 {
-                Timer -= deltaTime;
-                DBG ("Timer > %f mSec at level %f", Timer, Current);
-                return;
+                Current = Peak;
+                Updated = true;
                 }
-            Timer      = ReleaseTime - TIME_THRESHOLD;
-            State      = ESTATE::RELEASE;
-            ReleaseSt  = Current;
-            DBG ("Start > %f  mSec from level %f to 0", Timer, Current);
             return;
             }
         //***************************************

@@ -5367,7 +5367,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "015ccc4d-6a94-45e9-a46c-04bd5c310ce4")
-		(property "Reference" "J53"
+		(property "Reference" "J87"
 			(at 304.8 29.2099 0)
 			(effects
 				(font
@@ -5425,7 +5425,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J53")
+					(reference "J87")
 					(unit 1)
 				)
 			)
@@ -5441,7 +5441,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "06895eff-055b-4b19-9cae-1fab081aba3a")
-		(property "Reference" "J35"
+		(property "Reference" "J82"
 			(at 182.88 128.2699 0)
 			(effects
 				(font
@@ -5499,7 +5499,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J35")
+					(reference "J82")
 					(unit 1)
 				)
 			)
@@ -5515,7 +5515,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0d8230e3-4f4e-4071-9f0b-a2b2d0d884a0")
-		(property "Reference" "J32"
+		(property "Reference" "J77"
 			(at 181.61 100.3299 0)
 			(effects
 				(font
@@ -5570,7 +5570,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J32")
+					(reference "J77")
 					(unit 1)
 				)
 			)
@@ -5585,7 +5585,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "153cc290-82cc-49ba-8233-16f1978f27bb")
-		(property "Reference" "C128"
+		(property "Reference" "C146"
 			(at 276.352 51.816 0)
 			(effects
 				(font
@@ -5639,7 +5639,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C128")
+					(reference "C146")
 					(unit 1)
 				)
 			)
@@ -5655,7 +5655,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1ca8448e-ffa5-4049-902f-6be18ae1fd53")
-		(property "Reference" "J18"
+		(property "Reference" "J83"
 			(at 204.47 46.9899 0)
 			(effects
 				(font
@@ -5713,7 +5713,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J18")
+					(reference "J83")
 					(unit 1)
 				)
 			)
@@ -5799,7 +5799,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2943b66f-d19c-4a2c-aac0-5cb59ee735de")
-		(property "Reference" "J52"
+		(property "Reference" "J88"
 			(at 304.8 41.9099 0)
 			(effects
 				(font
@@ -5857,7 +5857,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J52")
+					(reference "J88")
 					(unit 1)
 				)
 			)
@@ -5872,7 +5872,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2dd6de69-410d-4494-b812-ecc35a923630")
-		(property "Reference" "C53"
+		(property "Reference" "C134"
 			(at 85.09 58.3946 0)
 			(effects
 				(font
@@ -5926,7 +5926,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C53")
+					(reference "C134")
 					(unit 1)
 				)
 			)
@@ -5942,7 +5942,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2f8b3a1c-c090-4a55-9fc3-5308a6bba15d")
-		(property "Reference" "J10"
+		(property "Reference" "J85"
 			(at 215.138 95.504 0)
 			(effects
 				(font
@@ -5995,7 +5995,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J10")
+					(reference "J85")
 					(unit 1)
 				)
 			)
@@ -6011,7 +6011,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "337ad5be-bf4c-431b-8c8a-3d0ab129dd70")
-		(property "Reference" "J34"
+		(property "Reference" "J81"
 			(at 182.88 113.0299 0)
 			(effects
 				(font
@@ -6069,7 +6069,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J34")
+					(reference "J81")
 					(unit 1)
 				)
 			)
@@ -6154,7 +6154,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3760f00f-0225-49e9-a0f1-1d84a20ce2d6")
-		(property "Reference" "J41"
+		(property "Reference" "J80"
 			(at 181.8942 158.0543 0)
 			(effects
 				(font
@@ -6212,7 +6212,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J41")
+					(reference "J80")
 					(unit 1)
 				)
 			)
@@ -6228,7 +6228,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3a8e246c-e2cf-4e4e-80e6-d8ab70394fc3")
-		(property "Reference" "J28"
+		(property "Reference" "J73"
 			(at 181.61 60.9345 0)
 			(effects
 				(font
@@ -6283,7 +6283,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J28")
+					(reference "J73")
 					(unit 1)
 				)
 			)
@@ -6299,7 +6299,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3e75077c-a440-44ac-80a8-d04d5f3f1368")
-		(property "Reference" "J11"
+		(property "Reference" "J84"
 			(at 212.09 110.744 0)
 			(effects
 				(font
@@ -6354,7 +6354,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J11")
+					(reference "J84")
 					(unit 1)
 				)
 			)
@@ -6369,7 +6369,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "40101aa4-b797-46a5-aa9f-0bc748343854")
-		(property "Reference" "C56"
+		(property "Reference" "C126"
 			(at 41.91 116.84 0)
 			(effects
 				(font
@@ -6423,7 +6423,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C56")
+					(reference "C126")
 					(unit 1)
 				)
 			)
@@ -6438,7 +6438,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "44650ab4-a2ef-4c2c-a356-8fc0e913f65e")
-		(property "Reference" "C55"
+		(property "Reference" "C138"
 			(at 117.475 95.25 0)
 			(effects
 				(font
@@ -6492,7 +6492,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C55")
+					(reference "C138")
 					(unit 1)
 				)
 			)
@@ -6508,7 +6508,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "44823773-2b47-4fd7-b6d8-a45359072d06")
-		(property "Reference" "J25"
+		(property "Reference" "J71"
 			(at 181.61 40.6145 0)
 			(effects
 				(font
@@ -6563,7 +6563,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J25")
+					(reference "J71")
 					(unit 1)
 				)
 			)
@@ -6579,7 +6579,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "472f78ac-d6c0-418c-abfb-da971e8c3828")
-		(property "Reference" "D5"
+		(property "Reference" "D15"
 			(at 61.2394 36.1442 0)
 			(effects
 				(font
@@ -6714,7 +6714,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D5")
+					(reference "D15")
 					(unit 1)
 				)
 			)
@@ -6730,7 +6730,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "501b55b7-62f1-42a6-870b-2b2fa2ae49c3")
-		(property "Reference" "C60"
+		(property "Reference" "C127"
 			(at 41.402 181.864 0)
 			(effects
 				(font
@@ -6784,7 +6784,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C60")
+					(reference "C127")
 					(unit 1)
 				)
 			)
@@ -6800,7 +6800,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5486658a-27a7-4fce-8139-9fc65c128bd4")
-		(property "Reference" "C61"
+		(property "Reference" "C130"
 			(at 50.419 182.1942 0)
 			(effects
 				(font
@@ -6854,7 +6854,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C61")
+					(reference "C130")
 					(unit 1)
 				)
 			)
@@ -6869,7 +6869,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5487cd68-3202-4b0f-8ac3-dcf6a4cdb97e")
-		(property "Reference" "D9"
+		(property "Reference" "D14"
 			(at 59.4106 163.1696 0)
 			(effects
 				(font
@@ -7004,7 +7004,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D9")
+					(reference "D14")
 					(unit 1)
 				)
 			)
@@ -7019,7 +7019,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "56632f04-16c0-44ed-9211-a35f2bc00e87")
-		(property "Reference" "C126"
+		(property "Reference" "C145"
 			(at 276.352 41.656 0)
 			(effects
 				(font
@@ -7073,7 +7073,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C126")
+					(reference "C145")
 					(unit 1)
 				)
 			)
@@ -7089,7 +7089,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5bda5202-3520-49bc-a3fe-151cce2e106f")
-		(property "Reference" "U104"
+		(property "Reference" "U92"
 			(at 253.9746 63.2968 0)
 			(effects
 				(font
@@ -7144,7 +7144,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U104")
+					(reference "U92")
 					(unit 1)
 				)
 			)
@@ -7161,7 +7161,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "5c6f7c4a-1498-41ee-b4a3-1780092b1fc7")
-		(property "Reference" "J37"
+		(property "Reference" "J66"
 			(at 41.91 152.3999 90)
 			(effects
 				(font
@@ -7219,7 +7219,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J37")
+					(reference "J66")
 					(unit 1)
 				)
 			)
@@ -7234,7 +7234,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "63103116-486c-405a-8f0d-4945b152754c")
-		(property "Reference" "C54"
+		(property "Reference" "C137"
 			(at 91.44 95.25 0)
 			(effects
 				(font
@@ -7288,7 +7288,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C54")
+					(reference "C137")
 					(unit 1)
 				)
 			)
@@ -7303,7 +7303,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "63baa384-a954-4b60-827e-b891bf02876f")
-		(property "Reference" "U19"
+		(property "Reference" "U87"
 			(at 60.9346 44.0944 0)
 			(effects
 				(font
@@ -7358,7 +7358,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U19")
+					(reference "U87")
 					(unit 1)
 				)
 			)
@@ -7452,7 +7452,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "695b6a9a-2944-4685-bf2d-e903adf848e4")
-		(property "Reference" "U22"
+		(property "Reference" "U89"
 			(at 60.9346 171.6532 0)
 			(effects
 				(font
@@ -7507,7 +7507,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U22")
+					(reference "U89")
 					(unit 1)
 				)
 			)
@@ -7522,7 +7522,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6fc475e7-9d98-4d9b-ac64-f03c7cd776d6")
-		(property "Reference" "C93"
+		(property "Reference" "C143"
 			(at 266.192 41.656 0)
 			(effects
 				(font
@@ -7576,7 +7576,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C93")
+					(reference "C143")
 					(unit 1)
 				)
 			)
@@ -7592,7 +7592,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "71eb3da0-2b96-4836-bbf3-40e0e788fec0")
-		(property "Reference" "C62"
+		(property "Reference" "C133"
 			(at 74.549 182.1942 0)
 			(effects
 				(font
@@ -7646,7 +7646,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C62")
+					(reference "C133")
 					(unit 1)
 				)
 			)
@@ -7661,7 +7661,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "72c03a7a-413f-4dfa-b92c-0d147d10f306")
-		(property "Reference" "C90"
+		(property "Reference" "C142"
 			(at 240.03 52.07 0)
 			(effects
 				(font
@@ -7715,7 +7715,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C90")
+					(reference "C142")
 					(unit 1)
 				)
 			)
@@ -7730,7 +7730,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7dca5ecd-bdac-4d1e-9d47-6515fc25cdec")
-		(property "Reference" "D10"
+		(property "Reference" "D17"
 			(at 96.52 182.88 90)
 			(effects
 				(font
@@ -7866,7 +7866,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D10")
+					(reference "D17")
 					(unit 1)
 				)
 			)
@@ -7882,7 +7882,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7dee8fea-c47f-4cfa-b9aa-852d7b9fff86")
-		(property "Reference" "D8"
+		(property "Reference" "D19"
 			(at 97.79 120.015 90)
 			(effects
 				(font
@@ -8018,7 +8018,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D8")
+					(reference "D19")
 					(unit 1)
 				)
 			)
@@ -8033,7 +8033,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7f03c326-3354-4322-b24b-1a5d008deb21")
-		(property "Reference" "C92"
+		(property "Reference" "C139"
 			(at 231.14 41.91 0)
 			(effects
 				(font
@@ -8087,7 +8087,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C92")
+					(reference "C139")
 					(unit 1)
 				)
 			)
@@ -8103,7 +8103,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "84bd939d-6ff8-4b6c-9729-74dc9c505ebf")
-		(property "Reference" "J24"
+		(property "Reference" "J70"
 			(at 181.61 30.4799 0)
 			(effects
 				(font
@@ -8158,7 +8158,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J24")
+					(reference "J70")
 					(unit 1)
 				)
 			)
@@ -8173,7 +8173,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "84fb2fff-f09e-4a32-8ee6-3080c5706e89")
-		(property "Reference" "C91"
+		(property "Reference" "C141"
 			(at 240.03 41.91 0)
 			(effects
 				(font
@@ -8227,7 +8227,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C91")
+					(reference "C141")
 					(unit 1)
 				)
 			)
@@ -8243,7 +8243,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "87a40dc1-2c0f-4f3b-9ffc-fe6dab57b90f")
-		(property "Reference" "J30"
+		(property "Reference" "J75"
 			(at 181.61 81.2799 0)
 			(effects
 				(font
@@ -8298,7 +8298,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J30")
+					(reference "J75")
 					(unit 1)
 				)
 			)
@@ -8313,7 +8313,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "89b9cfad-5bdc-4853-b944-f94a406e2818")
-		(property "Reference" "C89"
+		(property "Reference" "C140"
 			(at 231.14 52.07 0)
 			(effects
 				(font
@@ -8367,7 +8367,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C89")
+					(reference "C140")
 					(unit 1)
 				)
 			)
@@ -8382,7 +8382,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8e0564bc-1bcb-4665-8d75-fde4585dfe02")
-		(property "Reference" "J12"
+		(property "Reference" "J86"
 			(at 298.196 92.964 0)
 			(effects
 				(font
@@ -8435,7 +8435,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J12")
+					(reference "J86")
 					(unit 1)
 				)
 			)
@@ -8452,7 +8452,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8f9b525f-cc11-48b6-a98e-13135129d88e")
-		(property "Reference" "J38"
+		(property "Reference" "J67"
 			(at 72.39 152.3999 90)
 			(effects
 				(font
@@ -8510,7 +8510,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J38")
+					(reference "J67")
 					(unit 1)
 				)
 			)
@@ -8526,7 +8526,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9390d11c-f524-4bcd-af68-eaa2b14533cf")
-		(property "Reference" "J42"
+		(property "Reference" "J79"
 			(at 181.61 173.9899 0)
 			(effects
 				(font
@@ -8584,7 +8584,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J42")
+					(reference "J79")
 					(unit 1)
 				)
 			)
@@ -8599,7 +8599,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9af5d300-b81a-4c49-8a5e-040ba37e008c")
-		(property "Reference" "C58"
+		(property "Reference" "C132"
 			(at 74.93 116.84 0)
 			(effects
 				(font
@@ -8653,7 +8653,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C58")
+					(reference "C132")
 					(unit 1)
 				)
 			)
@@ -8669,7 +8669,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9b941029-21c3-47e7-af13-4a47e58473cc")
-		(property "Reference" "J36"
+		(property "Reference" "J78"
 			(at 181.61 142.2399 0)
 			(effects
 				(font
@@ -8727,7 +8727,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J36")
+					(reference "J78")
 					(unit 1)
 				)
 			)
@@ -8744,7 +8744,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9d505bb7-8b61-4781-9f21-07ef4df0fc9e")
-		(property "Reference" "J33"
+		(property "Reference" "J64"
 			(at 20.32 106.9848 0)
 			(effects
 				(font
@@ -8797,7 +8797,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J33")
+					(reference "J64")
 					(unit 1)
 				)
 			)
@@ -8812,7 +8812,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a1a9d140-a7ec-42a5-9ecd-553395e36e4e")
-		(property "Reference" "C57"
+		(property "Reference" "C129"
 			(at 50.8 116.84 0)
 			(effects
 				(font
@@ -8866,7 +8866,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C57")
+					(reference "C129")
 					(unit 1)
 				)
 			)
@@ -8882,7 +8882,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a6565338-7b9c-4e0f-bab2-90f179154a47")
-		(property "Reference" "C63"
+		(property "Reference" "C136"
 			(at 80.9752 182.0164 0)
 			(effects
 				(font
@@ -8936,7 +8936,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C63")
+					(reference "C136")
 					(unit 1)
 				)
 			)
@@ -8952,7 +8952,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a6c3ec59-579a-48fa-8cba-01a039876267")
-		(property "Reference" "J27"
+		(property "Reference" "J72"
 			(at 181.61 50.7745 0)
 			(effects
 				(font
@@ -9007,7 +9007,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J27")
+					(reference "J72")
 					(unit 1)
 				)
 			)
@@ -9022,7 +9022,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "aeaafe28-7ff8-4648-8b21-5e4466a09091")
-		(property "Reference" "C127"
+		(property "Reference" "C144"
 			(at 265.938 51.816 0)
 			(effects
 				(font
@@ -9076,7 +9076,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C127")
+					(reference "C144")
 					(unit 1)
 				)
 			)
@@ -9092,7 +9092,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "aebf5937-f669-4d65-9b77-de3f8c8236bf")
-		(property "Reference" "J29"
+		(property "Reference" "J74"
 			(at 181.61 71.0945 0)
 			(effects
 				(font
@@ -9147,7 +9147,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J29")
+					(reference "J74")
 					(unit 1)
 				)
 			)
@@ -9163,7 +9163,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "af54371d-7d29-4336-919f-d3d6cd748fb3")
-		(property "Reference" "D6"
+		(property "Reference" "D18"
 			(at 97.79 60.9346 90)
 			(effects
 				(font
@@ -9299,7 +9299,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D6")
+					(reference "D18")
 					(unit 1)
 				)
 			)
@@ -9314,7 +9314,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b02807b2-68ee-4443-a587-8ddca9c1bd56")
-		(property "Reference" "C51"
+		(property "Reference" "C128"
 			(at 49.53 58.3946 0)
 			(effects
 				(font
@@ -9368,7 +9368,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C51")
+					(reference "C128")
 					(unit 1)
 				)
 			)
@@ -9384,7 +9384,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c8a7ff09-6b70-4de4-9ff3-15ae6732423d")
-		(property "Reference" "D7"
+		(property "Reference" "D16"
 			(at 61.2394 97.1296 0)
 			(effects
 				(font
@@ -9519,7 +9519,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "D7")
+					(reference "D16")
 					(unit 1)
 				)
 			)
@@ -9534,7 +9534,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ca816e30-5486-4fd3-bb48-1ce26a86e15c")
-		(property "Reference" "U102"
+		(property "Reference" "U91"
 			(at 253.9746 34.4932 0)
 			(effects
 				(font
@@ -9589,7 +9589,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U102")
+					(reference "U91")
 					(unit 1)
 				)
 			)
@@ -9604,7 +9604,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cc7465e7-3dbe-4cf7-b138-683121507d7a")
-		(property "Reference" "U20"
+		(property "Reference" "U90"
 			(at 104.7496 83.4898 0)
 			(effects
 				(font
@@ -9659,7 +9659,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U20")
+					(reference "U90")
 					(unit 1)
 				)
 			)
@@ -9674,7 +9674,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d31df361-e340-4b59-85e4-9ddb37329dcd")
-		(property "Reference" "C52"
+		(property "Reference" "C131"
 			(at 73.66 58.3946 0)
 			(effects
 				(font
@@ -9728,7 +9728,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C52")
+					(reference "C131")
 					(unit 1)
 				)
 			)
@@ -9743,7 +9743,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d8aebcca-4a76-41ea-9bab-10c903db1930")
-		(property "Reference" "C59"
+		(property "Reference" "C135"
 			(at 85.09 116.84 0)
 			(effects
 				(font
@@ -9797,7 +9797,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "C59")
+					(reference "C135")
 					(unit 1)
 				)
 			)
@@ -9814,7 +9814,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "db5e892c-6736-48d6-b5ad-6099c40609aa")
-		(property "Reference" "J26"
+		(property "Reference" "J63"
 			(at 20.32 45.9994 0)
 			(effects
 				(font
@@ -9867,7 +9867,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J26")
+					(reference "J63")
 					(unit 1)
 				)
 			)
@@ -9883,7 +9883,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "de36e911-b729-4dea-815b-681672db7177")
-		(property "Reference" "J31"
+		(property "Reference" "J76"
 			(at 181.61 90.1699 0)
 			(effects
 				(font
@@ -9938,7 +9938,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J31")
+					(reference "J76")
 					(unit 1)
 				)
 			)
@@ -9955,7 +9955,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e6f19da5-56f8-4cf2-9fa3-ffd8736ff063")
-		(property "Reference" "J40"
+		(property "Reference" "J69"
 			(at 123.19 152.3999 90)
 			(effects
 				(font
@@ -10013,7 +10013,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J40")
+					(reference "J69")
 					(unit 1)
 				)
 			)
@@ -10030,7 +10030,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ee1b3844-85f1-4ffd-961c-7f56ae71f35c")
-		(property "Reference" "J39"
+		(property "Reference" "J68"
 			(at 96.52 152.3999 90)
 			(effects
 				(font
@@ -10088,7 +10088,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J39")
+					(reference "J68")
 					(unit 1)
 				)
 			)
@@ -10105,7 +10105,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fb08668f-e50a-4a16-aa71-a3133aafa837")
-		(property "Reference" "J43"
+		(property "Reference" "J65"
 			(at 20.32 173.0248 0)
 			(effects
 				(font
@@ -10158,7 +10158,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "J43")
+					(reference "J65")
 					(unit 1)
 				)
 			)
@@ -10173,7 +10173,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fc6efef6-6b08-41d2-8729-fa234c17ee7d")
-		(property "Reference" "U21"
+		(property "Reference" "U88"
 			(at 60.9346 105.6132 0)
 			(effects
 				(font
@@ -10228,7 +10228,7 @@
 		(instances
 			(project "Schematics-Midi32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/95306b60-5045-41b3-9495-58e5e819ea03"
-					(reference "U21")
+					(reference "U88")
 					(unit 1)
 				)
 			)

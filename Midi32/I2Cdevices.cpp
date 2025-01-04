@@ -214,7 +214,7 @@ void I2C_INTERFACE_C::Zero ()
                 bd.DataDtoA = 0;
                 this->Write4728 (bd);
                 }
-            if ( bd.Board.NumberDigital )           // Check for 8575 16 channel digital
+            if ( bd.Board.NumberDigital )           // Check for digital 8575 16 channel or 8574 8 channel
                 {
                 bd.DataDigital = 0;
                 this->Write8575 (bd);

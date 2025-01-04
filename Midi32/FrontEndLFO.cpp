@@ -25,50 +25,61 @@ static const char* LabelM = "M";
 #endif
 
 //#######################################################################
-void SYNTH_FRONT_C::PitchBend (uint8_t ch, int value)
+void SYNTH_FRONT_C::PitchBend (short ch, short value)
     {
-    float scaler = (value + 16384) * BEND_SCALER;
-    this->Lfo.PitchBend (scaler);
-    DBG ("Pitch bend > %f", scaler);
+    this->Lfo[0].PitchBend (value);
+    DBG ("Pitch bend > %d", value);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SelectWaveVCA (uint8_t ch, uint8_t state)
+void SYNTH_FRONT_C::ToggleSelectModVCA (short ch)
     {
+    DisplayMessage.LfoSoftwareSelect (ch);
     for ( int z = 0;  z < CHAN_COUNT;  z++)
-        this->pChan[z]->pOsc()->SetSoftLFO (ch, state);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SelectWaveVCF (uint8_t ch, uint8_t state)
-    {
-    this->Lfo.Select (ch, state);
+        this->pChan[z]->pOsc()->ToggleSoftLFO (ch);
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetLevelLFO (uint8_t data)
+void SYNTH_FRONT_C::FreqLFO (short ch, short data)
     {
-    this->Lfo.Level (data * PERS_SCALER);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::FreqLFO (byte ch, byte data)
-    {
-    float zf = (float)data * PRS_SCALER;
-
     switch ( ch )
         {
         case 2:
-            this->Lfo.SetPulseWidth (zf);
+            DisplayMessage.LfoHardwarePulseWidth (data);
+            this->Lfo[0].SetPulseWidth (data);
             break;
         case 1:
-            DisplayMessage.HardwareFreqLFO (data);
-            this->Lfo.SetFreq (zf);
+            DisplayMessage.LfoHardwareFreq (data);
+            this->Lfo[0].SetFreq (data);
             break;
         case 0:
-            DisplayMessage.SoftwareFreqLFO (data);
-            SoftLFO.SetFrequency (zf);
+            DisplayMessage.LfoSoftwareFreq (data);
+            SoftLFO.SetFrequency (data);
             break;
         }
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::ToggleSelectWaveVCO (short ch)
+    {
+    DisplayMessage.LfoHardwareSelect (ch);
+    this->Lfo[0].Toggle (ch);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SetLevelLFO (short data)
+    {
+    DisplayMessage.LfoSoftwareFreq (data);
+    this->Lfo[0].Level (data);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::ToggleRampSlope ()
+    {
+    uint8_t z;
+
+    z = !this->Lfo[0].GetSawSlope ();
+    DisplayMessage.LfoHardwareRampSlope (z);
+    this->Lfo[0].SetSawSlope (z);
     }
 

@@ -15,9 +15,21 @@ typedef struct MELEMENT_S
     lv_obj_t*               Unit;
     lv_obj_t*               Value;
     lv_style_t              Style;
-        MELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
+    MELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
         {  }
     } METER_ELEMENT_S;
+
+//############################################
+typedef struct LFO_ELEMENT_S
+    {
+    lv_meter_indicator_t*   Gauge;
+    lv_obj_t*               Label;
+    lv_obj_t*               Unit;
+    lv_obj_t*               Value;
+    lv_style_t              Style;
+    LFO_ELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
+        {  }
+    } LFO_ELEMENT_S;
 
 //############################################
 class TITLE_WIDGET_C
@@ -38,7 +50,6 @@ private:
     lv_obj_t*        Led;
     METER_ELEMENT_S  Attack;
     METER_ELEMENT_S  Decay;
-    METER_ELEMENT_S  Sustain;
     METER_ELEMENT_S  Release;
 
     void  InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, short y, uint32_t color);
@@ -48,7 +59,6 @@ public:
     void  Select              (bool sel);
     void  SetAttack           (int val);
     void  SetDecay            (int val);
-    void  SetSustain          (int val);
     void  SetRelease          (int val);
     };
 
@@ -74,7 +84,7 @@ public:
     };
 
 //############################################
-class SAWTOOTH_WIDGET_C
+class RAMP_WIDGET_C
     {
 private:
     lv_obj_t*   SlopeFore;
@@ -83,7 +93,7 @@ private:
     lv_style_t  StyleBack;
 
 public:
-         SAWTOOTH_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+         RAMP_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
     void SetDir            (bool dir);
     };
 
@@ -121,7 +131,12 @@ public:
 class LFO_METER_WIDGET_C
     {
 private:
-    lv_obj_t*       Meter;
+    lv_obj_t*        Meter;
+    lv_obj_t*        Led;
+    METER_ELEMENT_S  Sine;
+    METER_ELEMENT_S  Ramp;
+    METER_ELEMENT_S  Pulse;
+
     METER_ELEMENT_S MeterFreq;
     bool            SoftwareLFO;
 
@@ -130,6 +145,10 @@ private:
 public:
          LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software);
     void SetFreq            (short val);
+    void Select             (bool sel);
+    void SetSine            (int val);
+    void SetRamp            (int val);
+    void SetPulse           (int val);
     };
 
 //############################################

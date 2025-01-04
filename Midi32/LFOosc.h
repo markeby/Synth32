@@ -9,12 +9,11 @@
 #include "config.h"
 
 
-#define LFO_VCA_COUNT     4
+#define LFO_VCA_COUNT     3
 
 //#######################################################################
 enum class SHAPE {
     SINE = 0,
-    TRIANGLE,
     SAWTOOTH,
     PULSE,
     };
@@ -23,11 +22,9 @@ enum class D_A_OFF {
     BEND = 0,
     WIDTH,
     FREQ,
-    DIR,
-    SINE,
-    PULSE,
     SAWTOOTH,
-    TRIANGLE
+    PULSE,
+    SINE
     };
 
 #define MAX_FREQ_DEV    32
@@ -39,13 +36,18 @@ private:
     bool    Valid;
     int     Active;
     int     Number;
-    byte    OscChannel;
-    byte    PwmChannel;
-    byte    BendChannel;
+    byte    OscChannelIO;
+    byte    PwmChannelIO;
+    byte    BendChannelIO;
+    byte    SlopeChannelIO;
+    byte    HardResetChannelIO;
+    byte    InUse;
     bool    UpdateNeded;
-    float   CurrentFreq;
+    short   CurrentFreq;
     float   CurrentWidth;
     byte    CurrentLevel;
+    bool    SawtoothSlope;
+    bool    ResetOn;
 
     typedef struct
         {
@@ -59,18 +61,23 @@ private:
     VCA_T     Vca[OSC_MIXER_COUNT];
 
     void  ClearState (void);
-    void  SetLevel  (uint8_t ch, uint8_t data);
+    void  SetLevel   (uint8_t ch, uint8_t data);
 
 public:
-         SYNTH_LFO_C     (void);
-    void Begin           (int num, uint8_t first_device);
-    void Clear           (void);
-    void SetFreq         (float percent);
-    void SetPulseWidth   (float percent);
-    void SetMaxLevel     (uint8_t ch, uint8_t data);
-    void Level           (uint8_t data);
-    void Select          (uint8_t ch, bool sel);
-    void PitchBend       (float percent);
+         SYNTH_LFO_C    (void);
+    void Begin          (int num, uint8_t first_device, uint8_t lfo_digital);
+    void Clear          (void);
+    void SetFreq        (short value);
+    void SetPulseWidth  (short value);
+    void SetMaxLevel    (uint8_t ch, uint8_t data);
+    void Level          (uint8_t data);
+    void Toggle         (short ch);
+    void PitchBend      (short value);
+    void SetSawSlope    (bool val);
+    void HardReset      (void);
+    void Loop           (void);
+
+    bool GetSawSlope    (void)          { return (SawtoothSlope); }
     };
 
 

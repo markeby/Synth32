@@ -22,7 +22,7 @@ public:
          SOFT_LFO_C     (void);
         ~SOFT_LFO_C     ()  {}
 
-    void SetFrequency   (float freqpercent);
+    void SetFrequency   (short value);
     void Loop           (float millisec);
     void Multiplier     (float value);
 

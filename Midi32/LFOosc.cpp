@@ -19,15 +19,18 @@ static const char* Label = "LFO";
 #endif
 
 #define CONST_MULT      (DA_RANGE / FULL_KEYS)
-static  const char*     MixerNames[] = { "sine", "triangle", "saw", "pulse" };
+static  const char*     _MixerNames[] = { "sine", "saw", "pulse" };
 
 //#######################################################################
 SYNTH_LFO_C::SYNTH_LFO_C ()
     {
-    Valid         = false;
-    UpdateNeded   = false;
-    CurrentLevel  = 0;
-    CurrentFreq   = 0.0;
+    this->Valid         = false;
+    this->UpdateNeded   = false;
+    this->CurrentLevel  = 0;
+    this->CurrentFreq   = 0.0;
+    this->ResetOn       = false;
+    this->SawtoothSlope = false;
+    this->InUse         = 0;
     }
 
 //#######################################################################
@@ -35,7 +38,7 @@ void SYNTH_LFO_C::ClearState ()
     {
     for ( int z = 0;  z < LFO_VCA_COUNT;  z++)
         {
-        VCA_T& m = Vca[z];
+        SYNTH_LFO_C::VCA_T& m = this->Vca[z];
         I2cDevices.D2Analog (m.Channel, 0);
         }
     }
@@ -44,55 +47,57 @@ void SYNTH_LFO_C::ClearState ()
 void SYNTH_LFO_C::SetMaxLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
+    this->Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
 
-    DBG ("Level limit > %d", Vca[ch].MaximumLevel);
+    DBG ("Level limit > %d", this->Vca[ch].MaximumLevel);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    z = (z > Vca[ch].MaximumLevel ) ? Vca[ch].MaximumLevel : z;
+    z = (z > this->Vca[ch].MaximumLevel ) ? this->Vca[ch].MaximumLevel : z;
 
-    if ( z != Vca[ch].CurrentLevel )
+    if ( z != this->Vca[ch].CurrentLevel )
         {
-        Vca[ch].CurrentLevel = z;
-        I2cDevices.D2Analog (Vca[ch].Channel,  z);
-        UpdateNeded = true;
-        DBG ("%s level > %d", Vca[ch].Name, z);
+        this->Vca[ch].CurrentLevel = z;
+        I2cDevices.D2Analog (this->Vca[ch].Channel,  z);
+        this->UpdateNeded = true;
+        DBG ("%s level > %d", this->Vca[ch].Name, z);
         }
     }
 
 //#######################################################################
 //#######################################################################
-void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
+void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
     {
-    Number = num;
-    // D/A configuration
-    OscChannel = first_device + uint8_t(D_A_OFF::FREQ);
-    PwmChannel = first_device + uint8_t(D_A_OFF::WIDTH);
-    BendChannel = first_device + uint8_t(D_A_OFF::BEND);
-    Vca[int(SHAPE::TRIANGLE)].Channel = first_device + uint8_t(D_A_OFF::TRIANGLE);
-    Vca[int(SHAPE::SAWTOOTH)].Channel = first_device + uint8_t(D_A_OFF::SAWTOOTH);
-    Vca[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
-    Vca[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
+    this->Number = num;
+    // D/A configurations
+    this->OscChannelIO = first_device + uint8_t(D_A_OFF::FREQ);
+    this->PwmChannelIO = first_device + uint8_t(D_A_OFF::WIDTH);
+    this->BendChannelIO = first_device + uint8_t(D_A_OFF::BEND);
+    this->Vca[int(SHAPE::SAWTOOTH)].Channel = first_device + uint8_t(D_A_OFF::SAWTOOTH);
+    this->Vca[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
+    this->Vca[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
+    this->SlopeChannelIO = lfo_digital;
+    this->HardResetChannelIO  = lfo_digital + 1;
 
-    // Initialize mixer
+    // Initialize mixers
+
     for ( int z = 0;  z < LFO_VCA_COUNT;  z++ )
         {
-        Vca[z].Name         = MixerNames[z];
-        Vca[z].CurrentLevel = 0;
-        Vca[z].MaximumLevel = MAX_DA;
+        this->Vca[z].Name         = _MixerNames[z];
+        this->Vca[z].CurrentLevel = 0;
+        this->Vca[z].MaximumLevel = MAX_DA;
         }
 
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
         {
-        Valid = true;
-        PitchBend (50.0);
-        ClearState ();
+        this->Valid = true;
+        this->PitchBend (2048);
+        this->ClearState ();
         if ( DebugOsc )
-            printf("\t  >> LFO %d started for device %d\n", Number, first_device);
+            printf("\t  >> LFO %d started for device %d\n", this->Number, first_device);
         }
     else
         printf("\t  ** LFO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
@@ -101,73 +106,101 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device)
 //#######################################################################
 void SYNTH_LFO_C::Clear ()
     {
-    ClearState ();
+    this->ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetFreq (float percent)
+void SYNTH_LFO_C::SetFreq (short value)
     {
-    CurrentFreq = percent;
-    int z = CurrentFreq * MAX_DA;
-    DBG ("Set frequency %d", z);
-    I2cDevices.D2Analog (OscChannel, z);
+    this->CurrentFreq = value;
+    DBG ("Set frequency %d", value);
+    I2cDevices.D2Analog (this->OscChannelIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetPulseWidth (float percent)
+void SYNTH_LFO_C::SetPulseWidth (short value)
     {
-    CurrentWidth = percent;
-    int z = CurrentWidth * MAX_DA;
-    DBG ("Set pulse width %d", z);
-    I2cDevices.D2Analog (PwmChannel, z);
+    this->CurrentWidth = value;
+    DBG ("Set pulse width %d", value);
+    I2cDevices.D2Analog (this->PwmChannelIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Select (uint8_t ch, bool sel)
+void SYNTH_LFO_C::Toggle (short ch)
     {
-    Vca[ch].Select = sel;
-    if ( sel )
-        SetLevel (ch, CurrentLevel);
-    else
-        SetLevel (ch, 0);
-
-    if ( UpdateNeded )
+    Vca[ch].Select = !Vca[ch].Select;
+    if ( Vca[ch].Select )
         {
-        I2cDevices.UpdateAnalog ();     // Update D/A ports
-        UpdateNeded = false;
+        this->InUse++;
+        this->SetLevel (ch, CurrentLevel);
+        }
+    else
+        {
+        this->InUse--;
+        this->SetLevel (ch, 0);
         }
 
-    DBG ("%s(%d) selected %s", Vca[ch].Name, ch, ((sel) ? "ON" : "off"));
+    if ( this->UpdateNeded )
+        {
+        I2cDevices.UpdateAnalog ();     // Update D/A ports
+        this->UpdateNeded = false;
+        }
+
+    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((Vca[ch].Select) ? "ON" : "off"));
     }
 
 //#######################################################################
 void SYNTH_LFO_C::Level (uint8_t data)
     {
-    CurrentLevel = data;
+    this->CurrentLevel = data;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
         {
-        if ( Vca[z].Select )
-            SetLevel (z, data);
+        if ( this->Vca[z].Select )
+            this->SetLevel (z, data);
         else
-            SetLevel (z, 0);
+            this->SetLevel (z, 0);
         }
-    if ( UpdateNeded )
+    if ( this->UpdateNeded )
         {
         I2cDevices.UpdateAnalog ();     // Update D/A ports
-        UpdateNeded = false;
+        this->UpdateNeded = false;
         }
+    if ( InUse )
+        DisplayMessage.LfoHardwareLevel (data);
     }
 
 //#######################################################################
-void SYNTH_LFO_C::PitchBend (float percent)
+void SYNTH_LFO_C::PitchBend (short value)
     {
-    if ( percent < 1.0 )
-        percent = 1.0;
-    I2cDevices.D2Analog(BendChannel, (percent * 0.01) * (float)MAX_DA);
+    I2cDevices.D2Analog(this->BendChannelIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
+//#######################################################################
+void SYNTH_LFO_C::SetSawSlope (bool val)
+    {
+    this->SawtoothSlope = val;
+    I2cDevices.DigitalOut (this->SlopeChannelIO, val);
+    I2cDevices.UpdateDigital ();
+    }
+
+//#######################################################################
+void SYNTH_LFO_C::HardReset (void)
+    {
+    I2cDevices.DigitalOut (this->HardResetChannelIO, true);
+    this->ResetOn = true;
+    }
+
+//#######################################################################
+void SYNTH_LFO_C::Loop (void)
+    {
+    if (  this->ResetOn )
+        {
+        I2cDevices.DigitalOut(this->HardResetChannelIO, false);
+        this->ResetOn = false;
+        }
+    }
 

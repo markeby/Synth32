@@ -44,6 +44,7 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        7,     0x20,     0,    0,     16,  "Dig #120 - 135     " },   // Digital 48
       { 2,        7,     0x21,     0,    0,     16,  "Dig #136 - 151     " },   // Digital 48
       { 2,        7,     0x22,     0,    0,     16,  "Dig #152 - 167     " },   // Digital 48
+      { 2,        6,     0x70,     0,    0,      8,  "Dig #168 - 175     " },   // LFO controls
       {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
@@ -174,7 +175,7 @@ void setup (void)
         SynthActive = true;
 
         // Setup initial state of synth
-        SynthFront.Begin (START_OSC_ANALOG, START_MULT_DIGITAL, START_NOISE_DIGITAL);
+        SynthFront.Begin (START_OSC_ANALOG, START_MULT_DIGITAL, START_NOISE_DIGITAL, START_LFO_DIGITAL);
 
         printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);

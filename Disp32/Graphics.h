@@ -21,7 +21,7 @@ class ESP_Panel;
 class TITLE_WIDGET_C;
 class ADSR_METER_WIDGET_C;
 class LEVEL_WIDGET_C;
-class SAWTOOTH_WIDGET_C;
+class RAMP_WIDGET_C;
 class PULSE_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class LFO_METER_WIDGET_C;
@@ -45,7 +45,7 @@ private:
     ADSR_METER_WIDGET_C*    MeterADSR[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         MaxLevel[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         SustainLevel[OSC_MIXER_COUNT];
-    SAWTOOTH_WIDGET_C*      SawtoothDir;
+    RAMP_WIDGET_C*          RampDir;
     PULSE_WIDGET_C*         PulseWidth;
     NOISE_WIDGET_C*         Noise;
 
@@ -61,6 +61,12 @@ class PAGE_MOD_C : protected PAGE_TITLE_C
 private:
     TITLE_WIDGET_C*         TitleHardware;
     LFO_METER_WIDGET_C*     MeterHardware;
+    RAMP_WIDGET_C*          RampDir;
+    PULSE_WIDGET_C*         PulseWidth;
+    bool                    SelectSine;
+    bool                    SelectRamp;
+    bool                    SelectPulse;
+    int                     Level;
 
     TITLE_WIDGET_C*         TitleSoftware;
     LFO_METER_WIDGET_C*     MeterSoftware;

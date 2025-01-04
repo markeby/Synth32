@@ -39,12 +39,12 @@ private:
     uint64_t              DispMessageTimer;
 
     MIDI_MAP*             FaderMap;
-    MIDI_MAP*             KnobMap;
-    MIDI_MAP*             SwitchMap;
+    MIDI_BUTTON_MAP*      ButtonMap;
+    MIDI_ENCODER_MAP*     KnobMap;
     MIDI_XL_MAP*          XlMap;
     ENVELOPE_GENERATOR_C  EnvADSL;
     MULTIPLEX_C*          pMultiplexer;
-    SYNTH_LFO_C           Lfo;
+    SYNTH_LFO_C           Lfo[2];
     NOISE_C*              pNoise;
 
     CHANNEL_C*            pChan[CHAN_COUNT];
@@ -58,51 +58,52 @@ private:
     bool                  TuningOn[CHAN_COUNT];
     bool                  TuningChange;
 
-    String Selected         (void);
-    void   ShowChannelXL    (int val);
+    String Selected             (void);
+    void   ShowChannelXL        (int val);
 
 public:
     byte  CurrentZone;
     byte  ZoneCount;
 
-          SYNTH_FRONT_C      (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map);
-    void  Begin              (int osc_d_a, int mult_digital, int noise_digital);
-    void  ResetXL            (void);
-    void  Loop               (void);
-    void  Clear              (void);
-    void  DualZone           (byte chan, bool state);
-    void  Controller         (byte chan, byte type, byte value);
-
-    // FrontEndLFO.cpp
-    void  PitchBend          (byte chan, int value);
-    void  SelectWaveVCA      (byte ch, byte state);
-    void  SelectWaveVCF      (byte ch, byte state);
-    void  SetLevelLFO        (byte data);
-    void  FreqLFO            (byte ch, byte data);
-
-    // FrontEndOscCtrl.cpp
-    void  ChannelSetSelect   (byte chan, bool state);
-    void  SetMaxLevel        (byte ch, byte data);
-    void  SetAttackTime      (byte data);
-    void  SetDecayTime       (byte data);
-    void  SetSustainLevel    (byte ch, byte data);
-    void  SetSustainTime     (byte data);
-    void  SetReleaseTime     (byte data);
-    void  SawtoothDirection  (bool data);
-    void  SetPulseWidth      (byte data);
-    void  SetNoise           (byte ch, bool state);
-    void  SaveAllSettings    (void);
-
-
-    void  Tuning             (void);
-    void  TuningAdjust       (bool up);
-    void  StartTuning        (void);
-
-    void  DisplayUpdate      (int zone);
+          SYNTH_FRONT_C         (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map);
+    void  Begin                 (int osc_d_a, int mult_digital, int noise_digital, int lfo_digital);
+    void  ResetXL               (void);
+    void  Loop                  (void);
+    void  Clear                 (void);
+    void  DualZone              (short chan, bool state);
+    void  Controller            (byte short, byte type, byte value);
 
     //#######################################################################
-    MULTIPLEX_C* Multiplex (void);
-    NOISE_C*     Noise     (void);
+    // FrontEndLFO.cpp
+    void  PitchBend             (short chan, short value);
+    void  ToggleSelectModVCA    (short ch);
+    void  FreqLFO               (short ch, short data);
+    void  ToggleSelectWaveVCO   (short ch);
+    void  ToggleRampSlope       (void);
+    void  SetLevelLFO           (short data);
+
+    // FrontEndOscCtrl.cpp
+    void  ChannelSetSelect      (short chan, bool state);
+    void  SetMaxLevel           (short ch, short data);
+    void  SetAttackTime         (short data);
+    void  SetDecayTime          (short data);
+    void  SetSustainLevel       (short ch, short data);
+    void  SetReleaseTime        (short data);
+    void  SawtoothDirection     (bool data);
+    void  SetPulseWidth         (short data);
+    void  SetNoise              (short ch, bool state);
+    void  SaveAllSettings       (void);
+
+
+    void  Tuning                (void);
+    void  TuningAdjust          (bool up);
+    void  StartTuning           (void);
+
+    void  DisplayUpdate         (int zone);
+
+    //#######################################################################
+    MULTIPLEX_C* Multiplex      (void);
+    NOISE_C*     Noise          (void);
 
     //#######################################################################
     inline void SetClearKeyRed (byte key)

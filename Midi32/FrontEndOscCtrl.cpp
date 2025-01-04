@@ -27,11 +27,11 @@ static const char* LabelM = "M";
 #endif
 
 //#######################################################################
-void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
+void SYNTH_FRONT_C::ChannelSetSelect (short chan, bool state)
     {
     pChan[this->ZoneBase]->SelectedEnvelope[chan] = state;
     DisplayMessage.OscSelected (CurrentZone, chan, pChan[this->ZoneBase]->SelectedEnvelope[chan]);
-    DBG ("%s %s ", SwitchMap[chan].Desc, ( pChan[this->ZoneBase]->SelectedEnvelope[chan] ) ? "ON" : "off");
+    DBG ("%s %s ", ButtonMap[chan].Desc, ( pChan[this->ZoneBase]->SelectedEnvelope[chan] ) ? "ON" : "off");
 
     byte val = 0x0C;
     for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
@@ -43,7 +43,7 @@ void SYNTH_FRONT_C::ChannelSetSelect (byte chan, bool state)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
+void SYNTH_FRONT_C::SetMaxLevel (short ch, short data)
     {
     if ( this->SetTuning )
         {
@@ -62,7 +62,7 @@ void SYNTH_FRONT_C::SetMaxLevel (byte ch, byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetAttackTime (byte data)
+void SYNTH_FRONT_C::SetAttackTime (short data)
     {
     float dtime = data * TIME_MULT;
 
@@ -78,7 +78,7 @@ void SYNTH_FRONT_C::SetAttackTime (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetDecayTime (byte data)
+void SYNTH_FRONT_C::SetDecayTime (short data)
     {
     float dtime = data * TIME_MULT;
 
@@ -94,7 +94,7 @@ void SYNTH_FRONT_C::SetDecayTime (byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
+void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
     {
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < ZoneCount;  z++ )
@@ -103,28 +103,7 @@ void SYNTH_FRONT_C::SetSustainLevel (byte ch, byte data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetSustainTime (byte data)
-    {
-    float dtime;
-
-    if ( data == 0 )
-        dtime = -1;
-    else
-        dtime = data * TIME_MULT;
-
-    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
-        {
-        if ( this->pChan[this->ZoneBase]->SelectedEnvelope[ch] )
-            {
-            for ( int z = 0;  z < ZoneCount;  z++)
-                this->pChan[this->ZoneBase + z]->pOsc()->SetSustainTime (ch, dtime);
-            DisplayMessage.OscSustainTime (CurrentZone, ch, data);
-            }
-        }
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SetReleaseTime (byte data)
+void SYNTH_FRONT_C::SetReleaseTime (short data)
     {
     float dtime = data * TIME_MULT;
 
@@ -150,7 +129,7 @@ void SYNTH_FRONT_C::SawtoothDirection (bool data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetPulseWidth (byte data)
+void SYNTH_FRONT_C::SetPulseWidth (short data)
     {
     float percent = data * PRS_SCALER;
     for ( int z = 0;  z < ZoneCount;  z++)
@@ -159,7 +138,7 @@ void SYNTH_FRONT_C::SetPulseWidth (byte data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SetNoise (byte ch, bool state)
+void SYNTH_FRONT_C::SetNoise (short ch, bool state)
     {
     int z;
 

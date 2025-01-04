@@ -49,8 +49,8 @@ private:
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
     byte                    CurrentNote;
-    byte                    OscChannel;
-    byte                    PwmChannel;
+    byte                    OscChannelIO;
+    byte                    PwmChannelIO;
     byte                    SawtoothDirChannel;
 
     void  ClearState (void);
@@ -64,10 +64,9 @@ public:
     void        Clear              (void);
     void        SawtoothDirection  (bool data);
     void        PulseWidth         (float percent);
-    void        SetSoftLFO         (byte wave, bool state);
+    void        ToggleSoftLFO      (short wave);
     void        SetAttackTime      (byte wave, float time);
     void        SetDecayTime       (byte wave, float time);
-    void        SetSustainTime     (byte wave, float time);
     void        SetReleaseTime     (byte wave, float time);
     void        SetSustainLevel    (byte wave, float level_percent);
     void        SetMaxLevel        (byte wave, float level_percent);
@@ -79,7 +78,6 @@ public:
     inline float     GetSustainLevel (byte wave)       { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
     inline float     GetAttackTime   (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::ATTACK)); }
     inline float     GetDecayTime    (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::DECAY)); }
-    inline float     GetSustainTime  (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::SUSTAIN)); }
     inline float     GetReleaseTime  (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::RELEASE)); }
     inline uint16_t* GetBankAddr     (void)            { return (this->OctaveArray); }
     };

@@ -64,6 +64,7 @@ extern bool AnalogDiagEnabled;
 #define START_OSC_ANALOG        0
 #define START_MULT_DIGITAL      88
 #define START_NOISE_DIGITAL     104
+#define START_LFO_DIGITAL       168
 #define D_A_COUNT               88
 
 //#################################################
@@ -93,33 +94,48 @@ extern uint64_t RunTime;
 //#################################################
 typedef struct
     {
-    byte        Index;
+    short       Index;
     const char* Desc;
-    void       (*CallBack)(byte chan, byte data);
+    void       (*CallBack)(short chan, short data);
     }  MIDI_MAP;
+
 typedef struct
     {
-    byte        Index;
+    short       Index;
+    const char* Desc;
+    void       (*CallBack)(short chan);
+    }  MIDI_BUTTON_MAP;
+
+typedef struct
+    {
+    short       Index;
     byte        Color;
     const char* Desc;
-    void       (*CallBack)(byte chan, byte data);
+    void       (*CallBack)(short chan, short data);
     }  MIDI_XL_MAP;
 
+typedef struct
+    {
+    short       Index;
+    const char* Desc;
+    void        (*CallBack)(short chan, short data);
+    int         Value;
+    }  MIDI_ENCODER_MAP;
 
 typedef byte  LED_NOTE_MAP;
 
 //#################################################
 //  Synth interfaces
 //#################################################
-extern MIDI_MAP       FaderMapArray[];
-extern MIDI_MAP       KnobMapArray[];
-extern MIDI_MAP       SwitchMapArray[];
-#define SIZE_CL_MAP   56
-#define SIZE_S_LED    24
-extern MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP];
-extern LED_NOTE_MAP   SendA[];
-extern LED_NOTE_MAP   SendB[];
-extern LED_NOTE_MAP   PanDevice[];
+extern MIDI_MAP             FaderMapArray[];
+extern MIDI_ENCODER_MAP     KnobMapArray[];
+extern MIDI_BUTTON_MAP      SwitchMapArray[];
+#define SIZE_CL_MAP         56
+#define SIZE_S_LED          24
+extern MIDI_XL_MAP          XlMapArray[SIZE_CL_MAP];
+extern LED_NOTE_MAP         SendA[];
+extern LED_NOTE_MAP         SendB[];
+extern LED_NOTE_MAP         PanDevice[];
 
 //#################################################
 //  I2C bus interfaces

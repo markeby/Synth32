@@ -46,31 +46,31 @@ void FuncMessage (const MidiMessage& msg)
     }
 
 //###################################################################
-static void  FuncKeyDown (uint8_t chan, uint8_t key, uint8_t velocity)
+static void  FuncKeyDown (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    DBGM ("Key down  channel: %d  key: %d  velocity: %d", chan, key, velocity);
-    SynthFront.KeyDown (chan, key, velocity);
+    DBGM ("Key down  channel: %d  key: %d  velocity: %d", mchan, key, velocity);
+    SynthFront.KeyDown (mchan, key, velocity);
     }
 
 //###################################################################
-static void  FuncKeyUp (uint8_t chan, uint8_t key, uint8_t velocity)
+static void  FuncKeyUp (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    DBGM ("Key up  channel: %d  key: %d  velocity: %d", chan, key, velocity);
-    SynthFront.KeyUp (chan, key, velocity);
+    DBGM ("Key up  channel: %d  key: %d  velocity: %d", mchan, key, velocity);
+    SynthFront.KeyUp (mchan, key, velocity);
     }
 
 //###################################################################
-static void FuncController (uint8_t chan, uint8_t type, uint8_t value)
+static void FuncController (uint8_t mchan, uint8_t type, uint8_t value)
     {
-    SynthFront.Controller (chan, type, value);
-    DBGM ("Controller  Chan %2.2X  type %2.2X  value %2.2X", chan, type, value);
+    SynthFront.Controller (mchan, type, value);
+    DBGM ("Controller  Chan %2.2X  type %2.2X  value %2.2X", mchan, type, value);
     }
 
 //###################################################################
-static void FuncPitchBend (uint8_t chan, int value)
+static void FuncPitchBend (uint8_t mchan, int value)
     {
-    SynthFront.PitchBend(chan, value);
-    DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
+    SynthFront.PitchBend (mchan, value);
+    DBGM ("Pitch Bend  Chan %2.2X  value %d", mchan, value);
     }
 
 //#######################################################################
@@ -123,11 +123,11 @@ String SYNTH_FRONT_C::Selected ()
     }
 
 //#####################################################################
-SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP* switch_map, MIDI_XL_MAP* xl_map)
+SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map)
     {
     this->FaderMap        = fader_map;
     this->KnobMap         = knob_map;
-    this->SwitchMap       = switch_map;
+    this->ButtonMap       = button_map;
     this->XlMap           = xl_map;
     this->Down.Key        = 0;
     this->Down.Trigger    = false;
@@ -148,7 +148,7 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_MAP* knob_map, MIDI_MAP*
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
+void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int lfo_digital)
     {
     pMultiplexer = new MULTIPLEX_C (mult_digital);
     pNoise       = new NOISE_C     (noise_digital);
@@ -198,10 +198,10 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
 //  Midi_1.setHandleSystemReset          (SystemResetCallback fptr);
 
 //  Midi_2.setHandleMessage              (FuncMessage);
-//    Midi_2.setHandleNoteOn               (FuncKeyDown);
-//    Midi_2.setHandleNoteOff              (FuncKeyUp);
-//    Midi_2.setHandleControlChange        (FuncController);
-//    Midi_2.setHandlePitchBend            (FuncPitchBend);
+//  Midi_2.setHandleNoteOn               (FuncKeyDown);
+//  Midi_2.setHandleNoteOff              (FuncKeyUp);
+//  Midi_2.setHandleControlChange        (FuncController);
+//  Midi_2.setHandlePitchBend            (FuncPitchBend);
 //  Midi_2.setHandleError                (ErrorCallback fptr);
 //  Midi_2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
 //  Midi_2.setHandleProgramChange        (ProgramChangeCallback fptr);
@@ -241,7 +241,9 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital)
         pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
-    Lfo.Begin (0, osc_d_a);
+    Lfo[0].Begin (0, osc_d_a, lfo_digital + 1);
+    osc_d_a + 6;
+    Lfo[1].Begin (1, osc_d_a, lfo_digital + 3);
 
     this->SawtoothDirection (false);
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
@@ -259,7 +261,7 @@ void SYNTH_FRONT_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::DualZone (byte chan, bool state)
+void SYNTH_FRONT_C::DualZone (short chan, bool state)
     {
     if ( chan == 0 )
         return;
@@ -296,7 +298,7 @@ void SYNTH_FRONT_C::DualZone (byte chan, bool state)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
+void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
     {
     chan--;
 
@@ -304,69 +306,87 @@ void SYNTH_FRONT_C::Controller (byte chan, byte type, byte value)
         {
         case 0x01:
             // mod wheel
-            Lfo.Level (value);
+            Lfo[0].Level (value);
             SoftLFO.Multiplier ((float)value * PRS_SCALER * 0.4);
             DBG ("modulation = %d    ", value);
             break;
         case 0x07:          // Faders controls
-            if ( FaderMap[chan].CallBack != nullptr )
+            {
+            MIDI_MAP& m = FaderMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s > %d    ", FaderMap[chan].Desc, value);
-                FaderMap[chan].CallBack (FaderMap[chan].Index, value);
+                DBG ("%s > %d    ", m.Desc, value);
+                m.CallBack (m.Index, value);
                 }
+            }
             break;
-        case 0x0a:          // Rotatation controls
-            if ( KnobMap[chan].CallBack != nullptr )
+        case 0x0a:          // Rotatational encoder controls
+            {
+            MIDI_ENCODER_MAP& m = KnobMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s > %d    ", Selected ().c_str (), KnobMap[chan].Desc, value);
-                KnobMap[chan].CallBack (KnobMap[chan].Index, value);
+                m.Value += (value & 0x1F) * ((value & 0x40) ? -1 : 1);
+                if ( m.Value > 4095 )   m.Value = 4095;
+                if ( m.Value < 0 )      m.Value = 0;
+                DBG("%s %s > %d (%d)", Selected().c_str(), m.Desc, m.Value, value);
+                KnobMap[chan].CallBack(m.Index, m.Value);
                 }
+            }
             break;
         case 0x10 ... 0x1F:
+            {
             chan = type & 0x0F;
             if ( this->SetTuning && (chan < 8) )
                 {
                 DBG ("Tuning channel %s", (( value ) ? "ON" : "Off"));
-                if ( value )
-                    this->TuningOn[chan] = true;
-                else
-                    this->TuningOn[chan] = false;
+                this->TuningOn[chan] = !this->TuningOn[chan];
                 this->TuningChange = true;
                 return;
                 }
-            if ( SwitchMap[chan].CallBack != nullptr )
+            MIDI_BUTTON_MAP& m = ButtonMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s", SwitchMap[chan].Desc, (( value ) ? "ON" : "Off"));
-                SwitchMap[chan].CallBack (SwitchMap[chan].Index, value);
+                DBG ("%s toggle", m.Desc);
+                m.CallBack (m.Index);
                 }
+            }
             break;
         case 0x72:
         case 0x74:
         case 0x75:
         case 0x76:
         case 0x77:
+            {
             chan = type - (0x72 - 16);
-            if ( SwitchMap[chan].CallBack != nullptr )
+            MIDI_BUTTON_MAP& m = ButtonMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s", SwitchMap[chan].Desc, (( value ) ? "ON" : "Off"));
-                SwitchMap[chan].CallBack (SwitchMap[chan].Index, value);
+                DBG ("%s %X",  m.Desc, value);
+                m.CallBack ( m.Index);
                 }
+            }
             break;
         case 0x30 ... 0x4F:
+            {
             chan = type - 0x30;
-            if ( XlMap[chan].CallBack != nullptr )
+            MIDI_XL_MAP& m = XlMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s > %d    ", Selected ().c_str (), XlMap[chan].Desc, value);
-                XlMap[chan].CallBack (XlMap[chan].Index, value);
+                DBG ("%s %s > %d    ", Selected ().c_str (), m.Desc, value);
+                m.CallBack (m.Index, value);
                 }
+            }
             break;
         case 0x50 ... 0x67:
+            {
             chan = type - 0x30;
-            if ( XlMap[chan].CallBack != nullptr )
+            MIDI_XL_MAP& m = XlMap[chan];
+            if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s", XlMap[chan].Desc, (( value ) ? "ON" : "Off"));
-                XlMap[chan].CallBack (XlMap[chan].Index, value);
+                DBG ("%s %s", m.Desc, (( value ) ? "ON" : "Off"));
+                m.CallBack (m.Index, value);
                 }
+            }
             break;
 
         case 120 ... 127:           // all notes stop
@@ -486,7 +506,6 @@ void SYNTH_FRONT_C::DisplayUpdate (int zone)
         DisplayMessage.OscMaxLevel     (zone, z, osc.GetMaxLevel (z));
         DisplayMessage.OscAttackTime   (zone, z, osc.GetAttackTime (z));
         DisplayMessage.OscDecayTime    (zone, z,   osc.GetDecayTime (z));
-        DisplayMessage.OscSustainTime  (zone, z, osc.GetSustainTime (z));
         DisplayMessage.OscReleaseTime  (zone, z, osc.GetReleaseTime (z));
         DisplayMessage.OscSustainLevel (zone, z,osc.GetSustainLevel (z));
         }
@@ -502,6 +521,4 @@ void SYNTH_FRONT_C::ShowChannelXL (int val)
     Midi_0.sendNoteOn (PanDevice[1], val, 1);
     delay (20);
     Midi_0.sendNoteOn (PanDevice[2], val, 1);
-    delay (20);
-    Midi_0.sendNoteOn (PanDevice[3], val, 1);
     }
