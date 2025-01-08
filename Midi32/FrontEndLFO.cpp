@@ -24,19 +24,15 @@ static const char* LabelM = "M";
 #define DBGM(args...)
 #endif
 
-//#######################################################################
-void SYNTH_FRONT_C::PitchBend (short ch, short value)
-    {
-    this->Lfo[0].PitchBend (value);
-    DBG ("Pitch bend > %d", value);
-    }
-
 //#####################################################################
-void SYNTH_FRONT_C::ToggleSelectModVCA (short ch)
+void SYNTH_FRONT_C::ToggleSelectModVCA (byte ch)
     {
-    DisplayMessage.LfoSoftwareSelect (ch);
+    bool zb = !this->ModulationVCA[ch];
+    this->ModulationVCA[ch] = zb;
+
+    DisplayMessage.LfoSoftSelect (ch, zb);
     for ( int z = 0;  z < CHAN_COUNT;  z++)
-        this->pChan[z]->pOsc()->ToggleSoftLFO (ch);
+        this->pChan[z]->pOsc()->SetSoftLFO (ch, zb);
     }
 
 //#######################################################################
@@ -45,41 +41,18 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
     switch ( ch )
         {
         case 2:
-            DisplayMessage.LfoHardwarePulseWidth (data);
+            DisplayMessage.LfoHardPulseWidth (data);
             this->Lfo[0].SetPulseWidth (data);
             break;
         case 1:
-            DisplayMessage.LfoHardwareFreq (data);
+            DisplayMessage.LfoHardFreq (data);
             this->Lfo[0].SetFreq (data);
             break;
         case 0:
-            DisplayMessage.LfoSoftwareFreq (data);
+            DisplayMessage.LfoSoftFreq (data);
             SoftLFO.SetFrequency (data);
             break;
         }
     }
 
-//#######################################################################
-void SYNTH_FRONT_C::ToggleSelectWaveVCO (short ch)
-    {
-    DisplayMessage.LfoHardwareSelect (ch);
-    this->Lfo[0].Toggle (ch);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::SetLevelLFO (short data)
-    {
-    DisplayMessage.LfoSoftwareFreq (data);
-    this->Lfo[0].Level (data);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::ToggleRampSlope ()
-    {
-    uint8_t z;
-
-    z = !this->Lfo[0].GetSawSlope ();
-    DisplayMessage.LfoHardwareRampSlope (z);
-    this->Lfo[0].SetSawSlope (z);
-    }
 

@@ -145,6 +145,7 @@ namespace DISP_MESSAGE_N
         SAWTOOTH_DIRECTION,
         PULSE_WIDTH,
         LFO_FREQ,
+        DESELECTED,
         NOTE,
         NOISE,
         };
@@ -165,6 +166,7 @@ namespace DISP_MESSAGE_N
         "SAWTOOTH_DIRECTION",
         "PULSE_WIDTH",
         "LFO_FREQ",
+        "DESELECTED",
         "NOTE",
         "NOISE",
         "NONE",

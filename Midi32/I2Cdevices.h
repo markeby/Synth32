@@ -24,15 +24,15 @@ private:
         bool            Valid;              // This board is valid
         union
             {
-            uint64_t        LastDataDtoA;
-            uint64_t        LastDataAtoD;
-            uint64_t        LastDataDigital;
+            uint64_t    LastDataDtoA;
+            uint64_t    LastDataAtoD;
+            uint64_t    LastDataDigital;
             };
         union
             {
             union
                 {
-                uint8_t        ByteData[MAX_ANALOG_PER_BOARD * 2];
+                uint8_t     ByteData[MAX_ANALOG_PER_BOARD * 2];
                 uint16_t    BitWord;
                 };
             uint16_t    DtoA[MAX_ANALOG_PER_BOARD];
@@ -48,7 +48,7 @@ private:
         uint16_t*       pDtoA;
         uint16_t*       pAtoD;
         uint16_t*       pDigital;
-        uint8_t            Bit;
+        uint8_t         Bit;
         } I2C_DEVICE_T;
 
     I2C_BOARD_T*    pBoard;

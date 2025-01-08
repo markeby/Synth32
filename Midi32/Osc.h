@@ -64,7 +64,7 @@ public:
     void        Clear              (void);
     void        SawtoothDirection  (bool data);
     void        PulseWidth         (float percent);
-    void        ToggleSoftLFO      (short wave);
+    void        SetSoftLFO         (byte wave, bool sel);
     void        SetAttackTime      (byte wave, float time);
     void        SetDecayTime       (byte wave, float time);
     void        SetReleaseTime     (byte wave, float time);

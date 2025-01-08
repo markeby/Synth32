@@ -15,17 +15,17 @@ class CHANNEL_C
 private:
     OSC_C*  OscP;                   // oscillator class
     byte    Key;
-    int32_t         ActiveTimer;
-    int             Number;
+    int32_t ActiveTimer;
+    int     Number;
     byte    UseCount;
     bool    SawToothDirectionSet;
     float   PulseWidthSet;
 public:
     bool    SelectedEnvelope[ENVELOPE_COUNT];
 
-             CHANNEL_C    (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen);
-    void     Begin              (void);
-    void     Loop               (void);
+             CHANNEL_C            (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen);
+    void     Begin                (void);
+    void     Loop                 (void);
     void     NoteSet              (byte key, byte velocity);
     bool     NoteClear            (byte key);
 
@@ -35,7 +35,7 @@ public:
     void     PulseWidth           (float percent)         { this->OscP->PulseWidth (percent);  this->PulseWidthSet = percent; }
     float    GetPulseWidth        (void)                  { return (this->PulseWidthSet); }
     void     SetMaxLevel          (byte ch, float level)  { this->OscP->SetMaxLevel (ch, level); }
-    uint32_t       IsActive (void)      { return (this->ActiveTimer); }
+    uint32_t IsActive             (void)                  { return (this->ActiveTimer); }
     OSC_C*   pOsc                 (void)                  { return (this->OscP); }
     };
 

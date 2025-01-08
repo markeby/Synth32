@@ -14,6 +14,57 @@
 
 //#######################################################################
 //#######################################################################
+    TEXT_INFO_C::TEXT_INFO_C ()
+    {
+    Label = nullptr;
+    Unit  = nullptr;
+    Value = nullptr;
+    Valid = false;
+    lv_style_init (&this->StyleLabel);
+    lv_style_set_text_font (&this->StyleLabel, &lv_font_montserrat_14);
+    lv_style_init (&this->StyleValue);
+    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_14);
+    }
+
+//#######################################################################
+void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, short y, uint32_t color)
+    {
+    short x = 2;
+
+    this->Label = lv_label_create (base);
+    lv_obj_align (this->Label, LV_ALIGN_TOP_LEFT, 0, y);
+    lv_label_set_text (this->Label, s);
+    lv_obj_add_style (this->Label, &this->StyleLabel, 0);
+    lv_style_set_text_color (&this->StyleLabel, lv_color_hex (color));
+
+    this->Value = lv_label_create(base);
+    lv_obj_align (this->Value, LV_ALIGN_TOP_LEFT, 62, y);
+    lv_obj_add_style (this->Value, &this->StyleValue, 0);
+    lv_style_set_text_color (&this->StyleValue, lv_color_hex (color));
+
+    if ( strlen (su) > 0 )
+        {
+        this->Unit = lv_label_create(base);
+        lv_obj_align (this->Unit, LV_ALIGN_TOP_RIGHT, -11, y);
+        lv_label_set_text (this->Unit, su);
+        lv_obj_add_style (this->Unit, &this->StyleValue, 0);
+        }
+    }
+
+//#######################################################################
+void  TEXT_INFO_C::SetLabelColor (uint32_t color)
+    {
+    lv_style_set_text_color (&this->StyleLabel, lv_color_hex (color));
+    }
+
+//#######################################################################
+void  TEXT_INFO_C::SetValueColor (uint32_t color)
+    {
+    lv_style_set_text_color (&this->StyleValue, lv_color_hex (color));
+    }
+
+//#######################################################################
+//#######################################################################
     TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s)
     {
     lv_style_init (&Style);
@@ -38,49 +89,15 @@
     lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
-    this->Sine.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
-    this->Ramp.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
-    this->Pulse.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
-
+    this->Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
     this->Led  = lv_led_create (Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    InfoLine (base, MeterFreq, " Freq:", "Hz", y, 0x0000F0);
-
+    MeterFreq.BeginText (base, "  E2", "Hz", y, 0x0000F0);
     // Initial positions
     this->SetFreq (0);
-    }
-
-//#######################################################################
-void LFO_METER_WIDGET_C::InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, const char* su, short y, uint32_t color)
-    {
-    short x = 2;
-
-    element.Label = lv_label_create (base);
-    lv_obj_align (element.Label, LV_ALIGN_TOP_LEFT, 0, y);
-    lv_label_set_text (element.Label, s);
-    lv_style_init (&element.Style);
-    lv_style_set_text_font (&element.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color (&element.Style, lv_color_hex (color));
-    lv_obj_add_style (element.Label, &element.Style, 0);
-
-    if ( strlen (s) > 1 )
-        {
-        element.Value = lv_label_create(base);
-        lv_obj_align (element.Value, LV_ALIGN_TOP_LEFT, 62, y);
-        lv_obj_add_style (element.Value, &element.Style, 0);
-
-        element.Unit = lv_label_create (base);
-        lv_obj_align (element.Unit, LV_ALIGN_TOP_RIGHT, -11, y);
-        lv_label_set_text (element.Unit, su);
-        lv_obj_add_style (element.Unit, &element.Style, 0);
-        }
-    else
-        {
-        element.Value =  nullptr;
-        element.Unit  =  nullptr;
-        }
+    this->Select (false);
     }
 
 //#######################################################################
@@ -102,7 +119,6 @@ void LFO_METER_WIDGET_C::SetFreq (short val)
 //#######################################################################
 void LFO_METER_WIDGET_C::Select (bool sel)
     {
- return;
     if ( sel )
         {
         lv_led_set_color (Led, lv_palette_main (LV_PALETTE_RED));
@@ -114,25 +130,6 @@ void LFO_METER_WIDGET_C::Select (bool sel)
         lv_led_on (Led);
         }
     }
-
-//#######################################################################
-void LFO_METER_WIDGET_C::SetSine (int val)
-    {
-    lv_meter_set_indicator_end_value (Meter, Sine.Gauge, val);
-    }
-
-//#######################################################################
-void LFO_METER_WIDGET_C::SetRamp (int val)
-    {
-    lv_meter_set_indicator_end_value (Meter, Ramp.Gauge, val);
-    }
-
-//#######################################################################
-void LFO_METER_WIDGET_C::SetPulse (int val)
-    {
-    lv_meter_set_indicator_end_value (Meter, Pulse.Gauge, val);
-    }
-
 
 //#######################################################################
 //#######################################################################
@@ -147,46 +144,25 @@ void LFO_METER_WIDGET_C::SetPulse (int val)
     lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
-    this->Attack.Gauge  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
-    this->Decay.Gauge   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
-    this->Release.Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
+    this->GaugeAttack  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
+    this->GaugeDecay   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
+    this->GaugeRelease = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
 
     this->Led  = lv_led_create (Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    InfoLine (base, this->Attack, " Attack:", y, 0x008000);
+    Attack.BeginText (base, " Attack:", "mSec", y, 0x008000);
     y += 16;
-    InfoLine (base, this->Decay, "  Decay:", y, 0x0000ff);
+    Decay.BeginText (base, "  Decay:", "mSec", y, 0x0000ff);
     y += 16;
-    InfoLine (base, this->Release, "Release:", y, 0xff0000);
+    Release.BeginText (base, "Release:", "mSec", y, 0xff0000);
 
     // Initial positions
     this->SetAttack  (0);
     this->SetDecay   (0);
     this->SetRelease (0);
     this->Select     (false);
-    }
-
-//#######################################################################
-void ADSR_METER_WIDGET_C::InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, short y, uint32_t color)
-    {
-    element.Label = lv_label_create (base);
-    lv_obj_align (element.Label, LV_ALIGN_TOP_LEFT, 0, y);
-    lv_label_set_text (element.Label, s);
-    lv_style_init (&element.Style);
-    lv_style_set_text_font (&element.Style, &lv_font_montserrat_14);
-    lv_style_set_text_color (&element.Style, lv_color_hex (color));
-    lv_obj_add_style (element.Label, &element.Style, 0);
-
-    element.Value = lv_label_create (base);
-    lv_obj_align (element.Value, LV_ALIGN_TOP_LEFT, 62, y);
-    lv_obj_add_style (element.Value, &element.Style, 0);
-
-    element.Unit = lv_label_create (base);
-    lv_obj_align (element.Unit, LV_ALIGN_TOP_RIGHT, -11, y);
-    lv_label_set_text (element.Unit, "mSec");
-    lv_obj_add_style (element.Unit, &element.Style, 0);
     }
 
 //#######################################################################
@@ -207,21 +183,21 @@ void ADSR_METER_WIDGET_C::Select (bool sel)
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetAttack (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, Attack.Gauge, val);
+    lv_meter_set_indicator_end_value (Meter, GaugeAttack, val);
     lv_label_set_text_fmt (Attack.Value, "%d", val * TIME_MULT);
     }
 
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetDecay (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, Decay.Gauge, val);
+    lv_meter_set_indicator_end_value (Meter, GaugeDecay, val);
     lv_label_set_text_fmt (Decay.Value, "%d", val * TIME_MULT);
     }
 
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetRelease (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, Release.Gauge, val);
+    lv_meter_set_indicator_end_value (Meter, GaugeRelease, val);
     lv_label_set_text_fmt (Release.Value, "%d", val * TIME_MULT);
     }
 
@@ -297,29 +273,37 @@ void LEVEL_WIDGET_C::SetLevel (int val)
 static lv_point_t slopeBack[] = { {0, 20}, {0, 0}, {40, 20}, {40, 0}, {80, 20}};
 static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}};
 
-    RAMP_WIDGET_C::RAMP_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    RAMP_WIDGET_C::RAMP_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y)
     {
-    lv_style_init (&StyleFore);
-    lv_style_set_line_width (&StyleFore, 3);
-    lv_style_set_line_color (&StyleFore, lv_palette_main (LV_PALETTE_BLUE));
-    lv_style_set_line_opa (&StyleFore, LV_OPA_TRANSP);
-    lv_style_set_line_rounded (&StyleFore, true);
+    this->TextLabel = lv_label_create (base);
+    lv_obj_align (this->TextLabel, align, x - 60, y);
+    lv_label_set_text (this->TextLabel, s);
+    lv_style_init (&this->TextStyle);
+    lv_style_set_text_font (&this->TextStyle, &lv_font_montserrat_14);
+    lv_style_set_text_color (&this->TextStyle, lv_color_hex (0xD0D0D0));
+    lv_obj_add_style (this->TextLabel, &this->TextStyle, 0);
 
-    lv_style_init (&StyleBack);
-    lv_style_set_line_width (&StyleBack, 3);
-    lv_style_set_line_color (&StyleBack, lv_palette_main (LV_PALETTE_BLUE));
-    lv_style_set_line_opa (&StyleBack, LV_OPA_TRANSP);
-    lv_style_set_line_rounded (&StyleBack, true);
+    lv_style_init (&this->StyleFore);
+    lv_style_set_line_width (&this->StyleFore, 3);
+    lv_style_set_line_color (&this->StyleFore, lv_palette_main (LV_PALETTE_BLUE));
+    lv_style_set_line_opa (&this->StyleFore, LV_OPA_TRANSP);
+    lv_style_set_line_rounded (&this->StyleFore, true);
 
-    SlopeFore = lv_line_create (base);
-    lv_line_set_points (SlopeFore, slopeFore, 5);
-    lv_obj_align (SlopeFore, align, x, y);
-    lv_obj_add_style (SlopeFore, &StyleFore, 0);
+    lv_style_init (&this->StyleBack);
+    lv_style_set_line_width (&this->StyleBack, 3);
+    lv_style_set_line_color (&this->StyleBack, lv_palette_main (LV_PALETTE_BLUE));
+    lv_style_set_line_opa (&this->StyleBack, LV_OPA_TRANSP);
+    lv_style_set_line_rounded (&this->StyleBack, true);
 
-    SlopeBack = lv_line_create (base);
-    lv_line_set_points (SlopeBack, slopeBack, 5);
-    lv_obj_align (SlopeBack, align, x, y);
-    lv_obj_add_style (SlopeBack, &StyleBack, 0);
+    this->SlopeFore = lv_line_create (base);
+    lv_line_set_points (this->SlopeFore, slopeFore, 5);
+    lv_obj_align (this->SlopeFore, align, x, y);
+    lv_obj_add_style (this->SlopeFore, &StyleFore, 0);
+
+    this->SlopeBack = lv_line_create (base);
+    lv_line_set_points (this->SlopeBack, slopeBack, 5);
+    lv_obj_align (this->SlopeBack, align, x, y);
+    lv_obj_add_style (this->SlopeBack, &StyleBack, 0);
 
     this->SetDir (false);
     }
@@ -347,8 +331,16 @@ void RAMP_WIDGET_C::SetDir (bool dir)
 //#######################################################################
 static lv_point_t squareWave[SQUARE_SIZE] = { {0, 0}, {0, 20}, {0, 20}, {0, 0}, {40, 0}, {40, 20}, {40, 20}, {40, 0}, {80, 0}, {80, 20}};
 
-    PULSE_WIDGET_C::PULSE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
+    PULSE_WIDGET_C::PULSE_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y)
     {
+    this->TextLabel = lv_label_create (base);
+    lv_obj_align (this->TextLabel, align, x - 60, y);
+    lv_label_set_text (this->TextLabel, s);
+    lv_style_init (&this->TextStyle);
+    lv_style_set_text_font (&this->TextStyle, &lv_font_montserrat_14);
+    lv_style_set_text_color (&this->TextStyle, lv_color_hex (0xD0D0D0));
+    lv_obj_add_style (this->TextLabel, &this->TextStyle, 0);
+
     lv_style_init (&Style);
     lv_style_set_line_width (&Style, 2);
     lv_style_set_line_color (&Style, lv_palette_main (LV_PALETTE_BLUE));
@@ -365,7 +357,7 @@ static lv_point_t squareWave[SQUARE_SIZE] = { {0, 0}, {0, 20}, {0, 20}, {0, 0}, 
 //#######################################################################
 void PULSE_WIDGET_C::SetWidth (short width)
     {
-    float percent = (float)width / 127.0;
+    float percent = (float)width / 4095.0;
     width = (short)(40.0 * percent);
     Pulse[2].x = squareWave[2].x + width;
     Pulse[3].x = squareWave[3].x + width;

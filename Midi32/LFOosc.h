@@ -46,7 +46,7 @@ private:
     short   CurrentFreq;
     float   CurrentWidth;
     byte    CurrentLevel;
-    bool    SawtoothSlope;
+    bool    RampSlope;
     bool    ResetOn;
 
     typedef struct
@@ -70,14 +70,12 @@ public:
     void SetFreq        (short value);
     void SetPulseWidth  (short value);
     void SetMaxLevel    (uint8_t ch, uint8_t data);
-    void Level          (uint8_t data);
-    void Toggle         (short ch);
+    void SetLevel       (uint8_t data);
+    void ToggleWave     (short ch);
     void PitchBend      (short value);
-    void SetSawSlope    (bool val);
+    void ToggleRampDir  (void);
     void HardReset      (void);
     void Loop           (void);
-
-    bool GetSawSlope    (void)          { return (SawtoothSlope); }
     };
 
 

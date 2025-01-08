@@ -137,9 +137,9 @@ void OSC_C::PulseWidth (float percent)
     }
 
 //#######################################################################
-void OSC_C::ToggleSoftLFO (short wave)
+void OSC_C::SetSoftLFO (byte wave, bool sel)
     {
-    Mix[wave]->ToggleSoftLFO ();
+    Mix[wave]->SetSoftLFO (sel);
     }
 
 //#######################################################################

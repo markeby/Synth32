@@ -29,7 +29,7 @@ SYNTH_LFO_C::SYNTH_LFO_C ()
     this->CurrentLevel  = 0;
     this->CurrentFreq   = 0.0;
     this->ResetOn       = false;
-    this->SawtoothSlope = false;
+    this->RampSlope     = false;
     this->InUse         = 0;
     }
 
@@ -129,10 +129,13 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Toggle (short ch)
+void SYNTH_LFO_C::ToggleWave (short ch)
     {
-    Vca[ch].Select = !Vca[ch].Select;
-    if ( Vca[ch].Select )
+    bool zb = !Vca[ch].Select;;
+
+    Vca[ch].Select = zb;
+    DisplayMessage.LfoHardSelect (ch, zb);
+    if ( zb )
         {
         this->InUse++;
         this->SetLevel (ch, CurrentLevel);
@@ -143,17 +146,18 @@ void SYNTH_LFO_C::Toggle (short ch)
         this->SetLevel (ch, 0);
         }
 
+
     if ( this->UpdateNeded )
         {
         I2cDevices.UpdateAnalog ();     // Update D/A ports
         this->UpdateNeded = false;
         }
 
-    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((Vca[ch].Select) ? "ON" : "off"));
+    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((zb) ? "ON" : "off"));
     }
 
 //#######################################################################
-void SYNTH_LFO_C::Level (uint8_t data)
+void SYNTH_LFO_C::SetLevel (uint8_t data)
     {
     this->CurrentLevel = data;
     for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
@@ -169,21 +173,23 @@ void SYNTH_LFO_C::Level (uint8_t data)
         this->UpdateNeded = false;
         }
     if ( InUse )
-        DisplayMessage.LfoHardwareLevel (data);
+        DisplayMessage.LfoHardLevel (data);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::PitchBend (short value)
     {
-    I2cDevices.D2Analog(this->BendChannelIO, value);
+    I2cDevices.D2Analog (this->BendChannelIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetSawSlope (bool val)
+void SYNTH_LFO_C::ToggleRampDir ()
     {
-    this->SawtoothSlope = val;
-    I2cDevices.DigitalOut (this->SlopeChannelIO, val);
+    bool zb = !this->RampSlope;
+    this->RampSlope = zb;
+    DisplayMessage.LfoHardRampSlope (zb);
+    I2cDevices.DigitalOut (this->SlopeChannelIO, zb);
     I2cDevices.UpdateDigital ();
     }
 

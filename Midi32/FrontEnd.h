@@ -48,6 +48,7 @@ private:
     NOISE_C*              pNoise;
 
     CHANNEL_C*            pChan[CHAN_COUNT];
+    byte                  ModulationVCA[CHAN_COUNT];
     byte                  Zone[3];
     byte                  ZoneBase;
 
@@ -65,41 +66,43 @@ public:
     byte  CurrentZone;
     byte  ZoneCount;
 
-          SYNTH_FRONT_C         (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map);
-    void  Begin                 (int osc_d_a, int mult_digital, int noise_digital, int lfo_digital);
-    void  ResetXL               (void);
-    void  Loop                  (void);
-    void  Clear                 (void);
-    void  DualZone              (short chan, bool state);
-    void  Controller            (byte short, byte type, byte value);
+         SYNTH_FRONT_C         (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map);
+    void Begin                 (int osc_d_a, int mult_digital, int noise_digital, int lfo_digital);
+    void ResetXL               (void);
+    void Loop                  (void);
+    void Clear                 (void);
+    void DualZone              (short chan, bool state);
+    void Controller            (byte short, byte type, byte value);
 
     //#######################################################################
     // FrontEndLFO.cpp
-    void  PitchBend             (short chan, short value);
-    void  ToggleSelectModVCA    (short ch);
-    void  FreqLFO               (short ch, short data);
-    void  ToggleSelectWaveVCO   (short ch);
-    void  ToggleRampSlope       (void);
-    void  SetLevelLFO           (short data);
+    void ToggleSelectModVCA    (byte ch);
+    void FreqLFO               (short ch, short data);
+
+    void PitchBend (short value)            { this->Lfo[0].PitchBend (value); }
+    void ToggleSelectModVCO (short ch)      { this->Lfo[0].ToggleWave (ch);   }
+    void SetLevelLFO (short data)           { this->Lfo[0].SetLevel (data);   }
+    void ToggleRampDir (void)               { this->Lfo[0].ToggleRampDir ();  }
+
 
     // FrontEndOscCtrl.cpp
-    void  ChannelSetSelect      (short chan, bool state);
-    void  SetMaxLevel           (short ch, short data);
-    void  SetAttackTime         (short data);
-    void  SetDecayTime          (short data);
-    void  SetSustainLevel       (short ch, short data);
-    void  SetReleaseTime        (short data);
-    void  SawtoothDirection     (bool data);
-    void  SetPulseWidth         (short data);
-    void  SetNoise              (short ch, bool state);
-    void  SaveAllSettings       (void);
+    void ChannelSetSelect      (short chan, bool state);
+    void SetMaxLevel           (short ch, short data);
+    void SetAttackTime         (short data);
+    void SetDecayTime          (short data);
+    void SetSustainLevel       (short ch, short data);
+    void SetReleaseTime        (short data);
+    void SawtoothDirection     (bool data);
+    void SetPulseWidth         (short data);
+    void SetNoise              (short ch, bool state);
+    void SaveAllSettings       (void);
 
 
-    void  Tuning                (void);
-    void  TuningAdjust          (bool up);
-    void  StartTuning           (void);
+    void Tuning                (void);
+    void TuningAdjust          (bool up);
+    void StartTuning           (void);
 
-    void  DisplayUpdate         (int zone);
+    void DisplayUpdate         (int zone);
 
     //#######################################################################
     MULTIPLEX_C* Multiplex      (void);

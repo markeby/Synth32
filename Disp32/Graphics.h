@@ -16,6 +16,7 @@
 #include <lvgl.h>
 #include "../Common/SynthCommon.h"
 #include "../Common/DispMessages.h"
+#include "Widgets.h"
 
 class ESP_Panel;
 class TITLE_WIDGET_C;
@@ -59,21 +60,30 @@ public:
 class PAGE_MOD_C : protected PAGE_TITLE_C
     {
 private:
-    TITLE_WIDGET_C*         TitleHardware;
-    LFO_METER_WIDGET_C*     MeterHardware;
-    RAMP_WIDGET_C*          RampDir;
-    PULSE_WIDGET_C*         PulseWidth;
-    bool                    SelectSine;
-    bool                    SelectRamp;
-    bool                    SelectPulse;
-    int                     Level;
+    TITLE_WIDGET_C*     TitleHard;
+    LFO_METER_WIDGET_C* MeterHard;
+    TEXT_INFO_C         HardLabelSine;
+    TEXT_INFO_C         HardLabelRamp;
+    TEXT_INFO_C         HardLabelPulse;
+    bool                HardInUse[3];
+    RAMP_WIDGET_C*      RampDir;
+    PULSE_WIDGET_C*     PulseWidth;
 
-    TITLE_WIDGET_C*         TitleSoftware;
-    LFO_METER_WIDGET_C*     MeterSoftware;
+
+    TITLE_WIDGET_C*     TitleSoft;
+    LFO_METER_WIDGET_C* MeterSoft;
+    TEXT_INFO_C         SoftLabelSine;
+    TEXT_INFO_C         SoftLabelTriangle;
+    TEXT_INFO_C         SoftLabelRamp;
+    TEXT_INFO_C         SoftLabelPulse;
+    TEXT_INFO_C         SoftLabelNoise;
+    bool                SoftInUse[5];
 
 public:
-              PAGE_MOD_C (lv_obj_t* base);
-    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+            PAGE_MOD_C        (lv_obj_t* base);
+    void    UpdatePage        (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void    UpdateHardButtons (short value, bool sel);
+    void    UpdateSoftButtons (short value, bool sel);
     };
 
 //############################################

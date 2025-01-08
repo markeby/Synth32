@@ -69,7 +69,7 @@ public:
     float    GetTime        (ESTATE state);
     void     SetLevel       (ESTATE state, float percent);
     float    GetLevel       (ESTATE state);
-    void     ToggleSoftLFO  (void);
+    void     SetSoftLFO     (bool sel);
 
     inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
     inline uint16_t GetChannel       (void)             { return (DeviceChannel); }     // Return D/A channel number

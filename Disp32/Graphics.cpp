@@ -62,10 +62,10 @@ using namespace DISP_MESSAGE_N;
         switch ( z )
             {
             case 2:
-                RampDir = new RAMP_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+                RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             case 3:
-                PulseWidth = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+                PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             case 4:
                 Noise = new NOISE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -8);
@@ -107,7 +107,10 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             this->RampDir->SetDir (value);
             break;
         case EFFECT_C::PULSE_WIDTH:
-            this->PulseWidth->SetWidth (value);
+            {
+            float zf = value * 32.244;
+            this->PulseWidth->SetWidth ((short)zf);
+            }
             break;
         case EFFECT_C::NOISE:
             this->Noise->Set (value & 0x0F, value >> 7);
@@ -133,11 +136,28 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_left   (panel, 2, 0);
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
-    TitleSoftware = new TITLE_WIDGET_C (panel, "Software");
-    MeterSoftware = new LFO_METER_WIDGET_C (panel, 0, 18, true);
+    TitleSoft = new TITLE_WIDGET_C (panel, "Amplitide");
+    MeterSoft = new LFO_METER_WIDGET_C (panel, 0, 18, true);
+
+    y = 190;
+    this->SoftLabelSine.BeginText (panel, "   F1", "", y);
+    this->UpdateSoftButtons (0, false);
+    y += 14;
+    this->SoftLabelTriangle.BeginText (panel, "   F2", "", y);
+    this->UpdateSoftButtons (1, false);
+    y += 14;
+    this->SoftLabelRamp.BeginText (panel, "   F3", "", y);
+    this->UpdateSoftButtons (2, false);
+    y += 14;
+    this->SoftLabelPulse.BeginText (panel, "   F4", "", y);
+    this->UpdateSoftButtons (3, false);
+    y += 14;
+    this->SoftLabelNoise.BeginText (panel, "   F5", "", y);
+    this->UpdateSoftButtons (4, false);
+    this->SoftInUse[0] = this->SoftInUse[1] = this->SoftInUse[2] = this->SoftInUse[3] = this->SoftInUse[4] = false;
 
     x += 158;
-
+    y = 40;
     panel = lv_obj_create (base);
     lv_obj_set_size             (panel, 159, 320);
     lv_obj_set_pos              (panel, x, y);
@@ -146,14 +166,77 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_left   (panel, 2, 0);
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
-    TitleHardware = new TITLE_WIDGET_C (panel, "Hardware");
-    MeterHardware = new LFO_METER_WIDGET_C (panel, 0, 18, false);
-    RampDir       = new RAMP_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -36);
-    PulseWidth    = new PULSE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -6);
+    this->TitleHard  = new TITLE_WIDGET_C (panel, "Frequency");
+    this->MeterHard  = new LFO_METER_WIDGET_C (panel, 0, 18, false);
+    this->RampDir    = new RAMP_WIDGET_C (panel, "F12", LV_ALIGN_BOTTOM_MID, 0, -44);
+    this->PulseWidth = new PULSE_WIDGET_C (panel, "E3", LV_ALIGN_BOTTOM_MID, 0, -10);
 
-    SelectSine  = false;
-    SelectRamp  = false;
-    SelectPulse = false;
+    y = 190;
+    HardLabelSine.BeginText (panel, "   F9", "", y);
+    this->UpdateHardButtons (0, false);
+    y += 14;
+    HardLabelRamp.BeginText (panel, "   F10", "", y);
+    this->UpdateHardButtons (1, false);
+    y += 14;
+    HardLabelPulse.BeginText (panel, "   F11", "", y);
+    this->UpdateHardButtons (2, false);
+    this->HardInUse[0] = this->HardInUse[1] = this->HardInUse[2] = false;
+    }
+
+//#######################################################################
+void PAGE_MOD_C::UpdateHardButtons (short value, bool sel)
+    {
+    uint32_t color = ( sel ) ? 0x0000F0 : 0xD0D0D0;
+    HardInUse[value] = sel;
+    switch ( value )
+        {
+        case 0:
+            this->HardLabelSine.SetValueColor (color);
+            lv_label_set_text(this->HardLabelSine.Value,"Sine");
+            break;
+        case 1:
+            this->HardLabelRamp.SetValueColor (color);
+            lv_label_set_text(this->HardLabelRamp.Value,"Sawtooth");
+            break;
+        case 2:
+            this->HardLabelPulse.SetValueColor (color);
+            lv_label_set_text(this->HardLabelPulse.Value,"Pulse");
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
+void PAGE_MOD_C::UpdateSoftButtons (short value, bool sel)
+    {
+    uint32_t color = ( sel ) ? 0x0000F0 : 0xD0D0D0;
+    SoftInUse[value] = sel;
+    switch ( value )
+        {
+        case 0:
+            this->SoftLabelSine.SetValueColor (color);
+            lv_label_set_text(this->SoftLabelSine.Value,"Sine");
+            break;
+        case 1:
+            this->SoftLabelTriangle.SetValueColor (color);
+            lv_label_set_text(this->SoftLabelTriangle.Value,"Triangle");
+            break;
+        case 2:
+            this->SoftLabelRamp.SetValueColor (color);
+            lv_label_set_text(this->SoftLabelRamp.Value,"RAMP");
+            break;
+        case 3:
+            this->SoftLabelPulse.SetValueColor (color);
+            lv_label_set_text(this->SoftLabelPulse.Value,"Pulse");
+            break;
+        case 4:
+            this->SoftLabelNoise.SetValueColor (color);
+            lv_label_set_text(this->SoftLabelNoise.Value,"Noise");
+            break;
+        default:
+            break;
+        }
     }
 
 //#######################################################################
@@ -164,38 +247,17 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case CHANNEL_C::HARDWARE_LFO:
             switch ( effect )
                 {
-                case EFFECT_C::MAX_LEVEL:
-                    break;
                 case EFFECT_C::SELECTED:
-                    switch ( ch )
-                        {
-                        case 0:
-                            SelectSine = value;
-                            break;
-                        case 1:
-                            SelectRamp = value;
-                            break;
-                        case 2:
-                            SelectPulse = value;
-                            break;
-                        default:
-                            break;
-                        }
-                    if ( SelectSine )
-                        this->MeterHardware->SetSine (Level);
-                    else
-                        this->MeterHardware->SetSine (0);
-                    if ( SelectRamp )
-                        this->MeterHardware->SetRamp (Level);
-                    else
-                        this->MeterHardware->SetRamp (0);
-                    if ( SelectPulse )
-                        this->MeterHardware->SetPulse (Level);
-                    else
-                        this->MeterHardware->SetPulse (0);
+                    this->UpdateHardButtons (value, true);
+                    this->MeterHard->Select (true);
+                    break;
+                case EFFECT_C::DESELECTED:
+                    this->UpdateHardButtons (value, false);
+                    if ( !HardInUse[0] & !HardInUse[1] & !HardInUse[2] )
+                        this->MeterHard->Select (false);
                     break;
                 case EFFECT_C::LFO_FREQ:
-                    this->MeterHardware->SetFreq (value);
+                    this->MeterHard->SetFreq (value);
                     break;
                 case EFFECT_C::SAWTOOTH_DIRECTION:
                     this->RampDir->SetDir (value);
@@ -206,19 +268,23 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
                 default:
                     break;
                 }
-
-            if ( SelectSine || SelectRamp || SelectPulse )
-                this->MeterHardware->Select (true);
-            else
-                this->MeterHardware->Select (false);
             break;
         case CHANNEL_C::SOFTWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
+                    this->UpdateSoftButtons (value, true);
+                    this->MeterSoft->Select (true);
+                    break;
+                case EFFECT_C::DESELECTED:
+                    this->UpdateSoftButtons (value, false);
+                    if ( !SoftInUse[0] & !SoftInUse[1] & !SoftInUse[2] & !SoftInUse[3] & !SoftInUse[4] )
+                        this->MeterSoft->Select (false);
                     break;
                 case EFFECT_C::LFO_FREQ:
-                    this->MeterSoftware->SetFreq (value);
+                    if ( value == 0 )
+                        value = 1;
+                    this->MeterSoft->SetFreq (value);
                     break;
                 default:
                     break;

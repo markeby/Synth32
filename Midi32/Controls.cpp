@@ -31,15 +31,21 @@ static void SetTimeSetSelect (short ch, short state)
     }
 
 //########################################################
-static void SetModVCA (short ch)
+static void ToggleModVCA (short ch)
     {
     SynthFront.ToggleSelectModVCA (ch);
     }
 
 //########################################################
-static void SetSrcVCO (short ch)
+static void ToggleModVCO (short ch)
     {
-    SynthFront.ToggleSelectWaveVCO (ch);
+    SynthFront.ToggleSelectModVCO (ch);
+    }
+
+//########################################################
+static void ToggleRampDir (short ch)
+    {
+    SynthFront.ToggleRampDir ();
     }
 
 //########################################################
@@ -217,28 +223,28 @@ MIDI_ENCODER_MAP KnobMapArray[] =
 
 //########################################################
 MIDI_BUTTON_MAP SwitchMapArray[] =
-    {   {  0, "VCA Mod Sine    ",       SetModVCA   },  //  01  10  xx
-        {  1, "VCA Mod Triangle",       SetModVCA   },  //  01  11  xx
-        {  2, "VCA Mod Sawtooth",       SetModVCA   },  //  01  12  xx
-        {  3, "VCA Mod Pulse   ",       SetModVCA   },  //  01  13  xx
-        {  4, "VCA Mod Noise   ",       SetModVCA   },  //  01  14  xx
-        {  5, "Switch f6",              nullptr     },  //  01  15  xx
-        {  6, "Switch f7",              nullptr     },  //  01  16  xx
-        {  7, "Switch f8",              nullptr     },  //  01  17  xx
-        {  0, "VCO freq Mod Sine",      SetSrcVCO   },  //  01  18  xx
-        {  1, "VCO freq Mod Ramp",      SetSrcVCO   },  //  01  19  xx
-        {  2, "VCO freq Pulse   ",      SetSrcVCO   },  //  01  1A  xx
-        {  3, "Switch #12",             nullptr     },  //  01  1B  xx
-        {  4, "Switch #13",             nullptr     },  //  01  1C  xx
-        { 13, "Switch #14",             nullptr     },  //  01  1D  xx
-        { 14, "Switch #15",             nullptr     },  //  01  1E  xx
-        { 15, "Switch #16",             nullptr     },  //  01  1F  xx
-        { 24, "Switch #25",             nullptr     },  //  01  72  xx
-        { 24, "Switch #25",             nullptr     },  //  01  73  xx
-        { 20, "Switch #21",             nullptr     },  //  01  74  xx
-        { 21, "Switch #22",             nullptr     },  //  01  75  xx
-        { 22, "Tune/Reset",             TuneReset   },  //  01  76  xx
-        { 23, "Switch #24",             nullptr     },  //  01  77  xx
+    {   {  0, "VCA Mod Sine    ",       ToggleModVCA    },  //  01  10  xx
+        {  1, "VCA Mod Triangle",       ToggleModVCA    },  //  01  11  xx
+        {  2, "VCA Mod Sawtooth",       ToggleModVCA    },  //  01  12  xx
+        {  3, "VCA Mod Pulse   ",       ToggleModVCA    },  //  01  13  xx
+        {  4, "VCA Mod Noise   ",       ToggleModVCA    },  //  01  14  xx
+        {  5, "Switch f6",              nullptr         },  //  01  15  xx
+        {  6, "Switch f7",              nullptr         },  //  01  16  xx
+        {  7, "Switch f8",              nullptr         },  //  01  17  xx
+        {  0, "VCO freq Mod Sine",      ToggleModVCO    },  //  01  18  xx
+        {  1, "VCO freq Mod Ramp",      ToggleModVCO    },  //  01  19  xx
+        {  2, "VCO freq Pulse   ",      ToggleModVCO    },  //  01  1A  xx
+        {  3, "Toggle Ramp Direction",  ToggleRampDir   },  //  01  1B  xx
+        {  4, "Switch #13",             nullptr         },  //  01  1C  xx
+        { 13, "Switch #14",             nullptr         },  //  01  1D  xx
+        { 14, "Switch #15",             nullptr         },  //  01  1E  xx
+        { 15, "Switch #16",             nullptr         },  //  01  1F  xx
+        { 24, "Switch #25",             nullptr         },  //  01  72  xx
+        { 24, "Switch #25",             nullptr         },  //  01  73  xx
+        { 20, "Switch #21",             nullptr         },  //  01  74  xx
+        { 21, "Switch #22",             nullptr         },  //  01  75  xx
+        { 22, "Tune/Reset",             TuneReset       },  //  01  76  xx
+        { 23, "Switch #24",             nullptr         },  //  01  77  xx
      };
 
 

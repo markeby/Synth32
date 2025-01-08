@@ -63,7 +63,7 @@ void I2C_MESSAGE_C::Page (PAGE_C page)
 
 //###################################################################
 // CMD_C chan EFFECT_C high low
-void I2C_MESSAGE_C::SendUpdate (CMD_C page, byte channel, EFFECT_C effect, uint16_t value)
+void I2C_MESSAGE_C::SendUpdate (CMD_C page, byte channel, EFFECT_C effect, short value)
     {
     if ( this->Ready )
         {

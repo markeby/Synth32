@@ -155,10 +155,10 @@ float ENVELOPE_C::GetLevel (ESTATE state)
     }
 
 //#######################################################################
-void ENVELOPE_C::ToggleSoftLFO ()
+void ENVELOPE_C::SetSoftLFO (bool sel)
     {
-    this->UseSoftLFO = !this->UseSoftLFO;   // Toggle oscillator VCA modulation
-    DBG ("Toggle %s > %s",this->Name, (( this->UseSoftLFO ) ? "ON" : "Off") );
+    this->UseSoftLFO = sel;
+    DBG ("Toggle %s > %s", this->Name, (( sel ) ? "ON" : "Off") );
     }
 
 

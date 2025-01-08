@@ -67,10 +67,11 @@ static void FuncController (uint8_t mchan, uint8_t type, uint8_t value)
     }
 
 //###################################################################
-static void FuncPitchBend (uint8_t mchan, int value)
+static void FuncPitchBend (uint8_t chan, int value)
     {
-    SynthFront.PitchBend (mchan, value);
-    DBGM ("Pitch Bend  Chan %2.2X  value %d", mchan, value);
+    value = (value + 8192) >> 2;
+    SynthFront.PitchBend (value);
+    DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
     }
 
 //#######################################################################
@@ -306,7 +307,7 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
         {
         case 0x01:
             // mod wheel
-            Lfo[0].Level (value);
+            Lfo[0].SetLevel (value);
             SoftLFO.Multiplier ((float)value * PRS_SCALER * 0.4);
             DBG ("modulation = %d    ", value);
             break;

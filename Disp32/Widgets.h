@@ -8,28 +8,47 @@
 #include <lvgl.h>
 
 //############################################
-typedef struct MELEMENT_S
+class TEXT_INFO_C
     {
-    lv_meter_indicator_t*   Gauge;
-    lv_obj_t*               Label;
-    lv_obj_t*               Unit;
-    lv_obj_t*               Value;
-    lv_style_t              Style;
-    MELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
-        {  }
-    } METER_ELEMENT_S;
+private:
+    lv_style_t  StyleLabel;
+    lv_style_t  StyleValue;
+    lv_obj_t*   Label;
+    lv_obj_t*   Unit;
+    bool        Valid;
+
+public:
+    lv_obj_t*   Value;
+
+          TEXT_INFO_C   (void);
+    void  BeginText     (lv_obj_t* base, const char* s, const char* su, short y, uint32_t color);
+    void  SetValue      (short value);
+    void  SetLabelColor (uint32_t color);
+    void  SetValueColor (uint32_t color);
+
+    void BeginText (lv_obj_t* base, const char* s, const char* su, short y)
+        { this->BeginText (base, s, su, y, 0xD0D0D0);  }
+    void SetValid (bool state)
+        { this->Valid = state; }
+    bool GetValid (void)
+        { return (this-Valid); }
+    };
 
 //############################################
-typedef struct LFO_ELEMENT_S
+class LFO_METER_WIDGET_C
     {
+private:
+    lv_obj_t*               Meter;
     lv_meter_indicator_t*   Gauge;
-    lv_obj_t*               Label;
-    lv_obj_t*               Unit;
-    lv_obj_t*               Value;
-    lv_style_t              Style;
-    LFO_ELEMENT_S () : Gauge(nullptr),  Label(nullptr), Unit(nullptr), Value(nullptr)
-        {  }
-    } LFO_ELEMENT_S;
+    lv_obj_t*               Led;
+    TEXT_INFO_C             MeterFreq;
+    bool                    SoftwareLFO;
+
+public:
+         LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software);
+    void SetFreq            (short val);
+    void Select             (bool sel);
+ };
 
 //############################################
 class TITLE_WIDGET_C
@@ -46,13 +65,15 @@ public:
 class ADSR_METER_WIDGET_C
     {
 private:
-    lv_obj_t*        Meter;
-    lv_obj_t*        Led;
-    METER_ELEMENT_S  Attack;
-    METER_ELEMENT_S  Decay;
-    METER_ELEMENT_S  Release;
+    lv_obj_t*               Meter;
+    lv_obj_t*               Led;
+    lv_meter_indicator_t*   GaugeAttack;
+    TEXT_INFO_C             Attack;
+    lv_meter_indicator_t*   GaugeDecay;
+    TEXT_INFO_C             Decay;
+    lv_meter_indicator_t*   GaugeRelease;
+    TEXT_INFO_C             Release;
 
-    void  InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, short y, uint32_t color);
 public:
           ADSR_METER_WIDGET_C (lv_obj_t* base, short x, short y);
     void  Volume              (lv_obj_t* base);
@@ -87,13 +108,15 @@ public:
 class RAMP_WIDGET_C
     {
 private:
-    lv_obj_t*   SlopeFore;
     lv_style_t  StyleFore;
-    lv_obj_t*   SlopeBack;
     lv_style_t  StyleBack;
+    lv_obj_t*   SlopeFore;
+    lv_obj_t*   SlopeBack;
+    lv_style_t  TextStyle;
+    lv_obj_t*   TextLabel;
 
 public:
-         RAMP_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+         RAMP_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y);
     void SetDir            (bool dir);
     };
 
@@ -105,13 +128,11 @@ private:
     lv_point_t  Pulse[SQUARE_SIZE];
     lv_obj_t*   Wave;
     lv_style_t  Style;
-private:
-    lv_obj_t*   SlopeFore;
-    lv_style_t  StyleFore;
-
+    lv_style_t  TextStyle;
+    lv_obj_t*   TextLabel;
 
 public:
-         PULSE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
+         PULSE_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y);
     void SetWidth       (short width);
     };
 
@@ -124,31 +145,7 @@ private:
 
 public:
          NOTE_WIDGET_C (lv_obj_t* base, short x, short y);
-    void SetValue      (short val);
-    };
-
-//############################################
-class LFO_METER_WIDGET_C
-    {
-private:
-    lv_obj_t*        Meter;
-    lv_obj_t*        Led;
-    METER_ELEMENT_S  Sine;
-    METER_ELEMENT_S  Ramp;
-    METER_ELEMENT_S  Pulse;
-
-    METER_ELEMENT_S MeterFreq;
-    bool            SoftwareLFO;
-
-    void InfoLine (lv_obj_t* base, METER_ELEMENT_S &element, const char* s, const char* su, short y, uint32_t color);
-
-public:
-         LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software);
-    void SetFreq            (short val);
-    void Select             (bool sel);
-    void SetSine            (int val);
-    void SetRamp            (int val);
-    void SetPulse           (int val);
+    void SetValue      (short val);         // range 0 - 4095
     };
 
 //############################################
