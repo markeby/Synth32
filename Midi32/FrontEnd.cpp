@@ -239,18 +239,20 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < CHAN_COUNT;  z++ )
         {
-        pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
+        this->pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
-    Lfo[0].Begin (0, osc_d_a, lfo_digital + 1);
-    osc_d_a + 6;
-    Lfo[1].Begin (1, osc_d_a, lfo_digital + 3);
+    this->SplitLFO = lfo_digital++;
+    this->Lfo[0].Begin (0, osc_d_a, lfo_digital);
+    osc_d_a     += 6;
+    lfo_digital += 3;
+    this->Lfo[1].Begin (1, osc_d_a, lfo_digital);
 
     this->SawtoothDirection (false);
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
         {
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-            pChan[zc]->SelectedEnvelope[z] = false;
+        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+            this->pChan[zc]->SelectedEnvelope[z] = false;
         }
     }
 
@@ -258,7 +260,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
 void SYNTH_FRONT_C::Clear ()
     {
     for ( int z = 0;  z < CHAN_COUNT; z++ )
-        pChan[z]->Clear ();
+        this->pChan[z]->Clear ();
     }
 
 //#######################################################################

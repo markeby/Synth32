@@ -64,7 +64,7 @@ extern bool AnalogDiagEnabled;
 #define START_OSC_ANALOG        0
 #define START_MULT_DIGITAL      88
 #define START_NOISE_DIGITAL     104
-#define START_LFO_DIGITAL       168
+#define START_LFO_DIGITAL       120
 #define D_A_COUNT               88
 
 //#################################################

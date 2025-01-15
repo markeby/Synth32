@@ -41,10 +41,10 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        5,     0x60,     4,    0,      0,  "D/A #84, 85, 86, 87" },
       { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },   // Multiplexer
       { 2,        6,     0x21,     0,    0,     16,  "Dig #104 - 119     " },   // Noise output
-      { 2,        7,     0x20,     0,    0,     16,  "Dig #120 - 135     " },   // Digital 48
-      { 2,        7,     0x21,     0,    0,     16,  "Dig #136 - 151     " },   // Digital 48
-      { 2,        7,     0x22,     0,    0,     16,  "Dig #152 - 167     " },   // Digital 48
-      { 2,        6,     0x70,     0,    0,      8,  "Dig #168 - 175     " },   // LFO controls
+      { 2,        6,     0x38,     0,    0,      8,  "Dig #120 - 135     " },   // LFO controls
+      //      { 2,        7,     0x20,     0,    0,     16,  "Dig #136 - 151     " },   // Digital 48
+      //      { 2,        7,     0x21,     0,    0,     16,  "Dig #152 - 167     " },   // Digital 48
+      //      { 2,        7,     0x22,     0,    0,     16,  "Dig #168 - 183     " },   // Digital 48
       {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
@@ -115,16 +115,14 @@ inline void TickState (void)
         digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
         counter0 = 100;
         }
-    if ( SystemError || SystemFail )
+    if ( SystemError )
         {
-        if ( counter0 % 4 )
+        if ( counter0 % 25 )
             {
-            digitalWrite (BEEP_PIN, LOW);       // Tone off
             digitalWrite (HEARTBEAT_PIN, LOW);  // LED off
             }
         else
             {
-            digitalWrite (BEEP_PIN, HIGH);      // Tone on
             digitalWrite (HEARTBEAT_PIN, HIGH); // LED on
             }
         }
@@ -155,22 +153,17 @@ void setup (void)
     int errcnt = I2cDevices.Begin ();
     if ( errcnt > 0 )
         {
-//        if ( errcnt == I2cDevices.NumBoards () )
-            SystemFail = true;
-//        else
-            SystemError = true;
+//      SystemFail = true;
+        SystemError = true;
         }
     if ( SystemFail )
         Serial << "*******  Synth interface is not operational *******" << endl << endl << endl;
-
-
-    printf ("\t>>> System startup complete.\n");
-    if ( SystemError )
-        {
-        printf ("\t>## Not starting synth.\n");
-        }
     else
         {
+        printf ("\t>>> System startup complete.\n");
+        if ( SystemError )
+            printf ("\t>## Not all synth interce registers are active.\n");
+
         printf ("\t>>> Starting Synth...\n");
         SynthActive = true;
 

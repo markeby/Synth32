@@ -43,10 +43,12 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
         case 2:
             DisplayMessage.LfoHardPulseWidth (data);
             this->Lfo[0].SetPulseWidth (data);
+            this->Lfo[1].SetPulseWidth (data);
             break;
         case 1:
             DisplayMessage.LfoHardFreq (data);
             this->Lfo[0].SetFreq (data);
+            this->Lfo[1].SetFreq (data);
             break;
         case 0:
             DisplayMessage.LfoSoftFreq (data);
@@ -54,5 +56,4 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
             break;
         }
     }
-
 

@@ -172,7 +172,10 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     uint8_t buf[8];
     I2C_LOCATION_T& loc =  board.Board;
 
-    DBGDA ("%d:%d:%#3.3x  write  %#4.4d  %#4.4d  %#4.4d  %#4.4d  %s", loc.Cluster, loc.Slice, loc.Channel, board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3], loc.Name);
+    DBGDA ("%d:%d:%#3.3x%c write  %#4.4d  %#4.4d  %#4.4d  %#4.4d  %s",
+           loc.Cluster, loc.Slice, loc.Channel,
+           (( board.Valid ) ? ' ' : '-'),
+           board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3], loc.Name);
 
     buf[0] = board.ByteData[1];
     buf[1] = board.ByteData[0];
@@ -182,22 +185,35 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     buf[5] = board.ByteData[4];
     buf[6] = board.ByteData[7];
     buf[7] = board.ByteData[6];
-    this->Write (loc, buf, 8);
+    if ( board.Valid )
+        this->Write (loc, buf, 8);
     board.LastDataDtoA = board.DataDtoA;
     }
 
 //#######################################################################
-void I2C_INTERFACE_C::Write8575  (I2C_BOARD_T& board)
+void I2C_INTERFACE_C::Write857x (I2C_BOARD_T& board)
     {
     I2C_LOCATION_T& loc =  board.Board;
+
+#ifdef DEBUG_ON
     String str;
 
-    for ( uint8_t z;  z < 16;  z++ )
-        str += ( ((board.BitWord >> z) & 1) ) ? " 1" : " 0";
+    if ( DebugI2C )
+        {
+        for (uint8_t z;  z < board.Board.NumberDigital;  z++)
+            str += ( ((board.BitWord >> z) & 1) ) ? " 1" : " 0";
+        }
+#endif
+    DBGDIG ("%d:%d:%#3.3x%c write %s  %s",
+            loc.Cluster, loc.Slice, loc.Channel,
+            (( board.Valid ) ? ' ' : '-'),
+            str.c_str (),
+            loc.Name);
 
-    DBGDIG ("%d:%d:%#3.3x  write %s  %s", loc.Cluster, loc.Slice, loc.Channel, str.c_str (), loc.Name);
-
-    this->Write (loc, board.ByteData, 2);
+    if ( board.Board.NumberDigital == 8 )       // if device is a 8574
+        board.ByteData[1] = board.ByteData[0];
+    if ( board.Valid )
+        this->Write(loc, board.ByteData, 2);
     board.LastDataDigital = board.DataDigital;
     }
 
@@ -207,18 +223,15 @@ void I2C_INTERFACE_C::Zero ()
     for ( int z = 0;  z < BoardCount;  z++ )
         {
         I2C_BOARD_T& bd = this->pBoard[z];
-        if ( bd.Valid )
+        if ( bd.Board.NumberDtoA == 4 )         // check for 4728 D/A
             {
-            if ( bd.Board.NumberDtoA == 4 )         // check for 4728 D/A
-                {
-                bd.DataDtoA = 0;
-                this->Write4728 (bd);
-                }
-            if ( bd.Board.NumberDigital )           // Check for digital 8575 16 channel or 8574 8 channel
-                {
-                bd.DataDigital = 0;
-                this->Write8575 (bd);
-                }
+            bd.DataDtoA = 0;
+            this->Write4728 (bd);
+            }
+        if ( bd.Board.NumberDigital )           // Check for digital 8575 16 channel or 8574 8 channel
+            {
+            bd.DataDigital = 0;
+            this->Write857x (bd);
             }
         }
     }
@@ -272,11 +285,8 @@ void I2C_INTERFACE_C::UpdateAnalog ()
     for ( int z = 0;  z < BoardCount;  z++ )
         {
         I2C_BOARD_T& brd = pBoard[z];
-        if ( brd.Valid && brd.Board.NumberDtoA )
-            {
-            if ( brd.DataDtoA != brd.LastDataDtoA )
-                Write4728 (pBoard[z]);
-            }
+        if ( brd.Board.NumberDtoA && (brd.DataDtoA != brd.LastDataDtoA) )
+            Write4728 (pBoard[z]);
         }
     }
 
@@ -286,11 +296,8 @@ void I2C_INTERFACE_C::UpdateDigital ()
     for ( int z = 0;  z < BoardCount;  z++ )
         {
         I2C_BOARD_T& brd = pBoard[z];
-        if ( brd.Valid && brd.Board.NumberDigital )
-            {
-            if ( brd.DataDigital != brd.LastDataDigital )
-                Write8575 (pBoard[z]);
-            }
+        if ( brd.Board.NumberDigital && (brd.DataDigital != brd.LastDataDigital) )
+            this->Write857x (pBoard[z]);
         }
     }
 //#######################################################################

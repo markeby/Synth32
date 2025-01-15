@@ -53,6 +53,7 @@ private:
 
     I2C_BOARD_T*    pBoard;
     I2C_DEVICE_T*   pDevice;
+    byte            TempData[8];
     int             DeviceCount;
     int             AnalogOutCount;
     int             DigitalOutCount;
@@ -63,7 +64,7 @@ private:
     void EndBusMux      (uint8_t cluster);
     void Init4728       (I2C_LOCATION_T &loc);
     void Write4728      (I2C_BOARD_T& board);
-    void Write8575      (I2C_BOARD_T& board);
+    void Write857x      (I2C_BOARD_T& board);
     void Write          (I2C_LOCATION_T& loc, uint8_t* buff, uint8_t length);
     bool ValidateDevice (uint8_t board);
 

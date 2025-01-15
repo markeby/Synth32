@@ -48,6 +48,7 @@ private:
     NOISE_C*              pNoise;
 
     CHANNEL_C*            pChan[CHAN_COUNT];
+    short                 SplitLFO;
     byte                  ModulationVCA[CHAN_COUNT];
     byte                  Zone[3];
     byte                  ZoneBase;
@@ -79,10 +80,10 @@ public:
     void ToggleSelectModVCA    (byte ch);
     void FreqLFO               (short ch, short data);
 
-    void PitchBend (short value)            { this->Lfo[0].PitchBend (value); }
-    void ToggleSelectModVCO (short ch)      { this->Lfo[0].ToggleWave (ch);   }
-    void SetLevelLFO (short data)           { this->Lfo[0].SetLevel (data);   }
-    void ToggleRampDir (void)               { this->Lfo[0].ToggleRampDir ();  }
+    void PitchBend (short value)            { this->Lfo[0].PitchBend (value); this->Lfo[1].PitchBend (value); }
+    void ToggleSelectModVCO (short ch)      { this->Lfo[0].ToggleWave (ch);   this->Lfo[1].ToggleWave (ch);   }
+    void SetLevelLFO (short data)           { this->Lfo[0].SetLevel (data);   this->Lfo[1].SetLevel (data);   }
+    void ToggleRampDir (void)               { this->Lfo[0].ToggleRampDir ();  this->Lfo[1].ToggleRampDir ();}
 
 
     // FrontEndOscCtrl.cpp
