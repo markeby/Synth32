@@ -5,11 +5,10 @@
 	(uuid "f5cc2202-81db-46ce-a023-105d50d6266d")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Dual LFO")
+		(date "2025-01-16")
+		(rev "2.4")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "ADG419BN_1"

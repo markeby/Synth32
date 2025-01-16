@@ -5,11 +5,10 @@
 	(uuid "a290419b-0276-44cb-adec-ecfe9513e31e")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Ten Channel Mixer")
+		(date "2025-01-16")
+		(rev "2.0")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:TL072"

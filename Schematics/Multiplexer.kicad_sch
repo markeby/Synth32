@@ -4,6 +4,12 @@
 	(generator_version "8.0")
 	(uuid "0abffc30-43b7-43c1-b898-0428c41d6a26")
 	(paper "USLegal")
+	(title_block
+		(title "Signal Multiplexer")
+		(date "2025-01-16")
+		(rev "1.2")
+		(comment 1 "In Development ")
+	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:TL072"
 			(pin_names
@@ -9561,7 +9567,7 @@
 	)
 	(text "8  oscillator channels in\n16 channels out\n  - Oscillator direct\n  - To 3 state filters"
 		(exclude_from_sim no)
-		(at 237.236 179.832 0)
+		(at 308.61 180.34 0)
 		(effects
 			(font
 				(size 1.524 1.524)

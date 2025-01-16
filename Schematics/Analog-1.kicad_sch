@@ -5,11 +5,10 @@
 	(uuid "e36b28a4-7427-4708-a63e-3fe312e8d49f")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Digital to Analog")
+		(date "2025-01-16")
+		(rev "2.2")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Analog_DAC:MCP4728"

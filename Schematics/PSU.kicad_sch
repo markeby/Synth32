@@ -5,11 +5,10 @@
 	(uuid "ac400113-5b0c-4ba3-90f5-fba5c1ab46ed")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Primary Power Supply")
+		(date "2025-01-16")
+		(rev "1.4")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Connector:Conn_01x01_Female"

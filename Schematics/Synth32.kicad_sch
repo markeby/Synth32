@@ -5,11 +5,10 @@
 	(uuid "718f017d-28fe-4e29-b548-40db8e21cec7")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Top Interconnect")
+		(date "2025-01-16")
+		(rev "3.2")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Connector:AudioJack2"
@@ -166,12 +165,6 @@
 		)
 	)
 	(junction
-		(at 116.84 16.51)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "01922fd1-17c4-44dd-8e81-3e221016c22c")
-	)
-	(junction
 		(at 69.85 41.91)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -194,6 +187,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "5e4a9cf1-d3ff-420a-9af7-43efdf7ba015")
+	)
+	(junction
+		(at 111.76 16.51)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "677e423b-343e-4966-ab3a-f4648f4a92f2")
 	)
 	(junction
 		(at 71.12 85.09)
@@ -277,23 +276,23 @@
 	)
 	(bus
 		(pts
-			(xy 116.84 16.51) (xy 295.91 16.51)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0cff44a8-de53-4e27-8df2-25dc74789aac")
-	)
-	(bus
-		(pts
-			(xy 116.84 16.51) (xy 116.84 21.59)
+			(xy 111.76 16.51) (xy 111.76 21.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
 		(uuid "0d4e4849-84fd-409c-867f-16a768c18ea8")
+	)
+	(bus
+		(pts
+			(xy 111.76 16.51) (xy 295.91 16.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ef22bf8-e075-4ff2-89a2-b1f254fee32b")
 	)
 	(bus
 		(pts
@@ -517,7 +516,7 @@
 	)
 	(bus
 		(pts
-			(xy 105.41 38.1) (xy 119.38 38.1)
+			(xy 106.68 38.1) (xy 114.3 38.1)
 		)
 		(stroke
 			(width 0)
@@ -557,7 +556,7 @@
 	)
 	(bus
 		(pts
-			(xy 100.33 92.71) (xy 116.84 92.71)
+			(xy 100.33 83.82) (xy 110.49 83.82)
 		)
 		(stroke
 			(width 0)
@@ -617,7 +616,7 @@
 	)
 	(bus
 		(pts
-			(xy 116.84 21.59) (xy 119.38 21.59)
+			(xy 111.76 21.59) (xy 114.3 21.59)
 		)
 		(stroke
 			(width 0)
@@ -737,7 +736,7 @@
 	)
 	(bus
 		(pts
-			(xy 43.18 16.51) (xy 116.84 16.51)
+			(xy 43.18 16.51) (xy 111.76 16.51)
 		)
 		(stroke
 			(width 0)
@@ -747,7 +746,7 @@
 	)
 	(bus
 		(pts
-			(xy 105.41 30.48) (xy 119.38 30.48)
+			(xy 106.68 30.48) (xy 114.3 30.48)
 		)
 		(stroke
 			(width 0)
@@ -807,7 +806,7 @@
 	)
 	(bus
 		(pts
-			(xy 105.41 34.29) (xy 119.38 34.29)
+			(xy 106.68 34.29) (xy 114.3 34.29)
 		)
 		(stroke
 			(width 0)
@@ -937,7 +936,7 @@
 	)
 	(bus
 		(pts
-			(xy 116.84 74.93) (xy 119.38 74.93)
+			(xy 110.49 73.66) (xy 114.3 73.66)
 		)
 		(stroke
 			(width 0)
@@ -1067,7 +1066,7 @@
 	)
 	(bus
 		(pts
-			(xy 116.84 92.71) (xy 116.84 74.93)
+			(xy 110.49 83.82) (xy 110.49 73.66)
 		)
 		(stroke
 			(width 0)
@@ -1087,7 +1086,7 @@
 	)
 	(bus
 		(pts
-			(xy 105.41 26.67) (xy 119.38 26.67)
+			(xy 106.68 26.67) (xy 114.3 26.67)
 		)
 		(stroke
 			(width 0)
@@ -1298,9 +1297,19 @@
 		)
 		(uuid "26bfadd0-3fb4-4825-9aa2-3605eada54a6")
 	)
+	(text "x2"
+		(exclude_from_sim no)
+		(at 99.468 49.724 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8e1eae5d-7375-4f56-8012-8e9f084d09d7")
+	)
 	(text "x4"
 		(exclude_from_sim no)
-		(at 91.6383 20.8709 0)
+		(at 98.7267 21.1927 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -1563,7 +1572,7 @@
 	)
 	(hierarchical_label "J2-I2C"
 		(shape input)
-		(at 119.38 74.93 0)
+		(at 114.3 73.66 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1659,7 +1668,7 @@
 	)
 	(hierarchical_label "JcO-2"
 		(shape output)
-		(at 105.41 34.29 180)
+		(at 106.68 34.29 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1791,7 +1800,7 @@
 	)
 	(hierarchical_label "JA12"
 		(shape input)
-		(at 119.38 38.1 0)
+		(at 114.3 38.1 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1923,7 +1932,7 @@
 	)
 	(hierarchical_label "JcO-3"
 		(shape output)
-		(at 105.41 38.1 180)
+		(at 106.68 38.1 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1935,7 +1944,7 @@
 	)
 	(hierarchical_label "J2-I2C"
 		(shape output)
-		(at 100.33 92.71 180)
+		(at 100.33 83.82 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1983,7 +1992,7 @@
 	)
 	(hierarchical_label "JA12"
 		(shape input)
-		(at 119.38 26.67 0)
+		(at 114.3 26.67 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -1995,7 +2004,7 @@
 	)
 	(hierarchical_label "JcO-0"
 		(shape output)
-		(at 105.41 26.67 180)
+		(at 106.68 26.67 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2139,7 +2148,7 @@
 	)
 	(hierarchical_label "JA12"
 		(shape input)
-		(at 119.38 30.48 0)
+		(at 114.3 30.48 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2151,7 +2160,7 @@
 	)
 	(hierarchical_label "JA12"
 		(shape input)
-		(at 119.38 34.29 0)
+		(at 114.3 34.29 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2163,7 +2172,7 @@
 	)
 	(hierarchical_label "JcO-1"
 		(shape output)
-		(at 105.41 30.48 180)
+		(at 106.68 30.48 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2271,7 +2280,7 @@
 	)
 	(hierarchical_label "PJ1"
 		(shape input)
-		(at 119.38 21.59 0)
+		(at 114.3 21.59 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -2467,7 +2476,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "2")
 				)
@@ -2505,15 +2514,15 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "9")
+					(page "11")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 118.11 17.78)
+		(at 113.03 17.78)
 		(size 12.7 58.42)
 		(stroke
 			(width 0.1524)
@@ -2524,7 +2533,7 @@
 		)
 		(uuid "3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5")
 		(property "Sheetname" "Multiplexer"
-			(at 119.2881 19.5544 0)
+			(at 114.2081 19.5544 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2533,7 +2542,7 @@
 			)
 		)
 		(property "Sheetfile" "Multiplexer.kicad_sch"
-			(at 118.11 71.7046 0)
+			(at 113.03 71.7046 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2543,7 +2552,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "10")
 				)
@@ -2581,7 +2590,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "6")
 				)
@@ -2619,7 +2628,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "5")
 				)
@@ -2657,7 +2666,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "4")
 				)
@@ -2665,7 +2674,7 @@
 		)
 	)
 	(sheet
-		(at 146.05 21.59)
+		(at 213.36 22.86)
 		(size 24.13 24.13)
 		(stroke
 			(width 0.1524)
@@ -2676,7 +2685,7 @@
 		)
 		(uuid "819f44b8-8462-46b6-b700-efa66e61a0d7")
 		(property "Sheetname" "3 State VCF"
-			(at 156.718 21.082 0)
+			(at 224.028 22.352 0)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -2685,7 +2694,7 @@
 			)
 		)
 		(property "Sheetfile" "3PoleStateVarVCF.kicad_sch"
-			(at 146.05 46.3046 0)
+			(at 213.36 47.5746 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2695,7 +2704,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "12")
 				)
@@ -2733,7 +2742,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "3")
 				)
@@ -2771,7 +2780,45 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
+					(page "14")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 93.98 45.72)
+		(size 12.7 17.78)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "c5734bbc-3b0f-4464-8b2e-757e6274cb27")
+		(property "Sheetname" "VCO"
+			(at 97.79 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "VCO.kicad_sch"
+			(at 93.98 64.0846 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "8")
 				)
@@ -2809,16 +2856,54 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "11")
+					(page "9")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 165.1 35.56)
+		(size 12.7 12.7)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "e476386b-ebc3-4fce-8163-bcfa78a0952f")
+		(property "Sheetname" "VCF"
+			(at 168.91 38.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "VCF.kicad_sch"
+			(at 165.1 48.8446 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
+					(page "13")
 				)
 			)
 		)
 	)
 	(sheet
 		(at 85.344 17.78)
-		(size 21.59 58.42)
+		(size 22.606 58.42)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2847,7 +2932,7 @@
 			)
 		)
 		(instances
-			(project "Schematics-Midi32"
+			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "7")
 				)

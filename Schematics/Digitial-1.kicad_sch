@@ -5,11 +5,10 @@
 	(uuid "0bc86cc1-c86c-41e0-9315-281c18af05f0")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Processor Module")
+		(date "2025-01-16")
+		(rev "2.6")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Conn_01x04_1"

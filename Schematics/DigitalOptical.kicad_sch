@@ -5,11 +5,10 @@
 	(uuid "21ba1f4d-c5ff-4d0a-a687-4f76aa91be2a")
 	(paper "USLegal")
 	(title_block
-		(title "Synth #2")
-		(date "2023-07-27")
-		(rev "0.1")
-		(company "      MLE Tech                  Cedar Park, TX")
-		(comment 2 "In Development")
+		(title "Discrete Digital")
+		(date "2025-01-16")
+		(rev "1.8")
+		(comment 1 "In Development ")
 	)
 	(lib_symbols
 		(symbol "Connector_Generic:Conn_01x02"

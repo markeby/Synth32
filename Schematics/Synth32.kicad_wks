@@ -1,0 +1,205 @@
+(kicad_wks
+	(version 20231118)
+	(generator "pl_editor")
+	(generator_version "8.0")
+	(setup
+		(textsize 1.5 1.5)
+		(linewidth 0.15)
+		(textlinewidth 0.15)
+		(left_margin 10)
+		(right_margin 10)
+		(top_margin 10)
+		(bottom_margin 10)
+	)
+	(rect
+		(name "")
+		(start 87.775 27.6162)
+		(end 2.04 2.0142)
+		(comment "rect around the title block")
+	)
+	(rect
+		(name "")
+		(start 0 0 ltcorner)
+		(end 0 0)
+		(repeat 2)
+		(incrx 2)
+		(incry 2)
+	)
+	(line
+		(name "")
+		(start 50 2 ltcorner)
+		(end 50 0 ltcorner)
+		(repeat 30)
+		(incrx 50)
+	)
+	(tbtext "1"
+		(name "")
+		(pos 25 1 ltcorner)
+		(font
+			(size 1.3 1.3)
+		)
+		(repeat 100)
+		(incrx 50)
+	)
+	(line
+		(name "")
+		(start 50 2 lbcorner)
+		(end 50 0 lbcorner)
+		(repeat 30)
+		(incrx 50)
+	)
+	(tbtext "1"
+		(name "")
+		(pos 25 1 lbcorner)
+		(font
+			(size 1.3 1.3)
+		)
+		(repeat 100)
+		(incrx 50)
+	)
+	(line
+		(name "")
+		(start 0 50 ltcorner)
+		(end 2 50 ltcorner)
+		(repeat 30)
+		(incry 50)
+	)
+	(tbtext "A"
+		(name "")
+		(pos 1 25 ltcorner)
+		(font
+			(size 1.3 1.3)
+		)
+		(justify center)
+		(repeat 100)
+		(incry 50)
+	)
+	(line
+		(name "")
+		(start 0 50 rtcorner)
+		(end 2 50 rtcorner)
+		(repeat 30)
+		(incry 50)
+	)
+	(tbtext "A"
+		(name "")
+		(pos 1 25 rtcorner)
+		(font
+			(size 1.3 1.3)
+		)
+		(justify center)
+		(repeat 100)
+		(incry 50)
+	)
+	(tbtext "Date: ${ISSUE_DATE}"
+		(name "")
+		(pos 57.282 6.9002)
+	)
+	(line
+		(name "")
+		(start 87.663 5.3162)
+		(end 2.065 5.3162)
+	)
+	(tbtext "${KICAD_VERSION}"
+		(name "")
+		(pos 86.953 3.7692)
+		(comment "Kicad version")
+	)
+	(line
+		(name "")
+		(start 87.663 8.4912)
+		(end 2 8.5002)
+	)
+	(tbtext "Rev: ${REVISION}"
+		(name "")
+		(pos 24 6.9)
+		(font bold)
+	)
+	(tbtext ""
+		(name "")
+		(pos 86.902 6.9002)
+		(comment "Paper format name")
+	)
+	(tbtext "Id: ${#}/${##}"
+		(name "")
+		(pos 24.102 3.7182)
+		(comment "Sheet id")
+	)
+	(line
+		(name "")
+		(start 87.822 12.4182)
+		(end 1.938 12.4182)
+	)
+	(tbtext "${TITLE}"
+		(name "")
+		(pos 87.029 10.446)
+		(font
+			(size 2 2) bold italic)
+	)
+	(tbtext "File:   ${FILENAME}"
+		(name "")
+		(pos 87.029 14.173)
+	)
+	(line
+		(name "")
+		(start 87.79 18.3972)
+		(end 2.065 18.3972)
+	)
+	(tbtext "Sheet: ${SHEETPATH}"
+		(name "")
+		(pos 87.029 16.8732)
+	)
+	(tbtext "MLE Tech"
+		(name "")
+		(pos 23.15 16.7332)
+		(font
+			(face "Brush Script Std")
+			(size 2 2) bold)
+		(comment "Company name")
+	)
+	(tbtext "${COMMENT1}"
+		(name "")
+		(pos 86.902 6.998)
+		(font
+			(color 0 100 0 1)
+		)
+		(comment "Comment 0")
+	)
+	(tbtext "${COMMENT2}"
+		(name "")
+		(pos 86.164 20.9072)
+		(font
+			(face "Arial") italic)
+		(comment "Comment 1")
+	)
+	(tbtext "${PROJECTNAME}"
+		(name "")
+		(pos 87.105 24.8732)
+		(font
+			(size 2.083 2.083) bold)
+		(comment "Comment 2")
+	)
+	(line
+		(name "")
+		(start 57.691 8.4912)
+		(end 57.691 5.3162)
+	)
+	(line
+		(name "")
+		(start 26 8.5)
+		(end 26 2)
+	)
+	(tbtext "Cedar Park, TX"
+		(name "")
+		(pos 23.192 13.8742)
+		(font
+			(face "Brush Script Std")
+			(size 2 2) bold)
+		(comment "Company name")
+	)
+	(line
+		(name "")
+		(start 25.704 18.3852)
+		(end 25.704 12.4182)
+	)
+)

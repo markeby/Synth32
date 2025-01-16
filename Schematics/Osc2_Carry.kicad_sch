@@ -4,6 +4,12 @@
 	(generator_version "8.0")
 	(uuid "53f9ebab-756c-4d2d-80ee-1862aaf03b09")
 	(paper "USLegal")
+	(title_block
+		(title "Dual Oscillator Carrier Module")
+		(date "2025-01-16")
+		(rev "4.4")
+		(comment 1 "In Development ")
+	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:LM358"
 			(pin_names
