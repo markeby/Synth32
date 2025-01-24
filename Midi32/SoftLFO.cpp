@@ -14,28 +14,32 @@ static const char* Label = "LFO-S";
 //#######################################################################
     SOFT_LFO_C::SOFT_LFO_C ()
     {
-    SetFrequency (10);
+    SetFrequency (1);
     Current = 0.0;
     }
 
 //#######################################################################
 void SOFT_LFO_C::SetFrequency (short value)
     {
-    this->WaveLength = value;      // frequency / 2
-    this->HalfWaveLength = this->WaveLength * 0.5;
-    DBG ("Frequency = %f   Wavelength = %f", 1.0 / this->WaveLength, this->WaveLength);
+    this->Frequency = value * 0.014648;
+    this->WaveLength = 1000 / this->Frequency;
+    DBG ("Frequency = %f Hz  Wavelength = %f ms", this->Frequency, this->WaveLength);
     }
 
 //#######################################################################
 void SOFT_LFO_C::Loop (float millisec)
     {
-    Current += millisec / WaveLength;  // process zero to one
+    // Calculate current position of wavelength and remove overflow
+    this->Current += millisec;
+    if ( this->Current > this->WaveLength )
+        this->Current -= this->WaveLength;
 
-    if ( Current > WaveLength )         // remove overflow
-        Current -= WaveLength;
+    // Determine percentage of wavelength achieved and convert to radians
+    float zf = this->Current / this->WaveLength;
 
-    Sine = sin (Current * 6.28) * Modulation;        // Current is zero to one so convert to radians then generate -1.0 to 1.0
-//    I2cDevices.D2Analog (84, (uint16_t)((1.0 + Sine) * 2047.0));
+    // Calculate position in sine wave and factor in modulation wheel position
+    this->Sine = (sin (zf  * 6.28) + 1.0) * 0.5 * Modulation;
+//    I2cDevices.D2Analog (87, (uint16_t)((1.0 + Sine) * 2047.0));
     }
 
 //#######################################################################

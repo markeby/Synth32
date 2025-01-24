@@ -56,8 +56,8 @@ using namespace DISP_MESSAGE_N;
 
         TitleControl[z] = new TITLE_WIDGET_C (panel, ChannelText[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
-        SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 225, LV_PALETTE_ORANGE);
-        MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 225, LV_PALETTE_INDIGO);
+        SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
+        MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
 
         switch ( z )
             {
@@ -68,7 +68,7 @@ using namespace DISP_MESSAGE_N;
                 PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             case 4:
-                Noise = new NOISE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -8);
+                Noise = new NOISE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -25);
                 break;
             default:
                 break;
@@ -192,15 +192,15 @@ void PAGE_MOD_C::UpdateHardButtons (short value, bool sel)
         {
         case 0:
             this->HardLabelSine.SetValueColor (color);
-            lv_label_set_text(this->HardLabelSine.Value,"Sine");
+            this->HardLabelSine.SetLabel ("Sine");
             break;
         case 1:
             this->HardLabelRamp.SetValueColor (color);
-            lv_label_set_text(this->HardLabelRamp.Value,"Sawtooth");
+            this->HardLabelRamp.SetLabel ("Ramp");
             break;
         case 2:
             this->HardLabelPulse.SetValueColor (color);
-            lv_label_set_text(this->HardLabelPulse.Value,"Pulse");
+            this->HardLabelPulse.SetLabel ("Pulse");
             break;
         default:
             break;
@@ -216,23 +216,23 @@ void PAGE_MOD_C::UpdateSoftButtons (short value, bool sel)
         {
         case 0:
             this->SoftLabelSine.SetValueColor (color);
-            lv_label_set_text(this->SoftLabelSine.Value,"Sine");
+            this->SoftLabelSine.SetLabel ("Sine");
             break;
         case 1:
             this->SoftLabelTriangle.SetValueColor (color);
-            lv_label_set_text(this->SoftLabelTriangle.Value,"Triangle");
+            this->SoftLabelTriangle.SetLabel ("Triangle");
             break;
         case 2:
             this->SoftLabelRamp.SetValueColor (color);
-            lv_label_set_text(this->SoftLabelRamp.Value,"RAMP");
+            this->SoftLabelRamp.SetLabel ("Ramp");
             break;
         case 3:
             this->SoftLabelPulse.SetValueColor (color);
-            lv_label_set_text(this->SoftLabelPulse.Value,"Pulse");
+            this->SoftLabelPulse.SetLabel ("Pulse");
             break;
         case 4:
             this->SoftLabelNoise.SetValueColor (color);
-            lv_label_set_text(this->SoftLabelNoise.Value,"Noise");
+            this->SoftLabelNoise.SetLabel ("Noise");
             break;
         default:
             break;
@@ -260,7 +260,7 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
                     this->MeterHard->SetFreq (value);
                     break;
                 case EFFECT_C::SAWTOOTH_DIRECTION:
-                    this->RampDir->SetDir (value);
+                    this->RampDir->SetDir (!value);
                     break;
                 case EFFECT_C::PULSE_WIDTH:
                     this->PulseWidth->SetWidth (value);
@@ -308,22 +308,23 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int x = 155;
     int y = 140;
 
-    Tuningfont = &lv_font_montserrat_48;
-    lv_style_init (&TuningStyle);
-    lv_style_set_text_font  (&TuningStyle, Tuningfont);
-    lv_style_set_text_color (&TuningStyle, lv_color_hex(0xF00000));
+    this->Tuningfont = &lv_font_montserrat_48;
+    lv_style_init (&this->TuningStyle);
+    lv_style_set_text_font  (&this->TuningStyle, this->Tuningfont);
+    lv_style_set_text_color (&this->TuningStyle, lv_color_hex(0xF00000));
 
-    TuningTitle = lv_label_create (base);
-    lv_obj_set_pos    (TuningTitle, x + 45, 20);
-    lv_label_set_text (TuningTitle, "TUNING MODE");
-    lv_obj_add_style  (TuningTitle, &TuningStyle, 0);
+    this->TuningTitle = lv_label_create (base);
+    lv_obj_set_pos    (this->TuningTitle, x + 45, 20);
+    lv_label_set_text (this->TuningTitle, "TUNING MODE");
+    lv_obj_add_style  (this->TuningTitle, &this->TuningStyle, 0);
 
-    Note = new NOTE_WIDGET_C (base, x + 125, 80);
+    this->Note = new NOTE_WIDGET_C (base, x + 116, 80);
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        LevelTuning[z] = new LEVEL_WIDGET_C (base, ChannelText[z], x, y, LV_PALETTE_INDIGO);
+        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, ChannelText[z], x, y, LV_PALETTE_INDIGO);
         x += 90;
         }
+    this->TuneSelection = new TUNES_WIDGET_C (base, 248, 340);
     }
 
 //#######################################################################
@@ -336,6 +337,9 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             break;
         case EFFECT_C::NOTE:
             Note->SetValue (value);
+            break;
+        case EFFECT_C::SELECTED:
+            this->TuneSelection->Set (ch, value);
             break;
         default:
             break;
@@ -357,6 +361,12 @@ void GRPH_C::Begin ()
     lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
 
     lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+
+    // initialize keyboard sugguestions
+    lv_style_init (&GlobalKeyStyle);
+    lv_style_set_text_font (&GlobalKeyStyle, &lv_font_montserrat_12);
+    lv_style_set_text_color (&GlobalKeyStyle, lv_color_hex (0xD0D0D0));
+
     Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
 
     BasePageOsc0   = lv_tabview_add_tab (Pages, "");

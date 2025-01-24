@@ -169,7 +169,11 @@ void SYNTH_FRONT_C::SetNoise (short ch, bool state)
 //#######################################################################
 void SYNTH_FRONT_C::SaveAllSettings ()
     {
-    for ( int z = 0;  z < CHAN_COUNT;  z++ )
-        Settings.PutOscBank (z, this->pChan[z]->pOsc ()->GetBankAddr ());
+    if ( SetTuning )
+        {
+        Serial << "  Saving synth keyboard arrays" << endl;
+        for ( int z = 0;  z < CHAN_COUNT;  z++ )
+            Settings.PutOscBank (z, this->pChan[z]->pOsc ()->GetBankAddr ());
+        }
     }
 

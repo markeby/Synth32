@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include <chip-debug-report.h>
 #include "config.h"
+#include "I2Cmessages.h"
 #include "settings.h"
 #include "SerialMonitor.h"
 #include "FrontEnd.h"
@@ -70,6 +71,10 @@ bool MONITOR_C::Save (SMODE m)
         case INPWD:
             Settings.PutPasswd (this->InputString);
             break;
+        case VARIABLE:
+            Serial << endl;
+//            SynthFront.FreqLFO (1, this->InputString.toInt ());
+            break;
         default:
             break;
         }
@@ -94,10 +99,12 @@ void MONITOR_C::Tuning ()
 //#######################################################################
 void MONITOR_C::Reset ()
     {
+    DisplayMessage.Reset ();
     Serial << endl << "  ********** Reset requested **********";
     Serial << endl << endl;
     Serial << endl << endl;
     Serial << endl << endl;
+    delay (200);            // Pause a little bit so that the display message can get out.
     ESP.restart ();
     }
 
@@ -133,6 +140,7 @@ bool MONITOR_C::PromptZap (void)
     return (false);
     }
 
+void Test1 (byte code, byte value);
 //#######################################################################
 void MONITOR_C::MenuSel (void)
     {
@@ -226,7 +234,6 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case 'X':
                     SynthFront.SaveAllSettings ();
-                    Serial << "  Saving synth keyboard arrays" << endl;
                     this->Mode (MENU);
                     break;
                 case 'P':
@@ -251,10 +258,15 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
+                    this->InputString.clear ();
+                    this->InputPrompt ("  Enter value");
+                    this->Mode (VARIABLE);
                     break;
                 case 'x':           // Test function #2
+                    Test1 (151, 0x7F);
                     break;
                 case 'c':           // Test function #3
+                    Test1 (151, 0);
                     break;
                 case 'v':           // Test function #4
                     break;
@@ -284,7 +296,7 @@ void MONITOR_C::Menu (void)
     Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
     Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
-    Serial << "\tX   - Save synth oscillatore tunning" << endl;
+    Serial << "\tX   - Save synth oscillator tunning" << endl;
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\n";
     Serial << "\tz   - Test function #1" << endl;
@@ -369,6 +381,7 @@ void MONITOR_C::Loop (void)
                     break;
                 case INSSID:
                 case INPWD:
+                case VARIABLE:
                     this->TextIn ();
                     break;
                 case ZAP1:

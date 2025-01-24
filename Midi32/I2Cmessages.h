@@ -26,10 +26,10 @@ private:
     void  SendUpdate (DISP_MESSAGE_N::CMD_C page, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
 
 public:
-          I2C_MESSAGE_C     (void);
-    void  Begin             (byte display, byte sda, byte scl);
-    void  Pause             (bool state);
-    void  Page              (DISP_MESSAGE_N::PAGE_C page);
+          I2C_MESSAGE_C (void);
+    void  Begin         (byte display, byte sda, byte scl);
+    void  Page          (DISP_MESSAGE_N::PAGE_C page);
+    void  Reset         (void);
 
     //#################################################
     inline bool Loop (void)
@@ -71,6 +71,15 @@ public:
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
                           DISP_MESSAGE_N::EFFECT_C::NOTE,
+                          value);
+        }
+
+    //#################################################
+    inline void TuningSelect (byte ch, byte value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          ch,
+                          DISP_MESSAGE_N::EFFECT_C::SELECTED,
                           value);
         }
 

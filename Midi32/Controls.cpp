@@ -31,21 +31,21 @@ static void SetTimeSetSelect (short ch, short state)
     }
 
 //########################################################
-static void ToggleModVCA (short ch)
+static void ToggleModVCA (short ch, bool state)
     {
-    SynthFront.ToggleSelectModVCA (ch);
+    SynthFront.SelectModVCA (ch, state);
     }
 
 //########################################################
-static void ToggleModVCO (short ch)
+static void ToggleModVCO (short ch, bool state)
     {
-    SynthFront.ToggleSelectModVCO (ch);
+    SynthFront.SelectModVCO (ch, state);
     }
 
 //########################################################
-static void ToggleRampDir (short ch)
+static void ToggleRampDir (short ch, bool state)
     {
-    SynthFront.ToggleRampDir ();
+    SynthFront.SetRampDir (state);
     }
 
 //########################################################
@@ -87,12 +87,30 @@ static void FreqLFO (short ch, short data)
     }
 
 //########################################################
-static void TuneReset (short ch)
+static void TuneReset (short ch, bool state)
     {
-    if ( SynthFront.IsInTuning () )
-        Monitor.Reset ();
-    else
+    if ( state )
         Monitor.Tuning ();
+    else
+        Monitor.Reset ();
+    }
+
+//########################################################
+static void TuneUp (short ch, bool state)
+    {
+    SynthFront.TuningAdjust (true);
+    }
+
+//########################################################
+static void TuneDown (short ch, bool state)
+    {
+    SynthFront.TuningAdjust (false);
+    }
+
+//########################################################
+static void TunningSave (short ch, bool state)
+    {
+    SynthFront.SaveAllSettings ();
     }
 
 //########################################################
@@ -105,9 +123,9 @@ static void PageAdvance (short ch, short data)
     }
 
 //########################################################
-static void NoiseSet (short ch, short data)
+static void ToggleNoise (short ch, bool state)
     {
-    SynthFront.SetNoise (ch, data);
+    SynthFront.SetNoise (ch, state);
     }
 
 //########################################################
@@ -158,16 +176,16 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         { 0x55,             0x0D, "Sawtooth Dir",       SawtoothDirection },    // 01  55  xx
         {    1,                0, "Dual Zone 1",        DualZone          },    // 01  56  xx
         {    2,                0, "Dual Zone 2",        DualZone          },    // 01  57  xx
-        {   DUCT_BLUE,         0, "0-1 Blue ",          NoiseSet          },    // 01  58  xx
-        {   DUCT_WHITE,        0, "0-1 White",          NoiseSet          },    // 01  59  xx
-        {   DUCT_PINK,         0, "0-1 Pink ",          NoiseSet          },    // 01  5A  xx
-        {   DUCT_RED,          0, "0-1 Red  ",          NoiseSet          },    // 01  5B  xx
-        {   0x80 | DUCT_BLUE,  0, "2 Blue ",            NoiseSet          },    // 01  5C  xx
-        {   0x80 | DUCT_WHITE, 0, "2 White",            NoiseSet          },    // 01  5D  xx
-        {   0x80 | DUCT_PINK,  0, "2 Pink ",            NoiseSet          },    // 01  5E  xx
-        {   0x80 | DUCT_RED,   0, "2 Red  ",            NoiseSet          },    // 01  5F  xx
-        {   47,                0, "N ",                 nullptr           },    // 01  60  xx
-        {   47,                0, "N ",                 nullptr           },    // 01  61  xx
+        {   40,                0, "N ",                 nullptr           },    // 01  58  xx
+        {   41,                0, "N ",                 nullptr           },    // 01  59  xx
+        {   42,                0, "N ",                 nullptr           },    // 01  5A  xx
+        {   43,                0, "N ",                 nullptr           },    // 01  5B  xx
+        {   44,                0, "N ",                 nullptr           },    // 01  5C  xx
+        {   45,                0, "N ",                 nullptr           },    // 01  5D  xx
+        {   46,                0, "N ",                 nullptr           },    // 01  5E  xx
+        {   47,                0, "N ",                 nullptr           },    // 01  5F  xx
+        {   48,                0, "N ",                 nullptr           },    // 01  60  xx
+        {   49,                0, "N ",                 nullptr           },    // 01  61  xx
         {   50,                0, "N ",                 nullptr           },    // 01  62  xx
         {   51,                0, "N ",                 nullptr           },    // 01  63  xx
         { 0x64,             0x3F, "Page Advance",       PageAdvance       },    // 01  64  xx
@@ -203,48 +221,48 @@ MIDI_MAP FaderMapArray[] =
 
 //########################################################
 MIDI_ENCODER_MAP KnobMapArray[] =
-    {   {  0, "Soft LFO freq",          FreqLFO, 0  },  //  01  0A  xx
-        {  1, "Hard LFO freq",          FreqLFO, 0  },  //  02  0A  xx
-        {  2, "Hard LFO pulse width",   FreqLFO, 0  },  //  03  0A  xx
-        {  3, "N ",                     nullptr, 0  },  //  04  0A  xx
-        {  4, "N ",                     nullptr, 0  },  //  05  0A  xx
-        {  5, "N ",                     nullptr, 0  },  //  06  0A  xx
-        {  6, "N ",                     nullptr, 0  },  //  07  0A  xx
-        {  7, "N ",                     nullptr, 0  },  //  08  0A  xx
-        {  8, "N ",                     nullptr, 0  },  //  09  0A  xx
-        {  9, "N ",                     nullptr, 0  },  //  0A  0A  xx
-        { 10, "N ",                     nullptr, 0  },  //  0B  0A  xx
-        { 11, "N ",                     nullptr, 0  },  //  0C  0A  xx
-        { 12, "N ",                     nullptr, 0  },  //  0D  0A  xx
-        { 14, "N ",                     nullptr, 0  },  //  0E  0A  xx
-        { 14, "N ",                     nullptr, 0  },  //  0F  0A  xx
-        { 15, "N ",                     nullptr, 0  },  //  10  0A  xx
+    {   {  0, "Soft LFO freq",          FreqLFO, 1  },  //  01  0A  xx
+        {  1, "Hard LFO freq",          FreqLFO, 1  },  //  02  0A  xx
+        {  2, "Hard LFO pulse width",   FreqLFO, 1  },  //  03  0A  xx
+        {  3, "N ",                     nullptr, 1  },  //  04  0A  xx
+        {  4, "N ",                     nullptr, 1  },  //  05  0A  xx
+        {  5, "N ",                     nullptr, 1  },  //  06  0A  xx
+        {  6, "N ",                     nullptr, 1  },  //  07  0A  xx
+        {  7, "N ",                     nullptr, 1  },  //  08  0A  xx
+        {  8, "N ",                     nullptr, 1  },  //  09  0A  xx
+        {  9, "N ",                     nullptr, 1  },  //  0A  0A  xx
+        { 10, "N ",                     nullptr, 1  },  //  0B  0A  xx
+        { 11, "N ",                     nullptr, 1  },  //  0C  0A  xx
+        { 12, "N ",                     nullptr, 1  },  //  0D  0A  xx
+        { 14, "N ",                     nullptr, 1  },  //  0E  0A  xx
+        { 14, "N ",                     nullptr, 1  },  //  0F  0A  xx
+        { 15, "N ",                     nullptr, 1  },  //  10  0A  xx
     };
 
 //########################################################
 MIDI_BUTTON_MAP SwitchMapArray[] =
-    {   {  0, "VCA Mod Sine    ",       ToggleModVCA    },  //  01  10  xx
-        {  1, "VCA Mod Triangle",       ToggleModVCA    },  //  01  11  xx
-        {  2, "VCA Mod Sawtooth",       ToggleModVCA    },  //  01  12  xx
-        {  3, "VCA Mod Pulse   ",       ToggleModVCA    },  //  01  13  xx
-        {  4, "VCA Mod Noise   ",       ToggleModVCA    },  //  01  14  xx
-        {  5, "Switch f6",              nullptr         },  //  01  15  xx
-        {  6, "Switch f7",              nullptr         },  //  01  16  xx
-        {  7, "Switch f8",              nullptr         },  //  01  17  xx
-        {  0, "VCO freq Mod Sine",      ToggleModVCO    },  //  01  18  xx
-        {  1, "VCO freq Mod Ramp",      ToggleModVCO    },  //  01  19  xx
-        {  2, "VCO freq Pulse   ",      ToggleModVCO    },  //  01  1A  xx
-        {  3, "Toggle Ramp Direction",  ToggleRampDir   },  //  01  1B  xx
-        {  4, "Switch #13",             nullptr         },  //  01  1C  xx
-        { 13, "Switch #14",             nullptr         },  //  01  1D  xx
-        { 14, "Switch #15",             nullptr         },  //  01  1E  xx
-        { 15, "Switch #16",             nullptr         },  //  01  1F  xx
-        { 24, "Switch #25",             nullptr         },  //  01  72  xx
-        { 24, "Switch #25",             nullptr         },  //  01  73  xx
-        { 20, "Switch #21",             nullptr         },  //  01  74  xx
-        { 21, "Switch #22",             nullptr         },  //  01  75  xx
-        { 22, "Tune/Reset",             TuneReset       },  //  01  76  xx
-        { 23, "Switch #24",             nullptr         },  //  01  77  xx
+    {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA  },  //  01  10  xx
+        {  1,           false,  "VCA Mod Triangle",         ToggleModVCA  },  //  01  11  xx
+        {  2,           false,  "VCA Mod Sawtooth",         ToggleModVCA  },  //  01  12  xx
+        {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA  },  //  01  13  xx
+        {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA  },  //  01  14  xx
+        {  5,           false,  "Switch f6",                nullptr       },  //  01  15  xx
+        {  6,           false,  "Switch f7",                nullptr       },  //  01  16  xx
+        {  7,           false,  "Switch f8",                nullptr       },  //  01  17  xx
+        {  0,           false,  "VCO freq Mod Sine",        ToggleModVCO  },  //  01  18  xx
+        {  1,           false,  "VCO freq Mod Ramp",        ToggleModVCO  },  //  01  19  xx
+        {  2,           false,  "VCO freq Pulse   ",        ToggleModVCO  },  //  01  1A  xx
+        {  3,           false,  "Toggle Ramp Direction",    ToggleRampDir },  //  01  1B  xx
+        { DUCT_BLUE,    false,  "0-1 Blue ",                ToggleNoise   },  //  01  1C  xx
+        { DUCT_WHITE,   false,  "0-1 White",                ToggleNoise   },  //  01  1D  xx
+        { DUCT_PINK,    false,  "0-1 Pink ",                ToggleNoise   },  //  01  1E  xx
+        { DUCT_RED,     false,  "0-1 Red  ",                ToggleNoise   },  //  01  1F  xx
+        { 24,           false,  "Tuning save",              TunningSave   },  //  01  72  xx
+        { 24,           false,  "",                         nullptr       },  //  01  73  xx
+        { 20,           false,  "Tune +",                   TuneUp        },  //  01  74  xx
+        { 21,           false,  "Tune -",                   TuneDown      },  //  01  75  xx
+        { 22,           false,  "Tune/Reset",               TuneReset     },  //  01  76  xx
+        { 23,           false,  "Switch >",                 nullptr       },  //  01  77  xx
      };
 
 

@@ -62,6 +62,18 @@ void I2C_MESSAGE_C::Page (PAGE_C page)
     }
 
 //###################################################################
+void I2C_MESSAGE_C::Reset ()
+    {
+    if ( this->Ready )
+        {
+        sendBuffer[0] = (byte)CMD_C::RESET;
+        sendBuffer[1] = 0;
+        sendBuffer[2] = 0;
+        SendComplete (MESSAGE_LENGTH_PAGE);
+        }
+    }
+
+//###################################################################
 // CMD_C chan EFFECT_C high low
 void I2C_MESSAGE_C::SendUpdate (CMD_C page, byte channel, EFFECT_C effect, short value)
     {
@@ -75,18 +87,6 @@ void I2C_MESSAGE_C::SendUpdate (CMD_C page, byte channel, EFFECT_C effect, short
         DBGM ("Page: %X  channel: %X   effect: %X   Value: %X", sendBuffer[0], sendBuffer[1], sendBuffer[2], value);
         this->SendComplete (MESSAGE_LENGTH_UPDATE);
         }
-    }
-
-//#####################################################################
-void I2C_MESSAGE_C::Pause (bool state)
-    {
-    if ( state )
-        sendBuffer[0] = (byte)CMD_C::PAUSE;
-    else
-        sendBuffer[0] = (byte)CMD_C::GO;
-    sendBuffer[1] = 0;
-    DBGM ("Command: %d\n", sendBuffer[0]);
-    this->SendComplete (MESSAGE_LENGTH_CNTL);
     }
 
 I2C_MESSAGE_C DisplayMessage;

@@ -99,11 +99,8 @@ void MESSAGE_CLIENT_C::Process ()
             case CMD_C::UPDATE_PAGE_TUNING:
                 Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::PAUSE:
-                Graphics.Pause (true);
-                break;
-            case CMD_C::GO:
-                Graphics.Pause (false);
+            case CMD_C::RESET:
+                ESP.restart ();
                 break;
             case CMD_C::PAGE_SHOW:
                 Graphics.PageSelect ((PAGE_C)ptop.Bytes[2]);

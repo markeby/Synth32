@@ -205,9 +205,10 @@ void ENVELOPE_C::Update ()
         if ( this->Current > this->Peak )
             this->Current = this->Peak;
 
-        output = this->Current * this->Multiplier;
-        if ( this->UseSoftLFO && (output > 0.05) )
-            output += SoftLFO.GetSin ();
+//        output = this->Current * this->Multiplier;
+        output = this->Current;
+        if ( this->UseSoftLFO && (output > 0.5) )
+            output -= SoftLFO.GetSin ();
 
         int16_t z = abs(this->Floor + (this->Diff * output));
         I2cDevices.D2Analog (this->DeviceChannel, z);

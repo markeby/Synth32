@@ -25,14 +25,21 @@ static const char* LabelM = "M";
 #endif
 
 //#####################################################################
-void SYNTH_FRONT_C::ToggleSelectModVCA (byte ch)
+void SYNTH_FRONT_C::SelectModVCA (byte ch, bool state)
     {
-    bool zb = !this->ModulationVCA[ch];
-    this->ModulationVCA[ch] = zb;
+    this->ModulationVCA[ch] = state;
 
-    DisplayMessage.LfoSoftSelect (ch, zb);
+    DisplayMessage.LfoSoftSelect (ch, state);
     for ( int z = 0;  z < CHAN_COUNT;  z++)
-        this->pChan[z]->pOsc()->SetSoftLFO (ch, zb);
+        this->pChan[z]->pOsc()->SetSoftLFO (ch, state);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SplitLFO (bool state)
+    {
+    I2cDevices.DigitalOut (this->SplitLfoAdr, state);
+        I2cDevices.UpdateDigital ();
+
     }
 
 //#######################################################################
@@ -55,5 +62,6 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
             SoftLFO.SetFrequency (data);
             break;
         }
+    this->KnobMap[ch].Value = data;
     }
 

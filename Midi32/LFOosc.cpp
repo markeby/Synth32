@@ -129,13 +129,11 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::ToggleWave (short ch)
+void SYNTH_LFO_C::SetWave (short ch, bool state)
     {
-    bool zb = !Vca[ch].Select;;
-
-    Vca[ch].Select = zb;
-    DisplayMessage.LfoHardSelect (ch, zb);
-    if ( zb )
+    Vca[ch].Select = state;
+    DisplayMessage.LfoHardSelect (ch, state);
+    if ( state )
         {
         this->InUse++;
         this->SetLevel (ch, CurrentLevel);
@@ -153,7 +151,7 @@ void SYNTH_LFO_C::ToggleWave (short ch)
         this->UpdateNeded = false;
         }
 
-    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((zb) ? "ON" : "off"));
+    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((state) ? "ON" : "off"));
     }
 
 //#######################################################################
@@ -184,12 +182,11 @@ void SYNTH_LFO_C::PitchBend (short value)
     }
 
 //#######################################################################
-void SYNTH_LFO_C::ToggleRampDir ()
+void SYNTH_LFO_C::SetRampDir (bool state)
     {
-    bool zb = !this->RampSlope;
-    this->RampSlope = zb;
-    DisplayMessage.LfoHardRampSlope (zb);
-    I2cDevices.DigitalOut (this->SlopeChannelIO, zb);
+    this->RampSlope = state;
+    DisplayMessage.LfoHardRampSlope (state);
+    I2cDevices.DigitalOut (this->SlopeChannelIO, state);
     I2cDevices.UpdateDigital ();
     }
 

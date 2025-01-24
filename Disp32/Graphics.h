@@ -18,6 +18,8 @@
 #include "../Common/DispMessages.h"
 #include "Widgets.h"
 
+extern lv_style_t  GlobalKeyStyle;
+
 class ESP_Panel;
 class TITLE_WIDGET_C;
 class ADSR_METER_WIDGET_C;
@@ -108,6 +110,7 @@ private:
     NOTE_WIDGET_C*          Note;
     TITLE_WIDGET_C*         TitleTuning[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         LevelTuning[OSC_MIXER_COUNT];
+    TUNES_WIDGET_C*         TuneSelection;
 
 public:
               PAGE_TUNE_C (lv_obj_t* base);

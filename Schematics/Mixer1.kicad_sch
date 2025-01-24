@@ -3713,6 +3713,26 @@
 		)
 		(uuid "fe64394f-d42d-4421-8d1d-492208361359")
 	)
+	(text "Monitor\nAccessories"
+		(exclude_from_sim no)
+		(at 158.1589 69.0164 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5cccbfdc-5e13-4769-a983-66c03ddb63f9")
+	)
+	(text "Audio\nOut"
+		(exclude_from_sim no)
+		(at 157.5778 82.6141 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f2f770a2-653a-4cfb-a392-74e0ef227205")
+	)
 	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 52.07 20.32 90)
@@ -4571,10 +4591,9 @@
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "48742f39-e61f-4122-b7ce-dc7245615d33")
 		(property "Reference" "J32"
-			(at 154.94 81.9149 0)
+			(at 148.082 77.47 0)
 			(effects
 				(font
 					(size 1.27 1.27)

@@ -12,14 +12,15 @@
 #include "config.h"
 #include "Widgets.h"
 
+
 //#######################################################################
 //#######################################################################
     TEXT_INFO_C::TEXT_INFO_C ()
     {
-    Label = nullptr;
-    Unit  = nullptr;
-    Value = nullptr;
-    Valid = false;
+    this->Label = nullptr;
+    this->Unit  = nullptr;
+    this->Value = nullptr;
+    this->Valid = false;
     lv_style_init (&this->StyleLabel);
     lv_style_set_text_font (&this->StyleLabel, &lv_font_montserrat_14);
     lv_style_init (&this->StyleValue);
@@ -52,27 +53,15 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     }
 
 //#######################################################################
-void  TEXT_INFO_C::SetLabelColor (uint32_t color)
-    {
-    lv_style_set_text_color (&this->StyleLabel, lv_color_hex (color));
-    }
-
-//#######################################################################
-void  TEXT_INFO_C::SetValueColor (uint32_t color)
-    {
-    lv_style_set_text_color (&this->StyleValue, lv_color_hex (color));
-    }
-
-//#######################################################################
 //#######################################################################
     TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s)
     {
-    lv_style_init (&Style);
-    lv_style_set_text_font (&Style, &lv_font_montserrat_18);
-    Label  = lv_label_create (base);
-    lv_obj_align (Label, LV_ALIGN_TOP_MID, 3, 0);
-    lv_label_set_text (Label, s);
-    lv_obj_add_style (Label, &Style, 0);
+    lv_style_init (&this->Style);
+    lv_style_set_text_font (&this->Style, &lv_font_montserrat_18);
+    this->Label  = lv_label_create (base);
+    lv_obj_align (this->Label, LV_ALIGN_TOP_MID, 3, 0);
+    lv_label_set_text (this->Label, s);
+    lv_obj_add_style (this->Label, &this->Style, 0);
     }
 
 //#######################################################################
@@ -86,7 +75,7 @@ void  TEXT_INFO_C::SetValueColor (uint32_t color)
 
     lv_obj_remove_style (this->Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
-    lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
+    lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
     this->Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
@@ -94,7 +83,7 @@ void  TEXT_INFO_C::SetValueColor (uint32_t color)
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    MeterFreq.BeginText (base, "  E2", "Hz", y, 0x0000F0);
+    this->MeterFreq.BeginText (base, "  E2", "Hz", y, 0x0000F0);
     // Initial positions
     this->SetFreq (0);
     this->Select (false);
@@ -103,17 +92,20 @@ void  TEXT_INFO_C::SetValueColor (uint32_t color)
 //#######################################################################
 void LFO_METER_WIDGET_C::SetFreq (short val)
     {
-    float zf = val * 0.007874;
+    float zf;
 
-    if ( SoftwareLFO )
-        zf *= 83.4;
+    if ( this->SoftwareLFO )
+        {
+        zf = val * 0.014652;
+        if ( zf < 0.015 )   zf = 0.015;
+        }
     else
         {
-        zf *= 83.4;
-        if ( zf < 0.025 )
-            zf = 0.025;
+        zf = val * 0.014652;
+        if ( zf < 0.015 )   zf = 0.015;
         }
-    lv_label_set_text_fmt (MeterFreq.Value, "%.3f", zf);
+    this->MeterFreq.TextFloat (zf);
+    lv_meter_set_indicator_end_value (this->Meter, this->Gauge, zf * 1.6666);
     }
 
 //#######################################################################
@@ -121,13 +113,13 @@ void LFO_METER_WIDGET_C::Select (bool sel)
     {
     if ( sel )
         {
-        lv_led_set_color (Led, lv_palette_main (LV_PALETTE_RED));
-        lv_led_on (Led);
+        lv_led_set_color (this->Led, lv_palette_main (LV_PALETTE_RED));
+        lv_led_on (this->Led);
         }
     else
         {
-        lv_led_set_color (Led,  lv_color_white());
-        lv_led_on (Led);
+        lv_led_set_color (this->Led,  lv_color_white());
+        lv_led_on (this->Led);
         }
     }
 
@@ -141,22 +133,22 @@ void LFO_METER_WIDGET_C::Select (bool sel)
 
     lv_obj_remove_style (this->Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
-    lv_meter_scale_t* scale = lv_meter_add_scale (Meter);
+    lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
     lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
 
     this->GaugeAttack  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
     this->GaugeDecay   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
     this->GaugeRelease = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
 
-    this->Led  = lv_led_create (Meter);
+    this->Led  = lv_led_create (this->Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    Attack.BeginText (base, " Attack:", "mSec", y, 0x008000);
-    y += 16;
-    Decay.BeginText (base, "  Decay:", "mSec", y, 0x0000ff);
-    y += 16;
-    Release.BeginText (base, "Release:", "mSec", y, 0xff0000);
+    this->Attack.BeginText (base, " Attack:", "mSec", y, 0x008000);
+    y += 15;
+    this->Decay.BeginText (base, "  Decay:", "mSec", y, 0x0000ff);
+    y += 15;
+    this->Release.BeginText (base, "Release:", "mSec", y, 0xff0000);
 
     // Initial positions
     this->SetAttack  (0);
@@ -183,22 +175,22 @@ void ADSR_METER_WIDGET_C::Select (bool sel)
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetAttack (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, GaugeAttack, val);
-    lv_label_set_text_fmt (Attack.Value, "%d", val * TIME_MULT);
+    lv_meter_set_indicator_end_value (this->Meter, this->GaugeAttack, val);
+    this->Attack.TextInt (val * TIME_MULT);
     }
 
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetDecay (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, GaugeDecay, val);
-    lv_label_set_text_fmt (Decay.Value, "%d", val * TIME_MULT);
+    lv_meter_set_indicator_end_value (this->Meter, this->GaugeDecay, val);
+    this->Decay.TextInt (val * TIME_MULT);
     }
 
 //#######################################################################
 void ADSR_METER_WIDGET_C::SetRelease (int val)
     {
-    lv_meter_set_indicator_end_value (Meter, GaugeRelease, val);
-    lv_label_set_text_fmt (Release.Value, "%d", val * TIME_MULT);
+    lv_meter_set_indicator_end_value (this->Meter, this->GaugeRelease, val);
+    this->Release.TextInt (val * TIME_MULT);
     }
 
 //#######################################################################
@@ -215,48 +207,48 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
     lv_obj_set_style_pad_right (panel, 2, 0);
     lv_obj_set_style_pad_bottom (panel, 1, 0);
 
-    lv_style_init (&StyleLabel);
-    lv_style_set_text_font (&StyleLabel, &lv_font_montserrat_12);
-    lv_style_set_text_color (&StyleLabel, lv_palette_main (p));
-    Label  = lv_label_create (panel);
-    lv_obj_align (Label, LV_ALIGN_TOP_MID, 0, 0);
-    lv_label_set_text (Label, s);
-    lv_obj_add_style (Label, &StyleLabel, 0);
+    lv_style_init (&this->StyleLabel);
+    lv_style_set_text_font (&this->StyleLabel, &lv_font_montserrat_12);
+    lv_style_set_text_color (&this->StyleLabel, lv_palette_main (p));
+    this->Label  = lv_label_create (panel);
+    lv_obj_align (this->Label, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text (this->Label, s);
+    lv_obj_add_style (this->Label, &this->StyleLabel, 0);
 
-    lv_style_init (&StyleMain);
-    lv_style_set_bg_opa (&StyleMain, LV_OPA_COVER);
-    lv_style_set_bg_color (&StyleMain, lv_color_hex3 (0x999));
-    lv_style_set_radius (&StyleMain, LV_RADIUS_CIRCLE);
-    lv_style_set_width (&StyleMain, 5);
-    lv_style_set_height (&StyleMain, size);
+    lv_style_init (&this->StyleMain);
+    lv_style_set_bg_opa (&this->StyleMain, LV_OPA_COVER);
+    lv_style_set_bg_color (&this->StyleMain, lv_color_hex3 (0x999));
+    lv_style_set_radius (&this->StyleMain, LV_RADIUS_CIRCLE);
+    lv_style_set_width (&this->StyleMain, 5);
+    lv_style_set_height (&this->StyleMain, size);
 
-    lv_style_init (&StyleIndicator);
-    lv_style_set_bg_opa (&StyleIndicator, LV_OPA_COVER);
-    lv_style_set_bg_color (&StyleIndicator, lv_palette_lighten (p, 3));
+    lv_style_init (&this->StyleIndicator);
+    lv_style_set_bg_opa (&this->StyleIndicator, LV_OPA_COVER);
+    lv_style_set_bg_color (&this->StyleIndicator, lv_palette_lighten (p, 3));
 
-    lv_style_init (&StyleKnob);
-    lv_style_set_bg_opa (&StyleKnob, LV_OPA_COVER);
-    lv_style_set_bg_color (&StyleKnob, lv_palette_main (p));
-    lv_style_set_border_color (&StyleKnob, lv_palette_main (LV_PALETTE_BLUE_GREY));
-    lv_style_set_pad_hor (&StyleKnob, 8);
-    lv_style_set_pad_ver (&StyleKnob, 1);
+    lv_style_init (&this->StyleKnob);
+    lv_style_set_bg_opa (&this->StyleKnob, LV_OPA_COVER);
+    lv_style_set_bg_color (&this->StyleKnob, lv_palette_main (p));
+    lv_style_set_border_color (&this->StyleKnob, lv_palette_main (LV_PALETTE_BLUE_GREY));
+    lv_style_set_pad_hor (&this->StyleKnob, 8);
+    lv_style_set_pad_ver (&this->StyleKnob, 1);
 
-    Slider = lv_slider_create (panel);
-    lv_obj_remove_style_all (Slider);        // Remove the styles coming from the theme
-    lv_slider_set_range (Slider, 0, size);
-    lv_obj_align (Slider, LV_ALIGN_TOP_MID, 0, 20);
-    lv_obj_add_style (Slider, &StyleMain, LV_PART_MAIN);
-    lv_obj_add_style (Slider, &StyleIndicator, LV_PART_INDICATOR);
-    lv_obj_add_style (Slider, &StyleKnob, LV_PART_KNOB);
+    this->Slider = lv_slider_create (panel);
+    lv_obj_remove_style_all (this->Slider);        // Remove the styles coming from the theme
+    lv_slider_set_range (this->Slider, 0, size);
+    lv_obj_align (this->Slider, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_add_style (this->Slider, &this->StyleMain, LV_PART_MAIN);
+    lv_obj_add_style (this->Slider, &this->StyleIndicator, LV_PART_INDICATOR);
+    lv_obj_add_style (this->Slider, &this->StyleKnob, LV_PART_KNOB);
 
-    Value = lv_label_create (panel);
-    lv_obj_align (Value, LV_ALIGN_BOTTOM_MID, 0, -2);
-    lv_style_init (&StyleValue);
-    lv_style_set_text_font (&StyleValue, &lv_font_montserrat_14);
-    lv_style_set_text_color (&StyleValue, lv_palette_main (p));
-    lv_obj_add_style (Value, &StyleValue, 0);
+    this->Value = lv_label_create (panel);
+    lv_obj_align (this->Value, LV_ALIGN_BOTTOM_MID, 0, -2);
+    lv_style_init (&this->StyleValue);
+    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_14);
+    lv_style_set_text_color (&this->StyleValue, lv_palette_main (p));
+    lv_obj_add_style (this->Value, &this->StyleValue, 0);
 
-    Multiplier = (float)size / 127.0;
+    this->Multiplier = (float)size / 127.0;
     // Initial position
     this->SetLevel (0);
     }
@@ -275,13 +267,10 @@ static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}}
 
     RAMP_WIDGET_C::RAMP_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y)
     {
-    this->TextLabel = lv_label_create (base);
-    lv_obj_align (this->TextLabel, align, x - 60, y);
-    lv_label_set_text (this->TextLabel, s);
-    lv_style_init (&this->TextStyle);
-    lv_style_set_text_font (&this->TextStyle, &lv_font_montserrat_14);
-    lv_style_set_text_color (&this->TextStyle, lv_color_hex (0xD0D0D0));
-    lv_obj_add_style (this->TextLabel, &this->TextStyle, 0);
+    lv_obj_t* keys = lv_label_create (base);
+    lv_obj_align (keys, align, x - 60, y);
+    lv_label_set_text (keys, s);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
 
     lv_style_init (&this->StyleFore);
     lv_style_set_line_width (&this->StyleFore, 3);
@@ -305,7 +294,7 @@ static lv_point_t slopeFore[] = { {0, 20}, {40, 0}, {40, 20}, {80, 0}, {80, 20}}
     lv_obj_align (this->SlopeBack, align, x, y);
     lv_obj_add_style (this->SlopeBack, &StyleBack, 0);
 
-    this->SetDir (false);
+    this->SetDir (true);
     }
 
 //#######################################################################
@@ -333,13 +322,10 @@ static lv_point_t squareWave[SQUARE_SIZE] = { {0, 0}, {0, 20}, {0, 20}, {0, 0}, 
 
     PULSE_WIDGET_C::PULSE_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y)
     {
-    this->TextLabel = lv_label_create (base);
-    lv_obj_align (this->TextLabel, align, x - 60, y);
-    lv_label_set_text (this->TextLabel, s);
-    lv_style_init (&this->TextStyle);
-    lv_style_set_text_font (&this->TextStyle, &lv_font_montserrat_14);
-    lv_style_set_text_color (&this->TextStyle, lv_color_hex (0xD0D0D0));
-    lv_obj_add_style (this->TextLabel, &this->TextStyle, 0);
+    lv_obj_t* keys = lv_label_create (base);
+    lv_obj_align (keys, align, x - 60, y);
+    lv_label_set_text (keys, s);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
 
     lv_style_init (&Style);
     lv_style_set_line_width (&Style, 2);
@@ -359,11 +345,11 @@ void PULSE_WIDGET_C::SetWidth (short width)
     {
     float percent = (float)width / 4095.0;
     width = (short)(40.0 * percent);
-    Pulse[2].x = squareWave[2].x + width;
-    Pulse[3].x = squareWave[3].x + width;
-    Pulse[6].x = squareWave[6].x + width;
-    Pulse[7].x = squareWave[7].x + width;
-    lv_line_set_points (Wave, Pulse, SQUARE_SIZE);
+    this->Pulse[2].x = squareWave[2].x + width;
+    this->Pulse[3].x = squareWave[3].x + width;
+    this->Pulse[6].x = squareWave[6].x + width;
+    this->Pulse[7].x = squareWave[7].x + width;
+    lv_line_set_points (this->Wave, this->Pulse, SQUARE_SIZE);
     }
 
 //#######################################################################
@@ -388,19 +374,19 @@ static const float FreqTable[128] =
     NOTE_WIDGET_C::NOTE_WIDGET_C (lv_obj_t* base, short x, short y)
     {
     lv_obj_t* panel = lv_obj_create (base);
-    lv_obj_set_size (panel, 190, 26);
+    lv_obj_set_size (panel, 190, 28);
     lv_obj_set_pos (panel, x, y);
     lv_obj_set_style_pad_top (panel, 1, 0);
     lv_obj_set_style_pad_left (panel, 2, 0);
     lv_obj_set_style_pad_right (panel, 2, 0);
     lv_obj_set_style_pad_bottom (panel, 1, 0);
 
-    Value = lv_label_create (panel);
-    lv_obj_align (Value, LV_ALIGN_CENTER, 0, 0);
-    lv_style_init (&StyleValue);
-    lv_style_set_text_font (&StyleValue, &lv_font_montserrat_18);
-    lv_style_set_text_color (&StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
-    lv_obj_add_style (Value, &StyleValue, 0);
+    this->Value = lv_label_create (panel);
+    lv_obj_align (this->Value, LV_ALIGN_CENTER, 0, 0);
+    lv_style_init (&this->StyleValue);
+    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_18);
+    lv_style_set_text_color (&this->StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
+    lv_obj_add_style (this->Value, &this->StyleValue, 0);
 
     this->SetValue (0);
     }
@@ -409,47 +395,53 @@ static const float FreqTable[128] =
 void NOTE_WIDGET_C::SetValue (short val)
     {
     val %= 128;
-    lv_label_set_text_fmt (Value, "%s  %d = %.2f Hz", FreqNote[val % 12], val, FreqTable[val]);
+    lv_label_set_text_fmt (this->Value, "%s  %d = %.2f Hz", FreqNote[val % 12], val, FreqTable[val]);
     }
 
 //#######################################################################
     NOISE_WIDGET_C::NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
     {
+    lv_obj_t* keys = lv_label_create (base);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
+    lv_obj_align (keys, align, x, y);
+    lv_label_set_text (keys, "F13    F14   F15    F16");
+
+    y += 20;
     x += -45;
-    Blue = lv_label_create (base);
-    lv_obj_align (Blue, align, x, y);
-    lv_style_init (&StyleBlue);
-    lv_style_set_text_font (&StyleBlue, &lv_font_montserrat_18);
-    lv_style_set_text_color (&StyleBlue, lv_color_hex3(0xFFFFFF));
-    lv_obj_add_style (Blue, &StyleBlue, 0);
-    lv_label_set_text(Blue, "B");
+    this->Blue = lv_label_create (base);
+    lv_label_set_recolor (this->Blue, true);
+    lv_obj_align (this->Blue, align, x, y);
+    lv_style_init (&this->StyleBlue);
+    lv_style_set_text_font (&this->StyleBlue, &lv_font_montserrat_18);
+    lv_obj_add_style (this->Blue, &this->StyleBlue, 0);
+    this->Set (DUCT_BLUE, false);
     x += 30;
 
-    White = lv_label_create (base);
-    lv_obj_align (White, align, x, y);
-    lv_style_init (&StyleWhite);
-    lv_style_set_text_font (&StyleWhite, &lv_font_montserrat_18);
-    lv_style_set_text_color (&StyleWhite, lv_color_hex3(0xFFFFFF));
-    lv_obj_add_style (White, &StyleWhite, 0);
-    lv_label_set_text(White, "W");
+    this->White = lv_label_create (base);
+    lv_label_set_recolor (this->White, true);
+    lv_obj_align (this->White, align, x, y);
+    lv_style_init (&this->StyleWhite);
+    lv_style_set_text_font (&this->StyleWhite, &lv_font_montserrat_18);
+    lv_obj_add_style (this->White, &this->StyleWhite, 0);
+    this->Set (DUCT_WHITE,false);
     x += 30;
 
-    Pink = lv_label_create (base);
-    lv_obj_align (Pink, align, x, y);
-    lv_style_init (&StylePink);
-    lv_style_set_text_font (&StylePink, &lv_font_montserrat_18);
-    lv_style_set_text_color (&StylePink, lv_color_hex3(0xFFFFFF));
-    lv_obj_add_style (Pink, &StylePink, 0);
-    lv_label_set_text(Pink, "P");
+    this->Pink = lv_label_create (base);
+    lv_label_set_recolor (this->Pink, true);
+    lv_obj_align (this->Pink, align, x, y);
+    lv_style_init (&this->StylePink);
+    lv_style_set_text_font (&this->StylePink, &lv_font_montserrat_18);
+    lv_obj_add_style (this->Pink, &this->StylePink, 0);
+    this->Set (DUCT_PINK,false);
     x += 30;
 
-    Red = lv_label_create (base);
-    lv_obj_align (Red, align, x, y);
-    lv_style_init (&StyleRed);
-    lv_style_set_text_font (&StyleRed, &lv_font_montserrat_18);
-    lv_style_set_text_color (&StyleRed, lv_color_hex3(0xFFFFFF));
-    lv_obj_add_style (Red, &StyleRed, 0);
-    lv_label_set_text(Red, "R");
+    this->Red = lv_label_create (base);
+    lv_label_set_recolor (this->Red, true);
+    lv_obj_align (this->Red, align, x, y);
+    lv_style_init (&this->StyleRed);
+    lv_style_set_text_font (&this->StyleRed, &lv_font_montserrat_18);
+    lv_obj_add_style (this->Red, &this->StyleRed, 0);
+    this->Set (DUCT_RED, false);
     }
 
 //#######################################################################
@@ -459,31 +451,70 @@ void NOISE_WIDGET_C::Set (short color, bool state)
         {
         case DUCT_BLUE:
             if ( state )
-                lv_style_set_text_color(&StyleBlue, lv_palette_main(LV_PALETTE_BLUE));
+                lv_label_set_text (this->Blue, "#0000FF B#");
             else
-                lv_style_set_text_color(&StyleBlue, lv_color_hex3(0xFFFFFF));
+                lv_label_set_text (this->Blue, "#D0D0D0 B#");
             break;
         case DUCT_WHITE:
             if ( state )
-                lv_style_set_text_color (&StyleWhite, lv_palette_main (LV_PALETTE_GREY));
+                lv_label_set_text (this->White, "#666666 W#");
             else
-                lv_style_set_text_color(&StyleWhite, lv_color_hex3(0xFFFFFF));
+                lv_label_set_text (this->White, "#D0D0D0 W#");
             break;
         case DUCT_PINK:
             if ( state )
-                lv_style_set_text_color (&StylePink, lv_palette_main (LV_PALETTE_ORANGE));
+                lv_label_set_text (this->Pink, "#FF8844 P#");
             else
-                lv_style_set_text_color(&StylePink, lv_color_hex3(0xFFFFFF));
+                lv_label_set_text (this->Pink, "#D0D0D0 P#");
             break;
         case DUCT_RED:
             if ( state )
-                lv_style_set_text_color (&StyleRed, lv_palette_main (LV_PALETTE_RED));
+                lv_label_set_text (this->Red, "#FF0000 R#");
             else
-                lv_style_set_text_color(&StyleRed, lv_color_hex3(0xFFFFFF));
+                lv_label_set_text (this->Red, "#D0D0D0 R#");
             break;
         default:
-            return;
+            break;
         }
+    }
 
+//#######################################################################
+//#######################################################################
+    TUNES_WIDGET_C::TUNES_WIDGET_C (lv_obj_t* base, short x, short y)
+    {
+    lv_obj_t * panel = lv_obj_create (base);
+    lv_obj_set_size (panel, 254, 42);
+    lv_obj_set_pos (panel, x, y);
+    lv_obj_set_style_pad_top (panel, 1, 0);
+    lv_obj_set_style_pad_left (panel, 2, 0);
+    lv_obj_set_style_pad_right (panel, 2, 0);
+    lv_obj_set_style_pad_bottom (panel, 1, 0);
+
+    lv_obj_t* keys = lv_label_create (panel);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
+    lv_obj_align (keys, LV_ALIGN_BOTTOM_LEFT, 8, -20);
+    lv_label_set_text (keys, "F1    F2      F3      F4      F5     F6     F7     F8");
+
+    x = 8;
+    lv_style_init (&this->Style);
+    lv_style_set_text_font (&this->Style, &lv_font_montserrat_14);
+    for ( int z = 0;  z < CHAN_COUNT;  z++ )
+        {
+        this->Osc[z] = lv_label_create (panel);
+        lv_label_set_recolor (this->Osc[z], true);
+        lv_obj_align (this->Osc[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
+        lv_obj_add_style (this->Osc[z], &this->Style, 0);
+        this->Set (z, false);
+        x += 31;
+        }
+    }
+
+//#######################################################################
+void TUNES_WIDGET_C::Set (short chan, bool state)
+    {
+    if ( state )
+        lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan);
+    else
+        lv_label_set_text_fmt (Osc[chan], "#D0D0D0 %d#", chan);
     }
 

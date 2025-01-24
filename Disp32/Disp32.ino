@@ -23,6 +23,8 @@ uint64_t   RunTime             = 0;
 bool       DebugInterface      = false;
 bool       DebugGraphics       = false;
 
+lv_style_t  GlobalKeyStyle;
+
 //#######################################################################
 inline void TimeDelta (void)
     {

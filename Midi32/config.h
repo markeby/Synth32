@@ -102,8 +102,9 @@ typedef struct
 typedef struct
     {
     short       Index;
+    bool        State;
     const char* Desc;
-    void       (*CallBack)(short chan);
+    void       (*CallBack)(short chan, bool state);
     }  MIDI_BUTTON_MAP;
 
 typedef struct

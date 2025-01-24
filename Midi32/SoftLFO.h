@@ -11,10 +11,9 @@
 class SOFT_LFO_C
     {
 private:
+    float   Frequency;
     float   WaveLength;
-    float   HalfWaveLength;
     float   Current;
-    float   Triangle;
     float   Sine;
     float   Modulation;
 
@@ -26,8 +25,7 @@ public:
     void Loop           (float millisec);
     void Multiplier     (float value);
 
-    float GetSin        (void)          { return (this->Sine); }
-    float GetTri        (void)          { return (this->Triangle); }
+    float GetSin        (void)          { return (( this->Modulation > .05 ) ? this->Sine : 0.0); }
     };
 
 extern SOFT_LFO_C SoftLFO;

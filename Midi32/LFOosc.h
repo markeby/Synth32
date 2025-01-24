@@ -71,9 +71,9 @@ public:
     void SetPulseWidth  (short value);
     void SetMaxLevel    (uint8_t ch, uint8_t data);
     void SetLevel       (uint8_t data);
-    void ToggleWave     (short ch);
+    void SetWave        (short ch, bool state);
     void PitchBend      (short value);
-    void ToggleRampDir  (void);
+    void SetRampDir     (bool state);
     void HardReset      (void);
     void Loop           (void);
     };

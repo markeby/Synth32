@@ -31,8 +31,9 @@ static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
 //static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 
-#define SENDnote(k,c) {Midi_0.sendNoteOn(k,c,1);DBGM("Note 0x%X  Color = 0x%X  [%s]", k, c,__PRETTY_FUNCTION__);}
-#define SENDcc(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
+#define SENDnote0(k,c) {Midi_0.sendNoteOn(k,c,1);DBGM("Note 0x%X  Color = 0x%X  [%s]", k, c,__PRETTY_FUNCTION__);}
+#define SENDcc0(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
+#define SENDcc1(k,c) {Midi_1.send(midi::MidiType::ControlChange,k,c,1);DBGM("CC 0x%X Value = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
 
 using namespace MIDI_NAMESPACE;
 typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
@@ -69,16 +70,21 @@ static void FuncController (uint8_t mchan, uint8_t type, uint8_t value)
 //###################################################################
 static void FuncPitchBend (uint8_t chan, int value)
     {
+    DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
     value = (value + 8192) >> 2;
     SynthFront.PitchBend (value);
-    DBGM ("Pitch Bend  Chan %2.2X  value %d", chan, value);
+    }
+
+void Test1 (byte code, byte value)
+    {
+    SENDcc0 (code, value);
     }
 
 //#######################################################################
 //#######################################################################
 void SYNTH_FRONT_C::ResetXL ()
     {
-    SENDcc (0, 0);
+    SENDcc0 (0, 0);
     delay (50);
     for ( int z = 0;  z < SIZE_CL_MAP;  z++ )
         {
@@ -86,10 +92,10 @@ void SYNTH_FRONT_C::ResetXL ()
             {
             if ( z < SIZE_S_LED )
                 {
-                SENDnote (XlMap[z].Index, XlMap[z].Color);
+                SENDnote0 (XlMap[z].Index, XlMap[z].Color);
                 }
             else
-                SENDcc (XlMap[z].Index, XlMap[z].Color);
+                SENDcc0 (XlMap[z].Index, XlMap[z].Color);
             delay (20);
             }
         }
@@ -242,7 +248,7 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
         this->pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
-    this->SplitLFO = lfo_digital++;
+    this->SplitLfoAdr = lfo_digital++;
     this->Lfo[0].Begin (0, osc_d_a, lfo_digital);
     osc_d_a     += 6;
     lfo_digital += 3;
@@ -273,6 +279,7 @@ void SYNTH_FRONT_C::DualZone (short chan, bool state)
         {
         if ( (this->CurrentZone == 0) && (chan == 2) )
             return;
+        this->SplitLFO (state);
         this->CurrentZone = chan;
         this->ZoneCount   = ZONE_COUNT;
         this->ZoneBase    = ( chan == 2 ) ? ZONE_COUNT : 0;
@@ -282,6 +289,7 @@ void SYNTH_FRONT_C::DualZone (short chan, bool state)
         switch ( chan )
             {
             case ZONE1:
+                this->SplitLFO (false);
                 this->CurrentZone = ZONE0;
                 this->ZoneCount   = CHAN_COUNT;
                 this->ZoneBase    = 0;
@@ -303,6 +311,8 @@ void SYNTH_FRONT_C::DualZone (short chan, bool state)
 //#######################################################################
 void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
     {
+    int z;
+
     chan--;
 
     switch ( type )
@@ -310,7 +320,8 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
         case 0x01:
             // mod wheel
             Lfo[0].SetLevel (value);
-            SoftLFO.Multiplier ((float)value * PRS_SCALER * 0.4);
+            Lfo[1].SetLevel (value);
+            SoftLFO.Multiplier ((float)value * PRS_SCALER * 0.5);
             DBG ("modulation = %d    ", value);
             break;
         case 0x07:          // Faders controls
@@ -328,11 +339,11 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
             MIDI_ENCODER_MAP& m = KnobMap[chan];
             if ( m.CallBack != nullptr )
                 {
-                m.Value += (value & 0x1F) * ((value & 0x40) ? -1 : 1);
-                if ( m.Value > 4095 )   m.Value = 4095;
-                if ( m.Value < 0 )      m.Value = 0;
-                DBG("%s %s > %d (%d)", Selected().c_str(), m.Desc, m.Value, value);
-                KnobMap[chan].CallBack(m.Index, m.Value);
+                z = m.Value + (value & 0x1F) * ((value & 0x40) ? -1 : 1);
+                if ( z > 4095 )   z = 4095;
+                if ( z < 1 )      z = 1;
+                DBG("%s %s > %d (%d)", Selected().c_str(), m.Desc, z, value);
+                KnobMap[chan].CallBack(m.Index, z);
                 }
             }
             break;
@@ -341,16 +352,19 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
             chan = type & 0x0F;
             if ( this->SetTuning && (chan < 8) )
                 {
-                DBG ("Tuning channel %s", (( value ) ? "ON" : "Off"));
-                this->TuningOn[chan] = !this->TuningOn[chan];
+                bool zb = !this->TuningOn[chan];
+                this->TuningOn[chan] = zb;
+                DBG ("Tuning channel  %d %s", chan, (( zb ) ? "ON" : "Off"));
+                DisplayMessage.TuningSelect (chan, zb);
                 this->TuningChange = true;
                 return;
                 }
             MIDI_BUTTON_MAP& m = ButtonMap[chan];
             if ( m.CallBack != nullptr )
                 {
-                DBG ("%s toggle", m.Desc);
-                m.CallBack (m.Index);
+                m.State = !m.State;
+                DBG ("%s %d", m.Desc, m.State);
+                m.CallBack (m.Index, m.State);
                 }
             }
             break;
@@ -364,8 +378,9 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
             MIDI_BUTTON_MAP& m = ButtonMap[chan];
             if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %X",  m.Desc, value);
-                m.CallBack ( m.Index);
+                m.State = !m.State;
+                DBG ("%s %d", m.Desc, m.State);
+                m.CallBack (m.Index, m.State);
                 }
             }
             break;
@@ -407,14 +422,15 @@ void SYNTH_FRONT_C::Loop ()
     int oldest = -1;
     int doit   = -1;
 
+    this->Lfo[0].Loop ();
     if ( this->ClearEntryRed )
         {
-        SENDcc (this->ClearEntryRed, 0x3F);
+        SENDcc0 (this->ClearEntryRed, 0x3F);
         this->ClearEntryRed = 0;
         }
     if ( this->ClearEntryRedL )
         {
-        SENDcc (this->ClearEntryRedL, 0x0D);
+        SENDcc0 (this->ClearEntryRedL, 0x0D);
         this->ClearEntryRedL = 0;
         }
 
@@ -440,34 +456,32 @@ void SYNTH_FRONT_C::Loop ()
 
         if ( this->Down.Trigger )                          // Key went down so look for a channel to use
             {
-            for (int z = 0;  z <  this->ZoneCount;  z++)
+            for ( int z = 0;  z <  CHAN_COUNT;  z++ )
                 {
-                int offset = 0;
-                if ( (this->CurrentZone != ZONE0) && (this->Down.Channel == 2) )
-                    offset = 4;
-                int index = z + offset;
-                CHANNEL_C& ch = *(pChan[index]);
+                CHANNEL_C& ch = *(pChan[z]);
 
                 if ( !ch.IsActive () )              // grab the first channel not in use
                     {
-                    doit = index;
+                    doit = z;
                     break;
                     }
                 else
                     {
                     if ( oldest < 0 )               // channel is inu use so this is the first one to check for oldest
-                        oldest = index;
+                        oldest = z;
                     else
                         {
                         if ( ch.IsActive () > pChan[oldest]->IsActive () )      // check if current channel older than the oldest so far
-                            oldest = index;
+                            oldest = z;
                         }
                     }
                 }
             if ( doit < 0 )                                 // no unused channel so we will capture the one used the longest
                 doit = oldest;
             this->Down.Trigger = false;                            // release the trigger
-            this->pChan[doit]->NoteSet (this->Down.Key, this->Down.Velocity);   // set the channel
+            if ( doit == 0 )
+                this->Lfo[0].HardReset ();
+            this->pChan[doit]->NoteSet(this->Down.Key, this->Down.Velocity);   // set the channel
             DBG ("Key down > %d   Velocity > %d  Channel > %d", this->Down.Key, this->Down.Velocity, doit);
             }
 

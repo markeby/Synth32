@@ -13772,7 +13772,7 @@
 	)
 	(text "#2 LFO Freq"
 		(exclude_from_sim no)
-		(at 73.7288 101.0277 0)
+		(at 73.2024 106.0904 0)
 		(effects
 			(font
 				(size 0.9525 0.9525)
@@ -14164,7 +14164,7 @@
 	)
 	(text "#2 LFO Pulse Width"
 		(exclude_from_sim no)
-		(at 73.5116 106.2984 0)
+		(at 73.4349 101.2092 0)
 		(effects
 			(font
 				(size 0.9525 0.9525)

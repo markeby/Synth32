@@ -34,13 +34,6 @@ namespace DISP_MESSAGE_N
     //###########################################
 
     //###########################################
-    //        Pause/Go packets
-    #define MESSAGE_LENGTH_CNTL 2
-    //        =============
-    //  CMD_C - 0
-    //###########################################
-
-    //###########################################
     //  Control bytes
     //###########################################
     enum class CMD_C: byte
@@ -52,8 +45,7 @@ namespace DISP_MESSAGE_N
         UPDATE_PAGE_FILTER,
         UPDATE_PAGE_TUNING,
         PAGE_SHOW            = 0x20,
-        PAUSE                = 0x00,
-        GO                   = 0xFF,
+        RESET                = 0xFF,
         };
 
     //###########################################
@@ -115,7 +107,7 @@ namespace DISP_MESSAGE_N
         {
         "SINE",
         "TRIANGLE",
-        "SAWTOOTH",
+        "RAMP",
         "PULSE",
         "NOISE",
         "ALL",

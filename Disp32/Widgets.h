@@ -7,6 +7,8 @@
 #pragma once
 #include <lvgl.h>
 
+extern lv_style_t  GlobalKeyStyle;
+
 //############################################
 class TEXT_INFO_C
     {
@@ -15,16 +17,12 @@ private:
     lv_style_t  StyleValue;
     lv_obj_t*   Label;
     lv_obj_t*   Unit;
+    lv_obj_t*   Value;
     bool        Valid;
 
 public:
-    lv_obj_t*   Value;
-
           TEXT_INFO_C   (void);
     void  BeginText     (lv_obj_t* base, const char* s, const char* su, short y, uint32_t color);
-    void  SetValue      (short value);
-    void  SetLabelColor (uint32_t color);
-    void  SetValueColor (uint32_t color);
 
     void BeginText (lv_obj_t* base, const char* s, const char* su, short y)
         { this->BeginText (base, s, su, y, 0xD0D0D0);  }
@@ -32,6 +30,17 @@ public:
         { this->Valid = state; }
     bool GetValid (void)
         { return (this-Valid); }
+    void SetLabel (const char* s)
+        { lv_label_set_text (this->Value, s); }
+    void  SetLabelColor (uint32_t color)
+        { lv_style_set_text_color (&this->StyleLabel, lv_color_hex (color)); }
+    void  SetValueColor (uint32_t color)
+        { lv_style_set_text_color (&this->StyleValue, lv_color_hex (color)); }
+    void TextFloat (float f)
+        { lv_label_set_text_fmt (this->Value, "%.3f", f); }
+    void TextInt (int d)
+        { lv_label_set_text_fmt (this->Value, "%d", d); }
+
     };
 
 //############################################
@@ -112,8 +121,6 @@ private:
     lv_style_t  StyleBack;
     lv_obj_t*   SlopeFore;
     lv_obj_t*   SlopeBack;
-    lv_style_t  TextStyle;
-    lv_obj_t*   TextLabel;
 
 public:
          RAMP_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y);
@@ -128,8 +135,6 @@ private:
     lv_point_t  Pulse[SQUARE_SIZE];
     lv_obj_t*   Wave;
     lv_style_t  Style;
-    lv_style_t  TextStyle;
-    lv_obj_t*   TextLabel;
 
 public:
          PULSE_WIDGET_C (lv_obj_t* base, const char* s, lv_align_t align, short x, short y);
@@ -164,5 +169,17 @@ class NOISE_WIDGET_C
     public:
              NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
         void Set            (short val, bool state);
+    };
+
+//############################################
+class TUNES_WIDGET_C
+    {
+    private:
+        lv_style_t  Style;
+        lv_obj_t*   Osc[CHAN_COUNT];
+
+    public:
+             TUNES_WIDGET_C (lv_obj_t* base, short x, short y);
+        void Set            (short chan, bool state);
     };
 
