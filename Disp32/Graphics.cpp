@@ -54,6 +54,9 @@ using namespace DISP_MESSAGE_N;
         lv_obj_set_style_pad_left (panel, 2, 0);
         lv_obj_set_style_pad_right (panel, 2, 0);
 
+        String key = "TF";
+        key += String (z);
+        KeyLabel (panel, key.c_str (), 0, 0);
         TitleControl[z] = new TITLE_WIDGET_C (panel, ChannelText[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
         SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);

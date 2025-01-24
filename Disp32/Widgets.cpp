@@ -12,6 +12,13 @@
 #include "config.h"
 #include "Widgets.h"
 
+void KeyLabel (lv_obj_t* base, const char* s, short x, short y)
+    {
+    lv_obj_t* keys = lv_label_create (base);
+    lv_obj_align (keys, LV_ALIGN_DEFAULT, x, y);
+    lv_label_set_text (keys, s);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
+    }
 
 //#######################################################################
 //#######################################################################

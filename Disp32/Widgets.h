@@ -10,6 +10,9 @@
 extern lv_style_t  GlobalKeyStyle;
 
 //############################################
+void KeyLabel (lv_obj_t* base, const char* s, short x, short y);
+
+//############################################
 class TEXT_INFO_C
     {
 private:
