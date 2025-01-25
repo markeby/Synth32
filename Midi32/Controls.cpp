@@ -108,6 +108,12 @@ static void TuneDown (short ch, bool state)
     }
 
 //########################################################
+static void TuneBump (short ch, bool state)
+    {
+    SynthFront.TuningBump (state);
+    }
+
+//########################################################
 static void TunningSave (short ch, bool state)
     {
     SynthFront.SaveAllSettings ();
@@ -262,7 +268,7 @@ MIDI_BUTTON_MAP SwitchMapArray[] =
         { 20,           false,  "Tune +",                   TuneUp        },  //  01  74  xx
         { 21,           false,  "Tune -",                   TuneDown      },  //  01  75  xx
         { 22,           false,  "Tune/Reset",               TuneReset     },  //  01  76  xx
-        { 23,           false,  "Switch >",                 nullptr       },  //  01  77  xx
+        { 23,           false,  "Tune -/+",                 TuneBump      },  //  01  77  xx
      };
 
 

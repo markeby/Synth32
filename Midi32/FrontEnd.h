@@ -102,6 +102,7 @@ public:
 
     void Tuning                (void);
     void TuningAdjust          (bool up);
+    void TuningBump            (bool state);
     void StartTuning           (void);
 
     void DisplayUpdate         (int zone);

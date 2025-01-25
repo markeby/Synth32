@@ -73,10 +73,25 @@ void SYNTH_FRONT_C::StartTuning ()
 //#######################################################################
 void SYNTH_FRONT_C::TuningAdjust (bool up)
     {
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+    if ( SetTuning )
         {
-        if ( TuningOn[zc] )
-            pChan[zc]->pOsc()->TuningAdjust (up);
+        for ( int z = 0;  z < CHAN_COUNT;  z++ )
+            {
+            if ( TuningOn[z] )
+                pChan[z]->pOsc()->TuningAdjust (up);
+            }
+        }
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::TuningBump (bool state)
+    {
+    if ( SetTuning )
+        {
+        byte note = (state) ? 113 : 21;        // Highest F or lowest F
+        DisplayMessage.TuningNote (note);
+        for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+            pChan[zc]->pOsc()->SetTuningNote (note);
         }
     }
 

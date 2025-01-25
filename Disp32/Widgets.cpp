@@ -401,8 +401,14 @@ static const float FreqTable[128] =
 //#######################################################################
 void NOTE_WIDGET_C::SetValue (short val)
     {
+    char c = ' ';
+
     val %= 128;
-    lv_label_set_text_fmt (this->Value, "%s  %d = %.2f Hz", FreqNote[val % 12], val, FreqTable[val]);
+    if ( val == 113 )
+        c = '+';
+    if ( val == 21 )
+        c = '-';
+    lv_label_set_text_fmt (this->Value, "%c%s %d = %.2f Hz", c, FreqNote[val % 12], val, FreqTable[val]);
     }
 
 //#######################################################################
