@@ -75,11 +75,6 @@ static void FuncPitchBend (uint8_t chan, int value)
     SynthFront.PitchBend (value);
     }
 
-void Test1 (byte code, byte value)
-    {
-    SENDcc0 (code, value);
-    }
-
 //#######################################################################
 //#######################################################################
 void SYNTH_FRONT_C::ResetXL ()
@@ -144,11 +139,12 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, M
     this->Up.Velocity     = 0;
     this->CurrentZone     = ZONE0;
     this->ZoneBase        = 0;
-    Zone[0]               = 0;
-    Zone[1]               = 0;
-    Zone[2]               = 4;
-    ZoneCount             = CHAN_COUNT;
+    this->Zone[0]         = 0;
+    this->Zone[1]         = 0;
+    this->Zone[2]         = 4;
+    this->ZoneCount       = CHAN_COUNT;
     this->SetTuning       = false;
+    this->TuningBender    = false;
     this->TuningChange    = false;
     this->ClearEntryRed   = 0;
     this->ClearEntryRedL  = 0;
@@ -248,11 +244,14 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
         this->pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
+    this->PitchBendOffset = Settings.GetBenderOffset ();
+
     this->SplitLfoAdr = lfo_digital++;
     this->Lfo[0].Begin (0, osc_d_a, lfo_digital);
     osc_d_a     += 6;
     lfo_digital += 3;
     this->Lfo[1].Begin (1, osc_d_a, lfo_digital);
+    this->PitchBend (PITCH_BEND_CENTER);
 
     this->SawtoothDirection (false);
     for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
@@ -267,6 +266,18 @@ void SYNTH_FRONT_C::Clear ()
     {
     for ( int z = 0;  z < CHAN_COUNT; z++ )
         this->pChan[z]->Clear ();
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::PitchBend (short value)
+    {
+    short z = value + this->PitchBendOffset;
+    if ( z > 4090 )
+        return;
+    else if ( z < 126 )
+        return;
+    this->Lfo[0].PitchBend(z);
+    this->Lfo[1].PitchBend (z);
     }
 
 //#######################################################################

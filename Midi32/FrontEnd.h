@@ -48,12 +48,14 @@ private:
     NOISE_C*              pNoise;
 
     CHANNEL_C*            pChan[CHAN_COUNT];
+    short                 PitchBendOffset;
     short                 SplitLfoAdr;
     byte                  ModulationVCA[CHAN_COUNT];
     byte                  Zone[3];
     byte                  ZoneBase;
 
     bool                  SetTuning;
+    bool                  TuningBender;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
@@ -81,10 +83,15 @@ public:
     void SplitLFO              (bool state);
     void FreqLFO               (short ch, short data);
 
-    void PitchBend (short value)                { this->Lfo[0].PitchBend (value); this->Lfo[1].PitchBend (value); }
-    void SelectModVCO (short ch, bool state)    { this->Lfo[0].SetWave (ch, state);   this->Lfo[1].SetWave (ch, state);  }
-    void SetLevelLFO (short data)               { this->Lfo[0].SetLevel (data);   this->Lfo[1].SetLevel (data);   }
-    void SetRampDir (bool state)                { this->Lfo[0].SetRampDir (state);  this->Lfo[1].SetRampDir (state);}
+    void     PitchBend         (short value);
+    uint16_t GetBenderOffset   (void)
+        { return (this->PitchBendOffset); }
+    void     SelectModVCO      (short ch, bool state)
+        { this->Lfo[0].SetWave (ch, state);   this->Lfo[1].SetWave (ch, state);  }
+    void     SetLevelLFO       (short data)
+        { this->Lfo[0].SetLevel (data);   this->Lfo[1].SetLevel (data);   }
+    void     SetRampDir        (bool state)
+        { this->Lfo[0].SetRampDir (state);  this->Lfo[1].SetRampDir (state);}
 
 
     // FrontEndOscCtrl.cpp

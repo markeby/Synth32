@@ -94,7 +94,6 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
     if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
         {
         this->Valid = true;
-        this->PitchBend (2048);
         this->ClearState ();
         if ( DebugOsc )
             printf("\t  >> LFO %d started for device %d\n", this->Number, first_device);

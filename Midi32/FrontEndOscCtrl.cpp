@@ -174,6 +174,7 @@ void SYNTH_FRONT_C::SaveAllSettings ()
         Serial << "  Saving synth keyboard arrays" << endl;
         for ( int z = 0;  z < CHAN_COUNT;  z++ )
             Settings.PutOscBank (z, this->pChan[z]->pOsc ()->GetBankAddr ());
+        Settings.PutBenderOffset (this->PitchBendOffset);
         }
     }
 

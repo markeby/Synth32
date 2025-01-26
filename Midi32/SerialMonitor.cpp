@@ -140,7 +140,6 @@ bool MONITOR_C::PromptZap (void)
     return (false);
     }
 
-void Test1 (byte code, byte value);
 //#######################################################################
 void MONITOR_C::MenuSel (void)
     {
@@ -263,10 +262,8 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (VARIABLE);
                     break;
                 case 'x':           // Test function #2
-                    Test1 (151, 0x7F);
                     break;
                 case 'c':           // Test function #3
-                    Test1 (151, 0);
                     break;
                 case 'v':           // Test function #4
                     break;

@@ -88,6 +88,7 @@ extern uint64_t RunTime;
 #define DA_RANGE            4096
 #define MAX_DA              (DA_RANGE - 1)
 #define NOTES_PER_OCTAVE    12
+#define PITCH_BEND_CENTER   2048
 
 //#################################################
 //    Midi control mapping

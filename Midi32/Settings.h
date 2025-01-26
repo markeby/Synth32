@@ -51,6 +51,8 @@ public:
     void        ClearAllSynth   (void);
     bool        GetOscBank      (uint8_t num, uint16_t* pbank);
     void        PutOscBank      (uint8_t num, uint16_t* pbank);
+    short       GetBenderOffset (void);
+    void        PutBenderOffset (short offset);
     };
 
 //#######################################################################

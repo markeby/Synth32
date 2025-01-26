@@ -18,7 +18,8 @@ void SYNTH_FRONT_C::Tuning ()
         {
         if ( this->Down.Trigger )
             {
-            this->pChan[zc]->pOsc()->SetTuningNote(this->Down.Key);
+            this->TuningBender = false;                                 // Not doing bender wheel
+            this->pChan[zc]->pOsc()->SetTuningNote(this->Down.Key);     // send key index to oscillator
             DisplayMessage.TuningNote (this->Down.Key);
             }
         if ( this->TuningChange )
@@ -44,41 +45,51 @@ void SYNTH_FRONT_C::Tuning ()
                 }
             }
         }
-    this->TuningChange = false;
-    this->Down.Trigger = false;
-    I2cDevices.UpdateDigital();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    this->TuningChange = false;     // Indicate complete and ready for next not change
+    this->Down.Trigger = false;     // Clear note change trigger
+    I2cDevices.UpdateDigital ();    // Update all digital port changes
+    I2cDevices.UpdateAnalog  ();    // Update D/A port changes
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::StartTuning ()
     {
-    if ( SetTuning == false )
+    if ( this->SetTuning == false )
         {
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            TuningLevel[z] = (uint16_t)(pChan[0]->pOsc()->GetMaxLevel (z) * MAX_DA);
-            DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
+            this->TuningLevel[z] = (uint16_t)(this->pChan[0]->pOsc()->GetMaxLevel (z) * MAX_DA);
+            DisplayMessage.TuningLevel (z, this->TuningLevel[z] * MIDI_INV_MULTIPLIER);
             }
         for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
             {
-            TuningOn[zc] = false;
-            TuningChange = true;
+            this->TuningOn[zc] = false;
+            this->TuningChange = true;
             }
         }
-    SetTuning = true;
+    this->TuningBender = true;      // Entering tuning mode starts with the bender wheel
+    this->SetTuning    = true;
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::TuningAdjust (bool up)
     {
-    if ( SetTuning )
+    if ( this->SetTuning )
         {
-        for ( int z = 0;  z < CHAN_COUNT;  z++ )
+        if ( this->TuningBender )
             {
-            if ( TuningOn[z] )
-                pChan[z]->pOsc()->TuningAdjust (up);
+            this->PitchBendOffset += ( up ) ? -1 : +1;
+            this->PitchBend (PITCH_BEND_CENTER);
+
+            }
+        else
+            {
+            for (int z = 0;  z < CHAN_COUNT;  z++)
+                {
+                if ( this->TuningOn[z] )
+                    this->pChan[z]->pOsc()->TuningAdjust (up);
+                }
             }
         }
     }
@@ -88,10 +99,11 @@ void SYNTH_FRONT_C::TuningBump (bool state)
     {
     if ( SetTuning )
         {
-        byte note = (state) ? 113 : 21;        // Highest F or lowest F
+        this->TuningBender = false;             // Not doing bender wheel
+        byte note = (state) ? 113 : 21;         // Highest F or lowest F
         DisplayMessage.TuningNote (note);
         for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
-            pChan[zc]->pOsc()->SetTuningNote (note);
+            this->pChan[zc]->pOsc()->SetTuningNote (note);
         }
     }
 

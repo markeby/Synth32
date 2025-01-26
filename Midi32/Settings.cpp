@@ -21,6 +21,7 @@ static const char* sysKeyDBG      = "DBG";
 
 static const char* synthKeySpace  = "SynthP";
 static const char* synthKeyBank   = "BANK";
+static const char* synthKeyBender = "BEND";
 
 //#######################################################################
 void SETTINGS_C::ClearAllSys (void)
@@ -153,5 +154,22 @@ void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
     }
 
 //#######################################################################
-SETTINGS_C Settings;        // System settings
+short SETTINGS_C::GetBenderOffset ()
+    {
+    Prefs.begin (synthKeySpace, false);
+    short z = Prefs.getShort (synthKeyBender);
+    Prefs.end ();
+    return (z);
+    }
+
+//#######################################################################
+void SETTINGS_C::PutBenderOffset (short offset)
+    {
+    Prefs.begin(synthKeySpace, false);
+    Prefs.putShort (synthKeyBender, offset);
+    Prefs.end ();
+    }
+
+//#######################################################################
+SETTINGS_C Settings;        // Settings storage and retrieval
 
