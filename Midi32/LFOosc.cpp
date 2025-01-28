@@ -123,7 +123,7 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
     {
     this->CurrentWidth = value;
     DBG ("Set pulse width %d", value);
-    I2cDevices.D2Analog (this->PwmChannelIO, value);
+    I2cDevices.D2Analog (this->PwmChannelIO, DA_MAX - value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
