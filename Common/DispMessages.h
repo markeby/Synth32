@@ -44,6 +44,7 @@ namespace DISP_MESSAGE_N
         UPDATE_PAGE_MOD,
         UPDATE_PAGE_FILTER,
         UPDATE_PAGE_TUNING,
+        UPDATE_PAGE_MAP,
         PAGE_SHOW            = 0x20,
         RESET                = 0xFF,
         };
@@ -58,6 +59,7 @@ namespace DISP_MESSAGE_N
         PAGE_OSC2,
         PAGE_MOD,
         PAGE_FILTER,
+        PAGE_MIDI_MAP,
         PAGE_TUNING,
         NONE,
         PAGE_ADVANCE = 255
@@ -87,7 +89,7 @@ namespace DISP_MESSAGE_N
     //###########################################
     // Envelope selection bytes
     //###########################################
-    enum class CHANNEL_C: byte
+    enum class VOICE_C: byte
         {
         SINE = 0,
         TRIANGLE,
@@ -103,7 +105,7 @@ namespace DISP_MESSAGE_N
     // Envelope selection text
     //###########################################
     #ifdef ALLOCATE_DISP_MESSAGES
-    char* ChannelText[] =
+    char* VoiceText[] =
         {
         "SINE",
         "TRIANGLE",
@@ -119,7 +121,7 @@ namespace DISP_MESSAGE_N
         "NONE",
         };
     #else
-    extern char* ChannelText[];
+    extern char* VoiceText[];
     #endif
 
     //###########################################
@@ -140,6 +142,7 @@ namespace DISP_MESSAGE_N
         DESELECTED,
         NOTE,
         NOISE,
+        MAP_VOICE,
         };
 
     //###########################################

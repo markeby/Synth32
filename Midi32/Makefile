@@ -17,13 +17,14 @@ SHARED := ../Common
 
 # header files
 INCLUDES := config.h Debug.h Diagnostics.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Noise.h \
-            Multiplex.h LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h Channel.h UpdateOTA.h \
+            Multiplex.h LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h UpdateOTA.h Voice.h \
 	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
 SOURCES := $(PROJECT) SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Noise.cpp \
-           Multiplex.cpp SerialMonitor.cpp FrontEnd.cpp FrontEndOscCtrl.cpp FrontEndLFO.cpp FrontEndTuning.cpp Channel.cpp \
+           Multiplex.cpp SerialMonitor.cpp FrontEnd.cpp FrontEndOscCtrl.cpp FrontEndLFO.cpp FrontEndTuning.cpp \
+	   FrontEndMapping.cpp Voice.cpp \
 	   Osc.cpp Controls.cpp LFOosc.cpp Envelope.cpp Diagnostics.cpp UpdateOTA.cpp
 
 # serial port for uploading
@@ -106,9 +107,9 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
-	@python3 ../Tools/Beep.py UPLOAD
+	@python ../Tools/Beep.py UPLOAD
 	$(UPLOAD)
-	@python3 ../Tools/Beep.py OK
+	@python ../Tools/Beep.py OK
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	if not exist $(OUTPUT) (mkdir $(OUTPUT))

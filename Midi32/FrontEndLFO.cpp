@@ -30,16 +30,8 @@ void SYNTH_FRONT_C::SelectModVCA (byte ch, bool state)
     this->ModulationVCA[ch] = state;
 
     DisplayMessage.LfoSoftSelect (ch, state);
-    for ( int z = 0;  z < CHAN_COUNT;  z++)
-        this->pChan[z]->pOsc()->SetSoftLFO (ch, state);
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::SplitLFO (bool state)
-    {
-    I2cDevices.DigitalOut (this->SplitLfoAdr, state);
-        I2cDevices.UpdateDigital ();
-
+    for ( int z = 0;  z < VOICE_COUNT;  z++)
+        this->pVoice[z]->pOsc()->SetSoftLFO (ch, state);
     }
 
 //#######################################################################
@@ -63,5 +55,17 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
             break;
         }
     this->KnobMap[ch].Value = data;
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::PitchBend (short value)
+    {
+    short z = value + this->PitchBendOffset;
+    if ( z > 4090 )
+        return;
+    else if ( z < 126 )
+        return;
+    this->Lfo[0].PitchBend(z);
+    this->Lfo[1].PitchBend (z);
     }
 

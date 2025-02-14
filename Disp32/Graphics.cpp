@@ -22,6 +22,8 @@ static const char* Label = "G";
 
 using namespace DISP_MESSAGE_N;
 
+//#######################################################################
+//#######################################################################
     PAGE_TITLE_C::PAGE_TITLE_C (lv_obj_t* base, const char* str)
     {
     lv_obj_set_style_pad_top    (base, 0, 0);
@@ -46,7 +48,7 @@ using namespace DISP_MESSAGE_N;
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        lv_obj_t * panel = lv_obj_create (base);
+        lv_obj_t* panel = lv_obj_create (base);
         lv_obj_set_size (panel, 159, 440);
         lv_obj_set_pos (panel, x, y);
         lv_obj_set_style_pad_top (panel, 0, 0);
@@ -57,7 +59,7 @@ using namespace DISP_MESSAGE_N;
         String key = "TF";
         key += String (z);
         KeyLabel (panel, key.c_str (), 0, 0);
-        TitleControl[z] = new TITLE_WIDGET_C (panel, ChannelText[z]);
+        TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceText[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
         SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
         MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
@@ -245,9 +247,9 @@ void PAGE_MOD_C::UpdateSoftButtons (short value, bool sel)
 //#######################################################################
 void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
-    switch ( (CHANNEL_C)ch )
+    switch ( (VOICE_C)ch )
         {
-        case CHANNEL_C::HARDWARE_LFO:
+        case VOICE_C::HARDWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
@@ -272,7 +274,7 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
                     break;
                 }
             break;
-        case CHANNEL_C::SOFTWARE_LFO:
+        case VOICE_C::SOFTWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
@@ -292,6 +294,41 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
                 default:
                     break;
                 }
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
+//#######################################################################
+    PAGE_MAPPING_C::PAGE_MAPPING_C (lv_obj_t* base)
+    {
+    MidiTitle = lv_label_create (base);
+    lv_obj_align           (MidiTitle, LV_ALIGN_TOP_LEFT, 2, -12);
+    lv_label_set_text      (MidiTitle, "MIDI Mapping");
+    lv_style_init          (&MidiTitleStyle);
+    lv_style_set_text_font (&MidiTitleStyle, &lv_font_montserrat_24);
+    lv_obj_add_style       (MidiTitle, &MidiTitleStyle, 0);
+
+    for (int z = 0, c = 1;  z < 4;  z++, c += 2 )
+        {
+        String s = "Voice\n" + String (c) + " & " + String (c + 1);
+        this->Voice[z] = new MIDI_SEL_WIDGET_C (base, s.c_str (), 8 , 22 + (z * 108));
+        }
+    this->UpdatePage (0, EFFECT_C::SELECTED, 0);
+    }
+
+//#######################################################################
+void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
+    {
+    switch ( effect )
+        {
+        case EFFECT_C::MAP_VOICE:
+            this->Selected = ch;
+            for ( int z = 0;  z < 4;  z++ )
+                this->Voice[z]->Select (z == this->Selected);       // only select the device in ch
+            this->Voice[this->Selected]->Set (value);
             break;
         default:
             break;
@@ -324,7 +361,7 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     this->Note = new NOTE_WIDGET_C (base, x + 116, 80);
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, ChannelText[z], x, y, LV_PALETTE_INDIGO);
+        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceText[z], x, y, LV_PALETTE_INDIGO);
         x += 90;
         }
     this->TuneSelection = new TUNES_WIDGET_C (base, 248, 340);
@@ -382,6 +419,8 @@ void GRPH_C::Begin ()
     PageMod        = new PAGE_MOD_C     (BasePageMod);
     BasePageFilter = lv_tabview_add_tab (Pages, "");
     PageFilter     = new PAGE_FILTER_C  (BasePageFilter);
+    BasePageMap    = lv_tabview_add_tab (Pages, "");
+    PageMap        = new PAGE_MAPPING_C (BasePageMap);
     BasePageTuning = lv_tabview_add_tab (Pages, "");
     PageTune       = new PAGE_TUNE_C    (BasePageTuning);
 
@@ -389,8 +428,6 @@ void GRPH_C::Begin ()
 
     lvgl_port_unlock ();    // Release the mutex
     }
-
-//#######################################################################
 
 //#######################################################################
 void GRPH_C::Pause (bool state)

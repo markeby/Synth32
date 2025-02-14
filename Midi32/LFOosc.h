@@ -36,11 +36,11 @@ private:
     bool    Valid;
     int     Active;
     int     Number;
-    byte    OscChannelIO;
-    byte    PwmChannelIO;
-    byte    BendChannelIO;
-    byte    SlopeChannelIO;
-    byte    HardResetChannelIO;
+    byte    OscPortIO;
+    byte    PwmPortIO;
+    byte    BendPortIO;
+    byte    SlopePortO;
+    byte    HardResetPortIO;
     byte    InUse;
     bool    UpdateNeded;
     short   CurrentFreq;
@@ -51,7 +51,7 @@ private:
 
     typedef struct
         {
-        uint8_t     Channel;            // I2C device index
+        uint8_t     Port;            // I2C device index
         uint16_t    CurrentLevel;       // Current setting 12 bit D/A
         uint16_t    MaximumLevel;       // No higher than this
         bool        Select;

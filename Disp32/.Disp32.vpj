@@ -21,7 +21,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="ptime make Disp32_OTA"/>
+                <Exec CmdLine="pbench make Disp32_OTA"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -48,7 +48,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; make Disp32_OTA"/>
+                <Exec CmdLine="make clean &amp; pbench make Disp32_OTA"/>
             </Target>
         </Menu>
     </Config>
@@ -68,7 +68,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine=" ptime make Disp32_Serial"/>
+                <Exec CmdLine="pbench make Disp32_Serial"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -95,7 +95,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; make Disp32_Serial"/>
+                <Exec CmdLine="make clean &amp; pbench make Disp32_Serial"/>
             </Target>
         </Menu>
     </Config>

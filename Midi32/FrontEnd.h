@@ -8,7 +8,7 @@
 
 #include "LFOosc.h"
 #include "SoftLFO.h"
-#include "Channel.h"
+#include "Voice.h"
 #include "Envelope.h"
 #include "multiplex.h"
 #include "Noise.h"
@@ -28,7 +28,7 @@ private:
 
     typedef struct
         {
-        byte    Channel;
+        byte    Port;
         byte    Key;
         byte    Velocity;
         bool    Trigger;
@@ -47,23 +47,25 @@ private:
     SYNTH_LFO_C           Lfo[2];
     NOISE_C*              pNoise;
 
-    CHANNEL_C*            pChan[CHAN_COUNT];
+    bool                  MapSelectMode;
+    short                 MapVoiceMidi[VOICE_COUNT];
+    short                 CurrentMapSelected;
+
+    VOICE_C*              pVoice[VOICE_COUNT];
     short                 PitchBendOffset;
-    short                 SplitLfoAdr;
-    byte                  ModulationVCA[CHAN_COUNT];
-    byte                  Zone[3];
-    byte                  ZoneBase;
+    byte                  ModulationVCA[VOICE_COUNT];
 
     bool                  SetTuning;
     bool                  TuningBender;
     byte                  ClearEntryRed;
     byte                  ClearEntryRedL;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
-    bool                  TuningOn[CHAN_COUNT];
+    bool                  TuningOn[VOICE_COUNT];
     bool                  TuningChange;
 
-    String Selected             (void);
-    void   ShowChannelXL        (int val);
+
+    String Selected       (void);
+    void   ShowVoiceXL    (int val);
 
 public:
     byte  CurrentZone;
@@ -74,13 +76,11 @@ public:
     void ResetXL               (void);
     void Loop                  (void);
     void Clear                 (void);
-    void DualZone              (short chan, bool state);
     void Controller            (byte short, byte type, byte value);
 
     //#######################################################################
     // FrontEndLFO.cpp
     void SelectModVCA          (byte ch, bool state);
-    void SplitLFO              (bool state);
     void FreqLFO               (short ch, short data);
 
     void     PitchBend         (short value);
@@ -93,9 +93,17 @@ public:
     void     SetRampDir        (bool state)
         { this->Lfo[0].SetRampDir (state);  this->Lfo[1].SetRampDir (state);}
 
+    void MidiMapMode           (void);
+    bool GetMidiMapMode        (void)
+        { return (this->MapSelectMode); }
+    void MapModeBump           (short down);
+    void ChangeMapSelect        (short right);
+    bool GetMapSelect          (void)
+        { return (this->MapSelectMode); }
+
 
     // FrontEndOscCtrl.cpp
-    void ChannelSetSelect      (short chan, bool state);
+    void VoiceSetSelected      (short chan, bool state);
     void SetMaxLevel           (short ch, short data);
     void SetAttackTime         (short data);
     void SetDecayTime          (short data);
@@ -133,7 +141,7 @@ public:
     //#######################################################################
     inline void KeyDown (byte chan, byte key, byte velocity)
         {
-        this->Down.Channel  = chan;
+        this->Down.Port  = chan;
         this->Down.Key      = key;
         this->Down.Velocity = velocity;
         this->Down.Trigger  = true;
@@ -142,7 +150,7 @@ public:
     //#######################################################################
     inline void KeyUp (byte chan, byte key, byte velocity)
         {
-        this->Up.Channel  = chan;
+        this->Up.Port  = chan;
         this->Up.Key      = key;
         this->Up.Velocity = velocity;
         this->Up.Trigger  = true;

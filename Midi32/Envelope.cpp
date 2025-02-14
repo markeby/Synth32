@@ -57,7 +57,7 @@ void ENVELOPE_C::SetRange (int16_t floor, int16_t ceiling)
 ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& usecount) : UseCount(usecount)
     {
     this->Name          = name;
-    this->DeviceChannel = device;
+    this->DevicePortIO = device;
     this->Index         = index;
     this->Current       = 0;
     this->Peak          = 0;
@@ -211,7 +211,7 @@ void ENVELOPE_C::Update ()
             output -= SoftLFO.GetSin ();
 
         int16_t z = abs(this->Floor + (this->Diff * output));
-        I2cDevices.D2Analog (this->DeviceChannel, z);
+        I2cDevices.D2Analog (this->DevicePortIO, z);
         this->Updated = false;
         }
     }

@@ -25,6 +25,7 @@ SOURCES := $(PROJECT) Debug.cpp Widgets.cpp lvgl_port_v8.cpp SerialMonitor.cpp \
 
 # serial port for uploading
 DEFAULT_PORT := COM5
+//DEFAULT_PORT := COM4
 
 # IP address for uploading
 UPLOAD_OTA := 192.168.1.31
@@ -82,7 +83,7 @@ endif
 # Use Serial port or OTA to upload
 ############################################
 ifdef OTA
-  UPLOAD := python3 ../tools/UploadOTA.py $(TARGET) $(OTA)
+  UPLOAD := python ../tools/UploadOTA.py $(TARGET) $(OTA)
 else
   UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
 endif
@@ -112,9 +113,9 @@ clean :
 # Build instructions
 ############################################
 target : $(TARGET)
-	@python3 ../Tools/Beep.py UPLOAD
+	@python ../Tools/Beep.py UPLOAD
 	$(UPLOAD)
-	@python3 ../Tools/Beep.py OK
+	@python ../Tools/Beep.py OK
 
 $(TARGET) : $(SOURCES) $(INCLUDES)
 	@if not exist $(OUTPUT) (mkdir $(OUTPUT))

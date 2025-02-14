@@ -118,13 +118,13 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
-            <F N="Channel.cpp"/>
             <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
             <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="FrontEnd.cpp"/>
             <F N="FrontEndLFO.cpp"/>
+            <F N="FrontEndMapping.cpp"/>
             <F N="FrontEndOscCtrl.cpp"/>
             <F N="FrontEndTuning.cpp"/>
             <F N="I2Cdevices.cpp"/>
@@ -137,6 +137,7 @@
             <F N="Settings.cpp"/>
             <F N="SoftLFO.cpp"/>
             <F N="UpdateOTA.cpp"/>
+            <F N="Voice.cpp"/>
         </Folder>
         <Folder
             Name="Headers"
@@ -149,7 +150,6 @@
                 <F N="../Common/DispMessages.h"/>
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
-            <F N="Channel.h"/>
             <F N="config.h"/>
             <F N="Debug.h"/>
             <F N="Diagnostics.h"/>
@@ -165,6 +165,7 @@
             <F N="Settings.h"/>
             <F N="SoftLFO.h"/>
             <F N="UpdateOTA.h"/>
+            <F N="Voice.h"/>
         </Folder>
         <Folder
             Name="Tools"

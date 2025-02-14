@@ -108,6 +108,7 @@ NOISE_C* SYNTH_FRONT_C::Noise ()
     return (this->pNoise);
     }
 
+static const char* SelLabel[] = { "Sine",  "Triangle", "Ramp", "Pulse", "Square" };
 //#######################################################################
 String SYNTH_FRONT_C::Selected ()
     {
@@ -115,9 +116,9 @@ String SYNTH_FRONT_C::Selected ()
 
     for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
         {
-        if ( pChan[this->ZoneBase]->SelectedEnvelope[z] )
+        if ( pVoice[0]->SelectedEnvelope[z] )
             {
-            str += SwitchMapArray[z].Desc;
+            str += SelLabel[z];
             str += "  ";
             }
         }
@@ -127,27 +128,25 @@ String SYNTH_FRONT_C::Selected ()
 //#####################################################################
 SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map)
     {
-    this->FaderMap        = fader_map;
-    this->KnobMap         = knob_map;
-    this->ButtonMap       = button_map;
-    this->XlMap           = xl_map;
-    this->Down.Key        = 0;
-    this->Down.Trigger    = false;
-    this->Down.Velocity   = 0;
-    this->Up.Key          = 0;
-    this->Up.Trigger      = false;
-    this->Up.Velocity     = 0;
-    this->CurrentZone     = ZONE0;
-    this->ZoneBase        = 0;
-    this->Zone[0]         = 0;
-    this->Zone[1]         = 0;
-    this->Zone[2]         = 4;
-    this->ZoneCount       = CHAN_COUNT;
-    this->SetTuning       = false;
-    this->TuningBender    = false;
-    this->TuningChange    = false;
-    this->ClearEntryRed   = 0;
-    this->ClearEntryRedL  = 0;
+    this->FaderMap            = fader_map;
+    this->KnobMap             = knob_map;
+    this->ButtonMap           = button_map;
+    this->XlMap               = xl_map;
+    this->Down.Key            = 0;
+    this->Down.Trigger        = false;
+    this->Down.Velocity       = 0;
+    this->Up.Key              = 0;
+    this->Up.Trigger          = false;
+    this->Up.Velocity         = 0;
+    this->SetTuning           = false;
+    this->TuningBender        = false;
+    this->TuningChange        = false;
+    this->ClearEntryRed       = 0;
+    this->ClearEntryRedL      = 0;
+    this->CurrentMapSelected  = 0;
+
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        this->MapVoiceMidi[z] = 1;
     }
 
 //#######################################################################
@@ -239,84 +238,33 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
 //    printf ("\t>>> Serial2 midi ready\n");
 
     printf ("\t>>> Starting synth channels\n");
-    for ( int z = 0;  z < CHAN_COUNT;  z++ )
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        this->pChan[z] = new CHANNEL_C (z, osc_d_a, EnvADSL);
+        this->pVoice[z] = new VOICE_C (z, osc_d_a, EnvADSL);
         osc_d_a   += 8;
         }
     this->PitchBendOffset = Settings.GetBenderOffset ();
 
-    this->SplitLfoAdr = lfo_digital++;
     this->Lfo[0].Begin (0, osc_d_a, lfo_digital);
     osc_d_a     += 6;
     lfo_digital += 3;
     this->Lfo[1].Begin (1, osc_d_a, lfo_digital);
     this->PitchBend (PITCH_BEND_CENTER);
 
-    this->SawtoothDirection (false);
-    for ( int zc = 0;  zc < CHAN_COUNT;  zc++ )
+    for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
         {
         for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-            this->pChan[zc]->SelectedEnvelope[z] = false;
+            this->pVoice[zc]->SelectedEnvelope[z] = false;
         }
+
+    this->SawtoothDirection (false);
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::Clear ()
     {
-    for ( int z = 0;  z < CHAN_COUNT; z++ )
-        this->pChan[z]->Clear ();
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::PitchBend (short value)
-    {
-    short z = value + this->PitchBendOffset;
-    if ( z > 4090 )
-        return;
-    else if ( z < 126 )
-        return;
-    this->Lfo[0].PitchBend(z);
-    this->Lfo[1].PitchBend (z);
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::DualZone (short chan, bool state)
-    {
-    if ( chan == 0 )
-        return;
-
-    if ( state )
-        {
-        if ( (this->CurrentZone == 0) && (chan == 2) )
-            return;
-        this->SplitLFO (state);
-        this->CurrentZone = chan;
-        this->ZoneCount   = ZONE_COUNT;
-        this->ZoneBase    = ( chan == 2 ) ? ZONE_COUNT : 0;
-        }
-    else
-        {
-        switch ( chan )
-            {
-            case ZONE1:
-                this->SplitLFO (false);
-                this->CurrentZone = ZONE0;
-                this->ZoneCount   = CHAN_COUNT;
-                this->ZoneBase    = 0;
-                break;
-            case ZONE2:
-                if ( this->CurrentZone == ZONE2 )
-                    {
-                    this->CurrentZone = ZONE1;
-                    this->ZoneBase    = 0;
-                    }
-                break;
-            default:
-                break;
-            }
-        }
-    DisplayMessage.PageOsc (this->CurrentZone);
+    for ( int z = 0;  z < VOICE_COUNT; z++ )
+        this->pVoice[z]->Clear ();
     }
 
 //#######################################################################
@@ -457,8 +405,8 @@ void SYNTH_FRONT_C::Loop ()
             this->Up.Trigger = false;
 
             DBG ("Key up > %d", this->Up.Key);
-            for ( int z = 0;  z < CHAN_COUNT;  z++ )
-                if ( this->pChan[z]->NoteClear (this->Up.Key) )
+            for ( int z = 0;  z < VOICE_COUNT;  z++ )
+                if ( this->pVoice[z]->NoteClear (this->Up.Key) )
                     {
                     if ( DebugSynth )
                         printf ("  Osc > %d", z);
@@ -467,9 +415,9 @@ void SYNTH_FRONT_C::Loop ()
 
         if ( this->Down.Trigger )                          // Key went down so look for a channel to use
             {
-            for ( int z = 0;  z <  CHAN_COUNT;  z++ )
+            for ( int z = 0;  z <  VOICE_COUNT;  z++ )
                 {
-                CHANNEL_C& ch = *(pChan[z]);
+                VOICE_C& ch = *(pVoice[z]);
 
                 if ( !ch.IsActive () )              // grab the first channel not in use
                     {
@@ -482,7 +430,7 @@ void SYNTH_FRONT_C::Loop ()
                         oldest = z;
                     else
                         {
-                        if ( ch.IsActive () > pChan[oldest]->IsActive () )      // check if current channel older than the oldest so far
+                        if ( ch.IsActive () > pVoice[oldest]->IsActive () )      // check if current channel older than the oldest so far
                             oldest = z;
                         }
                     }
@@ -492,13 +440,13 @@ void SYNTH_FRONT_C::Loop ()
             this->Down.Trigger = false;                            // release the trigger
             if ( doit == 0 )
                 this->Lfo[0].HardReset ();
-            this->pChan[doit]->NoteSet(this->Down.Key, this->Down.Velocity);   // set the channel
-            DBG ("Key down > %d   Velocity > %d  Channel > %d", this->Down.Key, this->Down.Velocity, doit);
+            this->pVoice[doit]->NoteSet(this->Down.Key, this->Down.Velocity);   // set the channel
+            DBG ("Key down > %d   Velocity > %d  Port > %d", this->Down.Key, this->Down.Velocity, doit);
             }
 
         EnvADSL.Loop ();                                    // process all envelope generators
-        for ( int z = 0;  z < CHAN_COUNT;  z++ )            // Check all channels for done
-            this->pChan[z]->Loop ();
+        for ( int z = 0;  z < VOICE_COUNT;  z++ )            // Check all channels for done
+            this->pVoice[z]->Loop ();
         I2cDevices.UpdateDigital ();
         I2cDevices.UpdateAnalog  ();     // Update D/A ports
         }
@@ -510,7 +458,7 @@ void SYNTH_FRONT_C::Loop ()
 void SYNTH_FRONT_C::DisplayUpdate (int zone)
     {
     int zcount;
-    CHANNEL_C& ch = *(pChan[zone]);
+    VOICE_C& ch = *(pVoice[zone]);
     OSC_C& osc    = *(ch.pOsc ());
 
     switch ( zone )
@@ -530,19 +478,19 @@ void SYNTH_FRONT_C::DisplayUpdate (int zone)
 
     for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        DisplayMessage.OscSelected     (zone, z, ch.SelectedEnvelope[z]);
-        DisplayMessage.OscMaxLevel     (zone, z, osc.GetMaxLevel (z));
-        DisplayMessage.OscAttackTime   (zone, z, osc.GetAttackTime (z));
-        DisplayMessage.OscDecayTime    (zone, z,   osc.GetDecayTime (z));
-        DisplayMessage.OscReleaseTime  (zone, z, osc.GetReleaseTime (z));
-        DisplayMessage.OscSustainLevel (zone, z,osc.GetSustainLevel (z));
+        DisplayMessage.OscSelected     (z, ch.SelectedEnvelope[z]);
+        DisplayMessage.OscMaxLevel     (z, osc.GetMaxLevel (z));
+        DisplayMessage.OscAttackTime   (z, osc.GetAttackTime (z));
+        DisplayMessage.OscDecayTime    (z,   osc.GetDecayTime (z));
+        DisplayMessage.OscReleaseTime  (z, osc.GetReleaseTime (z));
+        DisplayMessage.OscSustainLevel (z,osc.GetSustainLevel (z));
         }
-    DisplayMessage.OscSawtoothDirection (zone, this->pChan[zone]->GetSawToothDirection ());
-    DisplayMessage.OscPulseWidth        (zone, this->pChan[zone]->GetPulseWidth ());
+    DisplayMessage.OscSawtoothDirection (this->pVoice[zone]->GetSawToothDirection ());
+    DisplayMessage.OscPulseWidth        (this->pVoice[zone]->GetPulseWidth ());
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::ShowChannelXL (int val)
+void SYNTH_FRONT_C::ShowVoiceXL (int val)
     {
     Midi_0.sendNoteOn (PanDevice[0], val, 1);
     delay (20);

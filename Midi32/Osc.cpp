@@ -28,9 +28,9 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     Valid = false;
     Number = num;
     // D/A configuration
-    OscChannelIO                = first_device + byte(D_A_OFF::EXPO);
-    PwmChannelIO                = first_device + byte(D_A_OFF::WIDTH);
-    SawtoothDirChannel        = first_device + byte(D_A_OFF::DIR);
+    OscPortIO                 = first_device + byte(D_A_OFF::EXPO);
+    PwmPortIO                 = first_device + byte(D_A_OFF::WIDTH);
+    RampDirPortIO             = first_device + byte(D_A_OFF::DIR);
     Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
     Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + byte(D_A_OFF::SAWTOOTH), usecount);
     Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
@@ -56,9 +56,9 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
             }
         }
 
-    if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
+    if ( I2cDevices.IsPortValid (first_device) && I2cDevices.IsPortValid (first_device + 7) )
         {
-        I2cDevices.D2Analog (PwmChannelIO, 900);
+        I2cDevices.D2Analog (PwmPortIO, 900);
 
         ClearState ();
         if ( DebugOsc )
@@ -93,7 +93,7 @@ void OSC_C::Clear ()
 //#######################################################################
 void OSC_C::SetTuningVolume (byte select, uint16_t level)
     {
-    I2cDevices.D2Analog (Mix[select]->GetChannel (), level);
+    I2cDevices.D2Analog (Mix[select]->GetPortIO (), level);
     }
 
 //#######################################################################
@@ -101,7 +101,7 @@ void OSC_C::SetTuningNote (byte note)
     {
     CurrentNote = note;
     DBG ("DownKey = %d\n", note);
-    I2cDevices.D2Analog (OscChannelIO, OctaveArray[note]);
+    I2cDevices.D2Analog (OscPortIO, OctaveArray[note]);
     }
 
 //#######################################################################
@@ -111,7 +111,7 @@ void OSC_C::NoteSet (byte note, byte velocity)
     DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
 
     ClearState ();
-    I2cDevices.D2Analog (OscChannelIO, OctaveArray[note]);
+    I2cDevices.D2Analog (OscPortIO, OctaveArray[note]);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         Mix[z]->Start ();
@@ -127,13 +127,13 @@ void OSC_C::NoteClear ()
 //#######################################################################
 void OSC_C::SawtoothDirection (bool data)
     {
-    I2cDevices.D2Analog (SawtoothDirChannel, ( data ) ? DA_MAX : 0);
+    I2cDevices.D2Analog (RampDirPortIO, ( data ) ? DA_MAX : 0);
     }
 
 //#######################################################################
 void OSC_C::PulseWidth (float percent)
     {
-    I2cDevices.D2Analog (PwmChannelIO, (percent * (float)DA_MAX));
+    I2cDevices.D2Analog (PwmPortIO, (percent * (float)DA_MAX));
     }
 
 //#######################################################################

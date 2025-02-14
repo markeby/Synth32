@@ -7,7 +7,7 @@ typedef struct
     {
     int8_t      Cluster;        // Mux chip address
     int8_t      Slice;          // Mux output select
-    int8_t      Channel;        // I2C address of device
+    int8_t      Port;        // I2C address of device
     int8_t      NumberDtoA;     // Device count on channel: 1 = MCP4725, 4 = MCP4728
     int8_t      NumberAtoD;
     int8_t      NumberDigital;  // number of digital I/O channeld: 8 / 16
@@ -73,7 +73,7 @@ public:
 //        ~I2C_INTERFACE_C (void);
     int  Begin           (void);
     void Zero            (void);
-    void D2Analog        (uint16_t Channel, int value);
+    void D2Analog        (uint16_t Port, int value);
     void DigitalOut      (uint8_t device, bool value);
     void AnalogClear     (void);
     void UpdateAnalog    (void);
@@ -82,7 +82,7 @@ public:
     int  NumBoards       (void)    { return (BoardCount); }
     int  NumAnalog       (void)    { return (AnalogOutCount); }
 
-    inline bool IsChannelValid (uint8_t device)
+    inline bool IsPortValid (uint8_t device)
         {
         if ( device < DeviceCount && pDevice[device].pBoard->Valid )
             return (true);

@@ -49,9 +49,9 @@ private:
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
     byte                    CurrentNote;
-    byte                    OscChannelIO;
-    byte                    PwmChannelIO;
-    byte                    SawtoothDirChannel;
+    byte                    OscPortIO;
+    byte                    PwmPortIO;
+    byte                    RampDirPortIO;
 
     void  ClearState (void);
 

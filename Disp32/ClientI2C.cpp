@@ -99,6 +99,9 @@ void MESSAGE_CLIENT_C::Process ()
             case CMD_C::UPDATE_PAGE_TUNING:
                 Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
+            case CMD_C::UPDATE_PAGE_MAP:
+                Graphics.UpdatePageMap ((uint8_t)ptop.Channel, ptop.Effect, value);
+                break;
             case CMD_C::RESET:
                 ESP.restart ();
                 break;

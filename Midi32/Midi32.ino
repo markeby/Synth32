@@ -16,7 +16,7 @@
 
 //#######################################################################
 I2C_LOCATION_T  BusI2C[] =
-//    Cluster   Slice   Channel   DtoA  AtoD    Dig     Name
+//    Cluster   Slice   Port   DtoA  AtoD    Dig     Name
     { { 0,        0,     0x60,     4,    0,      0,  "D/A #00, 01, 02, 03" },
       { 0,        1,     0x64,     4,    0,      0,  "D/A #04, 05, 06, 07" },
       { 0,        2,     0x60,     4,    0,      0,  "D/A #08, 09, 10, 11" },
@@ -152,10 +152,8 @@ void setup (void)
     printf ("\t>>> Starting I2C & devices...\n");
     int errcnt = I2cDevices.Begin ();
     if ( errcnt > 0 )
-        {
-//      SystemFail = true;
         SystemError = true;
-        }
+
     if ( SystemFail )
         Serial << "*******  Synth interface is not operational *******" << endl << endl << endl;
     else
@@ -163,6 +161,11 @@ void setup (void)
         printf ("\t>>> System startup complete.\n");
         if ( SystemError )
             printf ("\t>## Not all synth interce registers are active.\n");
+
+        printf ("\t>>> Starting display communications.\n");
+        DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
+
+        delay (1500);   // Give time for the graphics subsystem threads to start and Wifi to connect
 
         printf ("\t>>> Starting Synth...\n");
         SynthActive = true;

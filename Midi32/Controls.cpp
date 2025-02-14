@@ -13,6 +13,8 @@
 #include "SoftLFO.h"
 
 //########################################################
+//   VCO & VCA controls
+//########################################################
 static void SetMaxLevel (short ch, short data)
     {
     SynthFront.SetMaxLevel (ch, data);
@@ -27,19 +29,7 @@ static void SetSustain (short ch, short data)
 //########################################################
 static void SetTimeSetSelect (short ch, short state)
     {
-    SynthFront.ChannelSetSelect (ch, state);
-    }
-
-//########################################################
-static void ToggleModVCA (short ch, bool state)
-    {
-    SynthFront.SelectModVCA (ch, state);
-    }
-
-//########################################################
-static void ToggleModVCO (short ch, bool state)
-    {
-    SynthFront.SelectModVCO (ch, state);
+    SynthFront.VoiceSetSelected (ch, state);
     }
 
 //########################################################
@@ -81,11 +71,35 @@ static void PulseWidth (short ch, short data)
     }
 
 //########################################################
+//  LFO controls
+//########################################################
 static void FreqLFO (short ch, short data)
     {
     SynthFront.FreqLFO (ch, data);
     }
 
+//########################################################
+static void ToggleModVCA (short ch, bool state)
+    {
+    SynthFront.SelectModVCA (ch, state);
+    }
+
+//########################################################
+static void ToggleModVCO (short ch, bool state)
+    {
+    SynthFront.SelectModVCO (ch, state);
+    }
+
+//########################################################
+//  Noise control
+//########################################################
+static void ToggleNoise (short ch, bool state)
+    {
+    SynthFront.SetNoise (ch, state);
+    }
+
+//########################################################
+//  Tuning control
 //########################################################
 static void TuneReset (short ch, bool state)
     {
@@ -120,6 +134,8 @@ static void TunningSave (short ch, bool state)
     }
 
 //########################################################
+// Debug to advance page selection
+//########################################################
 static void PageAdvance (short ch, short data)
     {
     if ( data )
@@ -129,15 +145,37 @@ static void PageAdvance (short ch, short data)
     }
 
 //########################################################
-static void ToggleNoise (short ch, bool state)
+//  Channel to voice mapping controls
+//########################################################
+static void TrackSel (short ch, short data)
     {
-    SynthFront.SetNoise (ch, state);
+    static byte count = 0;
+    static byte last = 0;
+
+    count += ( data ) ? 1 : -1;
+    switch ( count )
+        {
+        case 0:
+            if ( SynthFront.GetMidiMapMode () && (last == 0) )
+                SynthFront.ChangeMapSelect (ch);
+            else
+                last--;
+            break;
+        case 2:
+            SynthFront.MidiMapMode ();
+            last = 1;
+            break;
+        }
     }
 
 //########################################################
-static void DualZone (short ch, short data)
+static void SendDir (short index, short data)
     {
-    SynthFront.DualZone (ch, data);
+    if ( SynthFront.GetMidiMapMode () )
+        {
+        if ( data )
+            SynthFront.MapModeBump (( index ) ? -1 : 1);
+        }
     }
 
 //########################################################
@@ -174,14 +212,14 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {   29,                0, "N ",                 nullptr           },    // 01  4D  xx
         {   30,                0, "N ",                 nullptr           },    // 01  4E  xx
         {   31,                0, "N ",                 nullptr           },    // 01  4F  xx
-        {    0,                0, "Sine",               SetTimeSetSelect  },    // 01  50  xx
-        {    1,                0, "Triangle",           SetTimeSetSelect  },    // 01  51  xx
-        {    2,                0, "Sawtooth",           SetTimeSetSelect  },    // 01  52  xx
-        {    3,                0, "Pulse",              SetTimeSetSelect  },    // 01  53  xx
-        {    4,                0, "Square",             SetTimeSetSelect  },    // 01  54  xx
+        {    0,                0, "Set Sine",           SetTimeSetSelect  },    // 01  50  xx
+        {    1,                0, "Set Triangle",       SetTimeSetSelect  },    // 01  51  xx
+        {    2,                0, "Set Ramp",           SetTimeSetSelect  },    // 01  52  xx
+        {    3,                0, "Set Pulse",          SetTimeSetSelect  },    // 01  53  xx
+        {    4,                0, "Set Square",         SetTimeSetSelect  },    // 01  54  xx
         { 0x55,             0x0D, "Sawtooth Dir",       SawtoothDirection },    // 01  55  xx
-        {    1,                0, "Dual Zone 1",        DualZone          },    // 01  56  xx
-        {    2,                0, "Dual Zone 2",        DualZone          },    // 01  57  xx
+        {    1,                0, "N ",                 nullptr           },    // 01  56  xx
+        {    2,                0, "N ",                 nullptr           },    // 01  57  xx
         {   40,                0, "N ",                 nullptr           },    // 01  58  xx
         {   41,                0, "N ",                 nullptr           },    // 01  59  xx
         {   42,                0, "N ",                 nullptr           },    // 01  5A  xx
@@ -190,10 +228,10 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {   45,                0, "N ",                 nullptr           },    // 01  5D  xx
         {   46,                0, "N ",                 nullptr           },    // 01  5E  xx
         {   47,                0, "N ",                 nullptr           },    // 01  5F  xx
-        {   48,                0, "N ",                 nullptr           },    // 01  60  xx
-        {   49,                0, "N ",                 nullptr           },    // 01  61  xx
-        {   50,                0, "N ",                 nullptr           },    // 01  62  xx
-        {   51,                0, "N ",                 nullptr           },    // 01  63  xx
+        {    0,                0, "Send Sel UP",        SendDir           },    // 01  60  xx
+        {    1,                0, "Send Sel DN",        SendDir           },    // 01  61  xx
+        {    0,                0, "Track Sel Left",     TrackSel          },    // 01  62  xx
+        {    1,                0, "Track Sel Right",    TrackSel          },    // 01  63  xx
         { 0x64,             0x3F, "Page Advance",       PageAdvance       },    // 01  64  xx
         {   53,                0, "N ",                 nullptr           },    // 01  65  xx
         {   54,                0, "N ",                 nullptr           },    // 01  66  xx
@@ -209,7 +247,7 @@ LED_NOTE_MAP PanDevice[] = { 15, 31, 47, 63, 79, 95, 111, 127 };
 MIDI_MAP FaderMapArray[] =
     {   {  0, "Sine Sustain",           SetSustain  },  // 01  07  xx
         {  1, "Triangle Sustain",       SetSustain  },  // 02  07  xx
-        {  2, "Sawtooth Sustain",       SetSustain  },  // 03  07  xx
+        {  2, "Ramp Sustain",           SetSustain  },  // 03  07  xx
         {  3, "Pulse Sustain",          SetSustain  },  // 04  07  xx
         {  4, "Noise Sustain",          SetSustain  },  // 05  07  xx
         {  5, "N ",                     nullptr     },  // 06  07  xx
@@ -249,7 +287,7 @@ MIDI_ENCODER_MAP KnobMapArray[] =
 MIDI_BUTTON_MAP SwitchMapArray[] =
     {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA  },  //  01  10  xx
         {  1,           false,  "VCA Mod Triangle",         ToggleModVCA  },  //  01  11  xx
-        {  2,           false,  "VCA Mod Sawtooth",         ToggleModVCA  },  //  01  12  xx
+        {  2,           false,  "VCA Mod Ramp",             ToggleModVCA  },  //  01  12  xx
         {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA  },  //  01  13  xx
         {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA  },  //  01  14  xx
         {  5,           false,  "Switch f6",                nullptr       },  //  01  15  xx

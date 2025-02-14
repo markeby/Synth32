@@ -179,10 +179,29 @@ class TUNES_WIDGET_C
     {
     private:
         lv_style_t  Style;
-        lv_obj_t*   Osc[CHAN_COUNT];
+        lv_obj_t*   Osc[VOICE_COUNT];
 
     public:
              TUNES_WIDGET_C (lv_obj_t* base, short x, short y);
         void Set            (short chan, bool state);
     };
+
+//############################################
+class MIDI_SEL_WIDGET_C
+    {
+    private:
+        lv_obj_t*   Button;
+        lv_obj_t*   Label;
+        lv_obj_t*   Roller;
+        lv_style_t  StyleSelect;
+        uint16_t    Current;
+
+    public:
+             MIDI_SEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y);
+        void Select            (bool state);
+        void Set               (short val);
+    };
+
+
+
 

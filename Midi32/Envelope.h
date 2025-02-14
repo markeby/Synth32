@@ -51,7 +51,7 @@ private:
     // Fixed parameters
     String      Name;
     byte        Index;
-    uint16_t    DeviceChannel;
+    uint16_t    DevicePortIO;
     float       Floor;
     float       Diff;
 
@@ -72,7 +72,7 @@ public:
     void     SetSoftLFO     (bool sel);
 
     inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
-    inline uint16_t GetChannel       (void)             { return (DeviceChannel); }     // Return D/A channel number
+    inline uint16_t GetPortIO       (void)             { return (DevicePortIO); }     // Return D/A channel number
     };  // end ENVELOPE_C
 
 //#######################################################################

@@ -25,7 +25,7 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_LOCATION_T* ploc)
     {
     I2C_LOCATION_T* zploc = ploc;
 
-    for ( this->BoardCount = 0;  zploc->Channel != -1;  this->BoardCount++, zploc++ );
+    for ( this->BoardCount = 0;  zploc->Port != -1;  this->BoardCount++, zploc++ );
 
     SystemFail     = false;
     this->pBoard         = new I2C_BOARD_T[this->BoardCount];
@@ -127,15 +127,15 @@ void I2C_INTERFACE_C::Init4728 (I2C_LOCATION_T &loc)
 
     BusMux (loc.Cluster, loc.Slice);
 
-    Wire.beginTransmission(loc.Channel);
+    Wire.beginTransmission(loc.Port);
     rval = Wire.write (p);
     rval = Wire.endTransmission (true);
 
-    Wire.beginTransmission(loc.Channel);
+    Wire.beginTransmission(loc.Port);
     rval = Wire.write (r);
     rval = Wire.endTransmission (true);
 
-    Wire.beginTransmission(loc.Channel);
+    Wire.beginTransmission(loc.Port);
     rval = Wire.write (g);
     rval = Wire.endTransmission (true);
 
@@ -148,7 +148,7 @@ bool I2C_INTERFACE_C::ValidateDevice (uint8_t board)
     I2C_BOARD_T& brd = this->pBoard[board];
     brd.Valid = false;
     this->BusMux (brd.Board.Cluster, brd.Board.Slice);
-    Wire.beginTransmission(brd.Board.Channel);
+    Wire.beginTransmission(brd.Board.Port);
     if ( Wire.endTransmission (true) == 0 )
        brd.Valid = true;
     this->EndBusMux (brd.Board.Cluster);
@@ -160,7 +160,7 @@ void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
     {
     int rval;
     this->BusMux (loc.Cluster, loc.Slice);
-    Wire.beginTransmission(loc.Channel);
+    Wire.beginTransmission(loc.Port);
     rval = Wire.write (buff, length);
     rval = Wire.endTransmission (true);
     this->EndBusMux (loc.Cluster);
@@ -173,7 +173,7 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     I2C_LOCATION_T& loc =  board.Board;
 
     DBGDA ("%d:%d:%#3.3x%c write  %#4.4d  %#4.4d  %#4.4d  %#4.4d  %s",
-           loc.Cluster, loc.Slice, loc.Channel,
+           loc.Cluster, loc.Slice, loc.Port,
            (( board.Valid ) ? ' ' : '-'),
            board.DtoA[0], board.DtoA[1], board.DtoA[2], board.DtoA[3], loc.Name);
 
@@ -205,7 +205,7 @@ void I2C_INTERFACE_C::Write857x (I2C_BOARD_T& board)
         }
 #endif
     DBGDIG ("%d:%d:%#3.3x%c write %s  %s",
-            loc.Cluster, loc.Slice, loc.Channel,
+            loc.Cluster, loc.Slice, loc.Port,
             (( board.Valid ) ? ' ' : '-'),
             str.c_str (),
             loc.Name);
@@ -248,7 +248,7 @@ int I2C_INTERFACE_C::Begin ()
         {
         I2C_LOCATION_T& board = pBoard[z].Board;
         if ( DebugI2C )
-            printf("\t  >> Init: Cluster = %d  Slice = %d  Chan = 0x%X  %s    ", board.Cluster, board.Slice, board.Channel,  board.Name);
+            printf("\t  >> Init: Cluster = %d  Slice = %d  Port = 0x%X  %s    ", board.Cluster, board.Slice, board.Port,  board.Name);
         if ( this->ValidateDevice (z) )
             {
             printf ("**** Failure to access I2C cluster %d\n",  board.Cluster);

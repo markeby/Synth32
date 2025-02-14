@@ -51,13 +51,18 @@ void I2C_MESSAGE_C::SendComplete (byte length)
 //###################################################################
 void I2C_MESSAGE_C::Page (PAGE_C page)
     {
-    if ( this->Ready )
+    if ( !this->Lock )
         {
-        sendBuffer[0] = (byte)CMD_C::PAGE_SHOW;
-        sendBuffer[1] = 0;
-        sendBuffer[2] = (byte)page;
-        DBGM ("Page %d", (byte)page);
-        SendComplete (MESSAGE_LENGTH_PAGE);
+        if ( this->Ready )
+            {
+            sendBuffer[0] = (byte)CMD_C::PAGE_SHOW;
+            sendBuffer[1] = 0;
+            sendBuffer[2] = (byte)page;
+            DBGM ("Page %d", (byte)page);
+            SendComplete (MESSAGE_LENGTH_PAGE);
+            if ( (page == PAGE_C::PAGE_TUNING) || (page == PAGE_C::PAGE_MIDI_MAP) )
+                this->Lock = true;
+            }
         }
     }
 

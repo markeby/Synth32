@@ -39,7 +39,7 @@ void SYNTH_LFO_C::ClearState ()
     for ( int z = 0;  z < LFO_VCA_COUNT;  z++)
         {
         SYNTH_LFO_C::VCA_T& m = this->Vca[z];
-        I2cDevices.D2Analog (m.Channel, 0);
+        I2cDevices.D2Analog (m.Port, 0);
         }
     }
 
@@ -61,7 +61,7 @@ void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
     if ( z != this->Vca[ch].CurrentLevel )
         {
         this->Vca[ch].CurrentLevel = z;
-        I2cDevices.D2Analog (this->Vca[ch].Channel,  z);
+        I2cDevices.D2Analog (this->Vca[ch].Port,  z);
         this->UpdateNeded = true;
         DBG ("%s level > %d", this->Vca[ch].Name, z);
         }
@@ -73,14 +73,14 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
     {
     this->Number = num;
     // D/A configurations
-    this->OscChannelIO = first_device + uint8_t(D_A_OFF::FREQ);
-    this->PwmChannelIO = first_device + uint8_t(D_A_OFF::WIDTH);
-    this->BendChannelIO = first_device + uint8_t(D_A_OFF::BEND);
-    this->Vca[int(SHAPE::SAWTOOTH)].Channel = first_device + uint8_t(D_A_OFF::SAWTOOTH);
-    this->Vca[int(SHAPE::PULSE)].Channel    = first_device + uint8_t(D_A_OFF::PULSE);
-    this->Vca[int(SHAPE::SINE)].Channel     = first_device + uint8_t(D_A_OFF::SINE);
-    this->SlopeChannelIO = lfo_digital;
-    this->HardResetChannelIO  = lfo_digital + 1;
+    this->OscPortIO = first_device + uint8_t(D_A_OFF::FREQ);
+    this->PwmPortIO = first_device + uint8_t(D_A_OFF::WIDTH);
+    this->BendPortIO = first_device + uint8_t(D_A_OFF::BEND);
+    this->Vca[int(SHAPE::SAWTOOTH)].Port = first_device + uint8_t(D_A_OFF::SAWTOOTH);
+    this->Vca[int(SHAPE::PULSE)].Port    = first_device + uint8_t(D_A_OFF::PULSE);
+    this->Vca[int(SHAPE::SINE)].Port     = first_device + uint8_t(D_A_OFF::SINE);
+    this->SlopePortO = lfo_digital;
+    this->HardResetPortIO  = lfo_digital + 1;
 
     // Initialize mixers
 
@@ -91,7 +91,7 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
         this->Vca[z].MaximumLevel = MAX_DA;
         }
 
-    if ( I2cDevices.IsChannelValid (first_device) && I2cDevices.IsChannelValid (first_device + 7) )
+    if ( I2cDevices.IsPortValid (first_device) && I2cDevices.IsPortValid (first_device + 7) )
         {
         this->Valid = true;
         this->ClearState ();
@@ -114,7 +114,7 @@ void SYNTH_LFO_C::SetFreq (short value)
     {
     this->CurrentFreq = value;
     DBG ("Set frequency %d", value);
-    I2cDevices.D2Analog (this->OscChannelIO, value);
+    I2cDevices.D2Analog (this->OscPortIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -123,7 +123,7 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
     {
     this->CurrentWidth = value;
     DBG ("Set pulse width %d", value);
-    I2cDevices.D2Analog (this->PwmChannelIO, DA_MAX - value);
+    I2cDevices.D2Analog (this->PwmPortIO, DA_MAX - value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -176,7 +176,7 @@ void SYNTH_LFO_C::SetLevel (uint8_t data)
 //#######################################################################
 void SYNTH_LFO_C::PitchBend (short value)
     {
-    I2cDevices.D2Analog (this->BendChannelIO, value);
+    I2cDevices.D2Analog (this->BendPortIO, value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -185,14 +185,14 @@ void SYNTH_LFO_C::SetRampDir (bool state)
     {
     this->RampSlope = state;
     DisplayMessage.LfoHardRampSlope (state);
-    I2cDevices.DigitalOut (this->SlopeChannelIO, state);
+    I2cDevices.DigitalOut (this->SlopePortO, state);
     I2cDevices.UpdateDigital ();
     }
 
 //#######################################################################
 void SYNTH_LFO_C::HardReset (void)
     {
-    I2cDevices.DigitalOut (this->HardResetChannelIO, true);
+    I2cDevices.DigitalOut (this->HardResetPortIO, true);
     this->ResetOn = true;
     }
 
@@ -201,7 +201,7 @@ void SYNTH_LFO_C::Loop (void)
     {
     if (  this->ResetOn )
         {
-        I2cDevices.DigitalOut(this->HardResetChannelIO, false);
+        I2cDevices.DigitalOut(this->HardResetPortIO, false);
         this->ResetOn = false;
         }
     }

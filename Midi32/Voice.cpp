@@ -1,26 +1,27 @@
 //#######################################################################
-// Module:     Channel.cpp
-// Descrption: Synthesizer Channel processing
+// Module:     Port.cpp
+// Descrption: Synthesizer Port processing
 // Creator:    markeby
 // Date:       3/16/2024
 //#######################################################################
 #include <Arduino.h>
 #include "config.h"
 #include "Osc.h"
-#include "Channel.h"
+#include "Voice.h"
 
 //#####################################################################
-CHANNEL_C::CHANNEL_C (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen)
+VOICE_C::VOICE_C (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen)
     {
     this->Number      = num;
     this->ActiveTimer = 0;
     this->Key         = -1;
     this->UseCount    = 0;
+    this->Channel     = 1;
     this->OscP        = new OSC_C (num, osc_d_a, UseCount, envgen);
     }
 
 //#######################################################################
-void CHANNEL_C::Loop ()
+void VOICE_C::Loop ()
     {
     if ( this->ActiveTimer )
         {
@@ -30,7 +31,7 @@ void CHANNEL_C::Loop ()
         }
     }
 //#######################################################################
-void CHANNEL_C::NoteSet (byte key, byte velocity)
+void VOICE_C::NoteSet (byte key, byte velocity)
     {
     this->ActiveTimer = 1;
     this->Key = key;
@@ -38,7 +39,7 @@ void CHANNEL_C::NoteSet (byte key, byte velocity)
     }
 
 //#######################################################################
-bool CHANNEL_C::NoteClear (byte key)
+bool VOICE_C::NoteClear (byte key)
     {
     if ( key != this->Key )
         return false;

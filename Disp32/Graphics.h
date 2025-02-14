@@ -30,6 +30,7 @@ class LFO_METER_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class NOTE_WIDGET_C;
 class NOISE_WIDGET_C;
+class MIDI_SEL_WIDGET_C;
 
 class PAGE_TITLE_C
     {
@@ -101,6 +102,22 @@ public:
 
 //############################################
 //############################################
+class PAGE_MAPPING_C
+    {
+private:
+    lv_obj_t*           MidiTitle;
+    lv_style_t          MidiTitleStyle;
+    MIDI_SEL_WIDGET_C*  Voice[4];
+    short               Selected;
+
+public:
+              PAGE_MAPPING_C (lv_obj_t* base);
+    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    };
+
+
+//############################################
+//############################################
 class PAGE_TUNE_C
     {
 private:
@@ -133,6 +150,7 @@ private:
     lv_obj_t*               BasePageOsc1;
     lv_obj_t*               BasePageOsc2;
     lv_obj_t*               BasePageMod;
+    lv_obj_t*               BasePageMap;
     lv_obj_t*               BasePageFilter;
     lv_obj_t*               BasePageTuning;
 
@@ -140,6 +158,7 @@ private:
     PAGE_OSC_C*             PageOsc1;
     PAGE_OSC_C*             PageOsc2;
     PAGE_MOD_C*             PageMod;
+    PAGE_MAPPING_C*         PageMap;
     PAGE_TUNE_C*            PageTune;
     PAGE_FILTER_C*          PageFilter;
 
@@ -148,6 +167,7 @@ public:
     void    Begin               (void);
     void    Pause               (bool state);
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
+    void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageMap->UpdatePage (ch, effect, value); }
     void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageMod->UpdatePage (ch, effect, value); }
     void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageTune->UpdatePage (ch, effect, value); }
     void    UpdatePageOsc0      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc0->UpdatePage (ch, effect, value); }

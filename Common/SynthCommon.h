@@ -10,7 +10,7 @@
 #define DA_MAX          4095
 
 // number of synth oscillaotor/filter/control channels
-#define CHAN_COUNT      8
+#define VOICE_COUNT     8
 #define NUM_ZONES       2
 #define ZONE_COUNT      4
 
@@ -22,6 +22,12 @@
 
 // number of total envelopes to process
 #define ENVELOPE_COUNT      OSC_MIXER_COUNT
+
+// number of MIDI channels possible
+#define MAX_MIDI        16
+
+// maximum number of entries on mapping page
+#define MAP_MAX         3
 
 // Noise ducts each of which connects to channel ins
 #define DUCT_NUM        4
