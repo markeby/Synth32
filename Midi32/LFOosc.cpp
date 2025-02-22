@@ -6,7 +6,6 @@
 //#######################################################################
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
-#include "config.h"
 #include "I2Cmessages.h"
 #include "LFOosc.h"
 #include "Debug.h"

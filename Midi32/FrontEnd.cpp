@@ -116,7 +116,7 @@ String SYNTH_FRONT_C::Selected ()
 
     for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
         {
-        if ( pVoice[0]->SelectedEnvelope[z] )
+        if ( this->SynthConfig[this->CurrentMapSelected].SelectedEnvelope[z] )
             {
             str += SelLabel[z];
             str += "  ";
@@ -144,9 +144,7 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, M
     this->ClearEntryRed       = 0;
     this->ClearEntryRedL      = 0;
     this->CurrentMapSelected  = 0;
-
-    for ( int z = 0;  z < VOICE_COUNT;  z++ )
-        this->MapVoiceMidi[z] = 1;
+    this->CurrentMidiSelected = 1;
     }
 
 //#######################################################################
@@ -233,9 +231,9 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
     Midi_1.begin (MIDI_CHANNEL_OMNI);
     printf ("\t>>> Serial1 midi ready\n");
 
-//    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
-//    Midi_2.begin (MIDI_CHANNEL_OMNI);
-//    printf ("\t>>> Serial2 midi ready\n");
+//  Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+//  Midi_2.begin (MIDI_CHANNEL_OMNI);
+//  printf ("\t>>> Serial2 midi ready\n");
 
     printf ("\t>>> Starting synth channels\n");
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
@@ -251,13 +249,8 @@ void SYNTH_FRONT_C::Begin (int osc_d_a, int mult_digital, int noise_digital, int
     this->Lfo[1].Begin (1, osc_d_a, lfo_digital);
     this->PitchBend (PITCH_BEND_CENTER);
 
-    for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
-        {
-        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-            this->pVoice[zc]->SelectedEnvelope[z] = false;
-        }
-
-    this->SawtoothDirection (false);
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        this->SynthConfig[z].Load (z);
     }
 
 //#######################################################################
@@ -457,36 +450,21 @@ void SYNTH_FRONT_C::Loop ()
 //#####################################################################
 void SYNTH_FRONT_C::DisplayUpdate (int zone)
     {
-    int zcount;
-    VOICE_C& ch = *(pVoice[zone]);
-    OSC_C& osc    = *(ch.pOsc ());
-
-    switch ( zone )
-        {
-        case ZONE0:
-            zcount = 8;
-            break;
-        case ZONE1:
-            zcount = 4;
-            break;
-        case ZONE2:
-            zcount = 4;
-            break;
-        default:
-            return;
-        }
-
-    for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        {
-        DisplayMessage.OscSelected     (z, ch.SelectedEnvelope[z]);
-        DisplayMessage.OscMaxLevel     (z, osc.GetMaxLevel (z));
-        DisplayMessage.OscAttackTime   (z, osc.GetAttackTime (z));
-        DisplayMessage.OscDecayTime    (z,   osc.GetDecayTime (z));
-        DisplayMessage.OscReleaseTime  (z, osc.GetReleaseTime (z));
-        DisplayMessage.OscSustainLevel (z,osc.GetSustainLevel (z));
-        }
-    DisplayMessage.OscSawtoothDirection (this->pVoice[zone]->GetSawToothDirection ());
-    DisplayMessage.OscPulseWidth        (this->pVoice[zone]->GetPulseWidth ());
+//    int zcount;
+//    VOICE_C& ch = *(pVoice[zone]);
+//    OSC_C& osc    = *(ch.pOsc ());
+//
+//    for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
+//        {
+//        DisplayMessage.OscSelected     (z, ch.SelectedEnvelope[z]);
+//        DisplayMessage.OscMaxLevel     (z, osc.GetMaxLevel (z));
+//        DisplayMessage.OscAttackTime   (z, osc.GetAttackTime (z));
+//        DisplayMessage.OscDecayTime    (z, osc.GetDecayTime (z));
+//        DisplayMessage.OscReleaseTime  (z, osc.GetReleaseTime (z));
+//        DisplayMessage.OscSustainLevel (z, osc.GetSustainLevel (z));
+//        }
+//    DisplayMessage.OscSawtoothDirection (this->pVoice[zone]->GetSawToothDirection ());
+//    DisplayMessage.OscPulseWidth        (this->pVoice[zone]->GetPulseWidth ());
     }
 
 //#####################################################################

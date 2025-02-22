@@ -5,7 +5,6 @@
 // Date:       9/4/2023
 //#######################################################################
 #include <Arduino.h>
-#include "config.h"
 #include "Settings.h"
 #include "Osc.h"
 #include "Debug.h"

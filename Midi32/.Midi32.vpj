@@ -118,6 +118,7 @@
             Name="Source"
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
+            <F N="Config.cpp"/>
             <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
             <F N="Diagnostics.cpp"/>
@@ -150,7 +151,7 @@
                 <F N="../Common/DispMessages.h"/>
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
-            <F N="config.h"/>
+            <F N="Config.h"/>
             <F N="Debug.h"/>
             <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>

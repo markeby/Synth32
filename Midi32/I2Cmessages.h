@@ -5,7 +5,7 @@
 // Date:       7/21/2024
 //#######################################################################
 #pragma once
-#include "config.h"
+#include "Config.h"
 #include "../Common/DispMessages.h"
 
 //#################################################
@@ -19,17 +19,19 @@ private:
     bool        ResetState;
     bool        Lock;
     uint64_t    ResetStart;
+    byte        CurrentVoicePage;
 
     byte        DisplayAddress;
 
     void  SendComplete  (byte length);
-    void  SendUpdate (DISP_MESSAGE_N::CMD_C page, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void  SendUpdate (DISP_MESSAGE_N::CMD_C cmd, byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
 
 public:
           I2C_MESSAGE_C (void);
     void  Begin         (byte display, byte sda, byte scl);
     void  Page          (DISP_MESSAGE_N::PAGE_C page);
     void  Reset         (void);
+    void  SetVoicePage  (byte page, byte midi);
 
     //#################################################
     inline bool Loop (void)
@@ -62,6 +64,7 @@ public:
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
+                          0,
                           DISP_MESSAGE_N::EFFECT_C::NOTE,
                           value);
         }
@@ -70,6 +73,7 @@ public:
     inline void TuningSelect (byte ch, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
                           ch,
                           DISP_MESSAGE_N::EFFECT_C::SELECTED,
                           value);
@@ -79,6 +83,7 @@ public:
     inline void TuningLevel (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
                           channel,
                           DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                           value);
@@ -97,42 +102,23 @@ public:
         }
 
     //#################################################
-    inline void SendUpdateOsc (byte midi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SetCurrentVoicePage (byte index)
         {
-        if ( !this->Lock )
-            {
-            DISP_MESSAGE_N::CMD_C page;
-            switch ( midi )
-                {
-                case 0:
-                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC0;
-                    break;
-                case 1:
-                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC1;
-                    break;
-                case 2:
-                    page = DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_OSC2;
-                    break;
-                default:
-                    return;
-                }
-            this->SendUpdate (page,
-                              channel,
-                              effect,
-                              value);
-            }
+        this->CurrentVoicePage = index; // identify which voice page
         }
 
     //#################################################
-    inline void SendUpdateOsc (DISP_MESSAGE_N::CMD_C midi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SelectVoicePage (byte index)
         {
-        SendUpdateOsc (midi, channel, effect, value);
+        this->CurrentVoicePage = index;             // identify which voice page
+        this->Page ((DISP_MESSAGE_N::PAGE_C)index); // Select voice page to show
         }
 
     //#################################################
     inline void SendMapVoiceMidi (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MAP,
+                          0,
                           channel,
                           effect,
                           value);
@@ -143,15 +129,29 @@ public:
         {
         if ( !Lock )
             this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
+                              0,
                               channel,
                               effect,
                               value);
         }
 
     //#################################################
+    inline void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+        {
+        if ( !this->Lock )
+            {
+            this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
+                              mapi,
+                              channel,
+                              effect,
+                              value);
+            }
+        }
+
+    //#################################################
     inline void OscSelected (byte channel, bool sel)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::SELECTED,
                              (( sel ) ? 1 : 0));
@@ -160,7 +160,7 @@ public:
     //#################################################
     inline void OscAttackTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
                              value);
@@ -169,7 +169,7 @@ public:
     //#################################################
     inline void OscMaxLevel (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                              value);
@@ -178,7 +178,7 @@ public:
     //#################################################
     inline void OscDecayTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
                              value);
@@ -187,7 +187,7 @@ public:
     //#################################################
     inline void OscReleaseTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
                              value);
@@ -196,7 +196,7 @@ public:
     //#################################################
     inline void OscSustainLevel (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
                              value);
@@ -205,7 +205,7 @@ public:
     //#################################################
     inline void OscSelectADSR (byte channel, bool select)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::SELECTED,
                              (( select ) ? 1 : 0));
@@ -214,7 +214,7 @@ public:
     //#################################################
     inline void OscSawtoothDirection ( bool sel)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              (byte)(DISP_MESSAGE_N::VOICE_C::SAWTOOTH),
                              DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION,
                              (( sel ) ? 1 : 0));
@@ -223,7 +223,7 @@ public:
     //#################################################
     inline void OscPulseWidth (byte width)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              (byte)(DISP_MESSAGE_N::VOICE_C::PULSE),
                              DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH,
                              width);
@@ -232,7 +232,7 @@ public:
     //#################################################
     inline void OscNoise (byte color, bool state)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateOsc (this->CurrentVoicePage,
                              (byte)(DISP_MESSAGE_N::VOICE_C::NOISE),
                              DISP_MESSAGE_N::EFFECT_C::NOISE,
                              color | ( (state) ? 0x80 : 0x00 ));

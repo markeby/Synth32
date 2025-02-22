@@ -12,11 +12,12 @@
 
 typedef union
     {
-    uint8_t     Bytes[5];
+    uint8_t     Bytes[MESSAGE_LENGTH_UPDATE];
     struct
         {
         DISP_MESSAGE_N::CMD_C       Command;
-        DISP_MESSAGE_N::VOICE_C   Channel;
+        uint8_t                     Index;
+        DISP_MESSAGE_N::VOICE_C     Channel;
         DISP_MESSAGE_N::EFFECT_C    Effect;
         uint8_t                     Value0;
         uint8_t                     Value1;

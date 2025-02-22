@@ -107,3 +107,15 @@ void SYNTH_FRONT_C::TuningBump (bool state)
         }
     }
 
+//#######################################################################
+void SYNTH_FRONT_C::SaveTuning ()
+    {
+    if ( SetTuning )
+        {
+        Serial << "  Saving synth keyboard arrays" << endl;
+        for ( int z = 0;  z < VOICE_COUNT;  z++ )
+            Settings.PutOscBank (z, this->pVoice[z]->pOsc ()->GetBankAddr ());
+        Settings.PutBenderOffset (this->PitchBendOffset);
+        }
+    }
+

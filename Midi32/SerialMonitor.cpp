@@ -6,7 +6,6 @@
 //#######################################################################
 #include <Arduino.h>
 #include <chip-debug-report.h>
-#include "config.h"
 #include "I2Cmessages.h"
 #include "settings.h"
 #include "SerialMonitor.h"
@@ -232,7 +231,7 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (INSSID);
                     break;
                 case 'X':
-                    SynthFront.SaveAllSettings ();
+                    SynthFront.SaveTuning ();
                     this->Mode (MENU);
                     break;
                 case 'P':

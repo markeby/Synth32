@@ -5,8 +5,7 @@
 // Date:       3/23/2023
 //#######################################################################
 #pragma once
-
-#include "config.h"
+#include "Config.h"
 #include "Envelope.h"
 
 namespace OSC_N

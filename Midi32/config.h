@@ -1,9 +1,10 @@
-// config.h
-//
-// Project settings here (defines, numbers, etc.)
-
+//#######################################################################
+// Module:     Config.h
+// Descrption: Configuration data for synth
+// Creator:    markeby
+// Date:       2/16/2025
+//#######################################################################
 #pragma once
-
 #include <Streaming.h>
 
 #include "../Common/SynthCommon.h"
@@ -143,5 +144,56 @@ extern LED_NOTE_MAP         PanDevice[];
 //  I2C bus interfaces
 //#################################################
 extern  I2C_INTERFACE_C I2cDevices;
+
+//#################################################
+//    Synthesizer configuration class
+//#################################################
+class SYNTH_CONFIG_C
+    {
+private:
+    // Parameters for one of the possible Midi Channels
+    typedef struct
+        {
+        short   MapVoiceMidi;
+        short   MapNoiseVoice;
+        bool    RampDirection;
+        float   MasterLevel;
+        float   PulseWidth;
+        float   MaxLevel[OSC_MIXER_COUNT];
+        float   SustainLevel[OSC_MIXER_COUNT];
+        float   AttackTime[OSC_MIXER_COUNT];
+        float   DecayTime[OSC_MIXER_COUNT];
+        float   ReleaseTime[OSC_MIXER_COUNT];
+        }   CONFIG_SAVE_T;
+
+    CONFIG_SAVE_T   S0;
+public:
+    bool    SelectedEnvelope[OSC_MIXER_COUNT];
+
+         SYNTH_CONFIG_C (void);
+    void Save           (int num);
+    void Load           (int num);
+
+    inline void  SetVoiceMidi       (short data)                { S0.MapVoiceMidi = data; }
+    inline short GetVoiceMidi       (void)                      { return (S0.MapVoiceMidi); }
+    inline void  SetNoiseVoice      (short data)                { S0.MapVoiceMidi = data; }
+    inline short GetNoiseVoice      (void)                      { return (S0.MapNoiseVoice); }
+    inline void  SetRampDirection   (bool data)                 { S0.RampDirection = data; }
+    inline bool  GetRampDirection   (void)                      { return (S0.RampDirection); }
+    inline void  SetMasterLevel     (float data)                { S0.MasterLevel = data; }
+    inline float GetMasterLevel     (void)                      { return (S0.MasterLevel); }
+    inline void  SetPulseWidth      (float data)                { S0.PulseWidth = data; }
+    inline float GetPulseWidth      (void)                      { return (S0.PulseWidth); }
+    inline void  SetMaxLevel        (byte index, float data)    { S0.MaxLevel[index] = data; }
+    inline float GetMaxLevel        (byte index)                { return (S0.MaxLevel[index]); }
+    inline void  SetSustainLevel    (byte index, float data)    { S0.SustainLevel[index] = data; }
+    inline float GetSustainLevel    (byte index)                { return (S0.SustainLevel[index]); }
+    inline void  SetAttackTime      (byte index, float data)    { S0.AttackTime[index] = data; }
+    inline float GetAttackTime      (byte index)                { return (S0.AttackTime[index]); }
+    inline void  SetDecayTime       (byte index, float data)    { S0.DecayTime[index] = data; }
+    inline float GetDecayTime       (byte index)                { return (S0.DecayTime[index]); }
+    inline void  SetReleaseTime     (byte index, float data)    { S0.ReleaseTime[index] = data; }
+    inline float GetReleaseTime     (byte index)                { return (S0.ReleaseTime[index]); }
+    };
 
 

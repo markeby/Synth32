@@ -10,12 +10,11 @@
 #define DA_MAX          4095
 
 // number of synth oscillaotor/filter/control channels
-#define VOICE_COUNT     8
-#define NUM_ZONES       2
-#define ZONE_COUNT      4
+#define VOICE_COUNT         8
+#define NUM_ZONES           2
 
 // number of mixer channels in each oscillator
-#define OSC_MIXER_COUNT 5
+#define OSC_MIXER_COUNT     5
 
 // number of analog channels for noise VCF and VCA
 #define FILTER_ANALOG_COUNT 2
@@ -24,19 +23,23 @@
 #define ENVELOPE_COUNT      OSC_MIXER_COUNT
 
 // number of MIDI channels possible
-#define MAX_MIDI        16
+#define MAX_MIDI            16
+
+// number of noise sources
+#define SOURCE_CNT_NOISE    4
 
 // maximum number of entries on mapping page
-#define MAP_MAX         3
+#define MAP_COUNT           4
+#define GROUP_COUNT         2
 
 // Noise ducts each of which connects to channel ins
-#define DUCT_NUM        4
-#define DUCT_COLOR_NUM  4
-#define DUCT_WHITE      0
-#define DUCT_PINK       1
-#define DUCT_RED        2
-#define DUCT_BLUE       3
-#define DUCT_TOTAL      16
+#define DUCT_NUM            4
+#define DUCT_COLOR_NUM      4
+#define DUCT_WHITE          0
+#define DUCT_PINK           1
+#define DUCT_RED            2
+#define DUCT_BLUE           3
+#define NOISE_DUCT_TOTAL    16
 
 // Detent multiplier for midi at 10mSec intervals
 #define TIME_MULT           10
@@ -48,10 +51,10 @@
 #define MIDI_INV_MULTIPLIER 0.03101256
 
 // Scaler for 100% on midi interface
-#define PERS_SCALER     0.7874
-#define PRS_SCALER      0.007874
-#define PRS_UNSCALER    127.1
+#define PERS_SCALER         0.7874
+#define PRS_SCALER          0.007874
+#define PRS_UNSCALER        127.1
 
 // Scaler for plus/minus pitch bend
-#define BEND_SCALER     0.00305
+#define BEND_SCALER         0.00305
 

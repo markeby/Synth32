@@ -74,41 +74,36 @@ void MESSAGE_CLIENT_C::Process ()
         {
         BUFFER_T& ptop = this->Buffers[this->CuurentBufferTop];
         uint16_t value = ptop.Value0 | (ptop.Value1 << 8);
-        DBG ("Update: %X  channel: %X   effect: %X   Value: %X", (uint8_t)ptop.Command, (uint8_t)ptop.Channel, (uint8_t)ptop.Effect, value);
+        DBG ("Update: %X  channel: %X   effect: %X   Value: %X", (byte)ptop.Command, (byte)ptop.Channel, (byte)ptop.Effect, value);
         switch ( ptop.Command )
             {
-            case CMD_C::UPDATE_PAGE_OSC0:
-                Graphics.UpdatePageOsc0 ((uint8_t)ptop.Channel, ptop.Effect, value);
-                Graphics.PageSelect (PAGE_C::PAGE_OSC0);
+            case CMD_C::SET_PAGE_VOICE:              // 3 byte message
+                Graphics.SetPage (ptop.Index, (byte)ptop.Channel);
+                Graphics.PageSelect ((DISP_MESSAGE_N::PAGE_C)ptop.Index);
                 break;
-            case CMD_C::UPDATE_PAGE_OSC1:
-                Graphics.UpdatePageOsc1 ((uint8_t)ptop.Channel, ptop.Effect, value);
-                Graphics.PageSelect (PAGE_C::PAGE_OSC1);
+            case CMD_C::UPDATE_PAGE_VOICE:           // 5 byte message
+                Graphics.UpdatePageVoice (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::UPDATE_PAGE_OSC2:
-                Graphics.UpdatePageOsc2 ((uint8_t)ptop.Channel, ptop.Effect, value);
-                Graphics.PageSelect (PAGE_C::PAGE_OSC2);
-                break;
-            case CMD_C::UPDATE_PAGE_MOD:
+            case CMD_C::UPDATE_PAGE_MOD:            // 5 byte messag
                 Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, value);
                 Graphics.PageSelect (PAGE_C::PAGE_MOD);
                 break;
-            case CMD_C::UPDATE_PAGE_FILTER:
+            case CMD_C::UPDATE_PAGE_FILTER:         // 5 byte messag
                 Graphics.PageSelect (PAGE_C::PAGE_FILTER);
                 break;
-            case CMD_C::UPDATE_PAGE_TUNING:
+            case CMD_C::UPDATE_PAGE_TUNING:         // 5 byte messag
                 Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::UPDATE_PAGE_MAP:
+            case CMD_C::UPDATE_PAGE_MAP:            // 5 byte messag
                 Graphics.UpdatePageMap ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::RESET:
+            case CMD_C::RESET:                      // 3 byte messag
                 ESP.restart ();
                 break;
-            case CMD_C::PAGE_SHOW:
+            case CMD_C::PAGE_SHOW:                  // 3 byte messag
                 Graphics.PageSelect ((PAGE_C)ptop.Bytes[2]);
                 break;
-            default:
+            default:                                // any other message goes nowher
                 break;
             }
         if ( ++this->CuurentBufferTop == BUFFER_COUNT )

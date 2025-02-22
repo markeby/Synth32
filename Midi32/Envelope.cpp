@@ -5,7 +5,6 @@
 // Date:       6/25/2024
 //#######################################################################
 #include <Arduino.h>
-#include "config.h"
 #include "Envelope.h"
 #include "SoftLFO.h"
 

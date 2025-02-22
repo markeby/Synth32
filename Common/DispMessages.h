@@ -20,7 +20,7 @@ namespace DISP_MESSAGE_N
 
     //###########################################
     //           Update packet
-    #define MESSAGE_LENGTH_UPDATE 5
+    #define MESSAGE_LENGTH_UPDATE 6
     //           =============
     //            index             16 bit value
     //    CMD_C - chan - EFFECT_C - high - low
@@ -38,15 +38,14 @@ namespace DISP_MESSAGE_N
     //###########################################
     enum class CMD_C: byte
         {
-        UPDATE_PAGE_OSC0      = 0xB0,
-        UPDATE_PAGE_OSC1,
-        UPDATE_PAGE_OSC2,
+        SET_PAGE_VOICE      = 0x10,
+        UPDATE_PAGE_VOICE,
         UPDATE_PAGE_MOD,
         UPDATE_PAGE_FILTER,
         UPDATE_PAGE_TUNING,
         UPDATE_PAGE_MAP,
-        PAGE_SHOW            = 0x20,
-        RESET                = 0xFF,
+        PAGE_SHOW           = 0x40,
+        RESET               = 0xFF,
         };
 
     //###########################################
@@ -57,6 +56,7 @@ namespace DISP_MESSAGE_N
         PAGE_OSC0 = 0,
         PAGE_OSC1,
         PAGE_OSC2,
+        PAGE_OSC3,
         PAGE_MOD,
         PAGE_FILTER,
         PAGE_MIDI_MAP,
@@ -71,9 +71,10 @@ namespace DISP_MESSAGE_N
     #ifdef ALLOCATE_DISP_MESSAGES
     char* PageText[] =
         {
-        "0 OSCILLATOR",
-        "1 OSCILLATOR",
-        "2 OSCILLATOR",
+        "Voice #0",
+        "Voice #1",
+        "Voice #2",
+        "Voice #3",
         "MODULATION",
         "FILTER",
         "TUNING",

@@ -23,6 +23,9 @@ static const char* synthKeySpace  = "SynthP";
 static const char* synthKeyBank   = "BANK";
 static const char* synthKeyBender = "BEND";
 
+static const char* SynthConfig    = "SynthC";
+static const char* SynthDefault   = "DEF";
+
 //#######################################################################
 void SETTINGS_C::ClearAllSys (void)
     {
@@ -148,9 +151,9 @@ void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
     char buf[8];
 
     sprintf (buf, "%s%d", synthKeyBank, num);
-    Prefs.begin(synthKeySpace, false);
+    Prefs.begin    (synthKeySpace, false);
     Prefs.putBytes ((const char *)buf, pbank, FULL_KEYS * sizeof (uint16_t));
-    Prefs.end ();
+    Prefs.end      ();
     }
 
 //#######################################################################
@@ -165,8 +168,36 @@ short SETTINGS_C::GetBenderOffset ()
 //#######################################################################
 void SETTINGS_C::PutBenderOffset (short offset)
     {
-    Prefs.begin(synthKeySpace, false);
+    Prefs.begin    (synthKeySpace, false);
     Prefs.putShort (synthKeyBender, offset);
+    Prefs.end      ();
+    }
+
+//#######################################################################
+void SETTINGS_C::GetDefaultConfig (int num, void* ptr, size_t len)
+    {
+    size_t rtn;
+    char buf[8];
+
+    sprintf (buf, "%s%d", SynthDefault, num);
+    Prefs.begin (SynthConfig, false);
+    if ( Prefs.isKey (buf) )
+        rtn = Prefs.getBytes (buf, ptr, len);
+    Prefs.end ();
+    }
+
+//#######################################################################
+void SETTINGS_C::PutDefaultConfig (int num, const void* ptr, size_t len)
+    {
+    bool zbl;
+    size_t rtn;
+    char buf[8];
+
+    sprintf (buf, "%s%d", SynthDefault, num);
+    Prefs.begin (SynthConfig, false);
+    if ( Prefs.isKey (buf) )
+        zbl = Prefs.remove (buf);
+    rtn = Prefs.putBytes (buf, ptr, len);
     Prefs.end ();
     }
 

@@ -1,5 +1,9 @@
 //#######################################################################
-#include "config.h"
+// Module:     Noise.cpp
+// Descrption: Noise controls
+// Creator:    markeby
+// Date:       2/8/2025
+//#######################################################################
 #include "Noise.h"
 #include "Debug.h"
 
@@ -23,7 +27,7 @@ using namespace NOISE_N;
 //#######################################################################
 void NOISE_C::Reset ()
     {
-    for ( int z = 0;  z < DUCT_TOTAL;  z++ )
+    for ( int z = 0;  z < NOISE_DUCT_TOTAL;  z++ )
         {
         I2cDevices.DigitalOut (DigitalBase + z, false);
         Duct[z / DUCT_COLOR_NUM].data[z % DUCT_COLOR_NUM] = false;

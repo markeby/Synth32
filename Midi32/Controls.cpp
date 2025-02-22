@@ -6,7 +6,6 @@
 //#######################################################################
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
-#include "config.h"
 #include "FrontEnd.h"
 #include "I2Cmessages.h"
 #include "SerialMonitor.h"
@@ -29,7 +28,7 @@ static void SetSustain (short ch, short data)
 //########################################################
 static void SetTimeSetSelect (short ch, short state)
     {
-    SynthFront.VoiceSetSelected (ch, state);
+    SynthFront.VoiceComponentSetSelected (ch, state);
     }
 
 //########################################################
@@ -130,7 +129,7 @@ static void TuneBump (short ch, bool state)
 //########################################################
 static void TunningSave (short ch, bool state)
     {
-    SynthFront.SaveAllSettings ();
+    SynthFront.SaveTuning ();
     }
 
 //########################################################
@@ -175,6 +174,15 @@ static void SendDir (short index, short data)
         {
         if ( data )
             SynthFront.MapModeBump (( index ) ? -1 : 1);
+        }
+    }
+
+static void SaveConfig (short index, short data)
+    {
+    if ( SynthFront.GetMidiMapMode () )
+        {
+        if ( data )
+            SynthFront.SaveDefaultConfig ();
         }
     }
 
@@ -235,7 +243,7 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         { 0x64,             0x3F, "Page Advance",       PageAdvance       },    // 01  64  xx
         {   53,                0, "N ",                 nullptr           },    // 01  65  xx
         {   54,                0, "N ",                 nullptr           },    // 01  66  xx
-        {   55,                0, "N ",                 nullptr           },    // 01  67  xx
+        {   55,                0, "Save Configuration", SaveConfig        },    // 01  67  xx
     };
 
 LED_NOTE_MAP SendA[]     = { 13, 29, 45, 61, 77, 93, 109, 125 };

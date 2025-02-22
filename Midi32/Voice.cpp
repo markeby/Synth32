@@ -5,7 +5,6 @@
 // Date:       3/16/2024
 //#######################################################################
 #include <Arduino.h>
-#include "config.h"
 #include "Osc.h"
 #include "Voice.h"
 
@@ -16,7 +15,7 @@ VOICE_C::VOICE_C (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen)
     this->ActiveTimer = 0;
     this->Key         = -1;
     this->UseCount    = 0;
-    this->Channel     = 1;
+    this->MidiChannel = 1;
     this->OscP        = new OSC_C (num, osc_d_a, UseCount, envgen);
     }
 

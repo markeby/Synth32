@@ -17,14 +17,12 @@ private:
     byte    Key;
     int32_t ActiveTimer;
     int     Number;
-    byte    Channel;
+    short   MidiChannel;
     byte    UseCount;
     bool    SawToothDirectionSet;
     float   PulseWidthSet;
 
 public:
-    bool    SelectedEnvelope[ENVELOPE_COUNT];
-
              VOICE_C                (int num, int osc_d_a, ENVELOPE_GENERATOR_C& envgen);
     void     Begin                  (void);
     void     Loop                   (void);
@@ -39,7 +37,7 @@ public:
     void     SetMaxLevel            (byte ch, float level)  { this->OscP->SetMaxLevel (ch, level); }
     uint32_t IsActive               (void)                  { return (this->ActiveTimer); }
     OSC_C*   pOsc                   (void)                  { return (this->OscP); }
-    void     SetChannel             (byte channel)          { this->Channel = channel; }
-    byte     GetChannel             (void)                  { return (this->Channel); }
+    void     SetMidiChannel         (short channel)         { this->MidiChannel = channel; }
+    short    GetCMidihannel         (void)                  { return (this->MidiChannel); }
     };
 

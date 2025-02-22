@@ -5,8 +5,8 @@
 // Date:       10/31/2024
 //#######################################################################
 #include <Arduino.h>
+
 #include "../Common/SynthCommon.h"
-#include "config.h"
 #include "Multiplex.h"
 #include "Debug.h"
 

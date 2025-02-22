@@ -52,10 +52,13 @@ private:
     RAMP_WIDGET_C*          RampDir;
     PULSE_WIDGET_C*         PulseWidth;
     NOISE_WIDGET_C*         Noise;
+    byte                    MidiChannel;
 
 public:
-              PAGE_OSC_C (lv_obj_t* base, const char* str);
+              PAGE_OSC_C (lv_obj_t* base);
+    void      SetPage    (byte midi);
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    byte      GetMidi    (void)     { return (this->MidiChannel); }
     };
 
 //############################################
@@ -106,8 +109,10 @@ class PAGE_MAPPING_C
     {
 private:
     lv_obj_t*           MidiTitle;
-    lv_style_t          MidiTitleStyle;
+    lv_obj_t*           NoiseTitle;
+    lv_style_t          TitleStyle;
     MIDI_SEL_WIDGET_C*  Voice[4];
+    NOISE_SEL_WIDGET_C* Noise[4];
     short               Selected;
 
 public:
@@ -146,17 +151,13 @@ private:
     lv_obj_t*               Pages;
     DISP_MESSAGE_N::PAGE_C  CurrentPage;
 
-    lv_obj_t*               BasePageOsc0;
-    lv_obj_t*               BasePageOsc1;
-    lv_obj_t*               BasePageOsc2;
+    lv_obj_t*               BasePageVoice[MAP_COUNT];
     lv_obj_t*               BasePageMod;
     lv_obj_t*               BasePageMap;
     lv_obj_t*               BasePageFilter;
     lv_obj_t*               BasePageTuning;
 
-    PAGE_OSC_C*             PageOsc0;
-    PAGE_OSC_C*             PageOsc1;
-    PAGE_OSC_C*             PageOsc2;
+    PAGE_OSC_C*             PageVoice[MAP_COUNT];
     PAGE_MOD_C*             PageMod;
     PAGE_MAPPING_C*         PageMap;
     PAGE_TUNE_C*            PageTune;
@@ -166,13 +167,13 @@ public:
             GRPH_C              (void);
     void    Begin               (void);
     void    Pause               (bool state);
+    void    SetPage             (byte num, byte midi);
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
-    void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageMap->UpdatePage (ch, effect, value); }
-    void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageMod->UpdatePage (ch, effect, value); }
-    void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageTune->UpdatePage (ch, effect, value); }
-    void    UpdatePageOsc0      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc0->UpdatePage (ch, effect, value); }
-    void    UpdatePageOsc1      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc1->UpdatePage (ch, effect, value); }
-    void    UpdatePageOsc2      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value) { PageOsc2->UpdatePage (ch, effect, value); }
+
+    inline void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMap->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMod->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice[index]->UpdatePage (ch, effect, value); }
     };
 
 extern GRPH_C  Graphics;

@@ -5,9 +5,7 @@
 // Date:       9/18/2023
 //#######################################################################
 #pragma once
-
-#include "config.h"
-
+#include "Config.h"
 
 #define LFO_VCA_COUNT     3
 

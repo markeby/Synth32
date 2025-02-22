@@ -41,7 +41,7 @@ using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 //#######################################################################
-    PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base, const char* str) : PAGE_TITLE_C (base, str)
+    PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Voice Midi 1")
     {
     int x = 0;
     int y = 40;
@@ -63,6 +63,7 @@ using namespace DISP_MESSAGE_N;
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
         SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
         MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
+        MidiChannel     = 0;
 
         switch ( z )
             {
@@ -81,6 +82,14 @@ using namespace DISP_MESSAGE_N;
 
         x += 158;
         }
+    }
+
+//#######################################################################
+void PAGE_OSC_C::SetPage (byte midi)
+    {
+    String s = "Voice  Midi  " + String (midi);
+    MidiChannel = midi;
+    lv_label_set_text (Title, s.c_str ());
     }
 
 //#######################################################################
@@ -304,17 +313,24 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 //#######################################################################
     PAGE_MAPPING_C::PAGE_MAPPING_C (lv_obj_t* base)
     {
+    lv_style_init          (&TitleStyle);
+    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_24);
+
     MidiTitle = lv_label_create (base);
     lv_obj_align           (MidiTitle, LV_ALIGN_TOP_LEFT, 2, -12);
     lv_label_set_text      (MidiTitle, "MIDI Mapping");
-    lv_style_init          (&MidiTitleStyle);
-    lv_style_set_text_font (&MidiTitleStyle, &lv_font_montserrat_24);
-    lv_obj_add_style       (MidiTitle, &MidiTitleStyle, 0);
+    lv_obj_add_style       (MidiTitle, &TitleStyle, 0);
+
+    NoiseTitle = lv_label_create (base);
+    lv_obj_align           (NoiseTitle, LV_ALIGN_TOP_LEFT, 198, -12);
+    lv_label_set_text      (NoiseTitle, "Noise Source");
+    lv_obj_add_style       (NoiseTitle, &TitleStyle, 0);
 
     for (int z = 0, c = 1;  z < 4;  z++, c += 2 )
         {
         String s = "Voice\n" + String (c) + " & " + String (c + 1);
-        this->Voice[z] = new MIDI_SEL_WIDGET_C (base, s.c_str (), 8 , 22 + (z * 108));
+        this->Voice[z] = new MIDI_SEL_WIDGET_C  (base, s.c_str (),   8, 22 + (z * 108));
+        this->Noise[z] = new NOISE_SEL_WIDGET_C (base, s.c_str (), 187, 22 + (z * 108));
         }
     this->UpdatePage (0, EFFECT_C::SELECTED, 0);
     }
@@ -322,13 +338,25 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 //#######################################################################
 void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
+    short nce = -1;
+
     switch ( effect )
         {
         case EFFECT_C::MAP_VOICE:
             this->Selected = ch;
-            for ( int z = 0;  z < 4;  z++ )
-                this->Voice[z]->Select (z == this->Selected);       // only select the device in ch
-            this->Voice[this->Selected]->Set (value);
+            for ( int z = 0;  z < MAP_COUNT;  z++ )
+                this->Voice[z]->Select (z == this->Selected);          // only select the device in ch
+            if ( this->Selected < MAP_COUNT )
+                this->Voice[this->Selected]->Set (value);
+            else
+                nce = this->Selected - MAP_COUNT;
+
+            for ( int z = 0;  z < MAP_COUNT;  z++ )
+                this->Noise[z]->Select (z == nce);                     // only select the device in ch / 2
+
+            if ( nce >= 0 )
+                this->Noise[nce]->Set (value);
+
             break;
         default:
             break;
@@ -409,12 +437,12 @@ void GRPH_C::Begin ()
 
     Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
 
-    BasePageOsc0   = lv_tabview_add_tab (Pages, "");
-    PageOsc0       = new PAGE_OSC_C     (BasePageOsc0, "Oscillators      zone 0 -- 8x");
-    BasePageOsc1   = lv_tabview_add_tab (Pages, "");
-    PageOsc1       = new PAGE_OSC_C     (BasePageOsc1, "Oscillators      zone 1 -- 4x");
-    BasePageOsc2   = lv_tabview_add_tab (Pages, "");
-    PageOsc2       = new PAGE_OSC_C     (BasePageOsc2, "Oscillators      zone 2 -- 4x");
+    for ( short z = 0;  z < MAP_COUNT;  z++ )
+        {
+        BasePageVoice[z] = lv_tabview_add_tab (Pages, "");
+        PageVoice[z]     = new PAGE_OSC_C     (BasePageVoice[z]);
+        }
+    PageVoice[0]->SetPage (1);                              // initialize only the first voice page for midi allocation as default
     BasePageMod    = lv_tabview_add_tab (Pages, "");
     PageMod        = new PAGE_MOD_C     (BasePageMod);
     BasePageFilter = lv_tabview_add_tab (Pages, "");
@@ -439,13 +467,21 @@ void GRPH_C::Pause (bool state)
     }
 
 //#######################################################################
+void GRPH_C::SetPage (byte num, byte midi)
+    {
+    PageVoice[num]->SetPage (midi);
+    }
+
+//#######################################################################
 void GRPH_C::PageSelect (PAGE_C page)
     {
-    if ( page == PAGE_C::PAGE_ADVANCE )
+    while ( page == PAGE_C::PAGE_ADVANCE )
         {
         page = (PAGE_C)((byte)this->CurrentPage + 1);
         if ( page == PAGE_C::PAGE_TUNING )
             page = PAGE_C::PAGE_OSC0;
+        if ( (page <= PAGE_C::PAGE_OSC3)  && (this->PageVoice[(byte)page]->GetMidi () != 0) )
+            break;
         }
     if ( CurrentPage != page )
         {
@@ -455,4 +491,6 @@ void GRPH_C::PageSelect (PAGE_C page)
         }
     }
 
+//#######################################################################
 GRPH_C  Graphics;
+
