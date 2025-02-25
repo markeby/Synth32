@@ -480,7 +480,7 @@ void GRPH_C::PageSelect (PAGE_C page)
         page = (PAGE_C)((byte)this->CurrentPage + 1);
         if ( page == PAGE_C::PAGE_TUNING )
             page = PAGE_C::PAGE_OSC0;
-        if ( (page <= PAGE_C::PAGE_OSC3)  && (this->PageVoice[(byte)page]->GetMidi () != 0) )
+        if ( (page <= PAGE_C::PAGE_OSC3) )
             break;
         }
     if ( CurrentPage != page )

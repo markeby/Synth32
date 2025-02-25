@@ -151,7 +151,7 @@
 	)
 	(tbtext "MLE Tech"
 		(name "")
-		(pos 23.15 16.7332)
+		(pos 24.674 16.7332)
 		(font
 			(face "Brush Script Std")
 			(size 2 2) bold)
@@ -186,12 +186,12 @@
 	)
 	(line
 		(name "")
-		(start 26 8.5)
-		(end 26 2)
+		(start 29.81 8.5002)
+		(end 29.81 2.0002)
 	)
 	(tbtext "Cedar Park, TX"
 		(name "")
-		(pos 23.192 13.8742)
+		(pos 29.034 13.8742)
 		(font
 			(face "Brush Script Std")
 			(size 2 2) bold)
@@ -199,7 +199,7 @@
 	)
 	(line
 		(name "")
-		(start 25.704 18.3852)
-		(end 25.704 12.4182)
+		(start 29.768 18.3852)
+		(end 29.768 12.4182)
 	)
 )

@@ -37,7 +37,7 @@ void SYNTH_FRONT_C::MidiMapMode ()
     else
         {
         DisplayMessage.Unlock ();
-        this->ResolveMapAllocation ();
+        this->ResetUSB ();
         this->CurrentMapSelected = 0;
         this->CurrentMidiSelected = this->SynthConfig[this->CurrentMapSelected].GetVoiceMidi ();
         this->MapSelectMode = false;
@@ -131,13 +131,14 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
             v0.pOsc ()->SetReleaseTime     (v, sc.GetReleaseTime  (v));
             v1.pOsc ()->SetReleaseTime     (v, sc.GetReleaseTime  (v));
             DisplayMessage.OscReleaseTime  (v, sc.GetReleaseTime  (v) * (1.0/TIME_MULT));
-            printf("@@@ release time for %d at %f\n", v, sc.GetReleaseTime (v));
             v0.pOsc ()->SetSustainLevel    (v, sc.GetSustainLevel (v));
             v1.pOsc ()->SetSustainLevel    (v, sc.GetSustainLevel (v));
             DisplayMessage.OscSustainLevel (v, sc.GetSustainLevel (v) * PRS_UNSCALER);
             v0.pOsc ()->SetMaxLevel        (v, sc.GetMaxLevel     (v));
             v1.pOsc ()->SetMaxLevel        (v, sc.GetMaxLevel     (v));
             DisplayMessage.OscMaxLevel     (v, sc.GetMaxLevel     (v) * PRS_UNSCALER);
+            sc.SelectedEnvelope[v] = false;
+            this->VoiceComponentSetSelected (v, false);
             }
         v0.pOsc ()->SawtoothDirection       (sc.GetRampDirection ());
         v1.pOsc ()->SawtoothDirection       (sc.GetRampDirection ());
@@ -146,6 +147,7 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
         v1.pOsc ()->PulseWidth              (sc.GetPulseWidth    ());
         DisplayMessage.OscPulseWidth        (sc.GetPulseWidth    () * PRS_UNSCALER);
         }
+    this->ResetXL  ();
     }
 
 //#####################################################################

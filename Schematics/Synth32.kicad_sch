@@ -1,7 +1,7 @@
 (kicad_sch
-	(version 20231120)
+	(version 20250114)
 	(generator "eeschema")
-	(generator_version "8.0")
+	(generator_version "9.0")
 	(uuid "718f017d-28fe-4e29-b548-40db8e21cec7")
 	(paper "USLegal")
 	(title_block
@@ -162,7 +162,62 @@
 					)
 				)
 			)
+			(embedded_fonts no)
 		)
+	)
+	(rectangle
+		(start 21.59 167.64)
+		(end 43.18 179.07)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 0ed4ebb7-5f9d-443b-9650-f63f7ab8ef49)
+	)
+	(text "+7 3A"
+		(exclude_from_sim no)
+		(at 20.32 199.39 0)
+		(effects
+			(font
+				(size 0.762 0.762)
+			)
+			(justify left bottom)
+		)
+		(uuid "26bfadd0-3fb4-4825-9aa2-3605eada54a6")
+	)
+	(text "x2"
+		(exclude_from_sim no)
+		(at 99.468 49.724 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8e1eae5d-7375-4f56-8012-8e9f084d09d7")
+	)
+	(text "x4"
+		(exclude_from_sim no)
+		(at 98.7267 21.1927 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "bb49eef8-e823-4b0d-8b11-a6b5078edb49")
+	)
+	(text "Disp32 Module"
+		(exclude_from_sim no)
+		(at 29.21 179.07 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left bottom)
+		)
+		(uuid "bbb75140-80b8-48b9-be52-afa147e2be09")
 	)
 	(junction
 		(at 69.85 41.91)
@@ -1274,63 +1329,8 @@
 		)
 		(uuid "f8495db7-8626-40d2-9a75-d04d41cfc28e")
 	)
-	(rectangle
-		(start 21.59 167.64)
-		(end 43.18 179.07)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(fill
-			(type none)
-		)
-		(uuid 0ed4ebb7-5f9d-443b-9650-f63f7ab8ef49)
-	)
-	(text "+7 3A"
-		(exclude_from_sim no)
-		(at 20.32 199.39 0)
-		(effects
-			(font
-				(size 0.762 0.762)
-			)
-			(justify left bottom)
-		)
-		(uuid "26bfadd0-3fb4-4825-9aa2-3605eada54a6")
-	)
-	(text "x2"
-		(exclude_from_sim no)
-		(at 99.468 49.724 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "8e1eae5d-7375-4f56-8012-8e9f084d09d7")
-	)
-	(text "x4"
-		(exclude_from_sim no)
-		(at 98.7267 21.1927 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "bb49eef8-e823-4b0d-8b11-a6b5078edb49")
-	)
-	(text "Disp32 Module"
-		(exclude_from_sim no)
-		(at 29.21 179.07 0)
-		(effects
-			(font
-				(size 1.016 1.016)
-			)
-			(justify left bottom)
-		)
-		(uuid "bbb75140-80b8-48b9-be52-afa147e2be09")
-	)
 	(label "+15 3A"
 		(at 20.32 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -1341,7 +1341,6 @@
 	)
 	(label "±12A"
 		(at 54.61 21.59 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1352,7 +1351,6 @@
 	)
 	(label "+5D"
 		(at 35.56 143.51 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1363,7 +1361,6 @@
 	)
 	(label "+7D"
 		(at 33.02 143.51 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1374,7 +1371,6 @@
 	)
 	(label "±12A"
 		(at 54.61 127 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1385,7 +1381,6 @@
 	)
 	(label "+5A"
 		(at 49.53 129.54 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1396,7 +1391,6 @@
 	)
 	(label "±12A"
 		(at 54.61 16.51 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1407,7 +1401,6 @@
 	)
 	(label "+5A"
 		(at 49.53 30.48 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1418,7 +1411,6 @@
 	)
 	(label "-15 3A"
 		(at 20.32 191.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -1429,7 +1421,6 @@
 	)
 	(label "±12A"
 		(at 54.61 115.57 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1441,7 +1432,6 @@
 	(hierarchical_label "JA17"
 		(shape output)
 		(at 66.04 85.09 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1453,7 +1443,6 @@
 	(hierarchical_label "JNI-1"
 		(shape input)
 		(at 86.36 66.04 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1465,7 +1454,6 @@
 	(hierarchical_label "JA1718"
 		(shape input)
 		(at 86.36 85.09 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1477,7 +1465,6 @@
 	(hierarchical_label "J1"
 		(shape input)
 		(at 86.36 90.17 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1489,7 +1476,6 @@
 	(hierarchical_label "JN-3"
 		(shape output)
 		(at 88.9 127 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1501,7 +1487,6 @@
 	(hierarchical_label "JNI-2"
 		(shape input)
 		(at 86.36 68.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1513,7 +1498,6 @@
 	(hierarchical_label "JA6"
 		(shape output)
 		(at 66.04 39.37 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1525,7 +1509,6 @@
 	(hierarchical_label "J1"
 		(shape input)
 		(at 53.34 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1537,7 +1520,6 @@
 	(hierarchical_label "JN-2"
 		(shape output)
 		(at 88.9 124.46 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1549,7 +1531,6 @@
 	(hierarchical_label "J1"
 		(shape input)
 		(at 30.48 199.39 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1561,7 +1542,6 @@
 	(hierarchical_label "JA1314"
 		(shape input)
 		(at 86.36 57.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1573,7 +1553,6 @@
 	(hierarchical_label "J2-I2C"
 		(shape input)
 		(at 114.3 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -1585,7 +1564,6 @@
 	(hierarchical_label "JA1816"
 		(shape input)
 		(at 86.36 62.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1597,7 +1575,6 @@
 	(hierarchical_label "J1"
 		(shape input)
 		(at 78.74 127 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1609,7 +1586,6 @@
 	(hierarchical_label "JA5"
 		(shape output)
 		(at 66.04 36.83 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1621,7 +1597,6 @@
 	(hierarchical_label "J2"
 		(shape output)
 		(at 30.48 195.58 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1633,7 +1608,6 @@
 	(hierarchical_label "JA14"
 		(shape output)
 		(at 66.04 59.69 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1645,7 +1619,6 @@
 	(hierarchical_label "J1"
 		(shape input)
 		(at 53.34 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1657,7 +1630,6 @@
 	(hierarchical_label "J22"
 		(shape output)
 		(at 43.18 30.48 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1669,7 +1641,6 @@
 	(hierarchical_label "JcO-2"
 		(shape output)
 		(at 106.68 34.29 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1681,7 +1652,6 @@
 	(hierarchical_label "JA19"
 		(shape output)
 		(at 66.04 90.17 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1693,7 +1663,6 @@
 	(hierarchical_label "J3"
 		(shape output)
 		(at 30.48 191.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1705,7 +1674,6 @@
 	(hierarchical_label "J11"
 		(shape input)
 		(at 22.86 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1717,7 +1685,6 @@
 	(hierarchical_label "JA56"
 		(shape input)
 		(at 86.36 36.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1729,7 +1696,6 @@
 	(hierarchical_label "J29"
 		(shape bidirectional)
 		(at 22.86 162.56 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1741,7 +1707,6 @@
 	(hierarchical_label "J1-I2C"
 		(shape output)
 		(at 66.04 109.22 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1753,7 +1718,6 @@
 	(hierarchical_label "PJ1"
 		(shape input)
 		(at 299.72 26.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1765,7 +1729,6 @@
 	(hierarchical_label "JA11"
 		(shape output)
 		(at 66.04 52.07 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1777,7 +1740,6 @@
 	(hierarchical_label "PJ1"
 		(shape input)
 		(at 86.36 21.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1789,7 +1751,6 @@
 	(hierarchical_label "J16"
 		(shape output)
 		(at 36.83 137.16 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1801,7 +1762,6 @@
 	(hierarchical_label "JA12"
 		(shape input)
 		(at 114.3 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1813,7 +1773,6 @@
 	(hierarchical_label "JA2"
 		(shape output)
 		(at 66.04 29.21 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1825,7 +1784,6 @@
 	(hierarchical_label "JA3"
 		(shape output)
 		(at 66.04 31.75 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1837,7 +1795,6 @@
 	(hierarchical_label "J22"
 		(shape output)
 		(at 43.18 129.54 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1849,7 +1806,6 @@
 	(hierarchical_label "J23"
 		(shape output)
 		(at 43.18 115.57 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1861,7 +1817,6 @@
 	(hierarchical_label "J22"
 		(shape output)
 		(at 43.18 127 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1873,7 +1828,6 @@
 	(hierarchical_label "JA19"
 		(shape input)
 		(at 86.36 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1885,7 +1839,6 @@
 	(hierarchical_label "JA10"
 		(shape output)
 		(at 66.04 49.53 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1897,7 +1850,6 @@
 	(hierarchical_label "JA16"
 		(shape output)
 		(at 66.04 64.77 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1909,7 +1861,6 @@
 	(hierarchical_label "JA18"
 		(shape output)
 		(at 66.04 87.63 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1921,7 +1872,6 @@
 	(hierarchical_label "JA15"
 		(shape output)
 		(at 66.04 62.23 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1933,7 +1883,6 @@
 	(hierarchical_label "JcO-3"
 		(shape output)
 		(at 106.68 38.1 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1945,7 +1894,6 @@
 	(hierarchical_label "J2-I2C"
 		(shape output)
 		(at 100.33 83.82 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -1957,7 +1905,6 @@
 	(hierarchical_label "J21"
 		(shape output)
 		(at 43.18 16.51 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1969,7 +1916,6 @@
 	(hierarchical_label "JA7"
 		(shape output)
 		(at 66.04 41.91 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1981,7 +1927,6 @@
 	(hierarchical_label "JA1112"
 		(shape input)
 		(at 86.36 52.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -1993,7 +1938,6 @@
 	(hierarchical_label "JA12"
 		(shape input)
 		(at 114.3 26.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2005,7 +1949,6 @@
 	(hierarchical_label "JcO-0"
 		(shape output)
 		(at 106.68 26.67 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2017,7 +1960,6 @@
 	(hierarchical_label "J16"
 		(shape output)
 		(at 31.75 137.16 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2029,7 +1971,6 @@
 	(hierarchical_label "JA78"
 		(shape input)
 		(at 86.36 41.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2041,7 +1982,6 @@
 	(hierarchical_label "JA4"
 		(shape output)
 		(at 66.04 34.29 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2053,7 +1993,6 @@
 	(hierarchical_label "JA34"
 		(shape input)
 		(at 86.36 31.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2065,7 +2004,6 @@
 	(hierarchical_label "J26"
 		(shape input)
 		(at 41.91 170.18 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2077,7 +2015,6 @@
 	(hierarchical_label "JA12"
 		(shape output)
 		(at 66.04 54.61 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2089,7 +2026,6 @@
 	(hierarchical_label "JA1"
 		(shape output)
 		(at 66.04 26.67 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2101,7 +2037,6 @@
 	(hierarchical_label "J21"
 		(shape output)
 		(at 43.18 21.59 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2113,7 +2048,6 @@
 	(hierarchical_label "LFO2"
 		(shape output)
 		(at 86.36 82.55 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2125,7 +2059,6 @@
 	(hierarchical_label "JA12"
 		(shape input)
 		(at 86.36 26.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2137,7 +2070,6 @@
 	(hierarchical_label "J9"
 		(shape input)
 		(at 22.86 129.54 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2149,7 +2081,6 @@
 	(hierarchical_label "JA12"
 		(shape input)
 		(at 114.3 30.48 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2161,7 +2092,6 @@
 	(hierarchical_label "JA12"
 		(shape input)
 		(at 114.3 34.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2173,7 +2103,6 @@
 	(hierarchical_label "JcO-1"
 		(shape output)
 		(at 106.68 30.48 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2185,7 +2114,6 @@
 	(hierarchical_label "J30"
 		(shape output)
 		(at 43.18 133.35 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2197,7 +2125,6 @@
 	(hierarchical_label "JA13"
 		(shape output)
 		(at 66.04 57.15 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2209,7 +2136,6 @@
 	(hierarchical_label "J29"
 		(shape input)
 		(at 36.83 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2221,7 +2147,6 @@
 	(hierarchical_label "JN-0-1"
 		(shape output)
 		(at 88.9 121.92 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2233,7 +2158,6 @@
 	(hierarchical_label "J29"
 		(shape input)
 		(at 31.75 148.59 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2245,7 +2169,6 @@
 	(hierarchical_label "LFO2"
 		(shape input)
 		(at 86.36 73.66 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2257,7 +2180,6 @@
 	(hierarchical_label "J10"
 		(shape input)
 		(at 22.86 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2269,7 +2191,6 @@
 	(hierarchical_label "J1-I2C"
 		(shape input)
 		(at 78.74 119.38 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -2281,7 +2202,6 @@
 	(hierarchical_label "PJ1"
 		(shape input)
 		(at 114.3 21.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2293,7 +2213,6 @@
 	(hierarchical_label "JA9"
 		(shape output)
 		(at 66.04 46.99 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2305,7 +2224,6 @@
 	(hierarchical_label "JA8"
 		(shape output)
 		(at 66.04 44.45 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2317,7 +2235,6 @@
 	(hierarchical_label "JN-3"
 		(shape output)
 		(at 88.9 129.54 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2329,7 +2246,6 @@
 	(hierarchical_label "JA810"
 		(shape input)
 		(at 86.36 46.99 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2341,7 +2257,6 @@
 	(hierarchical_label "J29"
 		(shape bidirectional)
 		(at 22.86 170.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -2353,7 +2268,6 @@
 	(hierarchical_label "J1-I2C"
 		(shape input)
 		(at 86.36 92.71 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -2365,7 +2279,6 @@
 	(hierarchical_label "J2-I2C"
 		(shape output)
 		(at 90.17 119.38 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 0.762 0.762)
@@ -2448,6 +2361,10 @@
 	(sheet
 		(at 29.21 190.5)
 		(size 12.7 10.16)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2486,6 +2403,10 @@
 	(sheet
 		(at 297.815 24.13)
 		(size 22.225 33.02)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2522,8 +2443,54 @@
 		)
 	)
 	(sheet
+		(at 137.16 77.47)
+		(size 16.51 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "2f7035a9-a9f9-4a38-93d0-c4286edf2773")
+		(property "Sheetname" "LFO-3"
+			(at 144.78 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "LFO-2.kicad_sch"
+			(at 137.16 96.5966 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
+					(page "15")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 113.03 17.78)
 		(size 12.7 58.42)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2562,6 +2529,10 @@
 	(sheet
 		(at 51.562 132.08)
 		(size 17.018 63.5)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2600,6 +2571,10 @@
 	(sheet
 		(at 50.8 25.4)
 		(size 16.51 87.63)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2638,6 +2613,10 @@
 	(sheet
 		(at 21.844 146.05)
 		(size 21.336 19.05)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2674,8 +2653,54 @@
 		)
 	)
 	(sheet
+		(at 157.48 77.47)
+		(size 22.86 16.51)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "727e9220-7d65-44be-8d6a-8e21b5514d98")
+		(property "Sheetname" "Modulation Control"
+			(at 158.242 79.756 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "ModControl.kicad_sch"
+			(at 157.48 94.5646 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
+					(page "16")
+				)
+			)
+		)
+	)
+	(sheet
 		(at 213.36 22.86)
 		(size 24.13 24.13)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2714,6 +2739,10 @@
 	(sheet
 		(at 20.828 13.97)
 		(size 24.892 125.73)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2752,6 +2781,10 @@
 	(sheet
 		(at 85.344 78.74)
 		(size 16.51 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2790,6 +2823,10 @@
 	(sheet
 		(at 93.98 45.72)
 		(size 12.7 17.78)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2828,6 +2865,10 @@
 	(sheet
 		(at 77.47 116.84)
 		(size 13.97 15.24)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2866,6 +2907,10 @@
 	(sheet
 		(at 165.1 35.56)
 		(size 12.7 12.7)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2904,6 +2949,10 @@
 	(sheet
 		(at 85.344 17.78)
 		(size 22.606 58.42)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
 		(stroke
 			(width 0.1524)
 			(type solid)
@@ -2944,4 +2993,5 @@
 			(page "1")
 		)
 	)
+	(embedded_fonts no)
 )

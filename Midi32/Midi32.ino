@@ -197,7 +197,10 @@ void loop (void)
         SoftLFO.Loop (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
+            {
+            printf("\n\t>>> Display reset requested\n");
             SynthFront.ResolveMapAllocation ();
+            }
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();

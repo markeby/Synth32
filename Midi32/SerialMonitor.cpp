@@ -261,6 +261,7 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (VARIABLE);
                     break;
                 case 'x':           // Test function #2
+                    SynthFront.ResetUSB ();
                     break;
                 case 'c':           // Test function #3
                     break;

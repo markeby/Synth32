@@ -70,9 +70,13 @@ public:
          SYNTH_FRONT_C              (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map);
     void Begin                      (int osc_d_a, int mult_digital, int noise_digital, int lfo_digital);
     void ResetXL                    (void);
+    void ResetUSB                   (void);
+
     void Loop                       (void);
     void Clear                      (void);
     void Controller                 (byte short, byte type, byte value);
+
+    void PageAdvance                (void);
 
     //#######################################################################
     // FrontEndLFO.cpp
@@ -106,7 +110,7 @@ public:
     void SetDecayTime               (short data);
     void SetSustainLevel            (short ch, short data);
     void SetReleaseTime             (short data);
-    void SawtoothDirection          (bool data);
+    void ToggleRampDirection        (void);
     void SetPulseWidth              (short data);
     void SetNoise                   (short ch, bool state);
 
@@ -115,8 +119,6 @@ public:
     void TuningBump                 (bool state);
     void StartTuning                (void);
     void SaveTuning                 (void);
-
-    void DisplayUpdate              (int zone);
 
     //#######################################################################
     MULTIPLEX_C* Multiplex          (void);

@@ -58,7 +58,8 @@ static void SetReleaseTime (short ch, short data)
 //########################################################
 static void SawtoothDirection (short ch, short data)
     {
-    SynthFront.SawtoothDirection (data != 0);
+    if ( data )
+        SynthFront.ToggleRampDirection ();
     }
 
 //########################################################
@@ -138,9 +139,16 @@ static void TunningSave (short ch, bool state)
 static void PageAdvance (short ch, short data)
     {
     if ( data )
-        DisplayMessage.PageAdvance();
-    else
-        SynthFront.SetClearKeyRed (0x64);
+        SynthFront.PageAdvance ();
+    }
+
+//########################################################
+// Debug to advance page selection
+//########################################################
+static void DebugPageAdvance (short ch, short data)
+    {
+    if ( data )
+        DisplayMessage.PageAdvance ();
     }
 
 //########################################################
@@ -177,6 +185,7 @@ static void SendDir (short index, short data)
         }
     }
 
+//########################################################
 static void SaveConfig (short index, short data)
     {
     if ( SynthFront.GetMidiMapMode () )
@@ -220,30 +229,30 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {   29,                0, "N ",                 nullptr           },    // 01  4D  xx
         {   30,                0, "N ",                 nullptr           },    // 01  4E  xx
         {   31,                0, "N ",                 nullptr           },    // 01  4F  xx
-        {    0,                0, "Set Sine",           SetTimeSetSelect  },    // 01  50  xx
-        {    1,                0, "Set Triangle",       SetTimeSetSelect  },    // 01  51  xx
-        {    2,                0, "Set Ramp",           SetTimeSetSelect  },    // 01  52  xx
-        {    3,                0, "Set Pulse",          SetTimeSetSelect  },    // 01  53  xx
-        {    4,                0, "Set Square",         SetTimeSetSelect  },    // 01  54  xx
-        { 0x55,             0x0D, "Sawtooth Dir",       SawtoothDirection },    // 01  55  xx
-        {    1,                0, "N ",                 nullptr           },    // 01  56  xx
-        {    2,                0, "N ",                 nullptr           },    // 01  57  xx
-        {   40,                0, "N ",                 nullptr           },    // 01  58  xx
-        {   41,                0, "N ",                 nullptr           },    // 01  59  xx
-        {   42,                0, "N ",                 nullptr           },    // 01  5A  xx
-        {   43,                0, "N ",                 nullptr           },    // 01  5B  xx
-        {   44,                0, "N ",                 nullptr           },    // 01  5C  xx
-        {   45,                0, "N ",                 nullptr           },    // 01  5D  xx
-        {   46,                0, "N ",                 nullptr           },    // 01  5E  xx
-        {   47,                0, "N ",                 nullptr           },    // 01  5F  xx
-        {    0,                0, "Send Sel UP",        SendDir           },    // 01  60  xx
-        {    1,                0, "Send Sel DN",        SendDir           },    // 01  61  xx
-        {    0,                0, "Track Sel Left",     TrackSel          },    // 01  62  xx
-        {    1,                0, "Track Sel Right",    TrackSel          },    // 01  63  xx
-        { 0x64,             0x3F, "Page Advance",       PageAdvance       },    // 01  64  xx
-        {   53,                0, "N ",                 nullptr           },    // 01  65  xx
-        {   54,                0, "N ",                 nullptr           },    // 01  66  xx
-        {   55,                0, "Save Configuration", SaveConfig        },    // 01  67  xx
+        { 0x50,             0x1F, "Set Sine",           SetTimeSetSelect  },    // 01  50  xx
+        { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 01  51  xx
+        { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 01  52  xx
+        { 0x53,             0x1F, "Set Pulse",          SetTimeSetSelect  },    // 01  53  xx
+        { 0x54,             0x1F, "Set Square",         SetTimeSetSelect  },    // 01  54  xx
+        { 0x55,                0, "N ",                 nullptr           },    // 01  55  xx
+        { 0x56,                0, "N ",                 nullptr           },    // 01  56  xx
+        { 0x57,             0x1F, "Sawtooth Dir",       SawtoothDirection },    // 01  57  xx
+        { 0x58,                0, "N ",                 nullptr           },    // 01  58  xx
+        { 0x59,                0, "N ",                 nullptr           },    // 01  59  xx
+        { 0x5A,                0, "N ",                 nullptr           },    // 01  5A  xx
+        { 0x5B,                0, "N ",                 nullptr           },    // 01  5B  xx
+        { 0x5C,                0, "N ",                 nullptr           },    // 01  5C  xx
+        { 0x5D,                0, "N ",                 nullptr           },    // 01  5D  xx
+        { 0x5E,                0, "N ",                 nullptr           },    // 01  5E  xx
+        { 0x5F,                0, "N ",                 nullptr           },    // 01  5F  xx
+        { 0x60,             0x1F, "Send Sel UP",        SendDir           },    // 01  60  xx
+        { 0x61,             0x1F, "Send Sel DN",        SendDir           },    // 01  61  xx
+        { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 01  62  xx
+        { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 01  63  xx
+        { 0x64,             0x1F, "Debug Page Advance", DebugPageAdvance  },    // 01  64  xx
+        { 0x65,                0, "N ",                 nullptr           },    // 01  65  xx
+        { 0x66,             0x1F, "Page Advance",       PageAdvance       },    // 01  66  xx
+        { 0x67,             0x1F, "Save Configuration", SaveConfig        },    // 01  67  xx
     };
 
 LED_NOTE_MAP SendA[]     = { 13, 29, 45, 61, 77, 93, 109, 125 };

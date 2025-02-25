@@ -24,12 +24,13 @@ private:
     byte        DisplayAddress;
 
     void  SendComplete  (byte length);
-    void  SendUpdate (DISP_MESSAGE_N::CMD_C cmd, byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void  SendUpdate    (DISP_MESSAGE_N::CMD_C cmd, byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
 
 public:
           I2C_MESSAGE_C (void);
     void  Begin         (byte display, byte sda, byte scl);
     void  Page          (DISP_MESSAGE_N::PAGE_C page);
+    void  Page          (short page)    { Page ((DISP_MESSAGE_N::PAGE_C)page);}
     void  Reset         (void);
     void  SetVoicePage  (byte page, byte midi);
 
@@ -51,6 +52,7 @@ public:
             else
                 this->ResetStart = RunTime;
             }
+        return (false);
         }
 
     //#################################################
@@ -127,7 +129,7 @@ public:
     //#################################################
     inline void SendUpdateMod (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        if ( !Lock )
+        if ( !this->Lock )
             this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
                               0,
                               channel,

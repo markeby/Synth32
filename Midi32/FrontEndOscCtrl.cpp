@@ -138,18 +138,18 @@ void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::SawtoothDirection (bool data)
+void SYNTH_FRONT_C::ToggleRampDirection ()
     {
+    bool zb = ! this->SynthConfig[this->CurrentMapSelected].GetRampDirection ();
+
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetCMidihannel() )
-            this->pVoice[z]->pOsc()->SawtoothDirection (data);
+            this->pVoice[z]->pOsc()->SawtoothDirection (zb);
         }
 
-    this->SynthConfig[this->CurrentMapSelected].SetRampDirection (data);
-    DisplayMessage.OscSawtoothDirection (data);
-    if ( !data )
-        this->ClearEntryRedL = XlMap[37].Index;
+    this->SynthConfig[this->CurrentMapSelected].SetRampDirection (zb);
+    DisplayMessage.OscSawtoothDirection (zb);
     }
 
 //#######################################################################

@@ -97,6 +97,17 @@ void SYNTH_FRONT_C::ResetXL ()
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::ResetUSB ()
+    {
+    while ( Usb.Init () == -1 )
+        {
+        delay (200);
+        printf ("Usb midi init retry!\n");
+        }
+    this->ResolveMapAllocation ();
+    }
+
+//#######################################################################
 MULTIPLEX_C* SYNTH_FRONT_C::Multiplex ()
     {
     return (this->pMultiplexer);
@@ -108,8 +119,8 @@ NOISE_C* SYNTH_FRONT_C::Noise ()
     return (this->pNoise);
     }
 
-static const char* SelLabel[] = { "Sine",  "Triangle", "Ramp", "Pulse", "Square" };
 //#######################################################################
+static const char* SelLabel[] = { "Sine",  "Triangle", "Ramp", "Pulse", "Square" };
 String SYNTH_FRONT_C::Selected ()
     {
     String str = "";
@@ -261,6 +272,40 @@ void SYNTH_FRONT_C::Clear ()
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::PageAdvance ()
+    {
+    short next = this->CurrentMapSelected + 1;
+    while ( next < MAP_COUNT )
+        {
+        for ( short z = 0;  z < MAP_COUNT;  z++ )
+            {
+            if ( z == next )
+                {
+                this->CurrentMidiSelected = this->SynthConfig[next].GetVoiceMidi ();
+                this->CurrentMapSelected = next;
+                DisplayMessage.SelectVoicePage (next);
+                return;
+                }
+            if ( this->SynthConfig[next].GetVoiceMidi() == this->SynthConfig[z].GetVoiceMidi() )
+                break;
+            }
+        next++;
+        }
+    if ( next < (short)DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP )
+        {
+        this->CurrentMapSelected = next;
+        DisplayMessage.Page (next);
+        this->CurrentMidiSelected = this->SynthConfig[(short)DISP_MESSAGE_N::PAGE_C::PAGE_OSC0].GetVoiceMidi ();
+        }
+    else
+        {
+        this->CurrentMapSelected = (short)DISP_MESSAGE_N::PAGE_C::PAGE_OSC0;
+        this->CurrentMidiSelected = this->SynthConfig[this->CurrentMapSelected].GetVoiceMidi ();
+        DisplayMessage.SelectVoicePage (this->CurrentMapSelected);
+        }
+    }
+
+//#######################################################################
 void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
     {
     int z;
@@ -349,12 +394,17 @@ void SYNTH_FRONT_C::Controller (short chan, byte type, byte value)
             break;
         case 0x50 ... 0x67:
             {
-            chan = type - 0x30;
-            MIDI_XL_MAP& m = XlMap[chan];
+            chan           = type - 0x30;       // offset to start of control map
+            bool tgl       = value > 0x1F;      // use color white to show selectable and green to show selected.
+            MIDI_XL_MAP& m = XlMap[chan];       // current control map entry
+
+            z = m.Index - 0x50;             // buttons need index tweaked
+            if ( z >= 0x10 )                // if buttons on side of unit
+                z -= 0x10;                  // then recalculate offset index
             if ( m.CallBack != nullptr )
                 {
-                DBG ("%s %s", m.Desc, (( value ) ? "ON" : "Off"));
-                m.CallBack (m.Index, value);
+                DBG ("%s %s", m.Desc, (( tgl ) ? "ON" : "Off"));
+                m.CallBack (z, (short)tgl);
                 }
             }
             break;
@@ -445,26 +495,6 @@ void SYNTH_FRONT_C::Loop ()
         }
     else
         this->Tuning ();
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::DisplayUpdate (int zone)
-    {
-//    int zcount;
-//    VOICE_C& ch = *(pVoice[zone]);
-//    OSC_C& osc    = *(ch.pOsc ());
-//
-//    for ( byte z = 0;  z < OSC_MIXER_COUNT;  z++ )
-//        {
-//        DisplayMessage.OscSelected     (z, ch.SelectedEnvelope[z]);
-//        DisplayMessage.OscMaxLevel     (z, osc.GetMaxLevel (z));
-//        DisplayMessage.OscAttackTime   (z, osc.GetAttackTime (z));
-//        DisplayMessage.OscDecayTime    (z, osc.GetDecayTime (z));
-//        DisplayMessage.OscReleaseTime  (z, osc.GetReleaseTime (z));
-//        DisplayMessage.OscSustainLevel (z, osc.GetSustainLevel (z));
-//        }
-//    DisplayMessage.OscSawtoothDirection (this->pVoice[zone]->GetSawToothDirection ());
-//    DisplayMessage.OscPulseWidth        (this->pVoice[zone]->GetPulseWidth ());
     }
 
 //#####################################################################
