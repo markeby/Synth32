@@ -2437,13 +2437,13 @@
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "11")
+					(page "15")
 				)
 			)
 		)
 	)
 	(sheet
-		(at 137.16 77.47)
+		(at 85.09 78.74)
 		(size 16.51 15.24)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -2457,8 +2457,8 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "2f7035a9-a9f9-4a38-93d0-c4286edf2773")
-		(property "Sheetname" "LFO-3"
-			(at 144.78 80.01 0)
+		(property "Sheetname" "LFO-2"
+			(at 92.71 81.28 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2467,7 +2467,7 @@
 			)
 		)
 		(property "Sheetfile" "LFO-2.kicad_sch"
-			(at 137.16 96.5966 0)
+			(at 85.09 97.8666 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2479,7 +2479,7 @@
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "15")
+					(page "10")
 				)
 			)
 		)
@@ -2521,7 +2521,7 @@
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "10")
+					(page "14")
 				)
 			)
 		)
@@ -2689,7 +2689,7 @@
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "16")
+					(page "11")
 				)
 			)
 		)
@@ -2774,48 +2774,6 @@
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
 					(page "3")
-				)
-			)
-		)
-	)
-	(sheet
-		(at 85.344 78.74)
-		(size 16.51 15.24)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(stroke
-			(width 0.1524)
-			(type solid)
-		)
-		(fill
-			(color 0 0 0 0.0000)
-		)
-		(uuid "a9be884e-6408-488d-9c6f-d8fb5b76e961")
-		(property "Sheetname" "LFO-2"
-			(at 92.964 81.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Sheetfile" "LFO-2.kicad_sch"
-			(at 85.344 97.8666 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-				(hide yes)
-			)
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7"
-					(page "14")
 				)
 			)
 		)

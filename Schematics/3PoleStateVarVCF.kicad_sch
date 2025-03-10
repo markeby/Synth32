@@ -6152,7 +6152,7 @@
 		(uuid "c915d682-4c8f-470b-b79a-cd652a81818b")
 	)
 	(junction
-		(at 279.4 45.72)
+		(at 279.4 46.99)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "e2c8cf19-bd5e-4f32-a738-217ea5395898")
@@ -6423,7 +6423,7 @@
 	)
 	(wire
 		(pts
-			(xy 262.89 49.53) (xy 260.35 49.53)
+			(xy 262.89 50.8) (xy 260.35 50.8)
 		)
 		(stroke
 			(width 0)
@@ -6470,16 +6470,6 @@
 			(type default)
 		)
 		(uuid "1d379c39-6469-4d61-9a2e-10249378d2b6")
-	)
-	(wire
-		(pts
-			(xy 231.14 54.61) (xy 262.89 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "209312e3-8480-4778-9c5e-dc38ea7c3762")
 	)
 	(wire
 		(pts
@@ -6603,16 +6593,6 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 55.88) (xy 231.14 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2c962b71-fc6c-4811-9a85-bde239e4607b")
-	)
-	(wire
-		(pts
 			(xy 232.41 34.29) (xy 233.68 34.29)
 		)
 		(stroke
@@ -6723,7 +6703,7 @@
 	)
 	(wire
 		(pts
-			(xy 279.4 40.64) (xy 279.4 45.72)
+			(xy 279.4 40.64) (xy 279.4 46.99)
 		)
 		(stroke
 			(width 0)
@@ -7363,7 +7343,7 @@
 	)
 	(wire
 		(pts
-			(xy 279.4 52.07) (xy 278.13 52.07)
+			(xy 279.4 53.34) (xy 278.13 53.34)
 		)
 		(stroke
 			(width 0)
@@ -7723,7 +7703,7 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 45.72) (xy 279.4 45.72)
+			(xy 260.35 46.99) (xy 279.4 46.99)
 		)
 		(stroke
 			(width 0)
@@ -7853,7 +7833,7 @@
 	)
 	(wire
 		(pts
-			(xy 224.79 55.88) (xy 231.14 55.88)
+			(xy 224.79 55.88) (xy 262.89 55.88)
 		)
 		(stroke
 			(width 0)
@@ -7903,7 +7883,7 @@
 	)
 	(wire
 		(pts
-			(xy 279.4 45.72) (xy 279.4 52.07)
+			(xy 279.4 46.99) (xy 279.4 53.34)
 		)
 		(stroke
 			(width 0)
@@ -8713,7 +8693,7 @@
 	)
 	(wire
 		(pts
-			(xy 260.35 49.53) (xy 260.35 45.72)
+			(xy 260.35 50.8) (xy 260.35 46.99)
 		)
 		(stroke
 			(width 0)
@@ -13337,7 +13317,7 @@
 	)
 	(symbol
 		(lib_id "My Chips:TL074")
-		(at 270.51 52.07 0)
+		(at 270.51 53.34 0)
 		(unit 3)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13345,7 +13325,7 @@
 		(dnp no)
 		(uuid "96c18c89-f012-4c99-8f11-429ea3f7ee53")
 		(property "Reference" "U67"
-			(at 271.78 47.498 0)
+			(at 271.78 48.768 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13353,7 +13333,7 @@
 			)
 		)
 		(property "Value" "TL074"
-			(at 272.542 48.768 0)
+			(at 272.542 50.038 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13361,7 +13341,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 269.24 49.53 0)
+			(at 269.24 50.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13370,7 +13350,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
-			(at 271.78 44.45 0)
+			(at 271.78 45.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13379,7 +13359,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 270.51 52.07 0)
+			(at 270.51 53.34 0)
 			(effects
 				(font
 					(size 1.27 1.27)

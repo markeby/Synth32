@@ -434,12 +434,12 @@
       "Noise"
     ],
     [
-      "3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5",
-      "Multiplexer"
+      "2f7035a9-a9f9-4a38-93d0-c4286edf2773",
+      "LFO-2"
     ],
     [
-      "2f5793a4-784d-4354-a923-086ce6f236aa",
-      "10 Chan Mixer"
+      "727e9220-7d65-44be-8d6a-8e21b5514d98",
+      "Modulation Control"
     ],
     [
       "819f44b8-8462-46b6-b700-efa66e61a0d7",
@@ -450,16 +450,12 @@
       "VCF"
     ],
     [
-      "a9be884e-6408-488d-9c6f-d8fb5b76e961",
-      "LFO-2"
+      "3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5",
+      "Multiplexer"
     ],
     [
-      "2f7035a9-a9f9-4a38-93d0-c4286edf2773",
-      "LFO-3"
-    ],
-    [
-      "727e9220-7d65-44be-8d6a-8e21b5514d98",
-      "Modulation Control"
+      "2f5793a4-784d-4354-a923-086ce6f236aa",
+      "10 Chan Mixer"
     ]
   ],
   "text_variables": {}

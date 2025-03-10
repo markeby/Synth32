@@ -41,9 +41,8 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },   // Multiplexer
       { 2,        6,     0x21,     0,    0,     16,  "Dig #104 - 119     " },   // Noise output
       { 2,        6,     0x38,     0,    0,      8,  "Dig #120 - 135     " },   // LFO controls
-      //      { 2,        7,     0x20,     0,    0,     16,  "Dig #136 - 151     " },   // Digital 48
-      //      { 2,        7,     0x21,     0,    0,     16,  "Dig #152 - 167     " },   // Digital 48
-      //      { 2,        7,     0x22,     0,    0,     16,  "Dig #168 - 183     " },   // Digital 48
+//      { 2,        6,     0x22,     0,    0,     16,  "Dig #136 - 143     " },   // Modulation control
+//      { 2,        6,     0x48,     0,    4,      0,  "A/D #144 - 147     " },   // LFO Static voltage A/D monitor (2.5V)
       {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
