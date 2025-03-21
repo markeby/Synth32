@@ -9,7 +9,7 @@
 #include "Osc.h"
 #include "Debug.h"
 
-#ifdef DEBUG_ON
+#ifdef DEBUG_SYNTH
 static const char* Label = "VCO";
 #define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
 #else

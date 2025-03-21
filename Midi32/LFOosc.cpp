@@ -10,7 +10,7 @@
 #include "LFOosc.h"
 #include "Debug.h"
 
-#ifdef DEBUG_ON
+#ifdef DEBUG_SYNTH
 static const char* Label = "LFO";
 #define DBG(args...) {if(DebugOsc){DebugMsg(Label,Number,args);}}
 #else

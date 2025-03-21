@@ -14,7 +14,7 @@
 #include "FrontEnd.h"
 #include "Debug.h"
 
-#ifdef DEBUG_ON
+#ifdef DEBUG_SYNTH
 static const char* Label  = "TOP";
 static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}

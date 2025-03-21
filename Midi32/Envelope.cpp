@@ -12,7 +12,7 @@ using namespace std;
 
 #include "Debug.h"
 
-#ifdef DEBUG_ON
+#ifdef DEBUG_SYNTH
 static const char* Label = "ENV";
 #define DBG(args...)  {if (DebugSynth){DebugMsgF(Label,Index,Name,StateLabel[(int)State],args); } }
 #else

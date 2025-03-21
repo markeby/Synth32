@@ -7,7 +7,7 @@
 #pragma once
 #include <Arduino.h>
 
-#define DEBUG_ON            1
+#define DEBUG_SYNTH            1
 
 #define DEBUG_NO_INDEX      255
 
@@ -17,4 +17,6 @@ const String vsFormat (const char *const zcFormat, va_list args);
 void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...);
 void DebugMsgN (const char* label, uint8_t index, String name,  const char *const fmt, ...);
 void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const char *const fmt, ...);
+
+void ErrorMsg (const char* label, const char* func, const char* const fmt, ...);
 

@@ -1,16 +1,17 @@
 #pragma once
 
 #define MAX_ANALOG_PER_BOARD  4
+#define START_A_D             144
 
 //#######################################################################
 typedef struct
     {
-    int8_t      Cluster;        // Mux chip address
-    int8_t      Slice;          // Mux output select
-    int8_t      Port;        // I2C address of device
-    int8_t      NumberDtoA;     // Device count on channel: 1 = MCP4725, 4 = MCP4728
-    int8_t      NumberAtoD;
-    int8_t      NumberDigital;  // number of digital I/O channeld: 8 / 16
+    uint8_t      Cluster;        // Mux chip address
+    uint8_t      Slice;          // Mux output select
+    uint8_t      Port;           // I2C address of device
+    uint8_t      NumberDtoA;     // Device count on channel: 1 = MCP4725, 4 = MCP4728
+    uint8_t      NumberAtoD;
+    uint8_t      NumberDigital;  // number of digital I/O channeld: 8 / 16
     const char* Name;
     } I2C_LOCATION_T;
 
@@ -48,6 +49,7 @@ private:
         uint16_t*       pDtoA;
         uint16_t*       pAtoD;
         uint16_t*       pDigital;
+        uint8_t         DtoAain;
         uint8_t         Bit;
         } I2C_DEVICE_T;
 
@@ -59,32 +61,58 @@ private:
     int             DigitalOutCount;
     int             BoardCount;
     bool            SystemFail;
+    bool            AtoD_Valid;
+    int16_t         AtoD_loop;
 
-    void BusMux         (uint8_t cluster, uint8_t channel);
-    void EndBusMux      (uint8_t cluster);
-    void Init4728       (I2C_LOCATION_T &loc);
-    void Write4728      (I2C_BOARD_T& board);
-    void Write857x      (I2C_BOARD_T& board);
-    void Write          (I2C_LOCATION_T& loc, uint8_t* buff, uint8_t length);
-    bool ValidateDevice (uint8_t board);
+    void     BusMux             (I2C_LOCATION_T& loc);
+    void     EndBusMux          (I2C_LOCATION_T& loc);
+
+    void     WriteRegisterByte  (uint8_t port, uint8_t data);
+    void     WriteRegister16    (uint8_t port, uint8_t addr, uint16_t data);
+    uint16_t ReadRegister16     (uint8_t port, uint8_t addr);
+    uint8_t  DecodeIndex1115    (uint8_t index);
+    void     Init1115           (I2C_LOCATION_T &loc);
+    void     Start1115          (I2C_DEVICE_T& device);
+    void     Init4728           (I2C_LOCATION_T &loc);
+    void     Write4728          (I2C_BOARD_T& board);
+    void     Write857x          (I2C_BOARD_T& board);
+    void     Write              (I2C_LOCATION_T& loc, uint8_t* buff, uint8_t length);
+    bool     ValidateDevice     (uint8_t board);
 
 public:
          I2C_INTERFACE_C (I2C_LOCATION_T* ploc);
-//        ~I2C_INTERFACE_C (void);
-    int  Begin           (void);
-    void Zero            (void);
-    void D2Analog        (uint16_t Port, int value);
-    void DigitalOut      (uint8_t device, bool value);
-    void AnalogClear     (void);
-    void UpdateAnalog    (void);
-    void UpdateDigital   (void);
-    void Error           (void);
-    int  NumBoards       (void)    { return (BoardCount); }
-    int  NumAnalog       (void)    { return (AnalogOutCount); }
+//        ~I2C_INTERFACE_C  (void);
+    int  Begin              (void);
+    void Zero               (void);
+    void Loop               (void);
+    void D2Analog           (uint16_t Port, int value);
+    void DigitalOut         (uint16_t device, bool value);
+    void StartAnalog        (void);
+    void AnalogClear        (void);
+    void UpdateAnalog       (void);
+    void UpdateDigital      (void);
+    void Error              (void);
 
+    //#######################################################################
+    inline void ResetAnalog (void)
+            { this->Init1115 (pDevice[START_A_D].pBoard->Board); }
+
+    //#######################################################################
+    inline bool ValidateAtoD (void)
+        { return (this->AtoD_Valid); }
+
+    //#######################################################################
+    inline int  NumBoards (void)
+        { return (this->BoardCount); }
+
+    //#######################################################################
+    inline int  NumAnalog (void)
+        { return (this->AnalogOutCount); }
+
+    //#######################################################################
     inline bool IsPortValid (uint8_t device)
         {
-        if ( device < DeviceCount && pDevice[device].pBoard->Valid )
+        if ( device < this->DeviceCount && this->pDevice[device].pBoard->Valid )
             return (true);
         return (false);
         }

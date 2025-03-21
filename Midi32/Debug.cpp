@@ -87,3 +87,13 @@ void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const
     Serial << str << endl;
     }
 
+//#######################################################################
+void ErrorMsg (const char* label, const char* func, const char* const fmt, ...)
+    {
+    va_list ap;
+    va_start (ap, fmt);
+    String str = "[" + String(label) + "] {" + String(label) + "} ";
+    str += vsFormat (fmt, ap);
+    Serial << str << endl;
+    }
+

@@ -8,6 +8,7 @@
 #include "SerialMonitor.h"
 #include "I2Cmessages.h"
 #include "FrontEnd.h"
+
 #include "Diagnostics.h"
 #include "UpdateOTA.h"
 
@@ -40,9 +41,9 @@ I2C_LOCATION_T  BusI2C[] =
       { 2,        5,     0x60,     4,    0,      0,  "D/A #84, 85, 86, 87" },
       { 2,        6,     0x20,     0,    0,     16,  "Dig #88  - 103     " },   // Multiplexer
       { 2,        6,     0x21,     0,    0,     16,  "Dig #104 - 119     " },   // Noise output
-      { 2,        6,     0x38,     0,    0,      8,  "Dig #120 - 135     " },   // LFO controls
-//      { 2,        6,     0x22,     0,    0,     16,  "Dig #136 - 143     " },   // Modulation control
-//      { 2,        6,     0x48,     0,    4,      0,  "A/D #144 - 147     " },   // LFO Static voltage A/D monitor (2.5V)
+      { 2,        6,     0x38,     0,    0,      8,  "Dig #120 - 127     " },   // LFO controls
+      { 2,        6,     0x22,     0,    0,     16,  "Dig #128 - 143     " },   // Modulation control
+      { 2,        6,     0x48,     0,    4,      0,  "A/D #144 - 147     " },   // LFO Static voltage A/D monitor (2.5V)
       {-1,       -1,       -1,    -1,   -1,     -1,   nullptr }
     };
 
@@ -175,6 +176,17 @@ void setup (void)
 
         SynthFront.ResolveMapAllocation ();
         printf("\t>>> Synth ready.\n");
+
+//        I2cDevices.DigitalOut (128, true);
+//        I2cDevices.DigitalOut (129, true);
+//        I2cDevices.DigitalOut (130, true);
+//        I2cDevices.DigitalOut (131, true);
+
+      I2cDevices.DigitalOut (136, true);
+      I2cDevices.DigitalOut (137, true);
+      I2cDevices.DigitalOut (138, true);
+      I2cDevices.DigitalOut (139, true);
+        I2cDevices.UpdateDigital ();
         }
     }
 
@@ -200,6 +212,7 @@ void loop (void)
             printf("\n\t>>> Display reset requested\n");
             SynthFront.ResolveMapAllocation ();
             }
+        I2cDevices.Loop ();
         }
     else if ( AnalogDiagEnabled )
         AnalogDiagnostics ();

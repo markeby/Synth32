@@ -256,14 +256,15 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
-                    this->InputString.clear ();
-                    this->InputPrompt ("  Enter value");
-                    this->Mode (VARIABLE);
                     break;
                 case 'x':           // Test function #2
-                    SynthFront.ResetUSB ();
                     break;
                 case 'c':           // Test function #3
+                    if ( I2cDevices.ValidateAtoD () )
+                        I2cDevices.ResetAnalog ();
+                    else
+                        I2cDevices.StartAnalog ();
+                    this->Mode (MENU);
                     break;
                 case 'v':           // Test function #4
                     break;
