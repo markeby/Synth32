@@ -35,6 +35,12 @@ public:
     void  SetVoicePage  (byte page, byte midi);
 
     //#################################################
+    inline byte GetCurrentVoicePage (void)
+        {
+        return (CurrentVoicePage);
+        }
+
+    //#################################################
     inline bool Loop (void)
         {
         bool z = digitalRead (RESET_STROBE_IO);
@@ -42,15 +48,9 @@ public:
             {
             this->ResetState = z;
             if ( z )
-                {
-                if ( (RunTime - this->ResetStart) < (RESET_TRIGGER_TIME + 50) )
-                    return (true);
-                else
-                    return (false);
-                return (false);
-                }
+                return (true);
             else
-                this->ResetStart = RunTime;
+                return (false);
             }
         return (false);
         }
@@ -112,7 +112,10 @@ public:
     //#################################################
     inline void SelectVoicePage (byte index)
         {
-        this->CurrentVoicePage = index;             // identify which voice page
+        if ( index < MAP_COUNT )
+            this->CurrentVoicePage = index;             // identify which voice page
+        else
+            this->CurrentVoicePage = -1;
         this->Page ((DISP_MESSAGE_N::PAGE_C)index); // Select voice page to show
         }
 
@@ -127,11 +130,11 @@ public:
         }
 
     //#################################################
-    inline void SendUpdateMod (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    inline void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         if ( !this->Lock )
             this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
-                              0,
+                              index,
                               channel,
                               effect,
                               value);
@@ -214,10 +217,10 @@ public:
         }
 
     //#################################################
-    inline void OscSawtoothDirection ( bool sel)
+    inline void OscRampDirection (bool sel)
         {
         this->SendUpdateOsc (this->CurrentVoicePage,
-                             (byte)(DISP_MESSAGE_N::VOICE_C::SAWTOOTH),
+                             (byte)(DISP_MESSAGE_N::VOICE_C::RAMP),
                              DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION,
                              (( sel ) ? 1 : 0));
         }
@@ -232,18 +235,10 @@ public:
         }
 
     //#################################################
-    inline void OscNoise (byte color, bool state)
-        {
-        this->SendUpdateOsc (this->CurrentVoicePage,
-                             (byte)(DISP_MESSAGE_N::VOICE_C::NOISE),
-                             DISP_MESSAGE_N::EFFECT_C::NOISE,
-                             color | ( (state) ? 0x80 : 0x00 ));
-        }
-
-    //#################################################
     inline void LfoSoftFreq (short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::SOFTWARE_LFO),
+                             0,
                              DISP_MESSAGE_N::EFFECT_C::LFO_FREQ,
                              value);
         }
@@ -252,48 +247,54 @@ public:
     inline void LfoSoftSelect (byte ch, bool sel)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::SOFTWARE_LFO),
+                             0,
                              ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
                              ch);
         }
 
     //#################################################
-    inline void LfoHardFreq (short value)
+    inline void LfoHardFreq (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::HARDWARE_LFO),
+                             index,
                              DISP_MESSAGE_N::EFFECT_C::LFO_FREQ,
                              value);
         }
 
     //#################################################
-    inline void LfoHardLevel (short value)
+    inline void LfoHardLevel (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::HARDWARE_LFO),
+                             index,
                              DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                              value);
         }
 
     //#################################################
-    inline void LfoHardPulseWidth (short value)
+    inline void LfoHardPulseWidth (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::HARDWARE_LFO),
+                             index,
                              DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH,
                              value);
         }
 
     //#################################################
-    inline void LfoHardRampSlope (byte value)
+    inline void LfoHardRampSlope (byte index, byte value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::HARDWARE_LFO),
+                             index,
                              DISP_MESSAGE_N::EFFECT_C::SAWTOOTH_DIRECTION,
                              value);
         }
 
     //#################################################
-    inline void LfoHardSelect (byte ch, bool sel)
+    inline void LfoHardSelect (byte index, byte wave, bool sel)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_C::HARDWARE_LFO),
+                             index,
                              ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
-                              ch);
+                             wave);
         }
     };
 

@@ -38,15 +38,37 @@ namespace DISP_MESSAGE_N
     //###########################################
     enum class CMD_C: byte
         {
-        SET_PAGE_VOICE      = 0x10,
+        RESET = 0,
+        PAGE_SHOW,
+        SET_PAGE_VOICE,
         UPDATE_PAGE_VOICE,
         UPDATE_PAGE_MOD,
         UPDATE_PAGE_FILTER,
-        UPDATE_PAGE_TUNING,
         UPDATE_PAGE_MAP,
-        PAGE_SHOW           = 0x40,
-        RESET               = 0xFF,
+        UPDATE_PAGE_TUNING,
         };
+
+    //###########################################
+    // Function/Effects bytes text
+    //###########################################
+    #ifdef ALLOCATE_DISP_MESSAGES
+    char* CommandText[] =
+        {
+        "RESET",
+        "PAGE_SHOW",
+        "SET_PAGE_VOICE",
+        "UPDATE_PAGE_VOICE",
+        "UPDATE_PAGE_MOD",
+        "UPDATE_PAGE_FILTER",
+        "UPDATE_PAGE_MAP",
+        "UPDATE_PAGE_TUNING",
+        "NONE",
+        "NONE",
+        "NONE",
+        };
+    #else
+    extern char* PageText[];
+    #endif
 
     //###########################################
     // Function/Page select bytes
@@ -61,8 +83,8 @@ namespace DISP_MESSAGE_N
         PAGE_FILTER,
         PAGE_MIDI_MAP,
         PAGE_TUNING,
+        PAGE_ADVANCE,
         NONE,
-        PAGE_ADVANCE = 255
         };
 
     //###########################################
@@ -71,14 +93,15 @@ namespace DISP_MESSAGE_N
     #ifdef ALLOCATE_DISP_MESSAGES
     char* PageText[] =
         {
-        "Voice #0",
-        "Voice #1",
-        "Voice #2",
-        "Voice #3",
-        "MODULATION",
-        "FILTER",
-        "TUNING",
-        "NONE",
+        "PAGE_ADVANCE",
+        "PAGE_OSC0",
+        "PAGE_OSC1",
+        "PAGE_OSC2",
+        "PAGE_OSC3",
+        "PAGE_MOD",
+        "PAGE_FILTER",
+        "PAGE_MIDI_MAP",
+        "PAGE_TUNING",
         "NONE",
         "NONE",
         "NONE",
@@ -94,7 +117,7 @@ namespace DISP_MESSAGE_N
         {
         SINE = 0,
         TRIANGLE,
-        SAWTOOTH,
+        RAMP,
         PULSE,
         NOISE,
         ALL,
@@ -165,7 +188,7 @@ namespace DISP_MESSAGE_N
         "DESELECTED",
         "NOTE",
         "NOISE",
-        "NONE",
+        "MAP_VOICE",
         "NONE",
         "NONE",
         };

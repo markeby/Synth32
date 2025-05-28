@@ -20,7 +20,7 @@ static const char* Label = "ENV";
 #endif
 
 char* StateLabel[] = { "IDLE", "START", "ATTACK", "DECAY", "SUSTAIN", "RELEASE" };
-#define TIME_THRESHOLD  10.0
+#define TIME_THRESHOLD  0.0
 
 //#######################################################################
 ENVELOPE_GENERATOR_C::ENVELOPE_GENERATOR_C ()
@@ -126,7 +126,7 @@ void ENVELOPE_C::SetLevel (ESTATE state, float percent)
         case ESTATE::RELEASE:
             break;
         }
-    DBG ("setting %s > %f", StateLabel[(int)state], percent );
+    DBG ("Setting %s > %f", StateLabel[(int)state], percent );
     }
 
 //#######################################################################
@@ -169,7 +169,7 @@ void ENVELOPE_C::Start ()
     this->Active = true;
     this->State = ESTATE::START;
     this->UseCount++;
-    DBG ("starting %d", this->Index);
+    DBG ("Starting %d", this->Index);
     }
 
 //#######################################################################
@@ -249,7 +249,7 @@ void ENVELOPE_C::Process (float deltaTime)
             this->PeakLevel   = false;
             this->TargetTime  = this->AttackTime - TIME_THRESHOLD;
             this->State       = ESTATE::ATTACK;
-            DBG ("Start attact to %f mSec from level %f to %f", TargetTime, Current, Peak);
+            DBG ("Start > %f mSec from level %f to %f", TargetTime, Current, Peak);
             return;
             }
         //***************************************
@@ -257,20 +257,28 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::ATTACK:
             {
-            if ( Timer < TargetTime )
+            this->Timer += deltaTime;
+            if ( this->Timer < this->TargetTime )
                 {
-                Timer  += deltaTime;
-                Current  = (Timer / TargetTime) * Peak;
-                Updated = true;
-                DBG ("Timer > %f mSec at level %f", Timer, Current);
+                this->Current  = (this->Timer / this->TargetTime) * this->Peak;
+                this->Updated = true;
+                DBG ("Timer > %f mSec at level %f", this->Timer, this->Current);
                 return;
                 }
-            Current     = Peak;
-            Updated     = true;
-            Timer       = DecayTime - TIME_THRESHOLD;;
-            State       = ESTATE::DECAY;
-            Target      = Peak - Sustain;
-            TargetTime  = 0.0;
+            this->Current     = this->Peak;
+            this->Updated     = true;
+            if ( this->DecayTime < 8.0 )
+                {
+                this->Timer   = 0.0;
+                this->State = ESTATE::SUSTAIN;
+                }
+            else
+                {
+                this->Timer       = this->DecayTime - TIME_THRESHOLD;;
+                this->State       = ESTATE::DECAY;
+                this->Target      = this->Peak - this->Sustain;
+                this->TargetTime  = 0.0;
+                }
             DBG ("Start > %f  mSec from level %f to %f", Timer, Current, Sustain);
             return;
             }
@@ -280,22 +288,22 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::DECAY:
             {
-            if ( Timer > 10 )
+            this->Timer -= deltaTime;
+            if ( this->Timer > 10 )
                 {
-                Timer -= deltaTime;
-                Current = Sustain + ((Timer / DecayTime) * Target);
-                Updated = true;
-                DBG ("Timer > %f mSec at level %f", Timer, Current);
+                this->Current = this->Sustain + ((this->Timer / this->DecayTime) * this->Target);
+                this->Updated = true;
+                DBG ("Timer > %f mSec at level %f", this->Timer, this->Current);
                 return;
                 }
-            Current = Sustain;
-            Updated = true;
-            Timer   = 0.0;
-            State   = ESTATE::SUSTAIN;
-            if ( Sustain >= Peak )
-                PeakLevel = true;
+            this->Current = this->Sustain;
+            this->Updated = true;
+            this->Timer   = 0.0;
+            this->State   = ESTATE::SUSTAIN;
+            if ( this->Sustain >= this->Peak )
+                this->PeakLevel = true;
 
-            DBG ("sustained at level %f", Current);
+            DBG ("sustained at level %f", this->Current);
             return;
             }
         //***************************************
@@ -303,10 +311,10 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::SUSTAIN:
             {
-            if ( PeakLevel && (Current != Peak) )
+            if ( this->PeakLevel && (this->Current != this->Peak) )
                 {
-                Current = Peak;
-                Updated = true;
+                this->Current = this->Peak;
+                this->Updated = true;
                 }
             return;
             }
@@ -315,13 +323,13 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::RELEASE:
             {
-            TriggerEnd = false;
+            this->TriggerEnd = false;
+            this->Timer  -= deltaTime;
             if ( Timer > 20)
                 {
-                Timer  -= deltaTime;
-                Current = (Timer / ReleaseTime) * ReleaseSt;
-                Updated = true;
-                DBG ("Timer > %f mSec at level %f", Timer, Current);
+                this->Current = (this->Timer / this->ReleaseTime) * this->ReleaseSt;
+                this->Updated = true;
+                DBG ("Timer > %f mSec at level %f", this->Timer, this->Current);
                 return;
                 }
             Clear ();          // We got to here so this envelope process in finished.
@@ -331,7 +339,7 @@ void ENVELOPE_C::Process (float deltaTime)
     //***************************************
     //  This should never happen
     //***************************************
-    DBG ("DANGER! DANGER!We should have never gotten here during environment processing!");
+    DBG ("DANGER! DANGER!We should have never gotten here during envelope processing!");
     Clear ();
     }
 

@@ -6,6 +6,7 @@
 //#######################################################################
 #pragma once
 #include <Arduino.h>
+#include <esp_debug_helpers.h>
 
 #define DEBUG_SYNTH            1
 

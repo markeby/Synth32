@@ -11,13 +11,9 @@
 
 // number of synth oscillaotor/filter/control channels
 #define VOICE_COUNT         8
-#define NUM_ZONES           2
 
 // number of mixer channels in each oscillator
 #define OSC_MIXER_COUNT     5
-
-// number of analog channels for noise VCF and VCA
-#define FILTER_ANALOG_COUNT 2
 
 // number of total envelopes to process
 #define ENVELOPE_COUNT      OSC_MIXER_COUNT
@@ -28,18 +24,15 @@
 // number of noise sources
 #define SOURCE_CNT_NOISE    4
 
-// maximum number of entries on mapping page
-#define MAP_COUNT           4
-#define GROUP_COUNT         2
+// number of LFO sources
+#define SOURCE_CNT_LFO      3
 
-// Noise ducts each of which connects to channel ins
-#define DUCT_NUM            4
-#define DUCT_COLOR_NUM      4
-#define DUCT_WHITE          0
-#define DUCT_PINK           1
-#define DUCT_RED            2
-#define DUCT_BLUE           3
-#define NOISE_DUCT_TOTAL    16
+// maximum number of entries on mapping page
+#define MAP_COUNT           (VOICE_COUNT / 2)
+#define GROUP_COUNT         4
+
+// Number of modululation multiplex inputs
+#define NUM_MOD_MUX_IN      3
 
 // Detent multiplier for midi at 10mSec intervals
 #define TIME_MULT           10
@@ -55,6 +48,4 @@
 #define PRS_SCALER          0.007874
 #define PRS_UNSCALER        127.1
 
-// Scaler for plus/minus pitch bend
-#define BEND_SCALER         0.00305
 

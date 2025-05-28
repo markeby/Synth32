@@ -59,22 +59,19 @@ using namespace DISP_MESSAGE_N;
         String key = "TF";
         key += String (z);
         KeyLabel (panel, key.c_str (), 0, 0);
-        TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceText[z]);
-        MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
-        SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
-        MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
-        MidiChannel     = 0;
+        this->TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceText[z]);
+        this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
+        this->SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
+        this->MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
+        this->Midi            = 0;
 
         switch ( z )
             {
             case 2:
-                RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -6);
+                this->RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             case 3:
-                PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -6);
-                break;
-            case 4:
-                Noise = new NOISE_WIDGET_C (panel, LV_ALIGN_BOTTOM_MID, 0, -25);
+                this->PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -6);
                 break;
             default:
                 break;
@@ -88,7 +85,7 @@ using namespace DISP_MESSAGE_N;
 void PAGE_OSC_C::SetPage (byte midi)
     {
     String s = "Voice  Midi  " + String (midi);
-    MidiChannel = midi;
+    this->Midi = midi;
     lv_label_set_text (Title, s.c_str ());
     }
 
@@ -126,9 +123,6 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             this->PulseWidth->SetWidth ((short)zf);
             }
             break;
-        case EFFECT_C::NOISE:
-            this->Noise->Set (value & 0x0F, value >> 7);
-            break;
         default:
             break;
         }
@@ -150,8 +144,8 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_left   (panel, 2, 0);
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
-    TitleSoft = new TITLE_WIDGET_C (panel, "Amplitide");
-    MeterSoft = new LFO_METER_WIDGET_C (panel, 0, 18, true);
+    TitleSoft = new TITLE_WIDGET_C (panel, "Amplitide 1");
+    MeterSoft = new LFO_METER_WIDGET_C (panel, 0, 18, true, "  E1");
 
     y = 190;
     this->SoftLabelSine.BeginText (panel, "   F1", "", y);
@@ -172,7 +166,26 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
     x += 158;
     y = 40;
-    panel = lv_obj_create (base);
+
+    this->CreateLFO (0, x, y, lv_obj_create (base), "Frequency 1", "  E2", "F12", "E3", "   F9", "   F10", "   F11");
+    this->UpdateHardButtons (0, 0, false);
+    this->UpdateHardButtons (0, 1, false);
+    this->UpdateHardButtons (0, 2, false);
+
+    x += 158;
+    y = 40;
+
+    this->CreateLFO (1, x, y, lv_obj_create (base), "Frequency 2", "  E4", "F12", "E5", "  F13", "   F14", "   F15");
+    this->UpdateHardButtons (1, 0, false);
+    this->UpdateHardButtons (1, 1, false);
+    this->UpdateHardButtons (1, 2, false);
+    }
+
+//#######################################################################
+void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* title, const char* mstr, const char* rs, const char* pws, const char* ssine, const char* sramp, const char* spulse)
+    {
+    LFO_C& lfo = this->LowFreq[num];
+
     lv_obj_set_size             (panel, 159, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
@@ -180,41 +193,39 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_left   (panel, 2, 0);
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
-    this->TitleHard  = new TITLE_WIDGET_C (panel, "Frequency");
-    this->MeterHard  = new LFO_METER_WIDGET_C (panel, 0, 18, false);
-    this->RampDir    = new RAMP_WIDGET_C (panel, "F12", LV_ALIGN_BOTTOM_MID, 0, -44);
-    this->PulseWidth = new PULSE_WIDGET_C (panel, "E3", LV_ALIGN_BOTTOM_MID, 0, -10);
+    lfo.TitleHard  = new TITLE_WIDGET_C (panel, title);
+    lfo.MeterHard  = new LFO_METER_WIDGET_C (panel, 0, 18, false, mstr);
+    lfo.RampDir    = new RAMP_WIDGET_C (panel, rs, LV_ALIGN_BOTTOM_MID, 0, -44);
+    lfo.PulseWidth = new PULSE_WIDGET_C (panel, pws, LV_ALIGN_BOTTOM_MID, 0, -10);
 
     y = 190;
-    HardLabelSine.BeginText (panel, "   F9", "", y);
-    this->UpdateHardButtons (0, false);
+    lfo.HardLabelSine.BeginText (panel, ssine, "", y);
     y += 14;
-    HardLabelRamp.BeginText (panel, "   F10", "", y);
-    this->UpdateHardButtons (1, false);
+    lfo.HardLabelRamp.BeginText (panel, sramp, "", y);
     y += 14;
-    HardLabelPulse.BeginText (panel, "   F11", "", y);
-    this->UpdateHardButtons (2, false);
-    this->HardInUse[0] = this->HardInUse[1] = this->HardInUse[2] = false;
+    lfo.HardLabelPulse.BeginText (panel, spulse, "", y);
+    lfo.HardInUse[0] = lfo.HardInUse[1] = lfo.HardInUse[2] = false;
     }
 
 //#######################################################################
-void PAGE_MOD_C::UpdateHardButtons (short value, bool sel)
+void PAGE_MOD_C::UpdateHardButtons (short index, short value, bool sel)
     {
+    LFO_C& lfo = this->LowFreq[index];
     uint32_t color = ( sel ) ? 0x0000F0 : 0xD0D0D0;
-    HardInUse[value] = sel;
+    lfo.HardInUse[value] = sel;
     switch ( value )
         {
         case 0:
-            this->HardLabelSine.SetValueColor (color);
-            this->HardLabelSine.SetLabel ("Sine");
+            lfo.HardLabelSine.SetValueColor (color);
+            lfo.HardLabelSine.SetLabel ("Sine");
             break;
         case 1:
-            this->HardLabelRamp.SetValueColor (color);
-            this->HardLabelRamp.SetLabel ("Ramp");
+            lfo.HardLabelRamp.SetValueColor (color);
+            lfo.HardLabelRamp.SetLabel ("Ramp");
             break;
         case 2:
-            this->HardLabelPulse.SetValueColor (color);
-            this->HardLabelPulse.SetLabel ("Pulse");
+            lfo.HardLabelPulse.SetValueColor (color);
+            lfo.HardLabelPulse.SetLabel ("Pulse");
             break;
         default:
             break;
@@ -254,7 +265,7 @@ void PAGE_MOD_C::UpdateSoftButtons (short value, bool sel)
     }
 
 //#######################################################################
-void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
+void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
     {
     switch ( (VOICE_C)ch )
         {
@@ -262,22 +273,22 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
-                    this->UpdateHardButtons (value, true);
-                    this->MeterHard->Select (true);
+                    this->UpdateHardButtons (index, value, true);
+                    this->LowFreq[index].MeterHard->Select (true);
                     break;
                 case EFFECT_C::DESELECTED:
-                    this->UpdateHardButtons (value, false);
-                    if ( !HardInUse[0] & !HardInUse[1] & !HardInUse[2] )
-                        this->MeterHard->Select (false);
+                    this->UpdateHardButtons (index, value, false);
+                    if ( !this->LowFreq[index].HardInUse[0] & !this->LowFreq[index].HardInUse[1] & !this->LowFreq[index].HardInUse[2] )
+                        this->LowFreq[index].MeterHard->Select (false);
                     break;
                 case EFFECT_C::LFO_FREQ:
-                    this->MeterHard->SetFreq (value);
+                    this->LowFreq[index].MeterHard->SetFreq (value);
                     break;
                 case EFFECT_C::SAWTOOTH_DIRECTION:
-                    this->RampDir->SetDir (!value);
+                    this->LowFreq[index].RampDir->SetDir (!value);
                     break;
                 case EFFECT_C::PULSE_WIDTH:
-                    this->PulseWidth->SetWidth (value);
+                    this->LowFreq[index].PulseWidth->SetWidth (value);
                     break;
                 default:
                     break;
@@ -314,50 +325,87 @@ void PAGE_MOD_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     PAGE_MAPPING_C::PAGE_MAPPING_C (lv_obj_t* base)
     {
     lv_style_init          (&TitleStyle);
-    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_24);
+    lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_20);
 
     MidiTitle = lv_label_create (base);
-    lv_obj_align           (MidiTitle, LV_ALIGN_TOP_LEFT, 2, -12);
-    lv_label_set_text      (MidiTitle, "MIDI Mapping");
+    lv_obj_align           (MidiTitle, LV_ALIGN_TOP_LEFT, 45, -10);
+    lv_label_set_text      (MidiTitle, "Voice");
     lv_obj_add_style       (MidiTitle, &TitleStyle, 0);
 
     NoiseTitle = lv_label_create (base);
-    lv_obj_align           (NoiseTitle, LV_ALIGN_TOP_LEFT, 198, -12);
-    lv_label_set_text      (NoiseTitle, "Noise Source");
+    lv_obj_align           (NoiseTitle, LV_ALIGN_TOP_LEFT, 200, -10);
+    lv_label_set_text      (NoiseTitle, "Noise");
     lv_obj_add_style       (NoiseTitle, &TitleStyle, 0);
+
+    ModTitle = lv_label_create (base);
+    lv_obj_align           (ModTitle, LV_ALIGN_TOP_LEFT, 335, -10);
+    lv_label_set_text      (ModTitle, "First Stage");
+    lv_obj_add_style       (ModTitle, &TitleStyle, 0);
+
+    ModTitle = lv_label_create (base);
+    lv_obj_align           (ModTitle, LV_ALIGN_TOP_LEFT, 510, -10);
+    lv_label_set_text      (ModTitle, "LFO");
+    lv_obj_add_style       (ModTitle, &TitleStyle, 0);
 
     for (int z = 0, c = 1;  z < 4;  z++, c += 2 )
         {
         String s = "Voice\n" + String (c) + " & " + String (c + 1);
-        this->Voice[z] = new MIDI_SEL_WIDGET_C  (base, s.c_str (),   8, 22 + (z * 108));
-        this->Noise[z] = new NOISE_SEL_WIDGET_C (base, s.c_str (), 187, 22 + (z * 108));
+        this->SelVoice[z]  = new SELECT_WIDGET_C (base, s.c_str (),   0, 22 + (z * 108), 136, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16", 24);
+        this->SelNoise[z]  = new SELECT_WIDGET_C (base, s.c_str (), 137, 22 + (z * 108), 164, "White\nPink\nRed\nBlue", 38);
+        this->SelOutput[z] = new SELECT_WIDGET_C (base, s.c_str (), 300, 22 + (z * 108), 155, "Off\nOsc\nFilter", 34);
+        if ( z < 2 )
+            s = "Freq\n " + String (z + 1);
+        if ( z > 1 )
+            s = "Amp\n " + String (z - 1);
+        if ( z < 3 )
+            this->Sellfo[z] = new SELECT_WIDGET_C(base, s.c_str(), 455, 22 + (z * 108), 172, "Off\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16", 28);
         }
-    this->UpdatePage (0, EFFECT_C::SELECTED, 0);
+    this->UpdatePage (0, EFFECT_C::MAP_VOICE, 0);
     }
 
 //#######################################################################
 void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
-    short nce = -1;
-
     switch ( effect )
         {
         case EFFECT_C::MAP_VOICE:
             this->Selected = ch;
-            for ( int z = 0;  z < MAP_COUNT;  z++ )
-                this->Voice[z]->Select (z == this->Selected);          // only select the device in ch
+            for ( int z = 0;  z < MAP_COUNT;  z++ )     // process first column
+                this->SelVoice[z]->Select (z == ch);
             if ( this->Selected < MAP_COUNT )
-                this->Voice[this->Selected]->Set (value);
+                {
+                this->SelVoice[ch]->Set (value);
+                ch = 255;
+                }
             else
-                nce = this->Selected - MAP_COUNT;
+                ch -= MAP_COUNT;
 
-            for ( int z = 0;  z < MAP_COUNT;  z++ )
-                this->Noise[z]->Select (z == nce);                     // only select the device in ch / 2
+            for ( int z = 0;  z < MAP_COUNT;  z++ )     // Process second column
+                this->SelNoise[z]->Select (z == ch);
+            if ( ch  < MAP_COUNT )
+                {
+                this->SelNoise[ch]->Set (value);
+                ch = 255;
+                }
+            else
+                ch -= MAP_COUNT;
 
-            if ( nce >= 0 )
-                this->Noise[nce]->Set (value);
+            for ( int z = 0;  z < MAP_COUNT;  z++ )     // Process third column
+                this->SelOutput[z]->Select (z == ch);
+            if ( ch  < MAP_COUNT )
+                {
+                this->SelOutput[ch]->Set (value);
+                ch = 255;
+                }
+            else
+                ch -= MAP_COUNT;
 
+            for ( int z = 0;  z < MAP_COUNT - 1;  z++ )     // Process fourth column
+                this->Sellfo[z]->Select (z == ch);
+            if ( ch  < (MAP_COUNT - 1) )
+                this->Sellfo[ch]->Set (value);
             break;
+
         default:
             break;
         }
@@ -469,7 +517,7 @@ void GRPH_C::Pause (bool state)
 //#######################################################################
 void GRPH_C::SetPage (byte num, byte midi)
     {
-    PageVoice[num]->SetPage (midi);
+    this->PageVoice[num]->SetPage (midi);
     }
 
 //#######################################################################

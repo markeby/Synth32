@@ -402,24 +402,12 @@
       "Root"
     ],
     [
-      "135a07d0-7692-4455-8538-0bd4306020d8",
-      "PSU1"
-    ],
-    [
-      "95306b60-5045-41b3-9495-58e5e819ea03",
-      "Power Distribution"
-    ],
-    [
       "5f23d779-3412-4b06-96f4-480c60744fb9",
-      "Synth32 Module"
+      "Processor Module"
     ],
     [
       "5bc16b3a-a1cd-4002-8881-eefa1f194921",
       "Analog-1"
-    ],
-    [
-      "487f8b31-5028-40c9-b36e-b32ac98e0024",
-      "Digital-1"
     ],
     [
       "ed49763e-63b5-424a-88d5-03bad0c30f37",
@@ -456,6 +444,18 @@
     [
       "2f5793a4-784d-4354-a923-086ce6f236aa",
       "10 Chan Mixer"
+    ],
+    [
+      "95306b60-5045-41b3-9495-58e5e819ea03",
+      "Power Distribution"
+    ],
+    [
+      "135a07d0-7692-4455-8538-0bd4306020d8",
+      "PSU1"
+    ],
+    [
+      "7b3373d3-9a0f-41a8-800c-288ad5bfa3fb",
+      "I2C Multilplex"
     ]
   ],
   "text_variables": {}

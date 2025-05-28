@@ -74,19 +74,17 @@ void MESSAGE_CLIENT_C::Process ()
         {
         BUFFER_T& ptop = this->Buffers[this->CuurentBufferTop];
         uint16_t value = ptop.Value0 | (ptop.Value1 << 8);
-        DBG ("Update: %X  channel: %X   effect: %X   Value: %X", (byte)ptop.Command, (byte)ptop.Channel, (byte)ptop.Effect, value);
+        DBG ("Update: 0x%X  channel: 0x%X   effect: 0x%X   Value: 0x%X   Index: %d", (byte)ptop.Command, (byte)ptop.Channel, (byte)ptop.Effect, value, ptop.Index);
         switch ( ptop.Command )
             {
             case CMD_C::SET_PAGE_VOICE:              // 3 byte message
                 Graphics.SetPage (ptop.Index, (byte)ptop.Channel);
-                Graphics.PageSelect ((DISP_MESSAGE_N::PAGE_C)ptop.Index);
                 break;
             case CMD_C::UPDATE_PAGE_VOICE:           // 5 byte message
                 Graphics.UpdatePageVoice (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
             case CMD_C::UPDATE_PAGE_MOD:            // 5 byte messag
-                Graphics.UpdatePageMod ((uint8_t)ptop.Channel, ptop.Effect, value);
-                Graphics.PageSelect (PAGE_C::PAGE_MOD);
+                Graphics.UpdatePageMod (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
             case CMD_C::UPDATE_PAGE_FILTER:         // 5 byte messag
                 Graphics.PageSelect (PAGE_C::PAGE_FILTER);

@@ -18,8 +18,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U81"
-				(at 1.524 3.81 0)
+			(property "Reference" "U96"
+				(at 1.016 -3.81 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -28,7 +28,7 @@
 				)
 			)
 			(property "Value" "LM324"
-				(at 1.524 2.54 0)
+				(at 1.27 -2.54 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -108,14 +108,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -126,14 +126,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -144,14 +144,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2231,24 +2231,26 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U90"
-				(at 3.302 3.81 0)
+			(property "Reference" "U95"
+				(at 1.524 3.556 0)
 				(effects
 					(font
 						(size 0.889 0.889)
 					)
+					(justify left)
 				)
 			)
 			(property "Value" "LM324"
-				(at 3.81 2.54 0)
+				(at 1.524 2.286 0)
 				(effects
 					(font
 						(size 0.889 0.889)
 					)
+					(justify left)
 				)
 			)
 			(property "Footprint" ""
-				(at -1.27 -2.54 0)
+				(at -1.27 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2257,7 +2259,7 @@
 				)
 			)
 			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
-				(at 0.254 3.048 0)
+				(at 1.778 7.366 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2266,7 +2268,7 @@
 				)
 			)
 			(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
-				(at 1.27 -1.778 0)
+				(at 0.254 -7.62 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -2303,7 +2305,7 @@
 			(symbol "LM324_1_1_1"
 				(polyline
 					(pts
-						(xy -5.08 -5.08) (xy 5.08 0) (xy -5.08 5.08) (xy -5.08 -5.08)
+						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2316,14 +2318,14 @@
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "-"
+					(name "+"
 						(effects
 							(font
 								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "2"
+					(number "3"
 						(effects
 							(font
 								(size 0.889 0.889)
@@ -2334,14 +2336,14 @@
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "+"
+					(name "-"
 						(effects
 							(font
 								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "3"
+					(number "2"
 						(effects
 							(font
 								(size 0.889 0.889)
@@ -2371,7 +2373,7 @@
 			(symbol "LM324_1_2_1"
 				(polyline
 					(pts
-						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+						(xy -5.08 -5.08) (xy 5.08 0) (xy -5.08 5.08) (xy -5.08 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -2384,17 +2386,17 @@
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "+"
+					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "5"
+					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2402,17 +2404,17 @@
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "-"
+					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "6"
+					(number "5"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2430,7 +2432,7 @@
 					(number "7"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2452,17 +2454,17 @@
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "+"
+					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "10"
+					(number "9"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2470,17 +2472,17 @@
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "-"
+					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "9"
+					(number "10"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2491,14 +2493,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "8"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2523,14 +2525,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "12"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2541,14 +2543,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "13"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2559,14 +2561,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "14"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2579,14 +2581,14 @@
 					(name "V+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "4"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2597,14 +2599,14 @@
 					(name "V-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "11"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2619,7 +2621,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U85"
+			(property "Reference" "U95"
 				(at 1.524 3.556 0)
 				(effects
 					(font
@@ -2709,14 +2711,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2727,14 +2729,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2745,14 +2747,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -2777,14 +2779,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3009,7 +3011,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U85"
+			(property "Reference" "U95"
 				(at 1.524 3.556 0)
 				(effects
 					(font
@@ -3099,14 +3101,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3117,14 +3119,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3135,14 +3137,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3167,14 +3169,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3399,7 +3401,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U85"
+			(property "Reference" "U95"
 				(at 1.524 3.556 0)
 				(effects
 					(font
@@ -3489,14 +3491,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3507,14 +3509,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3525,14 +3527,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3557,14 +3559,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3789,8 +3791,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U81"
-				(at 1.524 3.81 0)
+			(property "Reference" "U96"
+				(at 1.016 -3.81 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -3799,7 +3801,7 @@
 				)
 			)
 			(property "Value" "LM324"
-				(at 1.524 2.54 0)
+				(at 1.27 -2.54 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -3879,14 +3881,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3897,14 +3899,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -3915,14 +3917,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4179,7 +4181,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U85"
+			(property "Reference" "U95"
 				(at 1.524 3.556 0)
 				(effects
 					(font
@@ -4269,14 +4271,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4287,14 +4289,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4305,14 +4307,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4337,14 +4339,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4569,8 +4571,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U81"
-				(at 1.524 3.81 0)
+			(property "Reference" "U96"
+				(at 1.016 -3.81 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -4579,7 +4581,7 @@
 				)
 			)
 			(property "Value" "LM324"
-				(at 1.524 2.54 0)
+				(at 1.27 -2.54 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -4659,14 +4661,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4677,14 +4679,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4695,14 +4697,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -4959,8 +4961,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U81"
-				(at 1.524 3.81 0)
+			(property "Reference" "U96"
+				(at 1.016 -3.81 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -4969,7 +4971,7 @@
 				)
 			)
 			(property "Value" "LM324"
-				(at 1.524 2.54 0)
+				(at 1.27 -2.54 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -5049,14 +5051,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -5067,14 +5069,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -5085,14 +5087,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -5349,8 +5351,8 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U81"
-				(at 1.524 3.81 0)
+			(property "Reference" "U96"
+				(at 1.016 -3.81 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -5359,7 +5361,7 @@
 				)
 			)
 			(property "Value" "LM324"
-				(at 1.524 2.54 0)
+				(at 1.27 -2.54 0)
 				(effects
 					(font
 						(size 0.889 0.889)
@@ -5439,14 +5441,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -5457,14 +5459,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -5475,14 +5477,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -6790,7 +6792,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U109"
+			(property "Reference" "U101"
 				(at 9.4996 43.5102 0)
 				(effects
 					(font
@@ -7049,7 +7051,7 @@
 					)
 				)
 				(pin input line
-					(at -22.86 -10.16 0)
+					(at -22.86 -6.35 0)
 					(length 5.08)
 					(name "LIN_FREQ"
 						(effects
@@ -9054,7 +9056,7 @@
 	)
 	(text "LFO-2"
 		(exclude_from_sim no)
-		(at 288.29 105.41 0)
+		(at 288.29 95.25 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -9255,7 +9257,7 @@
 		(uuid "0c0fe757-0bf9-4c6f-8fd4-b45df99b75f8")
 	)
 	(junction
-		(at 250.19 107.95)
+		(at 250.19 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "0c47b311-8474-4c08-9034-fc9c3fde332a")
@@ -9405,7 +9407,7 @@
 		(uuid "39046d0f-1f86-4d0d-8122-0678a8220e9a")
 	)
 	(junction
-		(at 234.95 107.95)
+		(at 234.95 104.14)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "3ec40eda-5e2c-44d4-bd80-7e3641a8d15b")
@@ -9423,7 +9425,7 @@
 		(uuid "3fb1b850-68fa-4d3c-8c7a-c6630e1a7cdd")
 	)
 	(junction
-		(at 234.95 121.92)
+		(at 234.95 118.11)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4073d11b-9a7e-49e8-951d-625bad278562")
@@ -9459,7 +9461,7 @@
 		(uuid "50a4b71d-7b49-4160-a19b-7fa4e5a442d8")
 	)
 	(junction
-		(at 210.82 105.41)
+		(at 210.82 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "51b094fc-2152-4f75-989c-bea1d9844619")
@@ -9525,6 +9527,12 @@
 		(uuid "6cf1f0bf-9c45-4353-b90a-e2a3559c5365")
 	)
 	(junction
+		(at 273.05 78.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6dec3b44-55dc-4ec5-acc7-11129ff04536")
+	)
+	(junction
 		(at 198.12 193.04)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -9571,12 +9579,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "8674f2df-4a99-40d8-bfe7-1b2e5940b737")
-	)
-	(junction
-		(at 274.32 105.41)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "86ace238-5a9f-4bc4-8f0e-6647ef021f75")
 	)
 	(junction
 		(at 207.01 170.18)
@@ -9729,6 +9731,12 @@
 		(uuid "f066f3a4-3289-4b60-bf9c-d7938ca8122f")
 	)
 	(junction
+		(at 273.05 95.25)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f399c391-e5a5-49c4-9298-f333683afb48")
+	)
+	(junction
 		(at 38.1 146.05)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -9802,7 +9810,7 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 99.06) (xy 274.32 105.41)
+			(xy 273.05 95.25) (xy 273.05 101.6)
 		)
 		(stroke
 			(width 0)
@@ -10002,7 +10010,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 119.38) (xy 234.95 121.92)
+			(xy 234.95 115.57) (xy 234.95 118.11)
 		)
 		(stroke
 			(width 0)
@@ -10019,6 +10027,16 @@
 			(type default)
 		)
 		(uuid "12046fee-583d-4520-908a-ee8adab5de5d")
+	)
+	(wire
+		(pts
+			(xy 273.05 77.47) (xy 273.05 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "136b7fa5-c9f5-42ce-b2a9-9d6af27c0014")
 	)
 	(wire
 		(pts
@@ -10052,7 +10070,7 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 107.95) (xy 256.54 107.95)
+			(xy 250.19 104.14) (xy 256.54 104.14)
 		)
 		(stroke
 			(width 0)
@@ -10119,6 +10137,16 @@
 			(type default)
 		)
 		(uuid "1b66786d-5581-4ff6-9f6c-b6fd92571dfe")
+	)
+	(wire
+		(pts
+			(xy 273.05 71.12) (xy 273.05 72.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1d36979c-ad96-411a-9361-30c9479d7080")
 	)
 	(wire
 		(pts
@@ -10342,7 +10370,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 107.95) (xy 234.95 107.95)
+			(xy 233.68 104.14) (xy 234.95 104.14)
 		)
 		(stroke
 			(width 0)
@@ -10409,6 +10437,16 @@
 			(type default)
 		)
 		(uuid "2e275d71-77ae-484e-b8c7-f7d168411a8f")
+	)
+	(wire
+		(pts
+			(xy 273.05 78.74) (xy 295.91 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ec2caac-5edd-4a96-a991-c121dff7e41d")
 	)
 	(wire
 		(pts
@@ -10522,7 +10560,7 @@
 	)
 	(wire
 		(pts
-			(xy 245.11 107.95) (xy 250.19 107.95)
+			(xy 245.11 104.14) (xy 250.19 104.14)
 		)
 		(stroke
 			(width 0)
@@ -10612,7 +10650,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 107.95) (xy 234.95 114.3)
+			(xy 234.95 104.14) (xy 234.95 110.49)
 		)
 		(stroke
 			(width 0)
@@ -10772,7 +10810,7 @@
 	)
 	(wire
 		(pts
-			(xy 125.73 77.47) (xy 130.81 77.47)
+			(xy 125.73 77.47) (xy 162.56 77.47)
 		)
 		(stroke
 			(width 0)
@@ -10802,7 +10840,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 128.27) (xy 234.95 129.54)
+			(xy 234.95 124.46) (xy 234.95 125.73)
 		)
 		(stroke
 			(width 0)
@@ -10822,7 +10860,7 @@
 	)
 	(wire
 		(pts
-			(xy 201.93 132.08) (xy 207.01 132.08)
+			(xy 201.93 132.08) (xy 205.74 132.08)
 		)
 		(stroke
 			(width 0)
@@ -11022,16 +11060,6 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 77.47) (xy 130.81 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5cfb36f3-a13e-47db-9ff1-ff43af464f8b")
-	)
-	(wire
-		(pts
 			(xy 102.87 163.83) (xy 135.89 163.83)
 		)
 		(stroke
@@ -11052,7 +11080,7 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 105.41) (xy 210.82 105.41)
+			(xy 205.74 101.6) (xy 210.82 101.6)
 		)
 		(stroke
 			(width 0)
@@ -11442,7 +11470,7 @@
 	)
 	(wire
 		(pts
-			(xy 210.82 107.95) (xy 210.82 105.41)
+			(xy 210.82 104.14) (xy 210.82 101.6)
 		)
 		(stroke
 			(width 0)
@@ -11872,7 +11900,7 @@
 	)
 	(wire
 		(pts
-			(xy 271.78 105.41) (xy 274.32 105.41)
+			(xy 271.78 101.6) (xy 273.05 101.6)
 		)
 		(stroke
 			(width 0)
@@ -11912,7 +11940,7 @@
 	)
 	(wire
 		(pts
-			(xy 254 99.06) (xy 274.32 99.06)
+			(xy 254 95.25) (xy 273.05 95.25)
 		)
 		(stroke
 			(width 0)
@@ -12102,7 +12130,7 @@
 	)
 	(wire
 		(pts
-			(xy 254 102.87) (xy 254 99.06)
+			(xy 254 99.06) (xy 254 95.25)
 		)
 		(stroke
 			(width 0)
@@ -12222,7 +12250,17 @@
 	)
 	(wire
 		(pts
-			(xy 210.82 105.41) (xy 218.44 105.41)
+			(xy 201.93 135.89) (xy 240.03 135.89)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ad26a3c8-9a0d-41d6-bd62-8a5b6353219d")
+	)
+	(wire
+		(pts
+			(xy 210.82 101.6) (xy 218.44 101.6)
 		)
 		(stroke
 			(width 0)
@@ -12242,7 +12280,7 @@
 	)
 	(wire
 		(pts
-			(xy 250.19 107.95) (xy 250.19 135.89)
+			(xy 250.19 104.14) (xy 250.19 135.89)
 		)
 		(stroke
 			(width 0)
@@ -12342,7 +12380,17 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 121.92) (xy 234.95 121.92)
+			(xy 273.05 95.25) (xy 302.26 95.25)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b85711a0-75f4-45f1-9e24-8198196103cf")
+	)
+	(wire
+		(pts
+			(xy 215.9 118.11) (xy 234.95 118.11)
 		)
 		(stroke
 			(width 0)
@@ -12362,7 +12410,7 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 110.49) (xy 218.44 110.49)
+			(xy 215.9 106.68) (xy 218.44 106.68)
 		)
 		(stroke
 			(width 0)
@@ -12582,7 +12630,7 @@
 	)
 	(wire
 		(pts
-			(xy 215.9 110.49) (xy 215.9 121.92)
+			(xy 215.9 106.68) (xy 215.9 118.11)
 		)
 		(stroke
 			(width 0)
@@ -12722,6 +12770,16 @@
 	)
 	(wire
 		(pts
+			(xy 273.05 78.74) (xy 273.05 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d31d8b91-875e-4835-8608-55c60c5c5f5a")
+	)
+	(wire
+		(pts
 			(xy 38.1 60.96) (xy 50.8 60.96)
 		)
 		(stroke
@@ -12812,7 +12870,7 @@
 	)
 	(wire
 		(pts
-			(xy 302.26 76.2) (xy 302.26 105.41)
+			(xy 302.26 76.2) (xy 302.26 95.25)
 		)
 		(stroke
 			(width 0)
@@ -12859,16 +12917,6 @@
 			(type default)
 		)
 		(uuid "db794187-cb79-40ab-a10e-f0d36b4ea245")
-	)
-	(wire
-		(pts
-			(xy 201.93 135.89) (xy 240.03 135.89)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "dba9eedc-96a4-4617-8a2a-f397ec65ccd5")
 	)
 	(wire
 		(pts
@@ -13052,16 +13100,6 @@
 	)
 	(wire
 		(pts
-			(xy 130.81 81.28) (xy 162.56 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ea579d21-823f-4924-a6af-72c6717313e0")
-	)
-	(wire
-		(pts
 			(xy 190.5 189.23) (xy 190.5 193.04)
 		)
 		(stroke
@@ -13102,7 +13140,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 121.92) (xy 234.95 123.19)
+			(xy 234.95 118.11) (xy 234.95 119.38)
 		)
 		(stroke
 			(width 0)
@@ -13212,17 +13250,17 @@
 	)
 	(wire
 		(pts
-			(xy 274.32 105.41) (xy 302.26 105.41)
+			(xy 273.05 88.9) (xy 273.05 95.25)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f2adb7bb-dda7-467d-8074-6cc7ad918e94")
+		(uuid "f2efc035-ee9f-4bf9-a788-0770be0edac4")
 	)
 	(wire
 		(pts
-			(xy 210.82 113.03) (xy 210.82 114.3)
+			(xy 210.82 109.22) (xy 210.82 110.49)
 		)
 		(stroke
 			(width 0)
@@ -13252,7 +13290,7 @@
 	)
 	(wire
 		(pts
-			(xy 256.54 102.87) (xy 254 102.87)
+			(xy 256.54 99.06) (xy 254 99.06)
 		)
 		(stroke
 			(width 0)
@@ -13322,7 +13360,7 @@
 	)
 	(wire
 		(pts
-			(xy 207.01 105.41) (xy 207.01 132.08)
+			(xy 205.74 101.6) (xy 205.74 132.08)
 		)
 		(stroke
 			(width 0)
@@ -13352,7 +13390,7 @@
 	)
 	(wire
 		(pts
-			(xy 234.95 107.95) (xy 240.03 107.95)
+			(xy 234.95 104.14) (xy 240.03 104.14)
 		)
 		(stroke
 			(width 0)
@@ -13607,7 +13645,7 @@
 	(symbol
 		(lib_name "LM324_9")
 		(lib_id "Amplifier_Operational:LM324")
-		(at 226.06 107.95 0)
+		(at 264.16 101.6 0)
 		(unit 4)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13616,7 +13654,7 @@
 		(fields_autoplaced yes)
 		(uuid "0d6bb7ed-ea81-45c1-a8b0-31dcf8078647")
 		(property "Reference" "U96"
-			(at 227.584 104.14 0)
+			(at 265.176 105.41 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13625,7 +13663,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 227.584 105.41 0)
+			(at 265.43 104.14 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13634,7 +13672,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 224.79 110.49 0)
+			(at 262.89 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13643,7 +13681,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
-			(at 227.33 102.87 0)
+			(at 265.43 96.52 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13652,7 +13690,7 @@
 			)
 		)
 		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
-			(at 226.06 107.95 0)
+			(at 264.16 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13980,6 +14018,75 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
+		(at 273.05 74.93 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "131c038a-919d-4506-88cb-4dd7a67bb01f")
+		(property "Reference" "R325"
+			(at 273.558 72.898 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 273.558 76.454 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 273.05 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 273.05 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 273.05 74.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1b614692-e159-4a23-9561-bdaa0634a943")
+		)
+		(pin "2"
+			(uuid "960df6ab-37ed-4468-88a3-0bf2a9fdc40f")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f7035a9-a9f9-4a38-93d0-c4286edf2773"
+					(reference "R325")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
 		(at 156.21 39.37 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -14057,7 +14164,7 @@
 		(dnp no)
 		(uuid "23717636-a33f-46e5-897d-1963c09e6df2")
 		(property "Reference" "Q15"
-			(at 41.402 135.636 90)
+			(at 40.386 141.478 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14065,7 +14172,7 @@
 			)
 		)
 		(property "Value" "BSS138"
-			(at 51.054 135.636 90)
+			(at 41.402 143.002 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14202,7 +14309,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 210.82 114.3 0)
+		(at 210.82 110.49 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14210,7 +14317,7 @@
 		(dnp no)
 		(uuid "257def0d-bad6-4ef3-a83a-fbf17eedf94b")
 		(property "Reference" "#PWR0172"
-			(at 210.82 120.65 0)
+			(at 210.82 116.84 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14219,7 +14326,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 210.7692 117.7544 0)
+			(at 210.7692 113.9444 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14227,7 +14334,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 210.82 114.3 0)
+			(at 210.82 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14236,7 +14343,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 210.82 114.3 0)
+			(at 210.82 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14245,7 +14352,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 210.82 114.3 0)
+			(at 210.82 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14275,7 +14382,7 @@
 		(dnp no)
 		(uuid "259b30fc-f2b6-44f8-84f9-94384bc5db74")
 		(property "Reference" "Q14"
-			(at 41.402 121.92 90)
+			(at 40.64 127.254 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14283,7 +14390,7 @@
 			)
 		)
 		(property "Value" "BSS138"
-			(at 51.308 121.92 90)
+			(at 41.656 128.778 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14499,7 +14606,7 @@
 		(fields_autoplaced yes)
 		(uuid "2af0326b-c89f-4d6a-86c2-87783c6d2160")
 		(property "Reference" "U96"
-			(at 227.584 69.85 0)
+			(at 227.076 77.47 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14508,7 +14615,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 227.584 71.12 0)
+			(at 227.33 76.2 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14870,7 +14977,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 210.82 110.49 0)
+		(at 210.82 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -14878,7 +14985,7 @@
 		(dnp no)
 		(uuid "3117ec42-28a1-4b7e-8cc3-1bd42a9b130b")
 		(property "Reference" "R315"
-			(at 211.074 108.458 0)
+			(at 211.074 104.648 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14887,7 +14994,7 @@
 			)
 		)
 		(property "Value" "10k"
-			(at 211.074 112.014 0)
+			(at 211.074 108.204 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -14896,7 +15003,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 210.82 110.49 0)
+			(at 210.82 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14905,7 +15012,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 210.82 110.49 0)
+			(at 210.82 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14914,7 +15021,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 210.82 110.49 0)
+			(at 210.82 106.68 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15070,7 +15177,7 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 234.95 129.54 0)
+		(at 234.95 125.73 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15078,7 +15185,7 @@
 		(dnp no)
 		(uuid "35d99a87-32a8-462c-ab88-a02f8b7761ac")
 		(property "Reference" "#PWR0175"
-			(at 234.95 135.89 0)
+			(at 234.95 132.08 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15087,7 +15194,7 @@
 			)
 		)
 		(property "Value" "GNDA"
-			(at 234.8992 132.9944 0)
+			(at 234.8992 129.1844 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15095,7 +15202,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 234.95 129.54 0)
+			(at 234.95 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15104,7 +15211,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 234.95 129.54 0)
+			(at 234.95 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15113,7 +15220,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 234.95 129.54 0)
+			(at 234.95 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15291,7 +15398,7 @@
 		(dnp no)
 		(uuid "37c09109-681f-4920-97b1-5f8cf3ad9ed4")
 		(property "Reference" "U95"
-			(at 188.8337 181.0114 0)
+			(at 194.564 178.054 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15300,7 +15407,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 188.5238 182.3028 0)
+			(at 194.564 179.324 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15718,7 +15825,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 234.95 116.84 0)
+		(at 234.95 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15726,7 +15833,7 @@
 		(dnp no)
 		(uuid "3a1513fa-d9b4-4eb3-b21f-4bdf25079d99")
 		(property "Reference" "R322"
-			(at 235.458 114.808 0)
+			(at 235.458 110.998 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15735,7 +15842,7 @@
 			)
 		)
 		(property "Value" "82k"
-			(at 235.458 118.364 0)
+			(at 235.458 114.554 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15744,7 +15851,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 234.95 116.84 0)
+			(at 234.95 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15753,7 +15860,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 234.95 116.84 0)
+			(at 234.95 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15762,7 +15869,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 234.95 116.84 0)
+			(at 234.95 113.03 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15795,7 +15902,7 @@
 		(dnp no)
 		(uuid "3bdeae68-4b71-4ab7-94e5-b88d896e8bd9")
 		(property "Reference" "U96"
-			(at 196.3234 181.0114 0)
+			(at 201.676 185.42 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -15804,7 +15911,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 196.0652 182.2511 0)
+			(at 201.93 184.15 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -16585,7 +16692,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 242.57 107.95 90)
+		(at 242.57 104.14 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -16593,7 +16700,7 @@
 		(dnp no)
 		(uuid "472ff944-6883-4418-8e41-08d3a37a35d8")
 		(property "Reference" "R326"
-			(at 239.776 108.966 90)
+			(at 239.776 105.156 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -16601,7 +16708,7 @@
 			)
 		)
 		(property "Value" "47k"
-			(at 245.872 108.966 90)
+			(at 245.872 105.156 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -16609,7 +16716,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 242.57 107.95 0)
+			(at 242.57 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16618,7 +16725,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 242.57 107.95 0)
+			(at 242.57 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16627,7 +16734,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 242.57 107.95 0)
+			(at 242.57 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -17507,6 +17614,75 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
+		(at 273.05 86.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "7a89ef5a-43e6-4e9a-8c71-327816394580")
+		(property "Reference" "R327"
+			(at 273.558 84.328 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 273.558 87.884 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 273.05 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 273.05 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 273.05 86.36 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "cfd687b0-27d1-4825-a06b-694f8bebfdde")
+		)
+		(pin "2"
+			(uuid "b1fcc929-e09f-45d2-8e66-6dfa850eea52")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/2f7035a9-a9f9-4a38-93d0-c4286edf2773"
+					(reference "R327")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
 		(at 96.52 157.48 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -17786,7 +17962,7 @@
 		(fields_autoplaced yes)
 		(uuid "812eb100-166d-40c9-be5f-3c165792f87c")
 		(property "Reference" "U96"
-			(at 265.684 67.31 0)
+			(at 265.176 74.93 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -17795,7 +17971,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 265.684 68.58 0)
+			(at 265.43 73.66 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -18705,16 +18881,16 @@
 	(symbol
 		(lib_name "LM324_5")
 		(lib_id "Amplifier_Operational:LM324")
-		(at 264.16 105.41 0)
+		(at 226.06 104.14 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(fields_autoplaced yes)
 		(uuid "901febc0-13ac-4327-988f-6c3259c94c3f")
 		(property "Reference" "U96"
-			(at 265.684 101.6 0)
+			(at 227.076 100.33 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -18723,7 +18899,7 @@
 			)
 		)
 		(property "Value" "LM324"
-			(at 265.684 102.87 0)
+			(at 227.33 101.6 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -18732,7 +18908,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 262.89 107.95 0)
+			(at 224.79 101.6 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18741,7 +18917,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
-			(at 265.43 100.33 0)
+			(at 227.33 109.22 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18750,7 +18926,7 @@
 			)
 		)
 		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
-			(at 264.16 105.41 0)
+			(at 226.06 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19978,23 +20154,25 @@
 		(dnp no)
 		(uuid "b5013771-4015-40e5-b401-37d7dea0dd12")
 		(property "Reference" "U95"
-			(at 94.742 54.61 0)
+			(at 92.964 54.864 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Value" "LM324"
-			(at 95.25 55.88 0)
+			(at 92.964 56.134 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 90.17 60.96 0)
+			(at 90.17 58.42 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20003,7 +20181,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2902-n.pdf"
-			(at 91.694 55.372 0)
+			(at 93.218 51.054 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20012,7 +20190,7 @@
 			)
 		)
 		(property "Description" "Low-Power, Quad-Operational Amplifiers, DIP-14/SOIC-14/SSOP-14"
-			(at 92.71 60.198 0)
+			(at 91.694 66.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21343,7 +21521,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 234.95 125.73 0)
+		(at 234.95 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -21351,7 +21529,7 @@
 		(dnp no)
 		(uuid "e327f4ce-481c-4fdc-9448-8b4c725b832e")
 		(property "Reference" "R323"
-			(at 235.458 123.698 0)
+			(at 235.458 119.888 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -21360,7 +21538,7 @@
 			)
 		)
 		(property "Value" "22.1k"
-			(at 235.204 127.508 0)
+			(at 235.204 123.698 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -21369,7 +21547,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 234.95 125.73 0)
+			(at 234.95 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21378,7 +21556,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 234.95 125.73 0)
+			(at 234.95 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21387,7 +21565,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 234.95 125.73 0)
+			(at 234.95 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)

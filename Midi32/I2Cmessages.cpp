@@ -37,9 +37,9 @@ void I2C_MESSAGE_C::Begin (byte display, byte sda, byte scl)
     this->DisplayAddress = display;
     Wire1.begin (sda, scl, 400000UL);   // Clock at 400kHz
     this->SetVoicePage (0, 1);
-    this->SetVoicePage (1, 1);
-    this->SetVoicePage (2, 1);
-    this->SetVoicePage (3, 1);
+    this->SetVoicePage (1, 0);
+    this->SetVoicePage (2, 0);
+    this->SetVoicePage (3, 0);
     this->Page (PAGE_C::PAGE_OSC0);
     this->Ready = true;
     }
@@ -66,7 +66,6 @@ void I2C_MESSAGE_C::Page (PAGE_C page)
             sendBuffer[2] = (byte)page;
             DBGM ("Page %d", (byte)page);
             SendComplete (MESSAGE_LENGTH_PAGE);
-
             if ( (page == PAGE_C::PAGE_TUNING) || (page == PAGE_C::PAGE_MIDI_MAP) )
                 this->Lock = true;
             }
@@ -95,6 +94,7 @@ void I2C_MESSAGE_C::SetVoicePage (byte page, byte midi)
         sendBuffer[2] = midi;
         DBGM ("Set voice %d to page %d", (byte)page, (byte)midi);
         SendComplete (MESSAGE_LENGTH_PAGE);
+        CurrentVoicePage = page;
         }
     }
 //###################################################################
@@ -109,7 +109,7 @@ void I2C_MESSAGE_C::SendUpdate (CMD_C cmd, byte mapi, byte channel, EFFECT_C eff
         sendBuffer[3] = (byte)effect;
         sendBuffer[4] = (byte)(value & 0x00FF);
         sendBuffer[5] = (byte)(value >> 8);
-        DBGM ("cmd: %X  mapi: %d\tchannel: %X\tValue: %X\teffect: %s", sendBuffer[0], sendBuffer[1], sendBuffer[2], value, EffectText[sendBuffer[3]]);
+        DBGM ("cmd: %s  mapi: %d\tchannel: %X\tValue: %X\teffect: %s", CommandText[sendBuffer[0]], sendBuffer[1], sendBuffer[2], value, EffectText[sendBuffer[3]]);
         this->SendComplete (MESSAGE_LENGTH_UPDATE);
         }
     }

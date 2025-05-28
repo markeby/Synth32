@@ -22,7 +22,7 @@ using namespace OSC_N;
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
-    OSC_C::OSC_C (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
+    OSC_C::OSC_C (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
     Valid = false;
     Number = num;
@@ -31,10 +31,10 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     PwmPortIO                 = first_device + byte(D_A_OFF::WIDTH);
     RampDirPortIO             = first_device + byte(D_A_OFF::DIR);
     Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
-    Mix[int(SHAPE::SAWTOOTH)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SAWTOOTH)], first_device + byte(D_A_OFF::SAWTOOTH), usecount);
+    Mix[int(SHAPE::RAMP)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::RAMP)], first_device + byte(D_A_OFF::RAMP), usecount);
     Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
     Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), usecount);
-    Mix[int(SHAPE::SQUARE)]   = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SQUARE)], first_device + byte(D_A_OFF::SQUARE), usecount);
+    Mix[int(SHAPE::NOISE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::NOISE)], first_device + byte(D_A_OFF::NOISE), usecount);
 
     for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
         {
@@ -124,7 +124,7 @@ void OSC_C::NoteClear ()
     }
 
 //#######################################################################
-void OSC_C::SawtoothDirection (bool data)
+void OSC_C::SetRampDirection (bool data)
     {
     I2cDevices.D2Analog (RampDirPortIO, ( data ) ? DA_MAX : 0);
     }
@@ -135,39 +135,4 @@ void OSC_C::PulseWidth (float percent)
     I2cDevices.D2Analog (PwmPortIO, (percent * (float)DA_MAX));
     }
 
-//#######################################################################
-void OSC_C::SetSoftLFO (byte wave, bool sel)
-    {
-    Mix[wave]->SetSoftLFO (sel);
-    }
-
-//#######################################################################
-void OSC_C::SetAttackTime (byte wave, float time)
-    {
-    Mix[wave]->SetTime (ESTATE::ATTACK, time);
-    }
-
-//#######################################################################
-void OSC_C::SetDecayTime (byte wave, float time)
-    {
-     Mix[wave]->SetTime (ESTATE::DECAY, time);
-    }
-
-//#######################################################################
-void OSC_C::SetReleaseTime (byte wave, float time)
-    {
-    Mix[wave]->SetTime (ESTATE::RELEASE, time);
-    }
-
-//#######################################################################
-void OSC_C::SetSustainLevel (byte wave, float level_percent)
-    {
-    Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent);
-    }
-
-//#######################################################################
-void OSC_C::SetMaxLevel (byte wave, float level_percent)
-    {
-    Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent);
-    }
 

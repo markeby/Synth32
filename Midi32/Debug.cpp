@@ -58,9 +58,9 @@ void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...)
     String str;
 
     if ( index == DEBUG_NO_INDEX )
-        str = "[" + String(label) + "] ";
+        str = "[" + String (label) + "] ";
     else
-        str = "[" + String(label) + "-" + String(index) + "] ";
+        str = "[" + String (label) + "-" + String (index) + "] ";
     str += vsFormat (fmt, ap);
     Serial << str << endl;
     }
@@ -71,7 +71,7 @@ void DebugMsgN (const char* label, uint8_t index, String name,  const char *cons
     va_list ap;
     va_start (ap, fmt);
 
-    String str = "[" + String(label) + "-" + String(index) + "]{";
+    String str = "[" + String (label) + "-" + String (index) + "]{";
     str += name + "} " + vsFormat (fmt, ap);
     Serial << str << endl;
     }
@@ -82,8 +82,8 @@ void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const
     va_list ap;
     va_start (ap, fmt);
 
-    String str = "[" + String(label) + "-" + String(index) + "]{" + name;
-    str += "} - " + String(flag) + " - " + vsFormat (fmt, ap);
+    String str = "[" + String (label) + "-" + String (index) + "]{" + name;
+    str += "} - " + String (flag) + " - " + vsFormat (fmt, ap);
     Serial << str << endl;
     }
 
@@ -92,7 +92,7 @@ void ErrorMsg (const char* label, const char* func, const char* const fmt, ...)
     {
     va_list ap;
     va_start (ap, fmt);
-    String str = "[" + String(label) + "] {" + String(label) + "} ";
+    String str = "ERROR >> [" + String (label) + "] {" + String (func) + "} ";
     str += vsFormat (fmt, ap);
     Serial << str << endl;
     }

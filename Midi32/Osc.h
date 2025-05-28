@@ -15,25 +15,25 @@ enum class SHAPE
     {
     SINE = 0,
     TRIANGLE,
-    SAWTOOTH,
+    RAMP,
     PULSE,
-    SQUARE,
+    NOISE,
     ALL
     };
 
 enum class D_A_OFF
     {
-    DIR = 0,
-    SINE,
-    SQUARE,
-    PULSE,
-    SAWTOOTH,
-    TRIANGLE,
+    EXPO = 0,
     WIDTH,
-    EXPO
+    TRIANGLE,
+    RAMP,
+    PULSE,
+    NOISE,
+    SINE,
+    DIR
     };
 
-#define TUNING_WAVES_SHAPE      (SHAPE::SAWTOOTH)
+#define TUNING_WAVES_SHAPE      (SHAPE::RAMP)
 
 }// end namespace OSC_N
 
@@ -48,37 +48,36 @@ private:
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
     byte                    CurrentNote;
-    byte                    OscPortIO;
-    byte                    PwmPortIO;
-    byte                    RampDirPortIO;
+    short                   OscPortIO;
+    short                   PwmPortIO;
+    short                   RampDirPortIO;
 
     void  ClearState (void);
 
 public:
-                OSC_C              (byte num, byte first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+                OSC_C              (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
     void        SetTuningVolume    (byte select, uint16_t level);
     void        SetTuningNote      (byte note);
     void        NoteSet            (byte key, byte velocity);
     void        NoteClear          (void);
     void        Clear              (void);
-    void        SawtoothDirection  (bool data);
+    void        SetRampDirection   (bool data);
     void        PulseWidth         (float percent);
-    void        SetSoftLFO         (byte wave, bool sel);
-    void        SetAttackTime      (byte wave, float time);
-    void        SetDecayTime       (byte wave, float time);
-    void        SetReleaseTime     (byte wave, float time);
-    void        SetSustainLevel    (byte wave, float level_percent);
-    void        SetMaxLevel        (byte wave, float level_percent);
     void        TuningAdjust       (bool up);
 
-
     //#######################################################################
-    inline float     GetMaxLevel     (byte wave)       { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
-    inline float     GetSustainLevel (byte wave)       { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
-    inline float     GetAttackTime   (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::ATTACK)); }
-    inline float     GetDecayTime    (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::DECAY)); }
-    inline float     GetReleaseTime  (byte wave)       { return (this->Mix[wave]->GetTime (ESTATE::RELEASE)); }
-    inline uint16_t* GetBankAddr     (void)            { return (this->OctaveArray); }
+    inline void     SetSoftLFO      (byte wave, bool sel)               { Mix[wave]->SetSoftLFO (sel); }
+    inline void     SetAttackTime   (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::ATTACK, time); }
+    inline void     SetDecayTime    (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }
+    inline void     SetReleaseTime  (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::RELEASE, time); }
+    inline void     SetSustainLevel (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent); }
+    inline void     SetMaxLevel     (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
+    inline float    GetMaxLevel     (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
+    inline float    GetSustainLevel (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
+    inline float    GetAttackTime   (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::ATTACK)); }
+    inline float    GetDecayTime    (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::DECAY)); }
+    inline float    GetReleaseTime  (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::RELEASE)); }
+    inline ushort*  GetBankAddr     (void)                              { return (this->OctaveArray); }
     };
 
 

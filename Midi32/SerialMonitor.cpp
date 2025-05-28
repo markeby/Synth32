@@ -120,11 +120,14 @@ bool MONITOR_C::PromptZap (void)
             switch ( this->InputMode )
                 {
                 case ZAP1:
-                    Settings.ClearAllSynth();
-                    Serial << 9 << endl << "\nCleared Synth settings." << endl;
+                    Settings.ClearTuning ();
+                    Serial << 9 << endl << "\nCleared tuning settings." << endl;
                     ESP.restart ();
                     break;
                 case ZAP2:
+                    Settings.ClearConfig ();
+                    Serial << 9 << endl << "\nCleared configuration settings." << endl;
+                    ESP.restart ();
                     break;
                 default:
                     break;
@@ -239,18 +242,13 @@ void MONITOR_C::MenuSel (void)
                     this->InputPrompt ("  Enter PWD");
                     this->Mode (INPWD);
                     break;
-                case 'F':
-                    this->InputPrompt ("  Formatting file system");
+                case 'C':
+                    this->InputPrompt ("  Clearing configuration settings");
                     this->Mode (ZAP2);
                     break;
-                case 'C':
-                    this->InputPrompt ("  Clearing Synth settings");
+                case 'T':
+                    this->InputPrompt ("  Clearing tuning settings");
                     this->Mode (ZAP1);
-                    break;
-                case 'q':
-                    AnalogDiagEnabled = true;
-                    SynthActive       = false;
-                    this->Mode (MENU);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
@@ -260,11 +258,7 @@ void MONITOR_C::MenuSel (void)
                 case 'x':           // Test function #2
                     break;
                 case 'c':           // Test function #3
-                    if ( I2cDevices.ValidateAtoD () )
-                        I2cDevices.ResetAnalog ();
-                    else
-                        I2cDevices.StartAnalog ();
-                    this->Mode (MENU);
+                    SynthFront.StartCalibration ();
                     break;
                 case 'v':           // Test function #4
                     break;
@@ -285,14 +279,11 @@ void MONITOR_C::Menu (void)
     Serial << "\t######    Midi Subsystem    ######" << endl;
     if (  SynthFront.IsInTuning () )
         Serial << "\t******     Tuning mode      ******" << endl;
-    if ( AnalogDiagEnabled )
-        Serial << "\t******    D/A Test mode     ******" << endl;
     Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
     Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
     Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
     Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
-    Serial << "\tq   - D/A Diagnostic mode" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << "\tX   - Save synth oscillator tunning" << endl;
     Serial << "\td   - Save debug flags" << endl;
@@ -303,8 +294,8 @@ void MONITOR_C::Menu (void)
     Serial << "\tv   - Test function #4" << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
-    Serial << "\tF   - Format file system" << endl;
-    Serial << "\tC   - Clear Synth settings" << endl;
+    Serial << "\tC   - Clear configuration settings" << endl;
+    Serial << "\tT   - Clear tuning settings" << endl;
     Serial << "\tF12 - Reset" << endl;
     Serial << endl;
     }
@@ -347,19 +338,6 @@ MONITOR_C::MONITOR_C (void)
     }
 
 //#######################################################################
-MONITOR_C::~MONITOR_C (void)
-    {
-    }
-
-//#######################################################################
-void MONITOR_C::Begin (void)
-    {
-    Serial.begin (115200);
-    this->DumpStats ();
-    Serial << "\n\n\nHow the hell did I get here man?\n\n\n";
-    }
-
-//#######################################################################
 bool MONITOR_C::Detect (void)
     {
     return (Serial.available ());
@@ -385,7 +363,7 @@ void MONITOR_C::Loop (void)
                 case ZAP1:
                 case ZAP2:
                     if ( this->PromptZap () )
-                        this->Mode(MENU);
+                        this->Mode (MENU);
                     break;
                 default:
                     break;

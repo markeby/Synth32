@@ -7,12 +7,11 @@
 #pragma once
 #include "Config.h"
 
-#define LFO_VCA_COUNT     3
 
 //#######################################################################
 enum class SHAPE {
     SINE = 0,
-    SAWTOOTH,
+    RAMP,
     PULSE,
     };
 
@@ -20,7 +19,7 @@ enum class D_A_OFF {
     BEND = 0,
     WIDTH,
     FREQ,
-    SAWTOOTH,
+    RAMP,
     PULSE,
     SINE
     };
@@ -37,8 +36,10 @@ private:
     byte    OscPortIO;
     byte    PwmPortIO;
     byte    BendPortIO;
+    short   Offset;
     byte    SlopePortO;
     byte    HardResetPortIO;
+    byte    Midi;
     byte    InUse;
     bool    UpdateNeded;
     short   CurrentFreq;
@@ -49,14 +50,14 @@ private:
 
     typedef struct
         {
-        uint8_t     Port;            // I2C device index
-        uint16_t    CurrentLevel;       // Current setting 12 bit D/A
-        uint16_t    MaximumLevel;       // No higher than this
+        uint8_t     Port;           // I2C device index
+        uint16_t    CurrentLevel;   // Current setting 12 bit D/A
+        uint16_t    MaximumLevel;   // No higher than this
         bool        Select;
         String      Name;
-        } VCA_T;
+        } WAVE_LEVEL_T;
 
-    VCA_T     Vca[OSC_MIXER_COUNT];
+    WAVE_LEVEL_T    Level[SOURCE_CNT_LFO];
 
     void  ClearState (void);
     void  SetLevel   (uint8_t ch, uint8_t data);
@@ -68,12 +69,26 @@ public:
     void SetFreq        (short value);
     void SetPulseWidth  (short value);
     void SetMaxLevel    (uint8_t ch, uint8_t data);
-    void SetLevel       (uint8_t data);
     void SetWave        (short ch, bool state);
+    void SetLevelMidi   (byte mchan, uint8_t data);
     void PitchBend      (short value);
     void SetRampDir     (bool state);
-    void HardReset      (void);
+    void HardReset      (byte mchan);
     void Loop           (void);
+
+    inline void PitchBend (byte mchan, short value)
+        {
+        if ( mchan == this->Midi )
+            this->PitchBend (value);
+        }
+    inline void  SetMidi        (byte data)
+        { Midi = data; }
+    inline byte  GetMidi        (void)
+        { return (Midi); }
+    inline void  SetOffset  (short val)
+        { this->Offset = val;  }
+    inline short GetOffset  (void)
+        { return (this->Offset); }
     };
 
 

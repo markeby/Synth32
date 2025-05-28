@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
 #include "I2Cmessages.h"
+#include "Settings.h"
 #include "LFOosc.h"
 #include "Debug.h"
 
@@ -30,14 +31,16 @@ SYNTH_LFO_C::SYNTH_LFO_C ()
     this->ResetOn       = false;
     this->RampSlope     = false;
     this->InUse         = 0;
+    this->Midi          = 1;
+    this->Offset        = 0;
     }
 
 //#######################################################################
 void SYNTH_LFO_C::ClearState ()
     {
-    for ( int z = 0;  z < LFO_VCA_COUNT;  z++)
+    for ( int z = 0;  z < SOURCE_CNT_LFO;  z++)
         {
-        SYNTH_LFO_C::VCA_T& m = this->Vca[z];
+        SYNTH_LFO_C::WAVE_LEVEL_T& m = this->Level[z];
         I2cDevices.D2Analog (m.Port, 0);
         }
     }
@@ -46,23 +49,23 @@ void SYNTH_LFO_C::ClearState ()
 void SYNTH_LFO_C::SetMaxLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    this->Vca[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
+    this->Level[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
 
-    DBG ("Level limit > %d", this->Vca[ch].MaximumLevel);
+    DBG ("Level limit > %d", this->Level[ch].MaximumLevel);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    z = (z > this->Vca[ch].MaximumLevel ) ? this->Vca[ch].MaximumLevel : z;
+    z = (z > this->Level[ch].MaximumLevel ) ? this->Level[ch].MaximumLevel : z;
 
-    if ( z != this->Vca[ch].CurrentLevel )
+    if ( z != this->Level[ch].CurrentLevel )
         {
-        this->Vca[ch].CurrentLevel = z;
-        I2cDevices.D2Analog (this->Vca[ch].Port,  z);
+        this->Level[ch].CurrentLevel = z;
+        I2cDevices.D2Analog (this->Level[ch].Port,  z);
         this->UpdateNeded = true;
-        DBG ("%s level > %d", this->Vca[ch].Name, z);
+        DBG ("%s level > %d", this->Level[ch].Name, z);
         }
     }
 
@@ -72,33 +75,36 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
     {
     this->Number = num;
     // D/A configurations
-    this->OscPortIO = first_device + uint8_t(D_A_OFF::FREQ);
-    this->PwmPortIO = first_device + uint8_t(D_A_OFF::WIDTH);
+    this->OscPortIO  = first_device + uint8_t(D_A_OFF::FREQ);
+    this->PwmPortIO  = first_device + uint8_t(D_A_OFF::WIDTH);
     this->BendPortIO = first_device + uint8_t(D_A_OFF::BEND);
-    this->Vca[int(SHAPE::SAWTOOTH)].Port = first_device + uint8_t(D_A_OFF::SAWTOOTH);
-    this->Vca[int(SHAPE::PULSE)].Port    = first_device + uint8_t(D_A_OFF::PULSE);
-    this->Vca[int(SHAPE::SINE)].Port     = first_device + uint8_t(D_A_OFF::SINE);
-    this->SlopePortO = lfo_digital;
+    this->Level[int(SHAPE::RAMP)].Port = first_device + uint8_t(D_A_OFF::RAMP);
+    this->Level[int(SHAPE::PULSE)].Port    = first_device + uint8_t(D_A_OFF::PULSE);
+    this->Level[int(SHAPE::SINE)].Port     = first_device + uint8_t(D_A_OFF::SINE);
+    this->SlopePortO       = lfo_digital;
     this->HardResetPortIO  = lfo_digital + 1;
+    this->Midi             = 0;
 
     // Initialize mixers
 
-    for ( int z = 0;  z < LFO_VCA_COUNT;  z++ )
+    for ( int z = 0;  z < SOURCE_CNT_LFO;  z++ )
         {
-        this->Vca[z].Name         = _MixerNames[z];
-        this->Vca[z].CurrentLevel = 0;
-        this->Vca[z].MaximumLevel = MAX_DA;
+        this->Level[z].Name         = _MixerNames[z];
+        this->Level[z].CurrentLevel = 0;
+        this->Level[z].MaximumLevel = MAX_DA;
         }
 
     if ( I2cDevices.IsPortValid (first_device) && I2cDevices.IsPortValid (first_device + 7) )
         {
         this->Valid = true;
+        this->Offset = Settings.GetOffsetLFO (num);
         this->ClearState ();
+        this->PitchBend (PITCH_BEND_CENTER);
         if ( DebugOsc )
-            printf("\t  >> LFO %d started for device %d\n", this->Number, first_device);
+            printf ("\t  >> LFO %d started for device %d\n", this->Number, first_device);
         }
     else
-        printf("\t  ** LFO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
+        printf ("\t  ** LFO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
     }
 
 //#######################################################################
@@ -129,12 +135,12 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
 //#######################################################################
 void SYNTH_LFO_C::SetWave (short ch, bool state)
     {
-    Vca[ch].Select = state;
-    DisplayMessage.LfoHardSelect (ch, state);
+    this->Level[ch].Select = state;
+    DisplayMessage.LfoHardSelect (this->Number, ch, state);
     if ( state )
         {
         this->InUse++;
-        this->SetLevel (ch, CurrentLevel);
+        this->SetLevel (ch, this->CurrentLevel);
         }
     else
         {
@@ -149,33 +155,36 @@ void SYNTH_LFO_C::SetWave (short ch, bool state)
         this->UpdateNeded = false;
         }
 
-    DBG ("%s(%d) selected %s", this->Vca[ch].Name, ch, ((state) ? "ON" : "off"));
+    DBG ("%s(%d) selected %s", this->Level[ch].Name, ch, ((state) ? "ON" : "off"));
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetLevel (uint8_t data)
+void SYNTH_LFO_C::SetLevelMidi (byte mchan, uint8_t data)
     {
-    this->CurrentLevel = data;
-    for (int z = 0;  z < LFO_VCA_COUNT;  z++ )
+    if ( mchan == this->Midi )
         {
-        if ( this->Vca[z].Select )
-            this->SetLevel (z, data);
-        else
-            this->SetLevel (z, 0);
+        this->CurrentLevel = data;
+        for (int z = 0;  z < SOURCE_CNT_LFO;  z++ )
+            {
+            if ( this->Level[z].Select )
+                this->SetLevel (z, data);
+            else
+                this->SetLevel (z, 0);
+            }
+        if ( this->UpdateNeded )
+            {
+            I2cDevices.UpdateAnalog ();     // Update D/A ports
+            this->UpdateNeded = false;
+            }
+        if ( InUse )
+            DisplayMessage.LfoHardLevel (this->Number, data);
         }
-    if ( this->UpdateNeded )
-        {
-        I2cDevices.UpdateAnalog ();     // Update D/A ports
-        this->UpdateNeded = false;
-        }
-    if ( InUse )
-        DisplayMessage.LfoHardLevel (data);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::PitchBend (short value)
     {
-    I2cDevices.D2Analog (this->BendPortIO, value);
+    I2cDevices.D2Analog (this->BendPortIO, value + this->Offset);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -183,16 +192,19 @@ void SYNTH_LFO_C::PitchBend (short value)
 void SYNTH_LFO_C::SetRampDir (bool state)
     {
     this->RampSlope = state;
-    DisplayMessage.LfoHardRampSlope (state);
-    I2cDevices.DigitalOut (this->SlopePortO, state);
-    I2cDevices.UpdateDigital ();
+    DisplayMessage.LfoHardRampSlope (this->Number, state);
+    I2cDevices.DigitalOut           (this->SlopePortO, state);
+    I2cDevices.UpdateDigital        ();
     }
 
 //#######################################################################
-void SYNTH_LFO_C::HardReset (void)
+void SYNTH_LFO_C::HardReset (byte mchan)
     {
-    I2cDevices.DigitalOut (this->HardResetPortIO, true);
-    this->ResetOn = true;
+    if ( mchan == this->Midi )
+        {
+        I2cDevices.DigitalOut (this->HardResetPortIO, true);
+        this->ResetOn = true;
+        }
     }
 
 //#######################################################################
@@ -200,7 +212,7 @@ void SYNTH_LFO_C::Loop (void)
     {
     if (  this->ResetOn )
         {
-        I2cDevices.DigitalOut(this->HardResetPortIO, false);
+        I2cDevices.DigitalOut (this->HardResetPortIO, false);
         this->ResetOn = false;
         }
     }

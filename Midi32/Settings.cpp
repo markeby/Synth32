@@ -14,42 +14,41 @@ Preferences Prefs;
 
 //#######################################################################
 // Preference keys
-static const char* sysKeySpace    = "SysP";
+static const char* sysKeySpace    = "SysP";     // WIFI and debug data directory
 static const char* sysKeySSID     = "SSID";
 static const char* sysKeyPSWD     = "PASSD";
 static const char* sysKeyDBG      = "DBG";
 
-static const char* synthKeySpace  = "SynthP";
-static const char* synthKeyBank   = "BANK";
-static const char* synthKeyBender = "BEND";
+static const char* synthTuning    = "SynthP";   // Tuning directory
+static const char* synthKeyBank   = "BANK";     // Keyboard bank prefix "BANKx"
+static const char* synthKeyBender = "BEND";     // LFO/Bender offset "BENDx"
 
-static const char* SynthConfig    = "SynthC";
-static const char* SynthDefault   = "DEF";
+static const char* SynthConfig    = "SynthC";   // Configureation directory
 
 //#######################################################################
 void SETTINGS_C::ClearAllSys (void)
     {
     Prefs.begin (sysKeySpace, false);
     Prefs.clear ();
-    Prefs.end ();
+    Prefs.end   ();
     }
 
 //#######################################################################
 void SETTINGS_C::PutSSID (String& str)
     {
-    Prefs.begin (sysKeySpace, false);
+    Prefs.begin     (sysKeySpace, false);
     Prefs.putString (sysKeySSID, str);
     s_SSID = str;
-    Prefs.end ();
+    Prefs.end       ();
     }
 
 //#######################################################################
 void SETTINGS_C::PutPasswd (String& str)
     {
-    Prefs.begin (sysKeySpace, false);
+    Prefs.begin     (sysKeySpace, false);
     Prefs.putString (sysKeyPSWD, str);
     s_PSWD = str;
-    Prefs.end ();
+    Prefs.end       ();
     }
 
 //#######################################################################
@@ -57,10 +56,10 @@ void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
     {
     char buf[8];
 
-    sprintf (buf, "%s%d", sysKeyDBG, num);
-    Prefs.begin(sysKeySpace, false);
+    sprintf       (buf, "%s%d", sysKeyDBG, num);
+    Prefs.begin   (sysKeySpace, false);
     Prefs.putBool ((const char *)buf, state);
-    Prefs.end ();
+    Prefs.end     ();
     }
 
 //#######################################################################
@@ -121,9 +120,17 @@ void SETTINGS_C::Begin (void)
 
 //#######################################################################
 //#######################################################################
-void SETTINGS_C::ClearAllSynth (void)
+void SETTINGS_C::ClearTuning (void)
     {
-    Prefs.begin (synthKeySpace, false);
+    Prefs.begin (synthTuning, false);
+    Prefs.clear ();
+    Prefs.end();
+    }
+
+//#######################################################################
+void SETTINGS_C::ClearConfig(void)
+    {
+    Prefs.begin (SynthConfig, false);
     Prefs.clear ();
     Prefs.end ();
     }
@@ -134,8 +141,8 @@ bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
     char buf[8];
     bool exist = true;
 
-    sprintf (buf, "%s%d", synthKeyBank, num);
-    Prefs.begin (synthKeySpace, false);
+    sprintf     (buf, "%s%d", synthKeyBank, num);
+    Prefs.begin (synthTuning, false);
     if (  Prefs.isKey ((const char *)buf) )
         {
         bool zb = Prefs.getBytes((const char *)buf, pbank, FULL_KEYS * sizeof(uint16_t));
@@ -150,54 +157,59 @@ void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
     {
     char buf[8];
 
-    sprintf (buf, "%s%d", synthKeyBank, num);
-    Prefs.begin    (synthKeySpace, false);
+    sprintf        (buf, "%s%d", synthKeyBank, num);
+    Prefs.begin    (synthTuning, false);
     Prefs.putBytes ((const char *)buf, pbank, FULL_KEYS * sizeof (uint16_t));
     Prefs.end      ();
     }
 
 //#######################################################################
-short SETTINGS_C::GetBenderOffset ()
+short SETTINGS_C::GetOffsetLFO (uint8_t num)
     {
-    Prefs.begin (synthKeySpace, false);
-    short z = Prefs.getShort (synthKeyBender);
-    Prefs.end ();
-    return (z);
+    char buf[8];
+
+    sprintf     (buf, "%s%d", synthKeyBender, num);
+    Prefs.begin (synthTuning, false);
+    short z     = Prefs.getShort (synthKeyBender);
+    Prefs.end   ();
+    return      (z);
     }
 
 //#######################################################################
-void SETTINGS_C::PutBenderOffset (short offset)
+void SETTINGS_C::SetOffsetLFO (uint8_t num, short offset)
     {
-    Prefs.begin    (synthKeySpace, false);
+    char buf[8];
+
+    sprintf        (buf, "%s%d", synthKeyBender, num);
+    Prefs.begin    (synthTuning, false);
     Prefs.putShort (synthKeyBender, offset);
     Prefs.end      ();
     }
 
 //#######################################################################
-void SETTINGS_C::GetDefaultConfig (int num, void* ptr, size_t len)
+bool SETTINGS_C::GetConfig (const char* name, void* ptr, size_t len)
     {
-    size_t rtn;
-    char buf[8];
+    size_t rtn = 0;
 
-    sprintf (buf, "%s%d", SynthDefault, num);
     Prefs.begin (SynthConfig, false);
-    if ( Prefs.isKey (buf) )
-        rtn = Prefs.getBytes (buf, ptr, len);
-    Prefs.end ();
+    if ( Prefs.isKey (name) )
+        rtn = Prefs.getBytes (name, ptr, len);
+    Prefs.end();
+    if ( rtn == len )
+        return (false);
+    return (true);
     }
 
 //#######################################################################
-void SETTINGS_C::PutDefaultConfig (int num, const void* ptr, size_t len)
+void SETTINGS_C::PutConfig (const char* name, const void* ptr, size_t len)
     {
     bool zbl;
     size_t rtn;
-    char buf[8];
 
-    sprintf (buf, "%s%d", SynthDefault, num);
     Prefs.begin (SynthConfig, false);
-    if ( Prefs.isKey (buf) )
-        zbl = Prefs.remove (buf);
-    rtn = Prefs.putBytes (buf, ptr, len);
+    if ( Prefs.isKey (name) )
+        zbl = Prefs.remove (name);
+    rtn = Prefs.putBytes (name, ptr, len);
     Prefs.end ();
     }
 

@@ -24,48 +24,67 @@ static const char* LabelM = "M";
 #define DBGM(args...)
 #endif
 
-//#####################################################################
-void SYNTH_FRONT_C::SelectModVCA (byte ch, bool state)
-    {
-    this->ModulationVCA[ch] = state;
-
-    DisplayMessage.LfoSoftSelect (ch, state);
-    for ( int z = 0;  z < VOICE_COUNT;  z++)
-        this->pVoice[z]->pOsc()->SetSoftLFO (ch, state);
-    }
-
 //#######################################################################
 void SYNTH_FRONT_C::FreqLFO (short ch, short data)
     {
     switch ( ch )
         {
-        case 2:
-            DisplayMessage.LfoHardPulseWidth (data);
-            this->Lfo[0].SetPulseWidth (data);
-            this->Lfo[1].SetPulseWidth (data);
+        case 0:
+            DisplayMessage.LfoSoftFreq    (data);
+            SoftLFO.SetFrequency          (data);
+            this->SynthConfig.SetSoftFreq (data);
             break;
         case 1:
-            DisplayMessage.LfoHardFreq (data);
-            this->Lfo[0].SetFreq (data);
-            this->Lfo[1].SetFreq (data);
+            DisplayMessage.LfoHardFreq     (0, data);
+            this->Lfo[0].SetFreq           (data);
+            this->SynthConfig.SetFrequency (0, data);
             break;
-        case 0:
-            DisplayMessage.LfoSoftFreq (data);
-            SoftLFO.SetFrequency (data);
+        case 2:
+            DisplayMessage.LfoHardPulseWidth (0, data);
+            this->Lfo[0].SetPulseWidth       (data);
+            this->SynthConfig.SetPulseWidth  (0, data);
+            break;
+        case 3:
+            DisplayMessage.LfoHardFreq     (1, data);
+            this->Lfo[1].SetFreq           (data);
+            this->SynthConfig.SetFrequency (1, data);
+            break;
+        case 4:
+            DisplayMessage.LfoHardPulseWidth (1, data);
+            this->Lfo[1].SetPulseWidth       (data);
+            this->SynthConfig.SetPulseWidth  (1, data);
             break;
         }
     this->KnobMap[ch].Value = data;
+    if ( !this->ResolutionMode )
+        this->NonOscPageSelect (DISP_MESSAGE_N::PAGE_C::PAGE_MOD);
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::PitchBend (short value)
+void SYNTH_FRONT_C::PitchBend (byte mchan, short value)
     {
-    short z = value + this->PitchBendOffset;
-    if ( z > 4090 )
-        return;
-    else if ( z < 126 )
-        return;
-    this->Lfo[0].PitchBend(z);
-    this->Lfo[1].PitchBend (z);
+    this->Lfo[0].PitchBend (mchan, value);
+    this->Lfo[1].PitchBend (mchan, value);
+    DBG ("Pitch Bend value = %d", value);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SelectModVCA (byte ch, bool state)
+    {
+    if ( !this->MapSelectMode )
+        {
+        this->SynthConfig.SetModSoftMixer (ch, state);
+
+        DisplayMessage.LfoSoftSelect (ch, state);
+        for ( int z = 0;  z < VOICE_COUNT;  z++)
+            {
+            if ( this->pVoice[z]->GetMidi () == SoftLFO.GetMidi () )
+                this->pVoice[z]->SetSoftLFO (ch, state);
+            else
+                this->pVoice[z]->SetSoftLFO (ch, false);
+            }
+        if ( !this->ResolutionMode )
+            this->NonOscPageSelect (DISP_MESSAGE_N::PAGE_C::PAGE_MOD);
+        }
     }
 

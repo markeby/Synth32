@@ -11,6 +11,21 @@
 #include "FrontEnd.h"
 #include "Debug.h"
 
+#ifdef DEBUG_SYNTH
+static const char* Label  = "CAL";
+//#define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#define DBG(args...) {if(true){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#else
+#define DBG(args...)
+#endif
+
+static constexpr float fsr6_144 = (6.144 / 32767.0) * 1000;
+
+static void CalibrationCallback (ushort val)
+    {
+    SynthFront.Calibration (val);
+    }
+
 //#######################################################################
 void SYNTH_FRONT_C::Tuning ()
     {
@@ -18,8 +33,7 @@ void SYNTH_FRONT_C::Tuning ()
         {
         if ( this->Down.Trigger )
             {
-            this->TuningBender = false;                                 // Not doing bender wheel
-            this->pVoice[zc]->pOsc()->SetTuningNote(this->Down.Key);     // send key index to oscillator
+            this->pVoice[zc]->SetTuningNote (this->Down.Key);     // send key index to oscillator
             DisplayMessage.TuningNote (this->Down.Key);
             }
         if ( this->TuningChange )
@@ -30,7 +44,7 @@ void SYNTH_FRONT_C::Tuning ()
                     {
                     if ( z < OSC_MIXER_COUNT )
                         {
-                        this->pVoice[zc]->pOsc()->SetTuningVolume (z, TuningLevel[z]);
+                        this->pVoice[zc]->SetTuningVolume (z, TuningLevel[z]);
                         DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
                         }
                     }
@@ -40,13 +54,13 @@ void SYNTH_FRONT_C::Tuning ()
                 for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
                     {
                     if ( z < OSC_MIXER_COUNT )
-                        this->pVoice[zc]->pOsc()->SetTuningVolume(z, 0);
+                        this->pVoice[zc]->SetTuningVolume(z, 0);
                     }
                 }
             }
         }
     this->TuningChange = false;     // Indicate complete and ready for next not change
-    this->Down.Trigger = false;     // Clear note change trigger
+    this->Down.Trigger = 0;         // Clear note change trigger
     I2cDevices.UpdateDigital ();    // Update all digital port changes
     I2cDevices.UpdateAnalog  ();    // Update D/A port changes
     }
@@ -59,7 +73,7 @@ void SYNTH_FRONT_C::StartTuning ()
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            this->TuningLevel[z] = (uint16_t)(this->pVoice[0]->pOsc()->GetMaxLevel (z) * MAX_DA);
+            this->TuningLevel[z] = (uint16_t)(this->pVoice[0]->GetMaxLevel (z) * MAX_DA);
             DisplayMessage.TuningLevel (z, this->TuningLevel[z] * MIDI_INV_MULTIPLIER);
             }
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
@@ -68,7 +82,6 @@ void SYNTH_FRONT_C::StartTuning ()
             this->TuningChange = true;
             }
         }
-    this->TuningBender = true;      // Entering tuning mode starts with the bender wheel
     this->SetTuning    = true;
     }
 
@@ -77,19 +90,10 @@ void SYNTH_FRONT_C::TuningAdjust (bool up)
     {
     if ( this->SetTuning )
         {
-        if ( this->TuningBender )
+        for (int z = 0;  z < VOICE_COUNT;  z++)
             {
-            this->PitchBendOffset += ( up ) ? -1 : +1;
-            this->PitchBend (PITCH_BEND_CENTER);
-
-            }
-        else
-            {
-            for (int z = 0;  z < VOICE_COUNT;  z++)
-                {
-                if ( this->TuningOn[z] )
-                    this->pVoice[z]->pOsc()->TuningAdjust (up);
-                }
+            if ( this->TuningOn[z] )
+                this->pVoice[z]->TuningAdjust (up);
             }
         }
     }
@@ -99,11 +103,10 @@ void SYNTH_FRONT_C::TuningBump (bool state)
     {
     if ( SetTuning )
         {
-        this->TuningBender = false;             // Not doing bender wheel
-        byte note = (state) ? 113 : 21;         // Highest F or lowest F
+        byte note = (state) ? 125 : 5;         // Highest F or lowest F
         DisplayMessage.TuningNote (note);
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
-            this->pVoice[zc]->pOsc()->SetTuningNote (note);
+            this->pVoice[zc]->SetTuningNote (note);
         }
     }
 
@@ -112,10 +115,97 @@ void SYNTH_FRONT_C::SaveTuning ()
     {
     if ( SetTuning )
         {
-        Serial << "  Saving synth keyboard arrays" << endl;
+        DBG ("Saving synth keyboard arrays");
         for ( int z = 0;  z < VOICE_COUNT;  z++ )
-            Settings.PutOscBank (z, this->pVoice[z]->pOsc ()->GetBankAddr ());
-        Settings.PutBenderOffset (this->PitchBendOffset);
+            Settings.PutOscBank (z, this->pVoice[z]->GetBankAddr ());
         }
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::StartCalibration ()
+    {
+    if ( this->CalibrationPhase > 0 )
+        return;
+
+    this->Lfo[0].SetOffset(0);
+    this->Lfo[1].SetOffset (0);
+    this->Lfo[0].PitchBend (PITCH_BEND_CENTER);
+    this->Lfo[1].PitchBend (PITCH_BEND_CENTER);
+
+    for (int z = 0;  z < 16;  z++ )                 // clear all ports
+        I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, false);
+    I2cDevices.DigitalOut (this->CalibrationBaseDigital + 8, true);
+    I2cDevices.UpdateDigital ();                    // Update all digital port changes
+    delay (500);                                      // let voltage settle
+    I2cDevices.SetCallbackAtoD (CalibrationCallback);
+    I2cDevices.StartAtoD (this->CalibrationAtoD);   // Start analog sampling
+    this->CalibrationPhase = 1;
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::Calibration (ushort val)
+    {
+    ushort zu = ((ushort)((float)val * fsr6_144) >> 1) << 1;    // caclulate voltage * 100 with LSB=0
+    DBG ("Calibration phase %d with at %#1.3f volts  [%x]", this->CalibrationPhase, 0.001 * (float)zu, val);
+
+    switch ( this->CalibrationPhase )
+        {
+        case 1:                                             // save calibration settings and start LFO calibration
+            this->CalibrationReference = zu;
+            this->CalibrationLFO   = 0;                     // start with first LFO
+                                                            // Fall through with LFO port setup
+        case 2:
+            for (int z = 0;  z < 16;  z++ )                 // clear all ports
+                I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, false);
+            if ( this->CalibrationLFO == 0 )
+                I2cDevices.DigitalOut (this->CalibrationBaseDigital, true);          // select LFO-0
+            else
+                I2cDevices.DigitalOut (this->CalibrationBaseDigital + 4, true);      // select LFO-1
+            I2cDevices.UpdateDigital ();                    // Update all digital port changes
+            delay (500);                                      // let voltage settle
+            I2cDevices.StartAtoD  (this->CalibrationAtoD);
+            this->CalibrationPhase = 3;
+            break;
+
+        case 3:
+            {
+            SYNTH_LFO_C& lfo = this->Lfo[this->CalibrationLFO];
+            short offset = 0;
+            if ( zu < this->CalibrationReference )
+                offset = +1;
+            else
+                {
+                if ( zu > this->CalibrationReference )
+                    offset = -1;
+                else
+                    {
+                    DBG ("LFO %d offset = %X", this->CalibrationLFO, lfo.GetOffset ());
+                    Settings.SetOffsetLFO (this->CalibrationLFO, lfo.GetOffset ());
+
+                    if ( this->CalibrationLFO == 0 )        // if calibrating the first LFO
+                        {
+                        this->CalibrationLFO++;             // select the next LFO
+                        this->CalibrationPhase = 2;         // restart LFO calibraion
+                        }
+                    else
+                        {
+                        this->CalibrationPhase    = 0;
+                        I2cDevices.ResetAnalog     (this->CalibrationAtoD);
+                        this->ResolveMapAllocation ();
+                        }
+                    break;
+                    }
+                }
+            lfo.SetOffset (offset + lfo.GetOffset());   // Update the offset value in the LFO
+            lfo.PitchBend (PITCH_BEND_CENTER);          // Update output voltage with new offset
+            delay (5);
+            I2cDevices.StartAtoD (this->CalibrationAtoD);
+            }
+            break;
+
+        default:        // This should never happen
+            break;
+        }
+
     }
 

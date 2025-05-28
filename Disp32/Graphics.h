@@ -29,7 +29,6 @@ class PULSE_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class LFO_METER_WIDGET_C;
 class NOTE_WIDGET_C;
-class NOISE_WIDGET_C;
 class MIDI_SEL_WIDGET_C;
 
 class PAGE_TITLE_C
@@ -51,14 +50,13 @@ private:
     LEVEL_WIDGET_C*         SustainLevel[OSC_MIXER_COUNT];
     RAMP_WIDGET_C*          RampDir;
     PULSE_WIDGET_C*         PulseWidth;
-    NOISE_WIDGET_C*         Noise;
-    byte                    MidiChannel;
+    byte                    Midi;
 
 public:
               PAGE_OSC_C (lv_obj_t* base);
     void      SetPage    (byte midi);
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
-    byte      GetMidi    (void)     { return (this->MidiChannel); }
+    byte      GetMidi    (void)     { return (this->Midi); }
     };
 
 //############################################
@@ -66,15 +64,19 @@ public:
 class PAGE_MOD_C : protected PAGE_TITLE_C
     {
 private:
-    TITLE_WIDGET_C*     TitleHard;
-    LFO_METER_WIDGET_C* MeterHard;
-    TEXT_INFO_C         HardLabelSine;
-    TEXT_INFO_C         HardLabelRamp;
-    TEXT_INFO_C         HardLabelPulse;
-    bool                HardInUse[3];
-    RAMP_WIDGET_C*      RampDir;
-    PULSE_WIDGET_C*     PulseWidth;
 
+    typedef struct
+        {
+        TITLE_WIDGET_C*     TitleHard;
+        LFO_METER_WIDGET_C* MeterHard;
+        TEXT_INFO_C         HardLabelSine;
+        TEXT_INFO_C         HardLabelRamp;
+        TEXT_INFO_C         HardLabelPulse;
+        bool                HardInUse[3];
+        RAMP_WIDGET_C*      RampDir;
+        PULSE_WIDGET_C*     PulseWidth;
+        } LFO_C;
+    LFO_C   LowFreq[2];
 
     TITLE_WIDGET_C*     TitleSoft;
     LFO_METER_WIDGET_C* MeterSoft;
@@ -85,10 +87,12 @@ private:
     TEXT_INFO_C         SoftLabelNoise;
     bool                SoftInUse[5];
 
+    void    CreateLFO         (int num, int x, int y, lv_obj_t* panel, const char* title, const char* mstr, const char* rs, const char* pws, const char* ssine, const char* sramp, const char* spulse);
+
 public:
             PAGE_MOD_C        (lv_obj_t* base);
-    void    UpdatePage        (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
-    void    UpdateHardButtons (short value, bool sel);
+    void    UpdatePage        (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void    UpdateHardButtons (short index, short value, bool sel);
     void    UpdateSoftButtons (short value, bool sel);
     };
 
@@ -110,9 +114,12 @@ class PAGE_MAPPING_C
 private:
     lv_obj_t*           MidiTitle;
     lv_obj_t*           NoiseTitle;
+    lv_obj_t*           ModTitle;
     lv_style_t          TitleStyle;
-    MIDI_SEL_WIDGET_C*  Voice[4];
-    NOISE_SEL_WIDGET_C* Noise[4];
+    SELECT_WIDGET_C*    SelVoice[MAP_COUNT];
+    SELECT_WIDGET_C*    SelNoise[MAP_COUNT];
+    SELECT_WIDGET_C*    SelOutput[MAP_COUNT];
+    SELECT_WIDGET_C*    Sellfo[MAP_COUNT];
     short               Selected;
 
 public:
@@ -171,7 +178,7 @@ public:
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
 
     inline void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMap->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageMod       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMod->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
     inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice[index]->UpdatePage (ch, effect, value); }
     };

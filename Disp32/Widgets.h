@@ -57,7 +57,7 @@ private:
     bool                    SoftwareLFO;
 
 public:
-         LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software);
+         LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software, const char* estr);
     void SetFreq            (short val);
     void Select             (bool sel);
  };
@@ -157,24 +157,6 @@ public:
     };
 
 //############################################
-class NOISE_WIDGET_C
-    {
-    private:
-        lv_style_t  StyleBlue;
-        lv_style_t  StyleWhite;
-        lv_style_t  StylePink;
-        lv_style_t  StyleRed;
-        lv_obj_t*   Blue;
-        lv_obj_t*   White;
-        lv_obj_t*   Pink;
-        lv_obj_t*   Red;
-
-    public:
-             NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y);
-        void Set            (short val, bool state);
-    };
-
-//############################################
 class TUNES_WIDGET_C
     {
     private:
@@ -187,7 +169,7 @@ class TUNES_WIDGET_C
     };
 
 //############################################
-class MIDI_SEL_WIDGET_C
+class SELECT_WIDGET_C
     {
     private:
         lv_obj_t*   Button;
@@ -196,31 +178,10 @@ class MIDI_SEL_WIDGET_C
         lv_style_t  StyleSelect;
         uint16_t    Current;
 
-        static const char* RollerData;
-
     public:
-             MIDI_SEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y);
+             SELECT_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, short width, const char* items, short offset);
         void Select            (bool state);
         void Set               (short val);
     };
 
-//############################################
-class NOISE_SEL_WIDGET_C
-    {
-    private:
-        lv_obj_t*   Button;
-        lv_obj_t*   Label;
-        lv_obj_t*   Roller;
-        lv_style_t  StyleSelect;
-        uint16_t    Current;
-
-        static const char* RollerData;
-
-    public:
-             NOISE_SEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y);
-        void Select            (bool state);
-        void Set               (short val);
-    };
-
-//############################################
 

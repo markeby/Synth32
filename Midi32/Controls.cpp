@@ -32,12 +32,6 @@ static void SetTimeSetSelect (short ch, short state)
     }
 
 //########################################################
-static void ToggleRampDir (short ch, bool state)
-    {
-    SynthFront.SetRampDir (state);
-    }
-
-//########################################################
 static void SetAttckTime (short ch, short data)
     {
     SynthFront.SetAttackTime (data);
@@ -85,17 +79,21 @@ static void ToggleModVCA (short ch, bool state)
     }
 
 //########################################################
-static void ToggleModVCO (short ch, bool state)
+static void ToggleModRampDir (short ch, bool state)
     {
-    SynthFront.SelectModVCO (ch, state);
+    if ( ch < 5 )
+        SynthFront.SetModRampDir (0, state);
+    else
+        SynthFront.SetModRampDir (1, state);
     }
 
 //########################################################
-//  Noise control
-//########################################################
-static void ToggleNoise (short ch, bool state)
+static void ToggleModVCO (short ch, bool state)
     {
-    SynthFront.SetNoise (ch, state);
+    if ( ch < 3 )
+        SynthFront.SelectModVCO (0, ch, state);
+    else
+        SynthFront.SelectModVCO (1, ch - 4, state);
     }
 
 //########################################################
@@ -159,18 +157,21 @@ static void TrackSel (short ch, short data)
     static byte count = 0;
     static byte last = 0;
 
-    count += ( data ) ? 1 : -1;
+    if ( !(!data && !count) )
+        count += ( data ) ? 1 : -1;
+
     switch ( count )
         {
         case 0:
-            if ( SynthFront.GetMidiMapMode () && (last == 0) )
-                SynthFront.ChangeMapSelect (ch);
+            if ( last == 0 )
+                SynthFront.ChangeMapSelect (ch - 2);
             else
                 last--;
             break;
         case 2:
             SynthFront.MidiMapMode ();
-            last = 1;
+            last = 2;
+            count = 0;
             break;
         }
     }
@@ -197,62 +198,62 @@ static void SaveConfig (short index, short data)
 
 //########################################################
 MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
-    {   {    0,                0, "N ",                 nullptr           },    // 01  30  xx
-        {    1,                0, "N ",                 nullptr           },    // 01  31  xx
-        {    2,                0, "N ",                 nullptr           },    // 01  32  xx
-        {    3,                0, "N ",                 nullptr           },    // 01  33  xx
-        {    4,                0, "N ",                 nullptr           },    // 01  34  xx
-        {    5,                0, "N ",                 nullptr           },    // 01  35  xx
-        {    6,                0, "N ",                 nullptr           },    // 01  36  xx
-        {    7,                0, "N ",                 nullptr           },    // 01  37  xx
-        {    8,                0, "N ",                 nullptr           },    // 01  38  xx
-        {    9,                0, "N ",                 nullptr           },    // 01  39  xx
-        {   10,                0, "N ",                 nullptr           },    // 01  3A  xx
-        {   11,                0, "N ",                 nullptr           },    // 01  3B  xx
-        {   12,                0, "N ",                 nullptr           },    // 01  3C  xx
-        {   13,                0, "N ",                 nullptr           },    // 01  3D  xx
-        {   14,                0, "N ",                 nullptr           },    // 01  3E  xx
-        {   15,                0, "N ",                 nullptr           },    // 01  3F  xx
-        {    0,                0, "Attack",             SetAttckTime      },    // 01  40  xx
-        {    1,                0, "Decay",              SetDecayTime      },    // 01  41  xx
-        {    2,                0, "Release",            SetReleaseTime    },    // 01  42  xx
-        {    3,                0, "N ",                 nullptr           },    // 01  43  xx
-        {   20,                0, "N ",                 nullptr           },    // 01  44  xx
-        {   21,                0, "N ",                 nullptr           },    // 01  45  xx
-        {   22,                0, "N ",                 nullptr           },    // 01  46  xx
-        {  127,             0x1D, "Pulse Width",        PulseWidth        },    // 01  47  xx
-        {    0,                0, "Sine max level",     SetMaxLevel       },    // 01  48  xx
-        {    1,                0, "Triangle max level", SetMaxLevel       },    // 01  49  xx
-        {    2,                0, "Sqiare max level",   SetMaxLevel       },    // 01  4A  xx
-        {    3,                0, "Sawtooth max level", SetMaxLevel       },    // 01  4B  xx
-        {    4,                0, "Pulse max level",    SetMaxLevel       },    // 01  4C  xx
-        {   29,                0, "N ",                 nullptr           },    // 01  4D  xx
-        {   30,                0, "N ",                 nullptr           },    // 01  4E  xx
-        {   31,                0, "N ",                 nullptr           },    // 01  4F  xx
-        { 0x50,             0x1F, "Set Sine",           SetTimeSetSelect  },    // 01  50  xx
-        { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 01  51  xx
-        { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 01  52  xx
-        { 0x53,             0x1F, "Set Pulse",          SetTimeSetSelect  },    // 01  53  xx
-        { 0x54,             0x1F, "Set Square",         SetTimeSetSelect  },    // 01  54  xx
-        { 0x55,                0, "N ",                 nullptr           },    // 01  55  xx
-        { 0x56,                0, "N ",                 nullptr           },    // 01  56  xx
-        { 0x57,             0x1F, "Sawtooth Dir",       SawtoothDirection },    // 01  57  xx
-        { 0x58,                0, "N ",                 nullptr           },    // 01  58  xx
-        { 0x59,                0, "N ",                 nullptr           },    // 01  59  xx
-        { 0x5A,                0, "N ",                 nullptr           },    // 01  5A  xx
-        { 0x5B,                0, "N ",                 nullptr           },    // 01  5B  xx
-        { 0x5C,                0, "N ",                 nullptr           },    // 01  5C  xx
-        { 0x5D,                0, "N ",                 nullptr           },    // 01  5D  xx
-        { 0x5E,                0, "N ",                 nullptr           },    // 01  5E  xx
-        { 0x5F,                0, "N ",                 nullptr           },    // 01  5F  xx
-        { 0x60,             0x1F, "Send Sel UP",        SendDir           },    // 01  60  xx
-        { 0x61,             0x1F, "Send Sel DN",        SendDir           },    // 01  61  xx
-        { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 01  62  xx
-        { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 01  63  xx
-        { 0x64,             0x1F, "Debug Page Advance", DebugPageAdvance  },    // 01  64  xx
-        { 0x65,                0, "N ",                 nullptr           },    // 01  65  xx
-        { 0x66,             0x1F, "Page Advance",       PageAdvance       },    // 01  66  xx
-        { 0x67,             0x1F, "Save Configuration", SaveConfig        },    // 01  67  xx
+    {   {    0,                0, "N ",                 nullptr           },    // 30
+        {    1,                0, "N ",                 nullptr           },    // 31
+        {    2,                0, "N ",                 nullptr           },    // 32
+        {    3,                0, "N ",                 nullptr           },    // 33
+        {    4,                0, "N ",                 nullptr           },    // 34
+        {    5,                0, "N ",                 nullptr           },    // 35
+        {    6,                0, "N ",                 nullptr           },    // 36
+        {    7,                0, "N ",                 nullptr           },    // 37
+        {    8,                0, "N ",                 nullptr           },    // 38
+        {    9,                0, "N ",                 nullptr           },    // 39
+        {   10,                0, "N ",                 nullptr           },    // 3A
+        {   11,                0, "N ",                 nullptr           },    // 3B
+        {   12,                0, "N ",                 nullptr           },    // 3C
+        {   13,                0, "N ",                 nullptr           },    // 3D
+        {   14,                0, "N ",                 nullptr           },    // 3E
+        {   15,                0, "N ",                 nullptr           },    // 3F
+        {    0,                0, "Attack",             SetAttckTime      },    // 40
+        {    1,                0, "Decay",              SetDecayTime      },    // 41
+        {    2,                0, "Release",            SetReleaseTime    },    // 42
+        {    3,                0, "N ",                 nullptr           },    // 43
+        {   20,                0, "N ",                 nullptr           },    // 44
+        {   21,                0, "N ",                 nullptr           },    // 45
+        {   22,                0, "N ",                 nullptr           },    // 46
+        {  127,             0x1D, "Pulse Width",        PulseWidth        },    // 47
+        {    0,                0, "Sine max level",     SetMaxLevel       },    // 48
+        {    1,                0, "Triangle max level", SetMaxLevel       },    // 49
+        {    2,                0, "Sqiare max level",   SetMaxLevel       },    // 4A
+        {    3,                0, "Sawtooth max level", SetMaxLevel       },    // 4B
+        {    4,                0, "Pulse max level",    SetMaxLevel       },    // 4C
+        {   29,                0, "N ",                 nullptr           },    // 4D
+        {   30,                0, "N ",                 nullptr           },    // 4E
+        {   31,                0, "N ",                 nullptr           },    // 4F
+        { 0x50,             0x1F, "Set Sine",           SetTimeSetSelect  },    // 50
+        { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 51
+        { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 52
+        { 0x53,             0x1F, "Set Pulse",          SetTimeSetSelect  },    // 53
+        { 0x54,             0x1F, "Set Square",         SetTimeSetSelect  },    // 54
+        { 0x55,                0, "N ",                 nullptr           },    // 55
+        { 0x56,                0, "N ",                 nullptr           },    // 56
+        { 0x57,             0x1F, "Sawtooth Dir",       SawtoothDirection },    // 57
+        { 0x58,                0, "N ",                 nullptr           },    // 58
+        { 0x59,                0, "N ",                 nullptr           },    // 59
+        { 0x5A,                0, "N ",                 nullptr           },    // 5A
+        { 0x5B,                0, "N ",                 nullptr           },    // 5B
+        { 0x5C,                0, "N ",                 nullptr           },    // 5C
+        { 0x5D,                0, "N ",                 nullptr           },    // 5D
+        { 0x5E,                0, "N ",                 nullptr           },    // 5E
+        { 0x5F,                0, "N ",                 nullptr           },    // 5F
+        { 0x60,             0x1F, "Send Sel UP",        SendDir           },    // 60
+        { 0x61,             0x1F, "Send Sel DN",        SendDir           },    // 61
+        { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 62
+        { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 63
+        { 0x64,             0x1F, "Debug Page Advance", DebugPageAdvance  },    // 64
+        { 0x65,                0, "N ",                 nullptr           },    // 65
+        { 0x66,             0x1F, "Page Advance",       PageAdvance       },    // 66
+        { 0x67,             0x1F, "Save Configuration", SaveConfig        },    // 67
     };
 
 LED_NOTE_MAP SendA[]     = { 13, 29, 45, 61, 77, 93, 109, 125 };
@@ -283,10 +284,10 @@ MIDI_MAP FaderMapArray[] =
 //########################################################
 MIDI_ENCODER_MAP KnobMapArray[] =
     {   {  0, "Soft LFO freq",          FreqLFO, 1  },  //  01  0A  xx
-        {  1, "Hard LFO freq",          FreqLFO, 1  },  //  02  0A  xx
-        {  2, "Hard LFO pulse width",   FreqLFO, 1  },  //  03  0A  xx
-        {  3, "N ",                     nullptr, 1  },  //  04  0A  xx
-        {  4, "N ",                     nullptr, 1  },  //  05  0A  xx
+        {  1, "Hard LFO 1 freq",        FreqLFO, 1  },  //  02  0A  xx
+        {  2, "Hard LFO 1 pulse width", FreqLFO, 1  },  //  03  0A  xx
+        {  3, "Hard LFO 2 freq",        FreqLFO, 1  },  //  04  0A  xx
+        {  4, "Hard LFO 2 pulse width", FreqLFO, 1  },  //  05  0A  xx
         {  5, "N ",                     nullptr, 1  },  //  06  0A  xx
         {  6, "N ",                     nullptr, 1  },  //  07  0A  xx
         {  7, "N ",                     nullptr, 1  },  //  08  0A  xx
@@ -302,28 +303,28 @@ MIDI_ENCODER_MAP KnobMapArray[] =
 
 //########################################################
 MIDI_BUTTON_MAP SwitchMapArray[] =
-    {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA  },  //  01  10  xx
-        {  1,           false,  "VCA Mod Triangle",         ToggleModVCA  },  //  01  11  xx
-        {  2,           false,  "VCA Mod Ramp",             ToggleModVCA  },  //  01  12  xx
-        {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA  },  //  01  13  xx
-        {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA  },  //  01  14  xx
-        {  5,           false,  "Switch f6",                nullptr       },  //  01  15  xx
-        {  6,           false,  "Switch f7",                nullptr       },  //  01  16  xx
-        {  7,           false,  "Switch f8",                nullptr       },  //  01  17  xx
-        {  0,           false,  "VCO freq Mod Sine",        ToggleModVCO  },  //  01  18  xx
-        {  1,           false,  "VCO freq Mod Ramp",        ToggleModVCO  },  //  01  19  xx
-        {  2,           false,  "VCO freq Pulse   ",        ToggleModVCO  },  //  01  1A  xx
-        {  3,           false,  "Toggle Ramp Direction",    ToggleRampDir },  //  01  1B  xx
-        { DUCT_BLUE,    false,  "0-1 Blue ",                ToggleNoise   },  //  01  1C  xx
-        { DUCT_WHITE,   false,  "0-1 White",                ToggleNoise   },  //  01  1D  xx
-        { DUCT_PINK,    false,  "0-1 Pink ",                ToggleNoise   },  //  01  1E  xx
-        { DUCT_RED,     false,  "0-1 Red  ",                ToggleNoise   },  //  01  1F  xx
-        { 24,           false,  "Tuning save",              TunningSave   },  //  01  72  xx
-        { 24,           false,  "",                         nullptr       },  //  01  73  xx
-        { 20,           false,  "Tune +",                   TuneUp        },  //  01  74  xx
-        { 21,           false,  "Tune -",                   TuneDown      },  //  01  75  xx
-        { 22,           false,  "Tune/Reset",               TuneReset     },  //  01  76  xx
-        { 23,           false,  "Tune -/+",                 TuneBump      },  //  01  77  xx
+    {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA     },  //  01  10  xx
+        {  1,           false,  "VCA Mod Triangle",         ToggleModVCA     },  //  01  11  xx
+        {  2,           false,  "VCA Mod Ramp",             ToggleModVCA     },  //  01  12  xx
+        {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA     },  //  01  13  xx
+        {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA     },  //  01  14  xx
+        {  5,           false,  "Switch f6",                nullptr          },  //  01  15  xx
+        {  6,           false,  "Switch f7",                nullptr          },  //  01  16  xx
+        {  7,           false,  "Switch f8",                nullptr          },  //  01  17  xx
+        {  0,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  01  18  xx
+        {  1,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  01  19  xx
+        {  2,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  01  1A  xx
+        {  3,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  01  1B  xx
+        {  4,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  01  1C  xx
+        {  5,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  01  1D  xx
+        {  6,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  01  1E  xx
+        {  7,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  01  1F  xx
+        { 24,           false,  "Tuning save",              TunningSave      },  //  01  72  xx
+        { 24,           false,  "",                         nullptr          },  //  01  73  xx
+        { 20,           false,  "Tune +",                   TuneUp           },  //  01  74  xx
+        { 21,           false,  "Tune -",                   TuneDown         },  //  01  75  xx
+        { 22,           false,  "Tune/Reset",               TuneReset        },  //  01  76  xx
+        { 23,           false,  "Tune -/+",                 TuneBump         },  //  01  77  xx
      };
 
 

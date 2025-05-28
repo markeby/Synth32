@@ -5,7 +5,7 @@
 	(uuid "d73dc980-96ca-4524-969a-5f6445d79c6d")
 	(paper "USLegal")
 	(title_block
-		(title "Dual Noise Geneartor")
+		(title "Quad Noise Geneartor")
 		(date "2025-01-16")
 		(rev "4.2")
 		(comment 1 "In Development ")
@@ -8613,6 +8613,30 @@
 			(embedded_fonts no)
 		)
 	)
+	(text "Channel\n#0"
+		(exclude_from_sim no)
+		(at 249.682 26.162 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "349b271c-21d5-4e90-bdd7-4f072453d817")
+	)
+	(text "Channel\n#2"
+		(exclude_from_sim no)
+		(at 333.502 25.908 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "3802d2e3-99a4-4453-b621-5ec990fca7fa")
+	)
 	(text "NC"
 		(exclude_from_sim no)
 		(at 38.1 35.56 0)
@@ -8622,6 +8646,18 @@
 			)
 		)
 		(uuid "3a09fc7c-535e-4567-abfc-2bb5acc4a346")
+	)
+	(text "I^{2}C"
+		(exclude_from_sim no)
+		(at 23.876 104.902 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "432419a6-f21d-44c5-965a-c6ff5364da3a")
 	)
 	(text "A2"
 		(exclude_from_sim no)
@@ -8656,6 +8692,43 @@
 		)
 		(uuid "61278a68-439b-410a-bf47-5cca2143dc35")
 	)
+	(text "I^{2}C"
+		(exclude_from_sim no)
+		(at 23.622 131.318 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "7451f051-3555-4621-b4b7-5a541ac86dcd")
+	)
+	(text "Channel\n#3"
+		(exclude_from_sim no)
+		(at 332.994 89.408 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "9f200d33-7e85-44db-8233-65bcbbe33c6e")
+	)
+	(text "±12V"
+		(exclude_from_sim no)
+		(at 14.986 180.34 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+			(justify left bottom)
+		)
+		(uuid "b6df76ff-4706-4f41-9011-12accb317852")
+	)
 	(text "A1"
 		(exclude_from_sim no)
 		(at 58.166 137.414 0)
@@ -8665,6 +8738,18 @@
 			)
 		)
 		(uuid "e59a8f6d-d5bc-4f10-ad98-281c32c24700")
+	)
+	(text "Channel\n#1"
+		(exclude_from_sim no)
+		(at 249.428 89.662 0)
+		(effects
+			(font
+				(size 1.524 1.524)
+				(thickness 0.3048)
+				(bold yes)
+			)
+		)
+		(uuid "eb4e1624-437a-4c3d-8489-814ad9c25a36")
 	)
 	(text "A0"
 		(exclude_from_sim no)
@@ -16463,7 +16548,7 @@
 		(dnp no)
 		(uuid "0de827ca-f4b5-4b91-9e2f-a36c42e13b0d")
 		(property "Reference" "J48"
-			(at 248.935 91.8652 0)
+			(at 248.92 98.806 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -16809,10 +16894,10 @@
 		(dnp no)
 		(uuid "15ca1bd0-4ea4-443b-b9af-3699946669dd")
 		(property "Reference" "J44"
-			(at 17.5768 179.8828 0)
+			(at 17.526 190.754 0)
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 0.889 0.889)
 				)
 			)
 		)
@@ -19376,7 +19461,7 @@
 		(dnp no)
 		(uuid "4a5e2139-c845-4d91-9cb9-894905a5dabb")
 		(property "Reference" "J49"
-			(at 332.755 28.3652 0)
+			(at 332.994 35.306 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -20787,7 +20872,7 @@
 		(dnp no)
 		(uuid "62d6d856-3f68-4b41-925a-9f8ece9230f4")
 		(property "Reference" "J47"
-			(at 248.935 28.3652 0)
+			(at 248.92 35.306 0)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -27138,7 +27223,7 @@
 		(dnp no)
 		(uuid "eb11edad-b9c0-44e9-aba0-8714896ffb35")
 		(property "Reference" "J50"
-			(at 332.755 91.8652 0)
+			(at 332.74 98.806 0)
 			(effects
 				(font
 					(size 0.889 0.889)

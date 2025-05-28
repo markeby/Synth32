@@ -50,6 +50,14 @@
                 ClearProcessBuffer="1">
                 <Exec CmdLine="make clean &amp; pbench make Midi32_OTA"/>
             </Target>
+            <Target
+                Name="xtensa addr2line"
+                MenuCaption="xtensa addr2line"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
+            </Target>
         </Menu>
     </Config>
     <Config
@@ -97,6 +105,14 @@
                 ClearProcessBuffer="1">
                 <Exec CmdLine="make clean &amp; make Midi32_Serial"/>
             </Target>
+            <Target
+                Name="xtensa addr2line"
+                MenuCaption="xtensa addr2line"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
+            </Target>
         </Menu>
     </Config>
     <Rules Name="Compile">
@@ -121,7 +137,6 @@
             <F N="Config.cpp"/>
             <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
-            <F N="Diagnostics.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="FrontEnd.cpp"/>
             <F N="FrontEndLFO.cpp"/>
@@ -131,8 +146,6 @@
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
-            <F N="Multiplex.cpp"/>
-            <F N="Noise.cpp"/>
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
@@ -153,14 +166,11 @@
             </Folder>
             <F N="Config.h"/>
             <F N="Debug.h"/>
-            <F N="Diagnostics.h"/>
             <F N="Envelope.h"/>
             <F N="FrontEnd.h"/>
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
             <F N="LFOosc.h"/>
-            <F N="Multiplex.h"/>
-            <F N="Noise.h"/>
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>

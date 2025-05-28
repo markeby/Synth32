@@ -23,8 +23,7 @@ private:
     void TextIn         (void);
 
 public:
-    MONITOR_C           (void);
-    ~MONITOR_C          (void);
+         MONITOR_C      (void);
     void Tuning         (void);
     bool Detect         (void);
     void Loop           (void);

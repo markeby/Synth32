@@ -44,17 +44,18 @@ public:
     //----------------------------------------
     // Synth tuning storage
     //----------------------------------------
-    void     ClearAllSynth       (void);
+    void     ClearTuning         (void);
+    void     ClearConfig         (void);
     bool     GetOscBank          (uint8_t num, uint16_t* pbank);
     void     PutOscBank          (uint8_t num, uint16_t* pbank);
-    short    GetBenderOffset     (void);
-    void     PutBenderOffset     (short offset);
+    short    GetOffsetLFO        (uint8_t num);
+    void     SetOffsetLFO        (uint8_t num, short offset);
 
     //----------------------------------------
     // Synth configure storage
     //----------------------------------------
-    void     GetDefaultConfig    (int num, void* ptr, size_t len);
-    void     PutDefaultConfig    (int num, const void* ptr, size_t len);
+    bool     GetConfig    (const char* name, void* ptr, size_t len);
+    void     PutConfig    (const char* name, const void* ptr, size_t len);
     };
 
 //#######################################################################

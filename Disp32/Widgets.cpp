@@ -73,10 +73,10 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
 
 //#######################################################################
 //#######################################################################
-    MIDI_SEL_WIDGET_C::MIDI_SEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y)
+    SELECT_WIDGET_C::SELECT_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, short width, const char* items, short offset)
     {
     lv_obj_t* panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 155, 106);
+    lv_obj_set_size             (panel, width, 106);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -87,7 +87,7 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     lv_style_set_text_font (&this->StyleSelect, &lv_font_montserrat_14);
 
     this->Roller = lv_roller_create (panel);
-    lv_roller_set_options (this->Roller, this->RollerData, LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_options (this->Roller, items, LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count (this->Roller, 3);
     lv_obj_add_style (this->Roller, &this->StyleSelect, LV_PART_SELECTED);
     lv_obj_align (this->Roller, LV_ALIGN_LEFT_MID, 0, 0);
@@ -95,7 +95,7 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     lv_roller_set_selected (this->Roller, this->Current, LV_ANIM_ON);
 
     this->Button = lv_btn_create (panel);
-    lv_obj_align      (this->Button, LV_ALIGN_CENTER, 30, 0);
+    lv_obj_align      (this->Button, LV_ALIGN_CENTER, offset, 0);
     lv_obj_add_flag   (this->Button, LV_OBJ_FLAG_CHECKABLE);
     lv_obj_set_height (this->Button, LV_SIZE_CONTENT);
 
@@ -105,10 +105,7 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     }
 
 //#######################################################################
-const char* MIDI_SEL_WIDGET_C::RollerData = "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16";
-
-//#######################################################################
-void MIDI_SEL_WIDGET_C::Select (bool state)
+void SELECT_WIDGET_C::Select (bool state)
     {
     if ( state )
         lv_obj_add_state (this->Button, LV_STATE_CHECKED);
@@ -117,69 +114,15 @@ void MIDI_SEL_WIDGET_C::Select (bool state)
     }
 
 //#######################################################################
-void MIDI_SEL_WIDGET_C::Set (short val)
-    {
-    this->Current = val - 1;
-    lv_roller_set_selected(this->Roller, this->Current, LV_ANIM_ON);
-    }
-
-//#######################################################################
-//#######################################################################
-    NOISE_SEL_WIDGET_C::NOISE_SEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y)
-    {
-    lv_obj_t* panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 182, 106);
-    lv_obj_set_pos              (panel, x, y);
-    lv_obj_set_style_pad_top    (panel, 0, 0);
-    lv_obj_set_style_pad_bottom (panel, 0, 0);
-    lv_obj_set_style_pad_left   (panel, 2, 0);
-    lv_obj_set_style_pad_right  (panel, 2, 0);
-
-    lv_style_init (&this->StyleSelect);
-    lv_style_set_text_font (&this->StyleSelect, &lv_font_montserrat_14);
-
-    this->Roller = lv_roller_create (panel);
-    lv_roller_set_options (this->Roller, this->RollerData, LV_ROLLER_MODE_INFINITE);
-    lv_roller_set_visible_row_count (this->Roller, 3);
-    lv_obj_add_style (this->Roller, &this->StyleSelect, LV_PART_SELECTED);
-    lv_obj_align (this->Roller, LV_ALIGN_LEFT_MID, 0, 0);
-    this->Current = 0;
-    lv_roller_set_selected (this->Roller, this->Current, LV_ANIM_ON);
-
-    this->Button = lv_btn_create (panel);
-    lv_obj_align      (this->Button, LV_ALIGN_CENTER, 44, 0);
-    lv_obj_add_flag   (this->Button, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_set_height (this->Button, LV_SIZE_CONTENT);
-
-    this->Label = lv_label_create (this->Button);
-    lv_label_set_text (this->Label, s);
-    lv_obj_center     (this->Label);
-
-    this->Set (0);
-    }
-
-//#######################################################################
-const char* NOISE_SEL_WIDGET_C::RollerData = "Blue\nWhite\nPink\nRed";
-
-//#######################################################################
-void NOISE_SEL_WIDGET_C::Select (bool state)
-    {
-    if ( state )
-        lv_obj_add_state (this->Button, LV_STATE_CHECKED);
-    else
-        lv_obj_clear_state (this->Button, LV_STATE_CHECKED);
-    }
-
-//#######################################################################
-void NOISE_SEL_WIDGET_C::Set (short val)
+void SELECT_WIDGET_C::Set (short val)
     {
     this->Current = val;
-    lv_roller_set_selected(this->Roller, this->Current, LV_ANIM_ON);
+    lv_roller_set_selected (this->Roller, this->Current, LV_ANIM_ON);
     }
 
 //#######################################################################
 //#######################################################################
-    LFO_METER_WIDGET_C::LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software)
+    LFO_METER_WIDGET_C::LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software, const char* estr)
     {
     SoftwareLFO = software;
     this->Meter = lv_meter_create (base);
@@ -196,7 +139,7 @@ void NOISE_SEL_WIDGET_C::Set (short val)
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    this->MeterFreq.BeginText (base, "  E2", "Hz", y, 0x0000F0);
+    this->MeterFreq.BeginText (base, estr, "Hz", y, 0x0000F0);
     // Initial positions
     this->SetFreq (0);
     this->Select (false);
@@ -515,86 +458,6 @@ void NOTE_WIDGET_C::SetValue (short val)
     if ( val == 21 )
         c = '-';
     lv_label_set_text_fmt (this->Value, "%c%s %d = %.2f Hz", c, FreqNote[val % 12], val, FreqTable[val]);
-    }
-
-//#######################################################################
-    NOISE_WIDGET_C::NOISE_WIDGET_C (lv_obj_t* base,  lv_align_t align, short x, short y)
-    {
-    lv_obj_t* keys = lv_label_create (base);
-    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
-    lv_obj_align (keys, align, x, y);
-    lv_label_set_text (keys, "F13    F14   F15    F16");
-
-    y += 20;
-    x += -45;
-    this->Blue = lv_label_create (base);
-    lv_label_set_recolor (this->Blue, true);
-    lv_obj_align (this->Blue, align, x, y);
-    lv_style_init (&this->StyleBlue);
-    lv_style_set_text_font (&this->StyleBlue, &lv_font_montserrat_18);
-    lv_obj_add_style (this->Blue, &this->StyleBlue, 0);
-    this->Set (DUCT_BLUE, false);
-    x += 30;
-
-    this->White = lv_label_create (base);
-    lv_label_set_recolor (this->White, true);
-    lv_obj_align (this->White, align, x, y);
-    lv_style_init (&this->StyleWhite);
-    lv_style_set_text_font (&this->StyleWhite, &lv_font_montserrat_18);
-    lv_obj_add_style (this->White, &this->StyleWhite, 0);
-    this->Set (DUCT_WHITE,false);
-    x += 30;
-
-    this->Pink = lv_label_create (base);
-    lv_label_set_recolor (this->Pink, true);
-    lv_obj_align (this->Pink, align, x, y);
-    lv_style_init (&this->StylePink);
-    lv_style_set_text_font (&this->StylePink, &lv_font_montserrat_18);
-    lv_obj_add_style (this->Pink, &this->StylePink, 0);
-    this->Set (DUCT_PINK,false);
-    x += 30;
-
-    this->Red = lv_label_create (base);
-    lv_label_set_recolor (this->Red, true);
-    lv_obj_align (this->Red, align, x, y);
-    lv_style_init (&this->StyleRed);
-    lv_style_set_text_font (&this->StyleRed, &lv_font_montserrat_18);
-    lv_obj_add_style (this->Red, &this->StyleRed, 0);
-    this->Set (DUCT_RED, false);
-    }
-
-//#######################################################################
-void NOISE_WIDGET_C::Set (short color, bool state)
-    {
-    switch ( color )
-        {
-        case DUCT_BLUE:
-            if ( state )
-                lv_label_set_text (this->Blue, "#0000FF B#");
-            else
-                lv_label_set_text (this->Blue, "#D0D0D0 B#");
-            break;
-        case DUCT_WHITE:
-            if ( state )
-                lv_label_set_text (this->White, "#666666 W#");
-            else
-                lv_label_set_text (this->White, "#D0D0D0 W#");
-            break;
-        case DUCT_PINK:
-            if ( state )
-                lv_label_set_text (this->Pink, "#FF8844 P#");
-            else
-                lv_label_set_text (this->Pink, "#D0D0D0 P#");
-            break;
-        case DUCT_RED:
-            if ( state )
-                lv_label_set_text (this->Red, "#FF0000 R#");
-            else
-                lv_label_set_text (this->Red, "#D0D0D0 R#");
-            break;
-        default:
-            break;
-        }
     }
 
 //#######################################################################

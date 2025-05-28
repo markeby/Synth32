@@ -13,8 +13,9 @@ static const char* Label = "LFO-S";
 //#######################################################################
     SOFT_LFO_C::SOFT_LFO_C ()
     {
-    SetFrequency (1);
-    Current = 0.0;
+    this->SetFrequency (1);
+    this->Current = 0.0;
+    this->Midi = 0;
     }
 
 //#######################################################################
@@ -42,11 +43,15 @@ void SOFT_LFO_C::Loop (float millisec)
     }
 
 //#######################################################################
-void SOFT_LFO_C::Multiplier (float value)
+void SOFT_LFO_C::Multiplier (byte mchan, float value)
     {
-    Modulation = value;
-    DBG ("Modulation = %f", Modulation);
+    if ( mchan == Midi )
+        {
+        Modulation = value;
+        DBG ("Modulation = %f", Modulation);
+        }
     }
 
-SOFT_LFO_C SoftLFO;
+//#######################################################################
+SOFT_LFO_C   SoftLFO;
 
