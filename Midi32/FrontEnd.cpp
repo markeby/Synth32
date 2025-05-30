@@ -99,6 +99,9 @@ void SYNTH_FRONT_C::ResetXL ()
             }
         }
     Midi_0.sendSysEx (sizeof (midi_msg), midi_msg, true);
+    Midi_0.sendNoteOn (PanDevice[0], 0, 1);
+    Midi_0.sendNoteOn (PanDevice[1], 0, 1);
+    Midi_0.sendNoteOn (PanDevice[2], 0, 1);
     }
 
 //#######################################################################
