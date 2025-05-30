@@ -79,6 +79,7 @@ static void FuncPitchBend (uint8_t mchan, int value)
 //#######################################################################
 void SYNTH_FRONT_C::ResetXL ()
     {
+    static const byte midi_msg[] = { 0xF0, 0x00, 0x20, 0x29, 0x02, 0x11, 0x7B, 0x00, 0x00 ,0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x04, 0x00, 0xF7 };
     delay (250);
     SENDcc0 (0, 0);
     delay (100);
@@ -97,6 +98,7 @@ void SYNTH_FRONT_C::ResetXL ()
             delay (20);
             }
         }
+    Midi_0.sendSysEx (sizeof (midi_msg), midi_msg, true);
     }
 
 //#######################################################################
@@ -272,6 +274,11 @@ void SYNTH_FRONT_C::PageAdvance ()
     byte  m    = this->CurrentMidiSelected;
     short next = this->CurrentMapSelected + 1;
 
+    if ( this->CurrentMapSelected < MAP_COUNT )
+        {
+        this->ResetVoiceComponentSetSelected ();
+        this->ResetXL ();
+        }
     while ( next < MAP_COUNT )
         {
         if ( m == this->SynthConfig.Voice[next].GetVoiceMidi () )
@@ -281,7 +288,7 @@ void SYNTH_FRONT_C::PageAdvance ()
             }
         this->CurrentMidiSelected  = this->SynthConfig.Voice[next].GetVoiceMidi ();
         this->CurrentMapSelected   = next;
-        this->CurrentVoiceSelected = next << 1;
+        this->CurrentVoiceSelected = next >> 1;
         DisplayMessage.SelectVoicePage (next);
         return;
         }
@@ -451,28 +458,33 @@ void SYNTH_FRONT_C::Loop ()
             for ( int z = 0;  z <  VOICE_COUNT;  z++ )
                 {
                 VOICE_C& ch = *(pVoice[z]);
-
-                if ( !ch.IsActive () )              // grab the first channel not in use
+                if ( this->Down.Trigger == ch.GetMidi () )
                     {
-                    doit = z;
-                    break;
-                    }
-                else
-                    {
-                    if ( oldest < 0 )               // channel is inu use so this is the first one to check for oldest
-                        oldest = z;
+                    if ( !ch.IsActive () )              // grab the first channel not in use
+                        {
+                        doit = z;
+                        break;
+                        }
                     else
                         {
-                        if ( ch.IsActive () > pVoice[oldest]->IsActive () )      // check if current channel older than the oldest so far
+                        if ( oldest < 0 )               // channel is inu use so this is the first one to check for oldest
                             oldest = z;
+                        else
+                            {
+                            if ( ch.IsActive () > pVoice[oldest]->IsActive () )      // check if current channel older than the oldest so far
+                                oldest = z;
+                            }
                         }
                     }
                 }
             if ( doit < 0 )                                 // no unused channel so we will capture the one used the longest
                 doit = oldest;
-            if ( doit == 0 )
+            if ( doit >= 0 )                                // only process valid channels
+                {
                 this->Lfo[0].HardReset (this->Down.Trigger);
-            this->pVoice[doit]->NoteSet(this->Down.Trigger, this->Down.Key, this->Down.Velocity);   // set the channel
+                this->Lfo[1].HardReset (this->Down.Trigger);
+                this->pVoice[doit]->NoteSet(this->Down.Trigger, this->Down.Key, this->Down.Velocity);   // set the channel
+                }
             DBG ("Key down > %d   Velocity > %d  Port > %d", this->Down.Key, this->Down.Velocity, doit);
             this->Down.Trigger = 0;                         // release the trigger
             }

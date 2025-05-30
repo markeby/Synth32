@@ -82,6 +82,7 @@ namespace DISP_MESSAGE_N
         PAGE_MOD,
         PAGE_FILTER,
         PAGE_MIDI_MAP,
+        PAGE_CALIBRATION,
         PAGE_TUNING,
         PAGE_ADVANCE,
         NONE,

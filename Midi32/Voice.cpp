@@ -50,12 +50,9 @@ void VOICE_C::Loop ()
 //#######################################################################
 void VOICE_C::NoteSet (byte mchan, byte key, byte velocity)
     {
-    if ( mchan == this->Midi )
-        {
-        this->ActiveTimer = 1;
-        this->Key = key;
-        this->pOsc->NoteSet (key, velocity);
-        }
+    this->ActiveTimer = 1;
+    this->Key = key;
+    this->pOsc->NoteSet (key, velocity);
     }
 
 //#######################################################################

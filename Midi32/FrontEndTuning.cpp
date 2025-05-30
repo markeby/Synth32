@@ -101,7 +101,7 @@ void SYNTH_FRONT_C::TuningAdjust (bool up)
 //#######################################################################
 void SYNTH_FRONT_C::TuningBump (bool state)
     {
-    if ( SetTuning )
+    if ( this->SetTuning )
         {
         byte note = (state) ? 125 : 5;         // Highest F or lowest F
         DisplayMessage.TuningNote (note);
@@ -126,6 +126,8 @@ void SYNTH_FRONT_C::StartCalibration ()
     {
     if ( this->CalibrationPhase > 0 )
         return;
+
+    DisplayMessage.PageCalibration ();
 
     this->Lfo[0].SetOffset(0);
     this->Lfo[1].SetOffset (0);
@@ -191,9 +193,14 @@ void SYNTH_FRONT_C::Calibration (ushort val)
                         {
                         this->CalibrationPhase    = 0;
                         I2cDevices.ResetAnalog     (this->CalibrationAtoD);
-                        this->ResolveMapAllocation ();
+
+                        for (int z = 0;  z < 8;  z++ )                 // clear LFO ports
+                            I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, false);
+                        for (int z = 8;  z < 12;  z++ )                 // enable fixed offset ports
+                            I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, true);
+                        this->StartTuning ();
                         }
-                    break;
+                    return;
                     }
                 }
             lfo.SetOffset (offset + lfo.GetOffset());   // Update the offset value in the LFO

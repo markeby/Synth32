@@ -127,13 +127,12 @@ public:
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };
 
-
 //############################################
 //############################################
 class PAGE_TUNE_C
     {
 private:
-    const lv_font_t*        Tuningfont;
+    const lv_font_t*        TuningFont;
     lv_style_t              TuningStyle;
     lv_obj_t*               TuningTitle;
     NOTE_WIDGET_C*          Note;
@@ -144,6 +143,18 @@ private:
 public:
               PAGE_TUNE_C (lv_obj_t* base);
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    };
+
+//############################################
+//############################################
+class PAGE_CALIBRATE_C
+    {
+private:
+    const lv_font_t*        CalibFont;
+    lv_style_t              CalibStyle;
+
+public:
+              PAGE_CALIBRATE_C (lv_obj_t* base);
     };
 
 //############################################
@@ -162,13 +173,15 @@ private:
     lv_obj_t*               BasePageMod;
     lv_obj_t*               BasePageMap;
     lv_obj_t*               BasePageFilter;
+    lv_obj_t*               BasePageCalibration;
     lv_obj_t*               BasePageTuning;
 
     PAGE_OSC_C*             PageVoice[MAP_COUNT];
     PAGE_MOD_C*             PageMod;
     PAGE_MAPPING_C*         PageMap;
-    PAGE_TUNE_C*            PageTune;
     PAGE_FILTER_C*          PageFilter;
+    PAGE_CALIBRATE_C*       PageCalibrate;
+    PAGE_TUNE_C*            PageTune;
 
 public:
             GRPH_C              (void);

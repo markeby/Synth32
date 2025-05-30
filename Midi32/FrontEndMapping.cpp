@@ -29,7 +29,7 @@ static const char* LabelM = "M";
 void SYNTH_FRONT_C::UpdateMapModeDisplay (int sel)
     {
     if ( sel < MAP_COUNT )
-        DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.Voice[sel].GetVoiceMidi () - 1);
+        DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.Voice[sel].GetVoiceMidi ());
 
     else if ( sel < (MAP_COUNT * 2) )
         DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.Voice[sel - MAP_COUNT].GetVoiceNoise ());
@@ -68,9 +68,10 @@ void SYNTH_FRONT_C::MapModeBump (short down)
         {
         if ( zi < MAP_COUNT )
             {
-            z = this->SynthConfig.Voice[zi].GetVoiceMidi () + down;
-            if ( z < 0 )            z = MAX_MIDI - 1;
-            if ( z >= MAX_MIDI )    z = 0;
+            z = this->SynthConfig.Voice[zi].GetVoiceMidi ();
+            z += down;
+            if ( z < 1 )            z = MAX_MIDI;
+            if ( z > MAX_MIDI )     z = 1;
             this->SynthConfig.Voice[zi].SetVoiceMidi (z);
             break;
             }

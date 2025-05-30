@@ -374,7 +374,7 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
                 this->SelVoice[z]->Select (z == ch);
             if ( this->Selected < MAP_COUNT )
                 {
-                this->SelVoice[ch]->Set (value);
+                this->SelVoice[ch]->Set (value - 1);
                 ch = 255;
                 }
             else
@@ -424,9 +424,9 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int x = 155;
     int y = 140;
 
-    this->Tuningfont = &lv_font_montserrat_48;
+    this->TuningFont = &lv_font_montserrat_48;
     lv_style_init (&this->TuningStyle);
-    lv_style_set_text_font  (&this->TuningStyle, this->Tuningfont);
+    lv_style_set_text_font  (&this->TuningStyle, this->TuningFont);
     lv_style_set_text_color (&this->TuningStyle, lv_color_hex(0xF00000));
 
     this->TuningTitle = lv_label_create (base);
@@ -464,6 +464,30 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
+    PAGE_CALIBRATE_C::PAGE_CALIBRATE_C (lv_obj_t* base)
+    {
+    int         x = 155;
+    int         y = 140;
+    lv_obj_t*   ctitle;
+
+    this->CalibFont = &lv_font_montserrat_48;
+    lv_style_init (&this->CalibStyle);
+    lv_style_set_text_font  (&this->CalibStyle, this->CalibFont);
+    lv_style_set_text_color (&this->CalibStyle, lv_color_hex(0xF00000));
+
+    ctitle = lv_label_create (base);
+    lv_obj_set_pos    (ctitle, x + 45, 20);
+    lv_label_set_text (ctitle, "Calibrating");
+    lv_obj_add_style  (ctitle, &this->CalibStyle, 0);
+
+    ctitle = lv_label_create (base);
+    lv_obj_set_pos    (ctitle, x + 45, 80);
+    lv_label_set_text (ctitle, "Please wait");
+    lv_obj_add_style  (ctitle, &this->CalibStyle, 0);
+    }
+
+//#######################################################################
+//#######################################################################
     GRPH_C::GRPH_C ()
     {
     }
@@ -491,15 +515,16 @@ void GRPH_C::Begin ()
         PageVoice[z]     = new PAGE_OSC_C     (BasePageVoice[z]);
         }
     PageVoice[0]->SetPage (1);                              // initialize only the first voice page for midi allocation as default
-    BasePageMod    = lv_tabview_add_tab (Pages, "");
-    PageMod        = new PAGE_MOD_C     (BasePageMod);
-    BasePageFilter = lv_tabview_add_tab (Pages, "");
-    PageFilter     = new PAGE_FILTER_C  (BasePageFilter);
-    BasePageMap    = lv_tabview_add_tab (Pages, "");
-    PageMap        = new PAGE_MAPPING_C (BasePageMap);
-    BasePageTuning = lv_tabview_add_tab (Pages, "");
-    PageTune       = new PAGE_TUNE_C    (BasePageTuning);
-
+    BasePageMod         = lv_tabview_add_tab (Pages, "");
+    PageMod             = new PAGE_MOD_C     (BasePageMod);
+    BasePageFilter      = lv_tabview_add_tab (Pages, "");
+    PageFilter          = new PAGE_FILTER_C  (BasePageFilter);
+    BasePageMap         = lv_tabview_add_tab (Pages, "");
+    PageMap             = new PAGE_MAPPING_C (BasePageMap);
+    BasePageCalibration = lv_tabview_add_tab (Pages, "");
+    PageCalibrate       = new PAGE_CALIBRATE_C (BasePageCalibration);
+    BasePageTuning      = lv_tabview_add_tab (Pages, "");
+    PageTune            = new PAGE_TUNE_C    (BasePageTuning);
     PageSelect (PAGE_C::PAGE_OSC0);
 
     lvgl_port_unlock ();    // Release the mutex
@@ -526,7 +551,7 @@ void GRPH_C::PageSelect (PAGE_C page)
     while ( page == PAGE_C::PAGE_ADVANCE )
         {
         page = (PAGE_C)((byte)this->CurrentPage + 1);
-        if ( page == PAGE_C::PAGE_TUNING )
+        if ( page == PAGE_C::PAGE_CALIBRATION )
             page = PAGE_C::PAGE_OSC0;
         if ( (page <= PAGE_C::PAGE_OSC3) )
             break;

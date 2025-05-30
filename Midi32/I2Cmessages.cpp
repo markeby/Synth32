@@ -94,7 +94,7 @@ void I2C_MESSAGE_C::SetVoicePage (byte page, byte midi)
         sendBuffer[2] = midi;
         DBGM ("Set voice %d to page %d", (byte)page, (byte)midi);
         SendComplete (MESSAGE_LENGTH_PAGE);
-        CurrentVoicePage = page;
+        this->CurrentVoicePage = page;
         }
     }
 //###################################################################

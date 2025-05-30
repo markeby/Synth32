@@ -86,7 +86,7 @@ public:
         { this->Lfo[index].SetLevelMidi (mchan, data); }
     void     SelectModVCO           (short index, short ch, bool state)
         { if ( !this->MapSelectMode )   this->Lfo[index].SetWave (ch, state);  this->SynthConfig.SetSelect (index, ch, state); }
-    void     SetModRampDir         (short index, bool state)
+    void     SetModRampDir          (short index, bool state)
         { if ( !this->MapSelectMode )   this->Lfo[index].SetRampDir (state);  this->SynthConfig.SetRampDir (index, state); }
 
     void MidiMapMode                (void);
@@ -101,25 +101,26 @@ public:
 
     //#######################################################################
     // FrontEndOscCtrl.cpp
-    void VoiceSelectedCheck         (void);
-    void VoiceComponentSetSelected  (short chan, bool state);
-    void SetMaxLevel                (short ch, short data);
-    void SetAttackTime              (short data);
-    void SetDecayTime               (short data);
-    void SetSustainLevel            (short ch, short data);
-    void SetReleaseTime             (short data);
-    void ToggleRampDirection        (void);
-    void SetPulseWidth              (short data);
+    void VoiceSelectedCheck             (void);
+    void ResetVoiceComponentSetSelected (void);
+    void VoiceComponentSetSelected      (short chan, bool state);
+    void SetMaxLevel                    (short ch, short data);
+    void SetAttackTime                  (short data);
+    void SetDecayTime                   (short data);
+    void SetSustainLevel                (short ch, short data);
+    void SetReleaseTime                 (short data);
+    void ToggleRampDirection            (void);
+    void SetPulseWidth                  (short data);
 
     //#######################################################################
     // FrontEndTuning.cpp
-    void Tuning                     (void);
-    void TuningAdjust               (bool up);
-    void TuningBump                 (bool state);
-    void StartTuning                (void);
-    void SaveTuning                 (void);
-    void Calibration                (ushort val);
-    void StartCalibration           (void);
+    void Tuning                         (void);
+    void TuningAdjust                   (bool up);
+    void TuningBump                     (bool state);
+    void StartTuning                    (void);
+    void SaveTuning                     (void);
+    void Calibration                    (ushort val);
+    void StartCalibration               (void);
 
     //#######################################################################
     inline void SetClearKeyRed (byte key)

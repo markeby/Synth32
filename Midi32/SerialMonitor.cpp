@@ -91,7 +91,7 @@ void MONITOR_C::InputPrompt (const char* text)
 //#######################################################################
 void MONITOR_C::Tuning ()
     {
-    SynthFront.StartTuning ();
+    SynthFront.StartCalibration ();
     this->Menu ();
     }
 

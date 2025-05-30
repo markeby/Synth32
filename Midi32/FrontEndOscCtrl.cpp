@@ -43,12 +43,24 @@ void SYNTH_FRONT_C::VoiceSelectedCheck ()
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::ResetVoiceComponentSetSelected ()
+    {
+    byte val = 0x0C;
+
+    for (int z = 0;  z < OSC_MIXER_COUNT; z++)
+        {
+        this->SynthConfig.Voice[z].SelectedEnvelope[z] = false;
+        this->ShowVoiceXL (val);
+        DisplayMessage.OscSelected (z, false);
+        }
+    }
+
+//#######################################################################
 void SYNTH_FRONT_C::VoiceComponentSetSelected (short chan, bool state)
     {
     byte val = 0x0C;
 
     this->VoiceSelectedCheck ();
-
     this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[chan] = state;
     for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
         {
@@ -56,7 +68,7 @@ void SYNTH_FRONT_C::VoiceComponentSetSelected (short chan, bool state)
             val = 0x3C;
         }
     this->ShowVoiceXL (val);
-    DisplayMessage.OscSelected (chan, this->SynthConfig.Voice[this->CurrentMapSelected].SelectedEnvelope[chan]);
+    DisplayMessage.OscSelected (chan, state);
     }
 
 //#####################################################################
@@ -77,10 +89,12 @@ void SYNTH_FRONT_C::SetMaxLevel (short ch, short data)
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetMaxLevel (ch, val);
             this->pVoice[z]->SetMaxLevel (ch, val);
+            }
         }
 
-    this->SynthConfig.Voice[this->CurrentMapSelected].SetMaxLevel (ch, val);
     DisplayMessage.OscMaxLevel (ch, data);
     }
 
@@ -93,14 +107,16 @@ void SYNTH_FRONT_C::SetAttackTime (short data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if (this->SynthConfig.Voice[this->CurrentMapSelected].SelectedEnvelope[ch] )
+        if (this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < VOICE_COUNT;  z++ )
                 {
                 if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+                    {
+                    this->SynthConfig.Voice[z >> 1].SetAttackTime (ch, dtime);
                     this->pVoice[z]->SetAttackTime (ch, dtime);
+                    }
                 }
-            this->SynthConfig.Voice[this->CurrentMapSelected].SetAttackTime (ch, dtime);
             DisplayMessage.OscAttackTime (ch, data);
             }
         }
@@ -115,14 +131,16 @@ void SYNTH_FRONT_C::SetDecayTime (short data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SynthConfig.Voice[this->CurrentMapSelected].SelectedEnvelope[ch] )
+        if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < VOICE_COUNT;  z++)
                 {
                 if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+                    {
+                    this->SynthConfig.Voice[z >> 1].SetDecayTime (ch, dtime);
                     this->pVoice[z]->SetDecayTime (ch, dtime);
+                    }
                 }
-            this->SynthConfig.Voice[this->CurrentMapSelected].SetDecayTime (ch, dtime);
             DisplayMessage.OscDecayTime (ch, data);
             }
         }
@@ -137,14 +155,16 @@ void SYNTH_FRONT_C::SetReleaseTime (short data)
 
     for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
         {
-        if ( this->SynthConfig.Voice[this->CurrentMapSelected].SelectedEnvelope[ch] )
+        if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
             {
             for ( int z = 0;  z < VOICE_COUNT;  z++)
                 {
                 if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+                    {
+                    this->SynthConfig.Voice[z >> 1].SetReleaseTime (ch, dtime);
                     this->pVoice[z]->SetReleaseTime (ch, dtime);
+                    }
                 }
-            this->SynthConfig.Voice[this->CurrentMapSelected].SetReleaseTime (ch, dtime);
             DisplayMessage.OscReleaseTime (ch, data);
             }
         }
@@ -159,26 +179,28 @@ void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetSustainLevel (ch, val);
             this->pVoice[z]->SetSustainLevel (ch, val);
+            }
         }
-    this->SynthConfig.Voice[this->CurrentMapSelected].SetSustainLevel (ch, val);
     DisplayMessage.OscSustainLevel (ch, data);
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::ToggleRampDirection ()
     {
-     this->VoiceSelectedCheck ();
+    this->VoiceSelectedCheck ();
 
     bool zb = ! this->SynthConfig.Voice[this->CurrentMapSelected].GetRampDirection ();
-
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetRampDirection (zb);
             this->pVoice[z]->SetRampDirection (zb);
+            }
         }
-
-    this->SynthConfig.Voice[this->CurrentMapSelected].SetRampDirection (zb);
     DisplayMessage.OscRampDirection (zb);
     }
 
@@ -191,9 +213,11 @@ void SYNTH_FRONT_C::SetPulseWidth (short data)
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetPulseWidth (percent);
             this->pVoice[z]->SetPulseWidth (percent);
+            }
         }
-    this->SynthConfig.Voice[this->CurrentMidiSelected, this->CurrentMapSelected].SetPulseWidth (percent);
     DisplayMessage.OscPulseWidth (data);
     }
 

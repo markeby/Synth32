@@ -141,15 +141,6 @@ static void PageAdvance (short ch, short data)
     }
 
 //########################################################
-// Debug to advance page selection
-//########################################################
-static void DebugPageAdvance (short ch, short data)
-    {
-    if ( data )
-        DisplayMessage.PageAdvance ();
-    }
-
-//########################################################
 //  Channel to voice mapping controls
 //########################################################
 static void TrackSel (short ch, short data)
@@ -234,7 +225,7 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 51
         { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 52
         { 0x53,             0x1F, "Set Pulse",          SetTimeSetSelect  },    // 53
-        { 0x54,             0x1F, "Set Square",         SetTimeSetSelect  },    // 54
+        { 0x54,             0x1F, "Set Noise",          SetTimeSetSelect  },    // 54
         { 0x55,                0, "N ",                 nullptr           },    // 55
         { 0x56,                0, "N ",                 nullptr           },    // 56
         { 0x57,             0x1F, "Sawtooth Dir",       SawtoothDirection },    // 57
@@ -250,9 +241,9 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         { 0x61,             0x1F, "Send Sel DN",        SendDir           },    // 61
         { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 62
         { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 63
-        { 0x64,             0x1F, "Debug Page Advance", DebugPageAdvance  },    // 64
+        { 0x64,             0x1F, "Page Advance",       PageAdvance       },    // 64
         { 0x65,                0, "N ",                 nullptr           },    // 65
-        { 0x66,             0x1F, "Page Advance",       PageAdvance       },    // 66
+        { 0x66,                0, "N ",                 nullptr           },    // 66
         { 0x67,             0x1F, "Save Configuration", SaveConfig        },    // 67
     };
 

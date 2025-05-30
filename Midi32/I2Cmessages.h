@@ -56,6 +56,12 @@ public:
         }
 
     //#################################################
+    inline void PageCalibration (void)
+        {
+        this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_CALIBRATION);
+        }
+
+    //#################################################
     inline void PageTuning (void)
         {
         this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
