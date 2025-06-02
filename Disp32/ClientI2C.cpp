@@ -83,22 +83,25 @@ void MESSAGE_CLIENT_C::Process ()
             case CMD_C::UPDATE_PAGE_VOICE:           // 5 byte message
                 Graphics.UpdatePageVoice (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::UPDATE_PAGE_MOD:            // 5 byte messag
+            case CMD_C::UPDATE_PAGE_MOD:            // 5 byte message
                 Graphics.UpdatePageMod (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::UPDATE_PAGE_FILTER:         // 5 byte messag
+            case CMD_C::UPDATE_PAGE_FILTER:         // 5 byte message
                 Graphics.PageSelect (PAGE_C::PAGE_FILTER);
                 break;
-            case CMD_C::UPDATE_PAGE_TUNING:         // 5 byte messag
+            case CMD_C::UPDATE_PAGE_TUNING:         // 5 byte message
                 Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::UPDATE_PAGE_MAP:            // 5 byte messag
+            case CMD_C::UPDATE_PAGE_MAP:            // 5 byte message
                 Graphics.UpdatePageMap ((uint8_t)ptop.Channel, ptop.Effect, value);
                 break;
-            case CMD_C::RESET:                      // 3 byte messag
+            case CMD_C::UPDATE_PAGE_LOAD_SAVE:      // 5 byte meesage
+                Graphics.UpdatePageLoadSave  (ptop.Effect, value);
+                break;
+            case CMD_C::RESET:                      // 3 byte message
                 ESP.restart ();
                 break;
-            case CMD_C::PAGE_SHOW:                  // 3 byte messag
+            case CMD_C::PAGE_SHOW:                  // 3 byte message
                 Graphics.PageSelect ((PAGE_C)ptop.Bytes[2]);
                 break;
             default:                                // any other message goes nowher

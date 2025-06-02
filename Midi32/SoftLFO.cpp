@@ -38,7 +38,7 @@ void SOFT_LFO_C::Loop (float millisec)
     float zf = this->Current / this->WaveLength;
 
     // Calculate position in sine wave and factor in modulation wheel position
-    this->Sine = (sin (zf  * 6.28) + 1.0) * 0.5 * Modulation;
+    this->Sine = (sin (zf  * 6.28) + 1.0) * Modulation;
 //    I2cDevices.D2Analog (87, (uint16_t)((1.0 + Sine) * 2047.0));
     }
 
@@ -47,8 +47,8 @@ void SOFT_LFO_C::Multiplier (byte mchan, float value)
     {
     if ( mchan == Midi )
         {
-        Modulation = value;
-        DBG ("Modulation = %f", Modulation);
+        this->Modulation = value;
+        DBG ("Modulation = %f", value);
         }
     }
 

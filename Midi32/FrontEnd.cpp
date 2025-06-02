@@ -29,7 +29,7 @@ static const char* LabelM = "M";
 static      USB Usb;
 static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
-//static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
+static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 
 #define SENDnote0(k,c) {Midi_0.sendNoteOn(k,c,1);DBGM("Note 0x%X  Color = 0x%X  [%s]", k, c,__PRETTY_FUNCTION__);}
 #define SENDcc0(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
@@ -147,11 +147,10 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, M
     this->Up.Velocity         = 0;
     this->SetTuning           = false;
     this->TuningChange        = false;
-    this->ClearEntryRed       = 0;
-    this->ClearEntryRedL      = 0;
     this->CurrentMapSelected  = 0;
     this->CurrentMidiSelected = 1;
-    this->CalibrationPhase         = 0;
+    this->CalibrationPhase    = 0;
+    this->LoadSaveSelection   = 1;
     }
 
 //#######################################################################
@@ -202,8 +201,8 @@ void SYNTH_FRONT_C::Begin (short osc_d_a, short mux_digital, short noise_digital
 //  Midi_1.setHandleSystemReset          (SystemResetCallback fptr);
 
 //  Midi_2.setHandleMessage              (FuncMessage);
-//  Midi_2.setHandleNoteOn               (FuncKeyDown);
-//  Midi_2.setHandleNoteOff              (FuncKeyUp);
+    Midi_2.setHandleNoteOn               (FuncKeyDown);
+    Midi_2.setHandleNoteOff              (FuncKeyUp);
 //  Midi_2.setHandleControlChange        (FuncController);
 //  Midi_2.setHandlePitchBend            (FuncPitchBend);
 //  Midi_2.setHandleError                (ErrorCallback fptr);
@@ -235,9 +234,9 @@ void SYNTH_FRONT_C::Begin (short osc_d_a, short mux_digital, short noise_digital
     Midi_1.begin (MIDI_CHANNEL_OMNI);
     printf ("\t>>> Serial1 midi ready\n");
 
-//  Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
-//  Midi_2.begin (MIDI_CHANNEL_OMNI);
-//  printf ("\t>>> Serial2 midi ready\n");
+    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+    Midi_2.begin (MIDI_CHANNEL_OMNI);
+    printf ("\t>>> Serial2 midi ready\n");
 
     // Setup ports for calibration
     CalibrationBaseDigital = mod_mux_digital;
@@ -430,21 +429,12 @@ void SYNTH_FRONT_C::Loop ()
     int doit   = -1;
 
     this->Lfo[0].Loop ();
-//  if ( this->ClearEntryRed )
-//      {
-//      SENDcc0 (this->ClearEntryRed, 0x3F);
-//      this->ClearEntryRed = 0;
-//      }
-//  if ( this->ClearEntryRedL )
-//      {
-//      SENDcc0 (this->ClearEntryRedL, 0x0D);
-//      this->ClearEntryRedL = 0;
-//      }
+    this->Lfo[1].Loop ();
 
     Usb.Task    ();
     Midi_0.read ();
     Midi_1.read ();
-//    Midi_2.read ();
+    Midi_2.read ();
 
     if ( !SetTuning )
         {

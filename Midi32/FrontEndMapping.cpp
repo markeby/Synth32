@@ -61,7 +61,7 @@ void SYNTH_FRONT_C::MidiMapMode ()
 //#####################################################################
 void SYNTH_FRONT_C::MapModeBump (short down)
     {
-    int z;
+    short z;
     ushort zi = this->CurrentMapSelected;
 
     while ( true )
@@ -138,7 +138,8 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
     this->ResetXL  ();
 
     DisplayMessage.Unlock ();
-    this->MapSelectMode = false;
+    this->LoadSaveMode   = false;
+    this->MapSelectMode  = false;
     this->ResolutionMode = true;
 
     for ( short z = 0;  z <= MAP_COUNT;  z++ )              // make sure any subsequent config of the same midi address match completely
@@ -223,8 +224,7 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 
     this->Lfo[0].SetMidi (this->SynthConfig.GetModMidi (0));
     this->Lfo[1].SetMidi (this->SynthConfig.GetModMidi (1));
-    SoftLFO.SetMidi      (this->SynthConfig.GetModMidi (3));
-
+    SoftLFO.SetMidi      (this->SynthConfig.GetModMidi (2));
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         this->SelectModVCA (z, this->SynthConfig.GetModSoftMixer (z));
 
@@ -257,5 +257,43 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 void SYNTH_FRONT_C::SaveDefaultConfig ()
     {
     this->SynthConfig.Save (0);
+    this->LoadSaveMode = false;
+
     }
+
+//#####################################################################
+void SYNTH_FRONT_C::LoadSelectedConfig ()
+    {
+    DisplayMessage.LoadMessage ();
+    this->SynthConfig.Load (this->LoadSaveSelection);
+    this->ResolveMapAllocation ();
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::SaveSelectedConfig ()
+    {
+    DisplayMessage.SaveMessage ();
+    this->SynthConfig.Save (this->LoadSaveSelection);
+    this->ResolveMapAllocation ();
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::LoadSaveBump (short down)
+    {
+    short z = this->LoadSaveSelection;
+    z += down;
+    if ( z < 1 )                z = MAX_LOAD_SAVE;
+    if ( z > MAX_LOAD_SAVE )    z = 1;
+    this->LoadSaveSelection = z;
+    DisplayMessage.SendLoadSave (z);
+    }
+
+//#####################################################################
+void SYNTH_FRONT_C::OpenLoadSavePage ()
+    {
+    DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_LOAD_SAVE);
+    LoadSaveMode = true;
+    DisplayMessage.SendLoadSave (this->LoadSaveSelection);
+    }
+
 

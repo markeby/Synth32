@@ -46,6 +46,7 @@ namespace DISP_MESSAGE_N
         UPDATE_PAGE_FILTER,
         UPDATE_PAGE_MAP,
         UPDATE_PAGE_TUNING,
+        UPDATE_PAGE_LOAD_SAVE,
         };
 
     //###########################################
@@ -84,6 +85,7 @@ namespace DISP_MESSAGE_N
         PAGE_MIDI_MAP,
         PAGE_CALIBRATION,
         PAGE_TUNING,
+        PAGE_LOAD_SAVE,
         PAGE_ADVANCE,
         NONE,
         };
@@ -168,6 +170,8 @@ namespace DISP_MESSAGE_N
         NOTE,
         NOISE,
         MAP_VOICE,
+        MESSAGE,
+        VALUE,
         };
 
     //###########################################

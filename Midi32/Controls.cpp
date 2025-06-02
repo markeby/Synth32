@@ -170,23 +170,43 @@ static void TrackSel (short ch, short data)
 //########################################################
 static void SendDir (short index, short data)
     {
-    if ( SynthFront.GetMidiMapMode () )
+    if ( data )
         {
-        if ( data )
+        if ( SynthFront.GetMidiMapMode () )
             SynthFront.MapModeBump (( index ) ? -1 : 1);
+        else if ( SynthFront.GetLoadSaveMode () )
+            SynthFront.LoadSaveBump (( index ) ? -1 : 1);
+        }
+    }
+
+//########################################################
+static void LoadConfig (short index, short data)
+    {
+    if ( data )
+        {
+        if ( SynthFront.GetLoadSaveMode () )
+            SynthFront.LoadSelectedConfig ();
+        else
+            SynthFront.OpenLoadSavePage ();
         }
     }
 
 //########################################################
 static void SaveConfig (short index, short data)
     {
-    if ( SynthFront.GetMidiMapMode () )
+    if ( data )
         {
-        if ( data )
+        if ( SynthFront.GetMidiMapMode() )
             SynthFront.SaveDefaultConfig ();
+        else if ( SynthFront.GetLoadSaveMode () )
+            SynthFront.SaveSelectedConfig ();
+        else
+            SynthFront.OpenLoadSavePage ();
+
         }
     }
 
+//########################################################
 //########################################################
 MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
     {   {    0,                0, "N ",                 nullptr           },    // 30
@@ -242,9 +262,9 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 62
         { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 63
         { 0x64,             0x1F, "Page Advance",       PageAdvance       },    // 64
-        { 0x65,                0, "N ",                 nullptr           },    // 65
-        { 0x66,                0, "N ",                 nullptr           },    // 66
-        { 0x67,             0x1F, "Save Configuration", SaveConfig        },    // 67
+        { 0x65,             0x1F, "Save Configuration", SaveConfig        },    // 65
+        { 0x66,             0x1F, "Load Configuration", LoadConfig        },    // 66
+        { 0x67,                0, "N ",                 nullptr           },    // 67
     };
 
 LED_NOTE_MAP SendA[]     = { 13, 29, 45, 61, 77, 93, 109, 125 };

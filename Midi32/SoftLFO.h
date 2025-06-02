@@ -18,7 +18,6 @@ private:
     float   Sine;
     float   Modulation;
     byte    Midi;
-    bool    Mixer[OSC_MIXER_COUNT];
 
 public:
          SOFT_LFO_C     (void);
@@ -30,8 +29,6 @@ public:
 
     void  SetMidi       (byte mchan)                    { this->Midi = mchan; }
     byte  GetMidi       (void)                          { return (this->Midi); }
-    void  SetMixer      (short index, bool data)        { this->Mixer[index] = data; }
-    bool  GetMixer      (short index)                   { return (this->Mixer[index]); }
     float GetSin        (void)                          { return (( this->Modulation > .05 ) ? this->Sine : 0.0); }
     };
 

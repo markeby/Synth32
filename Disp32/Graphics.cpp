@@ -452,7 +452,7 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             this->LevelTuning[ch]->SetLevel (value);
             break;
         case EFFECT_C::NOTE:
-            Note->SetValue (value);
+            this->Note->SetValue (value);
             break;
         case EFFECT_C::SELECTED:
             this->TuneSelection->Set (ch, value);
@@ -467,7 +467,6 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     PAGE_CALIBRATE_C::PAGE_CALIBRATE_C (lv_obj_t* base)
     {
     int         x = 155;
-    int         y = 140;
     lv_obj_t*   ctitle;
 
     this->CalibFont = &lv_font_montserrat_48;
@@ -484,6 +483,71 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_pos    (ctitle, x + 45, 80);
     lv_label_set_text (ctitle, "Please wait");
     lv_obj_add_style  (ctitle, &this->CalibStyle, 0);
+    }
+
+//#######################################################################
+//#######################################################################
+    PAGE_LOAD_SAVE_C::PAGE_LOAD_SAVE_C (lv_obj_t* base) : PAGE_TITLE_C (base, "LOAD / SAVE")
+    {
+    lv_obj_t*   panel;
+    int         x = 210;
+    int         y = 150;
+
+    panel = lv_obj_create (base);
+    lv_obj_set_size             (panel, 328, 188);
+    lv_obj_set_pos              (panel, x, y);
+    lv_obj_set_style_pad_top    (panel, 0, 0);
+    lv_obj_set_style_pad_bottom (panel, 0, 0);
+    lv_obj_set_style_pad_left   (panel, 2, 0);
+    lv_obj_set_style_pad_right  (panel, 2, 0);
+
+    this->Selection  = new SELECT_WIDGET_C (panel, "Selection",   62, 20, 180, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20", 32);
+//    this->Selection->Select (true);
+
+    this->MessageFont = &lv_font_montserrat_38;
+    lv_style_init (&this->MessageStyle);
+    lv_style_set_text_font (&this->MessageStyle, this->MessageFont);
+    this->Message = lv_label_create (panel);
+    lv_obj_add_style  (this->Message, &this->MessageStyle, 0);
+    }
+
+//#######################################################################
+void PAGE_LOAD_SAVE_C::UpdatePage (EFFECT_C effect, short value)
+    {
+    String str;
+    switch ( effect )
+        {
+        case EFFECT_C::MESSAGE:
+            switch ( value )
+                {
+                case 1:
+                    str = "LOADING #" + String (this->SelectedValue);
+                    break;
+                case 2:
+                    str = "SAVING #" + String (this->SelectedValue);
+                    break;
+                default:
+                    str.clear ();
+                    break;
+                }
+            this->SetMessage (str.c_str ());
+            break;
+        case EFFECT_C::VALUE:
+            this->SetMessage ("");
+
+            this->SelectedValue = value;
+            this->Selection->Set (value - 1);
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
+void PAGE_LOAD_SAVE_C::SetMessage (const char* str)
+    {
+    lv_label_set_text (this->Message, str);
+    lv_obj_align      (this->Message, LV_ALIGN_BOTTOM_MID, 0, -11);
     }
 
 //#######################################################################
@@ -515,19 +579,35 @@ void GRPH_C::Begin ()
         PageVoice[z]     = new PAGE_OSC_C     (BasePageVoice[z]);
         }
     PageVoice[0]->SetPage (1);                              // initialize only the first voice page for midi allocation as default
-    BasePageMod         = lv_tabview_add_tab (Pages, "");
-    PageMod             = new PAGE_MOD_C     (BasePageMod);
-    BasePageFilter      = lv_tabview_add_tab (Pages, "");
-    PageFilter          = new PAGE_FILTER_C  (BasePageFilter);
-    BasePageMap         = lv_tabview_add_tab (Pages, "");
-    PageMap             = new PAGE_MAPPING_C (BasePageMap);
-    BasePageCalibration = lv_tabview_add_tab (Pages, "");
+    BasePageMod         = lv_tabview_add_tab   (Pages, "");
+    PageMod             = new PAGE_MOD_C       (BasePageMod);
+    BasePageFilter      = lv_tabview_add_tab   (Pages, "");
+    PageFilter          = new PAGE_FILTER_C    (BasePageFilter);
+    BasePageMap         = lv_tabview_add_tab   (Pages, "");
+    PageMap             = new PAGE_MAPPING_C   (BasePageMap);
+    BasePageCalibration = lv_tabview_add_tab   (Pages, "");
     PageCalibrate       = new PAGE_CALIBRATE_C (BasePageCalibration);
-    BasePageTuning      = lv_tabview_add_tab (Pages, "");
-    PageTune            = new PAGE_TUNE_C    (BasePageTuning);
+    BasePageTuning      = lv_tabview_add_tab   (Pages, "");
+    PageTune            = new PAGE_TUNE_C      (BasePageTuning);
+    BasePageLoadSave    = lv_tabview_add_tab   (Pages, "");
+    PageLoadSave        = new PAGE_LOAD_SAVE_C (BasePageLoadSave);
+
     PageSelect (PAGE_C::PAGE_OSC0);
 
     lvgl_port_unlock ();    // Release the mutex
+    }
+
+//#######################################################################
+void GRPH_C::ClearData (short num)
+    {
+    switch ( num )
+        {
+        case 0:
+            PageLoadSave->SetMessage ("");
+            break;
+        default:
+            break;
+        }
     }
 
 //#######################################################################

@@ -34,6 +34,9 @@
 // Number of modululation multiplex inputs
 #define NUM_MOD_MUX_IN      3
 
+// Number of configurations that can be stored
+#define MAX_LOAD_SAVE       20
+
 // Detent multiplier for midi at 10mSec intervals
 #define TIME_MULT           10
 

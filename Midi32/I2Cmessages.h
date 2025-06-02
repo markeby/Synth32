@@ -302,6 +302,33 @@ public:
                              ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
                              wave);
         }
+    //#################################################
+    inline void SendLoadSave (uint16_t value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
+                          0,
+                          0,
+                          DISP_MESSAGE_N::EFFECT_C::VALUE,
+                          value);
+        }
+    //#################################################
+    inline void LoadMessage (void)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
+                          0,
+                          0,
+                          DISP_MESSAGE_N::EFFECT_C::MESSAGE,
+                          1);
+        }
+    //#################################################
+    inline void SaveMessage (void)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
+                          0,
+                          0,
+                          DISP_MESSAGE_N::EFFECT_C::MESSAGE,
+                          2);
+        }
     };
 
 extern I2C_MESSAGE_C DisplayMessage;

@@ -233,10 +233,6 @@ void MONITOR_C::MenuSel (void)
                     this->InputPrompt ("  Enter SSID");
                     this->Mode (INSSID);
                     break;
-                case 'X':
-                    SynthFront.SaveTuning ();
-                    this->Mode (MENU);
-                    break;
                 case 'P':
                     this->InputString = Settings.GetPasswd ();
                     this->InputPrompt ("  Enter PWD");
@@ -258,7 +254,6 @@ void MONITOR_C::MenuSel (void)
                 case 'x':           // Test function #2
                     break;
                 case 'c':           // Test function #3
-                    SynthFront.StartCalibration ();
                     break;
                 case 'v':           // Test function #4
                     break;
@@ -284,14 +279,14 @@ void MONITOR_C::Menu (void)
     Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
     Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
     Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
-    Serial << "\ts   - Dump process Stats" << endl;
-    Serial << "\tX   - Save synth oscillator tunning" << endl;
     Serial << "\td   - Save debug flags" << endl;
-    Serial << "\n";
+    Serial << "\ts   - Dump process Stats" << endl;
+    Serial << endl;
     Serial << "\tz   - Test function #1" << endl;
     Serial << "\tx   - Test function #2" << endl;
     Serial << "\tc   - Test function #3" << endl;
     Serial << "\tv   - Test function #4" << endl;
+    Serial << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
     Serial << "\tC   - Clear configuration settings" << endl;

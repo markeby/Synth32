@@ -142,7 +142,7 @@ private:
 
 public:
               PAGE_TUNE_C (lv_obj_t* base);
-    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void      UpdatePage  (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };
 
 //############################################
@@ -155,6 +155,27 @@ private:
 
 public:
               PAGE_CALIBRATE_C (lv_obj_t* base);
+    };
+
+//############################################
+//############################################
+class PAGE_LOAD_SAVE_C : protected PAGE_TITLE_C
+    {
+private:
+    const lv_font_t*        LoadSaveFont;
+    lv_style_t              LoadSaveStyle;
+    SELECT_WIDGET_C*        Selection;
+
+    const lv_font_t*        MessageFont;
+    lv_style_t              MessageStyle;
+    lv_obj_t*               Message;
+
+    short                   SelectedValue;
+
+public:
+              PAGE_LOAD_SAVE_C (lv_obj_t* base);
+    void      UpdatePage       (DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void      SetMessage       (const char* str);
     };
 
 //############################################
@@ -175,6 +196,7 @@ private:
     lv_obj_t*               BasePageFilter;
     lv_obj_t*               BasePageCalibration;
     lv_obj_t*               BasePageTuning;
+    lv_obj_t*               BasePageLoadSave;
 
     PAGE_OSC_C*             PageVoice[MAP_COUNT];
     PAGE_MOD_C*             PageMod;
@@ -182,10 +204,12 @@ private:
     PAGE_FILTER_C*          PageFilter;
     PAGE_CALIBRATE_C*       PageCalibrate;
     PAGE_TUNE_C*            PageTune;
+    PAGE_LOAD_SAVE_C*       PageLoadSave;
 
 public:
             GRPH_C              (void);
     void    Begin               (void);
+    void    ClearData           (short num);
     void    Pause               (bool state);
     void    SetPage             (byte num, byte midi);
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
@@ -194,6 +218,7 @@ public:
     inline void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
     inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice[index]->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
     };
 
 extern GRPH_C  Graphics;

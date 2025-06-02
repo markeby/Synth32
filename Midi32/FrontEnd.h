@@ -41,15 +41,14 @@ private:
 
     bool                  ResolutionMode;
     bool                  MapSelectMode;
+    bool                  LoadSaveMode;
     SYNTH_CONFIG_C        SynthConfig;
     short                 CurrentMidiSelected;
     short                 CurrentMapSelected;
     short                 CurrentVoiceSelected;
-
+    short                 LoadSaveSelection;
 
     bool                  SetTuning;
-    byte                  ClearEntryRed;
-    byte                  ClearEntryRedL;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  TuningOn[VOICE_COUNT];
     bool                  TuningChange;
@@ -81,7 +80,6 @@ public:
     void SelectModVCA               (byte ch, bool state);
     void FreqLFO                    (short ch, short data);
     void PitchBend                  (byte mchan, short value);
-
     void     SetLevelLFO            (short index, byte mchan, short data)
         { this->Lfo[index].SetLevelMidi (mchan, data); }
     void     SelectModVCO           (short index, short ch, bool state)
@@ -90,6 +88,8 @@ public:
         { if ( !this->MapSelectMode )   this->Lfo[index].SetRampDir (state);  this->SynthConfig.SetRampDir (index, state); }
 
     void MidiMapMode                (void);
+    bool GetLoadSaveMode            (void)
+        { return (LoadSaveMode); }
     bool GetMidiMapMode             (void)
         { return (this->MapSelectMode); }
     void MapModeBump                (short down);
@@ -98,6 +98,10 @@ public:
         { return (this->MapSelectMode); }
     void ResolveMapAllocation       (void);
     void SaveDefaultConfig          (void);
+    void LoadSelectedConfig         (void);
+    void SaveSelectedConfig         (void);
+    void LoadSaveBump               (short down);
+    void OpenLoadSavePage           (void);
 
     //#######################################################################
     // FrontEndOscCtrl.cpp
@@ -121,18 +125,8 @@ public:
     void SaveTuning                     (void);
     void Calibration                    (ushort val);
     void StartCalibration               (void);
-
-    //#######################################################################
-    inline void SetClearKeyRed (byte key)
-        {
-        this->ClearEntryRed = key;
-        }
-
-    //#######################################################################
     inline bool IsInTuning (void)
-        {
-        return (this->SetTuning);
-        }
+        { return (this->SetTuning); }
 
     //#######################################################################
     inline void KeyDown (byte mchan, byte key, byte velocity)

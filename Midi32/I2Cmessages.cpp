@@ -66,7 +66,7 @@ void I2C_MESSAGE_C::Page (PAGE_C page)
             sendBuffer[2] = (byte)page;
             DBGM ("Page %d", (byte)page);
             SendComplete (MESSAGE_LENGTH_PAGE);
-            if ( (page == PAGE_C::PAGE_TUNING) || (page == PAGE_C::PAGE_MIDI_MAP) )
+            if ( (page == PAGE_C::PAGE_TUNING) || (page == PAGE_C::PAGE_MIDI_MAP) || (page == PAGE_C::PAGE_LOAD_SAVE) )
                 this->Lock = true;
             }
         }
