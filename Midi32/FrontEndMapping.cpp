@@ -155,20 +155,20 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
     char lastMidi = 0;
     for ( short z = 0;  z < MAP_COUNT;  z++ )
         {
-        short                 v    = z * 2;                                   // calculate voice pair
-        VOICE_C&              v0   = *(pVoice[v]);                            // Voice pair for this configuration processing
+        short                 v    = z * 2;                         // calculate voice pair
+        VOICE_C&              v0   = *(pVoice[v]);                  // Voice pair for this configuration processing
         VOICE_C&              v1   = *(pVoice[v + 1]);
-        SYNTH_VOICE_CONFIG_C& sc   = this->SynthConfig.Voice[z];   // Configuration data for this voice pair
-        byte                  m    = sc.GetVoiceMidi ();                      // Get the midi value for voice pair
+        SYNTH_VOICE_CONFIG_C& sc   = this->SynthConfig.Voice[z];    // Configuration data for this voice pair
+        byte                  m    = sc.GetVoiceMidi ();            // Get the midi value for voice pair
         bool                  newm = false;
 
         if ( m != lastMidi )
             {
             newm = true;
-            DisplayMessage.SetVoicePage(z, m);                 // Tell the display to setup voice display for this MIDI channel
+                DisplayMessage.SetVoicePage(z, m);              // Tell the display to setup voice display for this MIDI channel
             }
         else
-            DisplayMessage.SetVoicePage(z, 0);          // No new midi channel
+            DisplayMessage.SetVoicePage(z, 0);                  // No new midi channel
 
         lastMidi = m;
 
@@ -177,23 +177,19 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
         v1.SetMidi (m);
 
         // configure hardware LFOs
-        v0.SetModMux (0);                                   // set to zero in case none are touched below
+        v0.SetModMux (0);                                       // set to zero in case none are touched below
         v1.SetModMux (0);
         for ( short v = 0;  v < 2;  v++ )
             {
-            if ( m == this->SynthConfig.GetModMidi (v) )    // Detect MIDI matching
+            if ( m == this->SynthConfig.GetModMidi (v) )        // Detect MIDI matching
                 v0.SetModMux (v + 1);
             }
-        v0.SetMux (0, false);                               // set to zero to be sure and turn off what isn't to be used
-        v0.SetMux (1, false);
-        v1.SetMux (0, false);
-        v1.SetMux (1, false);
-        v0.SetMux (this->SynthConfig.Voice[z].GetOutputEnable (), true);
-        v1.SetMux (this->SynthConfig.Voice[z].GetOutputEnable (), true);
+        v0.SetMux (sc.GetOutputEnable ());
+        v1.SetMux (sc.GetOutputEnable ());
 
         // Set selected noise
-        v0.NoiseSelect (this->SynthConfig.Voice[z].GetVoiceNoise ());
-        v1.NoiseSelect (this->SynthConfig.Voice[z].GetVoiceNoise ());
+        v0.NoiseSelect (sc.GetVoiceNoise ());
+        v1.NoiseSelect (sc.GetVoiceNoise ());
 
         for ( short v = 0;  v < OSC_MIXER_COUNT;  v++ )
             {

@@ -1,0 +1,726 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "563f23d8-934b-4115-98d7-44163ccbc554")
+	(paper "USLegal")
+	(lib_symbols)
+	(rectangle
+		(start 120.396 16.256)
+		(end 145.796 35.306)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 5928542e-d571-4f13-978c-28fb5d8dbe1f)
+	)
+	(rectangle
+		(start 113.03 50.8)
+		(end 156.21 116.84)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid b6c93191-74f1-473a-b277-9828b23cfb7c)
+	)
+	(rectangle
+		(start 175.26 93.98)
+		(end 218.44 146.05)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid c013db11-e203-4932-a8f2-314f76bb8177)
+	)
+	(text "MIDI\nConnector"
+		(exclude_from_sim no)
+		(at 133.35 22.86 0)
+		(effects
+			(font
+				(size 2.032 2.032)
+			)
+			(justify bottom)
+		)
+		(uuid "2b52c995-1200-4b8e-bbfb-875a31a31466")
+	)
+	(text "USB	Power Distribution"
+		(exclude_from_sim no)
+		(at 116.84 55.88 0)
+		(effects
+			(font
+				(size 2.032 2.032)
+			)
+			(justify left bottom)
+		)
+		(uuid "9088cf4e-a02d-4118-90a0-914c579d3329")
+	)
+	(text "Disp32 Module"
+		(exclude_from_sim no)
+		(at 186.182 98.298 0)
+		(effects
+			(font
+				(size 2.032 2.032)
+			)
+			(justify left bottom)
+		)
+		(uuid "c1658713-00b6-4b85-bbe5-238711a94d79")
+	)
+	(junction
+		(at 242.57 54.61)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f4548091-2c0f-4444-a646-cfa109639b4b")
+	)
+	(bus
+		(pts
+			(xy 153.67 110.49) (xy 180.34 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "1db6e13a-d691-41d3-b555-c2fbb5e131b0")
+	)
+	(bus
+		(pts
+			(xy 92.71 62.23) (xy 118.11 62.23)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20939862-90d5-4cf5-997e-737f440ce28a")
+	)
+	(bus
+		(pts
+			(xy 171.45 64.77) (xy 179.07 64.77)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "24043911-c7e9-4e42-a6f0-c85a0a657508")
+	)
+	(bus
+		(pts
+			(xy 171.45 64.77) (xy 171.45 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2ddc2f04-2977-4bfe-897c-dd50adc38047")
+	)
+	(bus
+		(pts
+			(xy 153.67 106.68) (xy 180.34 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "334331e0-0a7f-444f-badc-cc1e25431c5d")
+	)
+	(bus
+		(pts
+			(xy 152.4 59.69) (xy 179.07 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "42af602c-a477-4853-9c50-4d3f86638062")
+	)
+	(bus
+		(pts
+			(xy 167.64 36.83) (xy 167.64 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "93d8a4a9-d601-496a-9fb6-e2969f2f1055")
+	)
+	(bus
+		(pts
+			(xy 262.89 54.61) (xy 242.57 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9a437440-86c6-475d-8f86-7dc2cd4abf89")
+	)
+	(bus
+		(pts
+			(xy 167.64 27.94) (xy 142.24 27.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9adf7deb-33ef-4eb9-803d-577fb92bb533")
+	)
+	(bus
+		(pts
+			(xy 171.45 101.6) (xy 179.07 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a783dffb-5a01-43bf-88c5-884efe782677")
+	)
+	(bus
+		(pts
+			(xy 242.57 90.17) (xy 262.89 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c831d190-5515-46a7-880e-97b3ca90b55a")
+	)
+	(bus
+		(pts
+			(xy 167.64 36.83) (xy 179.07 36.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d318b32e-a65a-42e6-b6ef-31729aa36d94")
+	)
+	(bus
+		(pts
+			(xy 44.45 107.95) (xy 60.96 107.95)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d8737bdd-ba17-4bbe-8381-7411c87b332c")
+	)
+	(bus
+		(pts
+			(xy 242.57 54.61) (xy 242.57 90.17)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dc04c182-fe90-4d32-a325-17cbdc12739d")
+	)
+	(bus
+		(pts
+			(xy 92.71 45.72) (xy 179.07 45.72)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7ff93c9-a68a-4066-b7d1-46b52faa6bd5")
+	)
+	(bus
+		(pts
+			(xy 44.45 119.38) (xy 60.96 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f56a3207-c352-4707-8e99-4b3e0927fa97")
+	)
+	(bus
+		(pts
+			(xy 242.57 54.61) (xy 215.9 54.61)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f6071e0d-65fa-4f8b-ae8b-9fee1d76d2b3")
+	)
+	(bus
+		(pts
+			(xy 44.45 113.03) (xy 60.96 113.03)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffd8ef4b-8de6-4a8b-b2e9-7b5c6540b4cd")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 262.89 54.61 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "09f07767-78f8-46de-9c1b-e2f2fd3ca1da")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 179.07 36.83 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "0dda99c9-0317-468c-9c21-7c1752d3089a")
+	)
+	(hierarchical_label "J9"
+		(shape input)
+		(at 60.96 107.95 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "22a01251-188f-4917-a6ea-5adfc05ac066")
+	)
+	(hierarchical_label "I2C"
+		(shape output)
+		(at 215.9 54.61 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "257708f5-6d12-491e-b616-373d2dfd3a0f")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 179.07 45.72 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "2bba7dcb-aa94-446d-bb9c-b42f51d1089a")
+	)
+	(hierarchical_label "J11"
+		(shape input)
+		(at 60.96 119.38 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "319e4c9e-f641-40e7-b726-15297422d52d")
+	)
+	(hierarchical_label "J29"
+		(shape input)
+		(at 44.45 113.03 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "46ebb8d7-418c-40de-995d-67bec452243a")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 153.67 110.49 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "4f5c8ba8-26c4-4df4-96c1-fcb8182f4c2d")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 153.67 106.68 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "50a2453b-f68e-4ec0-812d-46f81577ae29")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 179.07 101.6 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "522917b9-9f5f-4d8d-8302-b4f07a31d20d")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 142.24 27.94 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "700ea131-2243-47a3-91ad-a60487a12293")
+	)
+	(hierarchical_label "J10"
+		(shape input)
+		(at 60.96 113.03 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "7aaca99b-7034-4099-bec4-6a675b61e63a")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 262.89 90.17 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "9666b386-728e-471b-93c9-c15d29e413c6")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 92.71 62.23 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "c71508b7-2095-4132-b84d-06cf2a0794d3")
+	)
+	(hierarchical_label "J29"
+		(shape input)
+		(at 44.45 119.38 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "ce6dfa45-f139-4034-b695-87f607497b1d")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 118.11 62.23 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "d90bca64-ebf8-4e43-9117-6ce0a94d3804")
+	)
+	(hierarchical_label "J29"
+		(shape input)
+		(at 44.45 107.95 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "e079ebb6-7cb9-458d-8ca5-40715aca0b96")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 92.71 45.72 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "e11247a8-2367-4b0a-a895-13603c2cab0c")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 180.34 110.49 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "e4cfe51f-f37a-47c9-ac61-e1f952174542")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 180.34 106.68 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "e5796980-3885-4bbf-ba74-645c398fc599")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 179.07 64.77 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "ece64b66-5eec-4d77-b31d-7a0f9aee9e9c")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 179.07 59.69 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "f6b16c62-ee5f-4e13-85f5-d09467df171c")
+	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 152.4 59.69 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "fbc29187-077b-45da-b135-f486304a8945")
+	)
+	(sheet
+		(at 22.86 100.33)
+		(size 25.4 31.75)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "11228cf3-2b03-4b6e-913e-59012597ce8d")
+		(property "Sheetname" "PSU2"
+			(at 30.226 103.378 0)
+			(effects
+				(font
+					(size 2.032 2.032)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "PSU.kicad_sch"
+			(at 23.2156 111.4806 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125"
+					(page "20")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 257.81 76.2)
+		(size 60.96 34.29)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "28ef12e1-08ba-4849-92c9-fc35a7a20bc2")
+		(property "Sheetname" "I2C Multilplex2"
+			(at 275.082 79.756 0)
+			(effects
+				(font
+					(size 2.032 2.032)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "I2C_Multiplax.kicad_sch"
+			(at 257.81 125.0446 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125"
+					(page "16")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 257.81 34.29)
+		(size 60.96 34.29)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "33e457f4-5b81-46f5-9d52-61db4533dabb")
+		(property "Sheetname" "DigitalToAnalog-3"
+			(at 273.812 38.1 0)
+			(effects
+				(font
+					(size 2.032 2.032)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Analog-1.kicad_sch"
+			(at 260.1214 104.648 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125"
+					(page "17")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 57.15 34.29)
+		(size 39.37 124.46)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "6f52a779-16f0-4c5f-b5ad-b57e7ae245b4")
+		(property "Sheetname" "Power Distribution1"
+			(at 61.976 37.846 0)
+			(effects
+				(font
+					(size 2.032 2.032)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Power-Distrib.kicad_sch"
+			(at 57.912 37.3888 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125"
+					(page "19")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 175.514 27.94)
+		(size 42.926 53.34)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0.0000)
+		)
+		(uuid "aad42c90-a42a-4d30-bdda-262c4c717c2c")
+		(property "Sheetname" "Processor Module1"
+			(at 185.166 31.75 0)
+			(effects
+				(font
+					(size 2.032 2.032)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "Processor_Module.kicad_sch"
+			(at 175.4378 39.4462 0)
+			(effects
+				(font
+					(size 1.016 1.016)
+				)
+				(justify left top)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125"
+					(page "18")
+				)
+			)
+		)
+	)
+)

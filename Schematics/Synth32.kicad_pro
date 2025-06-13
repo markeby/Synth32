@@ -402,60 +402,64 @@
       "Root"
     ],
     [
-      "5f23d779-3412-4b06-96f4-480c60744fb9",
-      "Processor Module"
+      "92fe7bea-64b6-40b3-8e51-c7dbcedff8cc",
+      "AudioControl"
     ],
     [
-      "5bc16b3a-a1cd-4002-8881-eefa1f194921",
-      "Analog-1"
-    ],
-    [
-      "ed49763e-63b5-424a-88d5-03bad0c30f37",
-      "Osc 2 Carrier"
-    ],
-    [
-      "c5734bbc-3b0f-4464-8b2e-757e6274cb27",
+      "183602d7-24c4-4572-8c8c-985858bcd8c5",
       "VCO"
     ],
     [
-      "caa06308-6b6a-4b6e-9c67-8b5a93c3615e",
-      "Noise"
+      "0961503a-ee36-4d85-ba6e-69b8d022a06b",
+      "Osc 2 Carrier"
     ],
     [
-      "2f7035a9-a9f9-4a38-93d0-c4286edf2773",
-      "LFO-2"
+      "368144d6-e85e-4968-b172-9b7cebe9c4ab",
+      "Noise2"
     ],
     [
-      "727e9220-7d65-44be-8d6a-8e21b5514d98",
-      "Modulation Control"
+      "685081d3-e0cd-499e-8ff2-fc11a92f2f22",
+      "LFO-4"
     ],
     [
-      "819f44b8-8462-46b6-b700-efa66e61a0d7",
+      "70dff70b-ca0e-4131-a269-eb5144bb09a1",
+      "Modulation Control2"
+    ],
+    [
+      "4ee2fb70-c02b-45ff-b6fc-7c263225c33f",
       "3 State VCF"
     ],
     [
-      "e476386b-ebc3-4fce-8163-bcfa78a0952f",
-      "VCF"
+      "fbf919ef-1775-4be1-9c89-ef62aa4c3250",
+      "Multiplexer2"
     ],
     [
-      "3b5df864-356f-4e2e-9fc5-e9e2a49bb6a5",
-      "Multiplexer"
+      "a58131de-3c81-4e3c-a577-8b273e08214f",
+      "10 Chan Mixer1"
     ],
     [
-      "2f5793a4-784d-4354-a923-086ce6f236aa",
-      "10 Chan Mixer"
+      "33a531ad-adab-44e4-8605-e758909b7125",
+      "Power & Processor"
     ],
     [
-      "95306b60-5045-41b3-9495-58e5e819ea03",
-      "Power Distribution"
+      "28ef12e1-08ba-4849-92c9-fc35a7a20bc2",
+      "I2C Multilplex2"
     ],
     [
-      "135a07d0-7692-4455-8538-0bd4306020d8",
-      "PSU1"
+      "33e457f4-5b81-46f5-9d52-61db4533dabb",
+      "DigitalToAnalog-3"
     ],
     [
-      "7b3373d3-9a0f-41a8-800c-288ad5bfa3fb",
-      "I2C Multilplex"
+      "aad42c90-a42a-4d30-bdda-262c4c717c2c",
+      "Processor Module1"
+    ],
+    [
+      "6f52a779-16f0-4c5f-b5ad-b57e7ae245b4",
+      "Power Distribution1"
+    ],
+    [
+      "11228cf3-2b03-4b6e-913e-59012597ce8d",
+      "PSU2"
     ]
   ],
   "text_variables": {}

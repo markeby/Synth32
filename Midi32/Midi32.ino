@@ -22,8 +22,7 @@ I2C_LOCATION_T  DevicesI2C[] =
       { 2,        6,     0x21,     0,    0,     16, "Dig #16  - 31 " }, // Noise output
       { 2,        6,     0x38,     0,    0,      8, "Dig #32  - 39 " }, // LFO controls
       { 2,        6,     0x22,     0,    0,     16, "Dig #40  - 55 " }, // Modulation control
-      { 2,        6,     0x48,     0,    4,      0, "A/D #56  - 59 " },
-       // LFO Static voltage A/D monitor (2.5V)
+      { 2,        6,     0x48,     0,    4,      0, "A/D #56  - 59 " }, // LFO Static voltage A/D monitor (2.5V)
       { 0,        0,     0x60,     4,    0,      0, "D/A #60  - 63 " }, // unallocated
       { 0,        1,     0x64,     4,    0,      0, "D/A #64  - 67 " },
       { 0,        2,     0x60,     4,    0,      0, "D/A #68  - 71 " },

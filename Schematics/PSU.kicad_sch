@@ -2575,6 +2575,1356 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "Screw_Terminal_1"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_1_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_10"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_10_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_2"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_2_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_3"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_3_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_4"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_4_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_5"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_5_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_6"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_6_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_7"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_7_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_8"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_8_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "Screw_Terminal_9"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U?"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "Screw_Terminal"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "Screw_Terminal_9_1_1"
+				(rectangle
+					(start -2.54 -1.27)
+					(end 0 -3.81)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.8034 -2.2352) (xy -0.9398 -3.0734)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.6256 -2.0574) (xy -0.762 -2.8956)
+					)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(circle
+					(center -1.27 -2.5654)
+					(radius 0.635)
+					(stroke
+						(width 0.1524)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin bidirectional line
+					(at -5.08 -2.54 0)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin bidirectional line
+					(at 2.54 -2.54 180)
+					(length 2.54)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "Switch:SW_SPST_Lamp"
 			(pin_names
 				(offset 1.016)
@@ -4445,12 +5795,6 @@
 		(uuid "b52710f0-74c3-4518-b882-13355a7b225b")
 	)
 	(junction
-		(at 179.07 64.77)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "bb39b2e6-1b22-4e9d-9936-4ec8e7549dad")
-	)
-	(junction
 		(at 107.95 139.7)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -5638,16 +6982,6 @@
 		)
 		(uuid "647fc184-0d80-485e-86e2-79c9fe2df348")
 	)
-	(wire
-		(pts
-			(xy 196.85 104.14) (xy 196.85 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6488aae4-d847-436a-8fc9-623b1a0d29cf")
-	)
 	(polyline
 		(pts
 			(xy 47.5234 29.9466) (xy 47.5742 14.224)
@@ -6020,16 +7354,6 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 104.14) (xy 227.33 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "821b643a-f8c5-47f7-a2e5-3d181cfce76b")
-	)
-	(wire
-		(pts
 			(xy 96.52 115.57) (xy 107.95 115.57)
 		)
 		(stroke
@@ -6307,16 +7631,6 @@
 			(type default)
 		)
 		(uuid "9462eb84-12a2-4a64-95b1-a8033431b931")
-	)
-	(wire
-		(pts
-			(xy 179.07 33.02) (xy 179.07 64.77)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "94b7b0a8-886d-4412-a9ca-a1cffb32c1a7")
 	)
 	(polyline
 		(pts
@@ -6780,16 +8094,6 @@
 	)
 	(wire
 		(pts
-			(xy 201.93 151.13) (xy 201.93 153.67)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c0119930-a087-4be7-afc6-000893c2f7cc")
-	)
-	(wire
-		(pts
 			(xy 119.38 109.22) (xy 119.38 115.57)
 		)
 		(stroke
@@ -7018,16 +8322,6 @@
 		)
 		(uuid "df8fd772-6bb9-4dbb-87e9-5d185fc49d8e")
 	)
-	(wire
-		(pts
-			(xy 217.17 115.57) (xy 217.17 118.11)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e0e4bc2b-fdcd-445e-b4c0-5c6332317180")
-	)
 	(polyline
 		(pts
 			(xy 46.6852 14.1224) (xy 46.6852 36.3982)
@@ -7090,7 +8384,7 @@
 	)
 	(wire
 		(pts
-			(xy 179.07 64.77) (xy 179.07 76.2)
+			(xy 179.07 33.02) (xy 179.07 76.2)
 		)
 		(stroke
 			(width 0)
@@ -7436,7 +8730,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "024b497b-1f2d-468b-87ec-941e57f264ff")
-		(property "Reference" "C121"
+		(property "Reference" "C7"
 			(at 97.79 102.87 0)
 			(effects
 				(font
@@ -7482,15 +8776,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "5661cbca-c91f-4c3f-81a8-cbd217cf8113")
+			(uuid "865cd67d-0c0e-4be0-96d0-64e14a24e1f8")
 		)
 		(pin "2"
-			(uuid "3634a446-f518-4ae1-9dd3-04c9a87321d0")
+			(uuid "136f1e5b-22bc-4540-91d4-25979dd356dd")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C121")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C7")
 					(unit 1)
 				)
 			)
@@ -7505,7 +8799,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "03817d20-266c-4a32-a072-56f20d48d854")
-		(property "Reference" "D5"
+		(property "Reference" "D1"
 			(at 38.1 59.69 90)
 			(effects
 				(font
@@ -7633,21 +8927,21 @@
 			)
 		)
 		(pin "1"
-			(uuid "e98a65f9-7fa1-4e6e-8f5b-c83ebb0782ba")
+			(uuid "68364b4e-fd2c-4837-8c36-814dd35eeec9")
 		)
 		(pin "2"
-			(uuid "30597757-69eb-4099-b87a-a5d2bf19c0fc")
+			(uuid "ef9cc281-3d5d-43e8-984b-f927f44f22da")
 		)
 		(pin "3"
-			(uuid "70f00da6-cc3b-4bf8-a804-51722bf061e5")
+			(uuid "634d5f7b-1dec-4c60-b131-881a30fd2172")
 		)
 		(pin "4"
-			(uuid "418d3a84-c753-4011-893e-8be25c8b4ba7")
+			(uuid "c749bb01-9d6b-4668-b783-6ede6355e5ac")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D5")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D1")
 					(unit 1)
 				)
 			)
@@ -7663,7 +8957,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0a8d021f-929e-4388-9921-c2ca09363699")
-		(property "Reference" "J61"
+		(property "Reference" "J7"
 			(at 246.38 149.8599 0)
 			(effects
 				(font
@@ -7710,12 +9004,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "f000eda5-f6b0-4ae1-a27e-20cee9400fef")
+			(uuid "cc2b0cea-c1a0-401c-8fe1-6bc53761dcec")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J61")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J7")
 					(unit 1)
 				)
 			)
@@ -7731,7 +9025,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1364675a-0870-4b0a-9cbd-21dd3410b84c")
-		(property "Reference" "J56"
+		(property "Reference" "J2"
 			(at 220.98 20.32 90)
 			(effects
 				(font
@@ -7776,39 +9070,39 @@
 			)
 		)
 		(pin "1"
-			(uuid "3255bbad-7111-4f84-bf6b-41bb6766c280")
+			(uuid "c230575f-c6a3-4d5a-b134-da05e0e1d650")
 		)
 		(pin "10"
-			(uuid "3ccd2d16-93c3-41b4-8f2d-fac755f356d3")
+			(uuid "27883c40-87c7-49e2-8546-e16ed3c7dd0b")
 		)
 		(pin "2"
-			(uuid "b4fce936-7db1-48e0-a496-b65a2af40bf3")
+			(uuid "a7a24ced-d0aa-4afe-bc8e-f825e220281e")
 		)
 		(pin "3"
-			(uuid "ef7be574-e6fa-4baa-8070-6f8f6955699d")
+			(uuid "2ec88f21-c2f3-45f7-b39b-5dd47c4770ad")
 		)
 		(pin "4"
-			(uuid "a096b5ca-9e04-43aa-8bdd-f3cae4cd8537")
+			(uuid "593557de-bbbc-495c-9022-a7bf50d5e50a")
 		)
 		(pin "5"
-			(uuid "e287274d-f0a3-435f-a64d-89e3f535ec34")
+			(uuid "5bca3d9f-491f-4198-81b7-9f92e5d5e8d4")
 		)
 		(pin "6"
-			(uuid "4ca7bd10-42ff-4e67-80ab-6fcb16a35c68")
+			(uuid "0e13a07c-06a8-4ff8-9268-30788882be26")
 		)
 		(pin "7"
-			(uuid "6e546c28-ec73-4ccd-8c1b-ecc02f91858f")
+			(uuid "a62741a9-6b91-4ce4-a301-b8ea3379c6f5")
 		)
 		(pin "8"
-			(uuid "81a785e6-a1c6-4e5e-a8ea-f74039c64030")
+			(uuid "586f1015-1985-4e91-8901-7acf6b800547")
 		)
 		(pin "9"
-			(uuid "6c7a8f62-09b6-4581-bd34-ba0d5c06bc3f")
+			(uuid "7ea10375-4664-4df7-8ffa-917f4c851a39")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J56")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J2")
 					(unit 1)
 				)
 			)
@@ -7824,7 +9118,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "1b4534e9-163c-425c-96d0-bdbd6370aaee")
-		(property "Reference" "U86"
+		(property "Reference" "U14"
 			(at 234.95 148.59 0)
 			(effects
 				(font
@@ -7870,15 +9164,15 @@
 			)
 		)
 		(pin ""
-			(uuid "abf85232-97a9-4efb-9096-b4ee50c7f648")
+			(uuid "acda0493-235e-47c6-99d8-91c2e5940e1a")
 		)
 		(pin ""
-			(uuid "abf85232-97a9-4efb-9096-b4ee50c7f649")
+			(uuid "87e8b3c7-a19f-4969-90bb-2938d25dd84f")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U86")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U14")
 					(unit 1)
 				)
 			)
@@ -7940,14 +9234,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "c246f9ce-c1d2-45fc-9620-0f2e317f07b1")
+			(uuid "5ea119b7-e00e-4288-a783-fd3ee52fc5a7")
 		)
 		(pin "2"
-			(uuid "60a2ef83-534c-4f31-83a2-ea1d9f52aa21")
+			(uuid "2b348fd7-4051-4a33-917c-9aebe39c8f86")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES4")
 					(unit 1)
 				)
@@ -7955,6 +9249,7 @@
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_4")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 177.8 137.16 0)
 		(unit 1)
@@ -7964,7 +9259,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "24f01bcf-81ce-4d2c-bb64-6742d990304e")
-		(property "Reference" "U80"
+		(property "Reference" "U8"
 			(at 177.8 137.16 0)
 			(effects
 				(font
@@ -8010,15 +9305,15 @@
 			)
 		)
 		(pin ""
-			(uuid "57eca742-15f3-4c22-8761-14ce9660434f")
+			(uuid "89e4bd17-1b26-47a6-a8c6-599b9024c021")
 		)
 		(pin ""
-			(uuid "57eca742-15f3-4c22-8761-14ce96604350")
+			(uuid "0697c867-1f16-4b7f-9939-408ec9babfb2")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U80")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U8")
 					(unit 1)
 				)
 			)
@@ -8033,7 +9328,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "25d6178b-d064-4d78-b005-a3775ea6ad69")
-		(property "Reference" "C123"
+		(property "Reference" "C9"
 			(at 109.22 63.5 0)
 			(effects
 				(font
@@ -8079,15 +9374,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "41b85892-373a-4987-aff0-3bf89fcd8559")
+			(uuid "2d91812b-e6c6-43a4-a795-48f2abbb9b00")
 		)
 		(pin "2"
-			(uuid "93d30d80-bfd6-4e37-9211-c09e74810dd9")
+			(uuid "ce647771-9022-4829-9e42-2d65997021e2")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C123")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C9")
 					(unit 1)
 				)
 			)
@@ -8146,14 +9441,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "69cca215-fe61-4f26-a1fb-f6e91b8b14ee")
+			(uuid "d69df64b-b9ce-4136-93fa-f821454ee5cd")
 		)
 		(pin "2"
-			(uuid "fc6d4d38-37b8-455f-8a3e-f7761de7610e")
+			(uuid "dadf1bc1-73d7-422e-a1ab-9f32e11616f3")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "CB1")
 					(unit 1)
 				)
@@ -8169,7 +9464,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2ba2a6ae-27c7-4b56-9d3f-dae118fbbe68")
-		(property "Reference" "D10"
+		(property "Reference" "D6"
 			(at 74.93 132.08 0)
 			(effects
 				(font
@@ -8296,15 +9591,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "49979753-9663-45ab-8380-01e6e9572cfd")
+			(uuid "3a903318-be3e-4865-8d7a-b50990ef65a7")
 		)
 		(pin "K"
-			(uuid "73329ecf-7690-494d-8ce4-4eb287809d98")
+			(uuid "b055d742-653c-4f6d-9450-e88e43052269")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D10")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D6")
 					(unit 1)
 				)
 			)
@@ -8320,7 +9615,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "32aa6173-55c0-4932-9f9c-11404ed3128e")
-		(property "Reference" "R264"
+		(property "Reference" "R2"
 			(at 87.1728 143.2052 0)
 			(effects
 				(font
@@ -8366,15 +9661,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "ce456476-97ae-4f4c-b68a-fc95278e7e8a")
+			(uuid "02f217a1-cbcc-4ce2-ba6d-0c2ff9c1e86b")
 		)
 		(pin "2"
-			(uuid "9741b1da-a16c-4c52-a4a0-71a453ca2e4e")
+			(uuid "37d0f7e7-820c-4a9b-b6b5-ec9681acad5d")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "R264")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "R2")
 					(unit 1)
 				)
 			)
@@ -8389,7 +9684,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "35626327-8640-4b0a-83c2-279e1253e1a4")
-		(property "Reference" "C124"
+		(property "Reference" "C10"
 			(at 106.68 102.87 0)
 			(effects
 				(font
@@ -8435,21 +9730,22 @@
 			)
 		)
 		(pin "1"
-			(uuid "3ebc9712-eb79-41a9-8357-284415e18028")
+			(uuid "e09f92dc-3247-459a-9968-ab8dfa1bb6ee")
 		)
 		(pin "2"
-			(uuid "bf963350-b23c-4194-a7a5-ef43eba0bd74")
+			(uuid "6f6141ce-d305-4249-9e58-50c9391e59ac")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C124")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C10")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_1")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 233.68 73.66 0)
 		(unit 1)
@@ -8459,7 +9755,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "39389d17-7a86-43a2-b2d3-58f70ffd4998")
-		(property "Reference" "U83"
+		(property "Reference" "U11"
 			(at 233.68 73.66 0)
 			(effects
 				(font
@@ -8505,15 +9801,15 @@
 			)
 		)
 		(pin ""
-			(uuid "ad9c6d8f-cb25-48b9-b9c5-545832494aa7")
+			(uuid "e8b52926-ed68-4347-ae78-b16e6ecbc1e8")
 		)
 		(pin ""
-			(uuid "ad9c6d8f-cb25-48b9-b9c5-545832494aa8")
+			(uuid "82ca3b0f-0083-4d31-8d63-72305f8eaea5")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U83")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U11")
 					(unit 1)
 				)
 			)
@@ -8529,7 +9825,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "484f1c16-cb1a-4563-9ef0-85b2919e3966")
-		(property "Reference" "D9"
+		(property "Reference" "D5"
 			(at 77.7494 80.6196 0)
 			(effects
 				(font
@@ -8656,15 +9952,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "f4d9cea2-8098-4421-8eeb-7c947e87d8a0")
+			(uuid "6a5e7be0-dba9-4de9-9be2-50bba12ffc7a")
 		)
 		(pin "K"
-			(uuid "1081e57a-72ee-4aa2-8c1c-4e160665a952")
+			(uuid "f50cf51f-5e18-4060-99bc-e9b2f57b8593")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D9")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D5")
 					(unit 1)
 				)
 			)
@@ -8680,7 +9976,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "53b8277b-bd1a-476b-a4fc-b11d78c9dc56")
-		(property "Reference" "D8"
+		(property "Reference" "D4"
 			(at 77.7494 41.2496 0)
 			(effects
 				(font
@@ -8807,15 +10103,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "ed3726c9-1c1e-46a1-9ce3-43b5e0560b71")
+			(uuid "f54fcd6d-fb9c-421a-ad7f-84aed2d106b5")
 		)
 		(pin "K"
-			(uuid "561a7391-77b0-494f-8f4f-7be349631fcf")
+			(uuid "213a48b7-88f8-4f57-a617-21a392a3a9d3")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D8")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -8831,7 +10127,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "56bb4914-872a-422c-8df5-edf6c3d96ba1")
-		(property "Reference" "J59"
+		(property "Reference" "J5"
 			(at 246.38 102.8699 0)
 			(effects
 				(font
@@ -8878,12 +10174,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "1d22327f-eb61-4d77-9477-097dd95aeac6")
+			(uuid "b6b4561e-e80b-4887-bb41-6e5da277ae12")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J59")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J5")
 					(unit 1)
 				)
 			)
@@ -8898,7 +10194,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5b653ebe-99f8-4457-afcb-e4ab459467e8")
-		(property "Reference" "C116"
+		(property "Reference" "C2"
 			(at 50.8 148.59 0)
 			(effects
 				(font
@@ -8944,15 +10240,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "aebacf0a-efd6-41e5-b4ca-b078972089c2")
+			(uuid "9c021a94-ed30-4f06-ba31-6332b8fbea8f")
 		)
 		(pin "2"
-			(uuid "4ffab274-1830-4fb5-94c5-b8777f5ab128")
+			(uuid "7309dd1b-fa38-41f5-8583-1dec61ad5cf0")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C116")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C2")
 					(unit 1)
 				)
 			)
@@ -8968,7 +10264,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "60e66473-890b-4eea-aa22-d94b11cee0cc")
-		(property "Reference" "R263"
+		(property "Reference" "R1"
 			(at 87.1728 96.2152 0)
 			(effects
 				(font
@@ -9014,15 +10310,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "da4446b7-1db2-413c-9c45-a43550ae20a2")
+			(uuid "e4ce1ecd-77a6-4f77-9350-dfd0d232d83d")
 		)
 		(pin "2"
-			(uuid "79794eba-1e56-4bda-a5cb-f9bd58e9508a")
+			(uuid "5e1b929f-98f0-4dd7-9339-f6ef504603c1")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "R263")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "R1")
 					(unit 1)
 				)
 			)
@@ -9037,7 +10333,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "63f58dcd-4484-43ee-955b-5cbae51419c5")
-		(property "Reference" "C125"
+		(property "Reference" "C11"
 			(at 109.22 149.86 0)
 			(effects
 				(font
@@ -9083,15 +10379,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "41e9fc66-0c32-4720-8103-8d1f9a962c7a")
+			(uuid "f3573a54-5f87-4c55-a514-cb0b9a52bfe8")
 		)
 		(pin "2"
-			(uuid "1ca9d1ff-3b79-4e23-a23b-cb97ba97112b")
+			(uuid "b1d76762-cff8-4d31-b500-df9f49f7a4c9")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C125")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C11")
 					(unit 1)
 				)
 			)
@@ -9153,14 +10449,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "f9baa62a-7189-437e-a276-3ded2e0a238e")
+			(uuid "89ebbda1-604e-47d9-b85a-d7a87478da74")
 		)
 		(pin "2"
-			(uuid "71544ea9-ceee-472e-ad99-2c3a0446c2da")
+			(uuid "a257bb0d-aa7f-432a-bbbd-e6791e848362")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES1")
 					(unit 1)
 				)
@@ -9176,7 +10472,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "66befa08-7526-4da2-89e2-34abcbde1298")
-		(property "Reference" "D7"
+		(property "Reference" "D3"
 			(at 38.1 144.78 90)
 			(effects
 				(font
@@ -9304,21 +10600,21 @@
 			)
 		)
 		(pin "1"
-			(uuid "6416140e-587a-43f5-8c8e-9d36f64c2092")
+			(uuid "bb02af6b-5d1e-4220-9358-6e394d8c4214")
 		)
 		(pin "2"
-			(uuid "ad834934-3092-471e-8ff4-819cd7c83fa0")
+			(uuid "e0fc09f1-e7b2-4f60-8b64-7e21608c2e07")
 		)
 		(pin "3"
-			(uuid "345463c0-6905-4526-996d-47be9b017622")
+			(uuid "25553b78-9a7e-4254-a44b-4c861fdbd4f8")
 		)
 		(pin "4"
-			(uuid "fc1ea307-c269-40b2-b45d-18a5b201ef80")
+			(uuid "6551e89d-94c3-482f-8220-27ff157687d2")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D7")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D3")
 					(unit 1)
 				)
 			)
@@ -9377,17 +10673,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "b23629b8-1d0f-4097-9534-39c2a9dd4cbe")
+			(uuid "446c1cdb-8838-4531-958c-9d6fad2c7b80")
 		)
 		(pin "2"
-			(uuid "efd8067a-4787-4172-8a8b-71c259bc0a19")
+			(uuid "fa9c8826-4606-4a91-b156-c07ceb73d418")
 		)
 		(pin "3"
-			(uuid "e7b5c383-5791-43f0-b0c3-3197ff90e01d")
+			(uuid "f944527b-6ca6-4c07-bcd6-9d0f0ecf362f")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "P1")
 					(unit 1)
 				)
@@ -9403,7 +10699,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6f521f8d-398a-4b23-a03d-80297f609940")
-		(property "Reference" "C122"
+		(property "Reference" "C8"
 			(at 97.79 149.86 0)
 			(effects
 				(font
@@ -9449,15 +10745,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "f313c3b0-bacb-4b50-ac0f-4609b059dd33")
+			(uuid "8fa9498f-0fd5-4739-a56c-a809f96177a4")
 		)
 		(pin "2"
-			(uuid "bd04aaba-05d9-4803-b770-4655ce332e42")
+			(uuid "2d7476e5-caa7-45ed-9fa8-4f1155fb1488")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C122")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C8")
 					(unit 1)
 				)
 			)
@@ -9473,7 +10769,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6f601334-79d0-4cf5-a51b-f9abef38e83f")
-		(property "Reference" "#PWR0147"
+		(property "Reference" "#PWR01"
 			(at 233.68 171.45 0)
 			(effects
 				(font
@@ -9519,18 +10815,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "36d62582-098e-4745-b75a-a809f7523fe7")
+			(uuid "654f7a26-b5c9-4536-980d-979b242e8b7e")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "#PWR0147")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "#PWR01")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_7")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 101.6 0)
 		(unit 1)
@@ -9540,7 +10837,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "70603e12-408c-44f8-886e-2e2e0c1eb24a")
-		(property "Reference" "U78"
+		(property "Reference" "U6"
 			(at 176.53 101.6 0)
 			(effects
 				(font
@@ -9586,21 +10883,22 @@
 			)
 		)
 		(pin ""
-			(uuid "811eb50c-8b05-4894-b029-444885e98e08")
+			(uuid "f102585d-3ca5-433a-afe7-308f2889d7f7")
 		)
 		(pin ""
-			(uuid "811eb50c-8b05-4894-b029-444885e98e09")
+			(uuid "13d5003c-1c4c-49d2-b12d-95fce51414fa")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U78")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U6")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_2")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 233.68 62.23 0)
 		(unit 1)
@@ -9610,7 +10908,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "7112fea0-2978-46bc-82c7-d2cf782cf547")
-		(property "Reference" "U82"
+		(property "Reference" "U10"
 			(at 233.68 62.23 0)
 			(effects
 				(font
@@ -9656,15 +10954,15 @@
 			)
 		)
 		(pin ""
-			(uuid "6a866da0-3970-471c-b304-604b888e358f")
+			(uuid "39e3716b-87dd-442f-8e46-33a450d5b702")
 		)
 		(pin ""
-			(uuid "6a866da0-3970-471c-b304-604b888e3590")
+			(uuid "c9843ab3-f8d4-4d32-a890-bc35c0b521c9")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U82")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U10")
 					(unit 1)
 				)
 			)
@@ -9679,7 +10977,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7e8a8526-5f59-4cda-b3e9-cbd922336ed3")
-		(property "Reference" "C119"
+		(property "Reference" "C5"
 			(at 62.23 148.59 0)
 			(effects
 				(font
@@ -9725,15 +11023,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "469ec3b9-ab7c-4842-9d97-50f9940768cd")
+			(uuid "b84d8947-08c0-463d-96d9-fad4c7921b6a")
 		)
 		(pin "2"
-			(uuid "213bc20a-24a5-4a47-92a2-3bcdbd79a1ea")
+			(uuid "9e97edc6-c288-4c61-aac6-c138fe4b6a7c")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C119")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C5")
 					(unit 1)
 				)
 			)
@@ -9749,7 +11047,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7fabf866-7b20-4227-8800-a476254f80fd")
-		(property "Reference" "D11"
+		(property "Reference" "D7"
 			(at 121.92 64.77 90)
 			(effects
 				(font
@@ -9876,15 +11174,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "7e770dc5-0830-4246-ba0a-7f3eb9d59803")
+			(uuid "a5002450-4eb4-4964-94c1-32f4c0c61519")
 		)
 		(pin "K"
-			(uuid "10b7d878-0cf1-4adc-bcf9-693c12828e38")
+			(uuid "a5778250-8def-41f7-b24b-9ad1636ff414")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D11")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D7")
 					(unit 1)
 				)
 			)
@@ -9900,7 +11198,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "81f3ab4e-193e-46cf-b917-315139166b35")
-		(property "Reference" "J55"
+		(property "Reference" "J1"
 			(at 190.5 20.32 90)
 			(effects
 				(font
@@ -9945,39 +11243,39 @@
 			)
 		)
 		(pin "1"
-			(uuid "d33c84b9-2b9a-49bb-a8fd-3a149a4a4c5c")
+			(uuid "2f8e5254-94f3-4edf-a9b4-a4cdcc11b3ef")
 		)
 		(pin "10"
-			(uuid "4c7d8b18-f052-4908-bbb8-4e02952f07ec")
+			(uuid "b3ff63b6-e64b-4c17-90c5-bdf05bedfbf2")
 		)
 		(pin "2"
-			(uuid "8ab98f32-25e5-484b-838a-b64bc2e7eedb")
+			(uuid "646233cb-a764-43eb-aeff-e518ee5ceb0b")
 		)
 		(pin "3"
-			(uuid "fd8165c5-06ad-4f26-8585-2836078e226b")
+			(uuid "7cbd8513-8be2-48c9-ae45-04420f49992f")
 		)
 		(pin "4"
-			(uuid "21d4ed21-9204-451b-8ed8-dac4037b1e87")
+			(uuid "65dbbed9-388a-40b4-8029-2d0d42d87836")
 		)
 		(pin "5"
-			(uuid "f377d1bc-c487-42cb-afe5-7b92d2f27966")
+			(uuid "39332a6e-b58a-466f-988b-862980ff243f")
 		)
 		(pin "6"
-			(uuid "8dbd24cd-b67c-4bcd-9b9e-1734773b7f82")
+			(uuid "f0fb0950-1974-4659-a172-ac2b57a72989")
 		)
 		(pin "7"
-			(uuid "7c3d31d4-ad67-48f1-a0db-dc618cc17e75")
+			(uuid "4604c651-58b4-4cfc-a947-05eb16571e74")
 		)
 		(pin "8"
-			(uuid "b63f0718-72c5-43a0-ba4d-0f6f968c4f8c")
+			(uuid "194442a3-b5f9-44bc-a5c6-c2054900cc14")
 		)
 		(pin "9"
-			(uuid "1e38ce8c-ef41-4b24-9984-b1c5efac9229")
+			(uuid "643d142a-a49a-419f-80f3-b327b64a9829")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J55")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J1")
 					(unit 1)
 				)
 			)
@@ -10039,14 +11337,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e517c214-36a2-4d99-8e2e-62d5ed496bf0")
+			(uuid "42491416-ea1b-45f2-8f23-5367706d73bd")
 		)
 		(pin "2"
-			(uuid "96e6e69d-2cdd-4066-a762-d60350047752")
+			(uuid "e865d9cf-f1c4-4d12-8b40-f647d9f3319f")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES2")
 					(unit 1)
 				)
@@ -10062,7 +11360,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8c2fb156-ee03-4716-afde-7a4e4a2b37ae")
-		(property "Reference" "U75"
+		(property "Reference" "U3"
 			(at 77.2414 134.2898 0)
 			(effects
 				(font
@@ -10106,18 +11404,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "0ba7e5c5-9f21-4638-9079-29d0b7b95045")
+			(uuid "6936978c-315a-40e4-b0c7-1947549bc6af")
 		)
 		(pin "2"
-			(uuid "68ee9f7e-104c-4718-8ba1-9b540baa4309")
+			(uuid "35ae774e-a7c3-4344-95aa-5b78dc7242cc")
 		)
 		(pin "3"
-			(uuid "09e5913d-4143-4c59-abaf-ba9c446cf93b")
+			(uuid "9a7de429-d474-4e3e-8c5b-937417f49447")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U75")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U3")
 					(unit 1)
 				)
 			)
@@ -10179,14 +11477,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "bc760e6f-7e15-4c83-8d7d-2d94a05ae46c")
+			(uuid "3c00c742-06d6-41ae-9ae5-60be430ba883")
 		)
 		(pin "2"
-			(uuid "e3cd4157-2e4b-4100-a12c-5f50013c6d39")
+			(uuid "548cbd57-b569-43cb-a713-8b44541b9b47")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES5")
 					(unit 1)
 				)
@@ -10202,7 +11500,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "9a34661f-2cea-4623-87ac-9f3bf7ea7b6f")
-		(property "Reference" "D6"
+		(property "Reference" "D2"
 			(at 38.1 99.06 90)
 			(effects
 				(font
@@ -10330,21 +11628,21 @@
 			)
 		)
 		(pin "1"
-			(uuid "e7002dac-f97b-4cc6-9c8e-ff4b07659805")
+			(uuid "b7c51346-c4fd-48c8-80f8-9898b7b57306")
 		)
 		(pin "2"
-			(uuid "44278616-3cbc-4f16-ae58-d5f88e5e2d3c")
+			(uuid "6229dd80-c33a-4b37-a480-f0397fe7934b")
 		)
 		(pin "3"
-			(uuid "6b98eb75-5434-4902-a792-187894dfe2b8")
+			(uuid "89973087-7dad-44b7-af61-bb322a5265af")
 		)
 		(pin "4"
-			(uuid "bd99fa54-569f-49ff-8dfc-c5c25d6bde79")
+			(uuid "7e975e08-0e4c-4de9-9298-d3b583037b08")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D6")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -10405,20 +11703,20 @@
 			)
 		)
 		(pin "1"
-			(uuid "96b1beea-1831-4693-96b3-c67019315f3e")
+			(uuid "f4f7d23f-b212-42d6-bfbc-feb20c55e30b")
 		)
 		(pin "2"
-			(uuid "da0f71ea-9118-41e1-987b-17c749dcd30d")
+			(uuid "91071280-d2cd-4749-b1e1-f526cfce4bf5")
 		)
 		(pin "3"
-			(uuid "f994530a-69a8-46d7-b7c0-a51c2d0e0afb")
+			(uuid "c1371210-12a8-47fb-9d9d-04b51cd667fa")
 		)
 		(pin "4"
-			(uuid "3b5396a4-f021-4792-81ec-66948a52fcf4")
+			(uuid "500df9a3-196a-4440-aeea-4490ea9b02e5")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "SW1")
 					(unit 1)
 				)
@@ -10480,20 +11778,20 @@
 			)
 		)
 		(pin "1"
-			(uuid "a6898f7b-2267-4bf0-a804-e84169c83f18")
+			(uuid "ab3a5603-0db0-43b5-9659-af4687a7ea33")
 		)
 		(pin "2"
-			(uuid "2180613f-e7c9-4ec5-a48f-cd551476a013")
+			(uuid "3f652345-c3a6-4b95-bf38-c71b3fb65387")
 		)
 		(pin "3"
-			(uuid "7f7b009b-bca5-48d8-b576-5339a1364a3f")
+			(uuid "f68555b0-2bb5-4b50-a450-380ee9dd88b1")
 		)
 		(pin "4"
-			(uuid "47e0cc11-3e73-4dcd-a265-3bbb6672365e")
+			(uuid "8a1a51cc-db6b-4f80-a876-4ef11aad1cd3")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "FL1")
 					(unit 1)
 				)
@@ -10501,6 +11799,7 @@
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_3")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 234.95 101.6 0)
 		(unit 1)
@@ -10510,7 +11809,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "a9714f75-0936-465d-9d5b-ed2f5422a36b")
-		(property "Reference" "U84"
+		(property "Reference" "U12"
 			(at 234.95 101.6 0)
 			(effects
 				(font
@@ -10556,15 +11855,15 @@
 			)
 		)
 		(pin ""
-			(uuid "e03279a9-52ec-4be3-ab12-400d04505926")
+			(uuid "0bbf05b8-a25a-45e2-8f7f-8b2f1c9dd461")
 		)
 		(pin ""
-			(uuid "e03279a9-52ec-4be3-ab12-400d04505927")
+			(uuid "18fd83ea-5d9f-4912-ad73-163f53262bcc")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U84")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U12")
 					(unit 1)
 				)
 			)
@@ -10579,7 +11878,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ab9371a8-5d42-4f6b-ae9f-f0ea39538c59")
-		(property "Reference" "C115"
+		(property "Reference" "C1"
 			(at 50.8 102.87 0)
 			(effects
 				(font
@@ -10625,21 +11924,22 @@
 			)
 		)
 		(pin "1"
-			(uuid "c2b3d9f2-a5b7-41eb-af9b-94d64a795364")
+			(uuid "db3706e1-8592-4655-b3c4-98154429233d")
 		)
 		(pin "2"
-			(uuid "4e5e66cf-a389-434e-96f9-18a37ceddf6d")
+			(uuid "a5be6b50-1800-46a7-931c-7fa91b01a3a4")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C115")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_10")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 234.95 113.03 0)
 		(unit 1)
@@ -10649,7 +11949,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "afb784f9-05a6-4e60-851e-add39855f848")
-		(property "Reference" "U85"
+		(property "Reference" "U13"
 			(at 234.95 113.03 0)
 			(effects
 				(font
@@ -10695,15 +11995,15 @@
 			)
 		)
 		(pin ""
-			(uuid "44d7ee39-fb0a-4b22-9346-47676d10aee4")
+			(uuid "c408a206-5be4-47a0-94cd-dc2bc9e014bb")
 		)
 		(pin ""
-			(uuid "44d7ee39-fb0a-4b22-9346-47676d10aee5")
+			(uuid "5693e6a4-cd01-4a1c-9e7e-4ebd3922a3b1")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U85")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U13")
 					(unit 1)
 				)
 			)
@@ -10719,7 +12019,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "afed740b-c8a6-4b53-a733-8b521c5764ff")
-		(property "Reference" "RV11"
+		(property "Reference" "RV1"
 			(at 78.74 66.04 0)
 			(effects
 				(font
@@ -10765,18 +12065,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "c70526ab-549b-4efe-a4c5-a1647d655eb4")
+			(uuid "4cde66dc-ed3f-4b96-a611-662eba1f9796")
 		)
 		(pin "2"
-			(uuid "284a58b7-c7c7-43f5-b0a4-16c987368dc9")
+			(uuid "e6d43515-0faa-4ee5-9426-6f15606bdf04")
 		)
 		(pin "3"
-			(uuid "750d7dfa-891d-4000-a9ed-8f2bf01f4fd6")
+			(uuid "921eadd2-e06e-4ad7-ae4f-019e12a0cc7b")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "RV11")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "RV1")
 					(unit 1)
 				)
 			)
@@ -10838,14 +12138,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "8c43c31a-a28e-47d8-9fda-b03395b5ac08")
+			(uuid "9aff5218-f437-4eaf-a621-eb0e3fa9aed6")
 		)
 		(pin "2"
-			(uuid "75a5bc8e-d44b-494f-8395-30cdbcd2f699")
+			(uuid "d1d10414-727c-4e38-835e-42966c3e3735")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "R`1")
 					(unit 1)
 				)
@@ -10853,6 +12153,7 @@
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_6")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 177.8 148.59 0)
 		(unit 1)
@@ -10862,7 +12163,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b31f8be6-bdff-456c-a529-d0436b56715f")
-		(property "Reference" "U81"
+		(property "Reference" "U9"
 			(at 177.8 148.59 0)
 			(effects
 				(font
@@ -10908,21 +12209,22 @@
 			)
 		)
 		(pin ""
-			(uuid "1d7aa26f-0e55-448b-921a-810c39e596fa")
+			(uuid "f8fd9f04-49e0-4179-b708-b06a77f51c0b")
 		)
 		(pin ""
-			(uuid "1d7aa26f-0e55-448b-921a-810c39e596fb")
+			(uuid "43e05e9f-2e02-497a-9f00-2f4a9722dc41")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U81")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U9")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_8")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 62.23 0)
 		(unit 1)
@@ -10932,7 +12234,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b84032fe-b54a-47a5-ac60-2e9999b89413")
-		(property "Reference" "U76"
+		(property "Reference" "U4"
 			(at 176.53 62.23 0)
 			(effects
 				(font
@@ -10978,15 +12280,15 @@
 			)
 		)
 		(pin ""
-			(uuid "cebac87b-fbf7-48a6-8f30-6430e5673161")
+			(uuid "564907b4-97eb-4957-b436-cfe94c6085a8")
 		)
 		(pin ""
-			(uuid "cebac87b-fbf7-48a6-8f30-6430e5673162")
+			(uuid "61d70863-0b59-4eed-ad9c-580765256442")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U76")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U4")
 					(unit 1)
 				)
 			)
@@ -11002,7 +12304,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ba9f3711-5b77-40d2-aff9-bcf7f55a5a78")
-		(property "Reference" "D12"
+		(property "Reference" "D8"
 			(at 121.92 104.14 90)
 			(effects
 				(font
@@ -11129,15 +12431,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "c0afb4db-a73d-4131-9ac8-6ed2d9509820")
+			(uuid "c9a251dd-fe9b-45bd-a1e6-8e28ca7ec32f")
 		)
 		(pin "K"
-			(uuid "2794a821-28b6-4e66-8c7d-21c1d24952a6")
+			(uuid "8455ce02-b549-4ea0-9e9f-ed1ea9927773")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D12")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D8")
 					(unit 1)
 				)
 			)
@@ -11153,7 +12455,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bf6f9a0b-6fe9-4cb1-8fa2-983e26ba8852")
-		(property "Reference" "RV13"
+		(property "Reference" "RV3"
 			(at 78.74 153.67 0)
 			(effects
 				(font
@@ -11199,18 +12501,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "c4096008-89f1-4c78-a7c3-a9aa50b4c315")
+			(uuid "15ec98a7-cdca-4268-be02-808fb127c9fb")
 		)
 		(pin "2"
-			(uuid "aa0c0049-381e-4372-b6d0-972a8814906c")
+			(uuid "bd51c93f-0670-4be2-81ba-0a94d8fcc1a5")
 		)
 		(pin "3"
-			(uuid "e7bff758-7504-44f8-b050-8dc8f0fb07a8")
+			(uuid "9b31dfc1-3b4a-43bd-8a44-b56a053b9eae")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "RV13")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "RV3")
 					(unit 1)
 				)
 			)
@@ -11272,14 +12574,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "07ac5a09-7f19-49b1-a371-26d916f796cf")
+			(uuid "e8deb25d-702c-47d2-b325-f41f2f7d40dc")
 		)
 		(pin "2"
-			(uuid "9dd65443-a39d-4ac7-96fe-aa43a83d64ff")
+			(uuid "4149af32-c75b-4d83-a6a6-3d2daf9dee60")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES3")
 					(unit 1)
 				)
@@ -11295,7 +12597,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cd0b65db-8eb6-440a-8bcb-4cc60327729c")
-		(property "Reference" "C117"
+		(property "Reference" "C3"
 			(at 55.88 63.5 0)
 			(effects
 				(font
@@ -11341,15 +12643,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "e2dfc5db-3a20-4fcb-96f1-d74d41369dda")
+			(uuid "dd6b6b2f-885b-4fb5-8987-80e1890805c3")
 		)
 		(pin "2"
-			(uuid "85f063c9-9339-46b9-91ed-2450257531e7")
+			(uuid "3daae230-0c65-4a47-924a-3360fc3e9fe7")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C117")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C3")
 					(unit 1)
 				)
 			)
@@ -11408,32 +12710,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "48b19ed8-9e98-4c43-a975-35b700bb7702")
+			(uuid "3e199ad2-7067-42d3-9893-74c0b4d0c419")
 		)
 		(pin "2"
-			(uuid "7a105c07-853e-4f6d-bc19-8526953b2396")
+			(uuid "dae96bd3-6a97-43da-be7a-d0c1d906435c")
 		)
 		(pin "3"
-			(uuid "45c39e80-fc5b-4ab5-ba2f-3541998937d5")
+			(uuid "d50f7ba4-fa15-4448-a6c8-cfb9d04160fe")
 		)
 		(pin "4"
-			(uuid "d2d2f74e-a9c4-48eb-add6-10245f58043d")
+			(uuid "d44e397a-5562-422b-b600-f36b7b8acf78")
 		)
 		(pin "5"
-			(uuid "e796a6b1-92e5-4db7-83fa-1e37f3c87b24")
+			(uuid "31e0fd01-cfec-4af1-90a8-c38f07682451")
 		)
 		(pin "6"
-			(uuid "d50078f0-5527-4057-baff-6b15698b9937")
+			(uuid "9eee49cb-3854-4667-a80e-01d85e641fdf")
 		)
 		(pin "7"
-			(uuid "680aa030-11cb-42c7-bfa1-ff39c96ed66c")
+			(uuid "c428b29c-c6f3-403c-9864-6bd41a1aae62")
 		)
 		(pin "8"
-			(uuid "192fb37b-a57d-4f0d-817c-b5cb0ed1daca")
+			(uuid "3af11a72-6d4f-42c1-bea8-b22a7da73dda")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "TR1")
 					(unit 1)
 				)
@@ -11450,7 +12752,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d1b90f4d-112a-46f1-b759-78725445016e")
-		(property "Reference" "J58"
+		(property "Reference" "J4"
 			(at 246.38 74.9299 0)
 			(effects
 				(font
@@ -11497,12 +12799,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "a32179ef-8ba4-4477-9343-1a5e590df1d8")
+			(uuid "725b538f-a829-4502-b430-8ae5f347c0f2")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J58")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -11517,7 +12819,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d6c317e1-7308-441f-a423-a617f20a0e7e")
-		(property "Reference" "C118"
+		(property "Reference" "C4"
 			(at 62.23 102.87 0)
 			(effects
 				(font
@@ -11563,15 +12865,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "6b55b7ed-6b42-4437-ae29-159d5b3a3acf")
+			(uuid "2a2e3cdf-5ad8-4774-ac2e-a6fba1c39eb9")
 		)
 		(pin "2"
-			(uuid "d05b2524-d8b9-45cc-920f-2d8fb2469c16")
+			(uuid "048d7396-29f2-4560-9b98-6fd9ed5106e2")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C118")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C4")
 					(unit 1)
 				)
 			)
@@ -11587,7 +12889,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d99a015f-f694-47d3-8b8b-122c2cb52ab7")
-		(property "Reference" "RV12"
+		(property "Reference" "RV2"
 			(at 78.74 106.68 0)
 			(effects
 				(font
@@ -11633,18 +12935,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "2d8b3c56-46fb-48a5-aa05-92c6d8deb68e")
+			(uuid "52cdbafb-c17e-430e-b7df-d93e9cb6ddb9")
 		)
 		(pin "2"
-			(uuid "1138352d-7939-4742-9cb4-464a0213285b")
+			(uuid "13eba1a4-f976-46e7-949d-fb959292f331")
 		)
 		(pin "3"
-			(uuid "d12ba263-fd34-474e-a911-dd7c9615b770")
+			(uuid "9429fec2-7706-4d66-9818-3a1e002bad3c")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "RV12")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "RV2")
 					(unit 1)
 				)
 			)
@@ -11659,7 +12961,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "da1e157b-8da8-43d7-bd7d-5629c17ccadd")
-		(property "Reference" "C120"
+		(property "Reference" "C6"
 			(at 97.79 63.5 0)
 			(effects
 				(font
@@ -11705,15 +13007,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "9af435bf-c49e-41a7-bd1e-97f87e96a8b5")
+			(uuid "9d9058ce-e7a3-489e-b9f4-7fb07bf2b14f")
 		)
 		(pin "2"
-			(uuid "9c4d4fe3-b1d5-4f49-a581-7a5099f29dc1")
+			(uuid "3e3545d3-c0f6-49b3-b033-1b07643949ed")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "C120")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "C6")
 					(unit 1)
 				)
 			)
@@ -11729,7 +13031,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "de5449fb-3a44-4b2e-a290-d82a7c107a78")
-		(property "Reference" "D13"
+		(property "Reference" "D9"
 			(at 121.92 149.86 90)
 			(effects
 				(font
@@ -11856,15 +13158,15 @@
 			)
 		)
 		(pin "A"
-			(uuid "e36009ef-e3da-49a7-bd37-ee4c260f929e")
+			(uuid "4a5b3a3b-fc3f-4ea9-88de-3f2cb9138bf2")
 		)
 		(pin "K"
-			(uuid "b1a21a50-c4af-4bbd-a6a5-aeaa539ebe50")
+			(uuid "c2e91dee-bec7-4dd4-94e4-2a1281c35768")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "D13")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "D9")
 					(unit 1)
 				)
 			)
@@ -11879,7 +13181,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e1813382-4ca1-406b-be77-aaf9f9640032")
-		(property "Reference" "U74"
+		(property "Reference" "U2"
 			(at 77.2922 88.392 0)
 			(effects
 				(font
@@ -11923,18 +13225,18 @@
 			)
 		)
 		(pin "1"
-			(uuid "27066e44-a6fc-4ff0-b758-76d2dd97f112")
+			(uuid "766e8c48-0998-464f-9918-35607b529907")
 		)
 		(pin "2"
-			(uuid "31168c03-cfde-4e88-ad64-dd51d4e9f025")
+			(uuid "26c5a172-a7f4-49d3-a544-12c13d303d81")
 		)
 		(pin "3"
-			(uuid "d619e9b5-84a1-4aa5-b00f-e6df2a66f0ad")
+			(uuid "b06ac0d8-a8c3-40fb-8a80-aa0257bbedf9")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U74")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -11950,7 +13252,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e3be3074-80e2-4d32-a310-c2349d6825e6")
-		(property "Reference" "J62"
+		(property "Reference" "J8"
 			(at 246.38 161.2899 0)
 			(effects
 				(font
@@ -11997,12 +13299,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "11648138-eda7-4a68-8141-a9e6fa33772b")
+			(uuid "4b52ebe6-336f-4650-ba9f-448373bf28a1")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J62")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J8")
 					(unit 1)
 				)
 			)
@@ -12017,7 +13319,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f1ba6f55-759d-438a-859e-5996dd6a2af4")
-		(property "Reference" "U73"
+		(property "Reference" "U1"
 			(at 77.4192 49.1998 0)
 			(effects
 				(font
@@ -12061,24 +13363,25 @@
 			)
 		)
 		(pin "1"
-			(uuid "e8cd3772-1502-440a-be08-66ca822b56bc")
+			(uuid "d8a3844a-fea0-4f19-815f-c2724bfc8d2d")
 		)
 		(pin "2"
-			(uuid "4cc8d592-fee6-4a24-a5ab-ebaa661bf693")
+			(uuid "69812791-0d21-4093-81ea-f0f4ab9e973d")
 		)
 		(pin "3"
-			(uuid "17bd3371-d418-4d2f-8ea6-83c85248e9e3")
+			(uuid "6d67be8d-8558-4fa0-87e7-d2a070bb457d")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U73")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_9")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 73.66 0)
 		(unit 1)
@@ -12088,7 +13391,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f3626ec7-25f9-40c6-9d17-af4b5ae23ff7")
-		(property "Reference" "U77"
+		(property "Reference" "U5"
 			(at 176.53 73.66 0)
 			(effects
 				(font
@@ -12134,15 +13437,15 @@
 			)
 		)
 		(pin ""
-			(uuid "cc215d1c-f483-4d16-a147-14877b0e1223")
+			(uuid "4744fdbd-25b2-4e0e-bd3d-3bc3df7c043f")
 		)
 		(pin ""
-			(uuid "cc215d1c-f483-4d16-a147-14877b0e1224")
+			(uuid "30c1d1be-1d0c-42f8-aa3b-49cb260b6938")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U77")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U5")
 					(unit 1)
 				)
 			)
@@ -12157,7 +13460,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f3cd1068-1b69-438e-bc6b-170acad3aec9")
-		(property "Reference" "J60"
+		(property "Reference" "J6"
 			(at 246.38 114.2999 0)
 			(effects
 				(font
@@ -12204,12 +13507,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "7a4fba28-9dea-4320-979d-a8c8bba67ff2")
+			(uuid "d057ef7b-e7d6-4edf-8d2e-21185cbd82b9")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J60")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J6")
 					(unit 1)
 				)
 			)
@@ -12271,14 +13574,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9aeb696e-133d-473a-a9db-e405790d1593")
+			(uuid "73b15af7-1555-4ef3-abf4-2869dab7e397")
 		)
 		(pin "2"
-			(uuid "bd664079-2d0d-49d2-9158-2f26fdeb5be8")
+			(uuid "78227f9e-0f7b-4d1c-b60d-5875be0e5b3c")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
 					(reference "MES6")
 					(unit 1)
 				)
@@ -12295,7 +13598,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "f720f08e-36dd-48e7-9fe2-c70412590882")
-		(property "Reference" "J57"
+		(property "Reference" "J3"
 			(at 246.38 63.4999 0)
 			(effects
 				(font
@@ -12342,18 +13645,19 @@
 			)
 		)
 		(pin "1"
-			(uuid "b19f5504-e991-47d7-a421-f3cd034b32e2")
+			(uuid "ff111e92-821c-42a7-99d1-7daa0afc5b72")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "J57")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "J3")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
+		(lib_name "Screw_Terminal_5")
 		(lib_id "ScrewTerminal:Screw_Terminal")
 		(at 176.53 113.03 0)
 		(unit 1)
@@ -12363,7 +13667,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "fb9912b6-6d06-463a-a8d7-098848ac64cf")
-		(property "Reference" "U79"
+		(property "Reference" "U7"
 			(at 176.53 113.03 0)
 			(effects
 				(font
@@ -12409,15 +13713,15 @@
 			)
 		)
 		(pin ""
-			(uuid "1ec10138-5936-4cea-8233-0f87993f813a")
+			(uuid "9f009c2d-40e9-4c57-9f35-2fe1be32c5ae")
 		)
 		(pin ""
-			(uuid "1ec10138-5936-4cea-8233-0f87993f813b")
+			(uuid "e659a477-86d0-444a-b1a4-a2cc1bf9f10f")
 		)
 		(instances
-			(project "Schematics-Midi32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/135a07d0-7692-4455-8538-0bd4306020d8"
-					(reference "U79")
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/33a531ad-adab-44e4-8605-e758909b7125/11228cf3-2b03-4b6e-913e-59012597ce8d"
+					(reference "U7")
 					(unit 1)
 				)
 			)

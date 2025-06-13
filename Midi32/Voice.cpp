@@ -70,15 +70,21 @@ bool VOICE_C::NoteClear (byte mchan, byte key)
     }
 
 //#######################################################################
-void VOICE_C::SetMux (byte select, bool enable)
+void VOICE_C::SetMux (byte select)
     {
     switch ( select )
         {
+        case 2:
+            I2cDevices.DigitalOut (this->DigitalOutOscillator, true);
+            I2cDevices.DigitalOut (this->DigitalOutFilter, false);
+            break;
         case 1:
-            I2cDevices.DigitalOut (this->DigitalOutFilter, enable);
+            I2cDevices.DigitalOut (this->DigitalOutFilter, true);
+            I2cDevices.DigitalOut (this->DigitalOutOscillator, false);
             break;
         default:       // zero
-            I2cDevices.DigitalOut (this->DigitalOutFilter, enable);
+            I2cDevices.DigitalOut (this->DigitalOutOscillator, false);
+            I2cDevices.DigitalOut (this->DigitalOutFilter, false);
             break;
         }
     }
