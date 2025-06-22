@@ -250,6 +250,15 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
+                    {
+                    static short bt = 0;
+
+                    if ( ++bt > 15 )    bt = 1;
+                    Serial << bt << endl;
+                    for ( int z = 0;  z < 4;  z++ )
+                        I2cDevices.DigitalOut (216 + z, (bt >> z) & 1);
+                    I2cDevices.UpdateDigital ();
+                    }
                     break;
                 case 'x':           // Test function #2
                     break;

@@ -137,7 +137,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int         y = 40;
 
     panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 159, 320);
+    lv_obj_set_size             (panel, 259, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -145,7 +145,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
     TitleSoft = new TITLE_WIDGET_C (panel, "Amplitide 1");
-    MeterSoft = new LFO_METER_WIDGET_C (panel, 0, 18, true, "  E1");
+    MeterSoft = new LFO_METER_WIDGET_C (panel, 9, 20, true, "  E1");
 
     y = 190;
     this->SoftLabelSine.BeginText (panel, "   F1", "", y);
@@ -164,7 +164,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     this->UpdateSoftButtons (4, false);
     this->SoftInUse[0] = this->SoftInUse[1] = this->SoftInUse[2] = this->SoftInUse[3] = this->SoftInUse[4] = false;
 
-    x += 158;
+    x += 258;
     y = 40;
 
     this->CreateLFO (0, x, y, lv_obj_create (base), "Frequency 1", "  E2", "F12", "E3", "   F9", "   F10", "   F11");
@@ -172,10 +172,10 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     this->UpdateHardButtons (0, 1, false);
     this->UpdateHardButtons (0, 2, false);
 
-    x += 158;
+    x += 258;
     y = 40;
 
-    this->CreateLFO (1, x, y, lv_obj_create (base), "Frequency 2", "  E4", "F12", "E5", "  F13", "   F14", "   F15");
+    this->CreateLFO (1, x, y, lv_obj_create (base), "Frequency 2", "  E4", "F16", "E5", "   F13", "   F14", "   F15");
     this->UpdateHardButtons (1, 0, false);
     this->UpdateHardButtons (1, 1, false);
     this->UpdateHardButtons (1, 2, false);
@@ -186,7 +186,7 @@ void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* 
     {
     LFO_C& lfo = this->LowFreq[num];
 
-    lv_obj_set_size             (panel, 159, 320);
+    lv_obj_set_size             (panel, 259, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -194,9 +194,9 @@ void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* 
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
     lfo.TitleHard  = new TITLE_WIDGET_C (panel, title);
-    lfo.MeterHard  = new LFO_METER_WIDGET_C (panel, 0, 18, false, mstr);
-    lfo.RampDir    = new RAMP_WIDGET_C (panel, rs, LV_ALIGN_BOTTOM_MID, 0, -44);
-    lfo.PulseWidth = new PULSE_WIDGET_C (panel, pws, LV_ALIGN_BOTTOM_MID, 0, -10);
+    lfo.MeterHard  = new LFO_METER_WIDGET_C (panel, 9, 20, false, mstr);
+    lfo.RampDir    = new RAMP_WIDGET_C (panel, rs, LV_ALIGN_BOTTOM_LEFT, 40, -44);
+    lfo.PulseWidth = new PULSE_WIDGET_C (panel, pws, LV_ALIGN_BOTTOM_LEFT, 40, -10);
 
     y = 190;
     lfo.HardLabelSine.BeginText (panel, ssine, "", y);

@@ -40,7 +40,7 @@ public:
     void  SetValueColor (uint32_t color)
         { lv_style_set_text_color (&this->StyleValue, lv_color_hex (color)); }
     void TextFloat (float f)
-        { lv_label_set_text_fmt (this->Value, "%.3f", f); }
+        { lv_label_set_text_fmt (this->Value, "%.3f Hz", f); }
     void TextInt (int d)
         { lv_label_set_text_fmt (this->Value, "%d", d); }
 

@@ -207,6 +207,20 @@ static void SaveConfig (short index, short data)
     }
 
 //########################################################
+static void SetFilterQ (short index, short data)
+    {
+    I2cDevices.D2Analog (212, data * MIDI_MULTIPLIER);
+    I2cDevices.UpdateAnalog  ();     // Update D/A ports
+    }
+
+//########################################################
+static void SetFilterF (short index, short data)
+    {
+    I2cDevices.D2Analog (213, data * MIDI_MULTIPLIER);
+    I2cDevices.UpdateAnalog  ();     // Update D/A ports
+    }
+
+//########################################################
 //########################################################
 MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
     {   {    0,                0, "N ",                 nullptr           },    // 30
@@ -239,8 +253,8 @@ MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
         {    3,                0, "Sawtooth max level", SetMaxLevel       },    // 4B
         {    4,                0, "Pulse max level",    SetMaxLevel       },    // 4C
         {   29,                0, "N ",                 nullptr           },    // 4D
-        {   30,                0, "N ",                 nullptr           },    // 4E
-        {   31,                0, "N ",                 nullptr           },    // 4F
+        {   30,                0, "Test Q ",            SetFilterQ        },    // 4E
+        {   31,                0, "Fest F",             SetFilterF        },    // 4F
         { 0x50,             0x1F, "Set Sine",           SetTimeSetSelect  },    // 50
         { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 51
         { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 52

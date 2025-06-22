@@ -126,20 +126,20 @@ void SELECT_WIDGET_C::Set (short val)
     {
     SoftwareLFO = software;
     this->Meter = lv_meter_create (base);
-    lv_obj_align (this->Meter, LV_ALIGN_TOP_MID, x, y);
+    lv_obj_align (this->Meter, LV_ALIGN_TOP_LEFT, x, y);
     lv_obj_set_size (this->Meter, 140, 140);
 
     lv_obj_remove_style (this->Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
     lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
-    lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
+    lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3 (0x444));
 
-    this->Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
+    this->Gauge = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main (LV_PALETTE_RED), 2);
     this->Led  = lv_led_create (Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    this->MeterFreq.BeginText (base, estr, "Hz", y, 0x0000F0);
+    this->MeterFreq.BeginText (base, estr, "", y, 0x0000F0);
     // Initial positions
     this->SetFreq (0);
     this->Select (false);
@@ -174,7 +174,7 @@ void LFO_METER_WIDGET_C::Select (bool sel)
         }
     else
         {
-        lv_led_set_color (this->Led,  lv_color_white());
+        lv_led_set_color (this->Led,  lv_color_white ());
         lv_led_on (this->Led);
         }
     }
