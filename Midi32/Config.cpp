@@ -57,7 +57,6 @@ void SYNTH_VOICE_CONFIG_C::InitButtonsXL ()
         this->ButtonState[z] = XL_MidiMapArray[XL_MIDI_MAP_OSC][XL_BUTTON_START + z].Color;
     }
 
-
 //#######################################################################
 //#######################################################################
     SYNTH_CONFIG_C::SYNTH_CONFIG_C ()
