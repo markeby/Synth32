@@ -54,15 +54,15 @@ public:
     inline void     SetDecayTime        (byte wave, float time)             { pOsc->SetDecayTime    (wave, time); }
     inline void     SetReleaseTime      (byte wave, float time)             { pOsc->SetReleaseTime  (wave, time); }
     inline void     SetSustainLevel     (byte wave, float level_percent)    { pOsc->SetSustainLevel (wave, level_percent); }
-    inline void     SetMaxLevel         (byte wave, float level_percent)    { pOsc->SetMaxLevel     (wave, level_percent); }
-    inline float    GetMaxLevel         (byte wave)                         { return (pOsc->GetMaxLevel     (wave)); }
+    inline void     SetLevel            (byte wave, float level_percent)    { pOsc->SetLevel        (wave, level_percent); }
+    inline float    GetLevel            (byte wave)                         { return (pOsc->GetLevel        (wave)); }
     inline float    GetSustainLevel     (byte wave)                         { return (pOsc->GetSustainLevel (wave)); }
     inline float    GetAttackTime       (byte wave)                         { return (pOsc->GetAttackTime   (wave)); }
     inline float    GetDecayTime        (byte wave)                         { return (pOsc->GetDecayTime    (wave)); }
     inline float    GetReleaseTime      (byte wave)                         { return (pOsc->GetReleaseTime  (wave)); }
-    inline void     SetTuningNote       (byte note)                         { pOsc->SetTuningNote (note); }
+    inline void     SetTuningNote       (byte note)                         { pOsc->SetTuningNote   (note); }
     inline void     SetTuningVolume     (byte select, uint16_t level)       { pOsc->SetTuningVolume (select, level); }
-    inline void     TuningAdjust        (bool up)                           { pOsc->TuningAdjust (up); }
+    inline void     TuningAdjust        (bool up)                           { pOsc->TuningAdjust    (up); }
     inline ushort*  GetBankAddr         (void)                              { return (pOsc->GetBankAddr ()); }
     inline uint32_t IsActive            (void)                              { return (this->ActiveTimer); }
     inline void     SetMidi             (byte mchan)                        { this->Midi = mchan; }

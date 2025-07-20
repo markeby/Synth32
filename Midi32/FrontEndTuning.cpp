@@ -13,8 +13,7 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label  = "CAL";
-//#define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
-#define DBG(args...) {if(true){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #else
 #define DBG(args...)
 #endif
@@ -73,7 +72,7 @@ void SYNTH_FRONT_C::StartTuning ()
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            this->TuningLevel[z] = (uint16_t)(this->pVoice[0]->GetMaxLevel (z) * MAX_DA);
+            this->TuningLevel[z] = (uint16_t)(this->pVoice[0]->GetLevel (z) * MAX_DA);
             DisplayMessage.TuningLevel (z, this->TuningLevel[z] * MIDI_INV_MULTIPLIER);
             }
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
@@ -128,6 +127,7 @@ void SYNTH_FRONT_C::StartCalibration ()
         return;
 
     DisplayMessage.PageCalibration ();
+    DBG ("Starting Calibration");
 
     this->Lfo[0].SetOffset(0);
     this->Lfo[1].SetOffset (0);

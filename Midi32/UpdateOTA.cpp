@@ -64,7 +64,7 @@ void OTA_C::WaitWiFi ()
 //#######################################################################
 void OTA_C::Setup (const char* pssid, const char* ppasswd)
     {
-    printf ("\t>>> Connecting to: %s\n", pssid);
+    printf ("\t>>>\tConnecting to: %s\n", pssid);
     WiFi.mode (WIFI_STA);
     WiFi.begin (pssid, ppasswd);
     }

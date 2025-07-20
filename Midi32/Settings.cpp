@@ -96,7 +96,7 @@ void SETTINGS_C::RestoreDebugFlags ()
     DebugSynth  = this->GetDebugSwitch (3);
     DebugDisp   = this->GetDebugSwitch (4);
     if ( this->DebugFlags )
-        printf ("\t>>> Debug setup.\n");
+        printf ("\t>>>\tDebug setup.\n");
     else
         printf ("\t  **** Debug flags failed to load\n");
     }

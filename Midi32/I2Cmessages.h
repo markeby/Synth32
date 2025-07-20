@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     I@Cmessages.h
+// Module:     I2Cmessages.h
 // Descrption:  Synthesizer display message
 // Creator:    markeby
 // Date:       7/21/2024
@@ -20,7 +20,8 @@ private:
     bool        Lock;
     uint64_t    ResetStart;
     byte        CurrentVoicePage;
-
+    byte        PreviousPage;
+    byte        CurrentPage;
     byte        DisplayAddress;
 
     void  SendComplete  (byte length);

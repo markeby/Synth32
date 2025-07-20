@@ -8,10 +8,18 @@
     <Config
         Name="Wifi-Loader"
         Type="cpp"
-        DebugCallbackName="gdb"
+        DebugCallbackName=""
         OutputFile=""
         CompilerConfigName="Latest Version">
         <Menu>
+            <Target
+                Name="xtensa addr2line"
+                MenuCaption="xtensa addr2line"
+                RunFromDir="%rw"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveNone">
+                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
+            </Target>
             <Target
                 Name="Build"
                 MenuCaption="&amp;Build"
@@ -51,6 +59,24 @@
                 <Exec CmdLine="make clean &amp; pbench make Midi32_OTA"/>
             </Target>
             <Target
+                Name="Debug"
+                MenuCaption="Debug"
+                CaptureOutputWith="ProcessBuffer"
+                SaveOption="SaveCurrent"
+                RunFromDir="%rw"
+                ShowOnMenu="">
+                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf  %(ESP)%"/>
+            </Target>
+        </Menu>
+    </Config>
+    <Config
+        Name="COM3-Loader"
+        Type="cpp"
+        DebugCallbackName=""
+        OutputFile=""
+        CompilerConfigName="Latest Version">
+        <Menu>
+            <Target
                 Name="xtensa addr2line"
                 MenuCaption="xtensa addr2line"
                 RunFromDir="%rw"
@@ -58,15 +84,6 @@
                 SaveOption="SaveNone">
                 <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
             </Target>
-        </Menu>
-    </Config>
-    <Config
-        Name="COM3-Loader"
-        Type="cpp"
-        DebugCallbackName="gdb"
-        OutputFile=""
-        CompilerConfigName="Latest Version">
-        <Menu>
             <Target
                 Name="Build"
                 MenuCaption="&amp;Build"
@@ -106,12 +123,13 @@
                 <Exec CmdLine="make clean &amp; make Midi32_Serial"/>
             </Target>
             <Target
-                Name="xtensa addr2line"
-                MenuCaption="xtensa addr2line"
-                RunFromDir="%rw"
+                Name="Debug"
+                MenuCaption="Debug"
                 CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
+                SaveOption="SaveCurrent"
+                RunFromDir="%rw"
+                ShowOnMenu="">
+                <Exec CmdLine=""/>
             </Target>
         </Menu>
     </Config>
@@ -171,6 +189,7 @@
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
             <F N="LFOosc.h"/>
+            <F N="Novation.h"/>
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
@@ -184,6 +203,7 @@
             GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
             <F N="../.gitignore"/>
             <F N="../tools/Beep.py"/>
+            <F N="dbg.bat"/>
             <F
                 N="Makefile"
                 Type="Makefile"/>

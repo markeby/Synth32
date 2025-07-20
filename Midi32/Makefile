@@ -16,7 +16,7 @@ PROJECT := Midi32.ino
 SHARED := ../Common
 
 # header files
-INCLUDES := config.h Debug.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h \
+INCLUDES := config.h Debug.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Novation.h \
             LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h UpdateOTA.h Voice.h \
 	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   

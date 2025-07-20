@@ -1,7 +1,5 @@
 #pragma once
 
-namespace SERIAL_MONITOR
-{
 //#######################################################################
 class MONITOR_C
     {
@@ -30,9 +28,9 @@ public:
     void Begin          (void);
     void Reset          (void);
     };
-}
 
 
-extern SERIAL_MONITOR::MONITOR_C Monitor;
+
+extern MONITOR_C Monitor;
 
 

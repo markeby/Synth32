@@ -14,46 +14,41 @@
 //########################################################
 //   VCO & VCA controls
 //########################################################
-static void SetMaxLevel (short ch, short data)
+static void SetLevel (short ch, short data)
     {
-    SynthFront.SetMaxLevel (ch, data);
+    SynthFront.SetLevel (ch, data);
     }
 
 //########################################################
-static void SetSustain (short ch, short data)
+static void SetLevelSelect (short ch, short state)
     {
-    SynthFront.SetSustainLevel (ch, data);
-    }
-
-//########################################################
-static void SetTimeSetSelect (short ch, short state)
-    {
-    SynthFront.VoiceComponentSetSelected (ch, state);
+    if ( !state )
+        SynthFront.VoiceLevelSelect(ch, state);
     }
 
 //########################################################
 static void SetAttckTime (short ch, short data)
     {
-    SynthFront.SetAttackTime (data);
+    SynthFront.SetAttackTime (ch, data);
     }
 
 //########################################################
 static void SetDecayTime (short ch, short data)
     {
-    SynthFront.SetDecayTime (data);
+    SynthFront.SetDecayTime (ch, data);
     }
 
 //########################################################
 static void SetReleaseTime (short ch, short data)
     {
-    SynthFront.SetReleaseTime (data);
+    SynthFront.SetReleaseTime (ch, data);
     }
 
 //########################################################
-static void SawtoothDirection (short ch, short data)
+static void ToogleRamp (short ch, short data)
     {
-    if ( data )
-        SynthFront.ToggleRampDirection ();
+    if ( !data )
+        SynthFront.ToggleRampDirection (ch);
     }
 
 //########################################################
@@ -108,15 +103,9 @@ static void TuneReset (short ch, bool state)
     }
 
 //########################################################
-static void TuneUp (short ch, bool state)
+static void TuneUpDown (short ch, bool state)
     {
-    SynthFront.TuningAdjust (true);
-    }
-
-//########################################################
-static void TuneDown (short ch, bool state)
-    {
-    SynthFront.TuningAdjust (false);
+    SynthFront.TuningAdjust (state);
     }
 
 //########################################################
@@ -136,7 +125,7 @@ static void TunningSave (short ch, bool state)
 //########################################################
 static void PageAdvance (short ch, short data)
     {
-    if ( data )
+    if ( !data )
         SynthFront.PageAdvance ();
     }
 
@@ -145,32 +134,24 @@ static void PageAdvance (short ch, short data)
 //########################################################
 static void TrackSel (short ch, short data)
     {
-    static byte count = 0;
-    static byte last = 0;
-
-    if ( !(!data && !count) )
-        count += ( data ) ? 1 : -1;
-
-    switch ( count )
+    if ( !data )
         {
-        case 0:
-            if ( last == 0 )
-                SynthFront.ChangeMapSelect (ch - 2);
-            else
-                last--;
-            break;
-        case 2:
-            SynthFront.MidiMapMode ();
-            last = 2;
-            count = 0;
-            break;
+        if ( SynthFront.GetMidiMapMode () )
+            SynthFront.ChangeMapSelect (ch);
         }
+    }
+
+//########################################################
+static void MappingSelect (short index, short data)
+    {
+    if ( !data )
+        SynthFront.MidiMapMode ();
     }
 
 //########################################################
 static void SendDir (short index, short data)
     {
-    if ( data )
+    if ( !data )
         {
         if ( SynthFront.GetMidiMapMode () )
             SynthFront.MapModeBump (( index ) ? -1 : 1);
@@ -182,7 +163,7 @@ static void SendDir (short index, short data)
 //########################################################
 static void LoadConfig (short index, short data)
     {
-    if ( data )
+    if ( !data )
         {
         if ( SynthFront.GetLoadSaveMode () )
             SynthFront.LoadSelectedConfig ();
@@ -194,7 +175,7 @@ static void LoadConfig (short index, short data)
 //########################################################
 static void SaveConfig (short index, short data)
     {
-    if ( data )
+    if ( !data )
         {
         if ( SynthFront.GetMidiMapMode() )
             SynthFront.SaveDefaultConfig ();
@@ -202,97 +183,313 @@ static void SaveConfig (short index, short data)
             SynthFront.SaveSelectedConfig ();
         else
             SynthFront.OpenLoadSavePage ();
-
         }
     }
 
 //########################################################
-static void SetFilterQ (short index, short data)
+//########################################################
+XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
     {
-    I2cDevices.D2Analog (212, data * MIDI_MULTIPLIER);
-    I2cDevices.UpdateAnalog  ();     // Update D/A ports
-    }
+// XL_MIDI_MAP_OSC
+      { {     0,   0x3C, "Attack Sine",         SetAttckTime    },  // 48 0x30  0
+        {     1,   0x3C, "Attack Triangle",     SetAttckTime    },  // 49 0x31  1
+        {     2,   0x3C, "Attack Ramp",         SetAttckTime    },  // 50 0x32  2
+        {     3,   0x3C, "Attack Pulse",        SetAttckTime    },  // 51 0x33  3
+        {     4,   0x3C, "Attack Noise",        SetAttckTime    },  // 52 0x34  4
+        {     5,   0x0C, "N ",                  nullptr         },  // 53 0x35  5
+        {     6,   0x0C, "N ",                  nullptr         },  // 54 0x36  6
+        {     7,   0x0C, "N ",                  nullptr         },  // 55 0x37  7
+        {     0,   0x3C, "Decay Sine",          SetDecayTime    },  // 56 0x38  8
+        {     1,   0x3C, "Decay Triangle",      SetDecayTime    },  // 57 0x39  9
+        {     2,   0x3C, "Decay Ramp",          SetDecayTime    },  // 58 0x3A  10
+        {     3,   0x3C, "Decay Pulse",         SetDecayTime    },  // 59 0x3B  11
+        {     4,   0x3C, "Decay Noise",         SetDecayTime    },  // 60 0x3C  12
+        {     5,   0x0C, "N ",                  nullptr         },  // 61 0x3D  13
+        {     6,   0x0C, "N ",                  nullptr         },  // 62 0x3E  14
+        {     7,   0x0C, "N ",                  nullptr         },  // 63 0x3F  15
+        {     0,   0x3C, "Release Sine",        SetReleaseTime  },  // 64 0x40  16
+        {     1,   0x3C, "Release Triangle",    SetReleaseTime  },  // 65 0x41  17
+        {     2,   0x3C, "Release Ramp",        SetReleaseTime  },  // 66 0x42  18
+        {     3,   0x3C, "Release Pulse",       SetReleaseTime  },  // 67 0x43  19
+        {     4,   0x3C, "Release Noise",       SetReleaseTime  },  // 68 0x44  20
+        {     5,   0x0C, "N ",                  nullptr         },  // 69 0x45  21
+        {     6,   0x0C, "N ",                  nullptr         },  // 70 0x46  22
+        {   127,   0x3C, "Pulse Width",         PulseWidth      },  // 71 0x47  23
+        {     0,   0x3C, "Set Sine L/S",        SetLevelSelect  },  // 72 0x48  24
+        {     1,   0x3C, "Set Triangle L/S",    SetLevelSelect  },  // 73 0x49  25
+        {     2,   0x3C, "Set Ramp  L/S",       SetLevelSelect  },  // 74 0x4A  26
+        {     3,   0x3C, "Set Pulse L/S ",      SetLevelSelect  },  // 75 0x4B  27
+        {     4,   0x3C, "Set Noise L/S ",      SetLevelSelect  },  // 76 0x4C  28
+        {     5,   0x0C, "N ",                  nullptr         },  // 77 0x4D  29
+        {     6,   0x0C, "N ",                  nullptr         },  // 78 0x4E  30
+        {     7,   0x3C, "Sawtooth Dir",        ToogleRamp      },  // 79 0x4D  31
+        {     8,   0x0C, "N ",                  nullptr         },  // 80 0x50  32
+        {     9,   0x0C, "N ",                  nullptr         },  // 81 0x51  33
+        {    10,   0x0C, "N ",                  nullptr         },  // 82 0x52  34
+        {    11,   0x0C, "N ",                  nullptr         },  // 83 0x53  35
+        {    12,   0x0C, "N ",                  nullptr         },  // 84 0x54  36
+        {    13,   0x0C, "N ",                  nullptr         },  // 85 0x55  37
+        {    14,   0x0C, "N ",                  nullptr         },  // 86 0x56  38
+        {    15,   0x0C, "N ",                  nullptr         },  // 87 0x57  39
+        {     0,   0x3F, "Page Advance",        PageAdvance     },  // 88 0x58  40
+        {     1,   0x3F, "Save Configuration",  SaveConfig      },  // 89 0x59  41
+        {     2,   0x3F, "Load Configuration",  LoadConfig      },  // 90 0x5A  42
+        {     3,   0x3F, "Map mode select",     MappingSelect   },  // 91 0x5B  43
+        {     0,   0x3F, "Send Sel UP",         SendDir         },  // 92 0x5C  44
+        {     1,   0x3F, "Send Sel DN",         SendDir         },  // 93 0x5D  45
+        {     0,   0x3F, "Track Sel Left",      TrackSel        },  // 94 0x5E  46
+        {     1,   0x3F, "Track Sel Right",     TrackSel        },  // 95 0x5F  47
+        {     0,      0, "Level Sine",          SetLevel        },  // 96 0x60  48
+        {     1,      0, "Level Triangle",      SetLevel        },  // 97 0x61  49
+        {     2,      0, "Level Ramp",          SetLevel        },  // 98 0x62  50
+        {     3,      0, "Level Pulse",         SetLevel        },  // 99 0x63  51
+        {     4,      0, "Level Noise",         SetLevel        },  //100 0x64  52
+        {     5,      0, "N ",                  nullptr         },  //101 0x65  53
+        {     6,      0, "N ",                  nullptr         },  //102 0x66  54
+        {     7,      0, "N ",                  nullptr         },  //103 0x67  55
+      },
+// XL_MIDI_MAP_FILTER
+      { {     0,      0, "N ",                  nullptr         },  // 48 0x30  0
+        {     0,      0, "N ",                  nullptr         },  // 49 0x31  1
+        {     0,      0, "N ",                  nullptr         },  // 50 0x32  2
+        {     0,      0, "N ",                  nullptr         },  // 51 0x33  3
+        {     0,      0, "N ",                  nullptr         },  // 52 0x34  4
+        {     0,      0, "N ",                  nullptr         },  // 53 0x35  5
+        {     0,      0, "N ",                  nullptr         },  // 54 0x36  6
+        {     0,      0, "N ",                  nullptr         },  // 55 0x37  7
+        {     0,      0, "N ",                  nullptr         },  // 56 0x38  8
+        {     0,      0, "N ",                  nullptr         },  // 57 0x39  9
+        {     0,      0, "N ",                  nullptr         },  // 58 0x3A  10
+        {     0,      0, "N ",                  nullptr         },  // 59 0x3B  11
+        {     0,      0, "N ",                  nullptr         },  // 60 0x3C  12
+        {     0,      0, "N ",                  nullptr         },  // 61 0x3D  13
+        {     0,      0, "N ",                  nullptr         },  // 62 0x3E  14
+        {     0,      0, "N ",                  nullptr         },  // 63 0x3F  15
+        {     0,      0, "N ",                  nullptr         },  // 64 0x40  16
+        {     0,      0, "N ",                  nullptr         },  // 65 0x41  17
+        {     0,      0, "N ",                  nullptr         },  // 66 0x42  18
+        {     0,      0, "N ",                  nullptr         },  // 67 0x43  19
+        {     0,      0, "N ",                  nullptr         },  // 68 0x44  20
+        {     0,      0, "N ",                  nullptr         },  // 69 0x45  21
+        {     0,      0, "N ",                  nullptr         },  // 70 0x46  22
+        {     0,      0, "N ",                  nullptr         },  // 71 0x47  23
+        {     0,      0, "N ",                  nullptr         },  // 72 0x48  24
+        {     0,      0, "N ",                  nullptr         },  // 73 0x49  25
+        {     0,      0, "N ",                  nullptr         },  // 74 0x4A  26
+        {     0,      0, "N ",                  nullptr         },  // 75 0x4B  27
+        {     0,      0, "N ",                  nullptr         },  // 76 0x4C  28
+        {     0,      0, "N ",                  nullptr         },  // 77 0x4D  29
+        {     0,      0, "N ",                  nullptr         },  // 78 0x4E  30
+        {     0,      0, "N ",                  nullptr         },  // 79 0x4D  31
+        {     0,      0, "N ",                  nullptr         },  // 80 0x50  32
+        {     0,      0, "N ",                  nullptr         },  // 81 0x51  33
+        {     0,      0, "N ",                  nullptr         },  // 82 0x52  34
+        {     0,      0, "N ",                  nullptr         },  // 83 0x53  35
+        {     0,      0, "N ",                  nullptr         },  // 84 0x54  36
+        {     0,      0, "N ",                  nullptr         },  // 85 0x55  37
+        {     0,      0, "N ",                  nullptr         },  // 86 0x56  38
+        {     0,      0, "N ",                  nullptr         },  // 87 0x57  39
+        {     0,   0x3F, "Page Advance",        PageAdvance     },  // 88 0x58  40
+        {     1,   0x3F, "Save Configuration",  SaveConfig      },  // 89 0x59  41
+        {     2,   0x3F, "Load Configuration",  LoadConfig      },  // 90 0x5A  42
+        {     3,   0x3F, "Map mode select",     MappingSelect   },  // 91 0x5B  43
+        {     0,   0x3F, "Send Sel UP",         SendDir         },  // 92 0x5C  44
+        {     1,   0x3F, "Send Sel DN",         SendDir         },  // 93 0x5D  45
+        {     0,   0x3F, "Track Sel Left",      TrackSel        },  // 94 0x5E  46
+        {     1,   0x3F, "Track Sel Right",     TrackSel        },  // 95 0x5F  47
+        {     0,      0, "N ",                  nullptr         },  // 96 0x60  48
+        {     0,      0, "N ",                  nullptr         },  // 97 0x61  49
+        {     0,      0, "N ",                  nullptr         },  // 98 0x62  50
+        {     0,      0, "N ",                  nullptr         },  // 99 0x63  51
+        {     0,      0, "N ",                  nullptr         },  //100 0x64  52
+        {     0,      0, "N ",                  nullptr         },  //101 0x65  53
+        {     0,      0, "N ",                  nullptr         },  //102 0x66  54
+        {     0,      0, "N ",                  nullptr         },  //103 0x67  55
+      },
+// XL_MIDI_MAP_LFO
+      { {     0,      0, "N ",                  nullptr         },  // 48 0x30  0
+        {     0,      0, "N ",                  nullptr         },  // 49 0x31  1
+        {     0,      0, "N ",                  nullptr         },  // 50 0x32  2
+        {     0,      0, "N ",                  nullptr         },  // 51 0x33  3
+        {     0,      0, "N ",                  nullptr         },  // 52 0x34  4
+        {     0,      0, "N ",                  nullptr         },  // 53 0x35  5
+        {     0,      0, "N ",                  nullptr         },  // 54 0x36  6
+        {     0,      0, "N ",                  nullptr         },  // 55 0x37  7
+        {     0,      0, "N ",                  nullptr         },  // 56 0x38  8
+        {     0,      0, "N ",                  nullptr         },  // 57 0x39  9
+        {     0,      0, "N ",                  nullptr         },  // 58 0x3A  10
+        {     0,      0, "N ",                  nullptr         },  // 59 0x3B  11
+        {     0,      0, "N ",                  nullptr         },  // 60 0x3C  12
+        {     0,      0, "N ",                  nullptr         },  // 61 0x3D  13
+        {     0,      0, "N ",                  nullptr         },  // 62 0x3E  14
+        {     0,      0, "N ",                  nullptr         },  // 63 0x3F  15
+        {     0,      0, "N ",                  nullptr         },  // 64 0x40  16
+        {     0,      0, "N ",                  nullptr         },  // 65 0x41  17
+        {     0,      0, "N ",                  nullptr         },  // 66 0x42  18
+        {     0,      0, "N ",                  nullptr         },  // 67 0x43  19
+        {     0,      0, "N ",                  nullptr         },  // 68 0x44  20
+        {     0,      0, "N ",                  nullptr         },  // 69 0x45  21
+        {     0,      0, "N ",                  nullptr         },  // 70 0x46  22
+        {     0,      0, "N ",                  nullptr         },  // 71 0x47  23
+        {     0,      0, "N ",                  nullptr         },  // 72 0x48  24
+        {     0,      0, "N ",                  nullptr         },  // 73 0x49  25
+        {     0,      0, "N ",                  nullptr         },  // 74 0x4A  26
+        {     0,      0, "N ",                  nullptr         },  // 75 0x4B  27
+        {     0,      0, "N ",                  nullptr         },  // 76 0x4C  28
+        {     0,      0, "N ",                  nullptr         },  // 77 0x4D  29
+        {     0,      0, "N ",                  nullptr         },  // 78 0x4E  30
+        {     0,      0, "N ",                  nullptr         },  // 79 0x4D  31
+        {     0,      0, "N ",                  nullptr         },  // 80 0x50  32
+        {     0,      0, "N ",                  nullptr         },  // 81 0x51  33
+        {     0,      0, "N ",                  nullptr         },  // 82 0x52  34
+        {     0,      0, "N ",                  nullptr         },  // 83 0x53  35
+        {     0,      0, "N ",                  nullptr         },  // 84 0x54  36
+        {     0,      0, "N ",                  nullptr         },  // 85 0x55  37
+        {     0,      0, "N ",                  nullptr         },  // 86 0x56  38
+        {     0,      0, "N ",                  nullptr         },  // 87 0x57  39
+        {     0,   0x3F, "Page Advance",        PageAdvance     },  // 88 0x58  40
+        {     1,   0x3F, "Save Configuration",  SaveConfig      },  // 89 0x59  41
+        {     2,   0x3F, "Load Configuration",  LoadConfig      },  // 90 0x5A  42
+        {     3,   0x3F, "Map mode select",     MappingSelect   },  // 91 0x5B  43
+        {     0,   0x3F, "Send Sel UP",         SendDir         },  // 92 0x5C  44
+        {     1,   0x3F, "Send Sel DN",         SendDir         },  // 93 0x5D  45
+        {     0,   0x3F, "Track Sel Left",      TrackSel        },  // 94 0x5E  46
+        {     1,   0x3F, "Track Sel Right",     TrackSel        },  // 95 0x5F  47
+        {     0,      0, "N ",                  nullptr         },  // 96 0x60  48
+        {     0,      0, "N ",                  nullptr         },  // 97 0x61  49
+        {     0,      0, "N ",                  nullptr         },  // 98 0x62  50
+        {     0,      0, "N ",                  nullptr         },  // 99 0x63  51
+        {     0,      0, "N ",                  nullptr         },  //100 0x64  52
+        {     0,      0, "N ",                  nullptr         },  //101 0x65  53
+        {     0,      0, "N ",                  nullptr         },  //102 0x66  54
+        {     0,      0, "N ",                  nullptr         },  //103 0x67  55
+      },
+// XL_MIDI_MAP_MAPPING
+      { {     0,      0, "N ",                  nullptr         },  // 48 0x30  0
+        {     0,      0, "N ",                  nullptr         },  // 49 0x31  1
+        {     0,      0, "N ",                  nullptr         },  // 50 0x32  2
+        {     0,      0, "N ",                  nullptr         },  // 51 0x33  3
+        {     0,      0, "N ",                  nullptr         },  // 52 0x34  4
+        {     0,      0, "N ",                  nullptr         },  // 53 0x35  5
+        {     0,      0, "N ",                  nullptr         },  // 54 0x36  6
+        {     0,      0, "N ",                  nullptr         },  // 55 0x37  7
+        {     0,      0, "N ",                  nullptr         },  // 56 0x38  8
+        {     0,      0, "N ",                  nullptr         },  // 57 0x39  9
+        {     0,      0, "N ",                  nullptr         },  // 58 0x3A  10
+        {     0,      0, "N ",                  nullptr         },  // 59 0x3B  11
+        {     0,      0, "N ",                  nullptr         },  // 60 0x3C  12
+        {     0,      0, "N ",                  nullptr         },  // 61 0x3D  13
+        {     0,      0, "N ",                  nullptr         },  // 62 0x3E  14
+        {     0,      0, "N ",                  nullptr         },  // 63 0x3F  15
+        {     0,      0, "N ",                  nullptr         },  // 64 0x40  16
+        {     0,      0, "N ",                  nullptr         },  // 65 0x41  17
+        {     0,      0, "N ",                  nullptr         },  // 66 0x42  18
+        {     0,      0, "N ",                  nullptr         },  // 67 0x43  19
+        {     0,      0, "N ",                  nullptr         },  // 68 0x44  20
+        {     0,      0, "N ",                  nullptr         },  // 69 0x45  21
+        {     0,      0, "N ",                  nullptr         },  // 70 0x46  22
+        {     0,      0, "N ",                  nullptr         },  // 71 0x47  23
+        {     0,      0, "N ",                  nullptr         },  // 72 0x48  24
+        {     0,      0, "N ",                  nullptr         },  // 73 0x49  25
+        {     0,      0, "N ",                  nullptr         },  // 74 0x4A  26
+        {     0,      0, "N ",                  nullptr         },  // 75 0x4B  27
+        {     0,      0, "N ",                  nullptr         },  // 76 0x4C  28
+        {     0,      0, "N ",                  nullptr         },  // 77 0x4D  29
+        {     0,      0, "N ",                  nullptr         },  // 78 0x4E  30
+        {     0,      0, "N ",                  nullptr         },  // 79 0x4D  31
+        {     0,      0, "N ",                  nullptr         },  // 80 0x50  32
+        {     0,      0, "N ",                  nullptr         },  // 81 0x51  33
+        {     0,      0, "N ",                  nullptr         },  // 82 0x52  34
+        {     0,      0, "N ",                  nullptr         },  // 83 0x53  35
+        {     0,      0, "N ",                  nullptr         },  // 84 0x54  36
+        {     0,      0, "N ",                  nullptr         },  // 85 0x55  37
+        {     0,      0, "N ",                  nullptr         },  // 86 0x56  38
+        {     0,      0, "N ",                  nullptr         },  // 87 0x57  39
+        {     0,      0, "Page Advance",        nullptr         },  // 88 0x58  40
+        {     1,   0x3F, "Save Configuration",  SaveConfig      },  // 89 0x59  41
+        {     2,      0, "Load Configuration",  nullptr         },  // 90 0x5A  42
+        {     3,   0x3F, "Map mode select",     MappingSelect   },  // 91 0x5B  43
+        {     0,   0x3F, "Send Sel UP",         SendDir         },  // 92 0x5C  44
+        {     1,   0x3F, "Send Sel DN",         SendDir         },  // 93 0x5D  45
+        {     0,   0x3F, "Track Sel Left",      TrackSel        },  // 94 0x5E  46
+        {     1,   0x3F, "Track Sel Right",     TrackSel        },  // 95 0x5F  47
+        {     0,      0, "N ",                  nullptr         },  // 96 0x60  48
+        {     0,      0, "N ",                  nullptr         },  // 97 0x61  49
+        {     0,      0, "N ",                  nullptr         },  // 98 0x62  50
+        {     0,      0, "N ",                  nullptr         },  // 99 0x63  51
+        {     0,      0, "N ",                  nullptr         },  //100 0x64  52
+        {     0,      0, "N ",                  nullptr         },  //101 0x65  53
+        {     0,      0, "N ",                  nullptr         },  //102 0x66  54
+        {     0,      0, "N ",                  nullptr         },  //103 0x67  55
+      },
+// XL_MIDI_MAP_SPARE
+      { {     0,      0, "N ",                  nullptr         },  // 48 0x30  0
+        {     0,      0, "N ",                  nullptr         },  // 49 0x31  1
+        {     0,      0, "N ",                  nullptr         },  // 50 0x32  2
+        {     0,      0, "N ",                  nullptr         },  // 51 0x33  3
+        {     0,      0, "N ",                  nullptr         },  // 52 0x34  4
+        {     0,      0, "N ",                  nullptr         },  // 53 0x35  5
+        {     0,      0, "N ",                  nullptr         },  // 54 0x36  6
+        {     0,      0, "N ",                  nullptr         },  // 55 0x37  7
+        {     0,      0, "N ",                  nullptr         },  // 56 0x38  8
+        {     0,      0, "N ",                  nullptr         },  // 57 0x39  9
+        {     0,      0, "N ",                  nullptr         },  // 58 0x3A  10
+        {     0,      0, "N ",                  nullptr         },  // 59 0x3B  11
+        {     0,      0, "N ",                  nullptr         },  // 60 0x3C  12
+        {     0,      0, "N ",                  nullptr         },  // 61 0x3D  13
+        {     0,      0, "N ",                  nullptr         },  // 62 0x3E  14
+        {     0,      0, "N ",                  nullptr         },  // 63 0x3F  15
+        {     0,      0, "N ",                  nullptr         },  // 64 0x40  16
+        {     0,      0, "N ",                  nullptr         },  // 65 0x41  17
+        {     0,      0, "N ",                  nullptr         },  // 66 0x42  18
+        {     0,      0, "N ",                  nullptr         },  // 67 0x43  19
+        {     0,      0, "N ",                  nullptr         },  // 68 0x44  20
+        {     0,      0, "N ",                  nullptr         },  // 69 0x45  21
+        {     0,      0, "N ",                  nullptr         },  // 70 0x46  22
+        {     0,      0, "N ",                  nullptr         },  // 71 0x47  23
+        {     0,      0, "N ",                  nullptr         },  // 72 0x48  24
+        {     0,      0, "N ",                  nullptr         },  // 73 0x49  25
+        {     0,      0, "N ",                  nullptr         },  // 74 0x4A  26
+        {     0,      0, "N ",                  nullptr         },  // 75 0x4B  27
+        {     0,      0, "N ",                  nullptr         },  // 76 0x4C  28
+        {     0,      0, "N ",                  nullptr         },  // 77 0x4D  29
+        {     0,      0, "N ",                  nullptr         },  // 78 0x4E  30
+        {     0,      0, "N ",                  nullptr         },  // 79 0x4D  31
+        {     0,      0, "N ",                  nullptr         },  // 80 0x50  32
+        {     0,      0, "N ",                  nullptr         },  // 81 0x51  33
+        {     0,      0, "N ",                  nullptr         },  // 82 0x52  34
+        {     0,      0, "N ",                  nullptr         },  // 83 0x53  35
+        {     0,      0, "N ",                  nullptr         },  // 84 0x54  36
+        {     0,      0, "N ",                  nullptr         },  // 85 0x55  37
+        {     0,      0, "N ",                  nullptr         },  // 86 0x56  38
+        {     0,      0, "N ",                  nullptr         },  // 87 0x57  39
+        {     0,      0, "N ",                  nullptr         },  // 88 0x58  40
+        {     0,      0, "N ",                  nullptr         },  // 89 0x59  41
+        {     0,      0, "N ",                  nullptr         },  // 90 0x5A  42
+        {     0,      0, "N ",                  nullptr         },  // 91 0x5B  43
+        {     0,      0, "N ",                  nullptr         },  // 92 0x5C  44
+        {     0,      0, "N ",                  nullptr         },  // 93 0x5D  45
+        {     0,      0, "N ",                  nullptr         },  // 94 0x5E  46
+        {     0,      0, "N ",                  nullptr         },  // 95 0x5F  47
+        {     0,      0, "Level Sine",          SetLevel        },  // 96 0x60  48
+        {     1,      0, "Level Triangle",      SetLevel        },  // 97 0x61  49
+        {     2,      0, "Level Ramp",          SetLevel        },  // 98 0x62  50
+        {     3,      0, "Level Pulse",         SetLevel        },  // 99 0x63  51
+        {     4,      0, "Level Noise",         SetLevel        },  //100 0x64  52
+        {     0,      0, "N ",                  nullptr         },  //101 0x65  53
+        {     0,      0, "N ",                  nullptr         },  //102 0x66  54
+        {     0,      0, "N ",                  nullptr         },  //103 0x67  55
+      },
+  };
 
 //########################################################
-static void SetFilterF (short index, short data)
-    {
-    I2cDevices.D2Analog (213, data * MIDI_MULTIPLIER);
-    I2cDevices.UpdateAnalog  ();     // Update D/A ports
-    }
-
 //########################################################
-//########################################################
-MIDI_XL_MAP    XlMapArray[SIZE_CL_MAP] =
-    {   {    0,                0, "N ",                 nullptr           },    // 30
-        {    1,                0, "N ",                 nullptr           },    // 31
-        {    2,                0, "N ",                 nullptr           },    // 32
-        {    3,                0, "N ",                 nullptr           },    // 33
-        {    4,                0, "N ",                 nullptr           },    // 34
-        {    5,                0, "N ",                 nullptr           },    // 35
-        {    6,                0, "N ",                 nullptr           },    // 36
-        {    7,                0, "N ",                 nullptr           },    // 37
-        {    8,                0, "N ",                 nullptr           },    // 38
-        {    9,                0, "N ",                 nullptr           },    // 39
-        {   10,                0, "N ",                 nullptr           },    // 3A
-        {   11,                0, "N ",                 nullptr           },    // 3B
-        {   12,                0, "N ",                 nullptr           },    // 3C
-        {   13,                0, "N ",                 nullptr           },    // 3D
-        {   14,                0, "N ",                 nullptr           },    // 3E
-        {   15,                0, "N ",                 nullptr           },    // 3F
-        {    0,                0, "Attack",             SetAttckTime      },    // 40
-        {    1,                0, "Decay",              SetDecayTime      },    // 41
-        {    2,                0, "Release",            SetReleaseTime    },    // 42
-        {    3,                0, "N ",                 nullptr           },    // 43
-        {   20,                0, "N ",                 nullptr           },    // 44
-        {   21,                0, "N ",                 nullptr           },    // 45
-        {   22,                0, "N ",                 nullptr           },    // 46
-        {  127,             0x1D, "Pulse Width",        PulseWidth        },    // 47
-        {    0,                0, "Sine max level",     SetMaxLevel       },    // 48
-        {    1,                0, "Triangle max level", SetMaxLevel       },    // 49
-        {    2,                0, "Sqiare max level",   SetMaxLevel       },    // 4A
-        {    3,                0, "Sawtooth max level", SetMaxLevel       },    // 4B
-        {    4,                0, "Pulse max level",    SetMaxLevel       },    // 4C
-        {   29,                0, "N ",                 nullptr           },    // 4D
-        {   30,                0, "Test Q ",            SetFilterQ        },    // 4E
-        {   31,                0, "Fest F",             SetFilterF        },    // 4F
-        { 0x50,             0x1F, "Set Sine",           SetTimeSetSelect  },    // 50
-        { 0x51,             0x1F, "Set Triangle",       SetTimeSetSelect  },    // 51
-        { 0x52,             0x1F, "Set Ramp",           SetTimeSetSelect  },    // 52
-        { 0x53,             0x1F, "Set Pulse",          SetTimeSetSelect  },    // 53
-        { 0x54,             0x1F, "Set Noise",          SetTimeSetSelect  },    // 54
-        { 0x55,                0, "N ",                 nullptr           },    // 55
-        { 0x56,                0, "N ",                 nullptr           },    // 56
-        { 0x57,             0x1F, "Sawtooth Dir",       SawtoothDirection },    // 57
-        { 0x58,                0, "N ",                 nullptr           },    // 58
-        { 0x59,                0, "N ",                 nullptr           },    // 59
-        { 0x5A,                0, "N ",                 nullptr           },    // 5A
-        { 0x5B,                0, "N ",                 nullptr           },    // 5B
-        { 0x5C,                0, "N ",                 nullptr           },    // 5C
-        { 0x5D,                0, "N ",                 nullptr           },    // 5D
-        { 0x5E,                0, "N ",                 nullptr           },    // 5E
-        { 0x5F,                0, "N ",                 nullptr           },    // 5F
-        { 0x60,             0x1F, "Send Sel UP",        SendDir           },    // 60
-        { 0x61,             0x1F, "Send Sel DN",        SendDir           },    // 61
-        { 0x62,             0x1F, "Track Sel Left",     TrackSel          },    // 62
-        { 0x63,             0x1F, "Track Sel Right",    TrackSel          },    // 63
-        { 0x64,             0x1F, "Page Advance",       PageAdvance       },    // 64
-        { 0x65,             0x1F, "Save Configuration", SaveConfig        },    // 65
-        { 0x66,             0x1F, "Load Configuration", LoadConfig        },    // 66
-        { 0x67,                0, "N ",                 nullptr           },    // 67
-    };
-
-LED_NOTE_MAP SendA[]     = { 13, 29, 45, 61, 77, 93, 109, 125 };
-LED_NOTE_MAP SendB[]     = { 14, 30, 46, 62, 78, 94, 110, 126 };
-LED_NOTE_MAP PanDevice[] = { 15, 31, 47, 63, 79, 95, 111, 127 };
-
-//########################################################
-//########################################################
-MIDI_MAP FaderMapArray[] =
-    {   {  0, "Sine Sustain",           SetSustain  },  // 01  07  xx
-        {  1, "Triangle Sustain",       SetSustain  },  // 02  07  xx
-        {  2, "Ramp Sustain",           SetSustain  },  // 03  07  xx
-        {  3, "Pulse Sustain",          SetSustain  },  // 04  07  xx
-        {  4, "Noise Sustain",          SetSustain  },  // 05  07  xx
+G49_FADER_MIDI_MAP FaderMidiMapArray[] =
+    {   {  0, "N ",                     nullptr     },  // 01  07  xx
+        {  1, "N ",                     nullptr     },  // 02  07  xx
+        {  2, "N ",                     nullptr     },  // 03  07  xx
+        {  3, "N ",                     nullptr     },  // 04  07  xx
+        {  4, "N ",                     nullptr     },  // 05  07  xx
         {  5, "N ",                     nullptr     },  // 06  07  xx
         {  6, "N ",                     nullptr     },  // 07  07  xx
         {  7, "N ",                     nullptr     },  // 08  07  xx
@@ -307,7 +504,7 @@ MIDI_MAP FaderMapArray[] =
     };
 
 //########################################################
-MIDI_ENCODER_MAP KnobMapArray[] =
+G49_ENCODER_MIDI_MAP KnobMidiMapArray[] =
     {   {  0, "Soft LFO freq",          FreqLFO, 1  },  //  01  0A  xx
         {  1, "Hard LFO 1 freq",        FreqLFO, 1  },  //  02  0A  xx
         {  2, "Hard LFO 1 pulse width", FreqLFO, 1  },  //  03  0A  xx
@@ -327,29 +524,28 @@ MIDI_ENCODER_MAP KnobMapArray[] =
     };
 
 //########################################################
-MIDI_BUTTON_MAP SwitchMapArray[] =
-    {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA     },  //  01  10  xx
-        {  1,           false,  "VCA Mod Triangle",         ToggleModVCA     },  //  01  11  xx
-        {  2,           false,  "VCA Mod Ramp",             ToggleModVCA     },  //  01  12  xx
-        {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA     },  //  01  13  xx
-        {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA     },  //  01  14  xx
-        {  5,           false,  "Switch f6",                nullptr          },  //  01  15  xx
-        {  6,           false,  "Switch f7",                nullptr          },  //  01  16  xx
-        {  7,           false,  "Switch f8",                nullptr          },  //  01  17  xx
-        {  0,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  01  18  xx
-        {  1,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  01  19  xx
-        {  2,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  01  1A  xx
-        {  3,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  01  1B  xx
-        {  4,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  01  1C  xx
-        {  5,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  01  1D  xx
-        {  6,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  01  1E  xx
-        {  7,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  01  1F  xx
-        { 24,           false,  "Tuning save",              TunningSave      },  //  01  72  xx
-        { 24,           false,  "",                         nullptr          },  //  01  73  xx
-        { 20,           false,  "Tune +",                   TuneUp           },  //  01  74  xx
-        { 21,           false,  "Tune -",                   TuneDown         },  //  01  75  xx
-        { 22,           false,  "Tune/Reset",               TuneReset        },  //  01  76  xx
-        { 23,           false,  "Tune -/+",                 TuneBump         },  //  01  77  xx
+G49_BUTTON_MIDI_MAP SwitchMidiMapArray[] =
+    {   {  0,           false,  "VCA Mod Sine    ",         ToggleModVCA     },  //  16  1
+        {  1,           false,  "VCA Mod Triangle",         ToggleModVCA     },  //  16  2
+        {  2,           false,  "VCA Mod Ramp",             ToggleModVCA     },  //  16  3
+        {  3,           false,  "VCA Mod Pulse   ",         ToggleModVCA     },  //  16  4
+        {  4,           false,  "VCA Mod Noise   ",         ToggleModVCA     },  //  16  5
+        {  5,           false,  "Switch f6",                nullptr          },  //  16  6
+        {  6,           false,  "Switch f7",                nullptr          },  //  16  7
+        {  7,           false,  "Switch f8",                nullptr          },  //  16  8
+        {  0,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  16  9
+        {  1,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  16  10
+        {  2,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  16  11
+        {  3,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  16  12
+        {  4,           false,  "VCO freq Mod Sine",        ToggleModVCO     },  //  16  13
+        {  5,           false,  "VCO freq Mod Ramp",        ToggleModVCO     },  //  16  14
+        {  6,           false,  "VCO freq Pulse   ",        ToggleModVCO     },  //  16  15
+        {  7,           false,  "Toggle Ramp Direction",    ToggleModRampDir },  //  16  16
+        {  0,           false,  "Tune -",                   TuneUpDown       },  //  17  1
+        {  1,           false,  "Tune +",                   TuneUpDown       },  //  17  2
+        { 22,           false,  "Tune/Reset",               TuneReset        },  //  17  3
+        { 23,           false,  "Tune -/+",                 TuneBump         },  //  17  4
+        { 24,           false,  "Tuning save",              TunningSave      },  //  17  5
      };
 
 

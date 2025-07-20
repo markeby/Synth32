@@ -9,13 +9,13 @@
 
 
 //#######################################################################
-enum class SHAPE {
+enum class LFO_SHAPE {
     SINE = 0,
     RAMP,
     PULSE,
     };
 
-enum class D_A_OFF {
+enum class LFO_D_A_OFF {
     BEND = 0,
     WIDTH,
     FREQ,
@@ -59,8 +59,8 @@ private:
 
     WAVE_LEVEL_T    Level[SOURCE_CNT_LFO];
 
-    void  ClearState (void);
-    void  SetLevel   (uint8_t ch, uint8_t data);
+    void  ClearState        (void);
+    void  SetInternalLevel  (uint8_t ch, uint8_t data);
 
 public:
          SYNTH_LFO_C    (void);
@@ -68,7 +68,7 @@ public:
     void Clear          (void);
     void SetFreq        (short value);
     void SetPulseWidth  (short value);
-    void SetMaxLevel    (uint8_t ch, uint8_t data);
+    void SetLevel       (uint8_t ch, uint8_t data);
     void SetWave        (short ch, bool state);
     void SetLevelMidi   (byte mchan, uint8_t data);
     void PitchBend      (short value);

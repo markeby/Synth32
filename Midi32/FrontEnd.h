@@ -5,13 +5,13 @@
 // Date:       8/25/2023
 //#######################################################################
 #pragma once
-
 #include "Config.h"
 #include "../Common/DispMessages.h"
 #include "LFOosc.h"
 #include "SoftLFO.h"
 #include "Voice.h"
 #include "Envelope.h"
+#include "Novation.h"
 
 //#################################################
 //    Synthesizer front end class
@@ -30,11 +30,12 @@ private:
     KEY_T                 Down;
     KEY_T                 Up;
     uint64_t              DispMessageTimer;
+    short                 NovationCounter;
 
-    MIDI_MAP*             FaderMap;
-    MIDI_BUTTON_MAP*      ButtonMap;
-    MIDI_ENCODER_MAP*     KnobMap;
-    MIDI_XL_MAP*          XlMap;
+    G49_FADER_MIDI_MAP         *G49MidiMapFader;
+    G49_BUTTON_MIDI_MAP        *G49MidiMapButton;
+    G49_ENCODER_MIDI_MAP       *G49MidiMapEcoder;
+    XL_MIDI_MAP                (*pMidiMapXL)[XL_MIDI_MAP_SIZE];
     ENVELOPE_GENERATOR_C  EnvADSL;
     SYNTH_LFO_C           Lfo[2];
     VOICE_C*              pVoice[VOICE_COUNT];
@@ -47,7 +48,7 @@ private:
     short                 CurrentMapSelected;
     short                 CurrentVoiceSelected;
     short                 LoadSaveSelection;
-
+    NOVATION_XL_C         LaunchControl;
     bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
     bool                  TuningOn[VOICE_COUNT];
@@ -58,35 +59,35 @@ private:
     short                 CalibrationLFO;
     ushort                CalibrationAtoD;
 
-    String Selected                 (void);
-    void   ShowVoiceXL              (int val);
     void   NonOscPageSelect         (DISP_MESSAGE_N::PAGE_C page);
     void   UpdateMapModeDisplay     (int sel);
 public:
 
-         SYNTH_FRONT_C              (MIDI_MAP* fader_map, MIDI_ENCODER_MAP* knob_map, MIDI_BUTTON_MAP* button_map, MIDI_XL_MAP* xl_map);
-    void Begin                      (short osc_d_a, short mux_digital, short noise_digital, short lfo_analog, short lfo_digital, short mod_mux_digital, short start_a_d);
-    void ResetXL                    (void);
-    void ResetUSB                   (void);
-
+         SYNTH_FRONT_C              (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
+    void Begin                      (short voice, short mux_digital, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
+    void Initialize                 (void)
+        { this->LaunchControl.Begin (pMidiMapXL);  this->LoadDefaultConfig (); }
     void Loop                       (void);
     void Clear                      (void);
     void Controller                 (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
+    void TemplateSelect             (byte index);
 
     //#######################################################################
     // FrontEndLFO.cpp
     void SelectModVCA               (byte ch, bool state);
     void FreqLFO                    (short ch, short data);
     void PitchBend                  (byte mchan, short value);
-    void     SetLevelLFO            (short index, byte mchan, short data)
+    void SetLevelLFO                (short index, byte mchan, short data)
         { this->Lfo[index].SetLevelMidi (mchan, data); }
-    void     SelectModVCO           (short index, short ch, bool state)
+    void SelectModVCO               (short index, short ch, bool state)
         { if ( !this->MapSelectMode )   this->Lfo[index].SetWave (ch, state);  this->SynthConfig.SetSelect (index, ch, state); }
-    void     SetModRampDir          (short index, bool state)
+    void SetModRampDir              (short index, bool state)
         { if ( !this->MapSelectMode )   this->Lfo[index].SetRampDir (state);  this->SynthConfig.SetRampDir (index, state); }
 
+    //#######################################################################
+    // FrontEndMapping.cpp
     void MidiMapMode                (void);
     bool GetLoadSaveMode            (void)
         { return (LoadSaveMode); }
@@ -98,6 +99,7 @@ public:
         { return (this->MapSelectMode); }
     void ResolveMapAllocation       (void);
     void SaveDefaultConfig          (void);
+    void LoadDefaultConfig          (void);
     void LoadSelectedConfig         (void);
     void SaveSelectedConfig         (void);
     void LoadSaveBump               (short down);
@@ -106,14 +108,13 @@ public:
     //#######################################################################
     // FrontEndOscCtrl.cpp
     void VoiceSelectedCheck             (void);
-    void ResetVoiceComponentSetSelected (void);
-    void VoiceComponentSetSelected      (short chan, bool state);
-    void SetMaxLevel                    (short ch, short data);
-    void SetAttackTime                  (short data);
-    void SetDecayTime                   (short data);
+    void VoiceLevelSelect               (short ch, bool state);
+    void SetLevel                       (short ch, short data);
+    void SetAttackTime                  (short ch, short data);
+    void SetDecayTime                   (short ch, short data);
+    void SetReleaseTime                 (short ch, short data);
     void SetSustainLevel                (short ch, short data);
-    void SetReleaseTime                 (short data);
-    void ToggleRampDirection            (void);
+    void ToggleRampDirection            (short ch);
     void SetPulseWidth                  (short data);
 
     //#######################################################################

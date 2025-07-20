@@ -43,36 +43,16 @@ void SYNTH_FRONT_C::VoiceSelectedCheck ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ResetVoiceComponentSetSelected ()
+void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
     {
-    byte val = 0x0C;
-
-    for (int z = 0;  z < OSC_MIXER_COUNT; z++)
-        {
-        this->SynthConfig.Voice[z].SelectedEnvelope[z] = false;
-        this->ShowVoiceXL (val);
-        DisplayMessage.OscSelected (z, false);
-        }
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::VoiceComponentSetSelected (short chan, bool state)
-    {
-    byte val = 0x0C;
-
     this->VoiceSelectedCheck ();
-    this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[chan] = state;
-    for ( int z = 0;  z < OSC_MIXER_COUNT; z++ )
-        {
-        if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[z] )
-            val = 0x3C;
-        }
-    this->ShowVoiceXL (val);
-    DisplayMessage.OscSelected (chan, state);
+    state = !this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch];
+    this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] = state;
+    this->LaunchControl.ButtonColor (ch, (state) ? XL_LED::RED : XL_LED::GREEN);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetMaxLevel (short ch, short data)
+void SYNTH_FRONT_C::SetLevel (short ch, short data)
     {
     if ( this->SetTuning )
         {
@@ -82,16 +62,21 @@ void SYNTH_FRONT_C::SetMaxLevel (short ch, short data)
         return;
         }
 
+    if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
+        {
+        this->SetSustainLevel (ch,  data);;
+        return;
+        }
+
     this->VoiceSelectedCheck ();
 
     float val = (float)data * PRS_SCALER;
-
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetMaxLevel (ch, val);
-            this->pVoice[z]->SetMaxLevel (ch, val);
+            this->SynthConfig.Voice[z >> 1].SetLevel (ch, val);
+            this->pVoice[z]->SetLevel (ch, val);
             }
         }
 
@@ -99,75 +84,57 @@ void SYNTH_FRONT_C::SetMaxLevel (short ch, short data)
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetAttackTime (short data)
+void SYNTH_FRONT_C::SetAttackTime (short ch, short data)
     {
     this->VoiceSelectedCheck ();
 
     float dtime = data * TIME_MULT;
 
-    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        if (this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
+        if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            for ( int z = 0;  z < VOICE_COUNT;  z++ )
-                {
-                if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
-                    {
-                    this->SynthConfig.Voice[z >> 1].SetAttackTime (ch, dtime);
-                    this->pVoice[z]->SetAttackTime (ch, dtime);
-                    }
-                }
-            DisplayMessage.OscAttackTime (ch, data);
+            this->SynthConfig.Voice[z >> 1].SetAttackTime (ch, dtime);
+            this->pVoice[z]->SetAttackTime (ch, dtime);
             }
         }
+    DisplayMessage.OscAttackTime (ch, data);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetDecayTime (short data)
+void SYNTH_FRONT_C::SetDecayTime (short ch, short data)
     {
     float dtime = data * TIME_MULT;
 
      this->VoiceSelectedCheck ();
 
-    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
+    for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
-        if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
+        if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            for ( int z = 0;  z < VOICE_COUNT;  z++)
-                {
-                if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
-                    {
-                    this->SynthConfig.Voice[z >> 1].SetDecayTime (ch, dtime);
-                    this->pVoice[z]->SetDecayTime (ch, dtime);
-                    }
-                }
-            DisplayMessage.OscDecayTime (ch, data);
+            this->SynthConfig.Voice[z >> 1].SetDecayTime (ch, dtime);
+            this->pVoice[z]->SetDecayTime (ch, dtime);
             }
         }
+    DisplayMessage.OscDecayTime (ch, data);
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::SetReleaseTime (short data)
+void SYNTH_FRONT_C::SetReleaseTime (short ch, short data)
     {
     float dtime = data * TIME_MULT;
 
     this->VoiceSelectedCheck ();
 
-    for ( int ch = 0;  ch < OSC_MIXER_COUNT;  ch++ )
+    for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
-        if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
+        if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            for ( int z = 0;  z < VOICE_COUNT;  z++)
-                {
-                if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
-                    {
-                    this->SynthConfig.Voice[z >> 1].SetReleaseTime (ch, dtime);
-                    this->pVoice[z]->SetReleaseTime (ch, dtime);
-                    }
-                }
-            DisplayMessage.OscReleaseTime (ch, data);
+            this->SynthConfig.Voice[z >> 1].SetReleaseTime (ch, dtime);
+            this->pVoice[z]->SetReleaseTime (ch, dtime);
             }
         }
+    DisplayMessage.OscReleaseTime (ch, data);
     }
 
 //#####################################################################
@@ -188,7 +155,7 @@ void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ToggleRampDirection ()
+void SYNTH_FRONT_C::ToggleRampDirection (short ch)
     {
     this->VoiceSelectedCheck ();
 
@@ -202,6 +169,7 @@ void SYNTH_FRONT_C::ToggleRampDirection ()
             }
         }
     DisplayMessage.OscRampDirection (zb);
+    this->LaunchControl.ButtonColor (ch, ( zb ) ? XL_LED::RED : XL_LED::GREEN);
     }
 
 //#######################################################################

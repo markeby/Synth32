@@ -47,6 +47,14 @@ void SYNTH_VOICE_CONFIG_C::Load (const char* name)
     {
     if ( Settings.GetConfig (name, &(this->Cs), sizeof (Cs)) )
         printf ("### Error loading voice config!\n");
+    this->InitButtonsXL ();
+    }
+
+//#######################################################################
+void SYNTH_VOICE_CONFIG_C::InitButtonsXL ()
+    {
+    for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
+        this->ButtonState[z] = XL_MidiMapArray[XL_MIDI_MAP_OSC][XL_BUTTON_START + z].Color;
     }
 
 

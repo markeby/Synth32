@@ -71,8 +71,8 @@ public:
     inline void     SetDecayTime    (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }
     inline void     SetReleaseTime  (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::RELEASE, time); }
     inline void     SetSustainLevel (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent); }
-    inline void     SetMaxLevel     (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
-    inline float    GetMaxLevel     (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
+    inline void     SetLevel        (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
+    inline float    GetLevel        (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
     inline float    GetSustainLevel (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
     inline float    GetAttackTime   (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::ATTACK)); }
     inline float    GetDecayTime    (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::DECAY)); }

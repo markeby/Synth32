@@ -89,7 +89,7 @@ typedef struct
     short       Index;
     const char* Desc;
     void       (*CallBack)(short chan, short data);
-    }  MIDI_MAP;
+    }  G49_FADER_MIDI_MAP;
 
 typedef struct
     {
@@ -97,7 +97,7 @@ typedef struct
     bool        State;
     const char* Desc;
     void       (*CallBack)(short chan, bool state);
-    }  MIDI_BUTTON_MAP;
+    }  G49_BUTTON_MIDI_MAP;
 
 typedef struct
     {
@@ -105,7 +105,7 @@ typedef struct
     byte        Color;
     const char* Desc;
     void       (*CallBack)(short chan, short data);
-    }  MIDI_XL_MAP;
+    }  XL_MIDI_MAP;
 
 typedef struct
     {
@@ -113,22 +113,33 @@ typedef struct
     const char* Desc;
     void        (*CallBack)(short chan, short data);
     int         Value;
-    }  MIDI_ENCODER_MAP;
+    }  G49_ENCODER_MIDI_MAP;
 
 typedef byte  LED_NOTE_MAP;
 
 //#################################################
+// Novation LaunchControl X1 Control mapping
+//#################################################
+#define XL_MIDI_MAP_SIZE        56
+#define XL_MIDI_MAP_PAGES       5
+
+#define XL_MIDI_MAP_OSC         0
+#define XL_MIDI_MAP_FILTER      1
+#define XL_MIDI_MAP_LFO         2
+#define XL_MIDI_MAP_MAPPING     3
+#define XL_MIDI_MAP_SPARE       4
+
+#define XL_BUTTON_START         24
+#define XL_BUTTON_END           40
+#define XL_BUTTON_COUNT         (XL_BUTTON_END - XL_BUTTON_START)
+
+//#################################################
 //  Synth interfaces
 //#################################################
-extern MIDI_MAP             FaderMapArray[];
-extern MIDI_ENCODER_MAP     KnobMapArray[];
-extern MIDI_BUTTON_MAP      SwitchMapArray[];
-#define SIZE_CL_MAP         56
-#define SIZE_S_LED          24
-extern MIDI_XL_MAP          XlMapArray[SIZE_CL_MAP];
-extern LED_NOTE_MAP         SendA[];
-extern LED_NOTE_MAP         SendB[];
-extern LED_NOTE_MAP         PanDevice[];
+extern  G49_FADER_MIDI_MAP      FaderMidiMapArray[];
+extern  G49_ENCODER_MIDI_MAP    KnobMidiMapArray[];
+extern  G49_BUTTON_MIDI_MAP     SwitchMidiMapArray[];
+extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE];
 
 //#################################################
 //  I2C bus interfaces
@@ -161,37 +172,40 @@ private:
         ENVELOPE_T  Env[OSC_MIXER_COUNT];
         }   Cs;
 
-    String              Name;
+    String  Name;
+    byte    ButtonState[XL_BUTTON_COUNT];
 
 public:
     bool    SelectedEnvelope[OSC_MIXER_COUNT];
 
-         SYNTH_VOICE_CONFIG_C (void);
-    void Save                 (const char* name);
-    void Load                 (const char* name);
+         SYNTH_VOICE_CONFIG_C       (void);
+    void Save                       (const char* name);
+    void Load                       (const char* name);
+    void InitButtonsXL              (void);
 
-    inline void   SetName            (String& name)             { this->Name = name;}
-    inline String Getname            (void)                     { return (this->Name); }
-    inline void   SetOutputEnable    (short data)               { this->Cs.OutputEnable = data; }
-    inline short  GetOutputEnable    (void)                     { return (this->Cs.OutputEnable); }
-    inline void   SetVoiceMidi       (short data)               { this->Cs.MapVoiceMidi = data; }
-    inline short  GetVoiceMidi       (void)                     { return (this->Cs.MapVoiceMidi); }
-    inline void   SetVoiceNoise      (short data)               { this->Cs.MapVoiceNoise = data; }
-    inline short  GetVoiceNoise      (void)                     { return (this->Cs.MapVoiceNoise); }
-    inline void   SetRampDirection   (bool data)                { this->Cs.RampDirection = data; }
-    inline bool   GetRampDirection   (void)                     { return (this->Cs.RampDirection); }
-    inline void   SetPulseWidth      (float data)               { this->Cs.PulseWidth = data; }
-    inline float  GetPulseWidth      (void)                     { return (this->Cs.PulseWidth); }
-    inline void   SetMaxLevel        (byte index, float data)   { this->Cs.Env[index].MaxLevel = data; }
-    inline float  GetMaxLevel        (byte index)               { return (this->Cs.Env[index].MaxLevel); }
-    inline void   SetSustainLevel    (byte index, float data)   { this->Cs.Env[index].SustainLevel = data; }
-    inline float  GetSustainLevel    (byte index)               { return (this->Cs.Env[index].SustainLevel); }
-    inline void   SetAttackTime      (byte index, float data)   { this->Cs.Env[index].AttackTime = data; }
-    inline float  GetAttackTime      (byte index)               { return (this->Cs.Env[index].AttackTime); }
-    inline void   SetDecayTime       (byte index, float data)   { this->Cs.Env[index].DecayTime = data; }
-    inline float  GetDecayTime       (byte index)               { return (this->Cs.Env[index].DecayTime); }
-    inline void   SetReleaseTime     (byte index, float data)   { this->Cs.Env[index].ReleaseTime = data; }
-    inline float  GetReleaseTime     (byte index)               { return (this->Cs.Env[index].ReleaseTime); }
+    inline byte  *GetButtonState    (void)                      { return (ButtonState); }
+    inline void   SetName           (String& name)              { this->Name = name;}
+    inline String Getname           (void)                      { return (this->Name); }
+    inline void   SetOutputEnable   (short data)                { this->Cs.OutputEnable = data; }
+    inline short  GetOutputEnable   (void)                      { return (this->Cs.OutputEnable); }
+    inline void   SetVoiceMidi      (short data)                { this->Cs.MapVoiceMidi = data; }
+    inline short  GetVoiceMidi      (void)                      { return (this->Cs.MapVoiceMidi); }
+    inline void   SetVoiceNoise     (short data)                { this->Cs.MapVoiceNoise = data; }
+    inline short  GetVoiceNoise     (void)                      { return (this->Cs.MapVoiceNoise); }
+    inline void   SetRampDirection  (bool data)                 { this->Cs.RampDirection = data; }
+    inline bool   GetRampDirection  (void)                      { return (this->Cs.RampDirection); }
+    inline void   SetPulseWidth     (float data)                { this->Cs.PulseWidth = data; }
+    inline float  GetPulseWidth     (void)                      { return (this->Cs.PulseWidth); }
+    inline void   SetLevel          (byte index, float data)    { this->Cs.Env[index].MaxLevel = data; }
+    inline float  GetLevel          (byte index)                { return (this->Cs.Env[index].MaxLevel); }
+    inline void   SetSustainLevel   (byte index, float data)    { this->Cs.Env[index].SustainLevel = data; }
+    inline float  GetSustainLevel   (byte index)                { return (this->Cs.Env[index].SustainLevel); }
+    inline void   SetAttackTime     (byte index, float data)    { this->Cs.Env[index].AttackTime = data; }
+    inline float  GetAttackTime     (byte index)                { return (this->Cs.Env[index].AttackTime); }
+    inline void   SetDecayTime      (byte index, float data)    { this->Cs.Env[index].DecayTime = data; }
+    inline float  GetDecayTime      (byte index)                { return (this->Cs.Env[index].DecayTime); }
+    inline void   SetReleaseTime    (byte index, float data)    { this->Cs.Env[index].ReleaseTime = data; }
+    inline float  GetReleaseTime    (byte index)                { return (this->Cs.Env[index].ReleaseTime); }
     };
 
 class SYNTH_CONFIG_C
