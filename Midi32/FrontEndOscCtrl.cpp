@@ -1,7 +1,6 @@
 //#######################################################################
-// Module:     SyntFront.ino
-// Descrption: Synthesizer front end controller
-//                 Midi->Front->SynthModules
+// Module:     SyntFrontOscCtl.cpp
+// Descrption: Synthesizer oscillator controls
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
