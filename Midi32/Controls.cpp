@@ -105,7 +105,7 @@ static void TuneReset (short ch, bool state)
 //########################################################
 static void TuneUpDown (short ch, bool state)
     {
-    SynthFront.TuningAdjust (state);
+    SynthFront.TuningAdjust (ch);
     }
 
 //########################################################

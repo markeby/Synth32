@@ -422,7 +422,7 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     PAGE_TUNE_C::PAGE_TUNE_C (lv_obj_t* base)
     {
     int x = 155;
-    int y = 140;
+    int y = 156;
 
     this->TuningFont = &lv_font_montserrat_48;
     lv_style_init (&this->TuningStyle);
@@ -434,12 +434,10 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_label_set_text (this->TuningTitle, "TUNING MODE");
     lv_obj_add_style  (this->TuningTitle, &this->TuningStyle, 0);
 
-    this->Note = new NOTE_WIDGET_C (base, x + 116, 80);
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        {
+    this->Note  = new NOTE_WIDGET_C  (base, x + 116, 80);
+    this->Value = new VALUE_WIDGET_C (base, x + 151, 111, "D/A = ");
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++, x+=90 )
         this->LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceText[z], x, y, LV_PALETTE_INDIGO);
-        x += 90;
-        }
     this->TuneSelection = new TUNES_WIDGET_C (base, 248, 340);
     }
 
@@ -455,8 +453,10 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             this->Note->SetValue (value);
             break;
         case EFFECT_C::SELECTED:
-            this->TuneSelection->Set (ch, value);
+            this->TuneSelection->Set (ch);
             break;
+        case EFFECT_C::VALUE:
+            this->Value->Set (value);
         default:
             break;
         }

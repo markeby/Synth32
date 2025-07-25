@@ -358,10 +358,11 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             {
             if ( this->SetTuning && (chan < 8) )
                 {
-                bool zb = !this->TuningOn[chan];
-                this->TuningOn[chan] = zb;
-                DBG ("Tuning channel  %d %s", chan, (( zb ) ? "ON" : "Off"));
-                DisplayMessage.TuningSelect (chan, zb);
+                for ( z = 0;  z < VOICE_COUNT;  z++ )
+                    this->TuningOn[z] = false;
+                this->TuningOn[chan] = true;
+                DBG ("Tuning for channel %d", chan);
+                DisplayMessage.TuningSelect (chan);
                 this->TuningChange = true;
                 return;
                 }
@@ -378,6 +379,7 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             {
             chan += 16;
             G49_BUTTON_MIDI_MAP& m = this->G49MidiMapButton[chan];
+
             if ( m.CallBack != nullptr )
                 {
                 m.State = !m.State;

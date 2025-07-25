@@ -165,7 +165,21 @@ class TUNES_WIDGET_C
 
     public:
              TUNES_WIDGET_C (lv_obj_t* base, short x, short y);
-        void Set            (short chan, bool state);
+        void Set            (short chan);
+    };
+
+//############################################
+class VALUE_WIDGET_C
+    {
+    private:
+        lv_style_t  Style;
+        lv_style_t  StyleValue;
+        lv_obj_t*   Value;
+        String      PreStr;
+
+    public:
+             VALUE_WIDGET_C (lv_obj_t* base, short x, short y, const char* str);
+        void Set            (short val);
     };
 
 //############################################

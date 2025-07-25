@@ -154,6 +154,7 @@
             Filters="*.py"
             GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
             <F N="../.gitignore"/>
+            <F N="adr.bat"/>
             <F N="arduino-cli.yaml"/>
             <F
                 N="Makefile"

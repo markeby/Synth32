@@ -67,5 +67,6 @@ public:
     inline uint32_t IsActive            (void)                              { return (this->ActiveTimer); }
     inline void     SetMidi             (byte mchan)                        { this->Midi = mchan; }
     inline byte     GetMidi             (void)                              { return (this->Midi); }
+    inline void     SetTuningDisplay    (void)                              { pOsc->SetTuningDisplay (); }
     };
 

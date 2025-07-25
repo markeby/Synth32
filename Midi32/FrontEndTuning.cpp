@@ -34,6 +34,8 @@ void SYNTH_FRONT_C::Tuning ()
             {
             this->pVoice[zc]->SetTuningNote (this->Down.Key);     // send key index to oscillator
             DisplayMessage.TuningNote (this->Down.Key);
+            if ( this->TuningOn[zc] )
+                this->pVoice[zc]->SetTuningDisplay ();
             }
         if ( this->TuningChange )
             {
@@ -47,6 +49,7 @@ void SYNTH_FRONT_C::Tuning ()
                         DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
                         }
                     }
+                this->pVoice[zc]->SetTuningDisplay ();
                 }
             else
                 {
@@ -80,8 +83,9 @@ void SYNTH_FRONT_C::StartTuning ()
             this->TuningOn[zc] = false;
             this->TuningChange = true;
             }
+        this->TuningOn[0] = true;
         }
-    this->SetTuning    = true;
+    this->SetTuning = true;
     }
 
 //#######################################################################
@@ -105,7 +109,10 @@ void SYNTH_FRONT_C::TuningBump (bool state)
         byte note = (state) ? 125 : 5;         // Highest F or lowest F
         DisplayMessage.TuningNote (note);
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
+            {
             this->pVoice[zc]->SetTuningNote (note);
+            this->pVoice[zc]->SetTuningDisplay ();
+            }
         }
     }
 

@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "Settings.h"
 #include "Osc.h"
+#include "I2Cmessages.h"
 #include "Debug.h"
 
 #ifdef DEBUG_SYNTH
@@ -24,17 +25,17 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
 //#######################################################################
     OSC_C::OSC_C (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen) : EnvGen (envgen)
     {
-    Valid = false;
-    Number = num;
+    this->Valid = false;
+    this->Number = num;
     // D/A configuration
-    OscPortIO                 = first_device + byte(D_A_OFF::EXPO);
-    PwmPortIO                 = first_device + byte(D_A_OFF::WIDTH);
-    RampDirPortIO             = first_device + byte(D_A_OFF::DIR);
-    Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
-    Mix[int(SHAPE::RAMP)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::RAMP)], first_device + byte(D_A_OFF::RAMP), usecount);
-    Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
-    Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), usecount);
-    Mix[int(SHAPE::NOISE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::NOISE)], first_device + byte(D_A_OFF::NOISE), usecount);
+    this->OscPortIO                 = first_device + byte(D_A_OFF::EXPO);
+    this->PwmPortIO                 = first_device + byte(D_A_OFF::WIDTH);
+    this->RampDirPortIO             = first_device + byte(D_A_OFF::DIR);
+    this->Mix[int(SHAPE::TRIANGLE)] = EnvGen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
+    this->Mix[int(SHAPE::RAMP)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::RAMP)], first_device + byte(D_A_OFF::RAMP), usecount);
+    this->Mix[int(SHAPE::PULSE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
+    this->Mix[int(SHAPE::SINE)]     = EnvGen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), usecount);
+    this->Mix[int(SHAPE::NOISE)]    = EnvGen.NewADSR (num, MixerNames[int(SHAPE::NOISE)], first_device + byte(D_A_OFF::NOISE), usecount);
 
     for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
         {
@@ -43,15 +44,15 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
         }
 
     // Configure keyboard MIDI frequencies
-    memset (OctaveArray, 0, sizeof (OctaveArray));
-    if ( Settings.GetOscBank (num, OctaveArray) )                   // If key/note array not in storage
+    memset (this->OctaveArray, 0, sizeof (this->OctaveArray));
+    if ( Settings.GetOscBank (num, this->OctaveArray) )                   // If key/note array not in storage
         {
         printf ("\t  **** Tunning data failed to load.\n\t  **** Inializing default tunning.\n");
         for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )          // initialize at even intervals.
             {
-            OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
-            if ( OctaveArray[z] > MAX_DA )
-                OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
+            this->OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
+            if ( this->OctaveArray[z] > MAX_DA )
+                this->OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
             }
         }
 
@@ -59,10 +60,10 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
         {
         I2cDevices.D2Analog (PwmPortIO, 900);
 
-        ClearState ();
+        this->ClearState ();
         if ( DebugOsc )
             printf("\t  >> VCO %d started for device %d\n", num, first_device);
-        Valid = true;
+        this->Valid = true;
         }
     else
         printf("\t  ** VCO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
@@ -71,21 +72,22 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
 //#######################################################################
 void OSC_C::TuningAdjust (bool up)
     {
-    OctaveArray[this->CurrentNote] += ( up ) ? -1 : +1;
-    SetTuningNote (this->CurrentNote);
+    OctaveArray[this->CurrentNote] += ( up ) ? +1 : -1;
+    this->SetTuningNote (this->CurrentNote);
+    this->SetTuningDisplay ();
     }
 
 //#######################################################################
 void OSC_C::ClearState ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-        Mix[z]->Clear ();
+        this->Mix[z]->Clear ();
     }
 
 //#######################################################################
 void OSC_C::Clear ()
     {
-    ClearState ();
+    this->ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -104,35 +106,41 @@ void OSC_C::SetTuningNote (byte note)
     }
 
 //#######################################################################
+void OSC_C::SetTuningDisplay ()
+    {
+    DisplayMessage.TuningDtoA (OctaveArray[CurrentNote]);
+    }
+
+//#######################################################################
 void OSC_C::NoteSet (byte note, byte velocity)
     {
-    CurrentNote = note;
+    this->CurrentNote = note;
     DBG ("Key > %d D/A > %d\n", note, OctaveArray[note]);
 
-    ClearState ();
-    I2cDevices.D2Analog (OscPortIO, OctaveArray[note]);
+    this->ClearState ();
+    I2cDevices.D2Analog (this->OscPortIO, this->OctaveArray[note]);
 
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        Mix[z]->Start ();
+        this->Mix[z]->Start ();
     }
 
 //#######################################################################
 void OSC_C::NoteClear ()
     {
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        Mix[z]->End ();
+        this->Mix[z]->End ();
     }
 
 //#######################################################################
 void OSC_C::SetRampDirection (bool data)
     {
-    I2cDevices.D2Analog (RampDirPortIO, ( data ) ? DA_MAX : 0);
+    I2cDevices.D2Analog (this->RampDirPortIO, ( data ) ? DA_MAX : 0);
     }
 
 //#######################################################################
 void OSC_C::PulseWidth (float percent)
     {
-    I2cDevices.D2Analog (PwmPortIO, (percent * (float)DA_MAX));
+    I2cDevices.D2Analog (this->PwmPortIO, (percent * (float)DA_MAX));
     }
 
 

@@ -139,6 +139,7 @@ private:
     TITLE_WIDGET_C*         TitleTuning[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         LevelTuning[OSC_MIXER_COUNT];
     TUNES_WIDGET_C*         TuneSelection;
+    VALUE_WIDGET_C*         Value;
 
 public:
               PAGE_TUNE_C (lv_obj_t* base);

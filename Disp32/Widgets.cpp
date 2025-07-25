@@ -480,23 +480,52 @@ void NOTE_WIDGET_C::SetValue (short val)
     x = 8;
     lv_style_init (&this->Style);
     lv_style_set_text_font (&this->Style, &lv_font_montserrat_14);
-    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+    for ( short z = 0;  z < VOICE_COUNT;  z++ )
         {
         this->Osc[z] = lv_label_create (panel);
         lv_label_set_recolor (this->Osc[z], true);
         lv_obj_align (this->Osc[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
         lv_obj_add_style (this->Osc[z], &this->Style, 0);
-        this->Set (z, false);
+        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
         x += 31;
         }
     }
 
 //#######################################################################
-void TUNES_WIDGET_C::Set (short chan, bool state)
+void TUNES_WIDGET_C::Set (short chan)
     {
-    if ( state )
-        lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan);
-    else
-        lv_label_set_text_fmt (Osc[chan], "#D0D0D0 %d#", chan);
+    for ( short z = 0;  z < VOICE_COUNT;  z++ )
+        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
+    lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan);
     }
+
+//#######################################################################
+//#######################################################################
+    VALUE_WIDGET_C::VALUE_WIDGET_C (lv_obj_t* base, short x, short y, const char* str)
+    {
+    PreStr = str;
+    lv_obj_t * panel = lv_obj_create (base);
+    lv_obj_set_size (panel, 120, 32);
+    lv_obj_set_pos (panel, x, y);
+    lv_obj_set_style_pad_top (panel, 1, 0);
+    lv_obj_set_style_pad_left (panel, 2, 0);
+    lv_obj_set_style_pad_right (panel, 2, 0);
+    lv_obj_set_style_pad_bottom (panel, 1, 0);
+
+    this->Value = lv_label_create (panel);
+    lv_obj_align (this->Value, LV_ALIGN_CENTER, 0, 0);
+    lv_style_init (&this->StyleValue);
+    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_18);
+    lv_style_set_text_color (&this->StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
+    lv_obj_add_style (this->Value, &this->StyleValue, 0);
+
+    this->Set (0);
+    }
+
+//#######################################################################
+void VALUE_WIDGET_C::Set (short val)
+    {
+    lv_label_set_text_fmt (this->Value, "%s%d", PreStr.c_str (), val);
+    }
+
 

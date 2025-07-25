@@ -79,13 +79,23 @@ public:
         }
 
     //#################################################
-    inline void TuningSelect (byte ch, byte value)
+    inline void TuningDtoA (short value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
+                          0,
+                          DISP_MESSAGE_N::EFFECT_C::VALUE,
+                          value);
+        }
+
+    //#################################################
+    inline void TuningSelect (byte ch)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
                           ch,
                           DISP_MESSAGE_N::EFFECT_C::SELECTED,
-                          value);
+                          0);
         }
 
     //#################################################
