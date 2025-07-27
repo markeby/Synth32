@@ -202,8 +202,8 @@
             Filters="*.py"
             GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
             <F N="../.gitignore"/>
+            <F N="adr.bat"/>
             <F N="../tools/Beep.py"/>
-            <F N="dbg.bat"/>
             <F
                 N="Makefile"
                 Type="Makefile"/>
