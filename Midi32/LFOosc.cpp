@@ -98,6 +98,7 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
         {
         this->Valid = true;
         this->Offset = Settings.GetOffsetLFO (num);
+      printf("@@ LFO %d offset = %d [%x]\n", this->Number, this->Offset, this->Offset);
         this->ClearState ();
         this->PitchBend (PITCH_BEND_CENTER);
         if ( DebugOsc )

@@ -138,12 +138,13 @@ void SYNTH_FRONT_C::StartCalibration ()
 
     this->Lfo[0].SetOffset(0);
     this->Lfo[1].SetOffset (0);
-    this->Lfo[0].PitchBend (PITCH_BEND_CENTER);
-    this->Lfo[1].PitchBend (PITCH_BEND_CENTER);
+    this->Lfo[0].PitchBend (Lfo[0].GetOffset() + 64);
+    this->Lfo[1].PitchBend (Lfo[1].GetOffset() + 64);
 
     for (int z = 0;  z < 16;  z++ )                 // clear all ports
         I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, false);
-    I2cDevices.DigitalOut (this->CalibrationBaseDigital + 8, true);
+    for ( int z = 8;  z < 12;  z++)
+        I2cDevices.DigitalOut (this->CalibrationBaseDigital + z,  true);
     I2cDevices.UpdateDigital ();                    // Update all digital port changes
     delay (500);                                      // let voltage settle
     I2cDevices.SetCallbackAtoD (CalibrationCallback);
@@ -167,9 +168,15 @@ void SYNTH_FRONT_C::Calibration (ushort val)
             for (int z = 0;  z < 16;  z++ )                 // clear all ports
                 I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, false);
             if ( this->CalibrationLFO == 0 )
-                I2cDevices.DigitalOut (this->CalibrationBaseDigital, true);          // select LFO-0
+                {
+                for ( int z = 0;  z < 4;  z++)
+                    I2cDevices.DigitalOut(this->CalibrationBaseDigital + z, true);          // select LFO-0
+                }
             else
-                I2cDevices.DigitalOut (this->CalibrationBaseDigital + 4, true);      // select LFO-1
+                {
+                for ( int z = 4;  z < 8;  z++)
+                    I2cDevices.DigitalOut (this->CalibrationBaseDigital + z, true);      // select LFO-1
+                }
             I2cDevices.UpdateDigital ();                    // Update all digital port changes
             delay (500);                                      // let voltage settle
             I2cDevices.StartAtoD  (this->CalibrationAtoD);

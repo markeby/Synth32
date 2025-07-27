@@ -170,7 +170,7 @@ short SETTINGS_C::GetOffsetLFO (uint8_t num)
 
     sprintf     (buf, "%s%d", synthKeyBender, num);
     Prefs.begin (synthTuning, false);
-    short z     = Prefs.getShort (synthKeyBender);
+    short z     = Prefs.getShort (buf);
     Prefs.end   ();
     return      (z);
     }
@@ -182,7 +182,7 @@ void SETTINGS_C::SetOffsetLFO (uint8_t num, short offset)
 
     sprintf        (buf, "%s%d", synthKeyBender, num);
     Prefs.begin    (synthTuning, false);
-    Prefs.putShort (synthKeyBender, offset);
+    Prefs.putShort (buf, offset);
     Prefs.end      ();
     }
 

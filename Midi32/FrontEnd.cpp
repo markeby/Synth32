@@ -270,7 +270,7 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
 
     this->Lfo[0].Begin (0, lfo_control + 8 , lfo_control);
     this->Lfo[1].Begin (1, lfo_control + 8 + 6, lfo_control + 3);
-    this->CalibrationAtoD = start_a_d;
+    this->CalibrationAtoD = start_a_d + 2;
     this->ResolutionMode = true;
     }
 
