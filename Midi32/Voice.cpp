@@ -16,6 +16,8 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mux_digital, short mod_mux_dig
     this->Key                  = -1;
     this->UseCount             = 0;
     this->Midi                 = 1;
+    this->TuningOn             = false;
+
     if ( num & 1 )
         {
         this->DigitalOutOscillator = mux_digital + 8;
@@ -32,7 +34,8 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mux_digital, short mod_mux_dig
     this->ModMux[0] = mod_mux_digital + 8;
     this->ModMux[1] = mod_mux_digital;
     this->ModMux[2] = mod_mux_digital + 4;
-    this->pOsc = new OSC_C (num, osc_d_a, UseCount, envgen);
+    this->pOsc = new OSC_C  (num, osc_d_a, this->UseCount, envgen);
+    this->pFlt = new FLT4_C (num, osc_d_a + (( num & 1 ) ? 10 : 16), this->UseCount, envgen);
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
     }
@@ -111,4 +114,12 @@ void VOICE_C::NoiseReset ()
     for ( int z = 0;  z < SOURCE_CNT_NOISE;  z++ )
         I2cDevices.DigitalOut (this->NoiseDigitalIO + z, false);
     }
+
+//#######################################################################
+void VOICE_C::TuningAdjust (bool up)
+    {
+    if ( this->TuningOn )
+        this->pOsc->TuningAdjust (up);
+    }
+
 

@@ -44,10 +44,23 @@ void MONITOR_C::DumpStats (void)
     Serial << "==========================================" << endl;
     printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
+    Serial << hh << "       sketch size = " << ESP.getSketchSize () << endl;
+    Serial << hh << " free sketch space = " << ESP.getFreeSketchSpace () << endl << endl;
+
+    Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
+    Serial << hh << " larget heap block = " << ESP.getMaxAllocHeap () << endl;
+    Serial << hh << " lowest heap space = " << ESP.getMinFreeHeap () << endl;
+    Serial << hh << "   free heap space = " << ESP.getFreeHeap () << endl << endl;
+
     Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize () << endl;
     Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
-    printAfterSetupInfo ();
-    Serial << "==========================================" << endl << endl;
+
+    uint64_t zl = ESP.getEfuseMac ();
+    Serial << hh << "        Update MAC = " <<  _WIDTHZ (_HEX ( zl        & 0xFF), 2) <<
+                                        ":" <<  _WIDTHZ (_HEX ((zl >> 8)  & 0xFF), 2) <<
+                                        ":" <<  _WIDTHZ (_HEX ((zl >> 16) & 0xFF), 2) <<
+                                        ":" <<  _WIDTHZ (_HEX ((zl >> 24) & 0xFF), 2) <<
+                                        ":" <<  _WIDTHZ (_HEX ((zl >> 32) & 0xFF), 2) << endl;
     Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
     Serial << hh << "       Runing Time = ";
     DispRunTime ();
@@ -118,12 +131,12 @@ bool MONITOR_C::PromptZap (void)
         case 'Y':
             switch ( this->InputMode )
                 {
-                case ZAP1:
+                case CLR_TUNING:
                     Settings.ClearTuning ();
                     Serial << 9 << endl << "\nCleared tuning settings." << endl;
                     ESP.restart ();
                     break;
-                case ZAP2:
+                case CLR_CONFIG:
                     Settings.ClearConfig ();
                     Serial << 9 << endl << "\nCleared configuration settings." << endl;
                     ESP.restart ();
@@ -208,16 +221,11 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (MENU);
                     break;
                 case '3':
-                    DebugOsc   = !DebugOsc;
-                    Serial << "  Oscillator debugging " << (( DebugOsc ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
-                    break;
-                case '4':
                     DebugSynth = !DebugSynth;
                     Serial << "  Synth debugging " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
-                case '5':
+                case '4':
                     DebugDisp = !DebugDisp;
                     Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
@@ -239,11 +247,11 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case 'C':
                     this->InputPrompt ("  Clearing configuration settings");
-                    this->Mode (ZAP2);
+                    this->Mode (CLR_CONFIG);
                     break;
                 case 'T':
                     this->InputPrompt ("  Clearing tuning settings");
-                    this->Mode (ZAP1);
+                    this->Mode (CLR_TUNING);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
@@ -275,9 +283,8 @@ void MONITOR_C::Menu (void)
         Serial << "\t******     Tuning mode      ******" << endl;
     Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
     Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
-    Serial << StateDebug (DebugOsc)   << "\t3   - Debug Oscillators & Noise   " << endl;
-    Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth            " << endl;
-    Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface " << endl;
+    Serial << StateDebug (DebugSynth) << "\t3   - Debug Synth            " << endl;
+    Serial << StateDebug (DebugDisp ) << "\t4   - Debug Display Interface " << endl;
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << endl;
@@ -355,8 +362,8 @@ void MONITOR_C::Loop (void)
                 case VARIABLE:
                     this->TextIn ();
                     break;
-                case ZAP1:
-                case ZAP2:
+                case CLR_TUNING:
+                case CLR_CONFIG:
                     if ( this->PromptZap () )
                         this->Mode (MENU);
                     break;

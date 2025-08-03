@@ -61,6 +61,25 @@ public:
 
 //############################################
 //############################################
+class PAGE_FILTER_C : protected PAGE_TITLE_C
+    {
+private:
+    TITLE_WIDGET_C*         TitleControl[2];
+    ADSR_METER_WIDGET_C*    MeterADSR[2];
+    LEVEL_WIDGET_C*         ValueStart[2];
+    LEVEL_WIDGET_C*         ValueEnd[2];
+    LEVEL_WIDGET_C*         ValueSustain[2];
+
+    byte                    Midi;
+
+public:
+              PAGE_FILTER_C (lv_obj_t* base);
+    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void      SetPage    (byte midi);
+    };
+
+//############################################
+//############################################
 class PAGE_MOD_C : protected PAGE_TITLE_C
     {
 private:
@@ -94,17 +113,6 @@ public:
     void    UpdatePage        (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     void    UpdateHardButtons (short index, short value, bool sel);
     void    UpdateSoftButtons (short value, bool sel);
-    };
-
-//############################################
-//############################################
-class PAGE_FILTER_C : protected PAGE_TITLE_C
-    {
-private:
-
-public:
-              PAGE_FILTER_C (lv_obj_t* base);
-    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };
 
 //############################################
@@ -191,18 +199,18 @@ private:
     lv_obj_t*               Pages;
     DISP_MESSAGE_N::PAGE_C  CurrentPage;
 
-    lv_obj_t*               BasePageVoice[MAP_COUNT];
+    lv_obj_t*               BasePageVoice;
+    lv_obj_t*               BasePageFilter;
     lv_obj_t*               BasePageMod;
     lv_obj_t*               BasePageMap;
-    lv_obj_t*               BasePageFilter;
     lv_obj_t*               BasePageCalibration;
     lv_obj_t*               BasePageTuning;
     lv_obj_t*               BasePageLoadSave;
 
-    PAGE_OSC_C*             PageVoice[MAP_COUNT];
+    PAGE_OSC_C*             PageVoice;
+    PAGE_FILTER_C*          PageFilter;
     PAGE_MOD_C*             PageMod;
     PAGE_MAPPING_C*         PageMap;
-    PAGE_FILTER_C*          PageFilter;
     PAGE_CALIBRATE_C*       PageCalibrate;
     PAGE_TUNE_C*            PageTune;
     PAGE_LOAD_SAVE_C*       PageLoadSave;
@@ -211,14 +219,14 @@ public:
             GRPH_C              (void);
     void    Begin               (void);
     void    ClearData           (short num);
-    void    Pause               (bool state);
     void    SetPage             (byte num, byte midi);
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
 
+    inline void    PageSelect          (byte num)                                                           { PageSelect ((DISP_MESSAGE_N::PAGE_C)num); }
     inline void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMap->UpdatePage (ch, effect, value); }
     inline void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice[index]->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
     inline void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
     };
 

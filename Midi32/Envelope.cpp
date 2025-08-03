@@ -14,7 +14,7 @@ using namespace std;
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "ENV";
-#define DBG(args...)  {if (DebugSynth){DebugMsgF(Label,Index,Name,StateLabel[(int)State],args); } }
+#define DBG(args...)  {if (DebugSynth){DebugMsgF(Label,this->Index,this->Name,StateLabel[(int)State],args); } }
 #else
 #define DBG(args...)
 #endif
@@ -60,6 +60,7 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     this->Index         = index;
     this->Current       = 0;
     this->Peak          = 0;
+    this->Bottom        = 0;
     this->Sustain       = 0;
     this->AttackTime    = 0;
     this->DecayTime     = 0;
@@ -113,6 +114,7 @@ void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     switch ( state )
         {
         case ESTATE::START:
+            this->Bottom = percent;
             break;
         case ESTATE::ATTACK:
             this->Peak = percent;
@@ -137,6 +139,7 @@ float ENVELOPE_C::GetLevel (ESTATE state)
     switch ( state )
         {
         case ESTATE::START:
+            val = this->Bottom;
             break;
         case ESTATE::ATTACK:
             val = this->Peak;
@@ -169,7 +172,7 @@ void ENVELOPE_C::Start ()
     this->Active = true;
     this->State = ESTATE::START;
     this->UseCount++;
-    DBG ("Starting %d", this->Index);
+    DBG ("Starting");
     }
 
 //#######################################################################
@@ -190,7 +193,7 @@ void ENVELOPE_C::Clear ()
     this->State         = ESTATE::IDLE;
     this->Current       = 0.0;
     this->Updated       = true;
-    DBG ("clearing %d", Index);
+    DBG ("clearing");
     this->Update ();
     }
 
@@ -339,7 +342,7 @@ void ENVELOPE_C::Process (float deltaTime)
     //***************************************
     //  This should never happen
     //***************************************
-    DBG ("DANGER! DANGER!We should have never gotten here during envelope processing!");
+    DBG ("DANGER! DANGER! We should have never gotten here during envelope processing!");
     Clear ();
     }
 

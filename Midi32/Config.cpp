@@ -14,25 +14,37 @@
     this->Cs.MapVoiceMidi  = 1;
     this->Cs.MapVoiceNoise = 0;
     this->Cs.OutputEnable  = 0;
-    this->Cs.RampDirection    = false;
-    this->Cs.PulseWidth       = 2048;
+    this->Cs.FilterEnables  = 0;
+    this->Cs.RampDirection = false;
+    this->Cs.PulseWidth    = 2048;
 
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        this->Cs.Env[z].AttackTime   = 1.0;
-        this->Cs.Env[z].DecayTime    = 1.0;
-        this->Cs.Env[z].ReleaseTime  = 1.0;
-        this->Cs.Env[z].SustainLevel = 0.0;
-        this->Cs.Env[z].MaxLevel     = 0.0;
-        this->SelectedEnvelope[z]    = false;
+        this->Cs.OscEnv[z].AttackTime   = 1.0;      // All envelopes initialize
+        this->Cs.OscEnv[z].DecayTime    = 1.0;
+        this->Cs.OscEnv[z].ReleaseTime  = 1.0;
+        this->Cs.OscEnv[z].SustainLevel = 0.0;
+        this->Cs.OscEnv[z].MaxLevel     = 0.0;
+        this->Cs.OscEnv[z].MinLevel     = 0.0;
+        this->SelectedOscEnvelope[z]    = false;
+        if ( z < 2 )                                // filter initialization
+            {
+            this->Cs.FltEnv[z].AttackTime   = 1.0;
+            this->Cs.FltEnv[z].DecayTime    = 1.0;
+            this->Cs.FltEnv[z].ReleaseTime  = 1.0;
+            this->Cs.FltEnv[z].SustainLevel = 0.0;
+            this->Cs.FltEnv[z].MaxLevel     = 0.0;
+            this->Cs.FltEnv[z].MinLevel     = 0.0;
+            this->SelectedFltEnvelope[z]    = false;
+            }
         }
 
     // Default preload state
     int preset                       = 1;
-    this->Cs.Env[preset].AttackTime  = 20.0;
-    this->Cs.Env[preset].DecayTime   = 1.0;
-    this->Cs.Env[preset].ReleaseTime = 200.0;
-    this->Cs.Env[preset].MaxLevel    = 0.72;
+    this->Cs.OscEnv[preset].AttackTime  = 20.0;
+    this->Cs.OscEnv[preset].DecayTime   = 1.0;
+    this->Cs.OscEnv[preset].ReleaseTime = 200.0;
+    this->Cs.OscEnv[preset].MaxLevel    = 0.72;
     }
 
 //#######################################################################
@@ -54,7 +66,10 @@ void SYNTH_VOICE_CONFIG_C::Load (const char* name)
 void SYNTH_VOICE_CONFIG_C::InitButtonsXL ()
     {
     for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
-        this->ButtonState[z] = XL_MidiMapArray[XL_MIDI_MAP_OSC][XL_BUTTON_START + z].Color;
+        {
+        this->ButtonStateOsc[z] = XL_MidiMapArray[XL_MIDI_MAP_OSC][XL_BUTTON_START + z].Color;
+        this->ButtonStateFlt[z] = XL_MidiMapArray[XL_MIDI_MAP_FLT][XL_BUTTON_START + z].Color;
+        }
     }
 
 //#######################################################################
@@ -114,5 +129,14 @@ void SYNTH_CONFIG_C::Load (short num)
         s = sb + String (z);
         this->Voice[z].Load (s.c_str ());
         }
+    this->InitButtonsXL ();
     }
+
+//#######################################################################
+void SYNTH_CONFIG_C::InitButtonsXL ()
+    {
+    for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
+        this->ButtonStateLfo[z] = XL_MidiMapArray[XL_MIDI_MAP_LFO][XL_BUTTON_START + z].Color;
+    }
+
 

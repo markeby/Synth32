@@ -40,17 +40,17 @@ namespace DISP_MESSAGE_N
         {
         RESET = 0,
         PAGE_SHOW,
-        SET_PAGE_VOICE,
+        SET_PAGE,
         UPDATE_PAGE_VOICE,
-        UPDATE_PAGE_MOD,
         UPDATE_PAGE_FILTER,
+        UPDATE_PAGE_MOD,
         UPDATE_PAGE_MAP,
         UPDATE_PAGE_TUNING,
         UPDATE_PAGE_LOAD_SAVE,
         };
 
     //###########################################
-    // Function/Effects bytes text
+    // Control bytes text
     //###########################################
     #ifdef ALLOCATE_DISP_MESSAGES
     char* CommandText[] =
@@ -59,8 +59,8 @@ namespace DISP_MESSAGE_N
         "PAGE_SHOW",
         "SET_PAGE_VOICE",
         "UPDATE_PAGE_VOICE",
-        "UPDATE_PAGE_MOD",
         "UPDATE_PAGE_FILTER",
+        "UPDATE_PAGE_MOD",
         "UPDATE_PAGE_MAP",
         "UPDATE_PAGE_TUNING",
         "NONE",
@@ -72,41 +72,33 @@ namespace DISP_MESSAGE_N
     #endif
 
     //###########################################
-    // Function/Page select bytes
+    // Page select bytes
     //###########################################
     enum class PAGE_C: byte
         {
-        PAGE_OSC0 = 0,
-        PAGE_OSC1,
-        PAGE_OSC2,
-        PAGE_OSC3,
+        PAGE_OSC = 0,
+        PAGE_FLT,
         PAGE_MOD,
-        PAGE_FILTER,
         PAGE_MIDI_MAP,
         PAGE_CALIBRATION,
         PAGE_TUNING,
         PAGE_LOAD_SAVE,
-        PAGE_ADVANCE,
         NONE,
         };
 
     //###########################################
-    // Function/Effects bytes text
+    // Page select bytes text
     //###########################################
     #ifdef ALLOCATE_DISP_MESSAGES
     char* PageText[] =
         {
-        "PAGE_ADVANCE",
-        "PAGE_OSC0",
-        "PAGE_OSC1",
-        "PAGE_OSC2",
-        "PAGE_OSC3",
+        "PAGE_OSC",
+        "PAGE_FLT",
         "PAGE_MOD",
-        "PAGE_FILTER",
         "PAGE_MIDI_MAP",
-        "PAGE_TUNING",
-        "NONE",
-        "NONE",
+        "PAGE_CALIBRATION",
+        "PAGE TUNING",
+        "PAGE LOAD/SAVE",
         "NONE",
         };
     #else
@@ -116,7 +108,7 @@ namespace DISP_MESSAGE_N
     //###########################################
     // Envelope selection bytes
     //###########################################
-    enum class VOICE_C: byte
+    enum class VOICE_OPT_C: byte
         {
         SINE = 0,
         TRIANGLE,
@@ -132,7 +124,7 @@ namespace DISP_MESSAGE_N
     // Envelope selection text
     //###########################################
     #ifdef ALLOCATE_DISP_MESSAGES
-    char* VoiceText[] =
+    char* VoiceOptText[] =
         {
         "SINE",
         "TRIANGLE",
@@ -148,7 +140,7 @@ namespace DISP_MESSAGE_N
         "NONE",
         };
     #else
-    extern char* VoiceText[];
+    extern char* VoiceOptText[];
     #endif
 
     //###########################################
@@ -157,13 +149,13 @@ namespace DISP_MESSAGE_N
     enum class EFFECT_C: byte
         {
         SELECTED = 0,
-        BASE_VOL,
+        BASE_LEVEL,
         MAX_LEVEL,
         ATTACK_TIME,
         DECAY_TIME,
         RELEASE_TIME,
         SUSTAIN_LEVEL,
-        SAWTOOTH_DIRECTION,
+        RAMP_DIRECTION,
         PULSE_WIDTH,
         LFO_FREQ,
         DESELECTED,
@@ -181,13 +173,13 @@ namespace DISP_MESSAGE_N
     char* EffectText[] =
         {
         "SELECTED",
-        "BASE_VOL",
+        "BASE_LEVEL",
         "MAX_LEVEL",
         "ATTACK_TIME",
         "DECAY_TIME",
         "RELEASE_TIME",
         "SUSTAIN_LEVEL",
-        "SAWTOOTH_DIRECTION",
+        "RAMP_DIRECTION",
         "PULSE_WIDTH",
         "LFO_FREQ",
         "DESELECTED",

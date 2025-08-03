@@ -81,7 +81,6 @@ void SETTINGS_C::SaveDebugFlags ()
     {
     this->PutDebugSwitch (0, DebugMidi);
     this->PutDebugSwitch (1, DebugI2C);
-    this->PutDebugSwitch (2, DebugOsc);
     this->PutDebugSwitch (3, DebugSynth);
     this->PutDebugSwitch (4, DebugDisp);
     }
@@ -92,7 +91,6 @@ void SETTINGS_C::RestoreDebugFlags ()
     this->DebugFlags = true;
     DebugMidi   = this->GetDebugSwitch (0);
     DebugI2C    = this->GetDebugSwitch (1);
-    DebugOsc    = this->GetDebugSwitch (2);
     DebugSynth  = this->GetDebugSwitch (3);
     DebugDisp   = this->GetDebugSwitch (4);
     if ( this->DebugFlags )

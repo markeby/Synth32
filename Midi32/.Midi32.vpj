@@ -156,14 +156,16 @@
             <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
             <F N="Envelope.cpp"/>
+            <F N="Filter4.cpp"/>
             <F N="FrontEnd.cpp"/>
             <F N="FrontEndLFO.cpp"/>
             <F N="FrontEndMapping.cpp"/>
-            <F N="FrontEndOscCtrl.cpp"/>
             <F N="FrontEndTuning.cpp"/>
+            <F N="FrontEndVoice.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>
+            <F N="Novation.cpp"/>
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
@@ -185,6 +187,7 @@
             <F N="Config.h"/>
             <F N="Debug.h"/>
             <F N="Envelope.h"/>
+            <F N="Filter4.h"/>
             <F N="FrontEnd.h"/>
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>

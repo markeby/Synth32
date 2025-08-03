@@ -34,8 +34,7 @@ private:
     float       TargetTime;     // Timer is incrimented until this time is exceeded
     float       Current;        // Current level zero to one
     float       Target;
-    float       Peak;           // Fraction of one (percent)
-    float       Sustain;        // Sustain level up to one
+
     float       ReleaseSt;      // Start of release volume level
     bool        Updated;        // Flag indicating update output
     bool        PeakLevel;      // Flag indicating sustain and peak are the same
@@ -43,9 +42,12 @@ private:
 
     int16_t     DiffLevel;      // Difference to new level
 
+    float       Peak;           // Fraction of one (percent)
+    float       Bottom;         // Fraction of one (percent)
     float       AttackTime;     // Attack time in uSec.
     float       DecayTime;      // Decay time to sustatin level in uSec.
     float       ReleaseTime;    // How long to end back at base level in uSec.
+    float       Sustain;        // Sustain level up to one
     float       Multiplier;     // Final output adjustmet
 
     // Fixed parameters

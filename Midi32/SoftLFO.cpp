@@ -4,7 +4,7 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "LFO-S";
-#define DBG(args...) {if(DebugOsc){ DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#define DBG(args...) {if(DebugSynth){ DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #else
 #define DBG(args...)
 #endif

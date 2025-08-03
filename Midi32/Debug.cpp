@@ -97,3 +97,31 @@ void ErrorMsg (const char* label, const char* func, const char* const fmt, ...)
     Serial << str << endl;
     }
 
+//#######################################################################
+char* ErrorStringI2C (int err)
+    {
+    static char* e1 = "data too long to fit in transmit buffer";
+    static char* e2 = "Received NACK on transmit of address";
+    static char* e3 = "received NACK on transmit of data";
+    static char* e4 =  "other error";
+    static char* e5 = "timeout";
+
+    switch ( err )
+        {
+        case 1:
+            return (e1);
+        case 2:
+            return (e2);
+        case 3:
+            return (e3);
+        case 5:
+            return (e5);
+        case 4:
+            return (e4);
+        default:
+            break;
+        }
+    return (e4);
+    }
+
+

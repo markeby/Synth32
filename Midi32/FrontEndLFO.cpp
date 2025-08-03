@@ -56,8 +56,6 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
             break;
         }
     this->G49MidiMapEcoder[ch].Value = data;
-    if ( !this->ResolutionMode )
-        this->NonOscPageSelect (DISP_MESSAGE_N::PAGE_C::PAGE_MOD);
     }
 
 //#######################################################################
@@ -83,8 +81,6 @@ void SYNTH_FRONT_C::SelectModVCA (byte ch, bool state)
             else
                 this->pVoice[z]->SetSoftLFO (ch, false);
             }
-        if ( !this->ResolutionMode )
-            this->NonOscPageSelect (DISP_MESSAGE_N::PAGE_C::PAGE_MOD);
         }
     }
 

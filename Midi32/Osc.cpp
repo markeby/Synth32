@@ -12,7 +12,7 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "VCO";
-#define DBG(args...) {if(DebugOsc){ DebugMsg(Label,Number,args);}}
+#define DBG(args...) {if(DebugSynth){ DebugMsg(Label,Number,args);}}
 #else
 #define DBG(args...)
 #endif
@@ -59,22 +59,10 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     if ( I2cDevices.IsPortValid (first_device) && I2cDevices.IsPortValid (first_device + 7) )
         {
         I2cDevices.D2Analog (PwmPortIO, 900);
-
-        this->ClearState ();
-        if ( DebugOsc )
-            printf("\t  >> VCO %d started for device %d\n", num, first_device);
         this->Valid = true;
         }
     else
         printf("\t  ** VCO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
-    }
-
-//#######################################################################
-void OSC_C::TuningAdjust (bool up)
-    {
-    OctaveArray[this->CurrentNote] += ( up ) ? +1 : -1;
-    this->SetTuningNote (this->CurrentNote);
-    this->SetTuningDisplay ();
     }
 
 //#######################################################################
@@ -94,21 +82,24 @@ void OSC_C::Clear ()
 //#######################################################################
 void OSC_C::SetTuningVolume (byte select, uint16_t level)
     {
-    I2cDevices.D2Analog (Mix[select]->GetPortIO (), level);
+    I2cDevices.D2Analog (this->Mix[select]->GetPortIO (), level);
     }
 
 //#######################################################################
-void OSC_C::SetTuningNote (byte note)
+void OSC_C::SetTuningNote (byte note, bool active)
     {
-    CurrentNote = note;
+    this->CurrentNote = note;
     DBG ("DownKey = %d\n", note);
     I2cDevices.D2Analog (OscPortIO, OctaveArray[note]);
+    if ( active )
+        DisplayMessage.TuningDtoA (OctaveArray[note]);
     }
 
 //#######################################################################
-void OSC_C::SetTuningDisplay ()
+void OSC_C::TuningAdjust (bool up)
     {
-    DisplayMessage.TuningDtoA (OctaveArray[CurrentNote]);
+    OctaveArray[this->CurrentNote] += (up) ? +1 : -1;
+    this->SetTuningNote (this->CurrentNote, true);
     }
 
 //#######################################################################

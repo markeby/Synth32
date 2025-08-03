@@ -62,11 +62,18 @@ void MONITOR_C::DumpStats (void)
     Serial << "==========================================" << endl;
     printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
+    Serial << hh << "       sketch size = " << ESP.getSketchSize () << endl;
+    Serial << hh << " free sketch space = " << ESP.getFreeSketchSpace () << endl << endl;
+
+    Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
+    Serial << hh << " larget heap block = " << ESP.getMaxAllocHeap () << endl;
+    Serial << hh << " lowest heap space = " << ESP.getMinFreeHeap () << endl;
+    Serial << hh << "   free heap space = " << ESP.getFreeHeap () << endl << endl;
+
     Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize () << endl;
     Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
-    printAfterSetupInfo ();
-    Serial << "==========================================" << endl << endl;
-    Serial << hh << "       Runing Time = ";
+
+    Serial << hh << "  Total run time = ";
     DispRunTime ();
     Serial << hh << "Average interval = " << AverageDeltaTime << " mSec" << endl;
     Serial << hh << "   Last interval = " << DeltaTime << " mSec" << endl;

@@ -17,7 +17,7 @@ typedef union
         {
         DISP_MESSAGE_N::CMD_C       Command;
         uint8_t                     Index;
-        DISP_MESSAGE_N::VOICE_C     Channel;
+        DISP_MESSAGE_N::VOICE_OPT_C Channel;
         DISP_MESSAGE_N::EFFECT_C    Effect;
         uint8_t                     Value0;
         uint8_t                     Value1;

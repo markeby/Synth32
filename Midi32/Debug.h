@@ -21,3 +21,5 @@ void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const
 
 void ErrorMsg (const char* label, const char* func, const char* const fmt, ...);
 
+char* ErrorStringI2C (int err);
+

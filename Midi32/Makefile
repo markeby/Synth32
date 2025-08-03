@@ -17,13 +17,13 @@ SHARED := ../Common
 
 # header files
 INCLUDES := config.h Debug.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Novation.h \
-            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h UpdateOTA.h Voice.h \
+            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h UpdateOTA.h Voice.h Filter4.h \
 	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) Config.cpp SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
-           SerialMonitor.cpp FrontEnd.cpp FrontEndOscCtrl.cpp FrontEndLFO.cpp FrontEndTuning.cpp \
+SOURCES := $(PROJECT) Config.cpp SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Novation.cpp \
+           SerialMonitor.cpp FrontEnd.cpp FrontEndVoice.cpp FrontEndLFO.cpp FrontEndTuning.cpp Filter4.cpp \
 	   FrontEndMapping.cpp Voice.cpp Osc.cpp Controls.cpp LFOosc.cpp Envelope.cpp UpdateOTA.cpp
 
 # serial port for uploading

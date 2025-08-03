@@ -26,27 +26,11 @@ static const char* LabelM = "M";
 #endif
 
 //#######################################################################
-void SYNTH_FRONT_C::VoiceSelectedCheck ()
-    {
-    if ( this->CurrentMidiSelected == 0 )
-        {
-        this->CurrentMidiSelected = this->SynthConfig.Voice[0].GetVoiceMidi ();
-        this->CurrentMapSelected = 0;
-        this->CurrentVoiceSelected = 0;
-        DisplayMessage.SelectVoicePage (0);
-        return;
-        }
-
-    if ( DisplayMessage.GetCurrentVoicePage () != this->CurrentMapSelected )
-        DisplayMessage.SelectVoicePage (this->CurrentMapSelected);
-    }
-
-//#######################################################################
 void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
     {
-    this->VoiceSelectedCheck ();
-    state = !this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch];
-    this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] = state;
+    this->PageSelectedCheck ();
+    state = !this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch];
+    this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch] = state;
     this->LaunchControl.ButtonColor (ch, (state) ? XL_LED::RED : XL_LED::GREEN);
     }
 
@@ -61,21 +45,21 @@ void SYNTH_FRONT_C::SetLevel (short ch, short data)
         return;
         }
 
-    if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedEnvelope[ch] )
+    if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch] )
         {
         this->SetSustainLevel (ch,  data);;
         return;
         }
 
-    this->VoiceSelectedCheck ();
+    this->PageSelectedCheck ();
 
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetLevel (ch, val);
-            this->pVoice[z]->SetLevel (ch, val);
+            this->SynthConfig.Voice[z >> 1].SetOscMaxLevel (ch, val);
+            this->pVoice[z]->SetMaxLevel (ch, val);
             }
         }
 
@@ -85,7 +69,7 @@ void SYNTH_FRONT_C::SetLevel (short ch, short data)
 //#####################################################################
 void SYNTH_FRONT_C::SetAttackTime (short ch, short data)
     {
-    this->VoiceSelectedCheck ();
+    this->PageSelectedCheck ();
 
     float dtime = data * TIME_MULT;
 
@@ -93,8 +77,18 @@ void SYNTH_FRONT_C::SetAttackTime (short ch, short data)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetAttackTime (ch, dtime);
-            this->pVoice[z]->SetAttackTime (ch, dtime);
+            if ( this->CurrentVoiceSelected < 0 )
+                {
+                if ( this->CurrentFilterSelected < 0 )
+                    return;
+
+
+                }
+            else
+                {
+                this->SynthConfig.Voice[z >> 1].SetOscAttackTime (ch, dtime);
+                this->pVoice[z]->SetOscAttackTime (ch, dtime);
+                }
             }
         }
     DisplayMessage.OscAttackTime (ch, data);
@@ -105,14 +99,24 @@ void SYNTH_FRONT_C::SetDecayTime (short ch, short data)
     {
     float dtime = data * TIME_MULT;
 
-     this->VoiceSelectedCheck ();
+    this->PageSelectedCheck ();
 
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetDecayTime (ch, dtime);
-            this->pVoice[z]->SetDecayTime (ch, dtime);
+            if ( this->CurrentVoiceSelected < 0 )
+                {
+                if ( this->CurrentFilterSelected < 0 )
+                    return;
+
+
+                }
+            else
+                {
+                this->SynthConfig.Voice[z >> 1].SetOscDecayTime (ch, dtime);
+                this->pVoice[z]->SetOscDecayTime (ch, dtime);
+                }
             }
         }
     DisplayMessage.OscDecayTime (ch, data);
@@ -123,14 +127,24 @@ void SYNTH_FRONT_C::SetReleaseTime (short ch, short data)
     {
     float dtime = data * TIME_MULT;
 
-    this->VoiceSelectedCheck ();
+    this->PageSelectedCheck ();
 
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetReleaseTime (ch, dtime);
-            this->pVoice[z]->SetReleaseTime (ch, dtime);
+            if (  this->CurrentVoiceSelected < 0 )
+                {
+                if ( this->CurrentFilterSelected < 0 )
+                    return;
+
+
+                }
+            else
+                {
+                this->SynthConfig.Voice[z >> 1].SetOscReleaseTime(ch, dtime);
+                this->pVoice[z]->SetOscReleaseTime (ch, dtime);
+                }
             }
         }
     DisplayMessage.OscReleaseTime (ch, data);
@@ -139,15 +153,25 @@ void SYNTH_FRONT_C::SetReleaseTime (short ch, short data)
 //#####################################################################
 void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
     {
-    this->VoiceSelectedCheck ();
+    this->PageSelectedCheck ();
 
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetSustainLevel (ch, val);
-            this->pVoice[z]->SetSustainLevel (ch, val);
+            if ( this->CurrentVoiceSelected < 0 )
+                {
+                if ( this->CurrentFilterSelected < 0 )
+                    return;
+
+
+                }
+            else
+                {
+                this->SynthConfig.Voice[z >> 1].SetOscSustainLevel (ch, val);
+                this->pVoice[z]->SetOscSustainLevel (ch, val);
+                }
             }
         }
     DisplayMessage.OscSustainLevel (ch, data);
@@ -156,9 +180,11 @@ void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::ToggleRampDirection (short ch)
     {
-    this->VoiceSelectedCheck ();
+    if ( this->CurrentVoiceSelected < 0 )
+        return;
+    this->PageSelectedCheck ();
 
-    bool zb = ! this->SynthConfig.Voice[this->CurrentMapSelected].GetRampDirection ();
+    bool zb = !this->SynthConfig.Voice[this->CurrentVoiceSelected].GetRampDirection();
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
@@ -174,7 +200,9 @@ void SYNTH_FRONT_C::ToggleRampDirection (short ch)
 //#######################################################################
 void SYNTH_FRONT_C::SetPulseWidth (short data)
     {
-    this->VoiceSelectedCheck ();
+    if ( this->CurrentVoiceSelected < 0 )
+        return;
+    this->PageSelectedCheck ();
 
     float percent = data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++)
@@ -187,5 +215,4 @@ void SYNTH_FRONT_C::SetPulseWidth (short data)
         }
     DisplayMessage.OscPulseWidth (data);
     }
-
 

@@ -108,34 +108,6 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
     }
 
 //#######################################################################
-char* I2C_INTERFACE_C::ErrorString (int err)
-    {
-    static char* e1 = "data too long to fit in transmit buffer";
-    static char* e2 = "Received NACK on transmit of address";
-    static char* e3 = "received NACK on transmit of data";
-    static char* e4 =  "other error";
-    static char* e5 = "timeout";
-
-    switch ( err )
-        {
-        case 1:
-            return (e1);
-        case 2:
-            return (e2);
-        case 3:
-            return (e3);
-        case 5:
-            return (e5);
-        case 4:
-            return (e4);
-        default:
-            break;
-        }
-    return (e4);
-    }
-
-
-//#######################################################################
 void I2C_INTERFACE_C::BusMux (I2C_LOCATION_T& loc)
     {
     DBGMUX ("Selecting cluster %d with slice %d", loc.Cluster, loc.Slice);
@@ -143,7 +115,7 @@ void I2C_INTERFACE_C::BusMux (I2C_LOCATION_T& loc)
     Wire.write (1 << loc.Slice);                    // send byte to select bus
     this->LastEndT = Wire.endTransmission();
     if ( this->LastEndT )
-        ERROR ("BusMux cluster %d select %d with error: %s", loc.Cluster, loc.Slice, this->ErrorString (this->LastEndT));
+        ERROR ("BusMux cluster %d select %d with error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
     }
 
 //#######################################################################
@@ -154,7 +126,7 @@ void I2C_INTERFACE_C::EndBusMux (I2C_LOCATION_T& loc)
     Wire.write (0);                                 // send byte to deselect bus
     this->LastEndT = Wire.endTransmission();
     if ( this->LastEndT )
-        ERROR ("Ending cluster %d  slice: %d   error: %s", loc.Cluster, loc.Slice, this->ErrorString (this->LastEndT));
+        ERROR ("Ending cluster %d  slice: %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
     }
 
 //#######################################################################
@@ -164,7 +136,7 @@ void I2C_INTERFACE_C::WriteRegisterByte (uint8_t port, uint8_t data)
     Wire.write (data);
     this->LastEndT = Wire.endTransmission (true);
     if ( this->LastEndT )
-        ERROR ("Port: %#02.2X   data: %#02.2X   error: %s", port, data, this->ErrorString (this->LastEndT));
+        ERROR ("Port: %#02.2X   data: %#02.2X   error: %s", port, data, ErrorStringI2C (this->LastEndT));
     }
 
 //#######################################################################
@@ -177,7 +149,7 @@ void I2C_INTERFACE_C::WriteRegister16 (uint8_t port, uint8_t addr, uint16_t data
     Wire.write ((uint8_t)(data &  0xFF));
     this->LastEndT = Wire.endTransmission (true);
     if ( this->LastEndT )
-        ERROR ("Result: %s   port: %#02.2x   addr: %#02.2x   data: %#04.4x", this->ErrorString (this->LastEndT), port, addr, data);
+        ERROR ("Result: %s   port: %#02.2x   addr: %#02.2x   data: %#04.4x", ErrorStringI2C (this->LastEndT), port, addr, data);
     }
 
 //#######################################################################
@@ -188,7 +160,7 @@ uint16_t I2C_INTERFACE_C::ReadRegister16 (uint8_t port, uint8_t addr)
     Wire.write (addr);
     this->LastEndT = Wire.endTransmission (true);
     if ( this->LastEndT )
-        ERROR ("Cannot issue read request to port: %#02.2X   addr: %#02.2X   error: %s", port, addr, this->ErrorString (this->LastEndT));
+        ERROR ("Cannot issue read request to port: %#02.2X   addr: %#02.2X   error: %s", port, addr, ErrorStringI2C (this->LastEndT));
     Wire.requestFrom(port, (uint8_t)2, true);
     if ( Wire.available () )
         {
@@ -264,7 +236,7 @@ void I2C_INTERFACE_C::Init4728 (I2C_LOCATION_T &loc)
     this->BusMux (loc);
     if ( this->LastEndT )
         {
-        ERROR ("Accessing cluster %d to enable slice %d   error: %s", loc.Cluster, loc.Slice, this->ErrorString (this->LastEndT));
+        ERROR ("Accessing cluster %d to enable slice %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
         }
 
     this->WriteRegisterByte (loc.Port, p);
@@ -304,7 +276,7 @@ bool I2C_INTERFACE_C::ValidateDevice (ushort board)
     if ( this->LastEndT == 0 )
         brd.Valid = true;
     else
-        DBGERROR ("Validation error on port %#02.2X.  %s", brd.Board.Port, this->ErrorString (this->LastEndT));
+        DBGERROR ("Validation error on port %#02.2X.  %s", brd.Board.Port, ErrorStringI2C (this->LastEndT));
 
     this->EndBusMux (brd.Board);
     return (!brd.Valid);
@@ -321,7 +293,7 @@ void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
     this->EndBusMux (loc);
     if ( this->LastEndT )
         {
-        ERROR ("Result: %s   cluster: %d   slice: %d   port: 0x%#02.2X   buff[0]: 0x%#02.2X   length: %d", this->ErrorString (this->LastEndT), loc.Cluster, loc.Slice, loc.Port, *buff, length);
+        ERROR ("Result: %s   cluster: %d   slice: %d   port: 0x%#02.2X   buff[0]: 0x%#02.2X   length: %d", ErrorStringI2C (this->LastEndT), loc.Cluster, loc.Slice, loc.Port, *buff, length);
         }
     }
 
@@ -395,13 +367,13 @@ int I2C_INTERFACE_C::Begin ()
         Wire.write (0);                        // send byte to select bus
         this->LastEndT = Wire.endTransmission();
         if ( this->LastEndT )
-            DBGMUX ("Return for cluster %d is %s", *pc, this->ErrorString (this->LastEndT));
+            DBGMUX ("Return for cluster %d is %s", *pc, ErrorStringI2C (this->LastEndT));
         if ( this->LastEndT > err )
             err = this->LastEndT;
         }
     if ( err > 0 )
         {
-        printf ("\n  ### Cluster access error \"%s\".", this->ErrorString (err));
+        printf ("\n  ### Cluster access error \"%s\".", ErrorStringI2C (err));
         return (-1);
         }
 

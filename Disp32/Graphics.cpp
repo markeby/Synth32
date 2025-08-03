@@ -41,11 +41,80 @@ using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 //#######################################################################
+static const char* filterTitle[] = { "Frequency", "Q" };
+    PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Filter Midi 1")
+    {
+    int x = 0;
+    int y = 40;
+
+    this->Midi = 0;
+    for ( int z = 0;  z < 2;  z++ )
+        {
+        lv_obj_t* panel = lv_obj_create (base);
+        lv_obj_set_size (panel, 232, 440);
+        lv_obj_set_pos (panel, x, y);
+        lv_obj_set_style_pad_top (panel, 0, 0);
+        lv_obj_set_style_pad_bottom (panel, 0, 0);
+        lv_obj_set_style_pad_left (panel, 2, 0);
+        lv_obj_set_style_pad_right (panel, 2, 0);
+
+        this->TitleControl[z] = new TITLE_WIDGET_C (panel, filterTitle[z]);
+        this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
+        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 215, LV_PALETTE_ORANGE);
+        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 73, 215, LV_PALETTE_INDIGO);
+        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 146, 215, LV_PALETTE_INDIGO);
+
+        x += 231;
+        }
+    }
+
+//#######################################################################
+void PAGE_FILTER_C::SetPage (byte midi)
+    {
+    String s = "Filter  Midi  " + String (midi);
+    this->Midi = midi;
+    lv_label_set_text (Title, s.c_str ());
+    }
+
+//#######################################################################
+void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
+    {
+    switch ( effect )
+        {
+        case EFFECT_C::SELECTED:
+            this->MeterADSR[fn]->Select (value);
+            break;
+        case EFFECT_C::BASE_LEVEL:
+            this->ValueStart[fn]->SetLevel (value);
+            break;
+        case EFFECT_C::MAX_LEVEL:
+            this->ValueEnd[fn]->SetLevel (value);
+            break;
+        case EFFECT_C::ATTACK_TIME:
+            this->MeterADSR[fn]->SetAttack (value);
+            break;
+        case EFFECT_C::DECAY_TIME:
+            this->MeterADSR[fn]->SetDecay (value);
+            break;
+        case EFFECT_C::RELEASE_TIME:
+            this->MeterADSR[fn]->SetRelease (value);
+            break;
+        case EFFECT_C::SUSTAIN_LEVEL:
+            this->ValueSustain[fn]->SetLevel (value);
+            break;
+        default:
+            break;
+        }
+    }
+
+//#######################################################################
+//#######################################################################
     PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Voice Midi 1")
     {
     int x = 0;
     int y = 40;
 
+    this->Midi = 0;
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         lv_obj_t* panel = lv_obj_create (base);
@@ -59,11 +128,10 @@ using namespace DISP_MESSAGE_N;
         String key = "TF";
         key += String (z);
         KeyLabel (panel, key.c_str (), 0, 0);
-        this->TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceText[z]);
+        this->TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceOptText[z]);
         this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
-        this->SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 0, 210, LV_PALETTE_ORANGE);
-        this->MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 73, 210, LV_PALETTE_INDIGO);
-        this->Midi            = 0;
+        this->MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 0, 210, LV_PALETTE_INDIGO);
+        this->SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 73, 210, LV_PALETTE_ORANGE);
 
         switch ( z )
             {
@@ -97,7 +165,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case EFFECT_C::SELECTED:
             this->MeterADSR[ch]->Select (value);
             break;
-        case EFFECT_C::BASE_VOL:
+        case EFFECT_C::BASE_LEVEL:
             break;
         case EFFECT_C::MAX_LEVEL:
             this->MaxLevel[ch]->SetLevel (value);
@@ -114,7 +182,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case EFFECT_C::SUSTAIN_LEVEL:
             this->SustainLevel[ch]->SetLevel (value);
             break;
-        case EFFECT_C::SAWTOOTH_DIRECTION:
+        case EFFECT_C::RAMP_DIRECTION:
             this->RampDir->SetDir (value);
             break;
         case EFFECT_C::PULSE_WIDTH:
@@ -267,9 +335,9 @@ void PAGE_MOD_C::UpdateSoftButtons (short value, bool sel)
 //#######################################################################
 void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
     {
-    switch ( (VOICE_C)ch )
+    switch ( (VOICE_OPT_C)ch )
         {
-        case VOICE_C::HARDWARE_LFO:
+        case VOICE_OPT_C::HARDWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
@@ -284,7 +352,7 @@ void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
                 case EFFECT_C::LFO_FREQ:
                     this->LowFreq[index].MeterHard->SetFreq (value);
                     break;
-                case EFFECT_C::SAWTOOTH_DIRECTION:
+                case EFFECT_C::RAMP_DIRECTION:
                     this->LowFreq[index].RampDir->SetDir (!value);
                     break;
                 case EFFECT_C::PULSE_WIDTH:
@@ -294,7 +362,7 @@ void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
                     break;
                 }
             break;
-        case VOICE_C::SOFTWARE_LFO:
+        case VOICE_OPT_C::SOFTWARE_LFO:
             switch ( effect )
                 {
                 case EFFECT_C::SELECTED:
@@ -413,12 +481,6 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
-    PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "FILTERS")
-    {
-    }
-
-//#######################################################################
-//#######################################################################
     PAGE_TUNE_C::PAGE_TUNE_C (lv_obj_t* base)
     {
     int x = 155;
@@ -437,7 +499,7 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     this->Note  = new NOTE_WIDGET_C  (base, x + 116, 80);
     this->Value = new VALUE_WIDGET_C (base, x + 151, 111, "D/A = ");
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++, x+=90 )
-        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceText[z], x, y, LV_PALETTE_INDIGO);
+        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceOptText[z], x, y, LV_PALETTE_INDIGO);
     this->TuneSelection = new TUNES_WIDGET_C (base, 248, 340);
     }
 
@@ -564,7 +626,7 @@ void GRPH_C::Begin ()
     Panel->begin ();
     lvgl_port_init (Panel->getLcd (), Panel->getTouch ());
 
-    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
+//    lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
 
     // initialize keyboard sugguestions
     lv_style_init (&GlobalKeyStyle);
@@ -573,16 +635,16 @@ void GRPH_C::Begin ()
 
     Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
 
-    for ( short z = 0;  z < MAP_COUNT;  z++ )
-        {
-        BasePageVoice[z] = lv_tabview_add_tab (Pages, "");
-        PageVoice[z]     = new PAGE_OSC_C     (BasePageVoice[z]);
-        }
-    PageVoice[0]->SetPage (1);                              // initialize only the first voice page for midi allocation as default
+    BasePageVoice = lv_tabview_add_tab (Pages, "");
+    PageVoice     = new PAGE_OSC_C     (BasePageVoice);
+    PageVoice->SetPage (1);                              // initialize only the first voice page for midi allocation as default
+
+    BasePageFilter = lv_tabview_add_tab (Pages, "");
+    PageFilter     = new PAGE_FILTER_C  (BasePageFilter);
+    PageFilter->SetPage (1);                              // initialize only the first filter page for midi allocation as default
+
     BasePageMod         = lv_tabview_add_tab   (Pages, "");
     PageMod             = new PAGE_MOD_C       (BasePageMod);
-    BasePageFilter      = lv_tabview_add_tab   (Pages, "");
-    PageFilter          = new PAGE_FILTER_C    (BasePageFilter);
     BasePageMap         = lv_tabview_add_tab   (Pages, "");
     PageMap             = new PAGE_MAPPING_C   (BasePageMap);
     BasePageCalibration = lv_tabview_add_tab   (Pages, "");
@@ -592,9 +654,9 @@ void GRPH_C::Begin ()
     BasePageLoadSave    = lv_tabview_add_tab   (Pages, "");
     PageLoadSave        = new PAGE_LOAD_SAVE_C (BasePageLoadSave);
 
-    PageSelect (PAGE_C::PAGE_OSC0);
+    PageSelect (PAGE_C::PAGE_OSC);
 
-    lvgl_port_unlock ();    // Release the mutex
+//    lvgl_port_unlock ();    // Release the mutex
     }
 
 //#######################################################################
@@ -611,31 +673,25 @@ void GRPH_C::ClearData (short num)
     }
 
 //#######################################################################
-void GRPH_C::Pause (bool state)
-    {
-    if ( state )
-        lvgl_port_lock (-1);    // Lock the mutex due to the LVGL APIs are not thread-safe
-    else
-        lvgl_port_unlock ();    // Release the mutex
-    }
-
-//#######################################################################
 void GRPH_C::SetPage (byte num, byte midi)
     {
-    this->PageVoice[num]->SetPage (midi);
+    switch ( num )
+        {
+        case (byte)PAGE_C::PAGE_OSC:
+            this->PageVoice->SetPage (midi);
+            break;
+        case (byte)PAGE_C::PAGE_FLT:
+            this->PageFilter->SetPage (midi);
+            break;
+        default:
+            break;
+        }
+    this->PageSelect (num);
     }
 
 //#######################################################################
 void GRPH_C::PageSelect (PAGE_C page)
     {
-    while ( page == PAGE_C::PAGE_ADVANCE )
-        {
-        page = (PAGE_C)((byte)this->CurrentPage + 1);
-        if ( page == PAGE_C::PAGE_CALIBRATION )
-            page = PAGE_C::PAGE_OSC0;
-        if ( (page <= PAGE_C::PAGE_OSC3) )
-            break;
-        }
     if ( CurrentPage != page )
         {
         CurrentPage = page;

@@ -4,7 +4,7 @@
 class MONITOR_C
     {
 private:
-    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, ZAP1, ZAP2, VARIABLE };
+    enum SMODE {MENU = -1, CMD = 0, INSSID, INPWD, CLR_TUNING, CLR_CONFIG, VARIABLE };
 
     SMODE  InputMode;
     String InputString;

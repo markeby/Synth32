@@ -13,7 +13,7 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "LFO";
-#define DBG(args...) {if(DebugOsc){DebugMsg(Label,Number,args);}}
+#define DBG(args...) {if(DebugSynth){DebugMsg(Label,Number,args);}}
 #else
 #define DBG(args...)
 #endif
@@ -100,7 +100,7 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
         this->Offset = Settings.GetOffsetLFO (num);
         this->ClearState ();
         this->PitchBend (PITCH_BEND_CENTER);
-        if ( DebugOsc )
+        if ( DebugSynth )
             printf ("\t  >> LFO %d started for device %d\n", this->Number, first_device);
         }
     else

@@ -32,8 +32,8 @@ void SYNTH_FRONT_C::MidiMapMode ()
     if ( !this->MapSelectMode )
         {
         this->TemplateSelect (XL_MIDI_MAP_MAPPING);
-        delay (500);
         DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
+        this->LoadSaveMode = false;
         this->MapSelectMode = true;
         for ( int z = (MAP_COUNT * GROUP_COUNT) - 1;  z >= 0;  z-- )
             this->UpdateMapModeDisplay (z);
@@ -163,14 +163,6 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
         byte                  m    = sc.GetVoiceMidi ();            // Get the midi value for voice pair
         bool                  newm = false;
 
-        if ( m != lastMidi )
-            {
-            newm = true;
-                DisplayMessage.SetVoicePage(z, m);              // Tell the display to setup voice display for this MIDI channel
-            }
-        else
-            DisplayMessage.SetVoicePage(z, 0);                  // No new midi channel
-
         lastMidi = m;
 
         // set voice MIDI channel
@@ -197,22 +189,56 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 
         for ( short v = 0;  v < OSC_MIXER_COUNT;  v++ )
             {
-            v0.SetAttackTime   (v, sc.GetAttackTime   (v));
-            v1.SetAttackTime   (v, sc.GetAttackTime   (v));
-            if ( newm )     DisplayMessage.OscAttackTime (v, sc.GetAttackTime (v) * (1.0/TIME_MULT));
-            v0.SetDecayTime    (v, sc.GetDecayTime    (v));
-            v1.SetDecayTime    (v, sc.GetDecayTime    (v));
-            if ( newm )     DisplayMessage.OscDecayTime  (v, sc.GetDecayTime (v) * (1.0/TIME_MULT));
-            v0.SetReleaseTime  (v, sc.GetReleaseTime  (v));
-            v1.SetReleaseTime  (v, sc.GetReleaseTime  (v));
-            if ( newm )     DisplayMessage.OscReleaseTime (v, sc.GetReleaseTime (v) * (1.0/TIME_MULT));
-            v0.SetSustainLevel (v, sc.GetSustainLevel (v));
-            v1.SetSustainLevel (v, sc.GetSustainLevel (v));
-            if ( newm )     DisplayMessage.OscSustainLevel (v, sc.GetSustainLevel (v) * PRS_UNSCALER);
-            v0.SetLevel        (v, sc.GetLevel        (v));
-            v1.SetLevel        (v, sc.GetLevel        (v));
-            if ( newm )     DisplayMessage.OscMaxLevel (v, sc.GetLevel (v) * PRS_UNSCALER);
-            sc.SelectedEnvelope[v] = false;
+            v0.SetOscAttackTime (v, sc.GetOscAttackTime (v));
+            v1.SetOscAttackTime (v, sc.GetOscAttackTime (v));
+            if ( newm )
+                DisplayMessage.OscAttackTime (v, sc.GetOscAttackTime (v) * (1.0/TIME_MULT));
+            v0.SetOscDecayTime (v, sc.GetOscDecayTime (v));
+            v1.SetOscDecayTime (v, sc.GetOscDecayTime (v));
+            if ( newm )
+                DisplayMessage.OscDecayTime  (v, sc.GetOscDecayTime (v) * (1.0/TIME_MULT));
+            v0.SetOscReleaseTime (v, sc.GetOscReleaseTime (v));
+            v1.SetOscReleaseTime (v, sc.GetOscReleaseTime (v));
+            if ( newm )
+                DisplayMessage.OscReleaseTime (v, sc.GetOscReleaseTime (v) * (1.0/TIME_MULT));
+            v0.SetOscSustainLevel (v, sc.GetOscSustainLevel (v));
+            v1.SetOscSustainLevel (v, sc.GetOscSustainLevel (v));
+            if ( newm )
+                DisplayMessage.OscSustainLevel (v, sc.GetOscSustainLevel (v) * PRS_UNSCALER);
+            v0.SetMaxLevel (v, sc.GetOscMaxLevel (v));
+            v1.SetMaxLevel (v, sc.GetOscMaxLevel (v));
+            if ( newm )
+                DisplayMessage.OscMaxLevel (v, sc.GetOscMaxLevel (v) * PRS_UNSCALER);
+            sc.SelectedOscEnvelope[v] = false;
+
+            if ( v < 2 )                            // filter envelopes setup here
+                {
+                v0.SetFltAttackTime (v, sc.GetFltAttackTime (v));
+                v1.SetFltAttackTime (v, sc.GetFltAttackTime (v));
+                if ( newm )
+                    DisplayMessage.FltAttackTime (v, sc.GetFltAttackTime (v) * (1.0/TIME_MULT));
+                v0.SetFltDecayTime (v, sc.GetFltDecayTime (v));
+                v1.SetFltDecayTime (v, sc.GetFltDecayTime (v));
+                if ( newm )
+                    DisplayMessage.FltDecayTime  (v, sc.GetFltDecayTime (v) * (1.0/TIME_MULT));
+                v0.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
+                v1.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
+                if ( newm )
+                    DisplayMessage.FltReleaseTime (v, sc.GetFltReleaseTime (v) * (1.0/TIME_MULT));
+                v0.SetFltSustain (v, sc.GetFltSustainLevel (v));
+                v1.SetFltSustain (v, sc.GetFltSustainLevel (v));
+                if ( newm )
+                    DisplayMessage.FltSustain (v, sc.GetFltSustainLevel (v) * PRS_UNSCALER);
+                v0.SetFltStart (v, sc.GetFltStart (v));
+                v1.SetFltStart (v, sc.GetFltStart (v));
+                if ( newm )
+                    DisplayMessage.FltStart (v, sc.GetFltStart (v) * PRS_UNSCALER);
+                v0.SetFltEnd (v, sc.GetFltEnd (v));
+                v1.SetFltEnd (v, sc.GetFltEnd (v));
+                if ( newm )
+                    DisplayMessage.FltEnd (v, sc.GetFltEnd (v) * PRS_UNSCALER);
+                sc.SelectedFltEnvelope[v] = false;
+                }
             }
         v0.SetRampDirection     (sc.GetRampDirection ());
         v1.SetRampDirection     (sc.GetRampDirection ());
@@ -247,7 +273,7 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 
     this->ResolutionMode = false;
     this->TemplateSelect (XL_MIDI_MAP_OSC);
-    DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_OSC0);
+    DisplayMessage.SetPage ((byte)DISP_MESSAGE_N::PAGE_C::PAGE_OSC, this->SynthConfig.Voice[0].GetVoiceMidi ());
 
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
@@ -299,7 +325,8 @@ void SYNTH_FRONT_C::LoadSaveBump (short down)
 void SYNTH_FRONT_C::OpenLoadSavePage ()
     {
     DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_LOAD_SAVE);
-    LoadSaveMode = true;
+    this->LoadSaveMode = true;
     DisplayMessage.SendLoadSave (this->LoadSaveSelection);
+    this->TemplateSelect (XL_MIDI_MAP_LOADSAVE);
     }
 

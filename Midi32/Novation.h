@@ -8,6 +8,9 @@
 #include "Config.h"
 
 //#######################################################################
+#define NOVATION_LOOP_COUNT     1500
+
+//#######################################################################
 enum class XL_LED: byte
     {
     RED_FLASH       = 11,
@@ -32,8 +35,18 @@ private:
     short       FlashCounter;
     XL_MIDI_MAP (*pMidiMap)[XL_MIDI_MAP_SIZE];
     byte        *pButtonState;
+    bool        ButtonChange;
     bool        FlashState;
+    short       Counter;
 
+// located in FrontEnd.cpp
+private:
+    void    SendTo          (unsigned length, byte* buff);
+    void    ResetAllLED     (byte index);
+public:
+    void    ResetUSB        (void);
+
+// located in Novation.cpp
 public:
             NOVATION_XL_C   (void);
     void    Begin           (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
@@ -42,9 +55,14 @@ public:
     void    SelectTemplate  (byte index, byte* pbuttons=nullptr);
     void    SetColor        (byte index, byte led, XL_LED color);
     void    SetColor        (byte led, XL_LED color)                { this->SetColor (this->CurrentMap, led,  color); }
-    void    ButtonColor     (byte led, XL_LED color)                { if (pButtonState != nullptr )  pButtonState[led] = (byte)color; }
+    void    ButtonColor     (byte led, XL_LED color)
+        {
+        if ( pButtonState == nullptr )
+            return;
+        pButtonState[led] = (byte)color;
+        this->ButtonChange = true;
+        }
     void    UpdateButtons   (void);
-    void    ResetUSB        (void);
     short   GetCurrentMap   (void)                                  { return (this->CurrentMap); }
     };
 

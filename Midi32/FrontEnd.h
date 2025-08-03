@@ -30,7 +30,6 @@ private:
     KEY_T                 Down;
     KEY_T                 Up;
     uint64_t              DispMessageTimer;
-    short                 NovationCounter;
 
     G49_FADER_MIDI_MAP         *G49MidiMapFader;
     G49_BUTTON_MIDI_MAP        *G49MidiMapButton;
@@ -47,11 +46,12 @@ private:
     short                 CurrentMidiSelected;
     short                 CurrentMapSelected;
     short                 CurrentVoiceSelected;
+    short                 CurrentFilterSelected;
+    short                 CurrentDisplayPage;
     short                 LoadSaveSelection;
     NOVATION_XL_C         LaunchControl;
     bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
-    bool                  TuningOn[VOICE_COUNT];
     bool                  TuningChange;
     ushort                CalibrationReference;
     short                 CalibrationBaseDigital;
@@ -59,7 +59,6 @@ private:
     short                 CalibrationLFO;
     ushort                CalibrationAtoD;
 
-    void   NonOscPageSelect         (DISP_MESSAGE_N::PAGE_C page);
     void   UpdateMapModeDisplay     (int sel);
 public:
 
@@ -72,6 +71,7 @@ public:
     void Controller                 (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
+    void PageSelectedCheck          (void);
     void TemplateSelect             (byte index);
 
     //#######################################################################
@@ -107,7 +107,6 @@ public:
 
     //#######################################################################
     // FrontEndOscCtrl.cpp
-    void VoiceSelectedCheck             (void);
     void VoiceLevelSelect               (short ch, bool state);
     void SetLevel                       (short ch, short data);
     void SetAttackTime                  (short ch, short data);

@@ -36,6 +36,8 @@ static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 #define SENDcc0(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
 
 using namespace MIDI_NAMESPACE;
+using namespace DISP_MESSAGE_N;
+
 typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
 
 //###################################################################
@@ -123,8 +125,8 @@ static void  FuncKeyUp (uint8_t mchan, uint8_t key, uint8_t velocity)
 //###################################################################
 static void FuncController (uint8_t mchan, uint8_t type, uint8_t value)
     {
-    SynthFront.Controller (mchan, type, value);
     DBGM ("Controller  MIDI %2.2X  type %2.2X  value %2.2X", mchan, type, value);
+    SynthFront.Controller (mchan, type, value);
     }
 
 //###################################################################
@@ -139,10 +141,10 @@ static void FuncPitchBend (uint8_t mchan, int value)
 //#######################################################################
 SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
     {
-    this->G49MidiMapFader         = g49map_fader;
+    this->G49MidiMapFader     = g49map_fader;
     this->G49MidiMapEcoder    = g49map_knob;
-    this->G49MidiMapButton        = g49map_button;
-    this->pMidiMapXL              = xl_map;
+    this->G49MidiMapButton    = g49map_button;
+    this->pMidiMapXL          = xl_map;
     this->Down.Key            = 0;
     this->Down.Trigger        = 0;
     this->Down.Velocity       = 0;
@@ -155,7 +157,6 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI
     this->CurrentMidiSelected = 1;
     this->CalibrationPhase    = 0;
     this->LoadSaveSelection   = 1;
-    this->NovationCounter     = 1;
     }
 
 //#######################################################################
@@ -282,13 +283,30 @@ void SYNTH_FRONT_C::Clear ()
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::PageSelectedCheck ()
+    {
+    if ( this->CurrentMidiSelected == 0 )
+        {
+        this->CurrentMidiSelected = this->SynthConfig.Voice[0].GetVoiceMidi ();
+        this->CurrentMapSelected = 0;
+        this->CurrentVoiceSelected = 0;
+        DisplayMessage.SetPage (0, this->CurrentMidiSelected);
+        return;
+        }
+    }
+
+//#######################################################################
 void SYNTH_FRONT_C::PageAdvance ()
     {
     byte  m    = this->CurrentMidiSelected;
     short next = this->CurrentMapSelected + 1;
 
+    if ( this->LoadSaveMode )
+        this->LoadSaveMode = false;
+
     while ( next < MAP_COUNT )
         {
+        this->CurrentFilterSelected = -1;
         if ( m == this->SynthConfig.Voice[next].GetVoiceMidi () )
             {
             next++;
@@ -297,22 +315,56 @@ void SYNTH_FRONT_C::PageAdvance ()
         this->CurrentMidiSelected  = this->SynthConfig.Voice[next].GetVoiceMidi ();
         this->CurrentMapSelected   = next;
         this->CurrentVoiceSelected = next >> 1;
-        DisplayMessage.SelectVoicePage (next);
+        DisplayMessage.SetPage (PAGE_C::PAGE_OSC, this->CurrentMidiSelected);
+        this->TemplateSelect (XL_MIDI_MAP_OSC);
         return;
         }
-    if ( next < (short)DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP )
+
+    short index = next - MAP_COUNT;
+    if ( next == MAP_COUNT )
         {
-        this->CurrentMapSelected   = -1;
-        DisplayMessage.Page (next);
-        this->CurrentMidiSelected  = 0;
-        this->CurrentVoiceSelected = -1;
+        this->CurrentVoiceSelected  = -1;
+        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
+        this->CurrentMapSelected    = next;
+        this->CurrentFilterSelected = index >> 1;
+        DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
+        this->TemplateSelect (XL_MIDI_MAP_FLT);
+        return;
         }
-    else
+
+    while ( next < (MAP_COUNT * 2) )
+        {
+        this->CurrentVoiceSelected = -1;
+        if ( m == this->SynthConfig.Voice[index].GetVoiceMidi () )
+            {
+            next++;
+            continue;
+            }
+        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
+        this->CurrentMapSelected    = next;
+        this->CurrentFilterSelected = index >> 1;
+        DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
+        this->TemplateSelect (XL_MIDI_MAP_FLT);
+        return;
+        }
+
+    index = next - (MAP_COUNT * 2) + 2;
+    if ( DisplayMessage.Page () == (byte)PAGE_C::PAGE_MOD )
         {
         this->CurrentMapSelected   = 0;
         this->CurrentVoiceSelected = 0;
-        this->CurrentMidiSelected  = this->SynthConfig.Voice[this->CurrentMapSelected].GetVoiceMidi ();
-        DisplayMessage.SelectVoicePage (this->CurrentMapSelected);
+        this->CurrentMidiSelected  = this->SynthConfig.Voice[0].GetVoiceMidi ();
+        DisplayMessage.SetPage (PAGE_C::PAGE_OSC, this->CurrentMidiSelected);
+        this->TemplateSelect (XL_MIDI_MAP_OSC);
+        }
+    else
+        {
+        this->CurrentMapSelected    = next;
+        this->CurrentFilterSelected = -1;       // de-select functions to disable
+        this->CurrentVoiceSelected  = -1;
+        this->CurrentMidiSelected   = 0;
+        DisplayMessage.Page (index);
+        this->TemplateSelect (XL_MIDI_MAP_LFO);
         }
     }
 
@@ -334,24 +386,20 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
         case 7:          // Faders controls
             {
             G49_FADER_MIDI_MAP& m = this->G49MidiMapFader[chan];
+            DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
-                {
-                DBG ("%s > %d    ", m.Desc, value);
                 m.CallBack (m.Index, value);
-                }
             }
             break;
         case 10:          // Rotatational encoder controls
             {
             G49_ENCODER_MIDI_MAP& m = this->G49MidiMapEcoder[chan];
+            z = m.Value + (value & 0x1F) * ((value & 0x40) ? -1 : 1);
+            if ( z > 4095 )   z = 4095;
+            if ( z < 1 )      z = 1;
+            DBG("%s > %d (%d)", m.Desc, z, value);
             if ( m.CallBack != nullptr )
-                {
-                z = m.Value + (value & 0x1F) * ((value & 0x40) ? -1 : 1);
-                if ( z > 4095 )   z = 4095;
-                if ( z < 1 )      z = 1;
-                DBG("%s > %d (%d)", m.Desc, z, value);
                 G49MidiMapEcoder[chan].CallBack(m.Index, z);
-                }
             }
             break;
         case 16:
@@ -359,33 +407,28 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             if ( this->SetTuning && (chan < 8) )
                 {
                 for ( z = 0;  z < VOICE_COUNT;  z++ )
-                    this->TuningOn[z] = false;
-                this->TuningOn[chan] = true;
+                    this->pVoice[z]->TuningState (false);
+                this->pVoice[chan]->TuningState (true);
                 DBG ("Tuning for channel %d", chan);
                 DisplayMessage.TuningSelect (chan);
                 this->TuningChange = true;
                 return;
                 }
             G49_BUTTON_MIDI_MAP& m = this->G49MidiMapButton[chan];
+            m.State = !m.State;
+            DBG ("%s %d", m.Desc, m.State);
             if ( m.CallBack != nullptr )
-                {
-                m.State = !m.State;
-                DBG ("%s %d", m.Desc, m.State);
                 m.CallBack (m.Index, m.State);
-                }
             }
             break;
         case 17:
             {
             chan += 16;
             G49_BUTTON_MIDI_MAP& m = this->G49MidiMapButton[chan];
-
+            m.State = !m.State;
+            DBG ("%s %d", m.Desc, m.State);
             if ( m.CallBack != nullptr )
-                {
-                m.State = !m.State;
-                DBG ("%s %d", m.Desc, m.State);
                 m.CallBack (m.Index, m.State);
-                }
             }
             break;
         case 0x30 ... 0x47:
@@ -393,11 +436,9 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             {
             chan = type - 0x30;
             XL_MIDI_MAP& m = this->pMidiMapXL[this->LaunchControl.GetCurrentMap()][chan];
+            DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
-                {
-                DBG ("%s > %d    ", m.Desc, value);
                 m.CallBack (m.Index, value);
-                }
             }
             break;
         case 0x48 ... 0x5F:
@@ -405,12 +446,10 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             chan           = type - 0x30;                           // offset to start of control map
             bool    tgl    = value > 0x3C;                          // use color white to show selectable and green to show selected.
             XL_MIDI_MAP& m = this->pMidiMapXL[this->LaunchControl.GetCurrentMap()][chan];
+            DBG ("%s %s", m.Desc, (( tgl ) ? "ON" : "Off"));
 
             if ( m.CallBack != nullptr )
-                {
-                DBG ("%s %s", m.Desc, (( tgl ) ? "ON" : "Off"));
                 m.CallBack (m.Index, (short)tgl);
-                }
             }
             break;
 
@@ -493,99 +532,33 @@ void SYNTH_FRONT_C::Loop ()
     else
         this->Tuning ();
 
-    if ( --this->NovationCounter == 0 )
-        {
-        this->LaunchControl.Loop ();
-        this->NovationCounter = 800;
-        }
-    }
-
-//#####################################################################
-void SYNTH_FRONT_C::NonOscPageSelect (DISP_MESSAGE_N::PAGE_C page)
-    {
-    DisplayMessage.Page (page);
-    this->CurrentMidiSelected   =  0;
-    this->CurrentMapSelected    = -1;
-    this->CurrentVoiceSelected  = -1;
+    this->LaunchControl.Loop ();
     }
 
 //#####################################################################
 void SYNTH_FRONT_C::TemplateSelect (byte index)
     {
     byte *pb = nullptr;
-    if ( index == XL_MIDI_MAP_OSC )
-        pb = SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonState();
-    this->LaunchControl.SelectTemplate (index, pb);
-    }
 
-//#######################################################################
-//#######################################################################
-    NOVATION_XL_C::NOVATION_XL_C ()
-    {
-    this->CurrentMap = 0;
-    this->FlashState = false;
-    this->pButtonState = nullptr;
-    }
-
-//#######################################################################
-void NOVATION_XL_C::TemplateReset (byte index)
-    {
-    static byte midi_sysex_led[7 + ((XL_MIDI_MAP_SIZE - 8) * 2)] =
-        { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78 };
-
-    delay (22);
-    Midi_0.send ((MidiType)(0x90 | index), 0, 0, 0);
-    memset(&midi_sysex_led[7], 0, sizeof (midi_sysex_led) - 7);         // clear the map space in the sysex message
-    midi_sysex_led[6] = index;                                          // setup template index in message
-    short zi = 7;                                                       // start loading array at this index
-    for ( int z = 0;  z < XL_MIDI_MAP_SIZE;  z++ )
-        {
-        if ( this->pMidiMap[index][z].Color != 0 )                      // if color is non zero
-            {
-            midi_sysex_led[zi] = z;                                     // setup index of LED
-            midi_sysex_led[zi + 1] = this->pMidiMap[index][z].Color;    // get color value for LED
-            }
-        zi += 2;                                                        // bump target array index
-        }
-    delay (22);
-    Midi_0.sendSysEx (sizeof (midi_sysex_led), midi_sysex_led, false);  // Send message to set all LEDs
-    }
-
-//#######################################################################
-void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
-    {
-    this->pMidiMap = xl_map;
-
-    for ( int z = 0;  z < XL_MIDI_MAP_PAGES;  z++ )
-        this->TemplateReset (z);
-    this->SelectTemplate (0);                                               // starting with tempate zero
-    }
-
-//#######################################################################
-void NOVATION_XL_C::Loop ()
-    {
-    switch ( this->CurrentMap  )
+    switch ( index )
         {
         case XL_MIDI_MAP_OSC:
-            this->UpdateButtons ();
+            pb = SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateOsc ();
             break;
-        case XL_MIDI_MAP_FILTER:
+        case XL_MIDI_MAP_FLT:
+            pb = SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateFlt ();
             break;
         case XL_MIDI_MAP_LFO:
+            pb = SynthConfig.GetButtonStateLfo ();
             break;
-        case XL_MIDI_MAP_MAPPING:
-            this->FlashState = !this->FlashState;
-            this->SetColor(XL_MIDI_MAP_MAPPING, 40, XL_LED::OFF);
-            this->SetColor(XL_MIDI_MAP_MAPPING, 42, XL_LED::OFF);
-            this->SetColor(XL_MIDI_MAP_MAPPING, 43, ( this->FlashState ) ? XL_LED::AMBER : XL_LED::OFF);
-            break;
-        case XL_MIDI_MAP_SPARE:
-            break;
-        default:        // should never get here
+        default:
             break;
         }
+
+    this->LaunchControl.SelectTemplate(index, pb);
     }
 
+//#######################################################################
 //#######################################################################
 void NOVATION_XL_C::ResetUSB ()
     {
@@ -600,47 +573,22 @@ void NOVATION_XL_C::ResetUSB ()
     }
 
 //#######################################################################
-void NOVATION_XL_C::SelectTemplate (byte index, byte* pbuttons)
+void NOVATION_XL_C::SendTo (unsigned length, byte* buff)
     {
-    static byte midi_msg_template[] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x77, 0x00 };
+    // Debugging message
+//    String str;
+//    for ( short z = 0;  z < length;  z++ )
+//        str += " " + String (buff[z], 16);
+//    printf("@@ message %s\n", str.c_str ());
 
-    this->pButtonState = pbuttons;
-    delay (10);
-    midi_msg_template[6] = index;
-    this->CurrentMap     = index;
-    Midi_0.sendSysEx (sizeof (midi_msg_template), midi_msg_template, false);
-    this->UpdateButtons ();
+    // Message sent to deice
+    Midi_0.sendSysEx (length, buff, false);
     }
 
-//#####################################################################
-void NOVATION_XL_C::UpdateButtons ()
+//#######################################################################
+void NOVATION_XL_C::ResetAllLED (byte index)
     {
-    static byte midi_button_sysex[7 + (XL_BUTTON_COUNT * 2)] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78, 0x00 };
-    String st;
-
-    if ( this->pButtonState != nullptr )
-        {
-        delay(10);
-        midi_button_sysex[6] = this->CurrentMap;
-        for ( int z = 0;  z < XL_BUTTON_COUNT;  z++ )
-            {
-            midi_button_sysex[(z * 2) + 7] = XL_BUTTON_START + z;
-            midi_button_sysex[(z * 2) + 8] = this->pButtonState[z];
-            }
-        Midi_0.sendSysEx (sizeof (midi_button_sysex), midi_button_sysex, false);
-        }
+    delay (22);
+    Midi_0.send ((MidiType)(0x90 | index), 0, 0, 0);
     }
-
-//#####################################################################
-void NOVATION_XL_C::SetColor (byte index, byte led, XL_LED color)
-    {
-    static byte midi_color_sysex[9] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78 };
-
-    delay (10);
-    midi_color_sysex[6] = index;
-    midi_color_sysex[7] = led;
-    midi_color_sysex[8] = (byte)color;
-    Midi_0.sendSysEx (sizeof (midi_color_sysex), midi_color_sysex, false);
-    }
-
 
