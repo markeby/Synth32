@@ -227,6 +227,7 @@ public:
     inline void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
     inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
+    inline void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (ch, effect, value); }
     inline void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
     };
 

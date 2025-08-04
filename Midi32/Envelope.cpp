@@ -282,7 +282,7 @@ void ENVELOPE_C::Process (float deltaTime)
                 this->Target      = this->Peak - this->Sustain;
                 this->TargetTime  = 0.0;
                 }
-            DBG ("Start > %f  mSec from level %f to %f", Timer, Current, Sustain);
+            DBG ("at level %f", Current);
             return;
             }
 

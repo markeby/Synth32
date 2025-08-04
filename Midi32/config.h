@@ -213,10 +213,10 @@ public:
     inline void   SetOscReleaseTime     (byte index, float data)    { this->Cs.OscEnv[index].ReleaseTime = data; }
     inline float  GetOscReleaseTime     (byte index)                { return (this->Cs.OscEnv[index].ReleaseTime); }
 
-    inline void   SetFltStart           (byte index, float data)    { this->Cs.OscEnv[index].MinLevel = data; }
-    inline float  GetFltStart           (byte index)                { return (this->Cs.OscEnv[index].MinLevel); }
-    inline void   SetFltEnd             (byte index, float data)    { this->Cs.OscEnv[index].MaxLevel = data; }
-    inline float  GetFltEnd             (byte index)                { return (this->Cs.OscEnv[index].MaxLevel); }
+    inline void   SetFltStart           (byte index, float data)    { this->Cs.FltEnv[index].MinLevel = data; }
+    inline float  GetFltStart           (byte index)                { return (this->Cs.FltEnv[index].MinLevel); }
+    inline void   SetFltEnd             (byte index, float data)    { this->Cs.FltEnv[index].MaxLevel = data; }
+    inline float  GetFltEnd             (byte index)                { return (this->Cs.FltEnv[index].MaxLevel); }
     inline void   SetFltSustainLevel    (byte index, float data)    { this->Cs.FltEnv[index].SustainLevel = data; }
     inline float  GetFltSustainLevel    (byte index)                { return (this->Cs.FltEnv[index].SustainLevel); }
     inline void   SetFltAttackTime      (byte index, float data)    { this->Cs.FltEnv[index].AttackTime = data; }

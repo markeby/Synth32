@@ -123,26 +123,22 @@ public:
     //#################################################
     inline void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        if ( !this->Lock )
-            this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
-                              index,
-                              channel,
-                              effect,
-                              value);
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
+                          index,
+                          channel,
+                          effect,
+                          value);
         }
 
     //#################################################
     //#################################################
     inline void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        if ( !this->Lock )
-            {
-            this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
-                              mapi,
-                              channel,
-                              effect,
-                              value);
-            }
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
+                          mapi,
+                          channel,
+                          effect,
+                          value);
         }
 
     //#################################################
@@ -221,16 +217,14 @@ public:
     //#################################################
     inline void SendUpdateFlt (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        if ( !this->Lock )
-            {
-            this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER,
-                              mapi,
-                              channel,
-                              effect,
-                              value);
-            }
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER,
+                          mapi,
+                          channel,
+                          effect,
+                          value);
         }
 
+    //#################################################
     inline void FltSelected (byte channel, bool sel)
         {
         this->SendUpdateOsc (0,
@@ -242,34 +236,16 @@ public:
     //#################################################
     inline void FltAttackTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateFlt (0,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
                              value);
         }
 
     //#################################################
-    inline void FltStart (byte channel, uint16_t value)
-        {
-        this->SendUpdateOsc (0,
-                             channel,
-                             DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
-                             value);
-        }
-
-    //#################################################
-    inline void FltEnd (byte channel, uint16_t value)
-        {
-        this->SendUpdateOsc (0,
-                             channel,
-                             DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
-                             value);
-        }
-
-    //#################################################
     inline void FltDecayTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateFlt (0,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
                              value);
@@ -278,16 +254,34 @@ public:
     //#################################################
     inline void FltReleaseTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateFlt (0,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
                              value);
         }
 
     //#################################################
+    inline void FltStart (byte channel, uint16_t value)
+        {
+        this->SendUpdateFlt (0,
+                             channel,
+                             DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL,
+                             value);
+        }
+
+    //#################################################
+    inline void FltEnd (byte channel, uint16_t value)
+        {
+        this->SendUpdateFlt (0,
+                             channel,
+                             DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
+                             value);
+        }
+
+    //#################################################
     inline void FltSustain (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
+        this->SendUpdateFlt (0,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
                              value);

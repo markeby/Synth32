@@ -72,8 +72,6 @@ void NOVATION_XL_C::Loop ()
                 break;
             case XL_MIDI_MAP_MAPPING:
                 this->FlashState = !this->FlashState;
-                this->SetColor(XL_MIDI_MAP_MAPPING, 42, XL_LED::OFF);
-                this->SetColor(XL_MIDI_MAP_MAPPING, 43, XL_LED::OFF);
                 this->SetColor(XL_MIDI_MAP_MAPPING, 40, ( this->FlashState ) ? XL_LED::AMBER : XL_LED::OFF);
                 break;
             case XL_MIDI_MAP_SPARE:

@@ -153,8 +153,8 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI
     this->Up.Velocity         = 0;
     this->SetTuning           = false;
     this->TuningChange        = false;
-    this->CurrentMapSelected  = 0;
-    this->CurrentMidiSelected = 1;
+    this->CurrentMapSelected  = -1;
+    this->CurrentMidiSelected = 0;
     this->CalibrationPhase    = 0;
     this->LoadSaveSelection   = 1;
     }
@@ -283,26 +283,19 @@ void SYNTH_FRONT_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::PageSelectedCheck ()
-    {
-    if ( this->CurrentMidiSelected == 0 )
-        {
-        this->CurrentMidiSelected = this->SynthConfig.Voice[0].GetVoiceMidi ();
-        this->CurrentMapSelected = 0;
-        this->CurrentVoiceSelected = 0;
-        DisplayMessage.SetPage (0, this->CurrentMidiSelected);
-        return;
-        }
-    }
-
-//#######################################################################
 void SYNTH_FRONT_C::PageAdvance ()
     {
     byte  m    = this->CurrentMidiSelected;
     short next = this->CurrentMapSelected + 1;
 
-    if ( this->LoadSaveMode )
-        this->LoadSaveMode = false;
+    if ( this->LoadSaveMode || this->ResolutionMode || this->MapSelectMode )
+        {
+        next = 0;
+        m = 0;
+        this->LoadSaveMode   = false;
+        this->ResolutionMode = false;
+        this->MapSelectMode  = false;
+        }
 
     while ( next < MAP_COUNT )
         {
@@ -312,11 +305,10 @@ void SYNTH_FRONT_C::PageAdvance ()
             next++;
             continue;
             }
-        this->CurrentMidiSelected  = this->SynthConfig.Voice[next].GetVoiceMidi ();
         this->CurrentMapSelected   = next;
-        this->CurrentVoiceSelected = next >> 1;
-        DisplayMessage.SetPage (PAGE_C::PAGE_OSC, this->CurrentMidiSelected);
-        this->TemplateSelect (XL_MIDI_MAP_OSC);
+        this->CurrentVoiceSelected = next << 1;
+        this->CurrentMidiSelected  = this->SynthConfig.Voice[next].GetVoiceMidi ();
+        this->UpdateOscDisplay ();
         return;
         }
 
@@ -324,11 +316,10 @@ void SYNTH_FRONT_C::PageAdvance ()
     if ( next == MAP_COUNT )
         {
         this->CurrentVoiceSelected  = -1;
-        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
         this->CurrentMapSelected    = next;
-        this->CurrentFilterSelected = index >> 1;
-        DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
-        this->TemplateSelect (XL_MIDI_MAP_FLT);
+        this->CurrentFilterSelected = index << 1;
+        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
+        this->UpdateFltDisplay ();
         return;
         }
 
@@ -340,29 +331,28 @@ void SYNTH_FRONT_C::PageAdvance ()
             next++;
             continue;
             }
-        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
         this->CurrentMapSelected    = next;
-        this->CurrentFilterSelected = index >> 1;
-        DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
-        this->TemplateSelect (XL_MIDI_MAP_FLT);
+        this->CurrentFilterSelected = index << 1;
+        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
+        this->UpdateFltDisplay ();
         return;
         }
 
     index = next - (MAP_COUNT * 2) + 2;
     if ( DisplayMessage.Page () == (byte)PAGE_C::PAGE_MOD )
         {
-        this->CurrentMapSelected   = 0;
-        this->CurrentVoiceSelected = 0;
-        this->CurrentMidiSelected  = this->SynthConfig.Voice[0].GetVoiceMidi ();
-        DisplayMessage.SetPage (PAGE_C::PAGE_OSC, this->CurrentMidiSelected);
-        this->TemplateSelect (XL_MIDI_MAP_OSC);
+        this->CurrentMapSelected    = 0;
+        this->CurrentVoiceSelected  = 0;
+        this->CurrentFilterSelected = -1;
+        this->CurrentMidiSelected   = this->SynthConfig.Voice[0].GetVoiceMidi ();
+        this->UpdateOscDisplay ();
         }
     else
         {
         this->CurrentMapSelected    = next;
+        this->CurrentMidiSelected   = 0;
         this->CurrentFilterSelected = -1;       // de-select functions to disable
         this->CurrentVoiceSelected  = -1;
-        this->CurrentMidiSelected   = 0;
         DisplayMessage.Page (index);
         this->TemplateSelect (XL_MIDI_MAP_LFO);
         }

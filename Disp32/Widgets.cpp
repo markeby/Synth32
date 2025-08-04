@@ -185,26 +185,26 @@ void LFO_METER_WIDGET_C::Select (bool sel)
     {
     this->Meter = lv_meter_create (base);
     lv_obj_align (this->Meter, LV_ALIGN_TOP_MID, x, y);
-    lv_obj_set_size (this->Meter, 140, 140);
+    lv_obj_set_size (this->Meter, 142, 142);
 
     lv_obj_remove_style (this->Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
     lv_meter_scale_t* scale = lv_meter_add_scale (this->Meter);
-    lv_meter_set_scale_ticks (this->Meter, scale, 6, 2, 30, lv_color_hex3(0x444));
+    lv_meter_set_scale_ticks (this->Meter, scale, 8, 2, 30, lv_color_hex3(0x444));
 
-    this->GaugeAttack  = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_GREEN), 20);
-    this->GaugeDecay   = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_BLUE), 11);
-    this->GaugeRelease = lv_meter_add_arc (this->Meter, scale, 6, lv_palette_main(LV_PALETTE_RED), 2);
+    this->GaugeAttack  = lv_meter_add_arc (this->Meter, scale, 5, lv_palette_main(LV_PALETTE_RED), 6);
+    this->GaugeDecay   = lv_meter_add_arc (this->Meter, scale, 5, lv_palette_main(LV_PALETTE_BLUE), 13);
+    this->GaugeRelease = lv_meter_add_arc (this->Meter, scale, 5, lv_palette_main(LV_PALETTE_GREEN), 20);
 
     this->Led  = lv_led_create (this->Meter);
     lv_obj_align (this->Led, LV_ALIGN_CENTER, 0, 0);
 
     y = 160;
-    this->Attack.BeginText (base, " Attack:", "mSec", y, 0x008000);
+    this->Attack.BeginText (base, " Attack:", "mSec", y, 0xff0000);
     y += 15;
     this->Decay.BeginText (base, "  Decay:", "mSec", y, 0x0000ff);
     y += 15;
-    this->Release.BeginText (base, "Release:", "mSec", y, 0xff0000);
+    this->Release.BeginText (base, "Release:", "mSec", y, 0x008000);
 
     // Initial positions
     this->SetAttack  (0);

@@ -51,13 +51,13 @@
 void SYNTH_VOICE_CONFIG_C::Save (const char* name)
     {
     this->Name = name;
-    Settings.PutConfig (name, &(this->Cs), sizeof (Cs));
+    Settings.PutConfig (name, &(this->Cs), sizeof (this->Cs));
     }
 
 //#######################################################################
 void SYNTH_VOICE_CONFIG_C::Load (const char* name)
     {
-    if ( Settings.GetConfig (name, &(this->Cs), sizeof (Cs)) )
+    if ( Settings.GetConfig (name, &(this->Cs), sizeof (this->Cs)) )
         printf ("### Error loading voice config!\n");
     this->InitButtonsXL ();
     }
@@ -107,7 +107,7 @@ void SYNTH_CONFIG_C::Save (short num)
     for ( int z = 0;  z < MAP_COUNT;  z++ )
         {
         s = sb + String (z);
-        this->Voice[z].Save (s.c_str ());
+        this->Voice[z].Save(s.c_str());
         }
     }
 

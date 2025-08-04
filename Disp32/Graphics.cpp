@@ -60,9 +60,9 @@ static const char* filterTitle[] = { "Frequency", "Q" };
 
         this->TitleControl[z] = new TITLE_WIDGET_C (panel, filterTitle[z]);
         this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
-        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 215, LV_PALETTE_ORANGE);
-        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 73, 215, LV_PALETTE_INDIGO);
-        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 146, 215, LV_PALETTE_INDIGO);
+        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 215, LV_PALETTE_INDIGO);
+        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 73, 215, LV_PALETTE_TEAL);
+        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN" ,146, 215, LV_PALETTE_ORANGE);
 
         x += 231;
         }

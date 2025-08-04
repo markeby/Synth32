@@ -71,7 +71,6 @@ public:
     void Controller                 (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
-    void PageSelectedCheck          (void);
     void TemplateSelect             (byte index);
 
     //#######################################################################
@@ -107,24 +106,29 @@ public:
 
     //#######################################################################
     // FrontEndOscCtrl.cpp
-    void VoiceLevelSelect               (short ch, bool state);
-    void SetLevel                       (short ch, short data);
-    void SetAttackTime                  (short ch, short data);
-    void SetDecayTime                   (short ch, short data);
-    void SetReleaseTime                 (short ch, short data);
-    void SetSustainLevel                (short ch, short data);
-    void ToggleRampDirection            (short ch);
-    void SetPulseWidth                  (short data);
+    void UpdateOscDisplay           (void);
+    void UpdateFltDisplay           (void);
+    void VoiceLevelSelect           (short ch, bool state);
+    void SetLevel                   (short ch, short data);
+    void SetAttackTime              (short ch, short data);
+    void SetDecayTime               (short ch, short data);
+    void SetReleaseTime             (short ch, short data);
+    void SetSustainLevel            (short ch, short data);
+    void ToggleRampDirection        (short ch);
+    void SetPulseWidth              (short data);
+    void FltStart                   (short ch, short data);
+    void FltEnd                     (short ch, short data);
 
     //#######################################################################
     // FrontEndTuning.cpp
-    void Tuning                         (void);
-    void TuningAdjust                   (bool up);
-    void TuningBump                     (bool state);
-    void StartTuning                    (void);
-    void SaveTuning                     (void);
-    void Calibration                    (ushort val);
-    void StartCalibration               (void);
+    void Tuning                     (void);
+    void TuningAdjust               (bool up);
+    void TuningBump                 (bool state);
+    void StartTuning                (void);
+    void SaveTuning                 (void);
+    void Calibration                (ushort val);
+    void StartCalibration           (void);
+
     inline bool IsInTuning (void)
         { return (this->SetTuning); }
 

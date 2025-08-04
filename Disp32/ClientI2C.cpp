@@ -84,11 +84,11 @@ void MESSAGE_CLIENT_C::Process ()
             case CMD_C::UPDATE_PAGE_VOICE:      // 5 byte message
                 Graphics.UpdatePageVoice (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
                 break;
+            case CMD_C::UPDATE_PAGE_FILTER:      // 5 byte message
+                Graphics.UpdatePageFilter (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
+                break;
             case CMD_C::UPDATE_PAGE_MOD:        // 5 byte message
                 Graphics.UpdatePageMod (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
-                break;
-            case CMD_C::UPDATE_PAGE_FILTER:     // 5 byte message
-                Graphics.PageSelect (PAGE_C::PAGE_FLT);
                 break;
             case CMD_C::UPDATE_PAGE_TUNING:     // 5 byte message
                 Graphics.UpdatePageTuning ((uint8_t)ptop.Channel, ptop.Effect, value);
