@@ -132,6 +132,7 @@ public:
     // FrontEndTuning.cpp
     void Tuning                     (void);
     void TuningAdjust               (bool up);
+    void SetTuningLevel             (short ch, short data);
     void TuningBump                 (bool state);
     void StartTuning                (void);
     void SaveTuning                 (void);

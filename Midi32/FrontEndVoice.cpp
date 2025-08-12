@@ -100,14 +100,6 @@ void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
 //#####################################################################
 void SYNTH_FRONT_C::SetLevel (short ch, short data)
     {
-    if ( this->SetTuning )
-        {
-        this->TuningLevel[ch] = data * MIDI_MULTIPLIER;
-        DisplayMessage.TuningLevel (ch, data);
-        this->TuningChange = true;
-        return;
-        }
-
     if ( this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch] )
         {
         this->SetSustainLevel (ch,  data);;

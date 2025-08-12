@@ -129,7 +129,6 @@ void SYNTH_FRONT_C::FreqLFO (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::PitchBend (byte mchan, short value)
     {
-
     this->Lfo[0].PitchBend (mchan, value);
     this->Lfo[1].PitchBend (mchan, value);
     DBG ("Pitch Bend value = %d", value);

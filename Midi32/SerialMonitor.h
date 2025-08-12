@@ -22,7 +22,6 @@ private:
 
 public:
          MONITOR_C      (void);
-    void Tuning         (void);
     bool Detect         (void);
     void Loop           (void);
     void Begin          (void);

@@ -101,13 +101,6 @@ void MONITOR_C::InputPrompt (const char* text)
     }
 
 //#######################################################################
-void MONITOR_C::Tuning ()
-    {
-    SynthFront.StartCalibration ();
-    this->Menu ();
-    }
-
-//#######################################################################
 void MONITOR_C::Reset ()
     {
     DisplayMessage.Reset ();

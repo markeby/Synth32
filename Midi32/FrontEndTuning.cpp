@@ -91,23 +91,25 @@ void SYNTH_FRONT_C::StartTuning ()
 //#######################################################################
 void SYNTH_FRONT_C::TuningAdjust (bool up)
     {
-    if ( this->SetTuning )
-        {
-        for (int z = 0;  z < VOICE_COUNT;  z++)
-            this->pVoice[z]->TuningAdjust (up);
-        }
+    for (int z = 0;  z < VOICE_COUNT;  z++)
+        this->pVoice[z]->TuningAdjust (up);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SetTuningLevel (short ch, short data)
+    {
+    this->TuningLevel[ch] = data * MIDI_MULTIPLIER;
+    DisplayMessage.TuningLevel (ch, data);
+    this->TuningChange = true;
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::TuningBump (bool state)
     {
-    if ( this->SetTuning )
-        {
-        byte note = (state) ? 125 : 5;         // Highest F or lowest F
-        DisplayMessage.TuningNote (note);
-        for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
-            this->pVoice[zc]->SetTuningNote (note);
-        }
+    byte note = (state) ? 125 : 5;         // Highest F or lowest F
+    DisplayMessage.TuningNote (note);
+    for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
+        this->pVoice[zc]->SetTuningNote (note);
     }
 
 //#######################################################################
@@ -128,6 +130,7 @@ void SYNTH_FRONT_C::StartCalibration ()
         return;
 
     DisplayMessage.PageCalibration ();
+    this->TemplateSelect (XL_MIDI_MAP_SPARE);
     DBG ("Starting Calibration");
 
     this->Lfo[0].SetOffset(0);

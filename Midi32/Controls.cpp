@@ -125,9 +125,15 @@ static void ToggleModVCO (short ch, short data)
 static void TuneReset (short ch, bool state)
     {
     if ( state )
-        Monitor.Tuning ();
+        SynthFront.StartCalibration ();
     else
         Monitor.Reset ();
+    }
+
+//########################################################
+static void SetTuningLevel (short ch, short data)
+    {
+    SynthFront.SetTuningLevel (ch, data);
     }
 
 //########################################################
@@ -570,11 +576,11 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,   0x0C, "N ",                      nullptr             },  // 94 0x5E  46
         {     0,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "Level Sine",              SetLevel            },  // 96 0x60  48
-        {     1,      0, "Level Triangle",          SetLevel            },  // 97 0x61  49
-        {     2,      0, "Level Ramp",              SetLevel            },  // 98 0x62  50
-        {     3,      0, "Level Pulse",             SetLevel            },  // 99 0x63  51
-        {     4,      0, "Level Noise",             SetLevel            },  //100 0x64  52
+        {     0,      0, "Level Sine",              SetTuningLevel      },  // 96 0x60  48
+        {     1,      0, "Level Triangle",          SetTuningLevel      },  // 97 0x61  49
+        {     2,      0, "Level Ramp",              SetTuningLevel      },  // 98 0x62  50
+        {     3,      0, "Level Pulse",             SetTuningLevel      },  // 99 0x63  51
+        {     4,      0, "Level Noise",             SetTuningLevel      },  //100 0x64  52
         {     0,      0, "N ",                      nullptr             },  //101 0x65  53
         {     0,      0, "N ",                      nullptr             },  //102 0x66  54
         {     0,      0, "N ",                      nullptr             },  //103 0x67  55
