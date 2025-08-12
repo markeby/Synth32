@@ -44,14 +44,15 @@ private:
     void    SendTo          (unsigned length, byte* buff);
     void    ResetAllLED     (byte index);
 public:
-    void    ResetUSB        (void);
+    void    Begin           (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
 
 // located in Novation.cpp
 public:
             NOVATION_XL_C   (void);
-    void    Begin           (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
     void    Loop            (void);
     void    TemplateReset   (byte index);
+    void    TemplateRefresh (void)              { this->ButtonChange = true; }
+
     void    SelectTemplate  (byte index, byte* pbuttons=nullptr);
     void    SetColor        (byte index, byte led, XL_LED color);
     void    SetColor        (byte led, XL_LED color)                { this->SetColor (this->CurrentMap, led,  color); }

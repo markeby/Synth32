@@ -64,26 +64,32 @@ public:
 
          SYNTH_FRONT_C              (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
     void Begin                      (short voice, short mux_digital, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
-    void Initialize                 (void)
-        { this->LaunchControl.Begin (pMidiMapXL);  this->LoadDefaultConfig (); }
+    void MidiCommandConfiguration   (void);
     void Loop                       (void);
     void Clear                      (void);
     void Controller                 (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
     void TemplateSelect             (byte index);
+    void TemplateRefresh            (void)
+        { this->LaunchControl.TemplateRefresh (); }
 
     //#######################################################################
     // FrontEndLFO.cpp
+    void UpdateLfoDisplay           (void);
+    void UpdateModButtons           (void);
+    void SelectModVCA               (byte ch);
     void SelectModVCA               (byte ch, bool state);
     void FreqLFO                    (short ch, short data);
     void PitchBend                  (byte mchan, short value);
+    void SelectModVCO               (short index, short ch);
+    void SelectModVCO               (short index, short ch, bool state);
+    void ToggleModRampDir           (short index);
+    void SetModRampDir              (short index, bool state);
+    void ToggleModLevelAlt          (short index);
+    void SetModLevelAlt             (short index, bool state);
     void SetLevelLFO                (short index, byte mchan, short data)
         { this->Lfo[index].SetLevelMidi (mchan, data); }
-    void SelectModVCO               (short index, short ch, bool state)
-        { if ( !this->MapSelectMode )   this->Lfo[index].SetWave (ch, state);  this->SynthConfig.SetSelect (index, ch, state); }
-    void SetModRampDir              (short index, bool state)
-        { if ( !this->MapSelectMode )   this->Lfo[index].SetRampDir (state);  this->SynthConfig.SetRampDir (index, state); }
 
     //#######################################################################
     // FrontEndMapping.cpp
@@ -107,7 +113,9 @@ public:
     //#######################################################################
     // FrontEndOscCtrl.cpp
     void UpdateOscDisplay           (void);
+    void UpdateOscButtons           (void);
     void UpdateFltDisplay           (void);
+    void UpdateFltButtons           (void);
     void VoiceLevelSelect           (short ch, bool state);
     void SetLevel                   (short ch, short data);
     void SetAttackTime              (short ch, short data);
@@ -118,6 +126,7 @@ public:
     void SetPulseWidth              (short data);
     void FltStart                   (short ch, short data);
     void FltEnd                     (short ch, short data);
+    void SelectFilter               (short index);
 
     //#######################################################################
     // FrontEndTuning.cpp

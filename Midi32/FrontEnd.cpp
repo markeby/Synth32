@@ -18,6 +18,7 @@
 #ifdef DEBUG_SYNTH
 //#define DEBUG_FUNC
 //#define DEBUG_MIDI_MSG
+
 static const char* Label  = "TOP";
 static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
@@ -32,8 +33,6 @@ static      USB Usb;
 static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
-
-#define SENDcc0(k,c) {Midi_0.send(midi::MidiType::ControlChange,k,c,1);DBGM("code 0x%X Color = 0x%X  [%s]", k, c, __PRETTY_FUNCTION__);}
 
 using namespace MIDI_NAMESPACE;
 using namespace DISP_MESSAGE_N;
@@ -160,95 +159,96 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI
     }
 
 //#######################################################################
+void SYNTH_FRONT_C::MidiCommandConfiguration ()
+    {
+    Midi_0.setHandleNoteOn               (FuncKeyDown);
+    Midi_1.setHandleNoteOn               (FuncKeyDown);
+    Midi_2.setHandleNoteOn               (FuncKeyDown);
+
+    Midi_0.setHandleNoteOff              (FuncKeyUp);
+    Midi_1.setHandleNoteOff              (FuncKeyUp);
+    Midi_2.setHandleNoteOff              (FuncKeyUp);
+
+    Midi_0.setHandleControlChange        (FuncController);
+    Midi_1.setHandleControlChange        (FuncController);
+//  Midi_2.setHandleControlChange        (FuncController);
+
+    Midi_0.setHandlePitchBend            (FuncPitchBend);
+    Midi_1.setHandlePitchBend            (FuncPitchBend);
+//  Midi_2.setHandlePitchBend            (FuncPitchBend);
+
+    Midi_0.setHandleError                (FuncError);
+//  Midi_1.setHandleError                (FuncError);
+//  Midi_2.setHandleError                (FuncError);
+
+//  Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//  Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//  Midi_2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+
+//  Midi_0.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
+//  Midi_2.setHandleProgramChange        (ProgramChangeCallback fptr);
+
+//  Midi_0.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//  Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//  Midi_2.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+
+//  Midi_0.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//  Midi_2.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+
+//  Midi_0.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi_1.setHandleSongPosition         (SongPositionCallback fptr);
+//  Midi_2.setHandleSongPosition         (SongPositionCallback fptr);
+
+//  Midi_0.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi_1.setHandleSongSelect           (SongSelectCallback fptr);
+//  Midi_2.setHandleSongSelect           (SongSelectCallback fptr);
+
+//  Midi_0.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi_1.setHandleTuneRequest          (TuneRequestCallback fptr);
+//  Midi_2.setHandleTuneRequest          (TuneRequestCallback fptr);
+
+//  Midi_0.setHandleClock                (ClockCallback fptr);
+//  Midi_1.setHandleClock                (ClockCallback fptr);
+//  Midi_2.setHandleClock                (ClockCallback fptr);
+
+//  Midi_0.setHandleStart                (StartCallback fptr);
+//  Midi_1.setHandleStart                (StartCallback fptr);
+//  Midi_2.setHandleStart                (StartCallback fptr);
+
+//  Midi_0.setHandleTick                 (TickCallback fptr);
+//  Midi_1.setHandleTick                 (TickCallback fptr);
+//  Midi_2.setHandleTick                 (TickCallback fptr);
+
+//  Midi_0.setHandleContinue             (ContinueCallback fptr);
+//  Midi_1.setHandleContinue             (ContinueCallback fptr);
+//  Midi_2.setHandleContinue             (ContinueCallback fptr);
+
+//  Midi_0.setHandleStop                 (StopCallback fptr);
+//  Midi_1.setHandleStop                 (StopCallback fptr);
+//  Midi_2.setHandleStop                 (StopCallback fptr);
+
+//  Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr)
+//  Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
+//  Midi_2.setHandleActiveSensing        (ActiveSensingCallback fptr);
+
+    Midi_0.setHandleSystemReset          (FuncSystemReset0);
+    Midi_1.setHandleSystemReset          (FuncSystemReset1);
+    Midi_2.setHandleSystemReset          (FuncSystemReset2);
+    }
+
+//#######################################################################
 void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
     {
 #ifdef DEBUG_MIDI_MSG
     Midi_0.setHandleMessage              (FuncMessage0);
-#endif
-    Midi_0.setHandleNoteOn               (FuncKeyDown);
-    Midi_0.setHandleNoteOff              (FuncKeyUp);
-    Midi_0.setHandleControlChange        (FuncController);
-    Midi_0.setHandlePitchBend            (FuncPitchBend);
-    Midi_0.setHandleError                (FuncError);
-//  Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//  Midi_0.setHandleProgramChange        (ProgramChangeCallback fptr);
-//  Midi_0.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-    Midi_0.setHandleSystemExclusive      (FuncSystemEx);
-//  Midi_0.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//  Midi_0.setHandleSongPosition         (SongPositionCallback fptr);
-//  Midi_0.setHandleSongSelect           (SongSelectCallback fptr);
-//  Midi_0.setHandleTuneRequest          (TuneRequestCallback fptr);
-//  Midi_0.setHandleClock                (ClockCallback fptr);
-//  Midi_0.setHandleStart                (StartCallback fptr);
-//  Midi_0.setHandleTick                 (TickCallback fptr);
-//  Midi_0.setHandleContinue             (ContinueCallback fptr);
-//  Midi_0.setHandleStop                 (StopCallback fptr);
-//  Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr);
-    Midi_0.setHandleSystemReset          (FuncSystemReset0);
-
-#ifdef DEBUG_MIDI_MSG
     Midi_1.setHandleMessage              (FuncMessage1);
-#endif
-    Midi_1.setHandleNoteOn               (FuncKeyDown);
-    Midi_1.setHandleNoteOff              (FuncKeyUp);
-    Midi_1.setHandleControlChange        (FuncController);
-    Midi_1.setHandlePitchBend            (FuncPitchBend);
-//  Midi_1.setHandleError                (ErrorCallback fptr);
-//  Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//  Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
-//  Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-//  Midi_1.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
-//  Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//  Midi_1.setHandleSongPosition         (SongPositionCallback fptr);
-//  Midi_1.setHandleSongSelect           (SongSelectCallback fptr);
-//  Midi_1.setHandleTuneRequest          (TuneRequestCallback fptr);
-//  Midi_1.setHandleClock                (ClockCallback fptr);
-//  Midi_1.setHandleStart                (StartCallback fptr);
-//  Midi_1.setHandleTick                 (TickCallback fptr);
-//  Midi_1.setHandleContinue             (ContinueCallback fptr);
-//  Midi_1.setHandleStop                 (StopCallback fptr);
-//  Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
-    Midi_1.setHandleSystemReset          (FuncSystemReset1);
-
-#ifdef DEBUG_MIDI_MSG
     Midi_2.setHandleMessage              (FuncMessage2);
 #endif
-    Midi_2.setHandleNoteOn               (FuncKeyDown);
-    Midi_2.setHandleNoteOff              (FuncKeyUp);
-//  Midi_2.setHandleControlChange        (FuncController);
-//  Midi_2.setHandlePitchBend            (FuncPitchBend);
-//  Midi_2.setHandleError                (ErrorCallback fptr);
-//  Midi_2.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//  Midi_2.setHandleProgramChange        (ProgramChangeCallback fptr);
-//  Midi_2.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-//  Midi_2.setHandleSystemExclusive      (SystemExclusiveCallback fptr);
-//  Midi_2.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//  Midi_2.setHandleSongPosition         (SongPositionCallback fptr);
-//  Midi_2.setHandleSongSelect           (SongSelectCallback fptr);
-//  Midi_2.setHandleTuneRequest          (TuneRequestCallback fptr);
-//  Midi_2.setHandleClock                (ClockCallback fptr);
-//  Midi_2.setHandleStart                (StartCallback fptr);
-//  Midi_2.setHandleTick                 (TickCallback fptr);
-//  Midi_2.setHandleContinue             (ContinueCallback fptr);
-//  Midi_2.setHandleStop                 (StopCallback fptr);
-//  Midi_2.setHandleActiveSensing        (ActiveSensingCallback fptr);
-    Midi_2.setHandleSystemReset          (FuncSystemReset2);
-
-    printf ("\t>>>\tMidi interfaces startup\n");
-    while ( Usb.Init () == -1 )
-        {
-        delay (200);
-        printf ("Usb midi init retry!\n");
-        }
-    printf ("\t>>>\tUsb midi ready\n");
-
-    Serial1.begin (31250, SERIAL_8N1, RXD1, TXD1, false);
-    Midi_1.begin (MIDI_CHANNEL_OMNI);
-    printf ("\t>>>\tSerial1 midi ready\n");
-
-    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
-    Midi_2.begin (MIDI_CHANNEL_OMNI);
-    printf ("\t>>>\tSerial2 midi ready\n");
+    Midi_0.setHandleSystemExclusive      (FuncSystemEx);
+//  Midi_1.setHandleSystemExclusive      (FuncSystemEx);
+//  Midi_2.setHandleSystemExclusive      (FuncSystemEx);
 
     // Setup ports for calibration
     CalibrationBaseDigital = mod_mux_digital;
@@ -273,6 +273,26 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
     this->Lfo[1].Begin (1, lfo_control + 8 + 6, lfo_control + 3);
     this->CalibrationAtoD = start_a_d;
     this->ResolutionMode = true;
+
+    printf ("\t>>>\tMidi interfaces startup\n");
+    while ( Usb.Init () == -1 )
+        {
+        delay (200);
+        printf ("Usb midi init retry!\n");
+        }
+    printf ("\t>>>\tUsb midi ready\n");
+
+    Serial1.begin (31250, SERIAL_8N1, RXD1, TXD1, false);
+    Midi_1.begin (MIDI_CHANNEL_OMNI);
+    printf ("\t>>>\tSerial1 midi ready\n");
+
+    Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+    Midi_2.begin (MIDI_CHANNEL_OMNI);
+    printf ("\t>>>\tSerial2 midi ready\n");
+
+    this->LaunchControl.Begin (this->pMidiMapXL);
+
+    this->MidiCommandConfiguration ();
     }
 
 //#######################################################################
@@ -353,8 +373,7 @@ void SYNTH_FRONT_C::PageAdvance ()
         this->CurrentMidiSelected   = 0;
         this->CurrentFilterSelected = -1;       // de-select functions to disable
         this->CurrentVoiceSelected  = -1;
-        DisplayMessage.Page (index);
-        this->TemplateSelect (XL_MIDI_MAP_LFO);
+        this->UpdateLfoDisplay ();
         }
     }
 
@@ -533,10 +552,10 @@ void SYNTH_FRONT_C::TemplateSelect (byte index)
     switch ( index )
         {
         case XL_MIDI_MAP_OSC:
-            pb = SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateOsc ();
+            pb = SynthConfig.Voice[this->CurrentVoiceSelected >> 1].GetButtonStateOsc ();
             break;
         case XL_MIDI_MAP_FLT:
-            pb = SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateFlt ();
+            pb = SynthConfig.Voice[this->CurrentFilterSelected >> 1].GetButtonStateFlt ();
             break;
         case XL_MIDI_MAP_LFO:
             pb = SynthConfig.GetButtonStateLfo ();
@@ -545,31 +564,31 @@ void SYNTH_FRONT_C::TemplateSelect (byte index)
             break;
         }
 
-    this->LaunchControl.SelectTemplate(index, pb);
+    this->LaunchControl.SelectTemplate (index, pb);
     }
 
 //#######################################################################
 //#######################################################################
-void NOVATION_XL_C::ResetUSB ()
+void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
     {
-    DBG ("USB reset \n\n");
+    this->pMidiMap = xl_map;
 
-    while ( Usb.Init () == -1 )
+    for ( short z = 0;  z < 30;  z++ )
         {
-        DBG ("Usb midi init retry!\n");
-        delay (200);
+        Usb.Task    ();
+        Midi_0.read ();
+        delay (100);
         }
-    delay (3000);
     }
 
 //#######################################################################
 void NOVATION_XL_C::SendTo (unsigned length, byte* buff)
     {
     // Debugging message
-//    String str;
-//    for ( short z = 0;  z < length;  z++ )
-//        str += " " + String (buff[z], 16);
-//    printf("@@ message %s\n", str.c_str ());
+//  String str;
+//  for ( short z = 0;  z < length;  z++ )
+//      str += " " + String (buff[z], 16);
+//  printf("@@ message %s\n", str.c_str ());
 
     // Message sent to deice
     Midi_0.sendSysEx (length, buff, false);
@@ -578,7 +597,8 @@ void NOVATION_XL_C::SendTo (unsigned length, byte* buff)
 //#######################################################################
 void NOVATION_XL_C::ResetAllLED (byte index)
     {
-    delay (22);
     Midi_0.send ((MidiType)(0x90 | index), 0, 0, 0);
+    delay (100);
     }
+
 

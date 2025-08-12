@@ -36,6 +36,7 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mux_digital, short mod_mux_dig
     this->ModMux[2] = mod_mux_digital + 4;
     this->pOsc = new OSC_C  (num, osc_d_a, this->UseCount, envgen);
     this->pFlt = new FLT4_C (num, osc_d_a + (( num & 1 ) ? 10 : 16), this->UseCount, envgen);
+    this->SetMux (2);                   // default with oscillators enable
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
     }

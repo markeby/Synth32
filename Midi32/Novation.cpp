@@ -11,6 +11,8 @@
 #include "../Common/DispMessages.h"
 #include "Novation.h"
 
+byte dummyButtons[XL_BUTTON_COUNT];
+
 //#######################################################################
     NOVATION_XL_C::NOVATION_XL_C ()
     {
@@ -19,6 +21,9 @@
     this->pButtonState = nullptr;
     this->Counter      = NOVATION_LOOP_COUNT;
     this->ButtonChange = false;
+
+    memset (dummyButtons, 0x0C, sizeof (dummyButtons));
+    this->pButtonState = dummyButtons;
     }
 
 //#######################################################################
@@ -32,22 +37,12 @@ void NOVATION_XL_C::TemplateReset (byte index)
     short zi = 7;                                                       // start loading array at this index
     for ( int z = 0;  z < (XL_MIDI_MAP_SIZE - 8);  z++ )
         {
-        midi_sysex_led[zi] = z;                                     // setup index of LED
-        midi_sysex_led[zi + 1] = this->pMidiMap[index][z].Color;    // get color value for LED
+        midi_sysex_led[zi] = z;                                         // setup index of LED
+        midi_sysex_led[zi + 1] = this->pMidiMap[index][z].Color;        // get color value for LED
         zi += 2;                                                        // bump target array index
         }
-    delay (22);
+    delay (100);
     this->SendTo (sizeof (midi_sysex_led), midi_sysex_led);             // Send message to set all LEDs
-    }
-
-//#######################################################################
-void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
-    {
-    this->pMidiMap = xl_map;
-
-    for ( int z = 0;  z < XL_MIDI_MAP_PAGES;  z++ )
-        this->TemplateReset (z);
-    this->SelectTemplate (0);                                               // starting with tempate zero
     }
 
 //#######################################################################
@@ -79,19 +74,23 @@ void NOVATION_XL_C::Loop ()
             default:        // should never get here
                 break;
             }
+        this->ButtonChange = false;
         }
     }
 
 //#######################################################################
 void NOVATION_XL_C::SelectTemplate (byte index, byte* pbuttons)
     {
-    static byte midi_msg_template[] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x77, 0x00 };
-
-    this->pButtonState = pbuttons;
+    static byte midi_msg_template[7] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x77, 0x00 };
+    if ( pbuttons == nullptr )
+        this->pButtonState = dummyButtons;
+    else
+        this->pButtonState = pbuttons;
     delay (10);
     midi_msg_template[6] = index;
     this->CurrentMap     = index;
     this->SendTo (sizeof (midi_msg_template), midi_msg_template);
+    this->TemplateReset (index);
     this->UpdateButtons ();
     }
 
@@ -105,7 +104,7 @@ void NOVATION_XL_C::UpdateButtons ()
         {
         delay(10);
         midi_button_sysex[6] = this->CurrentMap;
-        for ( int z = 0;  z < XL_BUTTON_COUNT;  z++ )
+        for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
             {
             midi_button_sysex[(z * 2) + 7] = XL_BUTTON_START + z;
             midi_button_sysex[(z * 2) + 8] = this->pButtonState[z];

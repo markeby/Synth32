@@ -82,6 +82,8 @@ public:
     inline float    GetFltStart         (byte fn)                           { return (pFlt->GetStart (fn)); }
     inline void     SetFltEnd           (byte fn, float level_percent)      { pFlt->SetEnd (fn, level_percent); }
     inline float    GetFltEnd           (byte fn)                           { return (pFlt->GetEnd (fn)); }
+    inline void     SetFltOut           (byte fmap)                         { this->pFlt->SetOutMap (fmap); }
+    inline byte     GetFltOut           (void)                              { return (this->pFlt->GetOutMap ()); }
 
     inline void     SetTuningNote       (byte note)                         { pOsc->SetTuningNote   (note, this->TuningOn); }
     inline void     SetTuningVolume     (byte select, uint16_t level)       { pOsc->SetTuningVolume (select, level); }

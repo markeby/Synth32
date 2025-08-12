@@ -288,6 +288,15 @@ public:
         }
 
     //#################################################
+    inline void FltOut (byte fmap)
+        {
+        this->SendUpdateFlt (0,
+                             0,
+                             DISP_MESSAGE_N::EFFECT_C::MAP_VOICE,
+                             fmap);
+        }
+
+    //#################################################
     //#################################################
     inline void LfoSoftFreq (short value)
         {
@@ -339,6 +348,15 @@ public:
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
                              DISP_MESSAGE_N::EFFECT_C::RAMP_DIRECTION,
+                             value);
+        }
+
+    //#################################################
+    inline void SetModLevelAlt (byte index, byte value)
+        {
+        this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
+                             index,
+                             DISP_MESSAGE_N::EFFECT_C::ALTERNATE,
                              value);
         }
 

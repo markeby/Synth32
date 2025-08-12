@@ -6,6 +6,7 @@
 
 #include <Streaming.h>
 #include "../Common/SynthCommon.h"
+#include "Debug.h"
 
 //#####################################
 // Usefull constants

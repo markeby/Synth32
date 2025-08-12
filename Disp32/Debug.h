@@ -15,3 +15,5 @@ void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...);
 void DebugMsgN (const char* label, uint8_t index, String name,  const char *const fmt, ...);
 void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const char *const fmt, ...);
 
+void BootDebug (void);
+

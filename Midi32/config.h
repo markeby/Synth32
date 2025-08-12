@@ -9,6 +9,7 @@
 
 #include "../Common/SynthCommon.h"
 #include "I2Cdevices.h"
+#include "Debug.h"
 
 //#####################################
 // Usefull constants
@@ -188,8 +189,8 @@ public:
     void Load                           (const char* name);
     void InitButtonsXL                  (void);
 
-    inline byte*  GetButtonStateOsc     (void)                      { return (ButtonStateOsc); }
-    inline byte*  GetButtonStateFlt     (void)                      { return (ButtonStateFlt); }
+    inline byte*  GetButtonStateOsc     (void)                      { return (this->ButtonStateOsc); }
+    inline byte*  GetButtonStateFlt     (void)                      { return (this->ButtonStateFlt); }
     inline void   SetName               (String& name)              { this->Name = name;}
     inline String Getname               (void)                      { return (this->Name); }
     inline void   SetOutputEnable       (short data)                { this->Cs.OutputEnable = data; }
@@ -242,6 +243,7 @@ private:
             short   Frequency;
             short   PulseWidth;
             bool    RampDir;
+            bool    ModLevelAlt;
             bool    Select[SOURCE_CNT_LFO];
             } CfgLFO[2];
         } Cs;
@@ -274,5 +276,7 @@ public:
     inline short  GetFrequency      (short unit)                            { return (this->Cs.CfgLFO[unit].Frequency); }
     inline void   SetPulseWidth     (short unit, short data)                { this->Cs.CfgLFO[unit].PulseWidth = data; }
     inline short  GetPulseWidth     (short unit)                            { return (this->Cs.CfgLFO[unit].PulseWidth); }
+    inline void   SetModLevelAlt    (short unit, bool data)                 { this->Cs.CfgLFO[unit].ModLevelAlt = data; }
+    inline bool   GetModLevelAlt    (short unit)                            { return (this->Cs.CfgLFO[unit].ModLevelAlt); }
     };
 

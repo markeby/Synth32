@@ -44,7 +44,17 @@ void SYNTH_FRONT_C::UpdateOscDisplay ()
         }
     DisplayMessage.OscRampDirection (sc.GetRampDirection ());
     DisplayMessage.OscPulseWidth   (sc.GetPulseWidth () * PRS_UNSCALER);
+    this->UpdateOscButtons ();
     this->TemplateSelect (XL_MIDI_MAP_OSC);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::UpdateOscButtons ()
+    {
+    bool zb = this->SynthConfig.Voice[this->CurrentVoiceSelected].GetRampDirection ();
+    DisplayMessage.OscRampDirection (zb);
+    (this->SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateOsc ())[7] = ( zb ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
+    this->LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
@@ -53,8 +63,6 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
     SYNTH_VOICE_CONFIG_C& sc = this->SynthConfig.Voice[this->CurrentMapSelected];    // Configuration data for this voice pair
 
     DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
-    this->TemplateSelect (XL_MIDI_MAP_FLT);
-
     for ( short z = 0;  z < 2;  z++ )
         {
         DisplayMessage.FltAttackTime  (z, sc.GetFltAttackTime (z) * (1.0/TIME_MULT));
@@ -64,6 +72,20 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
         DisplayMessage.FltStart       (z, sc.GetFltStart (z) * PRS_UNSCALER);
         DisplayMessage.FltEnd         (z, sc.GetFltEnd (z) * PRS_UNSCALER);
         }
+    this->TemplateSelect (XL_MIDI_MAP_FLT);
+    this->UpdateFltButtons ();
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::UpdateFltButtons ()
+    {
+    byte  mask = this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();
+
+    DisplayMessage.FltOut (mask);
+
+    for ( short z = 0;  z < 4;  z++ )
+        (this->SynthConfig.Voice[this->CurrentFilterSelected].GetButtonStateFlt ())[z + 8] = ( (mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
+    this->LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
@@ -71,7 +93,8 @@ void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
     {
     state = !this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch];
     this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch] = state;
-    this->LaunchControl.ButtonColor (ch, (state) ? XL_LED::RED : XL_LED::GREEN);
+    (this->SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateOsc ())[ch] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
+    this->LaunchControl.TemplateRefresh ();
     }
 
 //#####################################################################
@@ -229,7 +252,7 @@ void SYNTH_FRONT_C::ToggleRampDirection (short ch)
     if ( this->CurrentVoiceSelected < 0 )
         return;
 
-    bool zb = !this->SynthConfig.Voice[this->CurrentVoiceSelected].GetRampDirection();
+    bool zb = !this->SynthConfig.Voice[this->CurrentVoiceSelected].GetRampDirection ();
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
@@ -238,8 +261,7 @@ void SYNTH_FRONT_C::ToggleRampDirection (short ch)
             this->pVoice[z]->SetRampDirection (zb);
             }
         }
-    DisplayMessage.OscRampDirection (zb);
-    this->LaunchControl.ButtonColor (ch, ( zb ) ? XL_LED::RED : XL_LED::GREEN);
+    this->UpdateOscButtons ();
     }
 
 //#######################################################################
@@ -263,14 +285,15 @@ void SYNTH_FRONT_C::SetPulseWidth (short data)
 //#######################################################################
 void SYNTH_FRONT_C::FltStart (short ch, short data)
     {
+    if ( this->CurrentFilterSelected < 0 )
+        return;
+
     ch -= 8;
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            if ( this->CurrentFilterSelected < 0 )
-                return;
             this->SynthConfig.Voice[z >> 1].SetFltStart (ch, val);
             this->pVoice[z]->SetFltStart (ch, val);
             }
@@ -281,18 +304,36 @@ void SYNTH_FRONT_C::FltStart (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::FltEnd (short ch, short data)
     {
+    if ( this->CurrentFilterSelected < 0 )
+        return;
+
     ch -= 8;
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            if ( this->CurrentFilterSelected < 0 )
-                return;
             this->SynthConfig.Voice[z >> 1].SetFltEnd (ch, val);
             this->pVoice[z]->SetFltEnd (ch, val);
             }
         }
     DisplayMessage.FltEnd (ch, data);
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SelectFilter (short index)
+    {
+    byte mask = 1 << index;                                                         // setup masking for the selected bit
+    mask ^= this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();            // Setup final output inverting selected bit
+
+    for ( short z = 0;  z < VOICE_COUNT;  z++ )
+        {
+        if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetFltOut (mask);
+            this->pVoice[z]->SetFltOut (mask);
+            }
+        }
+    this->UpdateFltButtons ();
     }
 

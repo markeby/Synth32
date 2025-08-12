@@ -38,6 +38,7 @@ static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
     this->OutSwitch[1] = dig++;
     this->OutSwitch[2] = dig++;
     this->OutSwitch[3] = dig;
+    this->OutMap       = 0;
 
     if ( I2cDevices.IsPortValid (this->FreqIO) && I2cDevices.IsPortValid (this->QuIO) && I2cDevices.IsPortValid (this->OutSwitch[0]) )
         {
@@ -61,6 +62,16 @@ void FLT4_C::Clear ()
     {
     this->ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
+    }
+
+//#######################################################################
+void FLT4_C::SetOutMap (byte fmap)
+    {
+    this->OutMap = fmap;
+
+    for ( short z = 0;  z < 4;  z++ )
+        I2cDevices.DigitalOut (this->OutSwitch[z], (fmap >> z) & 1);
+    I2cDevices.UpdateDigital ();
     }
 
 

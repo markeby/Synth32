@@ -54,10 +54,10 @@ private:
 
 public:
               PAGE_OSC_C (lv_obj_t* base);
-    void      SetPage    (byte midi);
+    void      SetMidi    (byte midi);
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
-    byte      GetMidi    (void)     { return (this->Midi); }
-    };
+    void      Select     (byte fmap);
+};
 
 //############################################
 //############################################
@@ -69,13 +69,14 @@ private:
     LEVEL_WIDGET_C*         ValueStart[2];
     LEVEL_WIDGET_C*         ValueEnd[2];
     LEVEL_WIDGET_C*         ValueSustain[2];
-
+    lv_obj_t*               Output[4];
     byte                    Midi;
 
 public:
               PAGE_FILTER_C (lv_obj_t* base);
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
-    void      SetPage    (byte midi);
+    void      SetMidi    (byte midi);
+    void      Select     (byte fmap);
     };
 
 //############################################
@@ -94,6 +95,7 @@ private:
         bool                HardInUse[3];
         RAMP_WIDGET_C*      RampDir;
         PULSE_WIDGET_C*     PulseWidth;
+        lv_obj_t*           ModLevelAlt[2];
         } LFO_C;
     LFO_C   LowFreq[2];
 
@@ -111,6 +113,7 @@ private:
 public:
             PAGE_MOD_C        (lv_obj_t* base);
     void    UpdatePage        (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void    LevelAlt          (short num, bool state);
     void    UpdateHardButtons (short index, short value, bool sel);
     void    UpdateSoftButtons (short value, bool sel);
     };

@@ -3,7 +3,6 @@
 // https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
 //
 #include <Arduino.h>
-#include <esp_system.h>
 
 #include "Settings.h"
 #include "SerialMonitor.h"
@@ -90,6 +89,8 @@ bool       DebugI2C             = false;
 bool       DebugSynth           = false;
 bool       DebugDisp            = false;
 
+static uint64_t startTime       = 0;
+
 //#######################################################################
 inline void TimeDelta (void)
     {
@@ -157,9 +158,8 @@ inline void TickState (void)
 void setup (void)
     {
     bool fault = false;
- // Pause here so that init of serial port in the monitor class can complete
-    delay (500);
 
+    BootDebug ();  // Pause here so that init of serial port in the monitor class can complete on power up
     printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
     printf ("\t>>> Start Settings config...\n");
     Settings.Begin ();    // System settings
@@ -201,7 +201,7 @@ void setup (void)
         // Setup initial state of synth
         SynthFront.Begin (START_VOICE_CONTROL, START_MULT_DIGITAL, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
         SynthActive = true;
-        printf ("\t>>> Synth ready.\n");
+        printf ("\t>>> Synth ready.\a\a\n");
         if ( SystemError )
             printf ("\n\t>## Not all synth interface registers are active.\n\n");
         }
@@ -211,7 +211,6 @@ void setup (void)
 void loop (void)
     {
     static bool first = true;
-    static int  fcnt  = 5000;
 
     TimeDelta ();
     if ( TickTime () )
@@ -221,9 +220,25 @@ void loop (void)
     if ( !UpdateOTA.WiFiStatus () )
         UpdateOTA.WaitWiFi ();
 
+    if ( first )
+        {
+        startTime += DeltaTimeMicro;
+
+        if ( startTime >= MILLI_TO_MICRO (500)  )
+            {
+            if ( !SystemFail )
+                SynthFront.LoadDefaultConfig ();
+            first = false;
+            }
+        return;     // We don't do any synth things until the default loads.
+        }
+    else
+        Monitor.Loop   ();
+    UpdateOTA.Loop ();
+
     if ( SynthActive )
         {
-        SoftLFO.Loop    (DeltaTimeMilli);     // Process sine wave for envelope generator modulation
+        SoftLFO.Loop (DeltaTimeMilli);      // Process sine wave for envelope generator level modulation
         SynthFront.Loop ();
         if ( DisplayMessage.Loop () )
             {
@@ -233,17 +248,5 @@ void loop (void)
         I2cDevices.Loop ();
         }
 
-    if ( first )
-        {
-        if ( --fcnt == 0 )
-            {
-            if ( !SystemFail )
-                SynthFront.Initialize();
-            first = false;
-            }
-        }
-    else
-        Monitor.Loop   ();
-    UpdateOTA.Loop ();
     }
 

@@ -300,6 +300,9 @@ void MONITOR_C::PageSelect (void)
 //#######################################################################
 MONITOR_C::MONITOR_C (void) : InputMode (MENU), InputString ("")
     {
+    Serial.begin (115200);
+    this->InputString = "";
+    this->InputMode   = MENU;
     }
 
 //#######################################################################

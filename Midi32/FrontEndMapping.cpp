@@ -167,9 +167,6 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
         v0.SetMidi (m);
         v1.SetMidi (m);
 
-        // Initialize LaunchControl XL Buttons
-        sc.InitButtonsXL ();
-
         // configure hardware LFOs
         v0.SetModMux (0);                                       // set to zero in case none are touched below
         v1.SetModMux (0);
@@ -216,10 +213,12 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
                 sc.SelectedFltEnvelope[v] = false;
                 }
             }
-        v0.SetRampDirection     (sc.GetRampDirection ());
-        v1.SetRampDirection     (sc.GetRampDirection ());
-        v0.SetPulseWidth        (sc.GetPulseWidth    ());
-        v1.SetPulseWidth        (sc.GetPulseWidth    ());
+        v0.SetRampDirection (sc.GetRampDirection ());
+        v1.SetRampDirection (sc.GetRampDirection ());
+        v0.SetPulseWidth    (sc.GetPulseWidth    ());
+        v1.SetPulseWidth    (sc.GetPulseWidth    ());
+        v0.SetFltOut        (sc.GetFltOut        ());
+        v1.SetFltOut        (sc.GetFltOut        ());
         }
 
     this->Lfo[0].SetMidi (this->SynthConfig.GetModMidi (0));
@@ -228,13 +227,15 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         this->SelectModVCA (z, this->SynthConfig.GetModSoftMixer (z));
 
-    this->FreqLFO       (0, this->SynthConfig.GetSoftFreq    ());
-    this->FreqLFO       (1, this->SynthConfig.GetFrequency   (0));
-    this->FreqLFO       (3, this->SynthConfig.GetFrequency   (1));
-    this->FreqLFO       (2, this->SynthConfig.GetPulseWidth  (0));
-    this->FreqLFO       (4, this->SynthConfig.GetPulseWidth  (1));
-    this->SetModRampDir (0, this->SynthConfig.GetRampDir     (0));
-    this->SetModRampDir (1, this->SynthConfig.GetRampDir     (1));
+    SoftLFO.SetFreq             (this->SynthConfig.GetSoftFreq    ());
+    this->Lfo[0].SetFreq        (this->SynthConfig.GetFrequency   (0));
+    this->Lfo[1].SetFreq        (this->SynthConfig.GetFrequency   (1));
+    this->Lfo[0].SetPulseWidth  (this->SynthConfig.GetPulseWidth  (0));
+    this->Lfo[1].SetPulseWidth  (this->SynthConfig.GetPulseWidth  (1));
+    this->Lfo[0].SetRampDir     (this->SynthConfig.GetRampDir     (0));
+    this->Lfo[1].SetRampDir     (this->SynthConfig.GetRampDir     (1));
+    this->Lfo[0].SetModLevelAlt (this->SynthConfig.GetModLevelAlt (0));
+    this->Lfo[1].SetModLevelAlt (this->SynthConfig.GetModLevelAlt (1));
 
     for ( short z = 0;  z < SOURCE_CNT_LFO;  z++ )
         {
@@ -247,7 +248,6 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
-
     this->PageAdvance ();
     }
 

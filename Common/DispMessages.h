@@ -164,6 +164,7 @@ namespace DISP_MESSAGE_N
         MAP_VOICE,
         MESSAGE,
         VALUE,
+        ALTERNATE,
         };
 
     //###########################################
@@ -186,8 +187,9 @@ namespace DISP_MESSAGE_N
         "NOTE",
         "NOISE",
         "MAP_VOICE",
-        "NONE",
-        "NONE",
+        "MESSAGE",
+        "VALUE",
+        "ALTERNATE",
         };
     #else
     extern char* EffectText[];

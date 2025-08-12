@@ -13,7 +13,6 @@
 #include <demos/lv_demos.h>
 
 #include "config.h"
-#include "Debug.h"
 #include "Graphics.h"
 #include "Widgets.h"
 
@@ -32,7 +31,7 @@ using namespace DISP_MESSAGE_N;
     lv_obj_set_style_pad_right  (base, 3, 0);
 
     Title = lv_label_create (base);
-    lv_obj_align      (Title, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_align      (Title, LV_ALIGN_TOP_MID, 0, -2);
     lv_label_set_text (Title, str);
     lv_style_init (&TitleStyle);       // for page titles
     lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_36);
@@ -41,17 +40,18 @@ using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 //#######################################################################
-static const char* filterTitle[] = { "Frequency", "Q" };
+static const char* filterTitle[]  = { "Frequency", "Q" };
+static const char* filterOutput[] = { "LP", "LBP", "UBP", "HP" };
     PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Filter Midi 1")
     {
     int x = 0;
-    int y = 40;
+    int y = 34;
 
     this->Midi = 0;
-    for ( int z = 0;  z < 2;  z++ )
+    for ( short z = 0;  z < 2;  z++ )
         {
         lv_obj_t* panel = lv_obj_create (base);
-        lv_obj_set_size (panel, 232, 440);
+        lv_obj_set_size (panel, 232, 392);
         lv_obj_set_pos (panel, x, y);
         lv_obj_set_style_pad_top (panel, 0, 0);
         lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -60,16 +60,56 @@ static const char* filterTitle[] = { "Frequency", "Q" };
 
         this->TitleControl[z] = new TITLE_WIDGET_C (panel, filterTitle[z]);
         this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
-        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 215, LV_PALETTE_INDIGO);
-        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 73, 215, LV_PALETTE_TEAL);
-        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN" ,146, 215, LV_PALETTE_ORANGE);
+        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 210, LV_PALETTE_INDIGO);
+        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 73, 210, LV_PALETTE_TEAL);
+        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN" ,146, 210, LV_PALETTE_ORANGE);
 
         x += 231;
+        }
+
+    lv_obj_t* spanel = lv_obj_create (base);
+    lv_obj_set_size (spanel, 464, 58);
+    lv_obj_set_pos (spanel, 0, 422);
+    lv_obj_set_style_pad_top (spanel, 0, 0);
+    lv_obj_set_style_pad_bottom (spanel, 0, 0);
+    x = 24;
+    for ( short z = 0;  z < 4;  z++ )
+        {
+        this->Output[z] = lv_btn_create (spanel);
+        lv_obj_align      (this->Output[z], LV_ALIGN_LEFT_MID, x, 0);
+        lv_obj_add_flag   (this->Output[z], LV_OBJ_FLAG_CHECKABLE);
+        lv_obj_add_state (this->Output[z], LV_STATE_DISABLED);
+        lv_obj_set_height (this->Output[z], 30);
+
+        lv_obj_t* label = lv_label_create (this->Output[z]);
+        lv_label_set_text (label, filterOutput[z]);
+        lv_obj_center     (label);
+
+        x += 95;
+        }
+
+    }
+
+//#######################################################################
+void PAGE_FILTER_C::Select (byte fmap)
+    {
+    for ( short z = 0;  z < 4;  z++ )
+        {
+        if ( (fmap >> z) & 1 )
+            {
+            lv_obj_clear_state (this->Output[z], LV_STATE_DISABLED);
+            lv_obj_add_state (this->Output[z], LV_STATE_CHECKED);
+            }
+        else
+            {
+            lv_obj_clear_state (this->Output[z], LV_STATE_CHECKED);
+            lv_obj_add_state (this->Output[z], LV_STATE_DISABLED);
+            }
         }
     }
 
 //#######################################################################
-void PAGE_FILTER_C::SetPage (byte midi)
+void PAGE_FILTER_C::SetMidi (byte midi)
     {
     String s = "Filter  Midi  " + String (midi);
     this->Midi = midi;
@@ -101,6 +141,9 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
             break;
         case EFFECT_C::SUSTAIN_LEVEL:
             this->ValueSustain[fn]->SetLevel (value);
+            break;
+        case EFFECT_C::MAP_VOICE:
+            this->Select (value);
             break;
         default:
             break;
@@ -136,10 +179,10 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
         switch ( z )
             {
             case 2:
-                this->RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -6);
+                this->RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -10);
                 break;
             case 3:
-                this->PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -6);
+                this->PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -10);
                 break;
             default:
                 break;
@@ -150,7 +193,7 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
     }
 
 //#######################################################################
-void PAGE_OSC_C::SetPage (byte midi)
+void PAGE_OSC_C::SetMidi (byte midi)
     {
     String s = "Voice  Midi  " + String (midi);
     this->Midi = midi;
@@ -204,8 +247,25 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int         x = 0;
     int         y = 40;
 
+    this->CreateLFO (0, x, y, base, "Frequency 1", "A1-A2", "TF4", "A3", "   TF1", "   TF2", "   TF3");
+    this->UpdateHardButtons (0, 0, false);
+    this->UpdateHardButtons (0, 1, false);
+    this->UpdateHardButtons (0, 2, false);
+    this->LowFreq[0].PulseWidth->SetWidth (64);
+    x += 202;
+    y = 40;
+
+    this->CreateLFO (1, x, y, base, "Frequency 2", "A5-A6", "TF8", "A7", "   TF5", "   TF6", "   TF7");
+    this->UpdateHardButtons (1, 0, false);
+    this->UpdateHardButtons (1, 1, false);
+    this->UpdateHardButtons (1, 2, false);
+    this->LowFreq[1].PulseWidth->SetWidth (64);
+
+    x += 404;
+    y = 40;
+
     panel = lv_obj_create (base);
-    lv_obj_set_size             (panel, 259, 320);
+    lv_obj_set_size             (panel, 159, 320);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -231,30 +291,16 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     this->SoftLabelNoise.BeginText (panel, "   F5", "", y);
     this->UpdateSoftButtons (4, false);
     this->SoftInUse[0] = this->SoftInUse[1] = this->SoftInUse[2] = this->SoftInUse[3] = this->SoftInUse[4] = false;
-
-    x += 258;
-    y = 40;
-
-    this->CreateLFO (0, x, y, lv_obj_create (base), "Frequency 1", "  E2", "F12", "E3", "   F9", "   F10", "   F11");
-    this->UpdateHardButtons (0, 0, false);
-    this->UpdateHardButtons (0, 1, false);
-    this->UpdateHardButtons (0, 2, false);
-
-    x += 258;
-    y = 40;
-
-    this->CreateLFO (1, x, y, lv_obj_create (base), "Frequency 2", "  E4", "F16", "E5", "   F13", "   F14", "   F15");
-    this->UpdateHardButtons (1, 0, false);
-    this->UpdateHardButtons (1, 1, false);
-    this->UpdateHardButtons (1, 2, false);
     }
 
 //#######################################################################
-void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* title, const char* mstr, const char* rs, const char* pws, const char* ssine, const char* sramp, const char* spulse)
+static const char* textModAlt[] = { "Mod Wheel", "G49 S1"};
+void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* base, const char* title, const char* mstr, const char* rs, const char* pws, const char* ssine, const char* sramp, const char* spulse)
     {
     LFO_C& lfo = this->LowFreq[num];
+    lv_obj_t* panel = lv_obj_create (base);
 
-    lv_obj_set_size             (panel, 259, 320);
+    lv_obj_set_size             (panel, 159, 390);
     lv_obj_set_pos              (panel, x, y);
     lv_obj_set_style_pad_top    (panel, 0, 0);
     lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -263,8 +309,9 @@ void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* 
 
     lfo.TitleHard  = new TITLE_WIDGET_C (panel, title);
     lfo.MeterHard  = new LFO_METER_WIDGET_C (panel, 9, 20, false, mstr);
-    lfo.RampDir    = new RAMP_WIDGET_C (panel, rs, LV_ALIGN_BOTTOM_LEFT, 40, -44);
-    lfo.PulseWidth = new PULSE_WIDGET_C (panel, pws, LV_ALIGN_BOTTOM_LEFT, 40, -10);
+    lfo.RampDir    = new RAMP_WIDGET_C (panel, rs, LV_ALIGN_CENTER, 0, 60);
+    lfo.PulseWidth = new PULSE_WIDGET_C (panel, pws, LV_ALIGN_CENTER, 0, 91);
+    lfo.MeterHard->SetFreq (0);
 
     y = 190;
     lfo.HardLabelSine.BeginText (panel, ssine, "", y);
@@ -273,6 +320,46 @@ void PAGE_MOD_C::CreateLFO (int num, int x, int y, lv_obj_t* panel, const char* 
     y += 14;
     lfo.HardLabelPulse.BeginText (panel, spulse, "", y);
     lfo.HardInUse[0] = lfo.HardInUse[1] = lfo.HardInUse[2] = false;
+
+    x = 0;
+    y = -50;
+    for ( short z = 0;  z < 2;  z++ )
+        {
+        lfo.ModLevelAlt[z] = lv_btn_create (panel);
+        lv_obj_align      (lfo.ModLevelAlt[z], LV_ALIGN_BOTTOM_MID, x, y);
+        lv_obj_add_flag   (lfo.ModLevelAlt[z], LV_OBJ_FLAG_CHECKABLE);
+            lv_obj_add_state(lfo.ModLevelAlt[z], LV_STATE_DISABLED);
+        lv_obj_set_height (lfo.ModLevelAlt[z], 30);
+
+        String str = textModAlt[z];
+        if ( z == 1 )
+            str.replace("1",  String (num + 1));
+        lv_obj_t* label = lv_label_create (lfo.ModLevelAlt[z]);
+        lv_label_set_text (label, str.c_str ());
+        lv_obj_center     (label);
+
+        y += 36;
+        }
+    this->LevelAlt (num, false);
+    }
+
+//#######################################################################
+void PAGE_MOD_C::LevelAlt (short num, bool state)
+    {
+    if ( state )
+        {
+        lv_obj_clear_state (this->LowFreq[num].ModLevelAlt[0], LV_STATE_CHECKED);
+        lv_obj_add_state   (this->LowFreq[num].ModLevelAlt[0], LV_STATE_DISABLED);
+        lv_obj_clear_state (this->LowFreq[num].ModLevelAlt[1], LV_STATE_DISABLED);
+        lv_obj_add_state   (this->LowFreq[num].ModLevelAlt[1], LV_STATE_CHECKED);
+        }
+    else
+        {
+        lv_obj_clear_state (this->LowFreq[num].ModLevelAlt[0], LV_STATE_DISABLED);
+        lv_obj_add_state   (this->LowFreq[num].ModLevelAlt[0], LV_STATE_CHECKED);
+        lv_obj_clear_state (this->LowFreq[num].ModLevelAlt[1], LV_STATE_CHECKED);
+        lv_obj_add_state   (this->LowFreq[num].ModLevelAlt[1], LV_STATE_DISABLED);
+        }
     }
 
 //#######################################################################
@@ -357,6 +444,9 @@ void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
                     break;
                 case EFFECT_C::PULSE_WIDTH:
                     this->LowFreq[index].PulseWidth->SetWidth (value);
+                    break;
+                case EFFECT_C::ALTERNATE:
+                    this->LevelAlt (index, value);
                     break;
                 default:
                     break;
@@ -637,11 +727,11 @@ void GRPH_C::Begin ()
 
     BasePageVoice = lv_tabview_add_tab (Pages, "");
     PageVoice     = new PAGE_OSC_C     (BasePageVoice);
-    PageVoice->SetPage (1);                              // initialize only the first voice page for midi allocation as default
+    PageVoice->SetMidi (1);                              // initialize only the first voice page for midi allocation as default
 
     BasePageFilter = lv_tabview_add_tab (Pages, "");
     PageFilter     = new PAGE_FILTER_C  (BasePageFilter);
-    PageFilter->SetPage (1);                              // initialize only the first filter page for midi allocation as default
+    PageFilter->SetMidi (1);                              // initialize only the first filter page for midi allocation as default
 
     BasePageMod         = lv_tabview_add_tab   (Pages, "");
     PageMod             = new PAGE_MOD_C       (BasePageMod);
@@ -678,10 +768,10 @@ void GRPH_C::SetPage (byte num, byte midi)
     switch ( num )
         {
         case (byte)PAGE_C::PAGE_OSC:
-            this->PageVoice->SetPage (midi);
+            this->PageVoice->SetMidi (midi);
             break;
         case (byte)PAGE_C::PAGE_FLT:
-            this->PageFilter->SetPage (midi);
+            this->PageFilter->SetMidi (midi);
             break;
         default:
             break;

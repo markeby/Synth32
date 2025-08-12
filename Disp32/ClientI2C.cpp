@@ -9,7 +9,6 @@
 #include "config.h"
 #include "Graphics.h"
 #include "ClientI2C.h"
-#include "Debug.h"
 #include "../Common/DispMessages.h"
 
 static const char* Label = "I";

@@ -2,7 +2,7 @@
 // Module:     LFOusc.cpp
 // Descrption: Oscillator controls
 // Creator:    markeby
-// Date:       9/18/2023
+// Date:       9/18/2024
 //#######################################################################
 #include <Arduino.h>
 #include "../Common/SynthCommon.h"
@@ -115,11 +115,19 @@ void SYNTH_LFO_C::Clear ()
     }
 
 //#######################################################################
-void SYNTH_LFO_C::SetFreq (short value)
+void SYNTH_LFO_C::ProcessFreq ()
     {
-    this->CurrentFreq = value;
-    DBG ("Set frequency %d", value);
-    I2cDevices.D2Analog (this->OscPortIO, value);
+    this->CurrentFreq = (this->CurrentFreqCoarse * MIDI_MULTIPLIER) + (this->CurrentFreqFine * (MIDI_MULTIPLIER * 0.01));
+    if ( this->CurrentFreq > DA_MAX )
+        this->CurrentFreq = DA_MAX;
+    this->OutputFreqIO ();
+    }
+
+//#######################################################################
+void SYNTH_LFO_C::OutputFreqIO ()
+    {
+    DBG ("Set frequency %d", this->CurrentFreq);
+    I2cDevices.D2Analog (this->OscPortIO, this->CurrentFreq);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
@@ -136,7 +144,6 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
 void SYNTH_LFO_C::SetWave (short ch, bool state)
     {
     this->Level[ch].Select = state;
-    DisplayMessage.LfoHardSelect (this->Number, ch, state);
     if ( state )
         {
         this->InUse++;
@@ -147,7 +154,6 @@ void SYNTH_LFO_C::SetWave (short ch, bool state)
         this->InUse--;
         this->SetInternalLevel (ch, 0);
         }
-
 
     if ( this->UpdateNeded )
         {
@@ -192,7 +198,6 @@ void SYNTH_LFO_C::PitchBend (short value)
 void SYNTH_LFO_C::SetRampDir (bool state)
     {
     this->RampSlope = state;
-    DisplayMessage.LfoHardRampSlope (this->Number, state);
     I2cDevices.DigitalOut           (this->SlopePortO, state);
     I2cDevices.UpdateDigital        ();
     }

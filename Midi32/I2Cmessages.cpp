@@ -45,7 +45,7 @@ void I2C_MESSAGE_C::SendComplete (byte length)
     int written = Wire1.write ((const byte*)this->SendBuffer, length);
     this->LastEndT = Wire1.endTransmission ();
     if ( this->LastEndT )
-        ERROR ("Send message with error: %s", ErrorStringI2C (this->LastEndT));
+        ERROR ("Send message command 0x%X of %d length, with error: %s", *this->SendBuffer, length, ErrorStringI2C (this->LastEndT));
     if ( written != length )
         ERROR ("Attempt to send %d byte message but shows %d", length, written);
     }

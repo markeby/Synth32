@@ -8,18 +8,20 @@
 #include <Arduino.h>
 #include <esp_debug_helpers.h>
 
-#define DEBUG_SYNTH            1
+#define DEBUG_SYNTH           1
 
 #define DEBUG_NO_INDEX      255
 
-const String vFormat (const char *const zcFormat, ...);
+const String vFormat  (const char *const zcFormat, ...);
 const String vsFormat (const char *const zcFormat, va_list args);
 
-void DebugMsg (const char* label, uint8_t index, const char *const fmt, ...);
+void DebugMsg  (const char* label, uint8_t index, const char *const fmt, ...);
 void DebugMsgN (const char* label, uint8_t index, String name,  const char *const fmt, ...);
 void DebugMsgF (const char* label, uint8_t index, String name, char* flag, const char *const fmt, ...);
-
-void ErrorMsg (const char* label, const char* func, const char* const fmt, ...);
+void ErrorMsg  (const char* label, const char* func, const char* const fmt, ...);
 
 char* ErrorStringI2C (int err);
+void  BootDebug      (void);
+
+#define PAUSE {printf("%s:%d\n",__FILE__,__LINE__);while(!Serial.available ()) continue;char s=Serial.read();}
 
