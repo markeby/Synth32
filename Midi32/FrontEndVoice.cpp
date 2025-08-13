@@ -83,7 +83,7 @@ void SYNTH_FRONT_C::UpdateFltButtons ()
 
     DisplayMessage.FltOut (mask);
 
-    for ( short z = 0;  z < 4;  z++ )
+    for ( short z = 0;  z < 5;  z++ )
         (this->SynthConfig.Voice[this->CurrentFilterSelected].GetButtonStateFlt ())[z + 8] = ( (mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
     this->LaunchControl.TemplateRefresh ();
     }
@@ -323,9 +323,11 @@ void SYNTH_FRONT_C::SelectFilter (short index)
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
             this->SynthConfig.Voice[z >> 1].SetFltOut (mask);
+            this->pVoice[z]->SetMux (mask & 1);
             this->pVoice[z]->SetFltOut (mask);
             }
         }
+
     this->UpdateFltButtons ();
     }
 

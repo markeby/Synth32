@@ -193,8 +193,6 @@ public:
     inline byte*  GetButtonStateFlt     (void)                      { return (this->ButtonStateFlt); }
     inline void   SetName               (String& name)              { this->Name = name;}
     inline String Getname               (void)                      { return (this->Name); }
-    inline void   SetOutputEnable       (short data)                { this->Cs.OutputEnable = data; }
-    inline short  GetOutputEnable       (void)                      { return (this->Cs.OutputEnable); }
     inline void   SetVoiceMidi          (short data)                { this->Cs.MapVoiceMidi = data; }
     inline short  GetVoiceMidi          (void)                      { return (this->Cs.MapVoiceMidi); }
     inline void   SetVoiceNoise         (short data)                { this->Cs.MapVoiceNoise = data; }

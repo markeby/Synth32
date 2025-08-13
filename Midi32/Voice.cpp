@@ -74,23 +74,10 @@ bool VOICE_C::NoteClear (byte mchan, byte key)
     }
 
 //#######################################################################
-void VOICE_C::SetMux (byte select)
+void VOICE_C::SetMux (bool bypass)
     {
-    switch ( select )
-        {
-        case 2:
-            I2cDevices.DigitalOut (this->DigitalOutOscillator, true);
-            I2cDevices.DigitalOut (this->DigitalOutFilter, false);
-            break;
-        case 1:
-            I2cDevices.DigitalOut (this->DigitalOutFilter, true);
-            I2cDevices.DigitalOut (this->DigitalOutOscillator, false);
-            break;
-        default:       // zero
-            I2cDevices.DigitalOut (this->DigitalOutOscillator, false);
-            I2cDevices.DigitalOut (this->DigitalOutFilter, false);
-            break;
-        }
+    I2cDevices.DigitalOut (this->DigitalOutFilter, bypass);        // Just hard code on until I build an newer mixer/switch board
+    I2cDevices.DigitalOut (this->DigitalOutOscillator, true);
     }
 
 //#######################################################################

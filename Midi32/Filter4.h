@@ -41,7 +41,7 @@ public:
     inline void     SetEnd              (byte fn, float level_percent)    { this->Funct[fn]->SetLevel (ESTATE::ATTACK, level_percent); }
     inline float    GetEnd              (byte fn)                         { return (this->Funct[fn]->GetLevel (ESTATE::ATTACK)); }
     void            SetOutMap           (byte fmap);
-    inline byte     GetOutMap           (void)                            { return (this->OutMap); }
+    inline byte     GetOutMap           (void)                            { return (this->OutMap << 1); }
     };
 
 

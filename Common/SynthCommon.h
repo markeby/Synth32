@@ -29,7 +29,7 @@
 
 // maximum number of entries on mapping page
 #define MAP_COUNT           (VOICE_COUNT / 2)
-#define GROUP_COUNT         4
+#define GROUP_COUNT         3
 
 // Number of modululation multiplex inputs
 #define NUM_MOD_MUX_IN      3

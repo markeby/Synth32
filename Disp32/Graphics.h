@@ -69,7 +69,7 @@ private:
     LEVEL_WIDGET_C*         ValueStart[2];
     LEVEL_WIDGET_C*         ValueEnd[2];
     LEVEL_WIDGET_C*         ValueSustain[2];
-    lv_obj_t*               Output[4];
+    lv_obj_t*               Output[5];
     byte                    Midi;
 
 public:
@@ -123,13 +123,9 @@ public:
 class PAGE_MAPPING_C
     {
 private:
-    lv_obj_t*           MidiTitle;
-    lv_obj_t*           NoiseTitle;
-    lv_obj_t*           ModTitle;
     lv_style_t          TitleStyle;
     SELECT_WIDGET_C*    SelVoice[MAP_COUNT];
     SELECT_WIDGET_C*    SelNoise[MAP_COUNT];
-    SELECT_WIDGET_C*    SelOutput[MAP_COUNT];
     SELECT_WIDGET_C*    Sellfo[MAP_COUNT];
     short               Selected;
 

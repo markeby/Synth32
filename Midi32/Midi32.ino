@@ -201,6 +201,7 @@ void setup (void)
         // Setup initial state of synth
         SynthFront.Begin (START_VOICE_CONTROL, START_MULT_DIGITAL, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
         SynthActive = true;
+        SynthFront.LoadDefaultConfig ();
         printf ("\t>>> Synth ready.\a\a\n");
         if ( SystemError )
             printf ("\n\t>## Not all synth interface registers are active.\n\n");
@@ -210,8 +211,6 @@ void setup (void)
 //#######################################################################
 void loop (void)
     {
-    static bool first = true;
-
     TimeDelta ();
     if ( TickTime () )
         TickState ();
@@ -220,20 +219,7 @@ void loop (void)
     if ( !UpdateOTA.WiFiStatus () )
         UpdateOTA.WaitWiFi ();
 
-    if ( first )
-        {
-        startTime += DeltaTimeMicro;
-
-        if ( startTime >= MILLI_TO_MICRO (500)  )
-            {
-            if ( !SystemFail )
-                SynthFront.LoadDefaultConfig ();
-            first = false;
-            }
-        return;     // We don't do any synth things until the default loads.
-        }
-    else
-        Monitor.Loop   ();
+    Monitor.Loop   ();
     UpdateOTA.Loop ();
 
     if ( SynthActive )
@@ -247,6 +233,5 @@ void loop (void)
             }
         I2cDevices.Loop ();
         }
-
     }
 

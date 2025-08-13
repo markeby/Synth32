@@ -51,11 +51,8 @@ void SYNTH_FRONT_C::UpdateMapModeDisplay (int sel)
     else if ( sel < (MAP_COUNT * 2) )
         DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.Voice[sel - MAP_COUNT].GetVoiceNoise ());
 
-    else if ( sel < (MAP_COUNT * 3) )
-        DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.Voice[sel - (MAP_COUNT * 2)].GetOutputEnable ());
-
-    else if ( sel < ((MAP_COUNT * 4) - 1) )
-        DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.GetModMidi (sel - (MAP_COUNT * 3)));
+    else if ( sel < ((MAP_COUNT * 3) - 1) )
+        DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, this->SynthConfig.GetModMidi (sel - (MAP_COUNT * 2)));
     }
 //#####################################################################
 void SYNTH_FRONT_C::MapModeBump (short down)
@@ -90,23 +87,15 @@ void SYNTH_FRONT_C::MapModeBump (short down)
 
         if ( zi < MAP_COUNT )
             {
-            z = this->SynthConfig.Voice[zi].GetOutputEnable () + down;
-            if ( z <  0 )       z = 2;
-            if ( z > 2 )        z = 0;
-            this->SynthConfig.Voice[zi].SetOutputEnable (z);
+            z = this->SynthConfig.GetModMidi (zi) + down;
+            if ( z <  0 )           z = MAX_MIDI;
+            if ( z > MAX_MIDI )     z = 0;
+            printf("@@ zi = %d  z = %d\n", zi, z);
+            this->SynthConfig.SetModMidi (zi, z);
             break;
             }
         else
             zi -= MAP_COUNT;
-
-        if ( zi < MAP_COUNT )
-            {
-            z = this->SynthConfig.GetModMidi (zi) + down;
-            if ( z <  0 )           z = MAX_MIDI;
-            if ( z > MAX_MIDI )     z = 0;
-            this->SynthConfig.SetModMidi (zi, z);
-            }
-        break;
         }
 
     DisplayMessage.SendMapVoiceMidi (this->CurrentMapSelected, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, z);
@@ -175,8 +164,6 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
             if ( m == this->SynthConfig.GetModMidi (v) )        // Detect MIDI matching
                 v0.SetModMux (v + 1);
             }
-        v0.SetMux (sc.GetOutputEnable ());
-        v1.SetMux (sc.GetOutputEnable ());
 
         // Set selected noise
         v0.NoiseSelect (sc.GetVoiceNoise ());

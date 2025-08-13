@@ -573,7 +573,7 @@ void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
     {
     this->pMidiMap = xl_map;
 
-    for ( short z = 0;  z < 30;  z++ )
+    for ( short z = 0;  z < 20;  z++ )
         {
         Usb.Task    ();
         Midi_0.read ();

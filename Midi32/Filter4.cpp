@@ -67,6 +67,7 @@ void FLT4_C::Clear ()
 //#######################################################################
 void FLT4_C::SetOutMap (byte fmap)
     {
+    fmap >>= 1;
     this->OutMap = fmap;
 
     for ( short z = 0;  z < 4;  z++ )

@@ -41,7 +41,7 @@ using namespace DISP_MESSAGE_N;
 //#######################################################################
 //#######################################################################
 static const char* filterTitle[]  = { "Frequency", "Q" };
-static const char* filterOutput[] = { "LP", "LBP", "UBP", "HP" };
+static const char* filterOutput[] = { "Bypass", "   LP   ", "   LBP  ", "   UBP  ", "   HP   " };
     PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Filter Midi 1")
     {
     int x = 0;
@@ -68,12 +68,12 @@ static const char* filterOutput[] = { "LP", "LBP", "UBP", "HP" };
         }
 
     lv_obj_t* spanel = lv_obj_create (base);
-    lv_obj_set_size (spanel, 464, 58);
+    lv_obj_set_size (spanel, 561, 58);
     lv_obj_set_pos (spanel, 0, 422);
     lv_obj_set_style_pad_top (spanel, 0, 0);
     lv_obj_set_style_pad_bottom (spanel, 0, 0);
-    x = 24;
-    for ( short z = 0;  z < 4;  z++ )
+    x = 0;
+    for ( short z = 0;  z < 5;  z++ )
         {
         this->Output[z] = lv_btn_create (spanel);
         lv_obj_align      (this->Output[z], LV_ALIGN_LEFT_MID, x, 0);
@@ -85,7 +85,7 @@ static const char* filterOutput[] = { "LP", "LBP", "UBP", "HP" };
         lv_label_set_text (label, filterOutput[z]);
         lv_obj_center     (label);
 
-        x += 95;
+        x += 106;
         }
 
     }
@@ -93,7 +93,7 @@ static const char* filterOutput[] = { "LP", "LBP", "UBP", "HP" };
 //#######################################################################
 void PAGE_FILTER_C::Select (byte fmap)
     {
-    for ( short z = 0;  z < 4;  z++ )
+    for ( short z = 0;  z < 5;  z++ )
         {
         if ( (fmap >> z) & 1 )
             {
@@ -485,38 +485,32 @@ void PAGE_MOD_C::UpdatePage (byte index, byte ch, EFFECT_C effect, short value)
     lv_style_init          (&TitleStyle);
     lv_style_set_text_font (&TitleStyle, &lv_font_montserrat_20);
 
-    MidiTitle = lv_label_create (base);
-    lv_obj_align           (MidiTitle, LV_ALIGN_TOP_LEFT, 45, -10);
-    lv_label_set_text      (MidiTitle, "Voice");
-    lv_obj_add_style       (MidiTitle, &TitleStyle, 0);
+    lv_obj_t* mtitle = lv_label_create (base);
+    lv_obj_align           (mtitle, LV_ALIGN_TOP_LEFT, 45, -10);
+    lv_label_set_text      (mtitle, "Voice");
+    lv_obj_add_style       (mtitle, &TitleStyle, 0);
 
-    NoiseTitle = lv_label_create (base);
-    lv_obj_align           (NoiseTitle, LV_ALIGN_TOP_LEFT, 200, -10);
-    lv_label_set_text      (NoiseTitle, "Noise");
-    lv_obj_add_style       (NoiseTitle, &TitleStyle, 0);
+    mtitle = lv_label_create (base);
+    lv_obj_align           (mtitle, LV_ALIGN_TOP_LEFT, 200, -10);
+    lv_label_set_text      (mtitle, "Noise");
+    lv_obj_add_style       (mtitle, &TitleStyle, 0);
 
-    ModTitle = lv_label_create (base);
-    lv_obj_align           (ModTitle, LV_ALIGN_TOP_LEFT, 335, -10);
-    lv_label_set_text      (ModTitle, "First Stage");
-    lv_obj_add_style       (ModTitle, &TitleStyle, 0);
-
-    ModTitle = lv_label_create (base);
-    lv_obj_align           (ModTitle, LV_ALIGN_TOP_LEFT, 510, -10);
-    lv_label_set_text      (ModTitle, "LFO");
-    lv_obj_add_style       (ModTitle, &TitleStyle, 0);
+    mtitle = lv_label_create (base);
+    lv_obj_align           (mtitle, LV_ALIGN_TOP_LEFT, 335, -10);
+    lv_label_set_text      (mtitle, "LFO");
+    lv_obj_add_style       (mtitle, &TitleStyle, 0);
 
     for (int z = 0, c = 1;  z < 4;  z++, c += 2 )
         {
         String s = "Voice\n" + String (c) + " & " + String (c + 1);
         this->SelVoice[z]  = new SELECT_WIDGET_C (base, s.c_str (),   0, 22 + (z * 108), 136, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16", 24);
         this->SelNoise[z]  = new SELECT_WIDGET_C (base, s.c_str (), 137, 22 + (z * 108), 164, "White\nPink\nRed\nBlue", 38);
-        this->SelOutput[z] = new SELECT_WIDGET_C (base, s.c_str (), 300, 22 + (z * 108), 155, "Off\nOsc\nFilter", 34);
         if ( z < 2 )
             s = "Freq\n " + String (z + 1);
         if ( z > 1 )
             s = "Amp\n " + String (z - 1);
         if ( z < 3 )
-            this->Sellfo[z] = new SELECT_WIDGET_C(base, s.c_str(), 455, 22 + (z * 108), 172, "Off\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16", 28);
+            this->Sellfo[z] = new SELECT_WIDGET_C(base, s.c_str(), 300, 22 + (z * 108), 172, "Off\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16", 28);
         }
     this->UpdatePage (0, EFFECT_C::MAP_VOICE, 0);
     }
@@ -548,22 +542,15 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             else
                 ch -= MAP_COUNT;
 
-            for ( int z = 0;  z < MAP_COUNT;  z++ )     // Process third column
-                this->SelOutput[z]->Select (z == ch);
+            for ( int z = 0;  z < MAP_COUNT - 1;  z++ )     // Process third column
+                this->Sellfo[z]->Select (z == ch);
             if ( ch  < MAP_COUNT )
                 {
-                this->SelOutput[ch]->Set (value);
+                this->Sellfo[ch]->Set (value);
                 ch = 255;
                 }
             else
                 ch -= MAP_COUNT;
-
-            for ( int z = 0;  z < MAP_COUNT - 1;  z++ )     // Process fourth column
-                this->Sellfo[z]->Select (z == ch);
-            if ( ch  < (MAP_COUNT - 1) )
-                this->Sellfo[ch]->Set (value);
-            break;
-
         default:
             break;
         }

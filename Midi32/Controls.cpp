@@ -328,11 +328,11 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0D, "N ",                      DummyButton         },  // 77 0x4D  29
         {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
         {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31
-        {     0,   0x3C, "Select LP",               SelectFilter        },  // 80 0x50  32
-        {     1,   0x3C, "Select LBP",              SelectFilter        },  // 81 0x51  33
-        {     2,   0x3C, "Select UBP",              SelectFilter        },  // 82 0x52  34
-        {     3,   0x3C, "Select HP",               SelectFilter        },  // 83 0x53  35
-        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36
+        {     0,   0x3C, "Select Bypass",           SelectFilter        },  // 80 0x50  32
+        {     1,   0x3C, "Select LP",               SelectFilter        },  // 81 0x51  33
+        {     2,   0x3C, "Select LBP",              SelectFilter        },  // 82 0x52  34
+        {     3,   0x3C, "Select UBP",              SelectFilter        },  // 83 0x53  35
+        {     4,   0x3C, "Select HP",               SelectFilter        },  // 84 0x54  36
         {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
         {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
         {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button

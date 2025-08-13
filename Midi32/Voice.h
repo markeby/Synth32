@@ -42,7 +42,7 @@ public:
     void    Loop                (void);
     void    NoteSet             (byte mchan, byte key, byte velocity);
     bool    NoteClear           (byte mchan, byte key);
-    void    SetMux              (byte select);
+    void    SetMux              (bool bypass);
     void    SetModMux           (byte select);
     void    NoiseReset          (void);
     void    NoiseSelect         (byte color);
