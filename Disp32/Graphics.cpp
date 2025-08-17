@@ -42,52 +42,102 @@ using namespace DISP_MESSAGE_N;
 //#######################################################################
 static const char* filterTitle[]  = { "Frequency", "Q" };
 static const char* filterOutput[] = { "Bypass", "   LP   ", "   LBP  ", "   UBP  ", "   HP   " };
+static const char* filterCtrl[]   = { "Fx", "Env", "Mod", "M W" };
     PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Filter Midi 1")
     {
-    int x = 0;
-    int y = 34;
+    lv_obj_t*       panel;
+    lv_obj_t*       label;
+    TITLE_WIDGET_C* title;
+    int             x = 0;
+    int             y = 34;
 
     this->Midi = 0;
     for ( short z = 0;  z < 2;  z++ )
         {
-        lv_obj_t* panel = lv_obj_create (base);
-        lv_obj_set_size (panel, 232, 392);
+        panel = lv_obj_create (base);
+        lv_obj_set_size (panel, 225, 392);
         lv_obj_set_pos (panel, x, y);
         lv_obj_set_style_pad_top (panel, 0, 0);
         lv_obj_set_style_pad_bottom (panel, 0, 0);
-        lv_obj_set_style_pad_left (panel, 2, 0);
-        lv_obj_set_style_pad_right (panel, 2, 0);
+        lv_obj_set_style_pad_left (panel, 0, 0);
+        lv_obj_set_style_pad_right (panel, 0, 0);
 
-        this->TitleControl[z] = new TITLE_WIDGET_C (panel, filterTitle[z]);
+        title                 = new TITLE_WIDGET_C (panel, filterTitle[z]);
         this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
         this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 210, LV_PALETTE_INDIGO);
         this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 73, 210, LV_PALETTE_TEAL);
         this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN" ,146, 210, LV_PALETTE_ORANGE);
 
-        x += 231;
+        x += 360;
+        }
+    x = 223;
+
+    for ( short zz = 0;  zz < 2;  zz++ )
+        {
+        panel = lv_obj_create (base);
+        lv_obj_set_size (panel, 138, 196);
+        lv_obj_set_pos (panel,  x, y);
+        lv_obj_set_style_pad_top (panel, 0, 0);
+        lv_obj_set_style_pad_bottom (panel, 0, 0);
+        lv_obj_set_style_pad_left (panel, 2, 0);
+        lv_obj_set_style_pad_right (panel, 2, 0);
+        title = new TITLE_WIDGET_C (panel, filterTitle[zz]);
+        for ( int z = 0;  z < 4;  z++ )
+            {
+            lv_obj_t*  plv;
+            plv = lv_btn_create (panel);
+            this->Ctrl[zz][z] = plv;
+            lv_obj_align      (plv, LV_ALIGN_TOP_MID, 0, (z * 39) + 27);
+            lv_obj_add_flag   (plv, LV_OBJ_FLAG_CHECKABLE);
+            lv_obj_add_state  (plv, LV_STATE_DISABLED);
+            lv_obj_set_height (plv, 30);
+
+            label = lv_label_create (plv);
+            lv_label_set_text (label, filterCtrl[z]);
+            lv_obj_center     (label);
+            }
+        y += 194;
         }
 
-    lv_obj_t* spanel = lv_obj_create (base);
-    lv_obj_set_size (spanel, 561, 58);
-    lv_obj_set_pos (spanel, 0, 422);
-    lv_obj_set_style_pad_top (spanel, 0, 0);
-    lv_obj_set_style_pad_bottom (spanel, 0, 0);
-    x = 0;
-    for ( short z = 0;  z < 5;  z++ )
+    panel = lv_obj_create (base);
+    lv_obj_set_size (panel, 586, 58);
+    lv_obj_set_pos (panel, 0, 422);
+    lv_obj_set_style_pad_top (panel, 0, 0);
+    lv_obj_set_style_pad_bottom (panel, 0, 0);
+    x = 6;
+    for ( int z = 0;  z < 5;  z++ )
         {
-        this->Output[z] = lv_btn_create (spanel);
+        this->Output[z] = lv_btn_create (panel);
         lv_obj_align      (this->Output[z], LV_ALIGN_LEFT_MID, x, 0);
         lv_obj_add_flag   (this->Output[z], LV_OBJ_FLAG_CHECKABLE);
-        lv_obj_add_state (this->Output[z], LV_STATE_DISABLED);
+        lv_obj_add_state  (this->Output[z], LV_STATE_DISABLED);
         lv_obj_set_height (this->Output[z], 30);
 
-        lv_obj_t* label = lv_label_create (this->Output[z]);
+        label = lv_label_create (this->Output[z]);
         lv_label_set_text (label, filterOutput[z]);
         lv_obj_center     (label);
 
-        x += 106;
+        x += 109;
         }
 
+    }
+
+//#######################################################################
+void PAGE_FILTER_C::Control (byte fn, byte select)
+    {
+    for ( short z = 0;  z < 4;  z++ )
+        {
+        if ( select == z )
+            {
+            lv_obj_clear_state (this->Ctrl[fn][z], LV_STATE_DISABLED);
+            lv_obj_add_state (this->Ctrl[fn][z], LV_STATE_CHECKED);
+            }
+        else
+            {
+            lv_obj_clear_state (this->Ctrl[fn][z], LV_STATE_CHECKED);
+            lv_obj_add_state (this->Ctrl[fn][z], LV_STATE_DISABLED);
+            }
+        }
     }
 
 //#######################################################################
@@ -144,6 +194,9 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
             break;
         case EFFECT_C::MAP_VOICE:
             this->Select (value);
+            break;
+        case EFFECT_C::CONTROL:
+            this->Control (fn, value);
             break;
         default:
             break;

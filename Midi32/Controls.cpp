@@ -22,8 +22,7 @@ static void SetLevel (short ch, short data)
 //########################################################
 static void SetLevelSelect (short ch, short state)
     {
-    if ( !state )
-        SynthFront.VoiceLevelSelect(ch, state);
+    SynthFront.VoiceLevelSelect(ch, state);
     }
 
 //########################################################
@@ -47,8 +46,7 @@ static void SetReleaseTime (short ch, short data)
 //########################################################
 static void ToogleRamp (short ch, short data)
     {
-    if ( !data )
-        SynthFront.ToggleRampDirection (ch);
+    SynthFront.ToggleRampDirection (ch);
     }
 
 //########################################################
@@ -79,6 +77,12 @@ static void FltSustain (short ch, short data)
     }
 
 //########################################################
+static void FreqCtrlModeAdv (short ch, short data)
+    {
+    SynthFront.FreqCtrlModeAdv (ch);
+    }
+
+//########################################################
 //  LFO controls
 //########################################################
 static void FreqLFO (short ch, short data)
@@ -89,34 +93,28 @@ static void FreqLFO (short ch, short data)
 //########################################################
 static void ToggleModVCA (short ch, short data)
     {
-    if ( !data )
-        SynthFront.SelectModVCA (ch);
+    SynthFront.SelectModVCA (ch);
     }
 
 //########################################################
 static void ToggleModLevelAlt (short ch, short data)
     {
-    if ( !data )
-        SynthFront.ToggleModLevelAlt (ch);
+    SynthFront.ToggleModLevelAlt (ch);
     }
 
 //########################################################
 static void ToggleModRampDir (short ch, short data)
     {
-    if ( !data )
-        SynthFront.ToggleModRampDir (ch);
+    SynthFront.ToggleModRampDir (ch);
     }
 
 //########################################################
 static void ToggleModVCO (short ch, short data)
     {
-    if ( !data )
-        {
-        if ( ch < 3 )
-            SynthFront.SelectModVCO (0, ch);
-        else
-            SynthFront.SelectModVCO (1, ch - 4);
-        }
+    if ( ch < 3 )
+        SynthFront.SelectModVCO (0, ch);
+    else
+        SynthFront.SelectModVCO (1, ch - 4);
     }
 
 //########################################################
@@ -159,8 +157,7 @@ static void TunningSave (short ch, bool state)
 //########################################################
 static void PageAdvance (short ch, short data)
     {
-    if ( !data )
-        SynthFront.PageAdvance ();
+    SynthFront.PageAdvance ();
     }
 
 //########################################################
@@ -168,63 +165,49 @@ static void PageAdvance (short ch, short data)
 //########################################################
 static void TrackSel (short ch, short data)
     {
-    if ( !data )
-        {
-        if ( SynthFront.GetMidiMapMode () )
-            SynthFront.ChangeMapSelect (ch);
-        }
+    if ( SynthFront.GetMidiMapMode () )
+        SynthFront.ChangeMapSelect (ch);
     }
 
 //########################################################
 static void MappingSelect (short index, short data)
     {
-    if ( !data )
-        SynthFront.MidiMapMode ();
+    SynthFront.MidiMapMode ();
     }
 
 //########################################################
 static void SendDir (short index, short data)
     {
-    if ( !data )
-        {
-        if ( SynthFront.GetMidiMapMode () )
-            SynthFront.MapModeBump (( index ) ? -1 : 1);
-        else if ( SynthFront.GetLoadSaveMode () )
-            SynthFront.LoadSaveBump (( index ) ? -1 : 1);
-        }
+    if ( SynthFront.GetMidiMapMode () )
+        SynthFront.MapModeBump (( index ) ? -1 : 1);
+    else if ( SynthFront.GetLoadSaveMode () )
+        SynthFront.LoadSaveBump (( index ) ? -1 : 1);
     }
 
 //########################################################
 static void LoadConfig (short index, short data)
     {
-    if ( !data )
-        {
-        if ( SynthFront.GetLoadSaveMode () )
-            SynthFront.LoadSelectedConfig ();
-        else
-            SynthFront.OpenLoadSavePage ();
-        }
+    if ( SynthFront.GetLoadSaveMode () )
+        SynthFront.LoadSelectedConfig ();
+    else
+        SynthFront.OpenLoadSavePage ();
     }
 
 //########################################################
 static void SaveConfig (short index, short data)
     {
-    if ( !data )
-        {
-        if ( SynthFront.GetMidiMapMode () )
-            SynthFront.SaveDefaultConfig ();
-        else if ( SynthFront.GetLoadSaveMode () )
-            SynthFront.SaveSelectedConfig ();
-        else
-            SynthFront.OpenLoadSavePage ();
-        }
-    }
+    if ( SynthFront.GetMidiMapMode () )
+        SynthFront.SaveDefaultConfig ();
+    else if ( SynthFront.GetLoadSaveMode () )
+        SynthFront.SaveSelectedConfig ();
+    else
+        SynthFront.OpenLoadSavePage ();
+     }
 
 //########################################################
 static void SelectFilter (short index, short data)
     {
-    if ( !data )
-        SynthFront.SelectFilter (index);
+    SynthFront.SelectFilter (index);
     }
 
 //########################################################
@@ -299,7 +282,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
       { {     8,   0x3C, "Attack Freq",             SetAttackTime       },  // 48 0x30  0
         {     0,   0x0C, "N ",                      nullptr             },  // 49 0x31  1
         {     0,   0x0C, "N ",                      nullptr             },  // 50 0x32  2
-        {     9,   0x0F, "Attack Q",                SetAttackTime       },  // 51 0x33  3
+        {     9,   0x2E, "Attack Q",                SetAttackTime       },  // 51 0x33  3
         {     0,   0x0C, "N ",                      nullptr             },  // 52 0x34  4
         {     0,   0x0C, "N ",                      nullptr             },  // 53 0x35  5
         {     0,   0x0C, "N ",                      nullptr             },  // 54 0x36  6
@@ -307,7 +290,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     8,   0x3C, "Decay Freq",              SetDecayTime        },  // 56 0x38  8
         {     0,   0x0C, "N ",                      nullptr             },  // 57 0x39  9
         {     0,   0x0C, "N ",                      nullptr             },  // 58 0x3A  10
-        {     9,   0x0F, "Decay Q",                 SetDecayTime        },  // 59 0x3B  11
+        {     9,   0x2E, "Decay Q",                 SetDecayTime        },  // 59 0x3B  11
         {     0,   0x0C, "N ",                      nullptr             },  // 60 0x3C  12
         {     0,   0x0C, "N ",                      nullptr             },  // 61 0x3D  13
         {     0,   0x0C, "N ",                      nullptr             },  // 62 0x3E  14
@@ -315,7 +298,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     8,   0x3C, "Release Freq",            SetReleaseTime      },  // 64 0x40  16
         {     0,   0x0C, "N ",                      nullptr             },  // 65 0x41  17
         {     0,   0x0C, "N ",                      nullptr             },  // 66 0x42  18
-        {     9,   0x0F, "Release Q",               SetReleaseTime      },  // 67 0x43  19
+        {     9,   0x2E, "Release Q",               SetReleaseTime      },  // 67 0x43  19
         {     0,   0x0C, "N ",                      nullptr             },  // 68 0x44  20
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
@@ -323,11 +306,11 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x1C, "N ",                      DummyButton         },  // 72 0x48  24  First button
         {     0,   0x1C, "N ",                      DummyButton         },  // 73 0x49  25
         {     0,   0x1C, "N ",                      DummyButton         },  // 74 0x4A  26
-        {     0,   0x0D, "N ",                      DummyButton         },  // 75 0x4B  27
-        {     0,   0x0D, "N ",                      DummyButton         },  // 76 0x4C  28
-        {     0,   0x0D, "N ",                      DummyButton         },  // 77 0x4D  29
-        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31
+        {     0,   0x1D, "N ",                      DummyButton         },  // 75 0x4B  27
+        {     0,   0x1D, "N ",                      DummyButton         },  // 76 0x4C  28
+        {     0,   0x1D, "N ",                      DummyButton         },  // 77 0x4D  29
+        {     0,   0x3C, "Freq ctrl mode advance",  FreqCtrlModeAdv     },  // 78 0x4E  30
+        {     1,   0x3C, "Q ctrl mode advance",     FreqCtrlModeAdv     },  // 79 0x4D  31
         {     0,   0x3C, "Select Bypass",           SelectFilter        },  // 80 0x50  32
         {     1,   0x3C, "Select LP",               SelectFilter        },  // 81 0x51  33
         {     2,   0x3C, "Select LBP",              SelectFilter        },  // 82 0x52  34

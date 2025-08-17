@@ -30,7 +30,7 @@ using namespace DISP_MESSAGE_N;
 //#######################################################################
 void SYNTH_FRONT_C::UpdateOscDisplay ()
     {
-    SYNTH_VOICE_CONFIG_C& sc = this->SynthConfig.Voice[this->CurrentMapSelected];    // Configuration data for this voice pair
+    SYNTH_VOICE_CONFIG_C& sc = this->SynthConfig.Voice[this->CurrentVoiceSelected];    // Configuration data for this voice pair
 
     DisplayMessage.SetPage (PAGE_C::PAGE_OSC, this->CurrentMidiSelected);
 
@@ -60,10 +60,10 @@ void SYNTH_FRONT_C::UpdateOscButtons ()
 //#######################################################################
 void SYNTH_FRONT_C::UpdateFltDisplay ()
     {
-    SYNTH_VOICE_CONFIG_C& sc = this->SynthConfig.Voice[this->CurrentMapSelected];    // Configuration data for this voice pair
+    SYNTH_VOICE_CONFIG_C& sc = this->SynthConfig.Voice[this->CurrentFilterSelected];    // Configuration data for this voice pair
 
     DisplayMessage.SetPage (PAGE_C::PAGE_FLT, this->CurrentMidiSelected);
-    for ( short z = 0;  z < 2;  z++ )
+    for ( short z = 0;  z < FILTER_DEVICES;  z++ )
         {
         DisplayMessage.FltAttackTime  (z, sc.GetFltAttackTime (z) * (1.0/TIME_MULT));
         DisplayMessage.FltDecayTime   (z, sc.GetFltDecayTime (z) * (1.0/TIME_MULT));
@@ -71,6 +71,8 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
         DisplayMessage.FltSustain     (z, sc.GetFltSustainLevel (z) * PRS_UNSCALER);
         DisplayMessage.FltStart       (z, sc.GetFltStart (z) * PRS_UNSCALER);
         DisplayMessage.FltEnd         (z, sc.GetFltEnd (z) * PRS_UNSCALER);
+        DisplayMessage.FltCtrl        (z, sc.GetFltCtrl (z));
+        DisplayMessage.FltOut         (sc.GetFltOut ());
         }
     this->TemplateSelect (XL_MIDI_MAP_FLT);
     this->UpdateFltButtons ();
@@ -79,10 +81,7 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
 //#######################################################################
 void SYNTH_FRONT_C::UpdateFltButtons ()
     {
-    byte  mask = this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();
-
-    DisplayMessage.FltOut (mask);
-
+    byte mask = this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();
     for ( short z = 0;  z < 5;  z++ )
         (this->SynthConfig.Voice[this->CurrentFilterSelected].GetButtonStateFlt ())[z + 8] = ( (mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
     this->LaunchControl.TemplateRefresh ();
@@ -327,7 +326,24 @@ void SYNTH_FRONT_C::SelectFilter (short index)
             this->pVoice[z]->SetFltOut (mask);
             }
         }
-
+    DisplayMessage.FltOut (mask);
     this->UpdateFltButtons ();
     }
+
+//#######################################################################
+void SYNTH_FRONT_C::FreqCtrlModeAdv (short index)
+    {
+    byte zb = (this->SynthConfig.Voice[this->CurrentFilterSelected].GetFltCtrl (index) + 1) % FILTER_CONTROLS;
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        {
+        if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
+            {
+            this->SynthConfig.Voice[z >> 1].SetFltCtrl (index, zb);
+            this->pVoice[z]->SetFltCtrl (index, zb);
+            }
+        }
+    DisplayMessage.FltCtrl (index, zb);
+    this->UpdateFltButtons ();
+    }
+
 

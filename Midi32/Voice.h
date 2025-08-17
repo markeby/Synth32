@@ -17,19 +17,21 @@
 class VOICE_C
     {
 private:
-    OSC_C*  pOsc;                   // oscillator class
-    FLT4_C* pFlt;
     byte    Key;
     int32_t ActiveTimer;
     int     Number;
     byte    Midi;
     byte    UseCount;
+
+    OSC_C   Osc;                    // oscillator class
     bool    RampDirection;
     float   PulseWidthSet;
-    short   ModMux[NUM_MOD_MUX_IN];
-
     short   DigitalOutOscillator;
+
+    FLT4_C  Flt;
     short   DigitalOutFilter;
+
+    short   ModMux[NUM_MOD_MUX_IN];
 
     byte    NoiseSource;
     short   NoiseDigitalIO;
@@ -49,46 +51,48 @@ public:
     void    TuningAdjust        (bool up);
 
     //#######################################################################
-    inline void     Clear               (void)                              { this->pOsc->Clear (); }
-    inline uint32_t IsActive            (void)                              { return (this->ActiveTimer); }
-    inline void     SetMidi             (byte mchan)                        { this->Midi = mchan; }
-    inline byte     GetMidi             (void)                              { return (this->Midi); }
-    inline void     SetSoftLFO          (byte wave, bool sel)               { pOsc->SetSoftLFO (wave, sel); }
+    inline void     Clear               (void)                              { Osc.Clear (); }
+    inline uint32_t IsActive            (void)                              { return (ActiveTimer); }
+    inline void     SetMidi             (byte mchan)                        { Midi = mchan; }
+    inline byte     GetMidi             (void)                              { return (Midi); }
+    inline void     SetSoftLFO          (byte fn, bool sel)                 { Osc.SetSoftLFO (fn, sel); }
 
-    inline void     SetOscAttackTime    (byte wave, float time)             { pOsc->SetAttackTime (wave, time); }
-    inline float    GetOscAttackTime    (byte wave)                         { return (pOsc->GetAttackTime   (wave)); }
-    inline void     SetOscDecayTime     (byte wave, float time)             { pOsc->SetDecayTime (wave, time); }
-    inline float    GetOscDecayTime     (byte wave)                         { return (pOsc->GetDecayTime    (wave)); }
-    inline void     SetOscReleaseTime   (byte wave, float time)             { pOsc->SetReleaseTime  (wave, time); }
-    inline float    GetOscReleaseTime   (byte wave)                         { return (pOsc->GetReleaseTime  (wave)); }
-    inline void     SetOscSustainLevel  (byte wave, float level_percent)    { pOsc->SetSustainLevel (wave, level_percent); }
-    inline float    GetOscSustainLevel  (byte wave)                         { return (pOsc->GetSustainLevel (wave)); }
-    inline void     SetMaxLevel         (byte wave, float level_percent)    { pOsc->SetLevel (wave, level_percent); }
-    inline float    GetMaxLevel         (byte wave)                         { return (pOsc->GetLevel (wave)); }
-    inline void     SetRampDirection    (bool data)                         { this->pOsc->SetRampDirection (data);  this->RampDirection = data; }
-    inline bool     GetRampDirection    (void)                              { return (this->RampDirection); }
-    inline void     SetPulseWidth       (float percent)                     { this->pOsc->PulseWidth (percent);  this->PulseWidthSet = percent; }
-    inline float    GetPulseWidth       (void)                              { return (this->PulseWidthSet); }
+    inline void     SetOscAttackTime    (byte fn, float time)               { Osc.SetAttackTime (fn, time); }
+    inline float    GetOscAttackTime    (byte fn)                           { return (Osc.GetAttackTime   (fn)); }
+    inline void     SetOscDecayTime     (byte fn, float time)               { Osc.SetDecayTime (fn, time); }
+    inline float    GetOscDecayTime     (byte fn)                           { return (Osc.GetDecayTime    (fn)); }
+    inline void     SetOscReleaseTime   (byte fn, float time)               { Osc.SetReleaseTime  (fn, time); }
+    inline float    GetOscReleaseTime   (byte fn)                           { return (Osc.GetReleaseTime  (fn)); }
+    inline void     SetOscSustainLevel  (byte fn, float level_percent)      { Osc.SetSustainLevel (fn, level_percent); }
+    inline float    GetOscSustainLevel  (byte fn)                           { return (Osc.GetSustainLevel (fn)); }
+    inline void     SetMaxLevel         (byte fn, float level_percent)      { Osc.SetLevel (fn, level_percent); }
+    inline float    GetMaxLevel         (byte fn)                           { return (Osc.GetLevel (fn)); }
+    inline void     SetRampDirection    (bool data)                         { Osc.SetRampDirection (data);  RampDirection = data; }
+    inline bool     GetRampDirection    (void)                              { return (RampDirection); }
+    inline void     SetPulseWidth       (float percent)                     { Osc.PulseWidth (percent);  PulseWidthSet = percent; }
+    inline float    GetPulseWidth       (void)                              { return (PulseWidthSet); }
 
-    inline void     SetFltAttackTime    (byte fn, float time)               { pFlt->SetAttackTime (fn, time); }
-    inline float    GetFltAttackTime    (byte fn)                           { return (pFlt->GetAttackTime (fn)); }
-    inline void     SetFltDecayTime     (byte fn, float time)               { pFlt->SetDecayTime (fn, time); }
-    inline float    GetFltDecayTime     (byte fn)                           { return (pFlt->GetDecayTime (fn)); }
-    inline void     SetFltReleaseTime   (byte fn, float time)               { pFlt->SetReleaseTime (fn, time); }
-    inline float    GetFltReleaseTime   (byte fn)                           { return (pFlt->GetReleaseTime (fn)); }
-    inline void     SetFltSustain       (byte fn, float level_percent)      { pFlt->SetSustainLevel (fn, level_percent); }
-    inline float    GetFltSustain       (byte fn)                           { return (pFlt->GetSustainLevel (fn)); }
-    inline void     SetFltStart         (byte fn, float level_percent)      { pFlt->SetStart (fn, level_percent); }
-    inline float    GetFltStart         (byte fn)                           { return (pFlt->GetStart (fn)); }
-    inline void     SetFltEnd           (byte fn, float level_percent)      { pFlt->SetEnd (fn, level_percent); }
-    inline float    GetFltEnd           (byte fn)                           { return (pFlt->GetEnd (fn)); }
-    inline void     SetFltOut           (byte fmap)                         { this->pFlt->SetOutMap (fmap); }
-    inline byte     GetFltOut           (void)                              { return (this->pFlt->GetOutMap ()); }
+    inline void     SetFltAttackTime    (byte fn, float time)               { Flt.SetAttackTime (fn, time); }
+    inline float    GetFltAttackTime    (byte fn)                           { return (Flt.GetAttackTime (fn)); }
+    inline void     SetFltDecayTime     (byte fn, float time)               { Flt.SetDecayTime (fn, time); }
+    inline float    GetFltDecayTime     (byte fn)                           { return (Flt.GetDecayTime (fn)); }
+    inline void     SetFltReleaseTime   (byte fn, float time)               { Flt.SetReleaseTime (fn, time); }
+    inline float    GetFltReleaseTime   (byte fn)                           { return (Flt.GetReleaseTime (fn)); }
+    inline void     SetFltSustain       (byte fn, float level_percent)      { Flt.SetSustainLevel (fn, level_percent); }
+    inline float    GetFltSustain       (byte fn)                           { return (Flt.GetSustainLevel (fn)); }
+    inline void     SetFltStart         (byte fn, float level_percent)      { Flt.SetStart (fn, level_percent); }
+    inline float    GetFltStart         (byte fn)                           { return (Flt.GetStart (fn)); }
+    inline void     SetFltEnd           (byte fn, float level_percent)      { Flt.SetEnd (fn, level_percent); }
+    inline float    GetFltEnd           (byte fn)                           { return (Flt.GetEnd (fn)); }
+    inline void     SetFltOut           (byte fmap)                         { Flt.SetOutMap (fmap); }
+    inline byte     GetFltOut           (void)                              { return (Flt.GetOutMap ()); }
+    inline void     SetFltCtrl          (byte fn, int value)                { Flt.SetCtrl (fn, value); }
+    inline int      GetFltCtrl          (byte fn)                           { return ((int)Flt.GetCtrl (fn)); }
 
-    inline void     SetTuningNote       (byte note)                         { pOsc->SetTuningNote   (note, this->TuningOn); }
-    inline void     SetTuningVolume     (byte select, uint16_t level)       { pOsc->SetTuningVolume (select, level); }
+    inline void     SetTuningNote       (byte note)                         { Osc.SetTuningNote   (note); }
+    inline void     SetTuningVolume     (byte select, uint16_t level)       { Osc.SetTuningVolume (select, level); }
     inline bool     TuningState         (void)                              { return (TuningOn); }
-    inline void     TuningState         (bool state)                        { TuningOn = state; this->SetTuningNote (pOsc->LastNote ()); }
-    inline ushort*  GetBankAddr         (void)                              { return (pOsc->GetBankAddr ()); }
+    inline void     TuningState         (bool state)                        { TuningOn = state; SetTuningNote (Osc.LastNote ()); }
+    inline ushort*  GetBankAddr         (void)                              { return (Osc.GetBankAddr ()); }
     };
 

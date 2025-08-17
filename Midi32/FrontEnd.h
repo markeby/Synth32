@@ -127,6 +127,7 @@ public:
     void FltStart                   (short ch, short data);
     void FltEnd                     (short ch, short data);
     void SelectFilter               (short index);
+    void FreqCtrlModeAdv            (short index);
 
     //#######################################################################
     // FrontEndTuning.cpp

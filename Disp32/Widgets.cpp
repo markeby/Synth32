@@ -61,15 +61,26 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
 
 //#######################################################################
 //#######################################################################
+    TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s, int yoff)
+    {
+    this->Begin (base, s, yoff);
+    }
+
     TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s)
+    {
+    this->Begin (base, s, 0);
+    }
+
+void TITLE_WIDGET_C::Begin (lv_obj_t* base, const char* s, int yoff)
     {
     lv_style_init (&this->Style);
     lv_style_set_text_font (&this->Style, &lv_font_montserrat_18);
     this->Label  = lv_label_create (base);
-    lv_obj_align (this->Label, LV_ALIGN_TOP_MID, 3, 0);
+    lv_obj_align (this->Label, LV_ALIGN_TOP_MID, 3, yoff);
     lv_label_set_text (this->Label, s);
     lv_obj_add_style (this->Label, &this->Style, 0);
     }
+
 
 //#######################################################################
 //#######################################################################

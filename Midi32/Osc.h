@@ -41,7 +41,6 @@ enum class D_A_OFF
 class   OSC_C
     {
 private:
-    ENVELOPE_GENERATOR_C&   EnvGen;
     ENVELOPE_C*             Mix[OSC_MIXER_COUNT];
     uint16_t                OctaveArray[FULL_KEYS];
 
@@ -55,9 +54,10 @@ private:
     void  ClearState (void);
 
 public:
-            OSC_C               (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+            OSC_C               (void);
+    void    Begin               (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
     void    SetTuningVolume     (byte select, uint16_t level);
-    void    SetTuningNote       (byte note, bool active);
+    void    SetTuningNote       (byte note);
     void    TuningAdjust        (bool up);
     void    NoteSet             (byte key, byte velocity);
     void    NoteClear           (void);

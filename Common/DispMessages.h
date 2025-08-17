@@ -165,6 +165,7 @@ namespace DISP_MESSAGE_N
         MESSAGE,
         VALUE,
         ALTERNATE,
+        CONTROL,
         };
 
     //###########################################
@@ -190,6 +191,7 @@ namespace DISP_MESSAGE_N
         "MESSAGE",
         "VALUE",
         "ALTERNATE",
+        "CONTROL",
         };
     #else
     extern char* EffectText[];

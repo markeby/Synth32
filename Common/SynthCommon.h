@@ -31,6 +31,15 @@
 #define MAP_COUNT           (VOICE_COUNT / 2)
 #define GROUP_COUNT         3
 
+// Number of devices per filter
+#define FILTER_DEVICES      2
+
+// Number of filter control inputs available
+#define FILTER_CONTROLS     4
+
+// Number of filter outputs
+#define FILTER_OUTPUTS      4
+
 // Number of modululation multiplex inputs
 #define NUM_MOD_MUX_IN      3
 

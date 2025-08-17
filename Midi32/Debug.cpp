@@ -150,7 +150,7 @@ void BootDebug ()
             break;
 
         case ESP_RST_POWERON:
-            delay (5000);
+            delay (2000);
             str = esp_rst_poweron;
             break;
 

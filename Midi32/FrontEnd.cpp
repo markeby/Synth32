@@ -140,22 +140,22 @@ static void FuncPitchBend (uint8_t mchan, int value)
 //#######################################################################
 SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
     {
-    this->G49MidiMapFader     = g49map_fader;
-    this->G49MidiMapEcoder    = g49map_knob;
-    this->G49MidiMapButton    = g49map_button;
-    this->pMidiMapXL          = xl_map;
-    this->Down.Key            = 0;
-    this->Down.Trigger        = 0;
-    this->Down.Velocity       = 0;
-    this->Up.Key              = 0;
-    this->Up.Trigger          = 0;
-    this->Up.Velocity         = 0;
-    this->SetTuning           = false;
-    this->TuningChange        = false;
-    this->CurrentMapSelected  = -1;
-    this->CurrentMidiSelected = 0;
-    this->CalibrationPhase    = 0;
-    this->LoadSaveSelection   = 1;
+    G49MidiMapFader     = g49map_fader;
+    G49MidiMapEcoder    = g49map_knob;
+    G49MidiMapButton    = g49map_button;
+    pMidiMapXL          = xl_map;
+    Down.Key            = 0;
+    Down.Trigger        = 0;
+    Down.Velocity       = 0;
+    Up.Key              = 0;
+    Up.Trigger          = 0;
+    Up.Velocity         = 0;
+    SetTuning           = false;
+    TuningChange        = false;
+    CurrentMapSelected  = -1;
+    CurrentMidiSelected = 0;
+    CalibrationPhase    = 0;
+    LoadSaveSelection   = 1;
     }
 
 //#######################################################################
@@ -257,7 +257,7 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
     short osc = voice;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        this->pVoice[z] = new VOICE_C(z, osc, mux_digital, mod_mux_digital, noise_digital, EnvADSL);
+        pVoice[z] = new VOICE_C(z, osc, mux_digital, mod_mux_digital, noise_digital, EnvADSL);
         osc         += 8;
         mux_digital += 1;
         if ( z & 1 )
@@ -269,10 +269,10 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
             }
         }
 
-    this->Lfo[0].Begin (0, lfo_control + 8 , lfo_control);
-    this->Lfo[1].Begin (1, lfo_control + 8 + 6, lfo_control + 3);
-    this->CalibrationAtoD = start_a_d;
-    this->ResolutionMode = true;
+    Lfo[0].Begin (0, lfo_control + 8 , lfo_control);
+    Lfo[1].Begin (1, lfo_control + 8 + 6, lfo_control + 3);
+    CalibrationAtoD = start_a_d;
+    ResolutionMode = true;
 
     printf ("\t>>>\tMidi interfaces startup\n");
     while ( Usb.Init () == -1 )
@@ -290,90 +290,90 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
     Midi_2.begin (MIDI_CHANNEL_OMNI);
     printf ("\t>>>\tSerial2 midi ready\n");
 
-    this->LaunchControl.Begin (this->pMidiMapXL);
+    LaunchControl.Begin (pMidiMapXL);
 
-    this->MidiCommandConfiguration ();
+    MidiCommandConfiguration ();
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::Clear ()
     {
     for ( int z = 0;  z < VOICE_COUNT; z++ )
-        this->pVoice[z]->Clear ();
+        pVoice[z]->Clear ();
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::PageAdvance ()
     {
-    byte  m    = this->CurrentMidiSelected;
-    short next = this->CurrentMapSelected + 1;
+    byte  m    = CurrentMidiSelected;
+    short next = CurrentMapSelected + 1;
 
-    if ( this->LoadSaveMode || this->ResolutionMode || this->MapSelectMode )
+    if ( LoadSaveMode || ResolutionMode || MapSelectMode )
         {
         next = 0;
         m = 0;
-        this->LoadSaveMode   = false;
-        this->ResolutionMode = false;
-        this->MapSelectMode  = false;
+        LoadSaveMode   = false;
+        ResolutionMode = false;
+        MapSelectMode  = false;
         }
 
     while ( next < MAP_COUNT )
         {
-        this->CurrentFilterSelected = -1;
-        if ( m == this->SynthConfig.Voice[next].GetVoiceMidi () )
+        CurrentFilterSelected = -1;
+        if ( m == SynthConfig.Voice[next].GetVoiceMidi () )
             {
             next++;
             continue;
             }
-        this->CurrentMapSelected   = next;
-        this->CurrentVoiceSelected = next << 1;
-        this->CurrentMidiSelected  = this->SynthConfig.Voice[next].GetVoiceMidi ();
-        this->UpdateOscDisplay ();
+        CurrentMapSelected   = next;
+        CurrentVoiceSelected = next << 1;
+        CurrentMidiSelected  = SynthConfig.Voice[next].GetVoiceMidi ();
+        UpdateOscDisplay ();
         return;
         }
 
     short index = next - MAP_COUNT;
     if ( next == MAP_COUNT )
         {
-        this->CurrentVoiceSelected  = -1;
-        this->CurrentMapSelected    = next;
-        this->CurrentFilterSelected = index << 1;
-        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
-        this->UpdateFltDisplay ();
+        CurrentVoiceSelected  = -1;
+        CurrentMapSelected    = next;
+        CurrentFilterSelected = index << 1;
+        CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
+        UpdateFltDisplay ();
         return;
         }
 
     while ( next < (MAP_COUNT * 2) )
         {
-        this->CurrentVoiceSelected = -1;
-        if ( m == this->SynthConfig.Voice[index].GetVoiceMidi () )
+        CurrentVoiceSelected = -1;
+        if ( m == SynthConfig.Voice[index].GetVoiceMidi () )
             {
             next++;
             continue;
             }
-        this->CurrentMapSelected    = next;
-        this->CurrentFilterSelected = index << 1;
-        this->CurrentMidiSelected   = this->SynthConfig.Voice[index].GetVoiceMidi ();
-        this->UpdateFltDisplay ();
+        CurrentMapSelected    = next;
+        CurrentFilterSelected = index << 1;
+        CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
+        UpdateFltDisplay ();
         return;
         }
 
     index = next - (MAP_COUNT * 2) + 2;
     if ( DisplayMessage.Page () == (byte)PAGE_C::PAGE_MOD )
         {
-        this->CurrentMapSelected    = 0;
-        this->CurrentVoiceSelected  = 0;
-        this->CurrentFilterSelected = -1;
-        this->CurrentMidiSelected   = this->SynthConfig.Voice[0].GetVoiceMidi ();
-        this->UpdateOscDisplay ();
+        CurrentMapSelected    = 0;
+        CurrentVoiceSelected  = 0;
+        CurrentFilterSelected = -1;
+        CurrentMidiSelected   = SynthConfig.Voice[0].GetVoiceMidi ();
+        UpdateOscDisplay ();
         }
     else
         {
-        this->CurrentMapSelected    = next;
-        this->CurrentMidiSelected   = 0;
-        this->CurrentFilterSelected = -1;       // de-select functions to disable
-        this->CurrentVoiceSelected  = -1;
-        this->UpdateLfoDisplay ();
+        CurrentMapSelected    = next;
+        CurrentMidiSelected   = 0;
+        CurrentFilterSelected = -1;       // de-select functions to disable
+        CurrentVoiceSelected  = -1;
+        UpdateLfoDisplay ();
         }
     }
 
@@ -387,14 +387,14 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
         {
         case 1:
             // mod wheel
-            this->SetLevelLFO (0, mchan, value);
-            this->SetLevelLFO (1, mchan, value);
+            SetLevelLFO (0, mchan, value);
+            SetLevelLFO (1, mchan, value);
             SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER * 0.5);
             DBG ("MIDI channel = %d   modulation = %d    ", mchan, value);
             break;
         case 7:          // Faders controls
             {
-            G49_FADER_MIDI_MAP& m = this->G49MidiMapFader[chan];
+            G49_FADER_MIDI_MAP& m = G49MidiMapFader[chan];
             DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
                 m.CallBack (m.Index, value);
@@ -402,7 +402,7 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             break;
         case 10:          // Rotatational encoder controls
             {
-            G49_ENCODER_MIDI_MAP& m = this->G49MidiMapEcoder[chan];
+            G49_ENCODER_MIDI_MAP& m = G49MidiMapEcoder[chan];
             z = m.Value + (value & 0x1F) * ((value & 0x40) ? -1 : 1);
             if ( z > 4095 )   z = 4095;
             if ( z < 1 )      z = 1;
@@ -413,17 +413,17 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             break;
         case 16:
             {
-            if ( this->SetTuning && (chan < 8) )
+            if ( SetTuning && (chan < 8) )
                 {
                 for ( z = 0;  z < VOICE_COUNT;  z++ )
-                    this->pVoice[z]->TuningState (false);
-                this->pVoice[chan]->TuningState (true);
+                    pVoice[z]->TuningState (false);
+                pVoice[chan]->TuningState (true);
                 DBG ("Tuning for channel %d", chan);
                 DisplayMessage.TuningSelect (chan);
-                this->TuningChange = true;
+                TuningChange = true;
                 return;
                 }
-            G49_BUTTON_MIDI_MAP& m = this->G49MidiMapButton[chan];
+            G49_BUTTON_MIDI_MAP& m = G49MidiMapButton[chan];
             m.State = !m.State;
             DBG ("%s %d", m.Desc, m.State);
             if ( m.CallBack != nullptr )
@@ -433,7 +433,7 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
         case 17:
             {
             chan += 16;
-            G49_BUTTON_MIDI_MAP& m = this->G49MidiMapButton[chan];
+            G49_BUTTON_MIDI_MAP& m = G49MidiMapButton[chan];
             m.State = !m.State;
             DBG ("%s %d", m.Desc, m.State);
             if ( m.CallBack != nullptr )
@@ -444,7 +444,7 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
         case 0x60 ... 0x67:
             {
             chan = type - 0x30;
-            XL_MIDI_MAP& m = this->pMidiMapXL[this->LaunchControl.GetCurrentMap()][chan];
+            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][chan];
             DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
                 m.CallBack (m.Index, value);
@@ -452,18 +452,18 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             break;
         case 0x48 ... 0x5F:
             {
-            chan           = type - 0x30;                           // offset to start of control map
-            bool    tgl    = value > 0x3C;                          // use color white to show selectable and green to show selected.
-            XL_MIDI_MAP& m = this->pMidiMapXL[this->LaunchControl.GetCurrentMap()][chan];
-            DBG ("%s %s", m.Desc, (( tgl ) ? "ON" : "Off"));
+            chan     = type - 0x30;                         // offset to start of control map
+            bool tgl = value > 0x3C;                        // use color green as threshold for button down
+            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][chan];
+            DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
 
-            if ( m.CallBack != nullptr )
+            if ( !tgl && (m.CallBack != nullptr) )
                 m.CallBack (m.Index, (short)tgl);
             }
             break;
 
         case 120 ... 127:           // all notes stop
-            this->Clear ();
+            Clear ();
             break;
 
         default:
@@ -478,8 +478,8 @@ void SYNTH_FRONT_C::Loop ()
     int oldest = -1;
     int doit   = -1;
 
-    this->Lfo[0].Loop ();
-    this->Lfo[1].Loop ();
+    Lfo[0].Loop ();
+    Lfo[1].Loop ();
 
     Usb.Task    ();
     Midi_0.read ();
@@ -488,20 +488,20 @@ void SYNTH_FRONT_C::Loop ()
 
     if ( !SetTuning )
         {
-        if ( this->Up.Trigger )
+        if ( Up.Trigger )
             {
-            DBG ("Key up > %d", this->Up.Key);
+            DBG ("Key up > %d", Up.Key);
             for ( int z = 0;  z < VOICE_COUNT;  z++ )
-                this->pVoice[z]->NoteClear (this->Up.Trigger, this->Up.Key);
-            this->Up.Trigger = 0;
+                pVoice[z]->NoteClear (Up.Trigger, Up.Key);
+            Up.Trigger = 0;
             }
 
-        if ( this->Down.Trigger )                          // Key went down so look for a channel to use
+        if ( Down.Trigger )                          // Key went down so look for a channel to use
             {
             for ( int z = 0;  z <  VOICE_COUNT;  z++ )
                 {
                 VOICE_C& ch = *(pVoice[z]);
-                if ( this->Down.Trigger == ch.GetMidi () )
+                if ( Down.Trigger == ch.GetMidi () )
                     {
                     if ( !ch.IsActive () )              // grab the first channel not in use
                         {
@@ -524,24 +524,24 @@ void SYNTH_FRONT_C::Loop ()
                 doit = oldest;
             if ( doit >= 0 )                                // only process valid channels
                 {
-                this->Lfo[0].HardReset (this->Down.Trigger);
-                this->Lfo[1].HardReset (this->Down.Trigger);
-                this->pVoice[doit]->NoteSet(this->Down.Trigger, this->Down.Key, this->Down.Velocity);   // set the channel
+                Lfo[0].HardReset (Down.Trigger);
+                Lfo[1].HardReset (Down.Trigger);
+                pVoice[doit]->NoteSet (Down.Trigger, Down.Key, Down.Velocity);   // set the channel
                 }
-            DBG ("Key down > %d   Velocity > %d  Port > %d", this->Down.Key, this->Down.Velocity, doit);
-            this->Down.Trigger = 0;                         // release the trigger
+            DBG ("Key down > %d   Velocity > %d  Port > %d", Down.Key, Down.Velocity, doit);
+            Down.Trigger = 0;                         // release the trigger
             }
 
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < VOICE_COUNT;  z++ )           // Check all channels for done
-            this->pVoice[z]->Loop ();
+            pVoice[z]->Loop ();
         I2cDevices.UpdateDigital ();
         I2cDevices.UpdateAnalog  ();     // Update D/A ports
         }
     else
-        this->Tuning ();
+        Tuning ();
 
-    this->LaunchControl.Loop ();
+    LaunchControl.Loop ();
     }
 
 //#####################################################################
@@ -552,10 +552,10 @@ void SYNTH_FRONT_C::TemplateSelect (byte index)
     switch ( index )
         {
         case XL_MIDI_MAP_OSC:
-            pb = SynthConfig.Voice[this->CurrentVoiceSelected >> 1].GetButtonStateOsc ();
+            pb = SynthConfig.Voice[CurrentVoiceSelected >> 1].GetButtonStateOsc ();
             break;
         case XL_MIDI_MAP_FLT:
-            pb = SynthConfig.Voice[this->CurrentFilterSelected >> 1].GetButtonStateFlt ();
+            pb = SynthConfig.Voice[CurrentFilterSelected >> 1].GetButtonStateFlt ();
             break;
         case XL_MIDI_MAP_LFO:
             pb = SynthConfig.GetButtonStateLfo ();
@@ -564,14 +564,14 @@ void SYNTH_FRONT_C::TemplateSelect (byte index)
             break;
         }
 
-    this->LaunchControl.SelectTemplate (index, pb);
+    LaunchControl.SelectTemplate (index, pb);
     }
 
 //#######################################################################
 //#######################################################################
 void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
     {
-    this->pMidiMap = xl_map;
+    pMidiMap = xl_map;
 
     for ( short z = 0;  z < 20;  z++ )
         {

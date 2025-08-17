@@ -297,6 +297,15 @@ public:
         }
 
     //#################################################
+    inline void FltCtrl (byte fn, byte value)
+        {
+        this->SendUpdateFlt (0,
+                             fn,
+                             DISP_MESSAGE_N::EFFECT_C::CONTROL,
+                             value);
+        }
+
+    //#################################################
     //#################################################
     inline void LfoSoftFreq (short value)
         {

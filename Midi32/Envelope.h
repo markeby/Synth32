@@ -27,54 +27,55 @@ private:
     int         Active;
     bool        TriggerEnd;
 
-    // Control state
+    // Runtime state
     byte&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
+
+    bool        Updated;        // Flag indicating update output
+    bool        PeakLevel;      // Flag indicating sustain and peak are the same
+    bool        UseSoftLFO;     // Flag to enable sofware LFO
+
+    // User supplied inputs
+    float       Top;            // Fraction of one (percent).
+    float       Bottom;         // Fraction of one (percent).
+    float       SetSustain;     // The settin of sustain level up to one.
+    float       AttackTime;     // Attack time in uSec.
+    float       DecayTime;      // Decay time to sustatin level in uSec.
+    float       ReleaseTime;    // How long to end back at base level in uSec.
+
+    // runtime calculations
+    float       Delta;          // Distance for the current state.
+    float       Sustain;        // The usable Sustain level up to one
+    bool        NoDecay;        // Decay time set so low that there is no decay.  Sustain serves no purpose then.
     float       Timer;          // Timer loaded with state time
     float       TargetTime;     // Timer is incrimented until this time is exceeded
     float       Current;        // Current level zero to one
     float       Target;
 
-    float       ReleaseSt;      // Start of release volume level
-    bool        Updated;        // Flag indicating update output
-    bool        PeakLevel;      // Flag indicating sustain and peak are the same
-    bool        UseSoftLFO;     // Flag to enable sofware LFO
-
-    int16_t     DiffLevel;      // Difference to new level
-
-    float       Peak;           // Fraction of one (percent)
-    float       Bottom;         // Fraction of one (percent)
-    float       AttackTime;     // Attack time in uSec.
-    float       DecayTime;      // Decay time to sustatin level in uSec.
-    float       ReleaseTime;    // How long to end back at base level in uSec.
-    float       Sustain;        // Sustain level up to one
-    float       Multiplier;     // Final output adjustmet
-
-    // Fixed parameters
+    // Fixed parameters at initialization
     String      Name;
     byte        Index;
     uint16_t    DevicePortIO;
-    float       Floor;
-    float       Diff;
-
 
 public:
-             ENVELOPE_C     (uint8_t index, String name, uint16_t device, uint8_t& usecount);
-            ~ENVELOPE_C     (void)      {}
-    void     Clear          (void);
-    void     SetRange       (int16_t floor, int16_t ceiling);
-    void     Process        (float deltaTime);
-    void     Update         (void);
-    void     Start          (void);
-    void     End            (void);
-    void     SetTime        (ESTATE state, float time);
-    float    GetTime        (ESTATE state);
-    void     SetLevel       (ESTATE state, float percent);
-    float    GetLevel       (ESTATE state);
-    void     SetSoftLFO     (bool sel);
+            ENVELOPE_C      (uint8_t index, String name, uint16_t device, uint8_t& usecount);
+    void    Clear           (void);
+    void    Process         (float deltaTime);
+    void    SetCurrent      (float data);
+    void    Update          (void);
+    void    Start           (void);
+    void    End             (void);
+    void    SetTime         (ESTATE state, float time);
+    float   GetTime         (ESTATE state);
+    void    SetLevel        (ESTATE state, float percent);
+    float   GetLevel        (ESTATE state);
+    void    SetSoftLFO      (bool sel);
 
-    inline void     OutputMultiplier (float val)        { Multiplier = val; }           // Initialize adjustment to output value
-    inline uint16_t GetPortIO       (void)             { return (DevicePortIO); }     // Return D/A channel number
+    inline uint16_t GetPortIO (void)                 // Return D/A channel number
+        { return (DevicePortIO); }
+
+    inline int IsActive (void)
+        { return (Active); }
     };  // end ENVELOPE_C
 
 //#######################################################################

@@ -60,7 +60,7 @@ public:
          LFO_METER_WIDGET_C (lv_obj_t* base, short x, short y, bool software, const char* estr);
     void SetFreq            (short val);
     void Select             (bool sel);
- };
+    };
 
 //############################################
 class TITLE_WIDGET_C
@@ -70,7 +70,9 @@ private:
     lv_style_t  Style;
 
 public:
-    TITLE_WIDGET_C (lv_obj_t* base, const char* s);
+            TITLE_WIDGET_C      (lv_obj_t* base, const char* s);
+            TITLE_WIDGET_C      (lv_obj_t* base, const char* s, int yoff);
+    void    Begin               (lv_obj_t* base, const char* s, int yoff);
     };
 
 //############################################

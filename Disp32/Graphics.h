@@ -64,19 +64,20 @@ public:
 class PAGE_FILTER_C : protected PAGE_TITLE_C
     {
 private:
-    TITLE_WIDGET_C*         TitleControl[2];
     ADSR_METER_WIDGET_C*    MeterADSR[2];
     LEVEL_WIDGET_C*         ValueStart[2];
     LEVEL_WIDGET_C*         ValueEnd[2];
     LEVEL_WIDGET_C*         ValueSustain[2];
     lv_obj_t*               Output[5];
+    lv_obj_t*               Ctrl[2][4];
     byte                    Midi;
 
 public:
               PAGE_FILTER_C (lv_obj_t* base);
-    void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
-    void      SetMidi    (byte midi);
-    void      Select     (byte fmap);
+    void      UpdatePage    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void      SetMidi       (byte midi);
+    void      Select        (byte fmap);
+    void      Control       (byte fn, byte select);
     };
 
 //############################################

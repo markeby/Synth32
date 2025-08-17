@@ -101,8 +101,8 @@ typedef struct
 
 typedef struct
     {
-    short       Index;
-    byte        Color;
+    short       Index;      // Value passed into function
+    byte        Color;      // Default color code for Novation device
     const char* Desc;
     void       (*CallBack)(short chan, short data);
     }  XL_MIDI_MAP;
@@ -148,7 +148,7 @@ extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_S
 extern  I2C_INTERFACE_C I2cDevices;
 
 //#################################################
-//    Synthesizer configuration class
+//    Synthesizer configuration storage
 //#################################################
 class SYNTH_VOICE_CONFIG_C
     {
@@ -172,8 +172,9 @@ private:
         float       PulseWidth;
         bool        RampDirection;
         byte        FilterEnables;
+        byte        FilterCtrl[FILTER_DEVICES];
         ENVELOPE_T  OscEnv[OSC_MIXER_COUNT];
-        ENVELOPE_T  FltEnv[2];
+        ENVELOPE_T  FltEnv[FILTER_DEVICES];
         }   Cs;
 
     String  Name;
@@ -182,7 +183,7 @@ private:
 
 public:
     bool    SelectedOscEnvelope[OSC_MIXER_COUNT];
-    bool    SelectedFltEnvelope[2];
+    bool    SelectedFltEnvelope[FILTER_DEVICES];
 
          SYNTH_VOICE_CONFIG_C           (void);
     void Save                           (const char* name);
@@ -226,6 +227,8 @@ public:
     inline float  GetFltReleaseTime     (byte index)                { return (this->Cs.FltEnv[index].ReleaseTime); }
     inline void   SetFltOut             (byte chanmap)              { this->Cs.FilterEnables = chanmap; }
     inline byte   GetFltOut             (void)                      { return (this->Cs.FilterEnables); }
+    inline void   SetFltCtrl            (byte index, int data)      { this->Cs.FilterCtrl[index] = data; }
+    inline byte   GetFltCtrl            (byte index)                { return (this->Cs.FilterCtrl[index]); }
     };
 
 class SYNTH_CONFIG_C

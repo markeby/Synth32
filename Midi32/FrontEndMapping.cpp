@@ -183,20 +183,22 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
             v1.SetMaxLevel (v, sc.GetOscMaxLevel (v));
             sc.SelectedOscEnvelope[v] = false;
 
-            if ( v < 2 )                            // filter envelopes setup here
+            if ( v < FILTER_DEVICES )                            // filter envelopes setup here
                 {
-                v0.SetFltAttackTime (v, sc.GetFltAttackTime (v));
-                v1.SetFltAttackTime (v, sc.GetFltAttackTime (v));
-                v0.SetFltDecayTime (v, sc.GetFltDecayTime (v));
-                v1.SetFltDecayTime (v, sc.GetFltDecayTime (v));
+                v0.SetFltAttackTime  (v, sc.GetFltAttackTime (v));
+                v1.SetFltAttackTime  (v, sc.GetFltAttackTime (v));
+                v0.SetFltDecayTime   (v, sc.GetFltDecayTime (v));
+                v1.SetFltDecayTime   (v, sc.GetFltDecayTime (v));
                 v0.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
                 v1.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
-                v0.SetFltSustain (v, sc.GetFltSustainLevel (v));
-                v1.SetFltSustain (v, sc.GetFltSustainLevel (v));
-                v0.SetFltStart (v, sc.GetFltStart (v));
-                v1.SetFltStart (v, sc.GetFltStart (v));
-                v0.SetFltEnd (v, sc.GetFltEnd (v));
-                v1.SetFltEnd (v, sc.GetFltEnd (v));
+                v0.SetFltSustain     (v, sc.GetFltSustainLevel (v));
+                v1.SetFltSustain     (v, sc.GetFltSustainLevel (v));
+                v0.SetFltStart       (v, sc.GetFltStart (v));
+                v1.SetFltStart       (v, sc.GetFltStart (v));
+                v0.SetFltEnd         (v, sc.GetFltEnd (v));
+                v1.SetFltEnd         (v, sc.GetFltEnd (v));
+                v0.SetFltCtrl        (v, sc.GetFltCtrl (v));
+                v1.SetFltCtrl        (v, sc.GetFltCtrl (v));
                 sc.SelectedFltEnvelope[v] = false;
                 }
             }

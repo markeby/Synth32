@@ -27,7 +27,7 @@
         this->Cs.OscEnv[z].MaxLevel     = 0.0;
         this->Cs.OscEnv[z].MinLevel     = 0.0;
         this->SelectedOscEnvelope[z]    = false;
-        if ( z < 2 )                                // filter initialization
+        if ( z < FILTER_DEVICES )                                // filter initialization
             {
             this->Cs.FltEnv[z].AttackTime   = 1.0;
             this->Cs.FltEnv[z].DecayTime    = 1.0;
@@ -35,6 +35,7 @@
             this->Cs.FltEnv[z].SustainLevel = 0.0;
             this->Cs.FltEnv[z].MaxLevel     = 0.0;
             this->Cs.FltEnv[z].MinLevel     = 0.0;
+            this->Cs.FilterCtrl[2]          = 0;
             this->SelectedFltEnvelope[z]    = false;
             }
         }
