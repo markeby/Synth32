@@ -38,7 +38,7 @@ public:
     void  SetPage       (DISP_MESSAGE_N::PAGE_C page, byte midi)    { this->SetPage ((byte)page,  midi); }
 
     //#################################################
-    inline bool Loop (void)
+    bool Loop (void)
         {
         bool z = digitalRead (RESET_STROBE_IO);
         if ( z != this->ResetState )
@@ -53,19 +53,19 @@ public:
         }
 
     //#################################################
-    inline void PageCalibration (void)
+    void PageCalibration (void)
         {
         this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_CALIBRATION);
         }
 
     //#################################################
-    inline void PageTuning (void)
+    void PageTuning (void)
         {
         this->Page (DISP_MESSAGE_N::PAGE_C::PAGE_TUNING);
         }
 
     //#################################################
-    inline void TuningNote (byte value)
+    void TuningNote (byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
@@ -75,7 +75,7 @@ public:
         }
 
     //#################################################
-    inline void TuningDtoA (short value)
+    void TuningDtoA (short value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
@@ -85,7 +85,7 @@ public:
         }
 
     //#################################################
-    inline void TuningSelect (byte ch)
+    void TuningSelect (byte ch)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
@@ -95,7 +95,7 @@ public:
         }
 
     //#################################################
-    inline void TuningLevel (byte channel, byte value)
+    void TuningLevel (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
                           0,
@@ -105,13 +105,33 @@ public:
         }
 
     //#################################################
-    inline void Unlock (void)
+    void TuningFilter (byte channel, byte value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
+                          channel,
+                          DISP_MESSAGE_N::EFFECT_C::FILTER,
+                          value);
+        }
+
+    //#################################################
+    void TuningControl (byte value)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
+                          0,
+                          DISP_MESSAGE_N::EFFECT_C::CONTROL,
+                          value);
+        }
+
+    //#################################################
+    void Unlock (void)
         {
         this->Lock = false;
         }
 
     //#################################################
-    inline void SendMapVoiceMidi (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    void SendMapVoiceMidi (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MAP,
                           0,
@@ -121,7 +141,7 @@ public:
         }
 
     //#################################################
-    inline void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
                           index,
@@ -132,7 +152,7 @@ public:
 
     //#################################################
     //#################################################
-    inline void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
                           mapi,
@@ -142,7 +162,7 @@ public:
         }
 
     //#################################################
-    inline void OscSelected (byte channel, bool sel)
+    void OscSelectedLevel (byte channel, bool sel)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -151,7 +171,7 @@ public:
         }
 
     //#################################################
-    inline void OscAttackTime (byte channel, uint16_t value)
+    void OscAttackTime (byte channel, uint16_t value)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -160,7 +180,7 @@ public:
         }
 
     //#################################################
-    inline void OscMaxLevel (byte channel, uint16_t value)
+    void OscMaxLevel (byte channel, uint16_t value)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -169,7 +189,7 @@ public:
         }
 
     //#################################################
-    inline void OscDecayTime (byte channel, uint16_t value)
+    void OscDecayTime (byte channel, uint16_t value)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -178,7 +198,7 @@ public:
         }
 
     //#################################################
-    inline void OscReleaseTime (byte channel, uint16_t value)
+    void OscReleaseTime (byte channel, uint16_t value)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -187,7 +207,7 @@ public:
         }
 
     //#################################################
-    inline void OscSustainLevel (byte channel, uint16_t value)
+    void OscSustainLevel (byte channel, uint16_t value)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -196,7 +216,7 @@ public:
         }
 
     //#################################################
-    inline void OscRampDirection (bool sel)
+    void OscRampDirection (bool sel)
         {
         this->SendUpdateOsc (0,
                              (byte)(DISP_MESSAGE_N::VOICE_OPT_C::RAMP),
@@ -205,7 +225,7 @@ public:
         }
 
     //#################################################
-    inline void OscPulseWidth (byte width)
+    void OscPulseWidth (byte width)
         {
         this->SendUpdateOsc (0,
                              (byte)(DISP_MESSAGE_N::VOICE_OPT_C::PULSE),
@@ -215,7 +235,7 @@ public:
 
     //#################################################
     //#################################################
-    inline void SendUpdateFlt (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+    void SendUpdateFlt (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER,
                           mapi,
@@ -225,7 +245,7 @@ public:
         }
 
     //#################################################
-    inline void FltSelected (byte channel, bool sel)
+    void FltSelected (byte channel, bool sel)
         {
         this->SendUpdateOsc (0,
                              channel,
@@ -234,7 +254,7 @@ public:
         }
 
     //#################################################
-    inline void FltAttackTime (byte channel, uint16_t value)
+    void FltAttackTime (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -243,7 +263,7 @@ public:
         }
 
     //#################################################
-    inline void FltDecayTime (byte channel, uint16_t value)
+    void FltDecayTime (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -252,7 +272,7 @@ public:
         }
 
     //#################################################
-    inline void FltReleaseTime (byte channel, uint16_t value)
+    void FltReleaseTime (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -261,7 +281,7 @@ public:
         }
 
     //#################################################
-    inline void FltStart (byte channel, uint16_t value)
+    void FltStart (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -270,7 +290,7 @@ public:
         }
 
     //#################################################
-    inline void FltEnd (byte channel, uint16_t value)
+    void FltEnd (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -279,7 +299,7 @@ public:
         }
 
     //#################################################
-    inline void FltSustain (byte channel, uint16_t value)
+    void FltSustain (byte channel, uint16_t value)
         {
         this->SendUpdateFlt (0,
                              channel,
@@ -288,7 +308,7 @@ public:
         }
 
     //#################################################
-    inline void FltOut (byte fmap)
+    void FltOut (byte fmap)
         {
         this->SendUpdateFlt (0,
                              0,
@@ -297,7 +317,7 @@ public:
         }
 
     //#################################################
-    inline void FltCtrl (byte fn, byte value)
+    void FltCtrl (byte fn, byte value)
         {
         this->SendUpdateFlt (0,
                              fn,
@@ -307,7 +327,7 @@ public:
 
     //#################################################
     //#################################################
-    inline void LfoSoftFreq (short value)
+    void LfoSoftFreq (short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::SOFTWARE_LFO),
                              0,
@@ -316,7 +336,7 @@ public:
         }
 
     //#################################################
-    inline void LfoSoftSelect (byte ch, bool sel)
+    void LfoSoftSelect (byte ch, bool sel)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::SOFTWARE_LFO),
                              0,
@@ -325,7 +345,7 @@ public:
         }
 
     //#################################################
-    inline void LfoHardFreq (byte index, short value)
+    void LfoHardFreq (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -334,7 +354,7 @@ public:
         }
 
     //#################################################
-    inline void LfoHardLevel (byte index, short value)
+    void LfoHardLevel (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -343,7 +363,7 @@ public:
         }
 
     //#################################################
-    inline void LfoHardPulseWidth (byte index, short value)
+    void LfoHardPulseWidth (byte index, short value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -352,7 +372,7 @@ public:
         }
 
     //#################################################
-    inline void LfoHardRampSlope (byte index, byte value)
+    void LfoHardRampSlope (byte index, byte value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -361,7 +381,7 @@ public:
         }
 
     //#################################################
-    inline void SetModLevelAlt (byte index, byte value)
+    void SetModLevelAlt (byte index, byte value)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -370,7 +390,7 @@ public:
         }
 
     //#################################################
-    inline void LfoHardSelect (byte index, byte wave, bool sel)
+    void LfoHardSelect (byte index, byte wave, bool sel)
         {
         this->SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
                              index,
@@ -378,7 +398,7 @@ public:
                              wave);
         }
     //#################################################
-    inline void SendLoadSave (uint16_t value)
+    void SendLoadSave (uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
                           0,
@@ -387,7 +407,7 @@ public:
                           value);
         }
     //#################################################
-    inline void LoadMessage (void)
+    void LoadMessage (void)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
                           0,
@@ -396,7 +416,7 @@ public:
                           1);
         }
     //#################################################
-    inline void SaveMessage (void)
+    void SaveMessage (void)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
                           0,

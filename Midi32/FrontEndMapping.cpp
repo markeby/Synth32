@@ -171,16 +171,16 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
 
         for ( short v = 0;  v < OSC_MIXER_COUNT;  v++ )
             {
-            v0.SetOscAttackTime (v, sc.GetOscAttackTime (v));
-            v1.SetOscAttackTime (v, sc.GetOscAttackTime (v));
-            v0.SetOscDecayTime (v, sc.GetOscDecayTime (v));
-            v1.SetOscDecayTime (v, sc.GetOscDecayTime (v));
-            v0.SetOscReleaseTime (v, sc.GetOscReleaseTime (v));
-            v1.SetOscReleaseTime (v, sc.GetOscReleaseTime (v));
+            v0.SetOscAttackTime   (v, sc.GetOscAttackTime (v));
+            v1.SetOscAttackTime   (v, sc.GetOscAttackTime (v));
+            v0.SetOscDecayTime    (v, sc.GetOscDecayTime (v));
+            v1.SetOscDecayTime    (v, sc.GetOscDecayTime (v));
+            v0.SetOscReleaseTime  (v, sc.GetOscReleaseTime (v));
+            v1.SetOscReleaseTime  (v, sc.GetOscReleaseTime (v));
             v0.SetOscSustainLevel (v, sc.GetOscSustainLevel (v));
             v1.SetOscSustainLevel (v, sc.GetOscSustainLevel (v));
-            v0.SetMaxLevel (v, sc.GetOscMaxLevel (v));
-            v1.SetMaxLevel (v, sc.GetOscMaxLevel (v));
+            v0.SetMaxLevel        (v, sc.GetOscMaxLevel (v));
+            v1.SetMaxLevel        (v, sc.GetOscMaxLevel (v));
             sc.SelectedOscEnvelope[v] = false;
 
             if ( v < FILTER_DEVICES )                            // filter envelopes setup here
@@ -206,8 +206,8 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
         v1.SetRampDirection (sc.GetRampDirection ());
         v0.SetPulseWidth    (sc.GetPulseWidth    ());
         v1.SetPulseWidth    (sc.GetPulseWidth    ());
-        v0.SetFltOut        (sc.GetFltOut        ());
-        v1.SetFltOut        (sc.GetFltOut        ());
+        v0.SetOutputMask    (sc.GetOutputMask    ());
+        v1.SetOutputMask    (sc.GetOutputMask    ());
         }
 
     this->Lfo[0].SetMidi (this->SynthConfig.GetModMidi (0));

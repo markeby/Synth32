@@ -413,21 +413,32 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             break;
         case 16:
             {
-            if ( SetTuning && (chan < 8) )
+            if ( SetTuning )
                 {
-                for ( z = 0;  z < VOICE_COUNT;  z++ )
-                    pVoice[z]->TuningState (false);
-                pVoice[chan]->TuningState (true);
-                DBG ("Tuning for channel %d", chan);
-                DisplayMessage.TuningSelect (chan);
+                switch ( chan )
+                    {
+                    case 0 ... 7:
+                        for ( z = 0;  z < VOICE_COUNT;  z++ )
+                            pVoice[z]->TuningState (false);
+                        pVoice[chan]->TuningState (true);
+                        DisplayMessage.TuningSelect (chan);
+                        break;
+                    case 8 ... 12:
+                        this->TuningOutputBitFlip (chan - 8);
+                        break;
+                    default:
+                        break;
+                    }
                 TuningChange = true;
-                return;
                 }
-            G49_BUTTON_MIDI_MAP& m = G49MidiMapButton[chan];
-            m.State = !m.State;
-            DBG ("%s %d", m.Desc, m.State);
-            if ( m.CallBack != nullptr )
-                m.CallBack (m.Index, m.State);
+            else
+                {
+                G49_BUTTON_MIDI_MAP& m = G49MidiMapButton[chan];
+                m.State = !m.State;
+                DBG ("%s %d", m.Desc, m.State);
+                if ( m.CallBack != nullptr )
+                    m.CallBack (m.Index, m.State);
+                }
             }
             break;
         case 17:

@@ -52,6 +52,8 @@ private:
     NOVATION_XL_C         LaunchControl;
     bool                  SetTuning;
     uint16_t              TuningLevel[ENVELOPE_COUNT+1];
+    uint16_t              TuningFlt[FILTER_DEVICES];
+    byte                  TuningOutputSelect;
     bool                  TuningChange;
     ushort                CalibrationReference;
     short                 CalibrationBaseDigital;
@@ -72,7 +74,7 @@ public:
     void PageAdvance                (void);
     void TemplateSelect             (byte index);
     void TemplateRefresh            (void)
-        { this->LaunchControl.TemplateRefresh (); }
+        { LaunchControl.TemplateRefresh (); }
 
     //#######################################################################
     // FrontEndLFO.cpp
@@ -89,7 +91,7 @@ public:
     void ToggleModLevelAlt          (short index);
     void SetModLevelAlt             (short index, bool state);
     void SetLevelLFO                (short index, byte mchan, short data)
-        { this->Lfo[index].SetLevelMidi (mchan, data); }
+        { Lfo[index].SetLevelMidi (mchan, data); }
 
     //#######################################################################
     // FrontEndMapping.cpp
@@ -97,11 +99,11 @@ public:
     bool GetLoadSaveMode            (void)
         { return (LoadSaveMode); }
     bool GetMidiMapMode             (void)
-        { return (this->MapSelectMode); }
+        { return (MapSelectMode); }
     void MapModeBump                (short down);
     void ChangeMapSelect            (short right);
     bool GetMapSelect               (void)
-        { return (this->MapSelectMode); }
+        { return (MapSelectMode); }
     void ResolveMapAllocation       (void);
     void SaveDefaultConfig          (void);
     void LoadDefaultConfig          (void);
@@ -134,29 +136,32 @@ public:
     void Tuning                     (void);
     void TuningAdjust               (bool up);
     void SetTuningLevel             (short ch, short data);
+    void SetTuningFilter            (short ch, short data);
     void TuningBump                 (bool state);
     void StartTuning                (void);
     void SaveTuning                 (void);
     void Calibration                (ushort val);
     void StartCalibration           (void);
 
+    inline void TuningOutputBitFlip (int bit)
+        { TuningOutputSelect ^= 1 << bit; TuningChange = true; }
     inline bool IsInTuning (void)
-        { return (this->SetTuning); }
+        { return (SetTuning); }
 
     //#######################################################################
     inline void KeyDown (byte mchan, byte key, byte velocity)
         {
-        this->Down.Key      = key;
-        this->Down.Velocity = velocity;
-        this->Down.Trigger  = mchan;
+        Down.Key      = key;
+        Down.Velocity = velocity;
+        Down.Trigger  = mchan;
         }
 
     //#######################################################################
     inline void KeyUp (byte mchan, byte key, byte velocity)
         {
-        this->Up.Key      = key;
-        this->Up.Velocity = velocity;
-        this->Up.Trigger  = mchan;
+        Up.Key      = key;
+        Up.Velocity = velocity;
+        Up.Trigger  = mchan;
         }
     };
 

@@ -262,58 +262,69 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
 
 //#######################################################################
 //#######################################################################
-    LEVEL_WIDGET_C::LEVEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, lv_palette_t p)
+    LEVEL_WIDGET_C::LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, lv_palette_t p)
     {
     short size = 127;
 
-    lv_obj_t* panel = lv_obj_create (base);
-    lv_obj_set_size (panel, 75, size + 50);
-    lv_obj_set_pos (panel, x, y);
-    lv_obj_set_style_pad_top (panel, 1, 0);
-    lv_obj_set_style_pad_left (panel, 2, 0);
-    lv_obj_set_style_pad_right (panel, 2, 0);
-    lv_obj_set_style_pad_bottom (panel, 1, 0);
+    Palette = p;                                    // Save Fader primary color
+    lv_color_t color = lv_palette_lighten (p, 1);
 
-    lv_style_init (&this->StyleLabel);
-    lv_style_set_text_font (&this->StyleLabel, &lv_font_montserrat_12);
-    lv_style_set_text_color (&this->StyleLabel, lv_palette_main (p));
-    this->Label  = lv_label_create (panel);
-    lv_obj_align (this->Label, LV_ALIGN_TOP_MID, 0, 0);
-    lv_label_set_text (this->Label, s);
-    lv_obj_add_style (this->Label, &this->StyleLabel, 0);
+    // Create the panel for placing the fader
+    Panel = lv_obj_create (base);
+    lv_obj_set_size             (Panel, 75, size + 50);
+    lv_obj_set_pos              (Panel, x, y);
+    lv_obj_set_style_pad_top    (Panel, 1, 0);
+    lv_obj_set_style_pad_left   (Panel, 2, 0);
+    lv_obj_set_style_pad_right  (Panel, 2, 0);
+    lv_obj_set_style_pad_bottom (Panel, 1, 0);
 
-    lv_style_init (&this->StyleMain);
-    lv_style_set_bg_opa (&this->StyleMain, LV_OPA_COVER);
-    lv_style_set_bg_color (&this->StyleMain, lv_color_hex3 (0x999));
-    lv_style_set_radius (&this->StyleMain, LV_RADIUS_CIRCLE);
-    lv_style_set_width (&this->StyleMain, 5);
-    lv_style_set_height (&this->StyleMain, size);
+    // Label the panel at the top
+    lv_style_init           (&StyleLabel);
+    lv_style_set_text_font  (&StyleLabel, &lv_font_montserrat_12);
+    lv_style_set_text_color (&StyleLabel, color);
+    Label  = lv_label_create (Panel);
+    lv_obj_align            (Label, LV_ALIGN_TOP_MID, 0, 0);
+    lv_label_set_text       (Label, title);
+    lv_obj_add_style        (Label, &StyleLabel, 0);
 
-    lv_style_init (&this->StyleIndicator);
-    lv_style_set_bg_opa (&this->StyleIndicator, LV_OPA_COVER);
-    lv_style_set_bg_color (&this->StyleIndicator, lv_palette_lighten (p, 3));
+    lv_style_init         (&StyleMain);
+    lv_style_set_bg_opa   (&StyleMain, LV_OPA_COVER);
+    lv_style_set_bg_color (&StyleMain, lv_color_hex3 (0x999));
+    lv_style_set_radius   (&StyleMain, LV_RADIUS_CIRCLE);
+    lv_style_set_width    (&StyleMain, 5);
+    lv_style_set_height   (&StyleMain, size);
 
-    lv_style_init (&this->StyleKnob);
-    lv_style_set_bg_opa (&this->StyleKnob, LV_OPA_COVER);
-    lv_style_set_bg_color (&this->StyleKnob, lv_palette_main (p));
-    lv_style_set_border_color (&this->StyleKnob, lv_palette_main (LV_PALETTE_BLUE_GREY));
-    lv_style_set_pad_hor (&this->StyleKnob, 8);
-    lv_style_set_pad_ver (&this->StyleKnob, 1);
+    lv_style_init         (&StyleIndicator);
+    lv_style_set_bg_opa   (&StyleIndicator, LV_OPA_COVER);
+    lv_style_set_bg_color (&StyleIndicator, color);
 
-    this->Slider = lv_slider_create (panel);
-    lv_obj_remove_style_all (this->Slider);        // Remove the styles coming from the theme
-    lv_slider_set_range (this->Slider, 0, size);
-    lv_obj_align (this->Slider, LV_ALIGN_TOP_MID, 0, 20);
-    lv_obj_add_style (this->Slider, &this->StyleMain, LV_PART_MAIN);
-    lv_obj_add_style (this->Slider, &this->StyleIndicator, LV_PART_INDICATOR);
-    lv_obj_add_style (this->Slider, &this->StyleKnob, LV_PART_KNOB);
+    lv_style_init             (&StyleKnob);
+    lv_style_set_bg_opa       (&StyleKnob, LV_OPA_COVER);
+    lv_style_set_bg_color     (&StyleKnob, color);
+    lv_style_set_border_color (&StyleKnob, lv_palette_main (LV_PALETTE_BLUE_GREY));
+    lv_style_set_pad_hor      (&StyleKnob, 8);
+    lv_style_set_pad_ver      (&StyleKnob, 1);
 
-    this->Value = lv_label_create (panel);
-    lv_obj_align (this->Value, LV_ALIGN_BOTTOM_MID, 0, -2);
-    lv_style_init (&this->StyleValue);
-    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_14);
-    lv_style_set_text_color (&this->StyleValue, lv_palette_main (p));
-    lv_obj_add_style (this->Value, &this->StyleValue, 0);
+    // instantiate the fader
+    this->Fader = lv_slider_create (Panel);
+    lv_obj_remove_style_all (Fader);        // Remove the styles coming from the theme
+    lv_slider_set_range     (Fader, 0, size);
+    lv_obj_align            (Fader, LV_ALIGN_TOP_MID, 0, 20);
+    lv_obj_add_style        (Fader, &StyleMain, LV_PART_MAIN);
+    lv_obj_add_style        (Fader, &StyleIndicator, LV_PART_INDICATOR);
+    lv_obj_add_style        (Fader, &StyleKnob, LV_PART_KNOB);
+
+    Value = lv_label_create (Panel);
+    lv_obj_align            (Value, LV_ALIGN_BOTTOM_MID, 0, -2);
+    lv_style_init           (&StyleValue);
+    lv_style_set_text_font  (&StyleValue, &lv_font_montserrat_14);
+    lv_style_set_text_color (&StyleValue, color);
+    lv_obj_add_style        (Value, &StyleValue, 0);
+
+    lv_obj_t* keys = lv_label_create (Panel);
+    lv_obj_align      (keys, LV_ALIGN_LEFT_MID, 3, 0);    // half way from top to bottom
+    lv_label_set_text (keys, ks);
+    lv_obj_add_style  (keys, &GlobalKeyStyle, 0);
 
     this->Multiplier = (float)size / 127.0;
     // Initial position
@@ -321,9 +332,27 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
     }
 
 //#######################################################################
+void LEVEL_WIDGET_C::Active (bool state)
+    {
+    lv_color_t color;
+
+    if ( state )
+        color = lv_palette_lighten (Palette, 1);
+    else
+        color = lv_palette_lighten (Palette, 5);
+
+    lv_style_set_text_color (&StyleLabel,     color);
+//    lv_style_set_bg_color   (&StyleIndicator, color);
+    lv_style_set_bg_color   (&StyleKnob,      color);
+//    lv_style_set_text_color (&StyleValue,     color);
+    lv_obj_invalidate       (Panel);
+    }
+
+
+//#######################################################################
 void LEVEL_WIDGET_C::SetLevel (int val)
     {
-    lv_slider_set_value (Slider, (int32_t)((float)val * Multiplier), LV_ANIM_OFF);
+    lv_slider_set_value   (Fader, (int32_t)((float)val * Multiplier), LV_ANIM_OFF);
     lv_label_set_text_fmt (Value, "%d%%", (int)(val / 1.27));
     }
 
@@ -412,11 +441,11 @@ void PULSE_WIDGET_C::SetWidth (short width)
     {
     float percent = (float)width / 4095.0;
     width = (short)(40.0 * percent);
-    this->Pulse[2].x = squareWave[2].x + width;
-    this->Pulse[3].x = squareWave[3].x + width;
-    this->Pulse[6].x = squareWave[6].x + width;
-    this->Pulse[7].x = squareWave[7].x + width;
-    lv_line_set_points (this->Wave, this->Pulse, SQUARE_SIZE);
+    Pulse[2].x = squareWave[2].x + width;
+    Pulse[3].x = squareWave[3].x + width;
+    Pulse[6].x = squareWave[6].x + width;
+    Pulse[7].x = squareWave[7].x + width;
+    lv_line_set_points (Wave, Pulse, SQUARE_SIZE);
     }
 
 //#######################################################################
@@ -448,14 +477,14 @@ static const float FreqTable[128] =
     lv_obj_set_style_pad_right (panel, 2, 0);
     lv_obj_set_style_pad_bottom (panel, 1, 0);
 
-    this->Value = lv_label_create (panel);
-    lv_obj_align (this->Value, LV_ALIGN_CENTER, 0, 0);
-    lv_style_init (&this->StyleValue);
-    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_18);
-    lv_style_set_text_color (&this->StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
-    lv_obj_add_style (this->Value, &this->StyleValue, 0);
+    Value = lv_label_create (panel);
+    lv_obj_align (Value, LV_ALIGN_CENTER, 0, 0);
+    lv_style_init (&StyleValue);
+    lv_style_set_text_font (&StyleValue, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
+    lv_obj_add_style (Value, &StyleValue, 0);
 
-    this->SetValue (0);
+    SetValue (0);
     }
 
 //#######################################################################
@@ -468,15 +497,16 @@ void NOTE_WIDGET_C::SetValue (short val)
         c = '+';
     if ( val == 21 )
         c = '-';
-    lv_label_set_text_fmt (this->Value, "%c%s %d = %.2f Hz", c, FreqNote[val % 12], val, FreqTable[val]);
+    lv_label_set_text_fmt (Value, "%c%s %d = %.2f Hz", c, FreqNote[val % 12], val, FreqTable[val]);
     }
 
 //#######################################################################
 //#######################################################################
-    TUNES_WIDGET_C::TUNES_WIDGET_C (lv_obj_t* base, short x, short y)
+static const char* fltText[] = { "OSC", "LP", "LBP", "UBP", "HP" };
+    TUNE_OSC_WIDGET_C::TUNE_OSC_WIDGET_C (lv_obj_t* base, short x, short y)
     {
     lv_obj_t * panel = lv_obj_create (base);
-    lv_obj_set_size (panel, 254, 42);
+    lv_obj_set_size (panel, 268, 42);
     lv_obj_set_pos (panel, x, y);
     lv_obj_set_style_pad_top (panel, 1, 0);
     lv_obj_set_style_pad_left (panel, 2, 0);
@@ -489,25 +519,66 @@ void NOTE_WIDGET_C::SetValue (short val)
     lv_label_set_text (keys, "F1    F2      F3      F4      F5     F6     F7     F8");
 
     x = 8;
-    lv_style_init (&this->Style);
-    lv_style_set_text_font (&this->Style, &lv_font_montserrat_14);
-    for ( short z = 0;  z < VOICE_COUNT;  z++ )
+    lv_style_init (&Style);
+    lv_style_set_text_font (&Style, &lv_font_montserrat_14);
+    for ( short z = 0;  z < VOICE_COUNT;  z++, x+=31 )
         {
-        this->Osc[z] = lv_label_create (panel);
-        lv_label_set_recolor (this->Osc[z], true);
-        lv_obj_align (this->Osc[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
-        lv_obj_add_style (this->Osc[z], &this->Style, 0);
+        Osc[z] = lv_label_create (panel);
+        lv_label_set_recolor (Osc[z], true);
+        lv_obj_align (Osc[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
+        lv_obj_add_style (Osc[z], &Style, 0);
         lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
-        x += 31;
         }
     }
 
 //#######################################################################
-void TUNES_WIDGET_C::Set (short chan)
+void TUNE_OSC_WIDGET_C::Set (short chan)
     {
     for ( short z = 0;  z < VOICE_COUNT;  z++ )
         lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
     lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan);
+    }
+
+//#######################################################################
+//#######################################################################
+    TUNE_FLT_WIDGET_C::TUNE_FLT_WIDGET_C (lv_obj_t* base, short x, short y)
+    {
+    Panel = lv_obj_create (base);
+    lv_obj_set_size             (Panel, 201, 42);
+    lv_obj_set_pos              (Panel, x, y);
+    lv_obj_set_style_pad_top    (Panel, 1, 0);
+    lv_obj_set_style_pad_left   (Panel, 2, 0);
+    lv_obj_set_style_pad_right  (Panel, 2, 0);
+    lv_obj_set_style_pad_bottom (Panel, 1, 0);
+
+    lv_obj_t* keys = lv_label_create (Panel);
+    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
+    lv_obj_align (keys, LV_ALIGN_BOTTOM_LEFT, 19, -20);
+    lv_label_set_text (keys, "F9     F10        F11       F12     F13");
+
+    x = 8;
+    lv_style_init (&Style);
+    lv_style_set_text_font (&Style, &lv_font_montserrat_14);
+    for ( short z = 0;  z < 5;  z++, x+=39 )
+        {
+        Flt[z] = lv_label_create (Panel);
+        lv_label_set_recolor (Flt[z], true);
+        lv_obj_align (Flt[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
+        lv_obj_add_style (Flt[z], &Style, 0);
+        lv_label_set_text_fmt (Flt[z], "#D0D0D0 %s#", fltText[z]);
+        }
+    }
+
+//#######################################################################
+void TUNE_FLT_WIDGET_C::Set (byte sel)
+    {
+    for ( short z = 0;  z < 5;  z++ )
+        {
+        if ( (sel >> z) & 1 )
+            lv_label_set_text_fmt (Flt[z], "#000000 %s#", fltText[z]);
+        else
+            lv_label_set_text_fmt (Flt[z], "#D0D0D0 %s#", fltText[z]);
+        }
     }
 
 //#######################################################################
@@ -523,12 +594,12 @@ void TUNES_WIDGET_C::Set (short chan)
     lv_obj_set_style_pad_right (panel, 2, 0);
     lv_obj_set_style_pad_bottom (panel, 1, 0);
 
-    this->Value = lv_label_create (panel);
-    lv_obj_align (this->Value, LV_ALIGN_CENTER, 0, 0);
-    lv_style_init (&this->StyleValue);
-    lv_style_set_text_font (&this->StyleValue, &lv_font_montserrat_18);
-    lv_style_set_text_color (&this->StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
-    lv_obj_add_style (this->Value, &this->StyleValue, 0);
+    Value = lv_label_create (panel);
+    lv_obj_align (Value, LV_ALIGN_CENTER, 0, 0);
+    lv_style_init (&StyleValue);
+    lv_style_set_text_font (&StyleValue, &lv_font_montserrat_18);
+    lv_style_set_text_color (&StyleValue, lv_palette_main (LV_PALETTE_DEEP_PURPLE));
+    lv_obj_add_style (Value, &StyleValue, 0);
 
     this->Set (0);
     }

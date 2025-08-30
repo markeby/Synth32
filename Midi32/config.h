@@ -171,7 +171,7 @@ private:
         short       MapVoiceNoise;
         float       PulseWidth;
         bool        RampDirection;
-        byte        FilterEnables;
+        byte        OutputMask;
         byte        FilterCtrl[FILTER_DEVICES];
         ENVELOPE_T  OscEnv[OSC_MIXER_COUNT];
         ENVELOPE_T  FltEnv[FILTER_DEVICES];
@@ -225,8 +225,8 @@ public:
     inline float  GetFltDecayTime       (byte index)                { return (this->Cs.FltEnv[index].DecayTime); }
     inline void   SetFltReleaseTime     (byte index, float data)    { this->Cs.FltEnv[index].ReleaseTime = data; }
     inline float  GetFltReleaseTime     (byte index)                { return (this->Cs.FltEnv[index].ReleaseTime); }
-    inline void   SetFltOut             (byte chanmap)              { this->Cs.FilterEnables = chanmap; }
-    inline byte   GetFltOut             (void)                      { return (this->Cs.FilterEnables); }
+    inline void   SetOutputMask         (byte chanmap)              { this->Cs.OutputMask = chanmap; }
+    inline byte   GetOutputMask         (void)                      { return (this->Cs.OutputMask); }
     inline void   SetFltCtrl            (byte index, int data)      { this->Cs.FilterCtrl[index] = data; }
     inline byte   GetFltCtrl            (byte index)                { return (this->Cs.FilterCtrl[index]); }
     };

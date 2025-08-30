@@ -72,7 +72,7 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
         DisplayMessage.FltStart       (z, sc.GetFltStart (z) * PRS_UNSCALER);
         DisplayMessage.FltEnd         (z, sc.GetFltEnd (z) * PRS_UNSCALER);
         DisplayMessage.FltCtrl        (z, sc.GetFltCtrl (z));
-        DisplayMessage.FltOut         (sc.GetFltOut ());
+        DisplayMessage.FltOut         (sc.GetOutputMask ());
         }
     this->TemplateSelect (XL_MIDI_MAP_FLT);
     this->UpdateFltButtons ();
@@ -81,7 +81,7 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
 //#######################################################################
 void SYNTH_FRONT_C::UpdateFltButtons ()
     {
-    byte mask = this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();
+    byte mask = this->SynthConfig.Voice[CurrentFilterSelected].GetOutputMask ();
     for ( short z = 0;  z < 5;  z++ )
         (this->SynthConfig.Voice[this->CurrentFilterSelected].GetButtonStateFlt ())[z + 8] = ( (mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
     this->LaunchControl.TemplateRefresh ();
@@ -92,6 +92,7 @@ void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
     {
     state = !this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch];
     this->SynthConfig.Voice[this->CurrentVoiceSelected].SelectedOscEnvelope[ch] = state;
+    DisplayMessage.OscSelectedLevel (ch, state);
     (this->SynthConfig.Voice[this->CurrentVoiceSelected].GetButtonStateOsc ())[ch] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
     this->LaunchControl.TemplateRefresh ();
     }
@@ -315,15 +316,14 @@ void SYNTH_FRONT_C::FltEnd (short ch, short data)
 void SYNTH_FRONT_C::SelectFilter (short index)
     {
     byte mask = 1 << index;                                                         // setup masking for the selected bit
-    mask ^= this->SynthConfig.Voice[CurrentFilterSelected].GetFltOut ();            // Setup final output inverting selected bit
+    mask ^= this->SynthConfig.Voice[CurrentFilterSelected].GetOutputMask ();        // Setup final output inverting selected bit
 
     for ( short z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( this->CurrentMidiSelected == this->pVoice[z]->GetMidi () )
             {
-            this->SynthConfig.Voice[z >> 1].SetFltOut (mask);
-            this->pVoice[z]->SetMux (mask & 1);
-            this->pVoice[z]->SetFltOut (mask);
+            this->SynthConfig.Voice[z >> 1].SetOutputMask (mask);
+            this->pVoice[z]->SetOutputMask (mask);
             }
         }
     DisplayMessage.FltOut (mask);

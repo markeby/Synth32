@@ -203,6 +203,12 @@ void ENVELOPE_C::SetCurrent (float data)
     }
 
 //#######################################################################
+void ENVELOPE_C::SetOverride (uint32_t data)
+    {
+    I2cDevices.D2Analog (DevicePortIO, data);
+    }
+
+//#######################################################################
 void ENVELOPE_C::Update ()
     {
     float output;

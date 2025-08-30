@@ -36,28 +36,28 @@ private:
     void    ClearState      (void);
 
 public:
-            FLT4_C          (void);
-    void    Begin           (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
-    void    Clear           (void);
-    void    NoteSet         (byte key, byte velocity);
-    void    NoteClear       (void);
+                    FLT4_C              (void);
+    void            Begin               (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void            Clear               (void);
+    void            NoteSet             (byte key, byte velocity);
+    void            NoteClear           (void);
 
-    inline void             SetAttackTime       (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::ATTACK, time); }
-    inline float            GetAttackTime       (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::ATTACK)); }
-    inline void             SetDecayTime        (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::DECAY, time); }
-    inline float            GetDecayTime        (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::DECAY)); }
-    inline void             SetReleaseTime      (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::RELEASE, time); }
-    inline float            GetReleaseTime      (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::RELEASE)); }
-    inline void             SetSustainLevel     (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::SUSTAIN, level_percent); }
-    inline float            GetSustainLevel     (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::SUSTAIN)); }
-           void             SetStart            (byte fn, float level_percent);
-    inline float            GetStart            (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::START)); }
-    inline void             SetEnd              (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::ATTACK, level_percent); }
-    inline float            GetEnd              (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::ATTACK)); }
-    inline void             SetCtrl             (byte fn, byte value)               { ControlSrc[fn] = (FILTER_CTRL_C)value; }
-    inline FILTER_CTRL_C    GetCtrl             (byte fn)                           { return (ControlSrc[fn]); }
-    void                    SetOutMap           (byte fmap);
-    inline byte             GetOutMap           (void)                              { return (OutMap << 1); }
+    void            SetAttackTime       (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::ATTACK, time); }
+    float           GetAttackTime       (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::ATTACK)); }
+    void            SetDecayTime        (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::DECAY, time); }
+    float           GetDecayTime        (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::DECAY)); }
+    void            SetReleaseTime      (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::RELEASE, time); }
+    float           GetReleaseTime      (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::RELEASE)); }
+    void            SetSustainLevel     (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::SUSTAIN, level_percent); }
+    float           GetSustainLevel     (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::SUSTAIN)); }
+    void            SetStart            (byte fn, float level_percent);
+    float           GetStart            (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::START)); }
+    void            SetEnd              (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::ATTACK, level_percent); }
+    float           GetEnd              (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::ATTACK)); }
+    void            SetCtrl             (byte fn, byte value)               { ControlSrc[fn] = (FILTER_CTRL_C)value; }
+    FILTER_CTRL_C   GetCtrl             (byte fn)                           { return (ControlSrc[fn]); }
+    void            SetOutMap           (byte fmap);
+    byte            GetOutMap           (void)                              { return (OutMap << 1); }
+    void            SetTuning           (byte fn, uint32_t level)           { Funct[fn]->SetOverride (level); }
     };
-
 

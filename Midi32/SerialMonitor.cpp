@@ -44,29 +44,30 @@ void MONITOR_C::DumpStats (void)
     Serial << "==========================================" << endl;
     printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
-    Serial << hh << "       sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << " free sketch space = " << ESP.getFreeSketchSpace () << endl << endl;
+    Serial << hh << "total sketch code = " << ESP.getFreeSketchSpace () << endl;
+    Serial << hh << "      sketch size = " << ESP.getSketchSize ()      << endl;
+    Serial << hh << "      sketch used = " << ((ESP.getSketchSize () * 100) / ESP.getFreeSketchSpace ()) << "%" << endl << endl;
 
-    Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
-    Serial << hh << " larget heap block = " << ESP.getMaxAllocHeap () << endl;
-    Serial << hh << " lowest heap space = " << ESP.getMinFreeHeap () << endl;
-    Serial << hh << "   free heap space = " << ESP.getFreeHeap () << endl << endl;
+    Serial << hh << "        Heap size = " << ESP.getHeapSize ()     << endl;
+    Serial << hh << "larget heap block = " << ESP.getMaxAllocHeap () << endl;
+    Serial << hh << "lowest heap space = " << ESP.getMinFreeHeap ()  << endl;
+    Serial << hh << "  free heap space = " << ESP.getFreeHeap ()     << endl << endl;
 
-    Serial << hh << "        Stack size = " << getArduinoLoopTaskStackSize () << endl;
-    Serial << hh << "  Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
+    Serial << hh << "       Stack size = " << getArduinoLoopTaskStackSize ()    << endl;
+    Serial << hh << " Free stack space = " << uxTaskGetStackHighWaterMark (NULL) << endl << endl;
 
     uint64_t zl = ESP.getEfuseMac ();
-    Serial << hh << "        Update MAC = " <<  _WIDTHZ (_HEX ( zl        & 0xFF), 2) <<
-                                        ":" <<  _WIDTHZ (_HEX ((zl >> 8)  & 0xFF), 2) <<
-                                        ":" <<  _WIDTHZ (_HEX ((zl >> 16) & 0xFF), 2) <<
-                                        ":" <<  _WIDTHZ (_HEX ((zl >> 24) & 0xFF), 2) <<
-                                        ":" <<  _WIDTHZ (_HEX ((zl >> 32) & 0xFF), 2) << endl;
-    Serial << hh << "        Update URL = " << UpdateOTA.GetIP() << endl << endl;
-    Serial << hh << "       Runing Time = ";
+    Serial << hh << "       Update MAC = " <<  _WIDTHZ (_HEX ( zl        & 0xFF), 2) <<
+                                      ":" <<  _WIDTHZ (_HEX ((zl >> 8)  & 0xFF), 2) <<
+                                      ":" <<  _WIDTHZ (_HEX ((zl >> 16) & 0xFF), 2) <<
+                                      ":" <<  _WIDTHZ (_HEX ((zl >> 24) & 0xFF), 2) <<
+                                      ":" <<  _WIDTHZ (_HEX ((zl >> 32) & 0xFF), 2) << endl;
+    Serial << hh << "       Update URL = " << UpdateOTA.GetIP() << endl << endl;
+    Serial << hh << "      Runing Time = ";
     DispRunTime ();
-    Serial << hh << "     Last interval = " << DeltaTimeMilli << " mSec" << endl;
-    Serial << hh << "  Average interval = " << DeltaTimeMilliAvg << " mSec" << endl;
-    Serial << hh << "  Longest interval = " << LongestTimeMilli << " mSec" << endl;
+    Serial << hh << "    Last interval = " << DeltaTimeMilli << " mSec" << endl;
+    Serial << hh << " Average interval = " << DeltaTimeMilliAvg << " mSec" << endl;
+    Serial << hh << " Longest interval = " << LongestTimeMilli << " mSec" << endl;
     LongestTimeMilli = 0;
     }
 

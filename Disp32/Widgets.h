@@ -101,20 +101,23 @@ public:
 class LEVEL_WIDGET_C
     {
 private:
-    lv_obj_t*   Slider;
-    short       SliderSize;
-    lv_style_t  StyleLabel;
-    lv_style_t  StyleValue;
-    lv_style_t  StyleMain;
-    lv_style_t  StyleIndicator;
-    lv_style_t  StyleKnob;
-    lv_obj_t*   Label;
-    lv_obj_t*   Unit;
-    lv_obj_t*   Value;
-    float       Multiplier;
+    lv_obj_t*       Panel;
+    lv_obj_t*       Fader;
+    short           SliderSize;
+    lv_style_t      StyleLabel;
+    lv_style_t      StyleValue;
+    lv_style_t      StyleMain;
+    lv_style_t      StyleIndicator;
+    lv_style_t      StyleKnob;
+    lv_obj_t*       Label;
+    lv_obj_t*       Unit;
+    lv_obj_t*       Value;
+    float           Multiplier;
+    lv_palette_t    Palette;
 
 public:
-         LEVEL_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, lv_palette_t p);
+         LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, lv_palette_t p);
+    void Active         (bool state);
     void SetLevel       (int val);
     };
 
@@ -159,15 +162,28 @@ public:
     };
 
 //############################################
-class TUNES_WIDGET_C
+class TUNE_OSC_WIDGET_C
     {
     private:
         lv_style_t  Style;
         lv_obj_t*   Osc[VOICE_COUNT];
 
     public:
-             TUNES_WIDGET_C (lv_obj_t* base, short x, short y);
-        void Set            (short chan);
+             TUNE_OSC_WIDGET_C (lv_obj_t* base, short x, short y);
+        void Set               (short chan);
+    };
+
+//############################################
+class TUNE_FLT_WIDGET_C
+    {
+    private:
+        lv_obj_t*   Panel;
+        lv_style_t  Style;
+        lv_obj_t*   Flt[5];
+
+    public:
+             TUNE_FLT_WIDGET_C (lv_obj_t* base, short x, short y);
+        void Set               (byte sel);
     };
 
 //############################################
@@ -196,8 +212,8 @@ class SELECT_WIDGET_C
 
     public:
              SELECT_WIDGET_C (lv_obj_t* base, const char* s, short x, short y, short width, const char* items, short offset);
-        void Select            (bool state);
-        void Set               (short val);
+        void Select          (bool state);
+        void Set             (short val);
     };
 
 

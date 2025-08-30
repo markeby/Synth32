@@ -93,7 +93,7 @@ void OSC_C::SetTuningNote (byte note)
     CurrentNote = note;
     DBG ("DownKey = %d\n", note);
     I2cDevices.D2Analog (OscPortIO, OctaveArray[note]);
-    DisplayMessage.TuningDtoA (OctaveArray[note]);
+    CurrentDA = OctaveArray[note];
     }
 
 //#######################################################################
@@ -101,6 +101,7 @@ void OSC_C::TuningAdjust (bool up)
     {
     OctaveArray[CurrentNote] += (up) ? +1 : -1;
     SetTuningNote (CurrentNote);
+    DisplayMessage.TuningDtoA (CurrentDA);
     }
 
 //#######################################################################

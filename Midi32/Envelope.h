@@ -62,6 +62,7 @@ public:
     void    Clear           (void);
     void    Process         (float deltaTime);
     void    SetCurrent      (float data);
+    void    SetOverride     (uint32_t data);
     void    Update          (void);
     void    Start           (void);
     void    End             (void);

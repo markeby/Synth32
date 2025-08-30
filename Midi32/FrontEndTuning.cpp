@@ -33,7 +33,11 @@ void SYNTH_FRONT_C::Tuning ()
         if ( this->Down.Trigger )
             {
             this->pVoice[zc]->SetTuningNote (this->Down.Key);     // send key index to oscillator
-            DisplayMessage.TuningNote (this->Down.Key);
+            if ( pVoice[zc]->TuningState () )
+                {
+                DisplayMessage.TuningNote (this->Down.Key);
+                DisplayMessage.TuningDtoA (this->pVoice[zc]->LastDA ());
+                }
             }
         if ( this->TuningChange )
             {
@@ -56,8 +60,21 @@ void SYNTH_FRONT_C::Tuning ()
                         this->pVoice[zc]->SetTuningVolume(z, 0);
                     }
                 }
+            for ( int z = 0;  z < FILTER_DEVICES;  z++ )
+                {
+                this->pVoice[zc]->SetTuningFlt (z, this->TuningFlt[z]);
+                this->pVoice[zc]->SetOutputMask (this->TuningOutputSelect);
+                }
             }
         }
+
+    if ( this->TuningChange )
+        {
+        DisplayMessage.TuningControl (this->TuningOutputSelect);
+        for ( int z = 0;  z < FILTER_DEVICES;  z++ )
+            DisplayMessage.TuningFilter (z, this->TuningFlt[z] * MIDI_INV_MULTIPLIER);
+        }
+
     this->TuningChange = false;     // Indicate complete and ready for next not change
     this->Down.Trigger = 0;         // Clear note change trigger
     I2cDevices.UpdateDigital ();    // Update all digital port changes
@@ -72,9 +89,16 @@ void SYNTH_FRONT_C::StartTuning ()
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            this->TuningLevel[z] = (uint16_t)(this->pVoice[0]->GetMaxLevel (z) * MAX_DA);
-            DisplayMessage.TuningLevel (z, this->TuningLevel[z] * MIDI_INV_MULTIPLIER);
+            this->TuningLevel[z] = 0;
+            DisplayMessage.TuningLevel (z, 0);
             }
+
+        for ( int z = 0;  z < FILTER_DEVICES;  z++ )
+            {
+            this->TuningFlt[z] = 0;
+            DisplayMessage.TuningFilter (z, 0);
+            }
+        TuningOutputSelect = 0x01;
         this->pVoice[0]->TuningState (true);
         byte note = 5;                     // start at the lowest F
         DisplayMessage.TuningNote (note);
@@ -82,8 +106,10 @@ void SYNTH_FRONT_C::StartTuning ()
             {
             this->TuningChange = true;
             this->pVoice[zc]->SetTuningNote (note);
+            this->pVoice[zc]->SetFltCtrl (0);
             }
         }
+    DisplayMessage.TuningDtoA (this->pVoice[0]->LastDA ());
     DisplayMessage.TuningSelect (0);
     this->SetTuning = true;
     }
@@ -99,7 +125,13 @@ void SYNTH_FRONT_C::TuningAdjust (bool up)
 void SYNTH_FRONT_C::SetTuningLevel (short ch, short data)
     {
     this->TuningLevel[ch] = data * MIDI_MULTIPLIER;
-    DisplayMessage.TuningLevel (ch, data);
+    this->TuningChange = true;
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::SetTuningFilter (short ch, short data)
+    {
+    this->TuningFlt[ch] = data * MIDI_MULTIPLIER;
     this->TuningChange = true;
     }
 

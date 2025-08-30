@@ -107,6 +107,13 @@ void VOICE_C::NoiseReset ()
     }
 
 //#######################################################################
+void VOICE_C::SetOutputMask (byte bitmap)
+    {
+    SetMux (bitmap & 1);
+    Flt.SetOutMap (bitmap >> 1);
+    }
+
+//#######################################################################
 void VOICE_C::TuningAdjust (bool up)
     {
     if ( TuningOn )

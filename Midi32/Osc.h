@@ -47,6 +47,7 @@ private:
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
     byte                    CurrentNote;
+    short                   CurrentDA;
     short                   OscPortIO;
     short                   PwmPortIO;
     short                   RampDirPortIO;
@@ -66,19 +67,20 @@ public:
     void    PulseWidth          (float percent);
 
     //#######################################################################
-    inline void     SetSoftLFO          (byte wave, bool sel)               { Mix[wave]->SetSoftLFO (sel); }
-    inline void     SetAttackTime       (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::ATTACK, time); }
-    inline float    GetAttackTime       (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::ATTACK)); }
-    inline void     SetDecayTime        (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }
-    inline float    GetDecayTime        (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::DECAY)); }
-    inline void     SetReleaseTime      (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::RELEASE, time); }
-    inline float    GetReleaseTime      (byte wave)                         { return (this->Mix[wave]->GetTime  (ESTATE::RELEASE)); }
-    inline void     SetSustainLevel     (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent); }
-    inline float    GetSustainLevel     (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
-    inline void     SetLevel            (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
-    inline float    GetLevel            (byte wave)                         { return (this->Mix[wave]->GetLevel (ESTATE::ATTACK)); }
-    inline ushort*  GetBankAddr         (void)                              { return (this->OctaveArray); }
-    inline byte     LastNote            (void)                              { return (this->CurrentNote); }
+    void    SetSoftLFO          (byte wave, bool sel)               { Mix[wave]->SetSoftLFO (sel); }
+    void    SetAttackTime       (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::ATTACK, time); }
+    float   GetAttackTime       (byte wave)                         { return (Mix[wave]->GetTime  (ESTATE::ATTACK)); }
+    void    SetDecayTime        (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }
+    float   GetDecayTime        (byte wave)                         { return (Mix[wave]->GetTime  (ESTATE::DECAY)); }
+    void    SetReleaseTime      (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::RELEASE, time); }
+    float   GetReleaseTime      (byte wave)                         { return (Mix[wave]->GetTime  (ESTATE::RELEASE)); }
+    void    SetSustainLevel     (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::SUSTAIN, level_percent); }
+    float   GetSustainLevel     (byte wave)                         { return (Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
+    void    SetLevel            (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
+    float   GetLevel            (byte wave)                         { return (Mix[wave]->GetLevel (ESTATE::ATTACK)); }
+    ushort* GetBankAddr         (void)                              { return (OctaveArray); }
+    byte    LastNote            (void)                              { return (CurrentNote); }
+    short   LastDA              (void)                              { return (CurrentDA); }
     };
 
 

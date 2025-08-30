@@ -43,6 +43,7 @@ using namespace DISP_MESSAGE_N;
 static const char* filterTitle[]  = { "Frequency", "Q" };
 static const char* filterOutput[] = { "Bypass", "   LP   ", "   LBP  ", "   UBP  ", "   HP   " };
 static const char* filterCtrl[]   = { "Fx", "Env", "Mod", "M W" };
+static const char* filterKeys[]   = { "1", "4", "2", "5", "3", "6" };
     PAGE_FILTER_C::PAGE_FILTER_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Filter Midi 1")
     {
     lv_obj_t*       panel;
@@ -64,9 +65,9 @@ static const char* filterCtrl[]   = { "Fx", "Env", "Mod", "M W" };
 
         title                 = new TITLE_WIDGET_C (panel, filterTitle[z]);
         this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
-        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START", 0, 210, LV_PALETTE_INDIGO);
-        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END", 73, 210, LV_PALETTE_TEAL);
-        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN" ,146, 210, LV_PALETTE_ORANGE);
+        this->ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START",   filterKeys[z],   0, 210, LV_PALETTE_INDIGO);
+        this->ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END",     filterKeys[z + 2],  73, 210, LV_PALETTE_TEAL);
+        this->ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", filterKeys[z + 4], 146, 210, LV_PALETTE_ORANGE);
 
         x += 360;
         }
@@ -205,6 +206,7 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
+static const char* OscKeys[]   = { "1", "2", "3", "4", "5" };
     PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Voice Midi 1")
     {
     int x = 0;
@@ -214,28 +216,29 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         lv_obj_t* panel = lv_obj_create (base);
-        lv_obj_set_size (panel, 159, 440);
-        lv_obj_set_pos (panel, x, y);
-        lv_obj_set_style_pad_top (panel, 0, 0);
+        lv_obj_set_size             (panel, 159, 440);
+        lv_obj_set_pos              (panel, x, y);
+        lv_obj_set_style_pad_top    (panel, 0, 0);
         lv_obj_set_style_pad_bottom (panel, 0, 0);
-        lv_obj_set_style_pad_left (panel, 2, 0);
-        lv_obj_set_style_pad_right (panel, 2, 0);
+        lv_obj_set_style_pad_left   (panel, 2, 0);
+        lv_obj_set_style_pad_right  (panel, 2, 0);
 
         String key = "TF";
         key += String (z);
         KeyLabel (panel, key.c_str (), 0, 0);
-        this->TitleControl[z] = new TITLE_WIDGET_C (panel, VoiceOptText[z]);
-        this->MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
-        this->MaxLevel[z]     = new LEVEL_WIDGET_C (panel, "MAX", 0, 210, LV_PALETTE_INDIGO);
-        this->SustainLevel[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", 73, 210, LV_PALETTE_ORANGE);
+        TitleControl[z] = new TITLE_WIDGET_C      (panel, VoiceOptText[z]);
+        MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
+        MaxLevel[z]     = new LEVEL_WIDGET_C      (panel, "MAX",     OscKeys[z],  0, 210, LV_PALETTE_INDIGO);
+        SustainLevel[z] = new LEVEL_WIDGET_C      (panel, "SUSTAIN", OscKeys[z], 73, 210, LV_PALETTE_ORANGE);
+        SustainLevel[z]->Active (false);
 
         switch ( z )
             {
             case 2:
-                this->RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -10);
+                RampDir = new RAMP_WIDGET_C (panel, "TF6", LV_ALIGN_BOTTOM_MID, 0, -10);
                 break;
             case 3:
-                this->PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -10);
+                PulseWidth = new PULSE_WIDGET_C (panel, "PD8", LV_ALIGN_BOTTOM_MID, 0, -10);
                 break;
             default:
                 break;
@@ -249,7 +252,7 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
 void PAGE_OSC_C::SetMidi (byte midi)
     {
     String s = "Voice  Midi  " + String (midi);
-    this->Midi = midi;
+    Midi = midi;
     lv_label_set_text (Title, s.c_str ());
     }
 
@@ -259,32 +262,33 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     switch ( effect )
         {
         case EFFECT_C::SELECTED:
-            this->MeterADSR[ch]->Select (value);
+            MaxLevel[ch]->Active     (!value);
+            SustainLevel[ch]->Active (value);
             break;
         case EFFECT_C::BASE_LEVEL:
             break;
         case EFFECT_C::MAX_LEVEL:
-            this->MaxLevel[ch]->SetLevel (value);
+            MaxLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::ATTACK_TIME:
-            this->MeterADSR[ch]->SetAttack (value);
+            MeterADSR[ch]->SetAttack (value);
             break;
         case EFFECT_C::DECAY_TIME:
-            this->MeterADSR[ch]->SetDecay (value);
+            MeterADSR[ch]->SetDecay (value);
             break;
         case EFFECT_C::RELEASE_TIME:
-            this->MeterADSR[ch]->SetRelease (value);
+            MeterADSR[ch]->SetRelease (value);
             break;
         case EFFECT_C::SUSTAIN_LEVEL:
-            this->SustainLevel[ch]->SetLevel (value);
+            SustainLevel[ch]->SetLevel (value);
             break;
         case EFFECT_C::RAMP_DIRECTION:
-            this->RampDir->SetDir (value);
+            RampDir->SetDir (value);
             break;
         case EFFECT_C::PULSE_WIDTH:
             {
             float zf = value * 32.244;
-            this->PulseWidth->SetWidth ((short)zf);
+            PulseWidth->SetWidth ((short)zf);
             }
             break;
         default:
@@ -611,26 +615,34 @@ void PAGE_MAPPING_C::UpdatePage (byte ch, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
+static const char* TuneKeys[]   = { "7", "8" };
     PAGE_TUNE_C::PAGE_TUNE_C (lv_obj_t* base)
     {
     int x = 155;
     int y = 156;
 
-    this->TuningFont = &lv_font_montserrat_48;
-    lv_style_init (&this->TuningStyle);
-    lv_style_set_text_font  (&this->TuningStyle, this->TuningFont);
-    lv_style_set_text_color (&this->TuningStyle, lv_color_hex(0xF00000));
+    TuningFont = &lv_font_montserrat_48;
+    lv_style_init (&TuningStyle);
+    lv_style_set_text_font  (&TuningStyle, this->TuningFont);
+    lv_style_set_text_color (&TuningStyle, lv_color_hex(0xF00000));
 
-    this->TuningTitle = lv_label_create (base);
-    lv_obj_set_pos    (this->TuningTitle, x + 45, 20);
-    lv_label_set_text (this->TuningTitle, "TUNING MODE");
-    lv_obj_add_style  (this->TuningTitle, &this->TuningStyle, 0);
+    TuningTitle = lv_label_create (base);
+    lv_obj_set_pos    (TuningTitle, x + 45, 20);
+    lv_label_set_text (TuningTitle, "TUNING MODE");
+    lv_obj_add_style  (TuningTitle, &this->TuningStyle, 0);
 
-    this->Note  = new NOTE_WIDGET_C  (base, x + 116, 80);
-    this->Value = new VALUE_WIDGET_C (base, x + 151, 111, "D/A = ");
+    Note            = new NOTE_WIDGET_C     (base, x + 116, 80);
+    Value           = new VALUE_WIDGET_C    (base, x + 151, 111, "D/A = ");
+    TuneSelection   = new TUNE_OSC_WIDGET_C (base, 95, 340);
+    FilterSelection = new TUNE_FLT_WIDGET_C (base, 530, 340);
+
+    x = 19;
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++, x+=90 )
-        this->LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceOptText[z], x, y, LV_PALETTE_INDIGO);
-    this->TuneSelection = new TUNES_WIDGET_C (base, 248, 340);
+        LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceOptText[z], OscKeys[z], x, y, LV_PALETTE_INDIGO);
+
+    x += 81;
+    for ( int z = 0;  z < FILTER_DEVICES; z++, x+=90 )
+        LevelFilter[z] = new LEVEL_WIDGET_C (base, filterTitle[z], TuneKeys[z], x, y, LV_PALETTE_INDIGO);
     }
 
 //#######################################################################
@@ -649,6 +661,13 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
             break;
         case EFFECT_C::VALUE:
             this->Value->Set (value);
+            break;
+        case EFFECT_C::FILTER:
+            this->LevelFilter[ch]->SetLevel (value);
+            break;
+        case EFFECT_C::CONTROL:
+            this->FilterSelection->Set (value);
+            break;
         default:
             break;
         }
@@ -761,7 +780,7 @@ void GRPH_C::Begin ()
     // initialize keyboard sugguestions
     lv_style_init (&GlobalKeyStyle);
     lv_style_set_text_font (&GlobalKeyStyle, &lv_font_montserrat_12);
-    lv_style_set_text_color (&GlobalKeyStyle, lv_color_hex (0xD0D0D0));
+    lv_style_set_text_color (&GlobalKeyStyle, lv_palette_lighten (LV_PALETTE_GREY, 1));
 
     Pages = lv_tabview_create ( lv_scr_act (), LV_DIR_LEFT, 0);
 

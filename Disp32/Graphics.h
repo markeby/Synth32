@@ -140,14 +140,16 @@ public:
 class PAGE_TUNE_C
     {
 private:
-    const lv_font_t*        TuningFont;
-    lv_style_t              TuningStyle;
-    lv_obj_t*               TuningTitle;
-    NOTE_WIDGET_C*          Note;
-    TITLE_WIDGET_C*         TitleTuning[OSC_MIXER_COUNT];
-    LEVEL_WIDGET_C*         LevelTuning[OSC_MIXER_COUNT];
-    TUNES_WIDGET_C*         TuneSelection;
-    VALUE_WIDGET_C*         Value;
+    const lv_font_t*    TuningFont;
+    lv_style_t          TuningStyle;
+    lv_obj_t*           TuningTitle;
+    NOTE_WIDGET_C*      Note;
+    TITLE_WIDGET_C*     TitleTuning[OSC_MIXER_COUNT];
+    LEVEL_WIDGET_C*     LevelTuning[OSC_MIXER_COUNT];
+    LEVEL_WIDGET_C*     LevelFilter[FILTER_DEVICES];
+    TUNE_OSC_WIDGET_C*  TuneSelection;
+    TUNE_FLT_WIDGET_C*  FilterSelection;
+    VALUE_WIDGET_C*     Value;
 
 public:
               PAGE_TUNE_C (lv_obj_t* base);

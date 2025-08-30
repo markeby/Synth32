@@ -72,7 +72,6 @@ void FLT4_C::Clear ()
 //#######################################################################
 void FLT4_C::SetOutMap (byte fmap)
     {
-    fmap >>= 1;
     OutMap = fmap;
 
     for ( short z = 0;  z < 4;  z++ )
@@ -124,3 +123,6 @@ void FLT4_C::SetStart (byte fn, float level_percent)
             break;
         }
     }
+
+//#######################################################################
+

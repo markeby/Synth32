@@ -14,7 +14,7 @@
     this->Cs.MapVoiceMidi  = 1;
     this->Cs.MapVoiceNoise = 0;
     this->Cs.OutputEnable  = 0;
-    this->Cs.FilterEnables  = 0;
+    this->Cs.OutputMask  = 0;
     this->Cs.RampDirection = false;
     this->Cs.PulseWidth    = 2048;
 
