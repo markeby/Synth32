@@ -29,7 +29,6 @@ private:
     short   DigitalOutOscillator;
 
     FLT4_C  Flt;
-    short   DigitalOutFilter;
 
     short   ModMux[NUM_MOD_MUX_IN];
 
@@ -39,7 +38,7 @@ private:
     byte    TuningOn;
 
 public:
-            VOICE_C             (short num, short osc_d_a, short mux_digital, short mod_mux_digital, short noise_digitinal, ENVELOPE_GENERATOR_C& envgen);
+            VOICE_C             (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENVELOPE_GENERATOR_C& envgen);
     void    Begin               (void);
     void    Loop                (void);
     void    NoteSet             (byte mchan, byte key, byte velocity);

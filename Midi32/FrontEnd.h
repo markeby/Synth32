@@ -65,7 +65,7 @@ private:
 public:
 
          SYNTH_FRONT_C              (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
-    void Begin                      (short voice, short mux_digital, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
+    void Begin                      (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
     void MidiCommandConfiguration   (void);
     void Loop                       (void);
     void Clear                      (void);

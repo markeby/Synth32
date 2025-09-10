@@ -9,7 +9,7 @@
 #include "Voice.h"
 
 //#####################################################################
-VOICE_C::VOICE_C (short num, short osc_d_a, short mux_digital, short mod_mux_digital, short noise_digitinal, ENVELOPE_GENERATOR_C& envgen)
+VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENVELOPE_GENERATOR_C& envgen)
     {
     Number               = num;
     ActiveTimer          = 0;
@@ -18,17 +18,8 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mux_digital, short mod_mux_dig
     Midi                 = 1;
     TuningOn             = false;
 
-    if ( num & 1 )
-        {
-        DigitalOutOscillator = mux_digital + 8;
-        DigitalOutFilter     = mux_digital;
-        }
-    else
-        {
-        DigitalOutOscillator = mux_digital;
-        DigitalOutFilter     = mux_digital + 8;
-        }
-    NoiseDigitalIO       = noise_digitinal;
+    DigitalOutOscillator = mixer;
+    NoiseDigitalIO = noise_digitinal;
     NoiseReset ();
 
     ModMux[0] = mod_mux_digital + 8;
@@ -78,8 +69,7 @@ bool VOICE_C::NoteClear (byte mchan, byte key)
 //#######################################################################
 void VOICE_C::SetMux (bool bypass)
     {
-    I2cDevices.DigitalOut (DigitalOutFilter, bypass);
-    I2cDevices.DigitalOut (DigitalOutOscillator, true);           // Just hard code on until I build an newer mixer/switch board
+    I2cDevices.DigitalOut (DigitalOutOscillator, bypass);           // Just hard code on until I build an newer mixer/switch board
     I2cDevices.UpdateDigital ();
     }
 

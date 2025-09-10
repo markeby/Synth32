@@ -8945,6 +8945,16 @@
 		)
 		(uuid "5deb4419-5614-41a3-9d36-1607e31a4202")
 	)
+	(text "ADRS\n0x38"
+		(exclude_from_sim no)
+		(at 89.408 184.658 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "66a7621f-3dda-49dc-9ed8-a65cfc6fb063")
+	)
 	(text "#1 HARD_SYNC"
 		(exclude_from_sim no)
 		(at 125.73 166.37 0)

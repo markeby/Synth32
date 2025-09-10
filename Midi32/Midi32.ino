@@ -21,55 +21,56 @@ I2C_CLUSTERS_T  BusI2C[] = { 0, 1, 7, -1 };
 I2C_LOCATION_T  DevicesI2C[] =
 //    Cluster   Slice   Port   DtoA  AtoD    Dig     Name
     {
-      { 1,        7,     0x20,     0,    0,     16, "Dig 0   - 15"  }, // Multiplexer
-      { 1,        6,     0x21,     0,    0,     16, "Dig 16  - 31"  }, // Noise output
-      { 1,        5,     0x38,     0,    0,      8, "Dig 32  - 39"  }, // LFO controls
-      { 7,        5,     0x60,     4,    0,      0, "D/A 40  - 43"  }, // LFO Analog controls
-      { 7,        6,     0x60,     4,    0,      0, "D/A 44  - 47"  },
-      { 7,        7,     0x60,     4,    0,      0, "D/A 48  - 51"  },
-      { 1,        4,     0x22,     0,    0,     16, "Dig 52  - 67"  }, // Modulation MUX
-      { 1,        4,     0x48,     0,    4,      0, "A/D 68  - 71"  }, // LFO Static voltage A/D monitor (2.5V)
-      { 0,        0,     0x60,     4,    0,      0, "D/A 72  - 75"  }, // Osc #0
-      { 0,        0,     0x61,     4,    0,      0, "D/A 76  - 79"  },
-      { 0,        0,     0x62,     4,    0,      0, "D/A 80  - 83"  }, // Osc #1
-      { 0,        0,     0x63,     4,    0,      0, "D/A 84  - 87"  },
-      { 0,        4,     0x60,     4,    0,      0, "D/A 88  - 91"  }, // Filter #0 & #1
-      { 0,        4,     0x38,     0,    0,      8, "Dig 92  - 99"  },
-      { 0,        1,     0x60,     4,    0,      0, "D/A 100 - 103" }, // Osc #2
-      { 0,        1,     0x61,     4,    0,      0, "D/A 104 - 107" },
-      { 0,        1,     0x62,     4,    0,      0, "D/A 108 - 111" }, // Osc #3
-      { 0,        1,     0x63,     4,    0,      0, "D/A 112 - 115" },
-      { 0,        5,     0x60,     4,    0,      0, "D/A 116 - 119" }, // Filter #2 & #3
-      { 0,        5,     0x38,     0,    0,      8, "Dig 120 - 127" },
-      { 0,        2,     0x60,     4,    0,      0, "D/A 128 - 131" }, // Osc #4
-      { 0,        2,     0x61,     4,    0,      0, "D/A 132 - 135" },
-      { 0,        2,     0x62,     4,    0,      0, "D/A 136 - 139" }, // Osc #5
-      { 0,        2,     0x63,     4,    0,      0, "D/A 140 - 143" },
-      { 0,        6,     0x60,     4,    0,      0, "D/A 144 - 147" }, // Filter #4 & #5
-      { 0,        6,     0x38,     0,    0,      8, "Dig 148 - 155" },
-      { 0,        3,     0x60,     4,    0,      0, "D/A 156 - 159" }, // Osc #6
-      { 0,        3,     0x61,     4,    0,      0, "D/A 160 - 163" },
-      { 0,        3,     0x62,     4,    0,      0, "D/A 164 - 167" }, // Osc #7
-      { 0,        3,     0x63,     4,    0,      0, "D/A 168 - 171" },
-      { 0,        7,     0x60,     4,    0,      0, "D/A 172 - 175" }, // Filter #6 & #7
-      { 0,        7,     0x38,     0,    0,      8, "Dig 176 - 183" },
-      { 7,        0,     0x60,     4,    0,      0, "D/A 184 - 187" }, // Unallocated D/A
-      { 7,        1,     0x60,     4,    0,      0, "D/A 188 - 191" },
-      { 7,        2,     0x60,     4,    0,      0, "D/A 192 - 195" },
-      { 7,        3,     0x60,     4,    0,      0, "D/A 180 - 183" },
-      { 7,        4,     0x60,     4,    0,      0, "D/A 184 - 187" },
+      { 1,        7,     0x38,     0,    0,      8, "Dig 0   - 7"   }, // Test position for new MUXmixer
+      { 1,        7,     0x60,     4,    0,      0, "D/A 8   - 11"  },
+      { 1,        6,     0x21,     0,    0,     16, "Dig 12  - 27"  }, // Noise output
+      { 1,        5,     0x38,     0,    0,      8, "Dig 28  - 35"  }, // LFO controls
+      { 7,        5,     0x60,     4,    0,      0, "D/A 36  - 39"  }, // LFO Analog controls
+      { 7,        6,     0x60,     4,    0,      0, "D/A 40  - 43"  },
+      { 7,        7,     0x60,     4,    0,      0, "D/A 44  - 47"  },
+      { 1,        4,     0x22,     0,    0,     16, "Dig 48  - 63"  }, // Modulation MUX
+      { 1,        4,     0x48,     0,    4,      0, "A/D 64  - 67"  }, // LFO Static voltage A/D monitor (2.5V)
+      { 0,        0,     0x60,     4,    0,      0, "D/A 68  - 71"  }, // Osc #0
+      { 0,        0,     0x61,     4,    0,      0, "D/A 72  - 75"  },
+      { 0,        0,     0x62,     4,    0,      0, "D/A 76  - 79"  }, // Osc #1
+      { 0,        0,     0x63,     4,    0,      0, "D/A 80  - 83"  },
+      { 0,        4,     0x60,     4,    0,      0, "D/A 84  - 87"  }, // Filter #0 & #1
+      { 0,        4,     0x38,     0,    0,      8, "Dig 88  - 95"  },
+      { 0,        1,     0x60,     4,    0,      0, "D/A 96  - 99"  }, // Osc #2
+      { 0,        1,     0x61,     4,    0,      0, "D/A 100 - 103" },
+      { 0,        1,     0x62,     4,    0,      0, "D/A 104 - 107" }, // Osc #3
+      { 0,        1,     0x63,     4,    0,      0, "D/A 108 - 111" },
+      { 0,        5,     0x60,     4,    0,      0, "D/A 112 - 115" }, // Filter #2 & #3
+      { 0,        5,     0x38,     0,    0,      8, "Dig 116 - 123" },
+      { 0,        2,     0x60,     4,    0,      0, "D/A 124 - 127" }, // Osc #4
+      { 0,        2,     0x61,     4,    0,      0, "D/A 128 - 131" },
+      { 0,        2,     0x62,     4,    0,      0, "D/A 132 - 135" }, // Osc #5
+      { 0,        2,     0x63,     4,    0,      0, "D/A 136 - 139" },
+      { 0,        6,     0x60,     4,    0,      0, "D/A 140 - 143" }, // Filter #4 & #5
+      { 0,        6,     0x38,     0,    0,      8, "Dig 144 - 151" },
+      { 0,        3,     0x60,     4,    0,      0, "D/A 152 - 155" }, // Osc #6
+      { 0,        3,     0x61,     4,    0,      0, "D/A 156 - 159" },
+      { 0,        3,     0x62,     4,    0,      0, "D/A 160 - 163" }, // Osc #7
+      { 0,        3,     0x63,     4,    0,      0, "D/A 164 - 167" },
+      { 0,        7,     0x60,     4,    0,      0, "D/A 168 - 171" }, // Filter #6 & #7
+      { 0,        7,     0x38,     0,    0,      8, "Dig 172 - 179" },
+      { 7,        0,     0x60,     4,    0,      0, "D/A 180 - 183" }, // Unallocated D/A
+      { 7,        1,     0x60,     4,    0,      0, "D/A 184 - 187" },
+      { 7,        2,     0x60,     4,    0,      0, "D/A 188 - 191" },
+      { 7,        3,     0x60,     4,    0,      0, "D/A 192 - 195" },
+      { 7,        4,     0x60,     4,    0,      0, "D/A 196 - 199" },
       {-1,       -1,       -1,    -1,   -1,     -1,  nullptr }
     };
 
 //#################################################
 //  Synth I2C interface starting indexes
 //#################################################
-#define START_MULT_DIGITAL      0
-#define START_NOISE_DIGITAL     16
-#define START_LFO_CONTROL       32
-#define START_MOD_MUX           52
-#define START_A_D               68
-#define START_VOICE_CONTROL     72
+#define START_MIXER             0
+#define START_NOISE_DIGITAL     12
+#define START_LFO_CONTROL       28
+#define START_MOD_MUX           48
+#define START_A_D               64
+#define START_VOICE_CONTROL     68
 
 //#######################################################################
 MONITOR_C       Monitor;
@@ -199,7 +200,7 @@ void setup (void)
         printf ("\t>>> Starting Synth...\n");
 
         // Setup initial state of synth
-        SynthFront.Begin (START_VOICE_CONTROL, START_MULT_DIGITAL, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
+        SynthFront.Begin (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
         SynthActive = true;
         SynthFront.LoadDefaultConfig ();
         printf ("\t>>> Synth ready.\a\a\n");

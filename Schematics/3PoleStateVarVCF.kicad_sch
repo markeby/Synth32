@@ -10015,20 +10015,20 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U"
-				(at 0 5.08 0)
+			(property "Reference" "U41"
+				(at 1.778 3.556 0)
 				(effects
 					(font
-						(size 1.27 1.27)
+						(size 0.889 0.889)
 					)
 					(justify left)
 				)
 			)
 			(property "Value" "TL072"
-				(at 0 -5.08 0)
+				(at 1.778 2.286 0)
 				(effects
 					(font
-						(size 1.27 1.27)
+						(size 0.889 0.889)
 					)
 					(justify left)
 				)
@@ -10089,7 +10089,7 @@
 			(symbol "TL072_9_1_1"
 				(polyline
 					(pts
-						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+						(xy -5.08 -5.08) (xy 5.08 0) (xy -5.08 5.08) (xy -5.08 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -10102,17 +10102,17 @@
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "+"
+					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "3"
+					(number "2"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10120,17 +10120,17 @@
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "-"
+					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "2"
+					(number "3"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10141,14 +10141,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10157,7 +10157,7 @@
 			(symbol "TL072_9_2_1"
 				(polyline
 					(pts
-						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+						(xy -5.08 -5.08) (xy 5.08 0) (xy -5.08 5.08) (xy -5.08 -5.08)
 					)
 					(stroke
 						(width 0.254)
@@ -10170,17 +10170,17 @@
 				(pin input line
 					(at -7.62 2.54 0)
 					(length 2.54)
-					(name "+"
+					(name "-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "5"
+					(number "6"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10188,17 +10188,17 @@
 				(pin input line
 					(at -7.62 -2.54 0)
 					(length 2.54)
-					(name "-"
+					(name "+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
-					(number "6"
+					(number "5"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10209,14 +10209,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "7"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10229,14 +10229,14 @@
 					(name "V+"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "8"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -10247,14 +10247,14 @@
 					(name "V-"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
 					(number "4"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 0.889 0.889)
 							)
 						)
 					)
@@ -19518,6 +19518,16 @@
 			)
 		)
 		(uuid "c801eef0-cfdd-4a7d-8f40-6be256390a83")
+	)
+	(text "ADRS\n0x38"
+		(exclude_from_sim no)
+		(at 294.894 172.72 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "cc5325ad-b8a1-4ac9-b6d5-23e7ac1f9c68")
 	)
 	(text "Note 2: Adjust for -0.21v to +0.76v"
 		(exclude_from_sim no)
@@ -39890,19 +39900,19 @@
 		(fields_autoplaced yes)
 		(uuid "a032d135-46c4-4209-bcba-6ac24010ec2e")
 		(property "Reference" "U41"
-			(at 335.28 124.4599 0)
+			(at 338.328 122.174 0)
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 0.889 0.889)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "TL072"
-			(at 335.28 126.9999 0)
+			(at 338.328 123.444 0)
 			(effects
 				(font
-					(size 1.27 1.27)
+					(size 0.889 0.889)
 				)
 				(justify left)
 			)
@@ -39961,6 +39971,10 @@
 		(instances
 			(project ""
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/4ee2fb70-c02b-45ff-b6fc-7c263225c33f"
+					(reference "U41")
+					(unit 3)
+				)
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c"
 					(reference "U41")
 					(unit 3)
 				)

@@ -12,6 +12,7 @@
 #include "SoftLFO.h"
 
 //########################################################
+//########################################################
 //   VCO / VCA / VCF controls
 //########################################################
 static void setLevel (short ch, short data)
@@ -59,6 +60,8 @@ static void pulseWidth (short ch, short data)
 
 //########################################################
 //########################################################
+//  Filter controls
+//########################################################
 static void fltStart (short ch, short data)
     {
     SynthFront.FltStart (ch, data);
@@ -82,6 +85,7 @@ static void freqCtrlModeAdv (short ch, short data)
     SynthFront.FreqCtrlModeAdv (ch);
     }
 
+//########################################################
 //########################################################
 //  LFO controls
 //########################################################
@@ -117,6 +121,7 @@ static void toggleModVCO (short ch, short data)
         SynthFront.SelectModVCO (1, ch - 4);
     }
 
+//########################################################
 //########################################################
 //  Tuning control
 //########################################################
@@ -156,13 +161,6 @@ static void tunningSave (short ch, bool state)
     }
 
 //########################################################
-// Debug to advance page selection
-//########################################################
-static void pageAdvance (short ch, short data)
-    {
-    SynthFront.PageAdvance ();
-    }
-
 //########################################################
 //  Channel to voice mapping controls
 //########################################################
@@ -217,6 +215,59 @@ static void selectFilter (short index, short data)
 static void dummyButton (short index, short data)
     {
     SynthFront.TemplateRefresh ();
+    }
+
+//########################################################
+//########################################################
+// Page advance selection (next page)
+//########################################################
+static void pageAdvance (short ch, short data)
+    {
+    SynthFront.PageAdvance ();
+    }
+
+//########################################################
+//########################################################
+// Testing
+//########################################################
+static void testMixer (short ch, short data)
+    {
+    data = (short)((float)data * MIDI_MULTIPLIER);
+    switch ( ch )
+        {
+        case 0:
+            I2cDevices.D2Analog (8, data);
+            break;
+        case 1:
+            I2cDevices.D2Analog (9, data);
+            break;
+        case 2:
+            I2cDevices.D2Analog (10, data);
+            break;
+        case 3:
+            I2cDevices.D2Analog (11, data);
+            break;
+        default:
+            break;
+        }
+    I2cDevices.UpdateAnalog  ();
+    }
+
+//########################################################
+static void selectOsc (short index, short data)
+    {
+    static bool state = false;
+
+    state = !state;
+    I2cDevices.DigitalOut (0, state);
+    I2cDevices.DigitalOut (1, state);
+    I2cDevices.DigitalOut (2, state);
+    I2cDevices.DigitalOut (3, state);
+    I2cDevices.DigitalOut (4, state);
+    I2cDevices.DigitalOut (5, state);
+    I2cDevices.DigitalOut (6, state);
+    I2cDevices.DigitalOut (7, state);
+    I2cDevices.UpdateDigital ();
     }
 
 //########################################################
@@ -513,7 +564,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,      0, "N ",                      nullptr             },  //102 0x66  54
         {     0,      0, "N ",                      nullptr             },  //103 0x67  55
       },
-// XL_MIDI_MAP_SPARE
+// XL_MIDI_MAP_TUNING
       { {     0,   0x0C, "N ",                      nullptr             },  // 48 0x30  0
         {     0,   0x0C, "N ",                      nullptr             },  // 49 0x31  1
         {     0,   0x0C, "N ",                      nullptr             },  // 50 0x32  2
@@ -538,7 +589,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  First button
+        {     0,   0x3C, "N ",                      selectOsc           },  // 72 0x48  24  First button
         {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25
         {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26
         {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27
@@ -562,10 +613,10 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,   0x0C, "N ",                      nullptr             },  // 94 0x5E  46
         {     0,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48
-        {     1,      0, "N ",                      nullptr             },  // 97 0x61  49
-        {     2,      0, "N ",                      nullptr             },  // 98 0x62  50
-        {     3,      0, "N ",                      nullptr             },  // 99 0x63  51
+        {     0,      0, "N ",                      testMixer           },  // 96 0x60  48  First Fader
+        {     1,      0, "N ",                      testMixer           },  // 97 0x61  49
+        {     2,      0, "N ",                      testMixer           },  // 98 0x62  50
+        {     3,      0, "N ",                      testMixer           },  // 99 0x63  51
         {     4,      0, "N ",                      nullptr             },  //100 0x64  52
         {     0,      0, "N ",                      nullptr             },  //101 0x65  53
         {     0,      0, "N ",                      nullptr             },  //102 0x66  54

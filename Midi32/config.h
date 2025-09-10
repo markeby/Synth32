@@ -128,7 +128,7 @@ typedef byte  LED_NOTE_MAP;
 #define XL_MIDI_MAP_LFO         2
 #define XL_MIDI_MAP_MAPPING     3
 #define XL_MIDI_MAP_LOADSAVE    4
-#define XL_MIDI_MAP_SPARE       5
+#define XL_MIDI_MAP_TUNING      5
 
 #define XL_BUTTON_START         24
 #define XL_BUTTON_END           40

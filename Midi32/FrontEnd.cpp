@@ -239,7 +239,7 @@ void SYNTH_FRONT_C::MidiCommandConfiguration ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
+void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
     {
 #ifdef DEBUG_MIDI_MSG
     Midi_0.setHandleMessage              (FuncMessage0);
@@ -257,9 +257,9 @@ void SYNTH_FRONT_C::Begin (short voice, short mux_digital, short noise_digital, 
     short osc = voice;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        pVoice[z] = new VOICE_C(z, osc, mux_digital, mod_mux_digital, noise_digital, EnvADSL);
-        osc         += 8;
-        mux_digital += 1;
+        pVoice[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital, EnvADSL);
+        osc      += 8;
+        mixer    += 1;
         if ( z & 1 )
             {
             mod_mux_digital += 1;

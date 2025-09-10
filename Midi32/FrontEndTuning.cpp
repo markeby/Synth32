@@ -162,7 +162,7 @@ void SYNTH_FRONT_C::StartCalibration ()
         return;
 
     DisplayMessage.PageCalibration ();
-    this->TemplateSelect (XL_MIDI_MAP_SPARE);
+    this->TemplateSelect (XL_MIDI_MAP_TUNING);
     DBG ("Starting Calibration");
 
     this->Lfo[0].SetOffset(0);
