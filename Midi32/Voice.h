@@ -43,7 +43,6 @@ public:
     void    Loop                (void);
     void    NoteSet             (byte mchan, byte key, byte velocity);
     bool    NoteClear           (byte mchan, byte key);
-    void    SetMux              (bool bypass);
     void    SetModMux           (byte select);
     void    NoiseReset          (void);
     void    NoiseSelect         (byte color);
@@ -54,8 +53,10 @@ public:
     uint32_t IsActive           (void)                              { return (ActiveTimer); }
     void     SetMidi            (byte mchan)                        { Midi = mchan; }
     byte     GetMidi            (void)                              { return (Midi); }
+    void     Mute               (bool state)                        { Osc.Mute (state); }
     void     SetSoftLFO         (byte fn, bool sel)                 { Osc.SetSoftLFO (fn, sel); }
 
+    void     SetDamperMode      (byte fn, bool sel)                 { Osc.SetDamperMode (fn, sel); }
     void     SetOscAttackTime   (byte fn, float time)               { Osc.SetAttackTime (fn, time); }
     float    GetOscAttackTime   (byte fn)                           { return (Osc.GetAttackTime   (fn)); }
     void     SetOscDecayTime    (byte fn, float time)               { Osc.SetDecayTime (fn, time); }

@@ -63,7 +63,10 @@ void SYNTH_FRONT_C::Tuning ()
             for ( int z = 0;  z < FILTER_DEVICES;  z++ )
                 {
                 this->pVoice[zc]->SetTuningFlt (z, this->TuningFlt[z]);
-                this->pVoice[zc]->SetOutputMask (this->TuningOutputSelect);
+                if ( this->pVoice[zc]->TuningState () )
+                    this->pVoice[zc]->SetOutputMask (this->TuningOutputSelect);
+                else
+                    this->pVoice[zc]->SetOutputMask (0);
                 }
             }
         }
@@ -84,12 +87,18 @@ void SYNTH_FRONT_C::Tuning ()
 //#######################################################################
 void SYNTH_FRONT_C::StartTuning ()
     {
+    uint16_t zb = 0;
+
     if ( this->SetTuning == false )
         {
         DisplayMessage.PageTuning ();
         for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
             {
-            this->TuningLevel[z] = 0;
+            if ( z == 1 )
+                zb = DA_MAX;
+            else
+                zb = 0;
+            this->TuningLevel[z] = zb;
             DisplayMessage.TuningLevel (z, 0);
             }
 
@@ -100,7 +109,7 @@ void SYNTH_FRONT_C::StartTuning ()
             }
         TuningOutputSelect = 0x01;
         this->pVoice[0]->TuningState (true);
-        byte note = 5;                     // start at the lowest F
+        byte note = KEYS_FIRST;                    // start at the C0
         DisplayMessage.TuningNote (note);
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
             {
@@ -138,10 +147,16 @@ void SYNTH_FRONT_C::SetTuningFilter (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::TuningBump (bool state)
     {
-    byte note = (state) ? 125 : 5;         // Highest F or lowest F
-    DisplayMessage.TuningNote (note);
+    byte note = (state) ? KEYS_LAST : KEYS_FIRST;         // C8 and C0
     for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
+        {
         this->pVoice[zc]->SetTuningNote (note);
+        if ( pVoice[zc]->TuningState () )
+            {
+            DisplayMessage.TuningNote (note);
+            DisplayMessage.TuningDtoA (this->pVoice[zc]->LastDA ());
+            }
+        }
     }
 
 //#######################################################################

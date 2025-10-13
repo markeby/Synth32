@@ -31,11 +31,14 @@ private:
     byte&       UseCount;       // increment started and decriment as idle
     ESTATE      State;          // Current state of this mixer channel
 
+    bool        Muted;          // Do not respond to Start directive
     bool        Updated;        // Flag indicating update output
     bool        PeakLevel;      // Flag indicating sustain and peak are the same
     bool        UseSoftLFO;     // Flag to enable sofware LFO
+    bool        Damper;         // Mode to utilize string damper
 
     // User supplied inputs
+    bool        DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
     float       Top;            // Fraction of one (percent).
     float       Bottom;         // Fraction of one (percent).
     float       SetSustain;     // The settin of sustain level up to one.
@@ -60,6 +63,7 @@ private:
 public:
             ENVELOPE_C      (uint8_t index, String name, uint16_t device, uint8_t& usecount);
     void    Clear           (void);
+    void    Mute            (bool state);
     void    Process         (float deltaTime);
     void    SetCurrent      (float data);
     void    SetOverride     (uint32_t data);
@@ -71,11 +75,16 @@ public:
     void    SetLevel        (ESTATE state, float percent);
     float   GetLevel        (ESTATE state);
     void    SetSoftLFO      (bool sel);
+    void    SetDamperMode   (bool sel)
+        { Damper = sel; }
 
-    inline uint16_t GetPortIO (void)                 // Return D/A channel number
+    void    SetDualUse (bool sel)
+        { DualUse = sel; }
+
+    uint16_t GetPortIO (void)                 // Return D/A channel number
         { return (DevicePortIO); }
 
-    inline int IsActive (void)
+    int IsActive (void)
         { return (Active); }
     };  // end ENVELOPE_C
 

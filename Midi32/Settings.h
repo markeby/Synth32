@@ -13,12 +13,15 @@
 class SETTINGS_C
     {
 private:
-    String  s_SSID;
-    String  s_PSWD;
-    bool    DebugFlags;
+    String   s_SSID;
+    String   s_PSWD;
+    int      SketchSize;
+    int      SketchSizePrev;
 
     bool    GetDebugSwitch      (uint8_t num);
     void    PutDebugSwitch      (uint8_t num, bool state);
+    void    PutSystemParam      (const char* name, int param);
+    int     GetSystemParam      (const char* name);
 
 public:
             SETTINGS_C  (void);
@@ -34,12 +37,20 @@ public:
     void    RestoreDebugFlags   (void);
 
     //------------------------------------
-    inline const char* GetPasswd (void)
+    const char* GetPasswd (void)
         { return (s_PSWD.c_str ()); }
 
     //------------------------------------
-    inline const char* GetSSID (void)
+    const char* GetSSID (void)
         { return (s_SSID.c_str ()); }
+
+    //------------------------------------
+    int GetSketchSize (void)
+        { return (SketchSize); }
+
+    //------------------------------------
+    int GetSketchSizePrev (void)
+        { return (SketchSizePrev); }
 
     //----------------------------------------
     // Synth tuning storage

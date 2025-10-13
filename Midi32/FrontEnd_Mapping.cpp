@@ -90,7 +90,6 @@ void SYNTH_FRONT_C::MapModeBump (short down)
             z = this->SynthConfig.GetModMidi (zi) + down;
             if ( z <  0 )           z = MAX_MIDI;
             if ( z > MAX_MIDI )     z = 0;
-            printf("@@ zi = %d  z = %d\n", zi, z);
             this->SynthConfig.SetModMidi (zi, z);
             break;
             }
@@ -235,6 +234,7 @@ void SYNTH_FRONT_C::ResolveMapAllocation ()
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         this->SelectModVCA (z, this->SynthConfig.GetModSoftMixer (z));
 
+    MuteVoicesReset ();
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
     this->PageAdvance ();

@@ -19,7 +19,6 @@ static const char* Label = "VCO";
 
 using namespace OSC_N;
 
-#define CONST_MULT      (DA_RANGE / FULL_KEYS)
 static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "pulse" };
 
 //#######################################################################
@@ -50,11 +49,17 @@ void OSC_C::Begin (short num, short first_device, byte& usecount, ENVELOPE_GENER
     if ( Settings.GetOscBank (num, OctaveArray) )                   // If key/note array not in storage
         {
         printf ("\t  **** Tunning data failed to load.\n\t  **** Inializing default tunning.\n");
-        for ( int z = 0, m = 0;  z < FULL_KEYS; z++, m++ )          // initialize at even intervals.
+        for ( int z = 0, n = 0;  z < KEYS_FULL; z++, n++ )          // initialize at even intervals.
             {
-            OctaveArray[z] = (uint16_t)((float)m * CONST_MULT);     // These DtoA are 9 x 1v / octave-
-            if ( OctaveArray[z] > MAX_DA )
-                OctaveArray[z] = (uint16_t)((float)MAX_DA * CONST_MULT);
+            if ( z < KEYS_FIRST )
+                {
+                OctaveArray[z] = 0;
+                n = 0;
+                }
+            else if ( z > KEYS_LAST )
+                OctaveArray[z] = 0;
+            else
+                OctaveArray[z] = (n * (DA_RANGE / KEYS_SYNTH )) - 11;
             }
         }
 
@@ -134,6 +139,13 @@ void OSC_C::SetRampDirection (bool data)
 void OSC_C::PulseWidth (float percent)
     {
     I2cDevices.D2Analog (PwmPortIO, (percent * (float)DA_MAX));
+    }
+
+//#######################################################################
+void OSC_C::Mute (bool state)
+    {
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        Mix[z]->Mute (state);
     }
 
 

@@ -18,6 +18,7 @@ static const char* sysKeySpace    = "SysP";     // WIFI and debug data directory
 static const char* sysKeySSID     = "SSID";
 static const char* sysKeyPSWD     = "PASSD";
 static const char* sysKeyDBG      = "DBG";
+static const char* sysKeySketch   = "SkSize";
 
 static const char* synthTuning    = "SynthP";   // Tuning directory
 static const char* synthKeyBank   = "BANK";     // Keyboard bank prefix "BANKx"
@@ -52,6 +53,23 @@ void SETTINGS_C::PutPasswd (String& str)
     }
 
 //#######################################################################
+void SETTINGS_C::PutSystemParam (const char* name, int param)
+    {
+    Prefs.begin  (sysKeySpace, false);
+    Prefs.putInt (name, param);
+    Prefs.end    ();
+    }
+
+//#######################################################################
+int SETTINGS_C::GetSystemParam (const char* name)
+    {
+    Prefs.begin (sysKeySpace, false);
+    int z = Prefs.getInt (name, 0);
+    Prefs.end ();
+    return (z);
+    }
+
+//#######################################################################
 void SETTINGS_C::PutDebugSwitch (uint8_t num, bool state)
     {
     char buf[8];
@@ -69,8 +87,6 @@ bool SETTINGS_C::GetDebugSwitch (uint8_t num)
 
     sprintf (buf, "%s%d", sysKeyDBG, num);
     Prefs.begin (sysKeySpace, false);
-    if (  !Prefs.isKey ((const char *)buf) )
-        this->DebugFlags = false;
     bool zb = Prefs.getBool ((const char *)buf);
     Prefs.end ();
     return (zb);
@@ -79,24 +95,21 @@ bool SETTINGS_C::GetDebugSwitch (uint8_t num)
 //#######################################################################
 void SETTINGS_C::SaveDebugFlags ()
     {
-    this->PutDebugSwitch (0, DebugMidi);
-    this->PutDebugSwitch (1, DebugI2C);
-    this->PutDebugSwitch (3, DebugSynth);
-    this->PutDebugSwitch (4, DebugDisp);
+    PutDebugSwitch (0, DebugSeq);
+    PutDebugSwitch (1, DebugMidi);
+    PutDebugSwitch (2, DebugI2C);
+    PutDebugSwitch (3, DebugSynth);
+    PutDebugSwitch (4, DebugDisp);
     }
 
 //#######################################################################
 void SETTINGS_C::RestoreDebugFlags ()
     {
-    this->DebugFlags = true;
-    DebugMidi   = this->GetDebugSwitch (0);
-    DebugI2C    = this->GetDebugSwitch (1);
-    DebugSynth  = this->GetDebugSwitch (3);
-    DebugDisp   = this->GetDebugSwitch (4);
-    if ( this->DebugFlags )
-        printf ("\t>>>\tDebug setup.\n");
-    else
-        printf ("\t  **** Debug flags failed to load\n");
+    DebugSeq    = GetDebugSwitch (0);
+    DebugMidi   = GetDebugSwitch (1);
+    DebugI2C    = GetDebugSwitch (2);
+    DebugSynth  = GetDebugSwitch (3);
+    DebugDisp   = GetDebugSwitch (4);
     }
 
 //#######################################################################
@@ -114,6 +127,9 @@ void SETTINGS_C::Begin (void)
         }
     Prefs.end ();
     Settings.RestoreDebugFlags ();
+    SketchSizePrev = GetSystemParam (sysKeySketch);
+    SketchSize = ESP.getSketchSize ();
+    PutSystemParam (sysKeySketch, SketchSize);
     }
 
 //#######################################################################
@@ -143,7 +159,7 @@ bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
     Prefs.begin (synthTuning, false);
     if (  Prefs.isKey ((const char *)buf) )
         {
-        bool zb = Prefs.getBytes((const char *)buf, pbank, FULL_KEYS * sizeof(uint16_t));
+        bool zb = Prefs.getBytes((const char *)buf, pbank, KEYS_FULL * sizeof(uint16_t));
         exist = false;
         }
     Prefs.end ();
@@ -157,7 +173,7 @@ void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
 
     sprintf        (buf, "%s%d", synthKeyBank, num);
     Prefs.begin    (synthTuning, false);
-    Prefs.putBytes ((const char *)buf, pbank, FULL_KEYS * sizeof (uint16_t));
+    Prefs.putBytes ((const char *)buf, pbank, KEYS_FULL * sizeof (uint16_t));
     Prefs.end      ();
     }
 

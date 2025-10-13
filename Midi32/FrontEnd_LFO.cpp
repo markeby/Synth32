@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     SyntFront.ino
+// Module:     FrontEndLFO.cpp
 // Descrption: Synthesizer front end controller
 //                 Midi->Front->SynthModules
 // Creator:    markeby

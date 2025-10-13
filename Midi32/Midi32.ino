@@ -59,7 +59,7 @@ I2C_LOCATION_T  DevicesI2C[] =
       { 7,        2,     0x60,     4,    0,      0, "D/A 188 - 191" },
       { 7,        3,     0x60,     4,    0,      0, "D/A 192 - 195" },
       { 7,        4,     0x60,     4,    0,      0, "D/A 196 - 199" },
-      {-1,       -1,       -1,    -1,   -1,     -1,  nullptr }
+      { 255, 255, 255, 255, 255, 255, nullptr }
     };
 
 //#################################################
@@ -77,18 +77,19 @@ MONITOR_C       Monitor;
 I2C_INTERFACE_C I2cDevices (BusI2C, DevicesI2C);
 SYNTH_FRONT_C   SynthFront (FaderMidiMapArray, KnobMidiMapArray, SwitchMidiMapArray, XL_MidiMapArray);
 
-bool       SystemError          = false;
-bool       SystemFail           = false;
-bool       SynthActive          = false;
-float      DeltaTimeMilli       = 0;             // Millisecond interval.
-float      DeltaTimeMicro       = 0;             // Microsecond interval
-float      DeltaTimeMilliAvg    = 0;
-float      LongestTimeMilli     = 0;
-uint64_t   RunTime              = 0;
-bool       DebugMidi            = false;
-bool       DebugI2C             = false;
-bool       DebugSynth           = false;
-bool       DebugDisp            = false;
+bool        SystemError         = false;
+bool        SystemFail          = false;
+bool        SynthActive         = false;
+float       DeltaTimeMilli      = 0;             // Millisecond interval.
+float       DeltaTimeMicro      = 0;             // Microsecond interval
+float       DeltaTimeMilliAvg   = 0;
+float       LongestTimeMilli    = 0;
+uint64_t    RunTime             = 0;
+bool        DebugMidi           = false;
+bool        DebugI2C            = false;
+bool        DebugSynth          = false;
+bool        DebugDisp           = false;
+bool        DebugSeq            = false;
 
 static uint64_t startTime       = 0;
 
@@ -160,15 +161,16 @@ void setup (void)
     {
     bool fault = false;
 
-    BootDebug ();  // Pause here so that init of serial port in the monitor class can complete on power up
-    printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
-    printf ("\t>>> Start Settings config...\n");
-    Settings.Begin ();    // System settings
-
     pinMode      (HEARTBEAT_PIN, OUTPUT);
-    pinMode      (BEEP_PIN, OUTPUT);
-    digitalWrite (BEEP_PIN, LOW);           // Tone off
     digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
+
+    BootDebug ();           // Pause here so that init of serial port in the monitor class can complete on power up
+    printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
+    Settings.Begin ();      // System settings
+    int z = Settings.GetSketchSize () - Settings.GetSketchSizePrev ();
+    if ( z != 0 )
+        printf ("\t>>> Change in size = %d\n", z);
+    printf ("\n");
 
     printf ("\t>>> Startup OTA...\n");
     UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());

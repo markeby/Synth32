@@ -53,10 +53,11 @@ void ENVELOPE_GENERATOR_C::Loop ()
 ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& usecount) : UseCount(usecount)
     {
     Name          = name;
-    DevicePortIO = device;
+    DevicePortIO  = device;
     Index         = index;
+    DualUse       = false;
     Current       = 0;
-    Top          = 0;
+    Top           = 0;
     Bottom        = 0;
     SetSustain    = 0;
     AttackTime    = 0;
@@ -64,8 +65,17 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     ReleaseTime   = 0;
     Active        = 0;
     UseSoftLFO    = false;
-    Clear    ();
+    Damper        = false;
+    Clear ();
     }
+
+//#######################################################################
+void ENVELOPE_C::Mute (bool state)
+    {
+    Muted = state;
+    Clear ();
+    }
+
 
 //#######################################################################
 void ENVELOPE_C::SetTime (ESTATE state, float time)
@@ -108,24 +118,27 @@ float ENVELOPE_C::GetTime (ESTATE state)
 //#######################################################################
 void ENVELOPE_C::SetLevel (ESTATE state, float percent)
     {
+    String str;
+
     switch ( state )
         {
         case ESTATE::START:
+            str = "BASE";
             Bottom = percent;
             break;
         case ESTATE::ATTACK:
+            str = "MAXIMUM";
             Top = percent;
             break;
         case ESTATE::DECAY:
-            SetSustain = percent;
-            break;
         case ESTATE::SUSTAIN:
+            str = "SUSTAIN LEVEL";
             SetSustain = percent;
             break;
         case ESTATE::RELEASE:
             break;
         }
-    DBG ("Setting %s > %f", StateLabel[(int)state], percent );
+    DBG ("Setting %s > %f", str.c_str (), percent );
     }
 
 //#######################################################################
@@ -164,7 +177,7 @@ void ENVELOPE_C::SetSoftLFO (bool sel)
 //#######################################################################
 void ENVELOPE_C::Start ()
     {
-    if ( Active || (Top == 0.0) )
+    if ( Active || (Top == 0.0 || Muted ) )
         return;
     Active = true;
     State = ESTATE::START;
@@ -261,13 +274,13 @@ void ENVELOPE_C::Process (float deltaTime)
                 if ( Bottom < Top )             // if envelope is going to be running forwards...
                     {
                     // Make sure sustain doesn't exceed top or bottom in the currect direction
-                    if ( (Sustain < Bottom) || (Sustain > Top) )
-                        NoDecay = true;         // This case makes sustain a pointless parameter
+//                    if ( (Sustain < Bottom) || (Sustain > Top) )
+//                        NoDecay = true;         // This case makes sustain a pointless parameter
                     }
                 else
                     {
-                    if ( (Sustain > Bottom) || (Sustain < Top) )
-                        NoDecay = true;         // This case makes sustain a pointless parameter
+//                    if ( (Sustain > Bottom) || (Sustain < Top) )
+//                        NoDecay = true;         // This case makes sustain a pointless parameter
                      }
                 }
             Timer       = 0.0;
@@ -339,7 +352,7 @@ void ENVELOPE_C::Process (float deltaTime)
         //***************************************
         case ESTATE::SUSTAIN:
             {
-            if ( PeakLevel && (Current != Top) )
+            if ( PeakLevel && (Current != Top) && !DualUse )
                 {
                 Current = Top;
                 Updated = true;

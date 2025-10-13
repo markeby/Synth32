@@ -45,8 +45,10 @@ void MONITOR_C::DumpStats (void)
     printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
     Serial << hh << "total sketch code = " << ESP.getFreeSketchSpace () << endl;
-    Serial << hh << "      sketch size = " << ESP.getSketchSize ()      << endl;
-    Serial << hh << "      sketch used = " << ((ESP.getSketchSize () * 100) / ESP.getFreeSketchSpace ()) << "%" << endl << endl;
+    Serial << hh << "      sketch size = " << Settings.GetSketchSize () << endl;
+    Serial << hh << "      sketch used = " << ((ESP.getSketchSize () * 100) / ESP.getFreeSketchSpace ()) << "%" << endl;
+    Serial << hh << "    previous size = " << Settings.GetSketchSizePrev () << endl;
+    Serial << hh << "      size change = " << (Settings.GetSketchSize () - Settings.GetSketchSizePrev ()) << endl << endl;
 
     Serial << hh << "        Heap size = " << ESP.getHeapSize ()     << endl;
     Serial << hh << "larget heap block = " << ESP.getMaxAllocHeap () << endl;
@@ -205,21 +207,26 @@ void MONITOR_C::MenuSel (void)
                     this->Mode (MENU);
                     break;
                 case '1':
+                    DebugSeq  = !DebugSeq;
+                    Serial << "  MIDI sequence debugging " << (( DebugSeq ) ? "Enabled" : "Disabled") << endl;
+                    this->Mode (MENU);
+                    break;
+                case '2':
                     DebugMidi  = !DebugMidi;
                     Serial << "  MIDI debugging " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
-                case '2':
+                case '3':
                     DebugI2C  = !DebugI2C;
                     Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
-                case '3':
+                case '4':
                     DebugSynth = !DebugSynth;
                     Serial << "  Synth debugging " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
                     break;
-                case '4':
+                case '5':
                     DebugDisp = !DebugDisp;
                     Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
                     this->Mode (MENU);
@@ -275,10 +282,11 @@ void MONITOR_C::Menu (void)
     Serial << "\t######    Midi Subsystem    ######" << endl;
     if (  SynthFront.IsInTuning () )
         Serial << "\t******     Tuning mode      ******" << endl;
-    Serial << StateDebug (DebugMidi)  << "\t1   - Debug MIDI interface   " << endl;
-    Serial << StateDebug (DebugI2C)   << "\t2   - Debug I2C interface " << endl;
-    Serial << StateDebug (DebugSynth) << "\t3   - Debug Synth            " << endl;
-    Serial << StateDebug (DebugDisp ) << "\t4   - Debug Display Interface " << endl;
+    Serial << StateDebug (DebugSeq)   << "\t1   - Debug MIDI Sequencer" << endl;
+    Serial << StateDebug (DebugMidi)  << "\t2   - Debug MIDI devices" << endl;
+    Serial << StateDebug (DebugI2C)   << "\t3   - Debug I2C interface" << endl;
+    Serial << StateDebug (DebugSynth) << "\t4   - Debug Synth" << endl;
+    Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface" << endl;
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << endl;

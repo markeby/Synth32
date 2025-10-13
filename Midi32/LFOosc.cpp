@@ -18,7 +18,6 @@ static const char* Label = "LFO";
 #define DBG(args...)
 #endif
 
-#define CONST_MULT      (DA_RANGE / FULL_KEYS)
 static  const char*     _MixerNames[] = { "sine", "saw", "pulse" };
 
 //#######################################################################

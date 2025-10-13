@@ -29,37 +29,47 @@ private:
 
     KEY_T                 Down;
     KEY_T                 Up;
-    uint64_t              DispMessageTimer;
 
-    G49_FADER_MIDI_MAP         *G49MidiMapFader;
-    G49_BUTTON_MIDI_MAP        *G49MidiMapButton;
-    G49_ENCODER_MIDI_MAP       *G49MidiMapEcoder;
-    XL_MIDI_MAP                (*pMidiMapXL)[XL_MIDI_MAP_SIZE];
-    ENVELOPE_GENERATOR_C  EnvADSL;
-    SYNTH_LFO_C           Lfo[2];
-    VOICE_C*              pVoice[VOICE_COUNT];
+    G49_FADER_MIDI_MAP      *G49MidiMapFader;
+    G49_BUTTON_MIDI_MAP     *G49MidiMapButton;
+    G49_ENCODER_MIDI_MAP    *G49MidiMapEcoder;
+    XL_MIDI_MAP             (*pMidiMapXL)[XL_MIDI_MAP_SIZE];
+    ENVELOPE_GENERATOR_C    EnvADSL;
+    SYNTH_LFO_C             Lfo[2];
+    VOICE_C*                pVoice[VOICE_COUNT];
+    bool                    VoiceMute[MAP_COUNT];
 
-    bool                  ResolutionMode;
-    bool                  MapSelectMode;
-    bool                  LoadSaveMode;
-    SYNTH_CONFIG_C        SynthConfig;
-    short                 CurrentMidiSelected;
-    short                 CurrentMapSelected;
-    short                 CurrentVoiceSelected;
-    short                 CurrentFilterSelected;
-    short                 CurrentDisplayPage;
-    short                 LoadSaveSelection;
-    NOVATION_XL_C         LaunchControl;
-    bool                  SetTuning;
-    uint16_t              TuningLevel[ENVELOPE_COUNT+1];
-    uint16_t              TuningFlt[FILTER_DEVICES];
-    byte                  TuningOutputSelect;
-    bool                  TuningChange;
-    ushort                CalibrationReference;
-    short                 CalibrationBaseDigital;
-    short                 CalibrationPhase;
-    short                 CalibrationLFO;
-    ushort                CalibrationAtoD;
+    short                   VolumeMaster;
+    short                   VolumeOscMaster;
+    short                   VolumeFltMaster;
+    short                   VolumeSprMaster;
+
+    bool                    ResolutionMode;
+    bool                    MapSelectMode;
+    bool                    LoadSaveMode;
+    SYNTH_CONFIG_C          SynthConfig;
+    bool                    KaptureMidiKeyboard;
+    short                   CurrentMidiSelected;
+    short                   CurrentMapSelected;
+    short                   CurrentVoiceSelected;
+    short                   CurrentFilterSelected;
+    short                   CurrentConfigSelected;
+    short                   CurrentDisplayPage;
+
+    short                   LoadSaveSelection;
+    NOVATION_XL_C           LaunchControl;
+
+    bool                    SetTuning;
+    uint16_t                TuningLevel[ENVELOPE_COUNT+1];
+    uint16_t                TuningFlt[FILTER_DEVICES];
+    byte                    TuningOutputSelect;
+    bool                    TuningChange;
+    uint64_t                TuningSelectionTime;
+    ushort                  CalibrationReference;
+    short                   CalibrationBaseDigital;
+    short                   CalibrationPhase;
+    short                   CalibrationLFO;
+    ushort                  CalibrationAtoD;
 
     void   UpdateMapModeDisplay     (int sel);
 public:
@@ -68,13 +78,19 @@ public:
     void Begin                      (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
     void MidiCommandConfiguration   (void);
     void Loop                       (void);
+    void MasterVolume               (short md);
     void Clear                      (void);
-    void Controller                 (short mchan, byte type, byte value);
+    void FuncController             (short mchan, byte type, byte value);
+    void SeqController              (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
     void TemplateSelect             (byte index);
     void TemplateRefresh            (void)
         { LaunchControl.TemplateRefresh (); }
+    void KeyboardKapture            (bool state)
+        { KaptureMidiKeyboard = state; }
+    bool KeyboardKapture            (void)
+        { return (KaptureMidiKeyboard); }
 
     //#######################################################################
     // FrontEndLFO.cpp
@@ -111,9 +127,14 @@ public:
     void SaveSelectedConfig         (void);
     void LoadSaveBump               (short down);
     void OpenLoadSavePage           (void);
+    byte CurrentMidi                (void)
+        { return (CurrentMidiSelected & 0xFF); }
 
     //#######################################################################
     // FrontEndOscCtrl.cpp
+    void VoiceDamperToggle          (short ch, bool state);
+    void MuteVoicesReset            (void);
+    void MuteVoiceToggle            (void);
     void UpdateOscDisplay           (void);
     void UpdateOscButtons           (void);
     void UpdateFltDisplay           (void);

@@ -16,15 +16,15 @@ PROJECT := Midi32.ino
 SHARED := ../Common
 
 # header files
-INCLUDES := config.h Debug.h Envelope.h  FrontEnd.h I2Cdevices.h I2Cmessages.h Novation.h \
-            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h UpdateOTA.h Voice.h Filter4.h \
-	    $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+INCLUDES := config.h UpdateOTA.h Debug.h I2Cdevices.h I2Cmessages.h Envelope.h FrontEnd.h \
+            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h Voice.h Filter4.h Novation.h \
+	        $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 	   
 
 # source files
-SOURCES := $(PROJECT) Config.cpp SoftLFO.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp Novation.cpp \
-           SerialMonitor.cpp FrontEnd.cpp FrontEndVoice.cpp FrontEndLFO.cpp FrontEndTuning.cpp Filter4.cpp \
-	   FrontEndMapping.cpp Voice.cpp Osc.cpp Controls.cpp LFOosc.cpp Envelope.cpp UpdateOTA.cpp
+SOURCES := $(PROJECT) Config.cpp SerialMonitor.cpp UpdateOTA.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
+           FrontEnd.cpp FrontEnd_Voice.cpp FrontEnd_LFO.cpp FrontEnd_Tuning.cpp FrontEnd_Mapping.cpp FrontEnd_Seq.cpp \
+	       SoftLFO.cpp Filter4.cpp Voice.cpp Osc.cpp Controls.cpp LFOosc.cpp Envelope.cpp Novation.cpp 
 
 # serial port for uploading
 DEFAULT_PORT := COM3
@@ -85,12 +85,12 @@ endif
 ############################################
 # User input targets
 ############################################
-PHONY: testOTA lab c3 monitor clean
+PHONY: OTA Serial monitor clean
 
-Midi32_OTA :
+OTA :
 	@$(MAKE) target OTA=$(UPLOAD_OTA)
 
-Midi32_Serial :
+Serial :
 	@$(MAKE) target PT=$(SERIAL_PORT)
 
 monitor :

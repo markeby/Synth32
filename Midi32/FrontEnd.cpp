@@ -21,17 +21,21 @@
 
 static const char* Label  = "TOP";
 static const char* LabelM = "M";
+static const char* LabelS = "SEQ";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
-#define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,DEBUG_NO_INDEX,args);}}
+#define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,mchan,args);}}
+#define DBGS(args...) {if(DebugSeq){DebugMsg(LabelS,mchan,args);}}
 #else
 #define DBG(args...)
 #define DBGM(args...)
+#define DBGS(args...)
 #endif
 
 //###################################################################
 static      USB Usb;
 static      UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);
+//static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 static      MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);
 
 using namespace MIDI_NAMESPACE;
@@ -40,21 +44,20 @@ using namespace DISP_MESSAGE_N;
 typedef Message<MIDI_NAMESPACE::DefaultSettings::SysExMaxSize> MidiMessage;
 
 //###################################################################
-//void FuncMessage (const MidiInterface::MidiMessage& msg)
 #ifdef DEBUG_MIDI_MSG
 void FuncMessage0 (const MidiMessage& msg)
     {
-    printf ("*** MIDI 0 MESSAGE:    type = %X   channel = %X   data1 = %X   data2 = %X   length = %X\n",
+    printf ("*** MIDI 0 MESSAGE:    type = 0x%02X  channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
             msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 void FuncMessage1 (const MidiMessage& msg)
     {
-    printf ("*** MIDI 1 MESSAGE:    type = %X   channel = %X   data1 = %X   data2 = %X   length = %X\n",
+    printf ("*** MIDI 1 MESSAGE:    type = 0x%02X   channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
             msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 void FuncMessage2 (const MidiMessage& msg)
     {
-    printf ("*** MIDI 2 MESSAGE:    type = %X   channel = %X   data1 = %X   data2 = %X   length = %X\n",
+    printf ("*** MIDI 2 MESSAGE:    type = 0x%02X   channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
             msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 #endif
@@ -62,9 +65,7 @@ void FuncMessage2 (const MidiMessage& msg)
 //###################################################################
 void FuncError (int8_t err)
     {
-#ifdef DEBUG_FUNC
-     printf ("\n\n*** MIDI ERROR %d\n", err);
-#endif
+    printf ("\n\n*** MIDI ERROR %d\n", err);
     }
 
 //###################################################################
@@ -108,31 +109,67 @@ void FuncSystemEx (byte * array, unsigned size)
     }
 
 //###################################################################
-static void  FuncKeyDown (uint8_t mchan, uint8_t key, uint8_t velocity)
+static void  FuncKeyDownDevice (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    DBGM ("Key down  MIDI: %d  key: %d  velocity: %d", mchan, key, velocity);
-    SynthFront.KeyDown (mchan, key, velocity);
+    if ( SynthFront.KeyboardKapture () )
+        {
+        if ( SynthFront.CurrentMidi() > 0 )
+            mchan = SynthFront.CurrentMidi ();
+        }
+    DBGM ("Key down: %d  velocity: %d", mchan, key, velocity);
+    SynthFront.KeyDown(mchan, key, velocity);
     }
 
 //###################################################################
-static void  FuncKeyUp (uint8_t mchan, uint8_t key, uint8_t velocity)
+static void  FuncKeyUpDevice (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    DBGM ("Key up  MIDI: %d  key: %d  velocity: %d", mchan, key, velocity);
+    if ( SynthFront.KeyboardKapture () )
+        {
+        if ( SynthFront.CurrentMidi() > 0 )
+            mchan = SynthFront.CurrentMidi ();
+        }
+    DBGM ("Key up: %d  velocity: %d", mchan, key, velocity);
     SynthFront.KeyUp (mchan, key, velocity);
     }
 
 //###################################################################
-static void FuncController (uint8_t mchan, uint8_t type, uint8_t value)
+static void  FuncKeyDownSeq (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    DBGM ("Controller  MIDI %2.2X  type %2.2X  value %2.2X", mchan, type, value);
-    SynthFront.Controller (mchan, type, value);
+    DBGS ("Key down: %d  velocity: %d", mchan, key, velocity);
+    SynthFront.KeyDown(mchan, key, velocity);
+    }
+
+//###################################################################
+static void  FuncKeyUpSeq (uint8_t mchan, uint8_t key, uint8_t velocity)
+    {
+    DBGS ("Key up: %d  velocity: %d", mchan, key, velocity);
+    SynthFront.KeyUp (mchan, key, velocity);
+    }
+
+//###################################################################
+static void FuncControlChange (uint8_t mchan, uint8_t type, uint8_t value)
+    {
+    DBGM ("Function Control change: 0x%2.2X  value 0x%2.2X", mchan, type, value);
+    SynthFront.FuncController (mchan, type, value);
+    }
+
+//###################################################################
+static void SeqControlChange (uint8_t mchan, uint8_t type, uint8_t value)
+    {
+    DBGM ("Sequence Control change: 0x%2.2X  value 0x%2.2X", mchan, type, value);
+    SynthFront.SeqController (mchan, type, value);
     }
 
 //###################################################################
 static void FuncPitchBend (uint8_t mchan, int value)
     {
-    DBGM ("Pitch Bend  MIDI %2.2X  value %d", mchan, value);
+    DBGM ("Pitch Bend value %d", mchan, value);
     value = (value + 8192) >> 2;
+    if ( SynthFront.KeyboardKapture () )
+        {
+        if ( SynthFront.CurrentMidi() > 0 )
+            mchan = SynthFront.CurrentMidi ();
+        }
     SynthFront.PitchBend (mchan, value);
     }
 
@@ -156,30 +193,31 @@ SYNTH_FRONT_C::SYNTH_FRONT_C (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI
     CurrentMidiSelected = 0;
     CalibrationPhase    = 0;
     LoadSaveSelection   = 1;
+    TuningSelectionTime = 0;
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::MidiCommandConfiguration ()
     {
-    Midi_0.setHandleNoteOn               (FuncKeyDown);
-    Midi_1.setHandleNoteOn               (FuncKeyDown);
-    Midi_2.setHandleNoteOn               (FuncKeyDown);
+    Midi_0.setHandleNoteOn               (FuncKeyDownDevice);
+    Midi_1.setHandleNoteOn               (FuncKeyDownDevice);
+    Midi_2.setHandleNoteOn               (FuncKeyDownSeq);
 
-    Midi_0.setHandleNoteOff              (FuncKeyUp);
-    Midi_1.setHandleNoteOff              (FuncKeyUp);
-    Midi_2.setHandleNoteOff              (FuncKeyUp);
+    Midi_0.setHandleNoteOff              (FuncKeyUpDevice);
+    Midi_1.setHandleNoteOff              (FuncKeyUpDevice);
+    Midi_2.setHandleNoteOff              (FuncKeyUpSeq);
 
-    Midi_0.setHandleControlChange        (FuncController);
-    Midi_1.setHandleControlChange        (FuncController);
-//  Midi_2.setHandleControlChange        (FuncController);
+    Midi_0.setHandleControlChange        (FuncControlChange);
+    Midi_1.setHandleControlChange        (FuncControlChange);
+    Midi_2.setHandleControlChange        (SeqControlChange);
 
     Midi_0.setHandlePitchBend            (FuncPitchBend);
     Midi_1.setHandlePitchBend            (FuncPitchBend);
 //  Midi_2.setHandlePitchBend            (FuncPitchBend);
 
     Midi_0.setHandleError                (FuncError);
-//  Midi_1.setHandleError                (FuncError);
-//  Midi_2.setHandleError                (FuncError);
+    Midi_1.setHandleError                (FuncError);
+    Midi_2.setHandleError                (FuncError);
 
 //  Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
 //  Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
@@ -255,6 +293,17 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
 
     printf ("\t>>>\tSynth channels\n");
     short osc = voice;
+    VolumeMaster    = mixer + 8;        // Master volume port
+    VolumeOscMaster = mixer + 9;        // Oscillator master volume port
+    VolumeFltMaster = mixer + 10;       // Filter master volume port
+    VolumeSprMaster = mixer + 11;       // Spare master volume port
+
+    MasterVolume (45);
+    I2cDevices.D2Analog      (VolumeOscMaster, 0);
+    I2cDevices.D2Analog      (VolumeFltMaster, 0);
+    I2cDevices.D2Analog      (VolumeSprMaster, DA_MAX);     // mute for now
+    I2cDevices.UpdateAnalog  ();
+
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         pVoice[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital, EnvADSL);
@@ -275,6 +324,7 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
     ResolutionMode = true;
 
     printf ("\t>>>\tMidi interfaces startup\n");
+    // MIDI interface for Novation Launch Control XT
     while ( Usb.Init () == -1 )
         {
         delay (200);
@@ -282,10 +332,12 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
         }
     printf ("\t>>>\tUsb midi ready\n");
 
+    // MIDI interface for keyboard
     Serial1.begin (31250, SERIAL_8N1, RXD1, TXD1, false);
     Midi_1.begin (MIDI_CHANNEL_OMNI);
     printf ("\t>>>\tSerial1 midi ready\n");
 
+    // MIDI interface from computer for sequencing
     Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
     Midi_2.begin (MIDI_CHANNEL_OMNI);
     printf ("\t>>>\tSerial2 midi ready\n");
@@ -293,6 +345,20 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
     LaunchControl.Begin (pMidiMapXL);
 
     MidiCommandConfiguration ();
+    }
+
+//#######################################################################
+void SYNTH_FRONT_C::MasterVolume (short md)
+    {
+    int x = 0;
+
+    if ( md > 0 )                               // zero is not valid flor log conversion.
+        x = (float(log(md))* 845.3431);         // convert linear MIDI value to logorithmic D to A value. (0 -> 127) maps to (0 ->4095)
+    x = DA_MAX - x;                             // Volume is a voltage controlled attenuator with 0 = 0 db, 4095 = -100 db change in output.
+
+    DBG ("D to A value for volume = %d", x);
+    I2cDevices.D2Analog      (VolumeMaster, x);
+    I2cDevices.UpdateAnalog  ();
     }
 
 //#######################################################################
@@ -325,9 +391,10 @@ void SYNTH_FRONT_C::PageAdvance ()
             next++;
             continue;
             }
-        CurrentMapSelected   = next;
-        CurrentVoiceSelected = next << 1;
-        CurrentMidiSelected  = SynthConfig.Voice[next].GetVoiceMidi ();
+        CurrentMapSelected    = next;
+        CurrentConfigSelected = next;
+        CurrentVoiceSelected  = next << 1;
+        CurrentMidiSelected   = SynthConfig.Voice[next].GetVoiceMidi ();
         UpdateOscDisplay ();
         return;
         }
@@ -337,6 +404,7 @@ void SYNTH_FRONT_C::PageAdvance ()
         {
         CurrentVoiceSelected  = -1;
         CurrentMapSelected    = next;
+        CurrentConfigSelected = index;
         CurrentFilterSelected = index << 1;
         CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
         UpdateFltDisplay ();
@@ -352,6 +420,7 @@ void SYNTH_FRONT_C::PageAdvance ()
             continue;
             }
         CurrentMapSelected    = next;
+        CurrentConfigSelected = index;
         CurrentFilterSelected = index << 1;
         CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
         UpdateFltDisplay ();
@@ -363,6 +432,7 @@ void SYNTH_FRONT_C::PageAdvance ()
         {
         CurrentMapSelected    = 0;
         CurrentVoiceSelected  = 0;
+        CurrentConfigSelected = 0;
         CurrentFilterSelected = -1;
         CurrentMidiSelected   = SynthConfig.Voice[0].GetVoiceMidi ();
         UpdateOscDisplay ();
@@ -373,12 +443,13 @@ void SYNTH_FRONT_C::PageAdvance ()
         CurrentMidiSelected   = 0;
         CurrentFilterSelected = -1;       // de-select functions to disable
         CurrentVoiceSelected  = -1;
+        CurrentConfigSelected = -1;
         UpdateLfoDisplay ();
         }
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
+void SYNTH_FRONT_C::FuncController (short mchan, byte type, byte value)
     {
     int   z;
     short chan = mchan - 1;;
@@ -418,10 +489,20 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
                 switch ( chan )
                     {
                     case 0 ... 7:
-                        for ( z = 0;  z < VOICE_COUNT;  z++ )
-                            pVoice[z]->TuningState (false);
-                        pVoice[chan]->TuningState (true);
-                        DisplayMessage.TuningSelect (chan);
+                        if ( (RunTime - TuningSelectionTime) < 5000 )
+                            {
+                            pVoice[chan]->TuningState (true);
+                            DisplayMessage.TuningSelectSecond (chan);
+                            TuningSelectionTime = 0;
+                            }
+                        else
+                            {
+                            for ( z = 0;  z < VOICE_COUNT;  z++ )
+                                pVoice[z]->TuningState (false);
+                            pVoice[chan]->TuningState (true);
+                            DisplayMessage.TuningSelect (chan);
+                            TuningSelectionTime = RunTime;
+                            }
                         break;
                     case 8 ... 12:
                         this->TuningOutputBitFlip (chan - 8);
@@ -474,6 +555,7 @@ void SYNTH_FRONT_C::Controller (short mchan, byte type, byte value)
             break;
 
         case 120 ... 127:           // all notes stop
+            DBG ("All note clear");
             Clear ();
             break;
 

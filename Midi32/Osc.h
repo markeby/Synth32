@@ -42,7 +42,7 @@ class   OSC_C
     {
 private:
     ENVELOPE_C*             Mix[OSC_MIXER_COUNT];
-    uint16_t                OctaveArray[FULL_KEYS];
+    uint16_t                OctaveArray[KEYS_FULL];
 
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
@@ -60,6 +60,7 @@ public:
     void    SetTuningVolume     (byte select, uint16_t level);
     void    SetTuningNote       (byte note);
     void    TuningAdjust        (bool up);
+    void    Mute                (bool state);
     void    NoteSet             (byte key, byte velocity);
     void    NoteClear           (void);
     void    Clear               (void);
@@ -68,6 +69,7 @@ public:
 
     //#######################################################################
     void    SetSoftLFO          (byte wave, bool sel)               { Mix[wave]->SetSoftLFO (sel); }
+    void    SetDamperMode       (byte wave, bool sel)               { Mix[wave]->SetDamperMode (sel); }
     void    SetAttackTime       (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::ATTACK, time); }
     float   GetAttackTime       (byte wave)                         { return (Mix[wave]->GetTime  (ESTATE::ATTACK)); }
     void    SetDecayTime        (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }

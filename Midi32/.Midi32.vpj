@@ -29,7 +29,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="pbench make Midi32_OTA"/>
+                <Exec CmdLine="pbench make OTA"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -37,7 +37,7 @@
                 RunFromDir="%rw"
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveNone">
-                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
+                <Exec CmdLine="ss -com:COM3"/>
             </Target>
             <Target
                 Name="Build-monitor"
@@ -47,7 +47,7 @@
                 SaveOption="SaveNone"
                 BuildFirst="1"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make monitor"/>
+                <Exec CmdLine="pbench make OTA &amp; ss -com:COM3"/>
             </Target>
             <Target
                 Name="Clean"
@@ -56,7 +56,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; pbench make Midi32_OTA"/>
+                <Exec CmdLine="make clean &amp; pbench make OTA"/>
             </Target>
             <Target
                 Name="Debug"
@@ -93,7 +93,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="ptime make Midi32_serial"/>
+                <Exec CmdLine="ptime make Serial"/>
             </Target>
             <Target
                 Name="Monitor"
@@ -101,7 +101,7 @@
                 RunFromDir="%rw"
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveNone">
-                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
+                <Exec CmdLine="ss -com:COM3"/>
             </Target>
             <Target
                 Name="Build-monitor"
@@ -111,7 +111,7 @@
                 SaveOption="SaveNone"
                 BuildFirst="1"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make monitor"/>
+                <Exec CmdLine="Make Serial &amp; ss -com:COM3 "/>
             </Target>
             <Target
                 Name="Clean"
@@ -120,7 +120,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; make Midi32_Serial"/>
+                <Exec CmdLine="make clean &amp; make Serial"/>
             </Target>
             <Target
                 Name="Debug"
@@ -158,10 +158,11 @@
             <F N="Envelope.cpp"/>
             <F N="Filter4.cpp"/>
             <F N="FrontEnd.cpp"/>
-            <F N="FrontEndLFO.cpp"/>
-            <F N="FrontEndMapping.cpp"/>
-            <F N="FrontEndTuning.cpp"/>
-            <F N="FrontEndVoice.cpp"/>
+            <F N="FrontEnd_LFO.cpp"/>
+            <F N="FrontEnd_Mapping.cpp"/>
+            <F N="FrontEnd_Seq.cpp"/>
+            <F N="FrontEnd_Tuning.cpp"/>
+            <F N="FrontEnd_Voice.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
             <F N="LFOosc.cpp"/>

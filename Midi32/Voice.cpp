@@ -27,7 +27,6 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, 
     ModMux[2] = mod_mux_digital + 4;
     Osc.Begin (num, osc_d_a, UseCount, envgen);
     Flt.Begin (num, osc_d_a + (( num & 1 ) ? 10 : 16), UseCount, envgen);
-    SetMux (true);                   // default with oscillators enable
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
     }
@@ -67,13 +66,6 @@ bool VOICE_C::NoteClear (byte mchan, byte key)
     }
 
 //#######################################################################
-void VOICE_C::SetMux (bool bypass)
-    {
-    I2cDevices.DigitalOut (DigitalOutOscillator, bypass);           // Just hard code on until I build an newer mixer/switch board
-    I2cDevices.UpdateDigital ();
-    }
-
-//#######################################################################
 void VOICE_C::SetModMux (byte select)
     {
     for ( int z = 0;  z < NUM_MOD_MUX_IN;  z++ )
@@ -99,8 +91,9 @@ void VOICE_C::NoiseReset ()
 //#######################################################################
 void VOICE_C::SetOutputMask (byte bitmap)
     {
-    SetMux (bitmap & 1);
+    I2cDevices.DigitalOut (DigitalOutOscillator, bitmap & 1);
     Flt.SetOutMap (bitmap >> 1);
+    I2cDevices.UpdateDigital ();
     }
 
 //#######################################################################
@@ -109,5 +102,4 @@ void VOICE_C::TuningAdjust (bool up)
     if ( TuningOn )
         Osc.TuningAdjust (up);
     }
-
 

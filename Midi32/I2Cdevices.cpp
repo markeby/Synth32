@@ -36,7 +36,7 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
     {
     I2C_LOCATION_T* zploc = ploc;
 
-    for ( this->BoardCount = 0;  zploc->Port != 0xFF;  this->BoardCount++, zploc++ );
+    for ( this->BoardCount = 0;  zploc->Port != 255;  this->BoardCount++, zploc++ );
     this->CallbackAtoD   = nullptr;
     AtoD_loopDevice      = 0;
     SystemFail           = false;

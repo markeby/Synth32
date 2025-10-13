@@ -95,6 +95,16 @@ public:
         }
 
     //#################################################
+    void TuningSelectSecond (byte ch)
+        {
+        this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
+                          0,
+                          ch,
+                          DISP_MESSAGE_N::EFFECT_C::ALTERNATE,
+                          0);
+        }
+
+    //#################################################
     void TuningLevel (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
@@ -159,6 +169,15 @@ public:
                           channel,
                           effect,
                           value);
+        }
+
+    //#################################################
+    void OscDamperMode (byte channel, bool sel)
+        {
+        this->SendUpdateOsc (0,
+                             channel,
+                             DISP_MESSAGE_N::EFFECT_C::DAMPER,
+                             (( sel ) ? 1 : 0));
         }
 
     //#################################################

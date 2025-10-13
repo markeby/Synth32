@@ -5097,6 +5097,17 @@
 		)
 		(uuid "2c9f860c-61b7-496f-a16d-30ea57dcb583")
 	)
+	(text "Note 1: Adjust for C0 to C8"
+		(exclude_from_sim no)
+		(at 279.146 181.102 0)
+		(effects
+			(font
+				(size 1.5748 1.5748)
+			)
+			(justify left top)
+		)
+		(uuid "2ee61121-2f23-49d4-b4d3-5e2d03140e21")
+	)
 	(text "_{TRIM}"
 		(exclude_from_sim no)
 		(at 121.666 65.024 0)
@@ -5155,6 +5166,16 @@
 		)
 		(uuid "3898e0e1-d6d7-460f-899b-687c76aaf63f")
 	)
+	(text "[Note 1]"
+		(exclude_from_sim no)
+		(at 312.674 29.972 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3cdb66e3-621e-4654-b5e6-3e353ca94698")
+	)
 	(text "Osc #1"
 		(exclude_from_sim no)
 		(at 289.306 154.94 0)
@@ -5209,6 +5230,16 @@
 			(justify left bottom)
 		)
 		(uuid "4bc726f3-f3b5-4006-b20e-1205e93688d6")
+	)
+	(text "[Note 1]"
+		(exclude_from_sim no)
+		(at 167.894 29.21 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "4d7b4a66-2489-4434-8976-4f1f438ed20f")
 	)
 	(text "+12V"
 		(exclude_from_sim no)
@@ -5372,7 +5403,7 @@
 		)
 		(uuid "8946d35e-7491-45d3-8ceb-4b989592a00d")
 	)
-	(text "0-10V"
+	(text "0-8V"
 		(exclude_from_sim no)
 		(at 158.242 28.194 0)
 		(effects
@@ -5575,7 +5606,7 @@
 		)
 		(uuid "d12939ec-9abc-43ec-a336-42f3db69118d")
 	)
-	(text "0-10V"
+	(text "0-8V"
 		(exclude_from_sim no)
 		(at 303.022 28.194 0)
 		(effects
@@ -13452,7 +13483,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22.1k"
+		(property "Value" "12k"
 			(at 149.606 32.004 0)
 			(effects
 				(font
@@ -13672,7 +13703,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "22.1k"
+		(property "Value" "12k"
 			(at 294.386 32.004 0)
 			(effects
 				(font

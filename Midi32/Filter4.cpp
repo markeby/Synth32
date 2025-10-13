@@ -33,7 +33,9 @@ void FLT4_C::Begin (short num, short first_device, byte& usecount, ENVELOPE_GENE
     FreqIO   = first_device;
     QuIO     = first_device + 1;
     Funct[0] = envgen.NewADSR (num, envNames[0], FreqIO, usecount);
+    Funct[0]->SetDualUse (true);
     Funct[1] = envgen.NewADSR (num, envNames[1], QuIO,   usecount);
+    Funct[1]->SetDualUse (true);
 
     short dig = first_device + 4;       // get first digital switch
     if ( num & 1 )                      //   odd numbered units need 2 more
@@ -76,7 +78,6 @@ void FLT4_C::SetOutMap (byte fmap)
 
     for ( short z = 0;  z < 4;  z++ )
         I2cDevices.DigitalOut (OutSwitch[z], (fmap >> z) & 1);
-    I2cDevices.UpdateDigital ();
     }
 
 //#######################################################################
