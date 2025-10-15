@@ -171,6 +171,7 @@ class TUNE_OSC_WIDGET_C
     public:
              TUNE_OSC_WIDGET_C (lv_obj_t* base, short x, short y);
         void Set               (short chan);
+        void Set2              (short chan);
     };
 
 //############################################

@@ -62,8 +62,11 @@ void MONITOR_C::DumpStats (void)
     Serial << "==========================================" << endl;
     printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
-    Serial << hh << "       sketch size = " << ESP.getSketchSize () << endl;
-    Serial << hh << " free sketch space = " << ESP.getFreeSketchSpace () << endl << endl;
+    Serial << hh << "total sketch code = " << ESP.getFreeSketchSpace () << endl;
+    Serial << hh << "      sketch size = " << Settings.GetSketchSize () << endl;
+    Serial << hh << "      sketch used = " << ((ESP.getSketchSize () * 100) / ESP.getFreeSketchSpace ()) << "%" << endl;
+    Serial << hh << "    previous size = " << Settings.GetSketchSizePrev () << endl;
+    Serial << hh << "      size change = " << (Settings.GetSketchSize () - Settings.GetSketchSizePrev ()) << endl << endl;
 
     Serial << hh << "         Heap size = " << ESP.getHeapSize () << endl;
     Serial << hh << " larget heap block = " << ESP.getMaxAllocHeap () << endl;

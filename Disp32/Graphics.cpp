@@ -659,6 +659,9 @@ void PAGE_TUNE_C::UpdatePage (byte ch, EFFECT_C effect, short value)
         case EFFECT_C::SELECTED:
             this->TuneSelection->Set (ch);
             break;
+        case EFFECT_C::ALTERNATE:
+            this->TuneSelection->Set2 (ch);
+            break;
         case EFFECT_C::VALUE:
             this->Value->Set (value);
             break;

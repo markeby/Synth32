@@ -55,12 +55,12 @@ void setup (void)
     {
  // Pause here so that init of serial port in the monitor class can complete
     BootDebug ();
-    printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
-    printf ("\t>>> Start Settings config...\n");
-
-
-    printf ("\t>>> Start Settings config...\n");
     Settings.Begin ();
+    printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
+    int z = Settings.GetSketchSize () - Settings.GetSketchSizePrev ();
+    if ( z != 0 )
+        printf ("\t>>> Change in size = %d\n", z);
+    printf ("\n");
 
     printf ("\t>>> Startup Graphics...\n");
     Graphics.Begin ();

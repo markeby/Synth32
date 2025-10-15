@@ -14,6 +14,7 @@ static const char* sysKeySpace  = "SysP";
 static const char* sysKeySSID   = "SSID";
 static const char* sysKeyPSWD   = "PASSD";
 static const char* sysKeyDBG    = "DBG";
+static const char* sysKeySketch   = "SkSize";
 
 //#######################################################################
 void SETTINGS_C::ClearAll (void)
@@ -79,6 +80,23 @@ void SETTINGS_C::RestoreDebugFlags ()
     }
 
 //#######################################################################
+void SETTINGS_C::PutSystemParam (const char* name, int param)
+    {
+    Prefs.begin  (sysKeySpace, false);
+    Prefs.putInt (name, param);
+    Prefs.end    ();
+    }
+
+//#######################################################################
+int SETTINGS_C::GetSystemParam (const char* name)
+    {
+    Prefs.begin (sysKeySpace, false);
+    int z = Prefs.getInt (name, 0);
+    Prefs.end ();
+    return (z);
+    }
+
+//#######################################################################
 SETTINGS_C::SETTINGS_C (void)
     {
     }
@@ -93,6 +111,9 @@ void SETTINGS_C::Begin (void)
         }
     Prefs.end ();
     Settings.RestoreDebugFlags ();
+    SketchSizePrev = GetSystemParam (sysKeySketch);
+    SketchSize = ESP.getSketchSize ();
+    PutSystemParam (sysKeySketch, SketchSize);
     }
 
 //#######################################################################

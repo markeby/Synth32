@@ -21,25 +21,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="pbench make Disp32_OTA"/>
-            </Target>
-            <Target
-                Name="Monitor"
-                MenuCaption="Monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
-            </Target>
-            <Target
-                Name="Build-monitor"
-                MenuCaption="Build-monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone"
-                BuildFirst="1"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="make monitor"/>
+                <Exec CmdLine="pbench make OTA"/>
             </Target>
             <Target
                 Name="Clean"
@@ -48,7 +30,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; pbench make Disp32_OTA"/>
+                <Exec CmdLine="make clean &amp; pbench make OTA"/>
             </Target>
         </Menu>
     </Config>
@@ -68,25 +50,7 @@
                 ClearProcessBuffer="1"
                 Verbose="1"
                 Beep="1">
-                <Exec CmdLine="pbench make Disp32_Serial"/>
-            </Target>
-            <Target
-                Name="Monitor"
-                MenuCaption="Monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="arduino-cli monitor -p COM3 -c baudrate=115200"/>
-            </Target>
-            <Target
-                Name="Build-monitor"
-                MenuCaption="Build-monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone"
-                BuildFirst="1"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="make monitor"/>
+                <Exec CmdLine="pbench make Serial"/>
             </Target>
             <Target
                 Name="Clean"
@@ -95,7 +59,7 @@
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; pbench make Disp32_Serial"/>
+                <Exec CmdLine="make clean &amp; pbench make Serial"/>
             </Target>
         </Menu>
     </Config>
@@ -144,6 +108,7 @@
             <F N="ESP_Panel_Board_Supported.h"/>
             <F N="ESP_Panel_Conf.h"/>
             <F N="Graphics.h"/>
+            <F N="lv_conf.h"/>
             <F N="lvgl_port_v8.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
@@ -155,7 +120,6 @@
             GUID="{3935C99B-B3E5-41A0-9D1B-CAEB26422F2D}">
             <F N="../.gitignore"/>
             <F N="adr.bat"/>
-            <F N="arduino-cli.yaml"/>
             <F
                 N="Makefile"
                 Type="Makefile"/>

@@ -93,16 +93,13 @@ endif
 ############################################
 # User input targets
 ############################################
-PHONY: testOTA lab c3 monitor clean
+PHONY: OTA Serial clean
 
-Disp32_OTA :
+OTA :
 	@$(MAKE) target OTA=$(UPLOAD_OTA)
 
-Disp32_Serial :
+Serial :
 	@$(MAKE) target PT=$(SERIAL_PORT)
-
-monitor :
-	@$(ARDUNIO) monitor -p $(PORT) -c baudrate=115200
 
 clean :
 	@rmdir /Q /S $(OUTPUT)
