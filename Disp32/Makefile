@@ -68,7 +68,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED) 
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED) -j 0
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 
