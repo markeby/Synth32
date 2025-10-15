@@ -12,10 +12,13 @@ S3DEV := 1
 # Base package name
 PROJECT := Disp32.ino
 
-# header files
+# Shared files directory
 SHARED := ../Common
 
-# Shared files directory
+# library paths
+LIBS := --libraries ./libraries --library $(SHARED) 
+
+# header files
 INCLUDES := config.h SerialMonitor.h Settings.h Graphics.h Widgets.h ClientI2C.h\
             ESP_Panel_Board_Custom.h ESP_Panel_Board_Supported.h ESP_Panel_Conf.h lvgl_port_v8.h \
 	    Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
@@ -68,7 +71,7 @@ endif
 ############################################
 ARDUNIO := arduino-cli
 BUILD   := --build-path $(OUTPUT)/build --output-dir $(OUTPUT)
-COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log --library $(SHARED) -j 0
+COMPILE := compile $(BUILD) --log-level warn --log-file $(OUTPUT)/build.log $(LIBS) -j 0
 TARGET  := $(OUTPUT)/$(PROJECT).bin
 MD5      = md5sums -u $(TARGET)
 

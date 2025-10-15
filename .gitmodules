@@ -1,0 +1,3 @@
+[submodule "Disp32/libraries"]
+	path = Disp32/libraries
+	url = git@github.com:markeby/libraries_Disp32
