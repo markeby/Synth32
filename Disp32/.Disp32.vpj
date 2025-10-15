@@ -6,35 +6,6 @@
     WorkingDir="."
     VCSProject="Git:">
     <Config
-        Name="OTA Loader"
-        Type="cpp"
-        DebugCallbackName="gdb"
-        OutputFile=""
-        CompilerConfigName="Latest Version">
-        <Menu>
-            <Target
-                Name="Build"
-                MenuCaption="&amp;Build"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveWorkspaceFiles"
-                RunFromDir="%rw"
-                ClearProcessBuffer="1"
-                Verbose="1"
-                Beep="1">
-                <Exec CmdLine="pbench make OTA"/>
-            </Target>
-            <Target
-                Name="Clean"
-                MenuCaption="Clean"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveWorkspaceFiles"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="make clean &amp; pbench make OTA"/>
-            </Target>
-        </Menu>
-    </Config>
-    <Config
         Name="Serial Loader"
         Type="cpp"
         DebugCallbackName="gdb"
