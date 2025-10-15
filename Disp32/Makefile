@@ -96,7 +96,10 @@ endif
 ############################################
 # User input targets
 ############################################
-PHONY: OTA Serial clean
+PHONY: libs OTA Serial clean
+
+libs :
+	@git submodule update --init --recursive
 
 OTA :
 	@$(MAKE) target OTA=$(UPLOAD_OTA)
