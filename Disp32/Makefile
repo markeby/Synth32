@@ -21,7 +21,7 @@ LIBS := --libraries ./libraries --library $(SHARED)
 # header files
 INCLUDES := config.h SerialMonitor.h Settings.h Graphics.h Widgets.h ClientI2C.h\
             ESP_Panel_Board_Custom.h ESP_Panel_Board_Supported.h ESP_Panel_Conf.h lvgl_port_v8.h \
-	    Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
+	        Debug.h $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h
 # source files
 SOURCES := $(PROJECT) Debug.cpp Widgets.cpp lvgl_port_v8.cpp SerialMonitor.cpp \
            Settings.cpp ClientI2C.cpp Graphics.cpp
@@ -91,7 +91,6 @@ else
   UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
 endif
 
-
 ############################################
 ############################################
 # User input targets
@@ -120,8 +119,10 @@ target : $(TARGET)
 	$(UPLOAD)
 	@python ../Tools/Beep.py OK
 
-$(TARGET) : $(SOURCES) $(INCLUDES)
+$(TARGET) : $(SOURCES) $(INCLUDES) libraries/.git
 	@if not exist $(OUTPUT) (mkdir $(OUTPUT))
 	$(ARDUNIO) $(COMPILE) $(ESP32) 
 
+libraries/.git:
+	@git submodule update --init --recursive
 
