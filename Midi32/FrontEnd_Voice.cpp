@@ -4,11 +4,11 @@
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
+#include <Arduino.h>
 #include <UHS2-MIDI.h>
 #include <MIDI.h>
 
-#include "../Common/SynthCommon.h"
-#include "../Common/DispMessages.h"
+#include "Config.h"
 #include "I2Cmessages.h"
 #include "Osc.h"
 #include "Settings.h"
@@ -42,7 +42,7 @@ void SYNTH_FRONT_C::UpdateOscDisplay ()
         DisplayMessage.OscSustainLevel  (z, sc.GetOscSustainLevel (z) * PRS_UNSCALER);
         DisplayMessage.OscMaxLevel      (z, sc.GetOscMaxLevel (z) * PRS_UNSCALER);
         DisplayMessage.OscDamperMode    (z, sc.GetDamperMode (z));
-        (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[z + 8] = ( sc.GetDamperMode (z) ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
+        SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (z + 8, ( sc.GetDamperMode (z) ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
         DisplayMessage.OscSelectedLevel (z, sc.SelectedOscEnvelope[z]);
         }
     DisplayMessage.OscRampDirection (sc.GetRampDirection ());
@@ -54,11 +54,11 @@ void SYNTH_FRONT_C::UpdateOscDisplay ()
 //#######################################################################
 void SYNTH_FRONT_C::UpdateOscButtons ()
     {
-    bool zb = this->SynthConfig.Voice[CurrentConfigSelected].GetRampDirection ();
+    bool zb = SynthConfig.Voice[CurrentConfigSelected].GetRampDirection ();
     DisplayMessage.OscRampDirection (zb);
-    (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[7] = ( zb ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-    (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[15] = ( VoiceMute[CurrentConfigSelected] ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-    this->LaunchControl.TemplateRefresh ();
+    SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (7, ( zb ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
+    SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (15, ( VoiceMute[CurrentConfigSelected] ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
+    LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
@@ -85,28 +85,25 @@ void SYNTH_FRONT_C::UpdateFltDisplay ()
 //#######################################################################
 void SYNTH_FRONT_C::UpdateFltButtons ()
     {
-    byte mask = this->SynthConfig.Voice[CurrentConfigSelected].GetOutputMask ();
+    byte mask = SynthConfig.Voice[CurrentConfigSelected].GetOutputMask ();
     for ( short z = 0;  z < 5;  z++ )
-        (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateFlt ())[z + 8] = ( (mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-    this->LaunchControl.TemplateRefresh ();
+        SynthConfig.Voice[CurrentConfigSelected].SetButtonStateFlt (z + 8, ((mask >> z) & 1 ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
+    LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
 void SYNTH_FRONT_C::VoiceLevelSelect (short ch, bool state)
     {
-    state = !this->SynthConfig.Voice[CurrentConfigSelected].SelectedOscEnvelope[ch];
-    this->SynthConfig.Voice[CurrentConfigSelected].SelectedOscEnvelope[ch] = state;
+    state = !SynthConfig.Voice[CurrentConfigSelected].SelectedOscEnvelope[ch];
+    SynthConfig.Voice[CurrentConfigSelected].SelectedOscEnvelope[ch] = state;
     DisplayMessage.OscSelectedLevel (ch, state);
-    (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[ch] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-    this->LaunchControl.TemplateRefresh ();
+    SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (ch, ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
+    LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::VoiceDamperToggle (short ch, bool state)
+void SYNTH_FRONT_C::VoiceDamperToggle (short ch)
     {
-    if ( this->CurrentVoiceSelected < 0 )
-        return;
-
     bool zb = !SynthConfig.Voice[CurrentConfigSelected].GetDamperMode (ch);
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
@@ -117,8 +114,8 @@ void SYNTH_FRONT_C::VoiceDamperToggle (short ch, bool state)
             DisplayMessage.OscDamperMode (ch, zb);
             }
         }
-    (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[ch + 8] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-    this->UpdateOscButtons ();
+    SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (ch + 8, ( zb ) ? (byte)XL_LED::AMBER : (byte)XL_LED::GREEN);
+    LaunchControl.TemplateRefresh ();
     }
 
 //#######################################################################
@@ -142,7 +139,9 @@ void SYNTH_FRONT_C::MuteVoiceToggle ()
         if ( CurrentMidiSelected == pVoice[z]->GetMidi () )
             pVoice[z]->Mute (state);
         }
-    (this->SynthConfig.Voice[CurrentConfigSelected].GetButtonStateOsc ())[8] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
+    DisplayMessage.OscMute (state);
+    SynthConfig.Voice[CurrentConfigSelected].SetButtonStateOsc (15, ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN);
+    UpdateOscButtons ();
     }
 
 //#####################################################################
@@ -289,9 +288,6 @@ void SYNTH_FRONT_C::SetSustainLevel (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::ToggleRampDirection (short ch)
     {
-    if ( this->CurrentVoiceSelected < 0 )
-        return;
-
     bool zb = !SynthConfig.Voice[CurrentConfigSelected].GetRampDirection ();
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
@@ -307,9 +303,6 @@ void SYNTH_FRONT_C::ToggleRampDirection (short ch)
 //#######################################################################
 void SYNTH_FRONT_C::SetPulseWidth (short data)
     {
-    if ( this->CurrentVoiceSelected < 0 )
-        return;
-
     float percent = data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
@@ -325,9 +318,6 @@ void SYNTH_FRONT_C::SetPulseWidth (short data)
 //#######################################################################
 void SYNTH_FRONT_C::FltStart (short ch, short data)
     {
-    if ( this->CurrentFilterSelected < 0 )
-        return;
-
     ch -= 8;
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
@@ -344,9 +334,6 @@ void SYNTH_FRONT_C::FltStart (short ch, short data)
 //#######################################################################
 void SYNTH_FRONT_C::FltEnd (short ch, short data)
     {
-    if ( this->CurrentFilterSelected < 0 )
-        return;
-
     ch -= 8;
     float val = (float)data * PRS_SCALER;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )

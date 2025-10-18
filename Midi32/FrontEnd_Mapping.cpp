@@ -4,11 +4,11 @@
 // Creator:    markeby
 // Date:       12/9/2024
 //#######################################################################
+#include <Arduino.h>
 #include <UHS2-MIDI.h>
 #include <MIDI.h>
 
-#include "../Common/SynthCommon.h"
-#include "../Common/DispMessages.h"
+#include "Config.h"
 #include "I2Cmessages.h"
 #include "Osc.h"
 #include "Settings.h"

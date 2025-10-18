@@ -4,12 +4,13 @@
 // Creator:    markeby
 // Date:       12/9/2024
 //#######################################################################
-#include <UHS2-MIDI.h>
-#include <MIDI.h>
+#include <Arduino.h>
 
 #include "Config.h"
-#include "../Common/DispMessages.h"
 #include "Novation.h"
+#include "MidiConf.h"
+
+using namespace MIDI_NAMESPACE;
 
 byte dummyButtons[XL_BUTTON_COUNT];
 
@@ -24,6 +25,39 @@ byte dummyButtons[XL_BUTTON_COUNT];
 
     memset (dummyButtons, 0x0C, sizeof (dummyButtons));
     this->pButtonState = dummyButtons;
+    }
+
+//#######################################################################
+void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
+    {
+    pMidiMap = xl_map;
+
+    for ( short z = 0;  z < 20;  z++ )
+        {
+        Usb.Task    ();
+        Midi_0.read ();
+        delay (100);
+        }
+    }
+
+//#######################################################################
+void NOVATION_XL_C::SendTo (unsigned length, byte* buff)
+    {
+    // Debugging message
+//  String str;
+//  for ( short z = 0;  z < length;  z++ )
+//      str += " " + String (buff[z], 16);
+//  printf("@@ message %s\n", str.c_str ());
+
+    // Message sent to deice
+    Midi_0.sendSysEx (length, buff, false);
+    }
+
+//#######################################################################
+void NOVATION_XL_C::ResetAllLED (byte index)
+    {
+    Midi_0.send ((MidiType)(0x90 | index), 0, 0, 0);
+    delay (100);
     }
 
 //#######################################################################

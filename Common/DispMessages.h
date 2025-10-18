@@ -168,6 +168,7 @@ namespace DISP_MESSAGE_N
         CONTROL,
         FILTER,
         DAMPER,
+        MUTE,
         };
 
     //###########################################
@@ -196,6 +197,7 @@ namespace DISP_MESSAGE_N
         "CONTROL",
         "FILTER",
         "DAMPER",
+        "MUTE",
         };
     #else
     extern char* EffectText[];

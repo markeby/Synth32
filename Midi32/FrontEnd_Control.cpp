@@ -5,11 +5,65 @@
 // Date:       5/17/2023
 //#######################################################################
 #include <Arduino.h>
-#include "../Common/SynthCommon.h"
+
+#include "Config.h"
 #include "FrontEnd.h"
-#include "I2Cmessages.h"
-#include "SerialMonitor.h"
-#include "SoftLFO.h"
+#include "Debug.h"
+#include "MidiConf.h"
+
+#ifdef DEBUG_SYNTH
+static const char* Label  = "TOP";
+#define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#else
+#define DBG(args...)
+#endif
+
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+static void Cb_ControlChange_Novation (uint8_t mchan, uint8_t type, uint8_t value)
+    {
+    DBG ("Control change Novation: 0x%2.2X  value 0x%2.2X", type, value);
+    SynthFront.ControllerNovation (mchan, type, value);
+    }
+
+//-------------------------------------------------------------------
+static void Cb_Message_Novation (const MidiMessage& msg)
+    {
+    printf ("*** Novation MESSAGE:  type = 0x%02X  channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
+            msg.type, msg.channel, msg.data1, msg.data2, msg.length);
+    }
+
+//-------------------------------------------------------------------
+static void Cb_SystemEx_Novation (byte * array, unsigned size)
+    {
+    printf ("\n\n*** Novation SYSEX");
+    SynthFront.SystemExDebug (array, size);
+    }
+
+//-------------------------------------------------------------------
+static void Cb_SystemReset_Novation (void)
+    {
+     printf ("\n\n*** Novation RESET\n");
+    }
+
+//-------------------------------------------------------------------
+static void Cb_Error_Novation (int8_t err)
+    {
+    printf ("\n\n*** Novation ERROR %d\n", err);
+    }
+
+//###################################################################
+void SYNTH_FRONT_C::SystemExDebug (byte* array, unsigned size)
+    {
+    for ( short z = 0;  z < size;  z += 16 )
+        {
+        String st = "\n";
+        for ( short zz = 0;  (zz < 16) && ((z + zz) < size);  zz++)
+            st += String(array[z+zz], HEX) + " ";
+        printf ("%s", st.c_str ());
+        }
+    printf("\n");
+    }
 
 //########################################################
 //########################################################
@@ -29,7 +83,7 @@ static void setLevelSelect (short ch, short state)
 //########################################################
 static void DamperToggle (short ch, short state)
     {
-    SynthFront.VoiceDamperToggle (ch, state);
+    SynthFront.VoiceDamperToggle (ch);
     }
 
 //########################################################
@@ -134,59 +188,6 @@ static void toggleModVCO (short ch, short data)
     }
 
 //########################################################
-//########################################################
-//  Tuning control
-//########################################################
-static void tuneReset (short ch, bool state)
-    {
-    if ( state )
-        SynthFront.StartCalibration ();
-    else
-        Monitor.Reset ();
-    }
-
-//########################################################
-static void faderG49 (short ch, short data)
-    {
-    if ( ch == 8 )
-        SynthFront.MasterVolume (data);
-    else if ( SynthFront.IsInTuning () )
-        {
-        switch ( ch )
-            {
-            case 0 ... 4:
-                SynthFront.SetTuningLevel (ch, data);
-                break;
-            case 6 ... 7:
-                SynthFront.SetTuningFilter (ch - 6, data);
-                break;
-            default:
-                break;
-            }
-        }
-    }
-
-//########################################################
-static void tuneUpDown (short ch, bool state)
-    {
-    SynthFront.TuningAdjust (ch);
-    }
-
-//########################################################
-static void tuneBump (short ch, bool state)
-    {
-    if ( SynthFront.IsInTuning () )
-        SynthFront.TuningBump (state);
-    else
-        SynthFront.KeyboardKapture (state);
-    }
-
-//########################################################
-static void tunningSave (short ch, bool state)
-    {
-    SynthFront.SaveTuning ();
-    }
-
 //########################################################
 //########################################################
 //  Channel to voice mapping controls
@@ -293,11 +294,11 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x3C, "Sine Damper on",          DamperToggle        },  // 80 0x50  32
         {     1,   0x3C, "Triangle Damper on",      DamperToggle        },  // 81 0x51  33
         {     2,   0x3C, "Ramp Damper on",          DamperToggle        },  // 82 0x52  34
-        {     3,   0x0C, "Pulse Damper on",         DamperToggle        },  // 83 0x53  35
-        {     4,   0x0C, "Noise Damper on",         DamperToggle        },  // 84 0x54  36
+        {     3,   0x3C, "Pulse Damper on",         DamperToggle        },  // 83 0x53  35
+        {     4,   0x3C, "Noise Damper on",         DamperToggle        },  // 84 0x54  36
         {    13,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
         {    14,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {    15,   0x3C, "Mute Voice",              nullptr             },  // 87 0x57  39  last button
+        {    15,   0x3C, "Mute Voice",              MuteVoiceToggle     },  // 87 0x57  39  last button
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
@@ -607,71 +608,76 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
       },
   };
 
-//########################################################
-//########################################################
-G49_FADER_MIDI_MAP FaderMidiMapArray[] =
-    {   {  0, "Level Sine",             faderG49     },  // 01  07  xx
-        {  1, "Level Triangle",         faderG49     },  // 02  07  xx
-        {  2, "Level Ramp",             faderG49     },  // 03  07  xx
-        {  3, "Level Pulse",            faderG49     },  // 04  07  xx
-        {  4, "Level Noise",            faderG49     },  // 05  07  xx
-        {  5, "N ",                     nullptr      },  // 06  07  xx
-        {  6, "Filter Frequency",       faderG49     },  // 07  07  xx
-        {  7, "Filter Q",               faderG49     },  // 08  07  xx
-        {  8, "Master Volume",          faderG49     },  // 09  07  xx
-        {  9, "N ",                     nullptr      },  // 0A  07  xx
-        { 10, "N ",                     nullptr      },  // 0B  07  xx
-        { 11, "N ",                     nullptr      },  // 0C  07  xx
-        { 12, "N ",                     nullptr      },  // 0D  07  xx
-        { 13, "N ",                     nullptr      },  // 0E  07  xx
-        { 14, "N ",                     nullptr      },  // 0F  07  xx
-        { 15, "N ",                     nullptr      },  // 10  07  xx
-    };
+//#######################################################################
+//#######################################################################
+void SYNTH_FRONT_C::InitMidiControl ()
+    {
+//    Midi_0.setHandleNoteOn               (Cb_KeyDown_Novation);
+//    Midi_0.setHandleNoteOff              (Cb_KeyUp_Novation);
+    Midi_0.setHandleControlChange        (Cb_ControlChange_Novation);
+//    Midi_0.setHandlePitchBend            (Cb_PitchBendNovaton);
+    Midi_0.setHandleError                (Cb_Error_Novation);
+//    Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//    Midi_0.setHandleProgramChange        (ProgramChangeCallback fptr);
+//    Midi_0.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//    Midi_0.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//    Midi_0.setHandleSongPosition         (SongPositionCallback fptr);
+//    Midi_0.setHandleSongSelect           (SongSelectCallback fptr);
+//    Midi_0.setHandleTuneRequest          (TuneRequestCallback fptr);
+//    Midi_0.setHandleClock                (ClockCallback fptr);
+//    Midi_0.setHandleStart                (StartCallback fptr);
+//    Midi_0.setHandleTick                 (TickCallback fptr);
+//    Midi_0.setHandleContinue             (ContinueCallback fptr);
+//    Midi_0.setHandleStop                 (StopCallback fptr);
+//    Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr)
+    Midi_0.setHandleSystemExclusive      (Cb_SystemEx_Novation);
+    Midi_0.setHandleSystemReset          (Cb_SystemReset_Novation);
+#ifdef DEBUG_MIDI_MSG           // Enable all messages to print on debug terminal
+    Midi_0.setHandleMessage              (Cb_Message_Novation);
+#endif
+    InitMidiKeyboard ();
+    InitMidiSequence ();
+    }
 
-//########################################################
-G49_ENCODER_MIDI_MAP KnobMidiMapArray[] =
-    {   {  0, "N ",                     nullptr, 1  },  //  01  0A  xx
-        {  1, "N ",                     nullptr, 1  },  //  02  0A  xx
-        {  2, "N ",                     nullptr, 1  },  //  03  0A  xx
-        {  3, "N ",                     nullptr, 1  },  //  04  0A  xx
-        {  4, "N ",                     nullptr, 1  },  //  05  0A  xx
-        {  5, "N ",                     nullptr, 1  },  //  06  0A  xx
-        {  6, "N ",                     nullptr, 1  },  //  07  0A  xx
-        {  7, "N ",                     nullptr, 1  },  //  08  0A  xx
-        {  8, "N ",                     nullptr, 1  },  //  09  0A  xx
-        {  9, "N ",                     nullptr, 1  },  //  0A  0A  xx
-        { 10, "N ",                     nullptr, 1  },  //  0B  0A  xx
-        { 11, "N ",                     nullptr, 1  },  //  0C  0A  xx
-        { 12, "N ",                     nullptr, 1  },  //  0D  0A  xx
-        { 14, "N ",                     nullptr, 1  },  //  0E  0A  xx
-        { 14, "N ",                     nullptr, 1  },  //  0F  0A  xx
-        { 15, "N ",                     nullptr, 1  },  //  10  0A  xx
-    };
+//#######################################################################
+void SYNTH_FRONT_C::ControllerNovation (short mchan, byte type, byte value)
+    {
+    int index;
 
-//########################################################
-G49_BUTTON_MIDI_MAP SwitchMidiMapArray[] =
-    {   {  0,   false,  "N ",           nullptr,    },  //  16  1
-        {  1,   false,  "N ",           nullptr,    },  //  16  2
-        {  2,   false,  "N ",           nullptr,    },  //  16  3
-        {  3,   false,  "N ",           nullptr,    },  //  16  4
-        {  4,   false,  "N ",           nullptr,    },  //  16  5
-        {  5,   false,  "N ",           nullptr,    },  //  16  6
-        {  6,   false,  "N ",           nullptr,    },  //  16  7
-        {  7,   false,  "N ",           nullptr,    },  //  16  8
-        {  0,   false,  "N ",           nullptr,    },  //  16  9
-        {  1,   false,  "N ",           nullptr,    },  //  16  10
-        {  2,   false,  "N ",           nullptr,    },  //  16  11
-        {  3,   false,  "N ",           nullptr,    },  //  16  12
-        {  4,   false,  "N ",           nullptr,    },  //  16  13
-        {  5,   false,  "N ",           nullptr,    },  //  16  14
-        {  6,   false,  "N ",           nullptr,    },  //  16  15
-        {  7,   false,  "N ",           nullptr,    },  //  16  16
-        {  0,   false,  "Tune -",       tuneUpDown  },  //  17  1
-        {  1,   false,  "Tune +",       tuneUpDown  },  //  17  2
-        { 22,   false,  "Tune/Reset",   tuneReset   },  //  17  3
-        { 23,   false,  "Tune -/+",     tuneBump    },  //  17  4
-        { 24,   false,  "Tuning save",  tunningSave },  //  17  5
-     };
+    switch ( type )
+        {
+        case 0x30 ... 0x47:
+        case 0x60 ... 0x67:
+            {
+            index = type - 0x30;
+            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][index];
+            DBG ("%s > %d    ", m.Desc, value);
+            if ( m.CallBack != nullptr )
+                m.CallBack (m.Index, value);
+            }
+            break;
+        case 0x48 ... 0x5F:
+            {
+            index     = type - 0x30;                         // offset to start of control map
+            bool tgl = value > 0x3C;                        // use color green as threshold for button down
+            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][index];
+            DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
+
+            if ( !tgl && (m.CallBack != nullptr) )
+                m.CallBack (m.Index, (short)tgl);
+            }
+            break;
+
+        case 120 ... 127:           // all notes stop
+            DBG ("All note clear");
+            Clear ();
+            break;
+
+        default:
+            DBG ("Invalid type code = %d [%x]\n", type, type);
+            break;
+        }
+    }
 
 
 

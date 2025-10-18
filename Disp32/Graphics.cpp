@@ -261,11 +261,16 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
     switch ( effect )
         {
-        case EFFECT_C::SELECTED:
-            MaxLevel[ch]->Active     (!value);
-            SustainLevel[ch]->Active (value);
+        case EFFECT_C::DAMPER:
+            MeterADSR[ch]->Damper (value);
             break;
-        case EFFECT_C::BASE_LEVEL:
+        case EFFECT_C::MUTE:
+            for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+                MeterADSR[z]->Mute (value);
+            break;
+        case EFFECT_C::SELECTED:
+            MaxLevel[ch]->Active (!value);
+            SustainLevel[ch]->Active (value);
             break;
         case EFFECT_C::MAX_LEVEL:
             MaxLevel[ch]->SetLevel (value);

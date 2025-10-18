@@ -13,41 +13,14 @@
         CompilerConfigName="Latest Version">
         <Menu>
             <Target
-                Name="xtensa addr2line"
-                MenuCaption="xtensa addr2line"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
-            </Target>
-            <Target
                 Name="Build"
                 MenuCaption="&amp;Build"
-                CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 RunFromDir="%rw"
                 ClearProcessBuffer="1"
                 Verbose="1"
-                Beep="1">
+                CaptureOutputWith="ProcessBuffer">
                 <Exec CmdLine="pbench make OTA"/>
-            </Target>
-            <Target
-                Name="Monitor"
-                MenuCaption="Monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="ss -com:COM3"/>
-            </Target>
-            <Target
-                Name="Build-monitor"
-                MenuCaption="Build-monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone"
-                BuildFirst="1"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="pbench make OTA &amp; ss -com:COM3"/>
             </Target>
             <Target
                 Name="Clean"
@@ -57,15 +30,6 @@
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
                 <Exec CmdLine="make clean &amp; pbench make OTA"/>
-            </Target>
-            <Target
-                Name="Debug"
-                MenuCaption="Debug"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveCurrent"
-                RunFromDir="%rw"
-                ShowOnMenu="">
-                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf  %(ESP)%"/>
             </Target>
         </Menu>
     </Config>
@@ -77,41 +41,14 @@
         CompilerConfigName="Latest Version">
         <Menu>
             <Target
-                Name="xtensa addr2line"
-                MenuCaption="xtensa addr2line"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="xtensa-esp32-elf-addr2line -pCfe output_doit\Midi32.ino.elf "/>
-            </Target>
-            <Target
                 Name="Build"
                 MenuCaption="&amp;Build"
                 CaptureOutputWith="ProcessBuffer"
                 SaveOption="SaveWorkspaceFiles"
                 RunFromDir="%rw"
                 ClearProcessBuffer="1"
-                Verbose="1"
-                Beep="1">
+                Verbose="1">
                 <Exec CmdLine="ptime make Serial"/>
-            </Target>
-            <Target
-                Name="Monitor"
-                MenuCaption="Monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone">
-                <Exec CmdLine="ss -com:COM3"/>
-            </Target>
-            <Target
-                Name="Build-monitor"
-                MenuCaption="Build-monitor"
-                RunFromDir="%rw"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveNone"
-                BuildFirst="1"
-                ClearProcessBuffer="1">
-                <Exec CmdLine="Make Serial &amp; ss -com:COM3 "/>
             </Target>
             <Target
                 Name="Clean"
@@ -121,15 +58,6 @@
                 SaveOption="SaveWorkspaceFiles"
                 ClearProcessBuffer="1">
                 <Exec CmdLine="make clean &amp; make Serial"/>
-            </Target>
-            <Target
-                Name="Debug"
-                MenuCaption="Debug"
-                CaptureOutputWith="ProcessBuffer"
-                SaveOption="SaveCurrent"
-                RunFromDir="%rw"
-                ShowOnMenu="">
-                <Exec CmdLine=""/>
             </Target>
         </Menu>
     </Config>
@@ -153,11 +81,12 @@
             Filters="*.cpp"
             GUID="{218C3706-E0A7-4679-A963-AF165264892B}">
             <F N="Config.cpp"/>
-            <F N="Controls.cpp"/>
             <F N="Debug.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="Filter4.cpp"/>
             <F N="FrontEnd.cpp"/>
+            <F N="FrontEnd_Control.cpp"/>
+            <F N="FrontEnd_Keyboard.cpp"/>
             <F N="FrontEnd_LFO.cpp"/>
             <F N="FrontEnd_Mapping.cpp"/>
             <F N="FrontEnd_Seq.cpp"/>
@@ -193,6 +122,7 @@
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
             <F N="LFOosc.h"/>
+            <F N="MidiConf.h"/>
             <F N="Novation.h"/>
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>

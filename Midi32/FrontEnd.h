@@ -6,7 +6,6 @@
 //#######################################################################
 #pragma once
 #include "Config.h"
-#include "../Common/DispMessages.h"
 #include "LFOosc.h"
 #include "SoftLFO.h"
 #include "Voice.h"
@@ -30,9 +29,6 @@ private:
     KEY_T                 Down;
     KEY_T                 Up;
 
-    G49_FADER_MIDI_MAP      *G49MidiMapFader;
-    G49_BUTTON_MIDI_MAP     *G49MidiMapButton;
-    G49_ENCODER_MIDI_MAP    *G49MidiMapEcoder;
     XL_MIDI_MAP             (*pMidiMapXL)[XL_MIDI_MAP_SIZE];
     ENVELOPE_GENERATOR_C    EnvADSL;
     SYNTH_LFO_C             Lfo[2];
@@ -74,14 +70,21 @@ private:
     void   UpdateMapModeDisplay     (int sel);
 public:
 
-         SYNTH_FRONT_C              (G49_FADER_MIDI_MAP* g49map_fader, G49_ENCODER_MIDI_MAP* g49map_knob, G49_BUTTON_MIDI_MAP *g49map_button, XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
+    //#######################################################################
+    // FrontEnd.cpp
+         SYNTH_FRONT_C              (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
     void Begin                      (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
-    void MidiCommandConfiguration   (void);
+    void SystemExDebug              (byte* array, unsigned size);
     void Loop                       (void);
+    void KeyDown (byte mchan, byte key, byte velocity)
+        { Down.Key = key; Down.Velocity = velocity; Down.Trigger = mchan; }
+
+    void KeyUp (byte mchan, byte key, byte velocity)
+        { Up.Key = key; Up.Velocity = velocity; Up.Trigger = mchan; }
+
     void MasterVolume               (short md);
     void Clear                      (void);
-    void FuncController             (short mchan, byte type, byte value);
-    void SeqController              (short mchan, byte type, byte value);
+    void ControllerNovation         (short mchan, byte type, byte value);
 
     void PageAdvance                (void);
     void TemplateSelect             (byte index);
@@ -93,7 +96,21 @@ public:
         { return (KaptureMidiKeyboard); }
 
     //#######################################################################
-    // FrontEndLFO.cpp
+    // FrontEnd_Control.cpp
+    void InitMidiControl            (void);
+
+    //#######################################################################
+    // FrontEnd_Seq.cpp
+    void InitMidiKeyboard           (void);
+    void ControlChangeKeyboard      (short mchan, byte type, byte value);
+
+    //#######################################################################
+    // FrontEnd_Seq.cpp
+    void InitMidiSequence           (void);
+    void ControllerSequence         (short mchan, byte type, byte value);
+
+    //#######################################################################
+    // FrontEnd_LFO.cpp
     void UpdateLfoDisplay           (void);
     void UpdateModButtons           (void);
     void SelectModVCA               (byte ch);
@@ -110,7 +127,7 @@ public:
         { Lfo[index].SetLevelMidi (mchan, data); }
 
     //#######################################################################
-    // FrontEndMapping.cpp
+    // FrontEnd_Mapping.cpp
     void MidiMapMode                (void);
     bool GetLoadSaveMode            (void)
         { return (LoadSaveMode); }
@@ -131,8 +148,8 @@ public:
         { return (CurrentMidiSelected & 0xFF); }
 
     //#######################################################################
-    // FrontEndOscCtrl.cpp
-    void VoiceDamperToggle          (short ch, bool state);
+    // FrontEnd_Voice.cpp
+    void VoiceDamperToggle          (short ch);
     void MuteVoicesReset            (void);
     void MuteVoiceToggle            (void);
     void UpdateOscDisplay           (void);
@@ -153,7 +170,7 @@ public:
     void FreqCtrlModeAdv            (short index);
 
     //#######################################################################
-    // FrontEndTuning.cpp
+    // FrontEnd_Tuning.cpp
     void Tuning                     (void);
     void TuningAdjust               (bool up);
     void SetTuningLevel             (short ch, short data);
@@ -164,26 +181,10 @@ public:
     void Calibration                (ushort val);
     void StartCalibration           (void);
 
-    inline void TuningOutputBitFlip (int bit)
+    void TuningOutputBitFlip (int bit)
         { TuningOutputSelect ^= 1 << bit; TuningChange = true; }
-    inline bool IsInTuning (void)
+    bool IsInTuning (void)
         { return (SetTuning); }
-
-    //#######################################################################
-    inline void KeyDown (byte mchan, byte key, byte velocity)
-        {
-        Down.Key      = key;
-        Down.Velocity = velocity;
-        Down.Trigger  = mchan;
-        }
-
-    //#######################################################################
-    inline void KeyUp (byte mchan, byte key, byte velocity)
-        {
-        Up.Key      = key;
-        Up.Velocity = velocity;
-        Up.Trigger  = mchan;
-        }
     };
 
 //#################################################

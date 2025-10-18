@@ -5,10 +5,10 @@
 // Creator:    markeby
 // Date:       5/17/2023
 //#######################################################################
+#include <Arduino.h>
 #include <UHS2-MIDI.h>
 
-#include "../Common/SynthCommon.h"
-#include "../Common/DispMessages.h"
+#include "Config.h"
 #include "I2Cmessages.h"
 #include "Osc.h"
 #include "FrontEnd.h"
@@ -49,7 +49,7 @@ void SYNTH_FRONT_C::UpdateLfoDisplay ()
 void SYNTH_FRONT_C::UpdateModButtons ()
     {
     bool state;
-    byte* pb = this->SynthConfig.GetButtonStateLfo ();
+    byte* pb = this->SynthConfig.GetButtonStateLfoPtr ();
 
     for (int idx = 0;  idx < 2;  idx++ )
         {

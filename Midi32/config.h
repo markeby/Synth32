@@ -7,9 +7,16 @@
 #pragma once
 #include <Streaming.h>
 
-#include "../Common/SynthCommon.h"
+#include <SynthCommon.h>
 #include "I2Cdevices.h"
 #include "Debug.h"
+
+//#####################################
+// Debug controls
+//#####################################
+#define DEBUG_SYNTH           1
+//#define DEBUG_MIDI_MSG
+//#define DEBUG_FUNC
 
 //#####################################
 // Usefull constants
@@ -90,34 +97,12 @@ extern uint64_t RunTime;
 //#################################################
 typedef struct
     {
-    short       Index;
-    const char* Desc;
-    void       (*CallBack)(short chan, short data);
-    }  G49_FADER_MIDI_MAP;
-
-typedef struct
-    {
-    short       Index;
-    bool        State;
-    const char* Desc;
-    void       (*CallBack)(short chan, bool state);
-    }  G49_BUTTON_MIDI_MAP;
-
-typedef struct
-    {
     short       Index;      // Value passed into function
     byte        Color;      // Default color code for Novation device
     const char* Desc;
     void       (*CallBack)(short chan, short data);
     }  XL_MIDI_MAP;
 
-typedef struct
-    {
-    short       Index;
-    const char* Desc;
-    void        (*CallBack)(short chan, short data);
-    int         Value;
-    }  G49_ENCODER_MIDI_MAP;
 
 typedef byte  LED_NOTE_MAP;
 
@@ -141,9 +126,6 @@ typedef byte  LED_NOTE_MAP;
 //#################################################
 //  Synth interfaces
 //#################################################
-extern  G49_FADER_MIDI_MAP      FaderMidiMapArray[];
-extern  G49_ENCODER_MIDI_MAP    KnobMidiMapArray[];
-extern  G49_BUTTON_MIDI_MAP     SwitchMidiMapArray[];
 extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE];
 
 //#################################################
@@ -195,47 +177,51 @@ public:
     void Load                           (const char* name);
     void InitButtonsXL                  (void);
 
-    void   SetDamperMode         (byte index, bool sel)      { Cs.OscEnv[index].Damper = sel; }
-    bool   GetDamperMode         (byte index)                { return (Cs.OscEnv[index].Damper); }
-    byte*  GetButtonStateOsc     (void)                      { return (ButtonStateOsc); }
-    byte*  GetButtonStateFlt     (void)                      { return (ButtonStateFlt); }
-    void   SetName               (String& name)              { Name = name;}
-    String Getname               (void)                      { return (Name); }
-    void   SetVoiceMidi          (short data)                { Cs.MapVoiceMidi = data; }
-    short  GetVoiceMidi          (void)                      { return (Cs.MapVoiceMidi); }
-    void   SetVoiceNoise         (short data)                { Cs.MapVoiceNoise = data; }
-    short  GetVoiceNoise         (void)                      { return (Cs.MapVoiceNoise); }
-    void   SetRampDirection      (bool data)                 { Cs.RampDirection = data; }
-    bool   GetRampDirection      (void)                      { return (Cs.RampDirection); }
-    void   SetPulseWidth         (float data)                { Cs.PulseWidth = data; }
-    float  GetPulseWidth         (void)                      { return (Cs.PulseWidth); }
-    void   SetOscMaxLevel        (byte index, float data)    { Cs.OscEnv[index].MaxLevel = data; }
-    float  GetOscMaxLevel        (byte index)                { return (Cs.OscEnv[index].MaxLevel); }
-    void   SetOscSustainLevel    (byte index, float data)    { Cs.OscEnv[index].SustainLevel = data; }
-    float  GetOscSustainLevel    (byte index)                { return (Cs.OscEnv[index].SustainLevel); }
-    void   SetOscAttackTime      (byte index, float data)    { Cs.OscEnv[index].AttackTime = data; }
-    float  GetOscAttackTime      (byte index)                { return (Cs.OscEnv[index].AttackTime); }
-    void   SetOscDecayTime       (byte index, float data)    { Cs.OscEnv[index].DecayTime = data; }
-    float  GetOscDecayTime       (byte index)                { return (Cs.OscEnv[index].DecayTime); }
-    void   SetOscReleaseTime     (byte index, float data)    { Cs.OscEnv[index].ReleaseTime = data; }
-    float  GetOscReleaseTime     (byte index)                { return (Cs.OscEnv[index].ReleaseTime); }
+    void   SetDamperMode         (byte index, bool sel)     { Cs.OscEnv[index].Damper = sel; }
+    bool   GetDamperMode         (byte index)               { return (Cs.OscEnv[index].Damper); }
+    void   SetButtonStateOsc     (int index, byte value)    { ButtonStateOsc[index] = value; }
+    byte   GetButtonStateOsc     (int index)                { return (ButtonStateOsc[index]); }
+    byte*  GetButtonStateOscPtr  ()                         { return (ButtonStateOsc); }
+    void   SetButtonStateFlt     (int index, byte value)    { ButtonStateFlt[index] = value; }
+    byte   GetButtonStateFlt     (int index)                { return (ButtonStateFlt[index]); }
+    byte*  GetButtonStateFltPtr  ()                         { return (ButtonStateFlt); }
+    void   SetName               (String& name)             { Name = name;}
+    String Getname               (void)                     { return (Name); }
+    void   SetVoiceMidi          (short data)               { Cs.MapVoiceMidi = data; }
+    short  GetVoiceMidi          (void)                     { return (Cs.MapVoiceMidi); }
+    void   SetVoiceNoise         (short data)               { Cs.MapVoiceNoise = data; }
+    short  GetVoiceNoise         (void)                     { return (Cs.MapVoiceNoise); }
+    void   SetRampDirection      (bool data)                { Cs.RampDirection = data; }
+    bool   GetRampDirection      (void)                     { return (Cs.RampDirection); }
+    void   SetPulseWidth         (float data)               { Cs.PulseWidth = data; }
+    float  GetPulseWidth         (void)                     { return (Cs.PulseWidth); }
+    void   SetOscMaxLevel        (byte index, float data)   { Cs.OscEnv[index].MaxLevel = data; }
+    float  GetOscMaxLevel        (byte index)               { return (Cs.OscEnv[index].MaxLevel); }
+    void   SetOscSustainLevel    (byte index, float data)   { Cs.OscEnv[index].SustainLevel = data; }
+    float  GetOscSustainLevel    (byte index)               { return (Cs.OscEnv[index].SustainLevel); }
+    void   SetOscAttackTime      (byte index, float data)   { Cs.OscEnv[index].AttackTime = data; }
+    float  GetOscAttackTime      (byte index)               { return (Cs.OscEnv[index].AttackTime); }
+    void   SetOscDecayTime       (byte index, float data)   { Cs.OscEnv[index].DecayTime = data; }
+    float  GetOscDecayTime       (byte index)               { return (Cs.OscEnv[index].DecayTime); }
+    void   SetOscReleaseTime     (byte index, float data)   { Cs.OscEnv[index].ReleaseTime = data; }
+    float  GetOscReleaseTime     (byte index)               { return (Cs.OscEnv[index].ReleaseTime); }
 
-    void   SetFltStart           (byte index, float data)    { Cs.FltEnv[index].MinLevel = data; }
-    float  GetFltStart           (byte index)                { return (Cs.FltEnv[index].MinLevel); }
-    void   SetFltEnd             (byte index, float data)    { Cs.FltEnv[index].MaxLevel = data; }
-    float  GetFltEnd             (byte index)                { return (Cs.FltEnv[index].MaxLevel); }
-    void   SetFltSustainLevel    (byte index, float data)    { Cs.FltEnv[index].SustainLevel = data; }
-    float  GetFltSustainLevel    (byte index)                { return (Cs.FltEnv[index].SustainLevel); }
-    void   SetFltAttackTime      (byte index, float data)    { Cs.FltEnv[index].AttackTime = data; }
-    float  GetFltAttackTime      (byte index)                { return (Cs.FltEnv[index].AttackTime); }
-    void   SetFltDecayTime       (byte index, float data)    { Cs.FltEnv[index].DecayTime = data; }
-    float  GetFltDecayTime       (byte index)                { return (Cs.FltEnv[index].DecayTime); }
-    void   SetFltReleaseTime     (byte index, float data)    { Cs.FltEnv[index].ReleaseTime = data; }
-    float  GetFltReleaseTime     (byte index)                { return (Cs.FltEnv[index].ReleaseTime); }
-    void   SetOutputMask         (byte chanmap)              { Cs.OutputMask = chanmap; }
-    byte   GetOutputMask         (void)                      { return (Cs.OutputMask); }
-    void   SetFltCtrl            (byte index, int data)      { Cs.FilterCtrl[index] = data; }
-    byte   GetFltCtrl            (byte index)                { return (Cs.FilterCtrl[index]); }
+    void   SetFltStart           (byte index, float data)   { Cs.FltEnv[index].MinLevel = data; }
+    float  GetFltStart           (byte index)               { return (Cs.FltEnv[index].MinLevel); }
+    void   SetFltEnd             (byte index, float data)   { Cs.FltEnv[index].MaxLevel = data; }
+    float  GetFltEnd             (byte index)               { return (Cs.FltEnv[index].MaxLevel); }
+    void   SetFltSustainLevel    (byte index, float data)   { Cs.FltEnv[index].SustainLevel = data; }
+    float  GetFltSustainLevel    (byte index)               { return (Cs.FltEnv[index].SustainLevel); }
+    void   SetFltAttackTime      (byte index, float data)   { Cs.FltEnv[index].AttackTime = data; }
+    float  GetFltAttackTime      (byte index)               { return (Cs.FltEnv[index].AttackTime); }
+    void   SetFltDecayTime       (byte index, float data)   { Cs.FltEnv[index].DecayTime = data; }
+    float  GetFltDecayTime       (byte index)               { return (Cs.FltEnv[index].DecayTime); }
+    void   SetFltReleaseTime     (byte index, float data)   { Cs.FltEnv[index].ReleaseTime = data; }
+    float  GetFltReleaseTime     (byte index)               { return (Cs.FltEnv[index].ReleaseTime); }
+    void   SetOutputMask         (byte chanmap)             { Cs.OutputMask = chanmap; }
+    byte   GetOutputMask         (void)                     { return (Cs.OutputMask); }
+    void   SetFltCtrl            (byte index, int data)     { Cs.FilterCtrl[index] = data; }
+    byte   GetFltCtrl            (byte index)               { return (Cs.FilterCtrl[index]); }
     };
 
 class SYNTH_CONFIG_C
@@ -267,24 +253,24 @@ public:
     void Load                       (short num);
     void InitButtonsXL              (void);
 
-    inline byte*  GetButtonStateLfo (void)                                  { return (ButtonStateLfo); }
-    inline void   SetName           (String& name)                          { this->Name = name; }
-    inline String Getname           (void)                                  { return (this->Name); }
-    inline void   SetSoftFreq       (short data)                            { this->Cs.SoftFrequency = data; }
-    inline short  GetSoftFreq       (void)                                  { return (this->Cs.SoftFrequency); };
-    inline void   SetModMidi        (byte index, short data)                { this->Cs.LfoMidi[index] = data; }
-    inline short  GetModMidi        (byte index)                            { return (this->Cs.LfoMidi[index]); };
-    inline void   SetModSoftMixer   (short index, bool data)                { this->Cs.SoftMixerLFO[index] = data; }
-    inline bool   GetModSoftMixer   (short unit)                            { return (this->Cs.SoftMixerLFO[unit]); }
-    inline void   SetSelect         (short unit, short index, bool data)    { this->Cs.CfgLFO[unit].Select[index] = data; }
-    inline bool   GetSelect         (short unit, short index)               { return (this->Cs.CfgLFO[unit].Select[index]); }
-    inline void   SetRampDir        (short unit, bool data)                 { this->Cs.CfgLFO[unit].RampDir = data; }
-    inline bool   GetRampDir        (short unit)                            { return (this->Cs.CfgLFO[unit].RampDir); }
-    inline void   SetFrequency      (short unit, short data)                { this->Cs.CfgLFO[unit].Frequency = data; }
-    inline short  GetFrequency      (short unit)                            { return (this->Cs.CfgLFO[unit].Frequency); }
-    inline void   SetPulseWidth     (short unit, short data)                { this->Cs.CfgLFO[unit].PulseWidth = data; }
-    inline short  GetPulseWidth     (short unit)                            { return (this->Cs.CfgLFO[unit].PulseWidth); }
-    inline void   SetModLevelAlt    (short unit, bool data)                 { this->Cs.CfgLFO[unit].ModLevelAlt = data; }
-    inline bool   GetModLevelAlt    (short unit)                            { return (this->Cs.CfgLFO[unit].ModLevelAlt); }
+    inline byte*  GetButtonStateLfoPtr  (void)                                  { return (ButtonStateLfo); }
+    inline void   SetName               (String& name)                          { this->Name = name; }
+    inline String Getname               (void)                                  { return (this->Name); }
+    inline void   SetSoftFreq           (short data)                            { this->Cs.SoftFrequency = data; }
+    inline short  GetSoftFreq           (void)                                  { return (this->Cs.SoftFrequency); };
+    inline void   SetModMidi            (byte index, short data)                { this->Cs.LfoMidi[index] = data; }
+    inline short  GetModMidi            (byte index)                            { return (this->Cs.LfoMidi[index]); };
+    inline void   SetModSoftMixer       (short index, bool data)                { this->Cs.SoftMixerLFO[index] = data; }
+    inline bool   GetModSoftMixer       (short unit)                            { return (this->Cs.SoftMixerLFO[unit]); }
+    inline void   SetSelect             (short unit, short index, bool data)    { this->Cs.CfgLFO[unit].Select[index] = data; }
+    inline bool   GetSelect             (short unit, short index)               { return (this->Cs.CfgLFO[unit].Select[index]); }
+    inline void   SetRampDir            (short unit, bool data)                 { this->Cs.CfgLFO[unit].RampDir = data; }
+    inline bool   GetRampDir            (short unit)                            { return (this->Cs.CfgLFO[unit].RampDir); }
+    inline void   SetFrequency          (short unit, short data)                { this->Cs.CfgLFO[unit].Frequency = data; }
+    inline short  GetFrequency          (short unit)                            { return (this->Cs.CfgLFO[unit].Frequency); }
+    inline void   SetPulseWidth         (short unit, short data)                { this->Cs.CfgLFO[unit].PulseWidth = data; }
+    inline short  GetPulseWidth         (short unit)                            { return (this->Cs.CfgLFO[unit].PulseWidth); }
+    inline void   SetModLevelAlt        (short unit, bool data)                 { this->Cs.CfgLFO[unit].ModLevelAlt = data; }
+    inline bool   GetModLevelAlt        (short unit)                            { return (this->Cs.CfgLFO[unit].ModLevelAlt); }
     };
 

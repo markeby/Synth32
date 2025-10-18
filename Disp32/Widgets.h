@@ -87,14 +87,20 @@ private:
     TEXT_INFO_C             Decay;
     lv_meter_indicator_t*   GaugeRelease;
     TEXT_INFO_C             Release;
+    bool                    LedBlue;
+    bool                    LedRed;
 
 public:
           ADSR_METER_WIDGET_C (lv_obj_t* base, short x, short y);
     void  Volume              (lv_obj_t* base);
-    void  Select              (bool sel);
+    void  Damper              (bool sel);
+    void  Mute                (bool sel);
     void  SetAttack           (int val);
     void  SetDecay            (int val);
     void  SetRelease          (int val);
+
+    void  Select              (int val)
+        { Damper (val); }
     };
 
 //############################################

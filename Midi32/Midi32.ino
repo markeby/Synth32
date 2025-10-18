@@ -3,6 +3,8 @@
 // https://circuits4you.com/2018/12/31/esp32-devkit-esp32-wroom-gpio-pinout/
 //
 #include <Arduino.h>
+#include <UHS2-MIDI.h>
+#include <MIDI.h>
 
 #include "Settings.h"
 #include "SerialMonitor.h"
@@ -73,9 +75,15 @@ I2C_LOCATION_T  DevicesI2C[] =
 #define START_VOICE_CONTROL     68
 
 //#######################################################################
+USB Usb;
+    UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);      // Novation MIDI device
+    MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, Midi_1);  // Grahpite MIDI device
+    MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);  // Sequencer MIDI device
+
+//#######################################################################
 MONITOR_C       Monitor;
 I2C_INTERFACE_C I2cDevices (BusI2C, DevicesI2C);
-SYNTH_FRONT_C   SynthFront (FaderMidiMapArray, KnobMidiMapArray, SwitchMidiMapArray, XL_MidiMapArray);
+SYNTH_FRONT_C   SynthFront (XL_MidiMapArray);
 
 bool        SystemError         = false;
 bool        SystemFail          = false;
@@ -192,14 +200,26 @@ void setup (void)
         printf ("\n\n*******  Synth interface is not operational *******\n\n\n");
     else
         {
-        printf ("\t>>> System startup complete.\n");
-
         printf ("\t>>> Starting display communications.\n");
         DisplayMessage.Begin (DISPLAY_I2C_ADDRESS, MSG_SDA, MSG_SCL);
 
         delay (1000);   // Give time for the graphics subsystem threads to start and Wifi to connect
-
         printf ("\t>>> Starting Synth...\n");
+
+        // MIDI interface for Novation LaunchControl XL
+        while ( Usb.Init () == -1 )
+            { delay (200);  printf ("Usb midi init retry!\n"); }
+        printf ("\t>>>\tUsb midi ready\n");
+
+        // MIDI interface for keyboard
+        Serial1.begin (31250, SERIAL_8N1, RXD1, TXD1, false);
+        Midi_1.begin (MIDI_CHANNEL_OMNI);
+        printf ("\t>>>\tSerial1 midi ready\n");
+
+        // MIDI interface from computer for sequencing
+        Serial2.begin (31250, SERIAL_8N1, RXD2, TXD2, false);
+        Midi_2.begin (MIDI_CHANNEL_OMNI);
+        printf ("\t>>>\tSerial2 midi ready\n");
 
         // Setup initial state of synth
         SynthFront.Begin (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);

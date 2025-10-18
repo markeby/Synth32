@@ -6,7 +6,7 @@
 //#######################################################################
 #pragma once
 #include "Config.h"
-#include "../Common/DispMessages.h"
+#include <DispMessages.h>
 
 //#################################################
 //    Synthesizer display message class
@@ -177,6 +177,15 @@ public:
         this->SendUpdateOsc (0,
                              channel,
                              DISP_MESSAGE_N::EFFECT_C::DAMPER,
+                             (( sel ) ? 1 : 0));
+        }
+
+    //#################################################
+    void OscMute (bool sel)
+        {
+        this->SendUpdateOsc (0,
+                             0,
+                             DISP_MESSAGE_N::EFFECT_C::MUTE,
                              (( sel ) ? 1 : 0));
         }
 

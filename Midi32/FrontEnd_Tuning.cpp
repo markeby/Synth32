@@ -4,7 +4,9 @@
 // Creator:    markeby
 // Date:       12/9/2024
 //#######################################################################
-#include "../Common/SynthCommon.h"
+#include <Arduino.h>
+
+#include "Config.h"
 #include "I2Cmessages.h"
 #include "Osc.h"
 #include "Settings.h"

@@ -46,7 +46,7 @@ void MONITOR_C::DumpStats (void)
     Serial << "==========================================" << endl << endl;
     Serial << hh << "total sketch code = " << ESP.getFreeSketchSpace () << endl;
     Serial << hh << "      sketch size = " << Settings.GetSketchSize () << endl;
-    Serial << hh << "      sketch used = " << ((ESP.getSketchSize () * 100) / ESP.getFreeSketchSpace ()) << "%" << endl;
+    Serial << hh << "      sketch used = " << (float)((ESP.getSketchSize () * 100) / (float)ESP.getFreeSketchSpace ()) << "%" << endl;
     Serial << hh << "    previous size = " << Settings.GetSketchSizePrev () << endl;
     Serial << hh << "      size change = " << (Settings.GetSketchSize () - Settings.GetSketchSizePrev ()) << endl << endl;
 

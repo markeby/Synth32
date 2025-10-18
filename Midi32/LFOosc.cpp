@@ -5,7 +5,8 @@
 // Date:       9/18/2024
 //#######################################################################
 #include <Arduino.h>
-#include "../Common/SynthCommon.h"
+
+#include "Config.h"
 #include "I2Cmessages.h"
 #include "Settings.h"
 #include "LFOosc.h"
