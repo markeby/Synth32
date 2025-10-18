@@ -23,7 +23,7 @@ static const char* Label  = "TOP";
 static void Cb_ControlChange_Novation (uint8_t mchan, uint8_t type, uint8_t value)
     {
     DBG ("Control change Novation: 0x%2.2X  value 0x%2.2X", type, value);
-    SynthFront.ControllerNovation (mchan, type, value);
+    ControllerNovation (mchan, type, value);
     }
 
 //-------------------------------------------------------------------
@@ -37,7 +37,7 @@ static void Cb_Message_Novation (const MidiMessage& msg)
 static void Cb_SystemEx_Novation (byte * array, unsigned size)
     {
     printf ("\n\n*** Novation SYSEX");
-    SynthFront.SystemExDebug (array, size);
+    SystemExDebug (array, size);
     }
 
 //-------------------------------------------------------------------
@@ -53,7 +53,7 @@ static void Cb_Error_Novation (int8_t err)
     }
 
 //###################################################################
-void SYNTH_FRONT_C::SystemExDebug (byte* array, unsigned size)
+void SystemExDebug (byte* array, unsigned size)
     {
     for ( short z = 0;  z < size;  z += 16 )
         {
@@ -71,49 +71,49 @@ void SYNTH_FRONT_C::SystemExDebug (byte* array, unsigned size)
 //########################################################
 static void setLevel (short ch, short data)
     {
-    SynthFront.SetLevel (ch, data);
+    SetLevel (ch, data);
     }
 
 //########################################################
 static void setLevelSelect (short ch, short state)
     {
-    SynthFront.VoiceLevelSelect (ch, state);
+    VoiceLevelSelect (ch, state);
     }
 
 //########################################################
 static void DamperToggle (short ch, short state)
     {
-    SynthFront.VoiceDamperToggle (ch);
+    VoiceDamperToggle (ch);
     }
 
 //########################################################
 static void setAttackTime (short ch, short data)
     {
-    SynthFront.SetAttackTime (ch, data);
+    SetAttackTime (ch, data);
     }
 
 //########################################################
 static void setDecayTime (short ch, short data)
     {
-    SynthFront.SetDecayTime (ch, data);
+    SetDecayTime (ch, data);
     }
 
 //########################################################
 static void setReleaseTime (short ch, short data)
     {
-    SynthFront.SetReleaseTime (ch, data);
+    SetReleaseTime (ch, data);
     }
 
 //########################################################
 static void MuteVoiceToggle (short ch, short data)
     {
-    SynthFront.MuteVoiceToggle ();
+    MuteVoiceToggle ();
     }
 
 //########################################################
 static void toogleRamp (short ch, short data)
     {
-    SynthFront.ToggleRampDirection (ch);
+    ToggleRampDirection (ch);
     }
 
 //########################################################
@@ -121,7 +121,7 @@ static void pulseWidth (short ch, short data)
     {
     if ( data == 0 )
         data = 1;
-    SynthFront.SetPulseWidth (data);
+    SetPulseWidth (data);
     }
 
 //########################################################
@@ -130,25 +130,25 @@ static void pulseWidth (short ch, short data)
 //########################################################
 static void fltStart (short ch, short data)
     {
-    SynthFront.FltStart (ch, data);
+    FltStart (ch, data);
     }
 
 //########################################################
 static void fltEnd  (short ch, short data)
     {
-    SynthFront.FltEnd (ch, data);
+    FltEnd (ch, data);
     }
 
 //########################################################
 static void fltSustain (short ch, short data)
     {
-    SynthFront.SetSustainLevel (ch, data);
+    SetSustainLevel (ch, data);
     }
 
 //########################################################
 static void freqCtrlModeAdv (short ch, short data)
     {
-    SynthFront.FreqCtrlModeAdv (ch);
+    FreqCtrlModeAdv (ch);
     }
 
 //########################################################
@@ -157,34 +157,34 @@ static void freqCtrlModeAdv (short ch, short data)
 //########################################################
 static void freqLFO (short ch, short data)
     {
-    SynthFront.FreqLFO (ch, data);
+    FreqLFO (ch, data);
     }
 
 //########################################################
 static void toggleModVCA (short ch, short data)
     {
-    SynthFront.SelectModVCA (ch);
+    SelectModVCA (ch);
     }
 
 //########################################################
 static void toggleModLevelAlt (short ch, short data)
     {
-    SynthFront.ToggleModLevelAlt (ch);
+    ToggleModLevelAlt (ch);
     }
 
 //########################################################
 static void toggleModRampDir (short ch, short data)
     {
-    SynthFront.ToggleModRampDir (ch);
+    ToggleModRampDir (ch);
     }
 
 //########################################################
-static void toggleModVCO (short ch, short data)
+static void toggleModVCO (short index, short data)
     {
-    if ( ch < 3 )
-        SynthFront.SelectModVCO (0, ch);
+    if ( index < 3 )
+        SelectModVCO (0, index);
     else
-        SynthFront.SelectModVCO (1, ch - 4);
+        SelectModVCO (1, index - 4);
     }
 
 //########################################################
@@ -192,57 +192,57 @@ static void toggleModVCO (short ch, short data)
 //########################################################
 //  Channel to voice mapping controls
 //########################################################
-static void trackSel (short ch, short data)
+static void trackSel (short index, short data)
     {
-    if ( SynthFront.GetMidiMapMode () )
-        SynthFront.ChangeMapSelect (ch);
+    if ( GetMidiMapMode () )
+        ChangeMapSelect (index);
     }
 
 //########################################################
 static void mappingSelect (short index, short data)
     {
-    SynthFront.MidiMapMode ();
+    MidiMapMode ();
     }
 
 //########################################################
 static void sendDir (short index, short data)
     {
-    if ( SynthFront.GetMidiMapMode () )
-        SynthFront.MapModeBump (( index ) ? -1 : 1);
-    else if ( SynthFront.GetLoadSaveMode () )
-        SynthFront.LoadSaveBump (( index ) ? -1 : 1);
+    if ( GetMidiMapMode () )
+        MapModeBump (( index ) ? -1 : 1);
+    else if ( GetLoadSaveMode () )
+        LoadSaveBump (( index ) ? -1 : 1);
     }
 
 //########################################################
 static void loadConfig (short index, short data)
     {
-    if ( SynthFront.GetLoadSaveMode () )
-        SynthFront.LoadSelectedConfig ();
+    if ( GetLoadSaveMode () )
+        LoadSelectedConfig ();
     else
-        SynthFront.OpenLoadSavePage ();
+        OpenLoadSavePage ();
     }
 
 //########################################################
 static void saveConfig (short index, short data)
     {
-    if ( SynthFront.GetMidiMapMode () )
-        SynthFront.SaveDefaultConfig ();
-    else if ( SynthFront.GetLoadSaveMode () )
-        SynthFront.SaveSelectedConfig ();
+    if ( GetMidiMapMode () )
+        SaveDefaultConfig ();
+    else if ( GetLoadSaveMode () )
+        SaveSelectedConfig ();
     else
-        SynthFront.OpenLoadSavePage ();
+        OpenLoadSavePage ();
      }
 
 //########################################################
 static void selectFilter (short index, short data)
     {
-    SynthFront.SelectFilter (index);
+    SelectFilter (index);
     }
 
 //########################################################
 static void dummyButton (short index, short data)
     {
-    SynthFront.TemplateRefresh ();
+    TemplateRefresh ();
     }
 
 //########################################################
@@ -251,7 +251,7 @@ static void dummyButton (short index, short data)
 //########################################################
 static void pageAdvance (short ch, short data)
     {
-    SynthFront.PageAdvance ();
+    PageAdvance ();
     }
 
 //########################################################
@@ -610,8 +610,10 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
 
 //#######################################################################
 //#######################################################################
-void SYNTH_FRONT_C::InitMidiControl ()
+void InitMidiControl ()
     {
+    LaunchControl.Begin (XL_MidiMapArray);
+
 //    Midi_0.setHandleNoteOn               (Cb_KeyDown_Novation);
 //    Midi_0.setHandleNoteOff              (Cb_KeyUp_Novation);
     Midi_0.setHandleControlChange        (Cb_ControlChange_Novation);
@@ -630,17 +632,15 @@ void SYNTH_FRONT_C::InitMidiControl ()
 //    Midi_0.setHandleContinue             (ContinueCallback fptr);
 //    Midi_0.setHandleStop                 (StopCallback fptr);
 //    Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr)
-    Midi_0.setHandleSystemExclusive      (Cb_SystemEx_Novation);
+//    Midi_0.setHandleSystemExclusive      (Cb_SystemEx_Novation);
     Midi_0.setHandleSystemReset          (Cb_SystemReset_Novation);
 #ifdef DEBUG_MIDI_MSG           // Enable all messages to print on debug terminal
     Midi_0.setHandleMessage              (Cb_Message_Novation);
 #endif
-    InitMidiKeyboard ();
-    InitMidiSequence ();
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ControllerNovation (short mchan, byte type, byte value)
+void ControllerNovation (short mchan, byte type, byte value)
     {
     int index;
 
@@ -650,7 +650,7 @@ void SYNTH_FRONT_C::ControllerNovation (short mchan, byte type, byte value)
         case 0x60 ... 0x67:
             {
             index = type - 0x30;
-            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][index];
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()][index];
             DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
                 m.CallBack (m.Index, value);
@@ -660,7 +660,7 @@ void SYNTH_FRONT_C::ControllerNovation (short mchan, byte type, byte value)
             {
             index     = type - 0x30;                         // offset to start of control map
             bool tgl = value > 0x3C;                        // use color green as threshold for button down
-            XL_MIDI_MAP& m = pMidiMapXL[LaunchControl.GetCurrentMap()][index];
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()]  [index];
             DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
 
             if ( !tgl && (m.CallBack != nullptr) )
@@ -670,7 +670,7 @@ void SYNTH_FRONT_C::ControllerNovation (short mchan, byte type, byte value)
 
         case 120 ... 127:           // all notes stop
             DBG ("All note clear");
-            Clear ();
+            ClearSynth ();
             break;
 
         default:

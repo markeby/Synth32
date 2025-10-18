@@ -9,7 +9,7 @@
 #include "Voice.h"
 
 //#####################################################################
-VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENVELOPE_GENERATOR_C& envgen)
+VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENV_GENERATOR_C& envgen)
     {
     Number               = num;
     ActiveTimer          = 0;

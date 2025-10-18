@@ -26,7 +26,7 @@ static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
     }
 
 //#######################################################################
-void FLT4_C::Begin (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen)
+void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
     {
     Number = num;
     // D/A configuration

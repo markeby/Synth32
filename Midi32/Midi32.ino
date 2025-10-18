@@ -83,7 +83,6 @@ USB Usb;
 //#######################################################################
 MONITOR_C       Monitor;
 I2C_INTERFACE_C I2cDevices (BusI2C, DevicesI2C);
-SYNTH_FRONT_C   SynthFront (XL_MidiMapArray);
 
 bool        SystemError         = false;
 bool        SystemFail          = false;
@@ -222,9 +221,9 @@ void setup (void)
         printf ("\t>>>\tSerial2 midi ready\n");
 
         // Setup initial state of synth
-        SynthFront.Begin (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
+        InitializeSynth (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
         SynthActive = true;
-        SynthFront.LoadDefaultConfig ();
+        LoadDefaultConfig ();
         printf ("\t>>> Synth ready.\a\a\n");
         if ( SystemError )
             printf ("\n\t>## Not all synth interface registers are active.\n\n");
@@ -248,11 +247,11 @@ void loop (void)
     if ( SynthActive )
         {
         SoftLFO.Loop (DeltaTimeMilli);      // Process sine wave for envelope generator level modulation
-        SynthFront.Loop ();
+        LoopSynth ();
         if ( DisplayMessage.Loop () )
             {
             printf ("\n\t>>> Display reset requested\n");
-            SynthFront.ResolveMapAllocation ();
+            ResolveMapAllocation ();
             }
         I2cDevices.Loop ();
         }

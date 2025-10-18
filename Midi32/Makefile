@@ -25,8 +25,9 @@ INCLUDES := config.h UpdateOTA.h Debug.h I2Cdevices.h I2Cmessages.h Envelope.h F
  
 # source files
 SOURCES := $(PROJECT) Config.cpp SerialMonitor.cpp UpdateOTA.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
-           FrontEnd.cpp FrontEnd_Keyboard.cpp FrontEnd_Voice.cpp FrontEnd_LFO.cpp FrontEnd_Tuning.cpp FrontEnd_Mapping.cpp \
-		   FrontEnd_Control.cpp FrontEnd_Seq.cpp SoftLFO.cpp Filter4.cpp Voice.cpp Osc.cpp LFOosc.cpp Envelope.cpp Novation.cpp 
+           FrontEnd.cpp MIDI_Keyboard.cpp MIDI_Control.cpp MIDI_Sequencer.cpp Novation.cpp \
+           Control_Voice.cpp Control_LFO.cpp Tuning.cpp Mapping.cpp \
+           SoftLFO.cpp Filter4.cpp Voice.cpp Osc.cpp LFOosc.cpp Envelope.cpp  
    
 # serial port for uploading
 DEFAULT_PORT := COM3

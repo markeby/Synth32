@@ -55,7 +55,6 @@ endif
 ############################################
 ifdef S3DEV
   ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,FlashSize=8M,PartitionScheme=huge_app
-# --config-file arduino-cli.yaml
   OUTPUT := output_esp32s3dev
 endif
 ############################################
@@ -108,7 +107,6 @@ Serial :
 
 clean :
 	@rmdir /Q /S $(OUTPUT)
-
 
 ############################################
 ############################################

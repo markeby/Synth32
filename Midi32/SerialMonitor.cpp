@@ -80,27 +80,27 @@ bool MONITOR_C::Save (SMODE m)
     switch ( m )
         {
         case INSSID:
-            Settings.PutSSID (this->InputString);
+            Settings.PutSSID (InputString);
             break;
         case INPWD:
-            Settings.PutPasswd (this->InputString);
+            Settings.PutPasswd (InputString);
             break;
         case VARIABLE:
             Serial << endl;
-            z = this->InputString.toInt ();
+            z = InputString.toInt ();
             break;
         default:
             break;
         }
 
-    this->InputString.clear ();
+    InputString.clear ();
     return (true);
     }
 
 //#######################################################################
 void MONITOR_C::InputPrompt (const char* text)
     {
-    Serial << "\n\n" << text << " >" << this->InputString;
+    Serial << "\n\n" << text << " >" << InputString;
     }
 
 //#######################################################################
@@ -125,7 +125,7 @@ bool MONITOR_C::PromptZap (void)
         {
         case 'y':
         case 'Y':
-            switch ( this->InputMode )
+            switch ( InputMode )
                 {
                 case CLR_TUNING:
                     Settings.ClearTuning ();
@@ -196,63 +196,63 @@ void MONITOR_C::MenuSel (void)
         return;
         }
 
-    switch ( this->InputMode )
+    switch ( InputMode )
         {
         case CMD:
             switch ( s )
                 {
                 case 's':
                     Serial << endl;
-                    this->DumpStats ();
-                    this->Mode (MENU);
+                    DumpStats ();
+                    Mode (MENU);
                     break;
                 case '1':
                     DebugSeq  = !DebugSeq;
                     Serial << "  MIDI sequence debugging " << (( DebugSeq ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case '2':
                     DebugMidi  = !DebugMidi;
                     Serial << "  MIDI debugging " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case '3':
                     DebugI2C  = !DebugI2C;
                     Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case '4':
                     DebugSynth = !DebugSynth;
                     Serial << "  Synth debugging " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case '5':
                     DebugDisp = !DebugDisp;
                     Serial << "  Display debugging " << (( DebugDisp ) ? "Enabled" : "Disabled") << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case 'd':
                     Settings.SaveDebugFlags ();
                     Serial << "  Saving debug flags" << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case 'S':
-                    this->InputString = Settings.GetSSID ();
-                    this->InputPrompt ("  Enter SSID");
-                    this->Mode (INSSID);
+                    InputString = Settings.GetSSID ();
+                    InputPrompt ("  Enter SSID");
+                    Mode (INSSID);
                     break;
                 case 'P':
-                    this->InputString = Settings.GetPasswd ();
-                    this->InputPrompt ("  Enter PWD");
-                    this->Mode (INPWD);
+                    InputString = Settings.GetPasswd ();
+                    InputPrompt ("  Enter PWD");
+                    Mode (INPWD);
                     break;
                 case 'C':
-                    this->InputPrompt ("  Clearing configuration settings");
-                    this->Mode (CLR_CONFIG);
+                    InputPrompt ("  Clearing configuration settings");
+                    Mode (CLR_CONFIG);
                     break;
                 case 'T':
-                    this->InputPrompt ("  Clearing tuning settings");
-                    this->Mode (CLR_TUNING);
+                    InputPrompt ("  Clearing tuning settings");
+                    Mode (CLR_TUNING);
                     break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
@@ -267,7 +267,7 @@ void MONITOR_C::MenuSel (void)
                     break;
                 default:
                     Serial << "       ??" << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 }
             break;
@@ -280,7 +280,7 @@ void MONITOR_C::Menu (void)
     Serial << endl;
     Serial << "\t######   Synth32 -- Midi32  ######" << endl;
     Serial << "\t######    Midi Subsystem    ######" << endl;
-    if (  SynthFront.IsInTuning () )
+    if (  IsInTuning () )
         Serial << "\t******     Tuning mode      ******" << endl;
     Serial << StateDebug (DebugSeq)   << "\t1   - Debug MIDI Sequencer" << endl;
     Serial << StateDebug (DebugMidi)  << "\t2   - Debug MIDI devices" << endl;
@@ -310,24 +310,24 @@ void MONITOR_C::TextIn (void)
     switch ( in_char )
         {
         case '\r':              // return (enter)
-            if ( this->Save (this->InputMode) )
-                this->Mode (MENU);
+            if ( Save (InputMode) )
+                Mode (MENU);
             break;
         case (char)127:         // backspace
-            if ( this->InputString.length () )
+            if ( InputString.length () )
                 {
                 Serial << (char)8 << ' ' << (char)8;
-                this->InputString.remove (this->InputString.length () - 1);
+                InputString.remove (InputString.length () - 1);
                 }
             break;
         case (char)27:          // escape for exit with no change
-            this->Mode (MENU);
+            Mode (MENU);
             break;
         case '\t':              // Tab for special loops
-            this->Save (this->InputMode);
+            Save (InputMode);
             break;
         default:                // all other characters go into string
-            this->InputString += in_char;
+            InputString += in_char;
             Serial << in_char;
             break;
         }
@@ -337,8 +337,8 @@ void MONITOR_C::TextIn (void)
 MONITOR_C::MONITOR_C (void)
     {
     Serial.begin (115200);
-    this->InputString = "";
-    this->InputMode   = MENU;
+    InputString = "";
+    InputMode   = MENU;
     }
 
 //#######################################################################
@@ -350,24 +350,24 @@ bool MONITOR_C::Detect (void)
 //#######################################################################
 void MONITOR_C::Loop (void)
     {
-    if ( this->InputMode != MENU )
+    if ( InputMode != MENU )
         {
         while ( Serial.available () )
             {
-            switch ( this->InputMode )
+            switch ( InputMode )
                 {
                 case CMD:
-                    this->MenuSel ();
+                    MenuSel ();
                     break;
                 case INSSID:
                 case INPWD:
                 case VARIABLE:
-                    this->TextIn ();
+                    TextIn ();
                     break;
                 case CLR_TUNING:
                 case CLR_CONFIG:
-                    if ( this->PromptZap () )
-                        this->Mode (MENU);
+                    if ( PromptZap () )
+                        Mode (MENU);
                     break;
                 default:
                     break;
@@ -376,8 +376,8 @@ void MONITOR_C::Loop (void)
         }
     else
         {
-        this->Menu ();
-        this->Mode (CMD);
+        Menu ();
+        Mode (CMD);
         }
     }
 

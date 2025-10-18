@@ -27,26 +27,7 @@ using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 //#######################################################################
-SYNTH_FRONT_C::SYNTH_FRONT_C (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
-    {
-    pMidiMapXL          = xl_map;
-    Down.Key            = 0;
-    Down.Trigger        = 0;
-    Down.Velocity       = 0;
-    Up.Key              = 0;
-    Up.Trigger          = 0;
-    Up.Velocity         = 0;
-    SetTuning           = false;
-    TuningChange        = false;
-    CurrentMapSelected  = -1;
-    CurrentMidiSelected = 0;
-    CalibrationPhase    = 0;
-    LoadSaveSelection   = 1;
-    TuningSelectionTime = 0;
-    }
-
-//#######################################################################
-void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
+void InitializeSynth (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
     {
     // Setup ports for calibration
     CalibrationBaseDigital = mod_mux_digital;
@@ -83,7 +64,6 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
     CalibrationAtoD = start_a_d;
     ResolutionMode = true;
 
-    LaunchControl.Begin (pMidiMapXL);
 
     InitMidiControl ();
     InitMidiKeyboard ();
@@ -91,7 +71,7 @@ void SYNTH_FRONT_C::Begin (short voice, short mixer, short noise_digital, short 
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::MasterVolume (short md)
+void MasterVolume (short md)
     {
     int x = 0;
 
@@ -105,14 +85,14 @@ void SYNTH_FRONT_C::MasterVolume (short md)
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Clear ()
+void ClearSynth ()
     {
     for ( int z = 0;  z < VOICE_COUNT; z++ )
         pVoice[z]->Clear ();
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::PageAdvance ()
+void PageAdvance ()
     {
     byte  m    = CurrentMidiSelected;
     short next = CurrentMapSelected + 1;
@@ -192,7 +172,7 @@ void SYNTH_FRONT_C::PageAdvance ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::Loop ()
+void LoopSynth ()
     {
     int oldest = -1;
     int doit   = -1;
@@ -264,7 +244,7 @@ void SYNTH_FRONT_C::Loop ()
     }
 
 //#####################################################################
-void SYNTH_FRONT_C::TemplateSelect (byte index)
+void TemplateSelect (byte index)
     {
     byte *pb = nullptr;
 
@@ -285,4 +265,46 @@ void SYNTH_FRONT_C::TemplateSelect (byte index)
 
     LaunchControl.SelectTemplate (index, pb);
     }
+
+//#####################################################################
+//#####################################################################
+KEY_T           Down;
+KEY_T           Up;
+
+ENV_GENERATOR_C EnvADSL;
+SYNTH_LFO_C     Lfo[2];
+VOICE_C*        pVoice[VOICE_COUNT];
+bool            VoiceMute[MAP_COUNT]    = { false, false, false, false };
+
+short           VolumeMaster;
+short           VolumeOscMaster;
+short           VolumeFltMaster;
+short           VolumeSprMaster;
+
+bool            ResolutionMode          = false;
+bool            MapSelectMode           = false;
+bool            LoadSaveMode            = false;
+SYNTH_CONFIG_C  SynthConfig;
+bool            KaptureMidiKeyboard     = false;
+short           CurrentMidiSelected     = 0;
+short           CurrentMapSelected      = -1;
+short           CurrentVoiceSelected    = -1;
+short           CurrentFilterSelected   = -1;
+short           CurrentConfigSelected   = -1;
+short           CurrentDisplayPage      = 0;
+
+short           LoadSaveSelection       = 1;
+NOVATION_XL_C   LaunchControl;
+
+bool            SetTuning               = false;
+uint16_t        TuningLevel[ENVELOPE_COUNT+1];
+uint16_t        TuningFlt[FILTER_DEVICES];
+byte            TuningOutputSelect;
+bool            TuningChange            = false;
+uint64_t        TuningSelectionTime;
+ushort          CalibrationReference;
+short           CalibrationBaseDigital;
+short           CalibrationPhase;
+short           CalibrationLFO;
+ushort                  CalibrationAtoD;
 

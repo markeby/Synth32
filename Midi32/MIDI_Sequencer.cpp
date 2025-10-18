@@ -25,21 +25,21 @@ using namespace MIDI_NAMESPACE;
 static void Cb_ControlChange_Seq (uint8_t mchan, uint8_t type, uint8_t value)
     {
     DBG ("Control change: 0x%2.2X  value 0x%2.2X", type, value);
-    SynthFront.ControllerSequence (mchan, type, value);
+    ControllerSequence (mchan, type, value);
     }
 
 //-------------------------------------------------------------------
 static void Cb_KeyDown_Seq (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
     DBG ("Key down: %d  velocity: %d", key, velocity);
-    SynthFront.KeyDown(mchan, key, velocity);
+    KeyDown (mchan, key, velocity);
     }
 
 //-------------------------------------------------------------------
 static void Cb_KeyUp_Seq (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
     DBG ("Key up: %d  velocity: %d", key, velocity);
-    SynthFront.KeyUp (mchan, key, velocity);
+    KeyUp (mchan, key, velocity);
     }
 
 //-------------------------------------------------------------------
@@ -47,7 +47,7 @@ static void Cb_PitchBend_Seq (uint8_t mchan, int value)
     {
     DBG ("Sequencer pitch bend value %d", value);
     value = (value + 8192) >> 2;
-    SynthFront.PitchBend (mchan, value);
+    PitchBender (mchan, value);
     }
 
 //-------------------------------------------------------------------
@@ -61,7 +61,7 @@ static void Cb_Message_Seq (const MidiMessage& msg)
 static void Cb_SystemEx_Seq (byte * array, unsigned size)
     {
     printf ("\n\n*** Sequencer SYSEX");
-    SynthFront.SystemExDebug (array, size);
+    SystemExDebug (array, size);
     }
 
 //-------------------------------------------------------------------
@@ -78,7 +78,7 @@ static void Cb_Error_Seq (int8_t err)
 
 //#######################################################################
 //#######################################################################
-void SYNTH_FRONT_C::InitMidiSequence ()
+void InitMidiSequence ()
     {
     Midi_2.setHandleNoteOn               (Cb_KeyDown_Seq);
     Midi_2.setHandleNoteOff              (Cb_KeyUp_Seq);
@@ -106,7 +106,7 @@ void SYNTH_FRONT_C::InitMidiSequence ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ControllerSequence (short mchan, byte type, byte value)
+void ControllerSequence (short mchan, byte type, byte value)
     {
     int  z;
     bool zl;
@@ -115,7 +115,7 @@ void SYNTH_FRONT_C::ControllerSequence (short mchan, byte type, byte value)
         {
         case 0x78:      // [Channel Mode Message] All Sound Off
             DBG ("[Channel Mode Message] All Sound Off");
-            this->Clear ();
+            ClearSynth ();
             break;
 
         case 0x40:      // Damper pedal (sustain)

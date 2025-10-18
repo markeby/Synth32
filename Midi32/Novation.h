@@ -51,19 +51,19 @@ public:
             NOVATION_XL_C   (void);
     void    Loop            (void);
     void    TemplateReset   (byte index);
-    void    TemplateRefresh (void)              { this->ButtonChange = true; }
+    void    TemplateRefresh (void)              { ButtonChange = true; }
 
     void    SelectTemplate  (byte index, byte* pbuttons=nullptr);
     void    SetColor        (byte index, byte led, XL_LED color);
-    void    SetColor        (byte led, XL_LED color)                { this->SetColor (this->CurrentMap, led,  color); }
+    void    SetColor        (byte led, XL_LED color)                { SetColor (CurrentMap, led,  color); }
     void    ButtonColor     (byte led, XL_LED color)
         {
         if ( pButtonState == nullptr )
             return;
         pButtonState[led] = (byte)color;
-        this->ButtonChange = true;
+        ButtonChange = true;
         }
     void    UpdateButtons   (void);
-    short   GetCurrentMap   (void)                                  { return (this->CurrentMap); }
+    short   GetCurrentMap   (void)                                  { return (CurrentMap); }
     };
 

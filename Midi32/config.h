@@ -254,23 +254,23 @@ public:
     void InitButtonsXL              (void);
 
     inline byte*  GetButtonStateLfoPtr  (void)                                  { return (ButtonStateLfo); }
-    inline void   SetName               (String& name)                          { this->Name = name; }
-    inline String Getname               (void)                                  { return (this->Name); }
-    inline void   SetSoftFreq           (short data)                            { this->Cs.SoftFrequency = data; }
-    inline short  GetSoftFreq           (void)                                  { return (this->Cs.SoftFrequency); };
-    inline void   SetModMidi            (byte index, short data)                { this->Cs.LfoMidi[index] = data; }
-    inline short  GetModMidi            (byte index)                            { return (this->Cs.LfoMidi[index]); };
-    inline void   SetModSoftMixer       (short index, bool data)                { this->Cs.SoftMixerLFO[index] = data; }
-    inline bool   GetModSoftMixer       (short unit)                            { return (this->Cs.SoftMixerLFO[unit]); }
-    inline void   SetSelect             (short unit, short index, bool data)    { this->Cs.CfgLFO[unit].Select[index] = data; }
-    inline bool   GetSelect             (short unit, short index)               { return (this->Cs.CfgLFO[unit].Select[index]); }
-    inline void   SetRampDir            (short unit, bool data)                 { this->Cs.CfgLFO[unit].RampDir = data; }
-    inline bool   GetRampDir            (short unit)                            { return (this->Cs.CfgLFO[unit].RampDir); }
-    inline void   SetFrequency          (short unit, short data)                { this->Cs.CfgLFO[unit].Frequency = data; }
-    inline short  GetFrequency          (short unit)                            { return (this->Cs.CfgLFO[unit].Frequency); }
-    inline void   SetPulseWidth         (short unit, short data)                { this->Cs.CfgLFO[unit].PulseWidth = data; }
-    inline short  GetPulseWidth         (short unit)                            { return (this->Cs.CfgLFO[unit].PulseWidth); }
-    inline void   SetModLevelAlt        (short unit, bool data)                 { this->Cs.CfgLFO[unit].ModLevelAlt = data; }
-    inline bool   GetModLevelAlt        (short unit)                            { return (this->Cs.CfgLFO[unit].ModLevelAlt); }
+    inline void   SetName               (String& name)                          { Name = name; }
+    inline String Getname               (void)                                  { return (Name); }
+    inline void   SetSoftFreq           (short data)                            { Cs.SoftFrequency = data; }
+    inline short  GetSoftFreq           (void)                                  { return (Cs.SoftFrequency); };
+    inline void   SetModMidi            (byte index, short data)                { Cs.LfoMidi[index] = data; }
+    inline short  GetModMidi            (byte index)                            { return (Cs.LfoMidi[index]); };
+    inline void   SetModSoftMixer       (short index, bool data)                { Cs.SoftMixerLFO[index] = data; }
+    inline bool   GetModSoftMixer       (short unit)                            { return (Cs.SoftMixerLFO[unit]); }
+    inline void   SetSelect             (short unit, short index, bool data)    { Cs.CfgLFO[unit].Select[index] = data; }
+    inline bool   GetSelect             (short unit, short index)               { return (Cs.CfgLFO[unit].Select[index]); }
+    inline void   SetRampDir            (short unit, bool data)                 { Cs.CfgLFO[unit].RampDir = data; }
+    inline bool   GetRampDir            (short unit)                            { return (Cs.CfgLFO[unit].RampDir); }
+    inline void   SetFrequency          (short unit, short data)                { Cs.CfgLFO[unit].Frequency = data; }
+    inline short  GetFrequency          (short unit)                            { return (Cs.CfgLFO[unit].Frequency); }
+    inline void   SetPulseWidth         (short unit, short data)                { Cs.CfgLFO[unit].PulseWidth = data; }
+    inline short  GetPulseWidth         (short unit)                            { return (Cs.CfgLFO[unit].PulseWidth); }
+    inline void   SetModLevelAlt        (short unit, bool data)                 { Cs.CfgLFO[unit].ModLevelAlt = data; }
+    inline bool   GetModLevelAlt        (short unit)                            { return (Cs.CfgLFO[unit].ModLevelAlt); }
     };
 

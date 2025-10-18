@@ -89,14 +89,14 @@ public:
     };  // end ENVELOPE_C
 
 //#######################################################################
-class ENVELOPE_GENERATOR_C
+class ENV_GENERATOR_C
     {
 private:
     std::deque<ENVELOPE_C>  Envelopes;
 
 public:
-                ENVELOPE_GENERATOR_C    (void);
-                ~ENVELOPE_GENERATOR_C   (void)   {}
+                ENV_GENERATOR_C    (void);
+                ~ENV_GENERATOR_C   (void)   {}
     ENVELOPE_C*  NewADSR                (uint8_t index, String name, uint16_t device, uint8_t& usecount);
     void         Loop                   (void);
     };

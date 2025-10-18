@@ -27,31 +27,31 @@ using namespace DISP_MESSAGE_N;
 static void Cb_ControlChange_Keyboard (uint8_t mchan, uint8_t type, uint8_t value)
     {
     DBG ("Control change Keyboard: 0x%2.2X  value 0x%2.2X", type, value);
-    SynthFront.ControlChangeKeyboard (mchan, type, value);
+    ControlChangeKeyboard (mchan, type, value);
     }
 
 //-------------------------------------------------------------------
 static void Cb_KeyDown_Keyboard (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    if ( SynthFront.KeyboardKapture () )
+    if ( KeyboardKapture () )
         {
-        if ( SynthFront.CurrentMidi() > 0 )
-            mchan = SynthFront.CurrentMidi ();
+        if ( CurrentMidi() > 0 )
+            mchan = CurrentMidi ();
         }
     DBG ("Key down: %d  velocity: %d", key, velocity);
-    SynthFront.KeyDown(mchan, key, velocity);
+    KeyDown(mchan, key, velocity);
     }
 
 //-------------------------------------------------------------------
 static void  Cb_KeyUp_Keyboard (uint8_t mchan, uint8_t key, uint8_t velocity)
     {
-    if ( SynthFront.KeyboardKapture () )
+    if ( KeyboardKapture () )
         {
-        if ( SynthFront.CurrentMidi() > 0 )
-            mchan = SynthFront.CurrentMidi ();
+        if ( CurrentMidi() > 0 )
+            mchan = CurrentMidi ();
         }
     DBG ("Key up: %d  velocity: %d", key, velocity);
-    SynthFront.KeyUp (mchan, key, velocity);
+    KeyUp (mchan, key, velocity);
     }
 
 //-------------------------------------------------------------------
@@ -59,12 +59,12 @@ static void Cb_PitchBend_Keyboard (uint8_t mchan, int value)
     {
     DBG ("Keyboard pitch bend %d", value);
     value = (value + 8192) >> 2;
-    if ( SynthFront.KeyboardKapture () )
+    if ( KeyboardKapture () )
         {
-        if ( SynthFront.CurrentMidi() > 0 )
-            mchan = SynthFront.CurrentMidi ();
+        if ( CurrentMidi() > 0 )
+            mchan = CurrentMidi ();
         }
-    SynthFront.PitchBend (mchan, value);
+    PitchBender (mchan, value);
     }
 
 //-------------------------------------------------------------------
@@ -78,7 +78,7 @@ static void Cb_Message_Keyboard (const MidiMessage& msg)
 static void Cb_SystemEx_Keyboard (byte * array, unsigned size)
     {
     printf ("\n\n*** Keyboard SYSEX");
-    SynthFront.SystemExDebug (array, size);
+    SystemExDebug (array, size);
     }
 
 //-------------------------------------------------------------------
@@ -98,45 +98,45 @@ static void Cb_Error_Keyboard (int8_t err)
 static void tuneReset (int index, bool state)
     {
     if ( state )
-        SynthFront.StartCalibration ();
+        StartCalibration ();
     else
         Monitor.Reset ();
     }
 //########################################################
 static void tuneUpDown (int index, bool state)
     {
-    SynthFront.TuningAdjust (index);
+    TuningAdjust (index);
     }
 
 //########################################################
 static void tuneBump (int index, bool state)
     {
-    if ( SynthFront.IsInTuning () )
-        SynthFront.TuningBump (state);
+    if ( IsInTuning () )
+        TuningBump (state);
     else
-        SynthFront.KeyboardKapture (state);
+        KeyboardKapture (state);
     }
 
 //########################################################
 static void tunningSave (int index, bool state)
     {
-    SynthFront.SaveTuning ();
+    SaveTuning ();
     }
 
 //########################################################
 static void faderG49 (int index, short data)
     {
     if ( index == 8 )
-        SynthFront.MasterVolume (data);
-    else if ( SynthFront.IsInTuning () )
+        MasterVolume (data);
+    else if ( IsInTuning () )
         {
         switch ( index )
             {
             case 0 ... 4:
-                SynthFront.SetTuningLevel (index, data);
+                SetTuningLevel (index, data);
                 break;
             case 6 ... 7:
-                SynthFront.SetTuningFilter (index - 6, data);
+                SetTuningFilter (index - 6, data);
                 break;
             default:
                 break;
@@ -216,7 +216,7 @@ G49_BUTTON_MAP switchMap[] =
 
 //#######################################################################
 //#######################################################################
-void SYNTH_FRONT_C::InitMidiKeyboard ()
+void InitMidiKeyboard ()
     {
     Midi_1.setHandleNoteOn               (Cb_KeyDown_Keyboard);
     Midi_1.setHandleNoteOff              (Cb_KeyUp_Keyboard);
@@ -244,7 +244,7 @@ void SYNTH_FRONT_C::InitMidiKeyboard ()
     }
 
 //#######################################################################
-void SYNTH_FRONT_C::ControlChangeKeyboard (short mchan, byte type, byte value)
+void ControlChangeKeyboard (short mchan, byte type, byte value)
     {
     type -= 16;                 // all controls start at 16
     switch ( mchan )
@@ -320,7 +320,7 @@ void SYNTH_FRONT_C::ControlChangeKeyboard (short mchan, byte type, byte value)
                         break;
 
                     case 8 ... 12:
-                        this->TuningOutputBitFlip (type - 8);
+                        TuningOutputBitFlip (type - 8);
                         break;
 
                     default:

@@ -37,7 +37,7 @@ private:
 
 public:
                     FLT4_C              (void);
-    void            Begin               (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void            Begin               (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen);
     void            Clear               (void);
     void            NoteSet             (byte key, byte velocity);
     void            NoteClear           (void);

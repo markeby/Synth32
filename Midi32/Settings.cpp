@@ -24,7 +24,7 @@ static const char* synthTuning    = "SynthP";   // Tuning directory
 static const char* synthKeyBank   = "BANK";     // Keyboard bank prefix "BANKx"
 static const char* synthKeyBender = "BEND";     // LFO/Bender offset "BENDx"
 
-static const char* SynthConfig    = "SynthC";   // Configureation directory
+static const char* synthConfig    = "SynthC";   // Configureation directory
 
 //#######################################################################
 void SETTINGS_C::ClearAllSys (void)
@@ -144,7 +144,7 @@ void SETTINGS_C::ClearTuning (void)
 //#######################################################################
 void SETTINGS_C::ClearConfig(void)
     {
-    Prefs.begin (SynthConfig, false);
+    Prefs.begin (synthConfig, false);
     Prefs.clear ();
     Prefs.end ();
     }
@@ -205,7 +205,7 @@ bool SETTINGS_C::GetConfig (const char* name, void* ptr, size_t len)
     {
     size_t rtn = 0;
 
-    Prefs.begin (SynthConfig, false);
+    Prefs.begin (synthConfig, false);
     if ( Prefs.isKey (name) )
         rtn = Prefs.getBytes (name, ptr, len);
     Prefs.end();
@@ -220,7 +220,7 @@ void SETTINGS_C::PutConfig (const char* name, const void* ptr, size_t len)
     bool zbl;
     size_t rtn;
 
-    Prefs.begin (SynthConfig, false);
+    Prefs.begin (synthConfig, false);
     if ( Prefs.isKey (name) )
         zbl = Prefs.remove (name);
     rtn = Prefs.putBytes (name, ptr, len);

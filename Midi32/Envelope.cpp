@@ -23,12 +23,12 @@ char* StateLabel[] = { "IDLE", "START", "ATTACK", "DECAY", "SUSTAIN", "RELEASE" 
 #define TIME_THRESHOLD  0.0
 
 //#######################################################################
-ENVELOPE_GENERATOR_C::ENVELOPE_GENERATOR_C ()
+ENV_GENERATOR_C::ENV_GENERATOR_C ()
     {
     }
 
 //#######################################################################
-ENVELOPE_C* ENVELOPE_GENERATOR_C::NewADSR (uint8_t index, String name, uint16_t device, uint8_t& usecount)
+ENVELOPE_C* ENV_GENERATOR_C::NewADSR (uint8_t index, String name, uint16_t device, uint8_t& usecount)
     {
     ENVELOPE_C adsl (index, name, device, usecount);
     Envelopes.push_back (adsl);
@@ -36,7 +36,7 @@ ENVELOPE_C* ENVELOPE_GENERATOR_C::NewADSR (uint8_t index, String name, uint16_t 
     }
 
 //#######################################################################
-void ENVELOPE_GENERATOR_C::Loop ()
+void ENV_GENERATOR_C::Loop ()
     {
     for ( deque<ENVELOPE_C>::iterator it = Envelopes.begin();  it != Envelopes.end();  ++it )
         {

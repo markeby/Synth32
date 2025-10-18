@@ -56,7 +56,7 @@ private:
 
 public:
             OSC_C               (void);
-    void    Begin               (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen);
+    void    Begin               (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen);
     void    SetTuningVolume     (byte select, uint16_t level);
     void    SetTuningNote       (byte note);
     void    TuningAdjust        (bool up);

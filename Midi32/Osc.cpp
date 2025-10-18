@@ -28,7 +28,7 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     }
 
 //#######################################################################
-void OSC_C::Begin (short num, short first_device, byte& usecount, ENVELOPE_GENERATOR_C& envgen)
+void OSC_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
     {
         Number = num;
     // D/A configuration
