@@ -11,41 +11,42 @@
 //#######################################################################
     SYNTH_VOICE_CONFIG_C::SYNTH_VOICE_CONFIG_C ()
     {
-    this->Cs.MapVoiceMidi  = 1;
-    this->Cs.MapVoiceNoise = 0;
-    this->Cs.OutputEnable  = 0;
-    this->Cs.OutputMask  = 0;
-    this->Cs.RampDirection = false;
-    this->Cs.PulseWidth    = 2048;
+    Mute = false;
+    Cs.MapVoiceMidi  = 1;
+    Cs.MapVoiceNoise = 0;
+    Cs.OutputEnable  = 0;
+    Cs.OutputMask  = 0;
+    Cs.RampDirection = false;
+    Cs.PulseWidth    = 2048;
 
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        this->Cs.OscEnv[z].AttackTime   = 1.0;      // All envelopes initialize
-        this->Cs.OscEnv[z].DecayTime    = 1.0;
-        this->Cs.OscEnv[z].ReleaseTime  = 1.0;
-        this->Cs.OscEnv[z].SustainLevel = 0.0;
-        this->Cs.OscEnv[z].MaxLevel     = 0.0;
-        this->Cs.OscEnv[z].MinLevel     = 0.0;
-        this->SelectedOscEnvelope[z]    = false;
+        Cs.OscEnv[z].AttackTime   = 1.0;      // All envelopes initialize
+        Cs.OscEnv[z].DecayTime    = 1.0;
+        Cs.OscEnv[z].ReleaseTime  = 1.0;
+        Cs.OscEnv[z].SustainLevel = 0.0;
+        Cs.OscEnv[z].MaxLevel     = 0.0;
+        Cs.OscEnv[z].MinLevel     = 0.0;
+        SelectedOscEnvelope[z]    = false;
         if ( z < FILTER_DEVICES )                                // filter initialization
             {
-            this->Cs.FltEnv[z].AttackTime   = 1.0;
-            this->Cs.FltEnv[z].DecayTime    = 1.0;
-            this->Cs.FltEnv[z].ReleaseTime  = 1.0;
-            this->Cs.FltEnv[z].SustainLevel = 0.0;
-            this->Cs.FltEnv[z].MaxLevel     = 0.0;
-            this->Cs.FltEnv[z].MinLevel     = 0.0;
-            this->Cs.FilterCtrl[2]          = 0;
-            this->SelectedFltEnvelope[z]    = false;
+            Cs.FltEnv[z].AttackTime   = 1.0;
+            Cs.FltEnv[z].DecayTime    = 1.0;
+            Cs.FltEnv[z].ReleaseTime  = 1.0;
+            Cs.FltEnv[z].SustainLevel = 0.0;
+            Cs.FltEnv[z].MaxLevel     = 0.0;
+            Cs.FltEnv[z].MinLevel     = 0.0;
+            Cs.FilterCtrl[2]          = 0;
+            SelectedFltEnvelope[z]    = false;
             }
         }
 
     // Default preload state
-    int preset                       = 1;
-    this->Cs.OscEnv[preset].AttackTime  = 20.0;
-    this->Cs.OscEnv[preset].DecayTime   = 1.0;
-    this->Cs.OscEnv[preset].ReleaseTime = 200.0;
-    this->Cs.OscEnv[preset].MaxLevel    = 0.72;
+    int preset = 1;
+    Cs.OscEnv[preset].AttackTime  = 20.0;
+    Cs.OscEnv[preset].DecayTime   = 1.0;
+    Cs.OscEnv[preset].ReleaseTime = 200.0;
+    Cs.OscEnv[preset].MaxLevel    = 0.72;
     }
 
 //#######################################################################

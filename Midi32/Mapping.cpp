@@ -26,24 +26,11 @@ static const char* LabelM = "M";
 #endif
 
 //#####################################################################
-//#####################################################################
-void MidiMapMode ()
-    {
-    if ( !MapSelectMode )
-        {
-        TemplateSelect (XL_MIDI_MAP_MAPPING);
-        DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
-        LoadSaveMode = false;
-        MapSelectMode = true;
-        for ( int z = (MAP_COUNT * GROUP_COUNT) - 1;  z >= 0;  z-- )
-            UpdateMapModeDisplay (z);
-        }
-    else
-        ResolveMapAllocation ();
-    }
+static short load_save_selection = 1;       // The Currently selected saved index (except the default at boot)
 
 //#####################################################################
-void UpdateMapModeDisplay (int sel)
+//#####################################################################
+static void updateMapModeDisplay (int sel)
     {
     if ( sel < MAP_COUNT )
         DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, SynthConfig.Voice[sel].GetVoiceMidi ());
@@ -54,6 +41,23 @@ void UpdateMapModeDisplay (int sel)
     else if ( sel < ((MAP_COUNT * 3) - 1) )
         DisplayMessage.SendMapVoiceMidi (sel, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, SynthConfig.GetModMidi (sel - (MAP_COUNT * 2)));
     }
+
+//#####################################################################
+void MidiMapMode ()
+    {
+    if ( !MapSelectMode )
+        {
+        TemplateSelect (XL_MIDI_MAP_MAPPING);
+        DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
+        LoadSaveMode = false;
+        MapSelectMode = true;
+        for ( int z = (MAP_COUNT * GROUP_COUNT) - 1;  z >= 0;  z-- )
+            updateMapModeDisplay (z);
+        }
+    else
+        ResolveMapAllocation ();
+    }
+
 //#####################################################################
 void MapModeBump (short down)
     {
@@ -115,7 +119,7 @@ void ChangeMapSelect (short right)
             if ( ++CurrentMapSelected >= ((MAP_COUNT * GROUP_COUNT) - 1) )
                 CurrentMapSelected = 0;
             }
-        UpdateMapModeDisplay (CurrentMapSelected);
+        updateMapModeDisplay (CurrentMapSelected);
         }
     }
 
@@ -141,8 +145,8 @@ void ResolveMapAllocation ()
     for ( short z = 0;  z < MAP_COUNT;  z++ )
         {
         short                 v    = z * 2;                         // calculate voice pair
-        VOICE_C&              v0   = *(pVoice[v]);                  // Voice pair for this configuration processing
-        VOICE_C&              v1   = *(pVoice[v + 1]);
+        VOICE_C&              v0   = *(VoiceArray[v]);                  // Voice pair for this configuration processing
+        VOICE_C&              v1   = *(VoiceArray[v + 1]);
         SYNTH_VOICE_CONFIG_C& sc   = SynthConfig.Voice[z];    // Configuration data for this voice pair
         byte                  m    = sc.GetVoiceMidi ();            // Get the midi value for voice pair
         bool                  newm = false;
@@ -258,7 +262,7 @@ void LoadDefaultConfig ()
 void LoadSelectedConfig ()
     {
     DisplayMessage.LoadMessage ();
-    SynthConfig.Load (LoadSaveSelection);
+    SynthConfig.Load (load_save_selection);
     ResolveMapAllocation ();
     }
 
@@ -266,18 +270,18 @@ void LoadSelectedConfig ()
 void SaveSelectedConfig ()
     {
     DisplayMessage.SaveMessage ();
-    SynthConfig.Save (LoadSaveSelection);
+    SynthConfig.Save (load_save_selection);
     ResolveMapAllocation ();
     }
 
 //#####################################################################
 void LoadSaveBump (short down)
     {
-    short z = LoadSaveSelection;
+    short z = load_save_selection;
     z += down;
     if ( z < 1 )                z = MAX_LOAD_SAVE;
     if ( z > MAX_LOAD_SAVE )    z = 1;
-    LoadSaveSelection = z;
+    load_save_selection = z;
     DisplayMessage.SendLoadSave (z);
     }
 
@@ -286,7 +290,7 @@ void OpenLoadSavePage ()
     {
     DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_LOAD_SAVE);
     LoadSaveMode = true;
-    DisplayMessage.SendLoadSave (LoadSaveSelection);
+    DisplayMessage.SendLoadSave (load_save_selection);
     TemplateSelect (XL_MIDI_MAP_LOADSAVE);
     }
 

@@ -23,72 +23,67 @@ static const char* Label  = "TOP";
 using namespace MIDI_NAMESPACE;
 using namespace DISP_MESSAGE_N;
 
-//-------------------------------------------------------------------
-static void Cb_ControlChange_Keyboard (uint8_t mchan, uint8_t type, uint8_t value)
-    {
-    DBG ("Control change Keyboard: 0x%2.2X  value 0x%2.2X", type, value);
-    ControlChangeKeyboard (mchan, type, value);
-    }
+//########################################################
+bool kaptureMidiKeyboard = false;
 
-//-------------------------------------------------------------------
-static void Cb_KeyDown_Keyboard (uint8_t mchan, uint8_t key, uint8_t velocity)
+//--------------------------------------------------------
+static void cb_KeyDown_Keyboard (byte mchan, byte key, byte velocity)
     {
-    if ( KeyboardKapture () )
+    if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidi() > 0 )
-            mchan = CurrentMidi ();
+        if ( CurrentMidiSelected > 0 )
+            mchan = CurrentMidiSelected;
         }
     DBG ("Key down: %d  velocity: %d", key, velocity);
     KeyDown(mchan, key, velocity);
     }
 
-//-------------------------------------------------------------------
-static void  Cb_KeyUp_Keyboard (uint8_t mchan, uint8_t key, uint8_t velocity)
+//--------------------------------------------------------
+static void  cb_KeyUp_Keyboard (byte mchan, byte key, byte velocity)
     {
-    if ( KeyboardKapture () )
+    if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidi() > 0 )
-            mchan = CurrentMidi ();
+        if ( CurrentMidiSelected > 0 )
+            mchan = CurrentMidiSelected;
         }
     DBG ("Key up: %d  velocity: %d", key, velocity);
     KeyUp (mchan, key, velocity);
     }
 
-//-------------------------------------------------------------------
-static void Cb_PitchBend_Keyboard (uint8_t mchan, int value)
+//--------------------------------------------------------
+static void cb_PitchBend_Keyboard (byte mchan, int value)
     {
     DBG ("Keyboard pitch bend %d", value);
-    value = (value + 8192) >> 2;
-    if ( KeyboardKapture () )
+    if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidi() > 0 )
-            mchan = CurrentMidi ();
+        if ( CurrentMidiSelected > 0 )
+            mchan = CurrentMidiSelected;
         }
     PitchBender (mchan, value);
     }
 
-//-------------------------------------------------------------------
-static void Cb_Message_Keyboard (const MidiMessage& msg)
+//--------------------------------------------------------
+static void cb_Message_Keyboard (const MidiMessage& msg)
     {
     printf ("*** Keyboard MESSAGE:    type = 0x%02X   channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
             msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 
-//-------------------------------------------------------------------
-static void Cb_SystemEx_Keyboard (byte * array, unsigned size)
+//--------------------------------------------------------
+static void cb_SystemEx_Keyboard (byte * array, unsigned size)
     {
     printf ("\n\n*** Keyboard SYSEX");
     SystemExDebug (array, size);
     }
 
-//-------------------------------------------------------------------
-static void Cb_SystemReset_Keyboard (void)
+//--------------------------------------------------------
+static void cb_SystemReset_Keyboard (void)
     {
     printf ("\n\n*** Keyboard RESET\n");
     }
 
-//-------------------------------------------------------------------
-static void Cb_Error_Keyboard (int8_t err)
+//--------------------------------------------------------
+static void cb_Error_Keyboard (int8_t err)
     {
     printf ("\n\n*** Keyboard ERROR %d\n", err);
     }
@@ -111,10 +106,10 @@ static void tuneUpDown (int index, bool state)
 //########################################################
 static void tuneBump (int index, bool state)
     {
-    if ( IsInTuning () )
+    if ( SetTuning )
         TuningBump (state);
     else
-        KeyboardKapture (state);
+        kaptureMidiKeyboard = state;
     }
 
 //########################################################
@@ -128,7 +123,7 @@ static void faderG49 (int index, short data)
     {
     if ( index == 8 )
         MasterVolume (data);
-    else if ( IsInTuning () )
+    else if ( SetTuning )
         {
         switch ( index )
             {
@@ -143,6 +138,7 @@ static void faderG49 (int index, short data)
             }
         }
     }
+
 //########################################################
 //########################################################
 //    Midi control mapping
@@ -213,38 +209,9 @@ G49_BUTTON_MAP switchMap[] =
         { 24,   false,  "Tuning save",  tunningSave },  //  17  5
      };
 
-
 //#######################################################################
 //#######################################################################
-void InitMidiKeyboard ()
-    {
-    Midi_1.setHandleNoteOn               (Cb_KeyDown_Keyboard);
-    Midi_1.setHandleNoteOff              (Cb_KeyUp_Keyboard);
-    Midi_1.setHandleControlChange        (Cb_ControlChange_Keyboard);
-    Midi_1.setHandlePitchBend            (Cb_PitchBend_Keyboard);
-    Midi_1.setHandleError                (Cb_Error_Keyboard);
-//    Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
-//    Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
-//    Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
-//    Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
-//    Midi_1.setHandleSongPosition         (SongPositionCallback fptr);
-//    Midi_1.setHandleSongSelect           (SongSelectCallback fptr);
-//    Midi_1.setHandleTuneRequest          (TuneRequestCallback fptr);
-//    Midi_1.setHandleClock                (ClockCallback fptr);
-//    Midi_1.setHandleStart                (StartCallback fptr);
-//    Midi_1.setHandleTick                 (TickCallback fptr);
-//    Midi_1.setHandleContinue             (ContinueCallback fptr);
-//    Midi_1.setHandleStop                 (StopCallback fptr);
-//    Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
-    Midi_1.setHandleSystemExclusive      (Cb_SystemEx_Keyboard);
-    Midi_1.setHandleSystemReset          (Cb_SystemReset_Keyboard);
-#ifdef DEBUG_MIDI_MSG           // Enable all messages to print on debug terminal
-    Midi_1.setHandleMessage              (Cb_Message_Keyboard);
-#endif
-    }
-
-//#######################################################################
-void ControlChangeKeyboard (short mchan, byte type, byte value)
+static void cb_Control_Keyboard (byte mchan, byte type, byte value)
     {
     type -= 16;                 // all controls start at 16
     switch ( mchan )
@@ -254,8 +221,8 @@ void ControlChangeKeyboard (short mchan, byte type, byte value)
                 {
                 case 1:
                     // mod wheel
-                    SetLevelLFO (0, mchan, value);
-                    SetLevelLFO (1, mchan, value);
+                    Lfo[0].SetLevelMidi (mchan, value);
+                    Lfo[1].SetLevelMidi (mchan, value);
                     SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER * 0.5);
                     DBG ("MIDI channel = %d   modulation = %d    ", mchan, value);
                     break;
@@ -303,20 +270,24 @@ void ControlChangeKeyboard (short mchan, byte type, byte value)
                 switch ( type )
                     {
                     case 0 ... 7:
-                        if ( (RunTime - TuningSelectionTime) < 5000 )
+                        {
+                        static uint64_t selection_time;
+
+                        if ( (RunTime - selection_time) < 5000 )
                             {
-                            pVoice[type]->TuningState (true);
+                            VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelectSecond (type);
-                            TuningSelectionTime = 0;
+                            selection_time = 0;
                             }
                         else
                             {
                             for ( int z = 0;  z < VOICE_COUNT;  z++ )
-                                pVoice[z]->TuningState (false);
-                            pVoice[type]->TuningState (true);
+                                VoiceArray[z]->TuningState (false);
+                            VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelect (type);
-                            TuningSelectionTime = RunTime;
+                            selection_time = RunTime;
                             }
+                        }
                         break;
 
                     case 8 ... 12:
@@ -353,4 +324,31 @@ void ControlChangeKeyboard (short mchan, byte type, byte value)
         }
     }
 
+//#######################################################################
+void InitMidiKeyboard ()
+    {
+    Midi_1.setHandleNoteOn               (cb_KeyDown_Keyboard);
+    Midi_1.setHandleNoteOff              (cb_KeyUp_Keyboard);
+    Midi_1.setHandleControlChange        (cb_Control_Keyboard);
+    Midi_1.setHandlePitchBend            (cb_PitchBend_Keyboard);
+    Midi_1.setHandleError                (cb_Error_Keyboard);
+//    Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+//    Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
+//    Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
+//    Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);
+//    Midi_1.setHandleSongPosition         (SongPositionCallback fptr);
+//    Midi_1.setHandleSongSelect           (SongSelectCallback fptr);
+//    Midi_1.setHandleTuneRequest          (TuneRequestCallback fptr);
+//    Midi_1.setHandleClock                (ClockCallback fptr);
+//    Midi_1.setHandleStart                (StartCallback fptr);
+//    Midi_1.setHandleTick                 (TickCallback fptr);
+//    Midi_1.setHandleContinue             (ContinueCallback fptr);
+//    Midi_1.setHandleStop                 (StopCallback fptr);
+//    Midi_1.setHandleActiveSensing        (ActiveSensingCallback fptr);
+    Midi_1.setHandleSystemExclusive      (cb_SystemEx_Keyboard);
+    Midi_1.setHandleSystemReset          (cb_SystemReset_Keyboard);
+#ifdef DEBUG_MIDI_MSG           // Enable all messages to print on debug terminal
+    Midi_1.setHandleMessage              (cb_Message_Keyboard);
+#endif
+    }
 

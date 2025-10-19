@@ -15,9 +15,6 @@
 // number of mixer channels in each oscillator
 #define OSC_MIXER_COUNT     5
 
-// number of total envelopes to process
-#define ENVELOPE_COUNT      OSC_MIXER_COUNT
-
 // number of MIDI channels possible
 #define MAX_MIDI            16
 

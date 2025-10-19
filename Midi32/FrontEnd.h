@@ -27,91 +27,61 @@ struct KEY_S
 typedef struct KEY_S KEY_T;
 
 //#######################################################################
-extern KEY_T                 Down;
-extern KEY_T                 Up;
+extern KEY_T            Down;
+extern KEY_T            Up;
 
-extern ENV_GENERATOR_C    EnvADSL;
-extern SYNTH_LFO_C             Lfo[2];
-extern VOICE_C*                pVoice[VOICE_COUNT];
-extern bool                    VoiceMute[MAP_COUNT]; ;
+extern ENV_GENERATOR_C  EnvADSL;                    // Envelope generator creation class
+extern SYNTH_LFO_C      Lfo[2];                     // Array of LFO interfaces
+extern VOICE_C*         VoiceArray[VOICE_COUNT];    // Pointers to each of the voice module devices
 
-extern short                   VolumeMaster;
-extern short                   VolumeOscMaster;
-extern short                   VolumeFltMaster;
-extern short                   VolumeSprMaster;
+extern bool             ResolutionMode;
+extern bool             MapSelectMode;
+extern bool             LoadSaveMode;
+extern SYNTH_CONFIG_C   SynthConfig;
+extern byte             CurrentMidiSelected;
+extern short            CurrentMapSelected;
+extern short            CurrentVoiceSelected;
+extern short            CurrentFilterSelected;
+extern short            CurrentConfigSelected;
+extern short            CurrentDisplayPage;         // Current index of page on display
 
-extern bool                    ResolutionMode;
-extern bool                    MapSelectMode;
-extern bool                    LoadSaveMode;
-extern SYNTH_CONFIG_C          SynthConfig;
-extern bool                    KaptureMidiKeyboard;
-extern short                   CurrentMidiSelected;
-extern short                   CurrentMapSelected;
-extern short                   CurrentVoiceSelected;
-extern short                   CurrentFilterSelected;
-extern short                   CurrentConfigSelected;
-extern short                   CurrentDisplayPage;
+extern NOVATION_XL_C    LaunchControl;              // Novation LaunchControl XL control and interface module
+                                                    //   (incomming commands on Midi_0)
+extern bool             SetTuning;                  // Tuning mode is activated and no other mode can be used.
+extern short            CalibrationBaseDigital;     // I2c base address for the digital controlled analog switches.
+extern ushort           CalibrationAtoD;            // I2c interface index to the analog to digital interface.
 
-extern short                   LoadSaveSelection;
-extern NOVATION_XL_C           LaunchControl;
+//#######################################################################
+inline void KeyDown (byte mchan, byte key, byte velocity)
+    { Down.Key = key; Down.Velocity = velocity; Down.Trigger = mchan; }
 
-extern bool                    SetTuning;
-extern uint16_t                TuningLevel[ENVELOPE_COUNT+1];
-extern uint16_t                TuningFlt[FILTER_DEVICES];
-extern byte                    TuningOutputSelect;
-extern bool                    TuningChange;
-extern uint64_t                TuningSelectionTime;
-extern ushort                  CalibrationReference;
-extern short                   CalibrationBaseDigital;
-extern short                   CalibrationPhase;
-extern short                   CalibrationLFO;
-extern ushort                  CalibrationAtoD;
-
-
-
-void   UpdateMapModeDisplay     (int sel);
+inline void KeyUp (byte mchan, byte key, byte velocity)
+    { Up.Key = key; Up.Velocity = velocity; Up.Trigger = mchan; }
 
 //#######################################################################
 // FrontEnd.cpp
 void InitializeSynth            (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
 void SystemExDebug              (byte* array, unsigned size);
 void LoopSynth                  (void);
-
-inline void KeyDown (byte mchan, byte key, byte velocity)
-    { Down.Key = key; Down.Velocity = velocity; Down.Trigger = mchan; }
-inline void KeyUp (byte mchan, byte key, byte velocity)
-    { Up.Key = key; Up.Velocity = velocity; Up.Trigger = mchan; }
-
 void MasterVolume               (short md);
 void ClearSynth                 (void);
-void ControllerNovation         (short mchan, byte type, byte value);
-
 void PageAdvance                (void);
 void TemplateSelect             (byte index);
 
-inline void TemplateRefresh (void)
-    { LaunchControl.TemplateRefresh (); }
-inline void KeyboardKapture (bool state)
-    { KaptureMidiKeyboard = state; }
-inline bool KeyboardKapture (void)
-    { return (KaptureMidiKeyboard); }
-
 //#######################################################################
-// FrontEnd_Control.cpp
+// MIDI_Control.cpp
 void InitMidiControl            (void);
 
 //#######################################################################
-// FrontEnd_Seq.cpp
+// MIDI_Keyboard.cpp
 void InitMidiKeyboard           (void);
-void ControlChangeKeyboard      (short mchan, byte type, byte value);
 
 //#######################################################################
-// FrontEnd_Seq.cpp
+// MIDI_Sequencer.cpp
 void InitMidiSequence           (void);
-void ControllerSequence         (short mchan, byte type, byte value);
 
 //#######################################################################
-// FrontEnd_LFO.cpp
+// Control_LFO.cpp
 void UpdateLfoDisplay           (void);
 void UpdateModButtons           (void);
 void SelectModVCA               (byte ch);
@@ -124,21 +94,10 @@ void ToggleModRampDir           (short index);
 void SetModRampDir              (short index, bool state);
 void ToggleModLevelAlt          (short index);
 void SetModLevelAlt             (short index, bool state);
-inline void SetLevelLFO                (short index, byte mchan, short data)
-    { Lfo[index].SetLevelMidi (mchan, data); }
 
 //#######################################################################
-// FrontEnd_Mapping.cpp
+// Mapping.cpp
 void MidiMapMode                (void);
-inline bool GetLoadSaveMode (void)
-    { return (LoadSaveMode); }
-inline bool GetMidiMapMode (void)
-    { return (MapSelectMode); }
-inline bool GetMapSelect (void)
-    { return (MapSelectMode); }
-inline byte CurrentMidi (void)
-    { return (CurrentMidiSelected & 0xFF); }
-
 void MapModeBump                (short down);
 void ChangeMapSelect            (short right);
 void ResolveMapAllocation       (void);
@@ -150,14 +109,12 @@ void LoadSaveBump               (short down);
 void OpenLoadSavePage           (void);
 
 //#######################################################################
-// FrontEnd_Voice.cpp
+// Control_Voice.cpp
 void VoiceDamperToggle          (short ch);
 void MuteVoicesReset            (void);
 void MuteVoiceToggle            (void);
 void UpdateOscDisplay           (void);
-void UpdateOscButtons           (void);
 void UpdateFltDisplay           (void);
-void UpdateFltButtons           (void);
 void VoiceLevelSelect           (short ch, bool state);
 void SetLevel                   (short ch, short data);
 void SetAttackTime              (short ch, short data);
@@ -172,19 +129,14 @@ void SelectFilter               (short index);
 void FreqCtrlModeAdv            (short index);
 
 //#######################################################################
-// FrontEnd_Tuning.cpp
+// Tuning.cpp
 void Tuning                     (void);
+void StartTuning                (void);
 void TuningAdjust               (bool up);
 void SetTuningLevel             (short ch, short data);
 void SetTuningFilter            (short ch, short data);
 void TuningBump                 (bool state);
-void StartTuning                (void);
 void SaveTuning                 (void);
-void Calibration                (ushort val);
 void StartCalibration           (void);
-
-inline void TuningOutputBitFlip (int bit)
-    { TuningOutputSelect ^= 1 << bit; TuningChange = true; }
-inline bool IsInTuning (void)
-    { return (SetTuning); }
+void TuningOutputBitFlip        (int bit);
 

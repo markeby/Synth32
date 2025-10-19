@@ -20,49 +20,70 @@ static const char* Label  = "TOP";
 
 //-------------------------------------------------------------------
 //-------------------------------------------------------------------
-static void Cb_ControlChange_Novation (uint8_t mchan, uint8_t type, uint8_t value)
-    {
-    DBG ("Control change Novation: 0x%2.2X  value 0x%2.2X", type, value);
-    ControllerNovation (mchan, type, value);
-    }
-
-//-------------------------------------------------------------------
-static void Cb_Message_Novation (const MidiMessage& msg)
+static void cb_Message_Novation (const MidiMessage& msg)
     {
     printf ("*** Novation MESSAGE:  type = 0x%02X  channel = %2d   data1 = 0x%02X   data2 = 0x%02X   length = 0x%02X\n",
             msg.type, msg.channel, msg.data1, msg.data2, msg.length);
     }
 
 //-------------------------------------------------------------------
-static void Cb_SystemEx_Novation (byte * array, unsigned size)
+static void cb_SystemEx_Novation (byte* array, unsigned size)
     {
     printf ("\n\n*** Novation SYSEX");
     SystemExDebug (array, size);
     }
 
 //-------------------------------------------------------------------
-static void Cb_SystemReset_Novation (void)
+static void cb_SystemReset_Novation (void)
     {
-     printf ("\n\n*** Novation RESET\n");
+    printf ("\n\n*** Novation RESET\n");
     }
 
 //-------------------------------------------------------------------
-static void Cb_Error_Novation (int8_t err)
+static void cb_Error_Novation (int8_t err)
     {
     printf ("\n\n*** Novation ERROR %d\n", err);
     }
 
-//###################################################################
-void SystemExDebug (byte* array, unsigned size)
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+void cb_ControllerControl (byte mchan, byte type, byte value)
     {
-    for ( short z = 0;  z < size;  z += 16 )
+    int index;
+
+    switch ( type )
         {
-        String st = "\n";
-        for ( short zz = 0;  (zz < 16) && ((z + zz) < size);  zz++)
-            st += String(array[z+zz], HEX) + " ";
-        printf ("%s", st.c_str ());
+        case 0x30 ... 0x47:
+        case 0x60 ... 0x67:
+            {
+            index = type - 0x30;
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()][index];
+            DBG ("%s > %d    ", m.Desc, value);
+            if ( m.CallBack != nullptr )
+                m.CallBack (m.Index, value);
+            }
+            break;
+        case 0x48 ... 0x5F:
+            {
+            index     = type - 0x30;                         // offset to start of control map
+            bool tgl = value > 0x3C;                        // use color green as threshold for button down
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()]  [index];
+            DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
+
+            if ( !tgl && (m.CallBack != nullptr) )
+                m.CallBack (m.Index, (short)tgl);
+            }
+            break;
+
+        case 120 ... 127:           // all notes stop
+            DBG ("All note clear");
+            ClearSynth ();
+            break;
+
+        default:
+            DBG ("Invalid type code = %d [%x]\n", type, type);
+            break;
         }
-    printf("\n");
     }
 
 //########################################################
@@ -194,7 +215,7 @@ static void toggleModVCO (short index, short data)
 //########################################################
 static void trackSel (short index, short data)
     {
-    if ( GetMidiMapMode () )
+    if ( MapSelectMode )
         ChangeMapSelect (index);
     }
 
@@ -207,16 +228,16 @@ static void mappingSelect (short index, short data)
 //########################################################
 static void sendDir (short index, short data)
     {
-    if ( GetMidiMapMode () )
+    if ( MapSelectMode )
         MapModeBump (( index ) ? -1 : 1);
-    else if ( GetLoadSaveMode () )
+    else if ( LoadSaveMode )
         LoadSaveBump (( index ) ? -1 : 1);
     }
 
 //########################################################
 static void loadConfig (short index, short data)
     {
-    if ( GetLoadSaveMode () )
+    if ( LoadSaveMode )
         LoadSelectedConfig ();
     else
         OpenLoadSavePage ();
@@ -225,9 +246,9 @@ static void loadConfig (short index, short data)
 //########################################################
 static void saveConfig (short index, short data)
     {
-    if ( GetMidiMapMode () )
+    if ( MapSelectMode )
         SaveDefaultConfig ();
-    else if ( GetLoadSaveMode () )
+    else if ( LoadSaveMode )
         SaveSelectedConfig ();
     else
         OpenLoadSavePage ();
@@ -242,7 +263,7 @@ static void selectFilter (short index, short data)
 //########################################################
 static void dummyButton (short index, short data)
     {
-    TemplateRefresh ();
+    LaunchControl.TemplateRefresh ();
     }
 
 //########################################################
@@ -609,16 +630,15 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
   };
 
 //#######################################################################
-//#######################################################################
 void InitMidiControl ()
     {
     LaunchControl.Begin (XL_MidiMapArray);
 
-//    Midi_0.setHandleNoteOn               (Cb_KeyDown_Novation);
-//    Midi_0.setHandleNoteOff              (Cb_KeyUp_Novation);
-    Midi_0.setHandleControlChange        (Cb_ControlChange_Novation);
-//    Midi_0.setHandlePitchBend            (Cb_PitchBendNovaton);
-    Midi_0.setHandleError                (Cb_Error_Novation);
+//    Midi_0.setHandleNoteOn               (cb_KeyDown_Novation);
+//    Midi_0.setHandleNoteOff              (cb_KeyUp_Novation);
+    Midi_0.setHandleControlChange        (cb_ControllerControl);
+//    Midi_0.setHandlePitchBend            (cb_PitchBendNovaton);
+    Midi_0.setHandleError                (cb_Error_Novation);
 //    Midi_0.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
 //    Midi_0.setHandleProgramChange        (ProgramChangeCallback fptr);
 //    Midi_0.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
@@ -633,62 +653,9 @@ void InitMidiControl ()
 //    Midi_0.setHandleStop                 (StopCallback fptr);
 //    Midi_0.setHandleActiveSensing        (ActiveSensingCallback fptr)
 //    Midi_0.setHandleSystemExclusive      (Cb_SystemEx_Novation);
-    Midi_0.setHandleSystemReset          (Cb_SystemReset_Novation);
+    Midi_0.setHandleSystemReset          (cb_SystemReset_Novation);
 #ifdef DEBUG_MIDI_MSG           // Enable all messages to print on debug terminal
-    Midi_0.setHandleMessage              (Cb_Message_Novation);
+    Midi_0.setHandleMessage              (cb_Message_Novation);
 #endif
     }
-
-//#######################################################################
-void ControllerNovation (short mchan, byte type, byte value)
-    {
-    int index;
-
-    switch ( type )
-        {
-        case 0x30 ... 0x47:
-        case 0x60 ... 0x67:
-            {
-            index = type - 0x30;
-            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()][index];
-            DBG ("%s > %d    ", m.Desc, value);
-            if ( m.CallBack != nullptr )
-                m.CallBack (m.Index, value);
-            }
-            break;
-        case 0x48 ... 0x5F:
-            {
-            index     = type - 0x30;                         // offset to start of control map
-            bool tgl = value > 0x3C;                        // use color green as threshold for button down
-            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()]  [index];
-            DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
-
-            if ( !tgl && (m.CallBack != nullptr) )
-                m.CallBack (m.Index, (short)tgl);
-            }
-            break;
-
-        case 120 ... 127:           // all notes stop
-            DBG ("All note clear");
-            ClearSynth ();
-            break;
-
-        default:
-            DBG ("Invalid type code = %d [%x]\n", type, type);
-            break;
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
 

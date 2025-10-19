@@ -20,13 +20,18 @@ static const char* Label  = "CAL";
 #define DBG(args...)
 #endif
 
+//#######################################################################
 static constexpr float fsr6_144 = (6.144 / 32767.0) * 1000;
 
-static void CalibrationCallback (ushort val)
-    {
-    Calibration (val);
-    }
+static bool    change_settings = false;
+static ushort  oscillator_level[OSC_MIXER_COUNT+1];
+static ushort  level_filter[FILTER_DEVICES];
+static byte    output_select;
+static ushort  calibration_reference;
+static short   calibration_phase;
+static short   calibration_lfo;
 
+//#######################################################################
 //#######################################################################
 void Tuning ()
     {
@@ -34,53 +39,53 @@ void Tuning ()
         {
         if ( Down.Trigger )
             {
-            pVoice[zc]->SetTuningNote (Down.Key);     // send key index to oscillator
-            if ( pVoice[zc]->TuningState () )
+            VoiceArray[zc]->SetTuningNote (Down.Key);     // send key index to oscillator
+            if ( VoiceArray[zc]->TuningState () )
                 {
                 DisplayMessage.TuningNote (Down.Key);
-                DisplayMessage.TuningDtoA (pVoice[zc]->LastDA ());
+                DisplayMessage.TuningDtoA (VoiceArray[zc]->LastDA ());
                 }
             }
-        if ( TuningChange )
+        if ( change_settings )
             {
-            if ( pVoice[zc]->TuningState () )
+            if ( VoiceArray[zc]->TuningState () )
                 {
-                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+                for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
                     {
                     if ( z < OSC_MIXER_COUNT )
                         {
-                        pVoice[zc]->SetTuningVolume (z, TuningLevel[z]);
-                        DisplayMessage.TuningLevel (z, TuningLevel[z] * MIDI_INV_MULTIPLIER);
+                        VoiceArray[zc]->SetTuningVolume (z, oscillator_level[z]);
+                        DisplayMessage.TuningLevel (z, oscillator_level[z] * MIDI_INV_MULTIPLIER);
                         }
                     }
                 }
             else
                 {
-                for ( int z = 0;  z < ENVELOPE_COUNT;  z++ )
+                for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
                     {
                     if ( z < OSC_MIXER_COUNT )
-                        pVoice[zc]->SetTuningVolume(z, 0);
+                        VoiceArray[zc]->SetTuningVolume(z, 0);
                     }
                 }
             for ( int z = 0;  z < FILTER_DEVICES;  z++ )
                 {
-                pVoice[zc]->SetTuningFlt (z, TuningFlt[z]);
-                if ( pVoice[zc]->TuningState () )
-                    pVoice[zc]->SetOutputMask (TuningOutputSelect);
+                VoiceArray[zc]->SetTuningFlt (z, level_filter[z]);
+                if ( VoiceArray[zc]->TuningState () )
+                    VoiceArray[zc]->SetOutputMask (output_select);
                 else
-                    pVoice[zc]->SetOutputMask (0);
+                    VoiceArray[zc]->SetOutputMask (0);
                 }
             }
         }
 
-    if ( TuningChange )
+    if ( change_settings )
         {
-        DisplayMessage.TuningControl (TuningOutputSelect);
+        DisplayMessage.TuningControl (output_select);
         for ( int z = 0;  z < FILTER_DEVICES;  z++ )
-            DisplayMessage.TuningFilter (z, TuningFlt[z] * MIDI_INV_MULTIPLIER);
+            DisplayMessage.TuningFilter (z, level_filter[z] * MIDI_INV_MULTIPLIER);
         }
 
-    TuningChange = false;     // Indicate complete and ready for next not change
+    change_settings = false;     // Indicate complete and ready for next not change
     Down.Trigger = 0;         // Clear note change trigger
     I2cDevices.UpdateDigital ();    // Update all digital port changes
     I2cDevices.UpdateAnalog  ();    // Update D/A port changes
@@ -94,56 +99,63 @@ void StartTuning ()
     if ( SetTuning == false )
         {
         DisplayMessage.PageTuning ();
-        for ( int z = 0;  z < ENVELOPE_COUNT;  z++)
+        for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
             {
             if ( z == 1 )
                 zb = DA_MAX;
             else
                 zb = 0;
-            TuningLevel[z] = zb;
+            oscillator_level[z] = zb;
             DisplayMessage.TuningLevel (z, 0);
             }
 
         for ( int z = 0;  z < FILTER_DEVICES;  z++ )
             {
-            TuningFlt[z] = 0;
+            level_filter[z] = 0;
             DisplayMessage.TuningFilter (z, 0);
             }
-        TuningOutputSelect = 0x01;
-        pVoice[0]->TuningState (true);
+        output_select = 0x01;
+        VoiceArray[0]->TuningState (true);
         byte note = KEYS_FIRST;                    // start at the C0
         DisplayMessage.TuningNote (note);
         for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
             {
-            TuningChange = true;
-            pVoice[zc]->SetTuningNote (note);
-            pVoice[zc]->SetFltCtrl (0);
+            change_settings = true;
+            VoiceArray[zc]->SetTuningNote (note);
+            VoiceArray[zc]->SetFltCtrl (0);
             }
         }
-    DisplayMessage.TuningDtoA (pVoice[0]->LastDA ());
+    DisplayMessage.TuningDtoA (VoiceArray[0]->LastDA ());
     DisplayMessage.TuningSelect (0);
     SetTuning = true;
+    }
+
+//#######################################################################
+void TuningOutputBitFlip (int bit)
+    {
+    output_select ^= 1 << bit;
+    change_settings = true;
     }
 
 //#######################################################################
 void TuningAdjust (bool up)
     {
     for (int z = 0;  z < VOICE_COUNT;  z++)
-        pVoice[z]->TuningAdjust (up);
+        VoiceArray[z]->TuningAdjust (up);
     }
 
 //#######################################################################
 void SetTuningLevel (short ch, short data)
     {
-    TuningLevel[ch] = data * MIDI_MULTIPLIER;
-    TuningChange = true;
+    oscillator_level[ch] = data * MIDI_MULTIPLIER;
+    change_settings = true;
     }
 
 //#######################################################################
 void SetTuningFilter (short ch, short data)
     {
-    TuningFlt[ch] = data * MIDI_MULTIPLIER;
-    TuningChange = true;
+    level_filter[ch] = data * MIDI_MULTIPLIER;
+    change_settings = true;
     }
 
 //#######################################################################
@@ -152,11 +164,11 @@ void TuningBump (bool state)
     byte note = (state) ? KEYS_LAST : KEYS_FIRST;         // C8 and C0
     for ( int zc = 0;  zc < VOICE_COUNT;  zc++ )
         {
-        pVoice[zc]->SetTuningNote (note);
-        if ( pVoice[zc]->TuningState () )
+        VoiceArray[zc]->SetTuningNote (note);
+        if ( VoiceArray[zc]->TuningState () )
             {
             DisplayMessage.TuningNote (note);
-            DisplayMessage.TuningDtoA (pVoice[zc]->LastDA ());
+            DisplayMessage.TuningDtoA (VoiceArray[zc]->LastDA ());
             }
         }
     }
@@ -168,52 +180,26 @@ void SaveTuning ()
         {
         DBG ("Saving synth keyboard arrays");
         for ( int z = 0;  z < VOICE_COUNT;  z++ )
-            Settings.PutOscBank (z, pVoice[z]->GetBankAddr ());
+            Settings.PutOscBank (z, VoiceArray[z]->GetBankAddr ());
         }
     }
 
 //#######################################################################
-void StartCalibration ()
-    {
-    if ( CalibrationPhase > 0 )
-        return;
-
-    DisplayMessage.PageCalibration ();
-    TemplateSelect (XL_MIDI_MAP_TUNING);
-    DBG ("Starting Calibration");
-
-    Lfo[0].SetOffset(0);
-    Lfo[1].SetOffset (0);
-    Lfo[0].PitchBend (Lfo[0].GetOffset() + 64);
-    Lfo[1].PitchBend (Lfo[1].GetOffset() + 64);
-
-    for (int z = 0;  z < 16;  z++ )                 // clear all ports
-        I2cDevices.DigitalOut (CalibrationBaseDigital + z, false);
-    for ( int z = 8;  z < 12;  z++)
-        I2cDevices.DigitalOut (CalibrationBaseDigital + z,  true);
-    I2cDevices.UpdateDigital ();                    // Update all digital port changes
-    delay (500);                                      // let voltage settle
-    I2cDevices.SetCallbackAtoD (CalibrationCallback);
-    I2cDevices.StartAtoD (CalibrationAtoD);   // Start analog sampling
-    CalibrationPhase = 1;
-    }
-
-//#######################################################################
-void Calibration (ushort val)
+static void  cb_Calibration (ushort val)
     {
     ushort zu = ((ushort)((float)val * fsr6_144) >> 1) << 1;    // caclulate voltage * 100 with LSB=0
-    DBG ("Calibration phase %d with at %#1.3f volts  [%x]", CalibrationPhase, 0.001 * (float)zu, val);
+    DBG ("Calibration phase %d with at %#1.3f volts  [%x]", calibration_phase, 0.001 * (float)zu, val);
 
-    switch ( CalibrationPhase )
+    switch ( calibration_phase )
         {
         case 1:                                             // save calibration settings and start LFO calibration
-            CalibrationReference = zu;
-            CalibrationLFO   = 0;                     // start with first LFO
+            calibration_reference = zu;
+            calibration_lfo   = 0;                     // start with first LFO
                                                             // Fall through with LFO port setup
         case 2:
             for (int z = 0;  z < 16;  z++ )                 // clear all ports
                 I2cDevices.DigitalOut (CalibrationBaseDigital + z, false);
-            if ( CalibrationLFO == 0 )
+            if ( calibration_lfo == 0 )
                 {
                 for ( int z = 0;  z < 4;  z++)
                     I2cDevices.DigitalOut(CalibrationBaseDigital + z, true);          // select LFO-0
@@ -226,32 +212,32 @@ void Calibration (ushort val)
             I2cDevices.UpdateDigital ();                    // Update all digital port changes
             delay (500);                                      // let voltage settle
             I2cDevices.StartAtoD  (CalibrationAtoD);
-            CalibrationPhase = 3;
+            calibration_phase = 3;
             break;
 
         case 3:
             {
-            SYNTH_LFO_C& lfo = Lfo[CalibrationLFO];
+            SYNTH_LFO_C& lfo = Lfo[calibration_lfo];
             short offset = 0;
-            if ( zu < CalibrationReference )
+            if ( zu < calibration_reference )
                 offset = +1;
             else
                 {
-                if ( zu > CalibrationReference )
+                if ( zu > calibration_reference )
                     offset = -1;
                 else
                     {
-                    DBG ("LFO %d offset = %X", CalibrationLFO, lfo.GetOffset ());
-                    Settings.SetOffsetLFO (CalibrationLFO, lfo.GetOffset ());
+                    DBG ("LFO %d offset = %X", calibration_lfo, lfo.GetOffset ());
+                    Settings.SetOffsetLFO (calibration_lfo, lfo.GetOffset ());
 
-                    if ( CalibrationLFO == 0 )        // if calibrating the first LFO
+                    if ( calibration_lfo == 0 )        // if calibrating the first LFO
                         {
-                        CalibrationLFO++;             // select the next LFO
-                        CalibrationPhase = 2;         // restart LFO calibraion
+                        calibration_lfo++;             // select the next LFO
+                        calibration_phase = 2;         // restart LFO calibraion
                         }
                     else
                         {
-                        CalibrationPhase    = 0;
+                        calibration_phase    = 0;
                         I2cDevices.ResetAnalog     (CalibrationAtoD);
 
                         for (int z = 0;  z < 8;  z++ )                 // clear LFO ports
@@ -274,5 +260,31 @@ void Calibration (ushort val)
             break;
         }
 
+    }
+
+//#######################################################################
+void StartCalibration ()
+    {
+    if ( calibration_phase > 0 )
+        return;
+
+    DisplayMessage.PageCalibration ();
+    TemplateSelect (XL_MIDI_MAP_TUNING);
+    DBG ("Starting Calibration");
+
+    Lfo[0].SetOffset(0);
+    Lfo[1].SetOffset (0);
+    Lfo[0].PitchBend (Lfo[0].GetOffset() + 64);
+    Lfo[1].PitchBend (Lfo[1].GetOffset() + 64);
+
+    for (int z = 0;  z < 16;  z++ )                 // clear all ports
+        I2cDevices.DigitalOut (CalibrationBaseDigital + z, false);
+    for ( int z = 8;  z < 12;  z++)
+        I2cDevices.DigitalOut (CalibrationBaseDigital + z,  true);
+    I2cDevices.UpdateDigital ();                    // Update all digital port changes
+    delay (500);                                      // let voltage settle
+    I2cDevices.SetCallbackAtoD (cb_Calibration);
+    I2cDevices.StartAtoD (CalibrationAtoD);   // Start analog sampling
+    calibration_phase = 1;
     }
 

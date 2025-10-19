@@ -39,7 +39,7 @@ public:
     void    Process            (void);
 
     //###################################################################
-    inline byte* GetNextBuffer (void)
+    byte* GetNextBuffer (void)
         {
         if ( this->CountBuffersInUse ==  BUFFER_COUNT )   // if buffer overrun
             {
@@ -50,7 +50,7 @@ public:
         }
 
     //###################################################################
-    inline void NextBufferGood (void)
+    void NextBufferGood (void)
         {
         if ( ++this->NextBufferIndex == BUFFER_COUNT )    // bump buffer and test for roll over
             this->NextBufferIndex = 0;

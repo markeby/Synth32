@@ -79,28 +79,28 @@ public:
     void HardReset          (byte mchan);
     void Loop               (void);
 
-    inline void PitchBend (byte mchan, short value)
+    void PitchBend (byte mchan, short value)
         {
         if ( mchan == this->Midi )
             this->PitchBend (value);
         }
 
-    inline void  SetMidi (byte data)
+    void  SetMidi (byte data)
         { Midi = data; }
 
-    inline byte  GetMidi (void)
+    byte  GetMidi (void)
         { return (Midi); }
 
-    inline void  SetOffset  (short val)
+    void  SetOffset  (short val)
         { this->Offset = val;  }
 
-    inline short GetOffset  (void)
+    short GetOffset  (void)
         { return (this->Offset); }
 
-    inline bool GetWave (short ch)
+    bool GetWave (short ch)
         { return (this->Level[ch].Select); }
 
-    inline bool GetRampDir (void)
+    bool GetRampDir (void)
         { return (this->RampSlope); }
 
     void SetFreqCoarse (short value)

@@ -153,7 +153,7 @@ private:
         }  ENVELOPE_T;
     struct
         {
-        short       MapVoiceMidi;
+        byte        MapVoiceMidi;
         short       OutputEnable;
         short       MapVoiceNoise;
         float       PulseWidth;
@@ -165,6 +165,7 @@ private:
         }   Cs;
 
     String  Name;
+    bool    Mute;
     byte    ButtonStateOsc[XL_BUTTON_COUNT];
     byte    ButtonStateFlt[XL_BUTTON_COUNT];
 
@@ -172,11 +173,13 @@ public:
     bool    SelectedOscEnvelope[OSC_MIXER_COUNT];
     bool    SelectedFltEnvelope[FILTER_DEVICES];
 
-         SYNTH_VOICE_CONFIG_C           (void);
-    void Save                           (const char* name);
-    void Load                           (const char* name);
-    void InitButtonsXL                  (void);
+         SYNTH_VOICE_CONFIG_C    (void);
+    void Save                    (const char* name);
+    void Load                    (const char* name);
+    void InitButtonsXL           (void);
 
+    void   SetMute               (bool state)               { Mute = state; }
+    bool   IsMute                (void)                     { return (Mute); }
     void   SetDamperMode         (byte index, bool sel)     { Cs.OscEnv[index].Damper = sel; }
     bool   GetDamperMode         (byte index)               { return (Cs.OscEnv[index].Damper); }
     void   SetButtonStateOsc     (int index, byte value)    { ButtonStateOsc[index] = value; }
@@ -187,8 +190,8 @@ public:
     byte*  GetButtonStateFltPtr  ()                         { return (ButtonStateFlt); }
     void   SetName               (String& name)             { Name = name;}
     String Getname               (void)                     { return (Name); }
-    void   SetVoiceMidi          (short data)               { Cs.MapVoiceMidi = data; }
-    short  GetVoiceMidi          (void)                     { return (Cs.MapVoiceMidi); }
+    void   SetVoiceMidi          (byte data)                { Cs.MapVoiceMidi = data; }
+    byte   GetVoiceMidi          (void)                     { return (Cs.MapVoiceMidi); }
     void   SetVoiceNoise         (short data)               { Cs.MapVoiceNoise = data; }
     short  GetVoiceNoise         (void)                     { return (Cs.MapVoiceNoise); }
     void   SetRampDirection      (bool data)                { Cs.RampDirection = data; }
@@ -248,29 +251,29 @@ private:
 public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
 
-         SYNTH_CONFIG_C (void);
-    void Save                       (short num);
-    void Load                       (short num);
-    void InitButtonsXL              (void);
+            SYNTH_CONFIG_C      (void);
+    void    Save                (short num);
+    void    Load                (short num);
+    void    InitButtonsXL       (void);
 
-    inline byte*  GetButtonStateLfoPtr  (void)                                  { return (ButtonStateLfo); }
-    inline void   SetName               (String& name)                          { Name = name; }
-    inline String Getname               (void)                                  { return (Name); }
-    inline void   SetSoftFreq           (short data)                            { Cs.SoftFrequency = data; }
-    inline short  GetSoftFreq           (void)                                  { return (Cs.SoftFrequency); };
-    inline void   SetModMidi            (byte index, short data)                { Cs.LfoMidi[index] = data; }
-    inline short  GetModMidi            (byte index)                            { return (Cs.LfoMidi[index]); };
-    inline void   SetModSoftMixer       (short index, bool data)                { Cs.SoftMixerLFO[index] = data; }
-    inline bool   GetModSoftMixer       (short unit)                            { return (Cs.SoftMixerLFO[unit]); }
-    inline void   SetSelect             (short unit, short index, bool data)    { Cs.CfgLFO[unit].Select[index] = data; }
-    inline bool   GetSelect             (short unit, short index)               { return (Cs.CfgLFO[unit].Select[index]); }
-    inline void   SetRampDir            (short unit, bool data)                 { Cs.CfgLFO[unit].RampDir = data; }
-    inline bool   GetRampDir            (short unit)                            { return (Cs.CfgLFO[unit].RampDir); }
-    inline void   SetFrequency          (short unit, short data)                { Cs.CfgLFO[unit].Frequency = data; }
-    inline short  GetFrequency          (short unit)                            { return (Cs.CfgLFO[unit].Frequency); }
-    inline void   SetPulseWidth         (short unit, short data)                { Cs.CfgLFO[unit].PulseWidth = data; }
-    inline short  GetPulseWidth         (short unit)                            { return (Cs.CfgLFO[unit].PulseWidth); }
-    inline void   SetModLevelAlt        (short unit, bool data)                 { Cs.CfgLFO[unit].ModLevelAlt = data; }
-    inline bool   GetModLevelAlt        (short unit)                            { return (Cs.CfgLFO[unit].ModLevelAlt); }
+    byte*  GetButtonStateLfoPtr (void)                                  { return (ButtonStateLfo); }
+    void   SetName              (String& name)                          { Name = name; }
+    String Getname              (void)                                  { return (Name); }
+    void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
+    short  GetSoftFreq          (void)                                  { return (Cs.SoftFrequency); };
+    void   SetModMidi           (byte index, short data)                { Cs.LfoMidi[index] = data; }
+    short  GetModMidi           (byte index)                            { return (Cs.LfoMidi[index]); };
+    void   SetModSoftMixer      (short index, bool data)                { Cs.SoftMixerLFO[index] = data; }
+    bool   GetModSoftMixer      (short unit)                            { return (Cs.SoftMixerLFO[unit]); }
+    void   SetSelect            (short unit, short index, bool data)    { Cs.CfgLFO[unit].Select[index] = data; }
+    bool   GetSelect            (short unit, short index)               { return (Cs.CfgLFO[unit].Select[index]); }
+    void   SetRampDir           (short unit, bool data)                 { Cs.CfgLFO[unit].RampDir = data; }
+    bool   GetRampDir           (short unit)                            { return (Cs.CfgLFO[unit].RampDir); }
+    void   SetFrequency         (short unit, short data)                { Cs.CfgLFO[unit].Frequency = data; }
+    short  GetFrequency         (short unit)                            { return (Cs.CfgLFO[unit].Frequency); }
+    void   SetPulseWidth        (short unit, short data)                { Cs.CfgLFO[unit].PulseWidth = data; }
+    short  GetPulseWidth        (short unit)                            { return (Cs.CfgLFO[unit].PulseWidth); }
+    void   SetModLevelAlt       (short unit, bool data)                 { Cs.CfgLFO[unit].ModLevelAlt = data; }
+    bool   GetModLevelAlt       (short unit)                            { return (Cs.CfgLFO[unit].ModLevelAlt); }
     };
 

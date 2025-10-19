@@ -1,9 +1,8 @@
 //#######################################################################
-// Module:     FrontEndLFO.cpp
-// Descrption: Synthesizer front end controller
-//                 Midi->Front->SynthModules
+// Module:     Control_LFO.cpp
+// Descrption: Synthesizer front end control for LFO
 // Creator:    markeby
-// Date:       5/17/2023
+// Date:       10/17/2025
 //#######################################################################
 #include <Arduino.h>
 #include <UHS2-MIDI.h>
@@ -129,6 +128,7 @@ void FreqLFO (short ch, short data)
 //#######################################################################
 void PitchBender (byte mchan, short value)
     {
+    value = (value + 8192) >> 2;
     Lfo[0].PitchBend (mchan, value);
     Lfo[1].PitchBend (mchan, value);
     DBG ("Pitch Bend value = %d", value);
@@ -143,10 +143,10 @@ void SelectModVCA (byte ch, bool state)
 
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
-        if ( pVoice[z]->GetMidi () == SoftLFO.GetMidi () )
-            pVoice[z]->SetSoftLFO (ch, state);
+        if ( VoiceArray[z]->GetMidi () == SoftLFO.GetMidi () )
+            VoiceArray[z]->SetSoftLFO (ch, state);
         else
-            pVoice[z]->SetSoftLFO (ch, false);
+            VoiceArray[z]->SetSoftLFO (ch, false);
         }
     UpdateModButtons ();
     }

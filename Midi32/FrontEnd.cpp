@@ -22,6 +22,12 @@ static const char* LabelM = "M";
 #endif
 
 //###################################################################
+static short    volumeMaster;
+static short    volumeOscMaster;
+static short    volumeFltMaster;
+static short    volumeSprMaster;
+
+//###################################################################
 using namespace MIDI_NAMESPACE;
 using namespace DISP_MESSAGE_N;
 
@@ -34,20 +40,20 @@ void InitializeSynth (short voice, short mixer, short noise_digital, short lfo_c
 
     printf ("\t>>>\tSynth channels\n");
     short osc = voice;
-    VolumeMaster    = mixer + 8;        // Master volume port
-    VolumeOscMaster = mixer + 9;        // Oscillator master volume port
-    VolumeFltMaster = mixer + 10;       // Filter master volume port
-    VolumeSprMaster = mixer + 11;       // Spare master volume port
+    volumeMaster    = mixer + 8;        // Master volume port
+    volumeOscMaster = mixer + 9;        // Oscillator master volume port
+    volumeFltMaster = mixer + 10;       // Filter master volume port
+    volumeSprMaster = mixer + 11;       // Spare master volume port
 
     MasterVolume (45);
-    I2cDevices.D2Analog      (VolumeOscMaster, 0);
-    I2cDevices.D2Analog      (VolumeFltMaster, 0);
-    I2cDevices.D2Analog      (VolumeSprMaster, DA_MAX);     // mute for now
+    I2cDevices.D2Analog      (volumeOscMaster, 0);
+    I2cDevices.D2Analog      (volumeFltMaster, 0);
+    I2cDevices.D2Analog      (volumeSprMaster, DA_MAX);     // mute for now
     I2cDevices.UpdateAnalog  ();
 
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        pVoice[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital, EnvADSL);
+        VoiceArray[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital, EnvADSL);
         osc      += 8;
         mixer    += 1;
         if ( z & 1 )
@@ -64,7 +70,6 @@ void InitializeSynth (short voice, short mixer, short noise_digital, short lfo_c
     CalibrationAtoD = start_a_d;
     ResolutionMode = true;
 
-
     InitMidiControl ();
     InitMidiKeyboard ();
     InitMidiSequence ();
@@ -80,7 +85,7 @@ void MasterVolume (short md)
     x = DA_MAX - x;                             // Volume is a voltage controlled attenuator with 0 = 0 db, 4095 = -100 db change in output.
 
     DBG ("D to A value for volume = %d", x);
-    I2cDevices.D2Analog      (VolumeMaster, x);
+    I2cDevices.D2Analog      (volumeMaster, x);
     I2cDevices.UpdateAnalog  ();
     }
 
@@ -88,7 +93,7 @@ void MasterVolume (short md)
 void ClearSynth ()
     {
     for ( int z = 0;  z < VOICE_COUNT; z++ )
-        pVoice[z]->Clear ();
+        VoiceArray[z]->Clear ();
     }
 
 //#######################################################################
@@ -191,7 +196,7 @@ void LoopSynth ()
             {
             DBG ("Key up > %d", Up.Key);
             for ( int z = 0;  z < VOICE_COUNT;  z++ )
-                pVoice[z]->NoteClear (Up.Trigger, Up.Key);
+                VoiceArray[z]->NoteClear (Up.Trigger, Up.Key);
             Up.Trigger = 0;
             }
 
@@ -199,7 +204,7 @@ void LoopSynth ()
             {
             for ( int z = 0;  z <  VOICE_COUNT;  z++ )
                 {
-                VOICE_C& ch = *(pVoice[z]);
+                VOICE_C& ch = *(VoiceArray[z]);
                 if ( Down.Trigger == ch.GetMidi () )
                     {
                     if ( !ch.IsActive () )              // grab the first channel not in use
@@ -213,7 +218,7 @@ void LoopSynth ()
                             oldest = z;
                         else
                             {
-                            if ( ch.IsActive () > pVoice[oldest]->IsActive () )      // check if current channel older than the oldest so far
+                            if ( ch.IsActive () > VoiceArray[oldest]->IsActive () )      // check if current channel older than the oldest so far
                                 oldest = z;
                             }
                         }
@@ -225,7 +230,7 @@ void LoopSynth ()
                 {
                 Lfo[0].HardReset (Down.Trigger);
                 Lfo[1].HardReset (Down.Trigger);
-                pVoice[doit]->NoteSet (Down.Trigger, Down.Key, Down.Velocity);   // set the channel
+                VoiceArray[doit]->NoteSet (Down.Trigger, Down.Key, Down.Velocity);   // set the channel
                 }
             DBG ("Key down > %d   Velocity > %d  Port > %d", Down.Key, Down.Velocity, doit);
             Down.Trigger = 0;                         // release the trigger
@@ -233,7 +238,7 @@ void LoopSynth ()
 
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < VOICE_COUNT;  z++ )           // Check all channels for done
-            pVoice[z]->Loop ();
+            VoiceArray[z]->Loop ();
         I2cDevices.UpdateDigital ();
         I2cDevices.UpdateAnalog  ();     // Update D/A ports
         }
@@ -267,44 +272,41 @@ void TemplateSelect (byte index)
     }
 
 //#####################################################################
+void SystemExDebug (byte* array, unsigned size)
+    {
+    for ( short z = 0;  z < size;  z += 16 )
+        {
+        String st = "\n";
+        for ( short zz = 0;  (zz < 16) && ((z + zz) < size);  zz++)
+            st += String(array[z+zz], HEX) + " ";
+        printf ("%s", st.c_str ());
+        }
+    printf("\n");
+    }
+
+//#####################################################################
 //#####################################################################
 KEY_T           Down;
 KEY_T           Up;
 
 ENV_GENERATOR_C EnvADSL;
 SYNTH_LFO_C     Lfo[2];
-VOICE_C*        pVoice[VOICE_COUNT];
-bool            VoiceMute[MAP_COUNT]    = { false, false, false, false };
-
-short           VolumeMaster;
-short           VolumeOscMaster;
-short           VolumeFltMaster;
-short           VolumeSprMaster;
+VOICE_C*        VoiceArray[VOICE_COUNT];
 
 bool            ResolutionMode          = false;
 bool            MapSelectMode           = false;
 bool            LoadSaveMode            = false;
 SYNTH_CONFIG_C  SynthConfig;
-bool            KaptureMidiKeyboard     = false;
-short           CurrentMidiSelected     = 0;
+byte            CurrentMidiSelected     = 0;
 short           CurrentMapSelected      = -1;
 short           CurrentVoiceSelected    = -1;
 short           CurrentFilterSelected   = -1;
 short           CurrentConfigSelected   = -1;
 short           CurrentDisplayPage      = 0;
 
-short           LoadSaveSelection       = 1;
 NOVATION_XL_C   LaunchControl;
 
 bool            SetTuning               = false;
-uint16_t        TuningLevel[ENVELOPE_COUNT+1];
-uint16_t        TuningFlt[FILTER_DEVICES];
-byte            TuningOutputSelect;
-bool            TuningChange            = false;
-uint64_t        TuningSelectionTime;
-ushort          CalibrationReference;
 short           CalibrationBaseDigital;
-short           CalibrationPhase;
-short           CalibrationLFO;
-ushort                  CalibrationAtoD;
+ushort          CalibrationAtoD;
 

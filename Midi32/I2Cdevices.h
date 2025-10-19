@@ -103,23 +103,23 @@ public:
     void Error              (void);
 
     //#######################################################################
-    inline void ResetAnalog (short device)
+    void ResetAnalog (short device)
             { this->Init1115 (pDevice[device].pBoard->Board); }
 
     //#######################################################################
-    inline int  NumBoards (void)
+    int  NumBoards (void)
         { return (this->BoardCount); }
 
     //#######################################################################
-    inline int  NumAnalog (void)
+    int  NumAnalog (void)
         { return (this->AnalogOutCount); }
 
     //#######################################################################
-    inline int GetDeviceCount (void)
+    int GetDeviceCount (void)
         { return (this->DeviceCount); }
 
     //#######################################################################
-    inline bool IsPortValid (uint8_t device)
+    bool IsPortValid (uint8_t device)
         {
         if ( device < this->DeviceCount && this->pDevice[device].pBoard->Valid )
             return (true);
@@ -127,7 +127,7 @@ public:
         }
 
     //#######################################################################
-    inline void SetCallbackAtoD (CallbackUShort fptr)
+    void SetCallbackAtoD (CallbackUShort fptr)
         { CallbackAtoD = fptr; }
 
     };

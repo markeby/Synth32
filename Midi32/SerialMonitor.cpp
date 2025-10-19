@@ -280,7 +280,7 @@ void MONITOR_C::Menu (void)
     Serial << endl;
     Serial << "\t######   Synth32 -- Midi32  ######" << endl;
     Serial << "\t######    Midi Subsystem    ######" << endl;
-    if (  IsInTuning () )
+    if (  SetTuning )
         Serial << "\t******     Tuning mode      ******" << endl;
     Serial << StateDebug (DebugSeq)   << "\t1   - Debug MIDI Sequencer" << endl;
     Serial << StateDebug (DebugMidi)  << "\t2   - Debug MIDI devices" << endl;

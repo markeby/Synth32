@@ -224,13 +224,13 @@ public:
     void    SetPage             (byte num, byte midi);
     void    PageSelect          (DISP_MESSAGE_N::PAGE_C page);
 
-    inline void    PageSelect          (byte num)                                                           { PageSelect ((DISP_MESSAGE_N::PAGE_C)num); }
-    inline void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMap->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
-    inline void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (ch, effect, value); }
-    inline void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
+    void    PageSelect          (byte num)                                                           { PageSelect ((DISP_MESSAGE_N::PAGE_C)num); }
+    void    UpdatePageMap       (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageMap->UpdatePage (ch, effect, value); }
+    void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
+    void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
+    void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
+    void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (ch, effect, value); }
+    void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
     };
 
 extern GRPH_C  Graphics;
