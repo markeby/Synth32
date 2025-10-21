@@ -68,15 +68,15 @@ bool SETTINGS_C::GetDebugSwitch (uint8_t num)
 //#######################################################################
 void SETTINGS_C::SaveDebugFlags ()
     {
-    this->PutDebugSwitch (0, DebugInterface);
-    this->PutDebugSwitch (1, DebugGraphics);
+    PutDebugSwitch (0, DebugInterface);
+    PutDebugSwitch (1, DebugGraphics);
     }
 
 //#######################################################################
 void SETTINGS_C::RestoreDebugFlags ()
     {
-    DebugInterface = this->GetDebugSwitch (0);
-    DebugGraphics  = this->GetDebugSwitch (1);
+    DebugInterface = GetDebugSwitch (0);
+    DebugGraphics  = GetDebugSwitch (1);
     }
 
 //#######################################################################

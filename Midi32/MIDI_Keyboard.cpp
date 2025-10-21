@@ -31,8 +31,8 @@ static void cb_KeyDown_Keyboard (byte mchan, byte key, byte velocity)
     {
     if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidiSelected > 0 )
-            mchan = CurrentMidiSelected;
+        if ( SelectedMidi > 0 )
+            mchan = SelectedMidi;
         }
     DBG ("Key down: %d  velocity: %d", key, velocity);
     KeyDown(mchan, key, velocity);
@@ -43,8 +43,8 @@ static void  cb_KeyUp_Keyboard (byte mchan, byte key, byte velocity)
     {
     if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidiSelected > 0 )
-            mchan = CurrentMidiSelected;
+        if ( SelectedMidi > 0 )
+            mchan = SelectedMidi;
         }
     DBG ("Key up: %d  velocity: %d", key, velocity);
     KeyUp (mchan, key, velocity);
@@ -56,8 +56,8 @@ static void cb_PitchBend_Keyboard (byte mchan, int value)
     DBG ("Keyboard pitch bend %d", value);
     if ( kaptureMidiKeyboard )
         {
-        if ( CurrentMidiSelected > 0 )
-            mchan = CurrentMidiSelected;
+        if ( SelectedMidi > 0 )
+            mchan = SelectedMidi;
         }
     PitchBender (mchan, value);
     }

@@ -65,7 +65,7 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     ReleaseTime   = 0;
     Active        = 0;
     UseSoftLFO    = false;
-    Damper        = false;
+    Damper        = DAMPER::OFF;
     Clear ();
     }
 

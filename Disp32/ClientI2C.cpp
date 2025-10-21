@@ -40,10 +40,10 @@ static void DataIn (int len)
 //#######################################################################
     MESSAGE_CLIENT_C::MESSAGE_CLIENT_C   ()
     {
-    this->NextBufferIndex   = 0;
-    this->CuurentBufferTop  = 0;
-    this->CountBuffersInUse = 0;
-    memset (this->Buffers, 0, BUFFER_COUNT * sizeof (BUFFER_T));
+    NextBufferIndex   = 0;
+    CuurentBufferTop  = 0;
+    CountBuffersInUse = 0;
+    memset (Buffers, 0, BUFFER_COUNT * sizeof (BUFFER_T));
     };
 
 //#######################################################################
@@ -70,9 +70,9 @@ void MESSAGE_CLIENT_C::TriggerInitialMsgs  ()
 //#######################################################################
 void MESSAGE_CLIENT_C::Process ()
     {
-    if ( this->CountBuffersInUse )
+    if ( CountBuffersInUse )
         {
-        BUFFER_T& ptop = this->Buffers[this->CuurentBufferTop];
+        BUFFER_T& ptop = Buffers[CuurentBufferTop];
         uint16_t value = ptop.Value0 | (ptop.Value1 << 8);
         DBG ("Update: 0x%X  channel: 0x%X   effect: 0x%X   Value: 0x%X   Index: %d", (byte)ptop.Command, (byte)ptop.Channel, (byte)ptop.Effect, value, ptop.Index);
         switch ( ptop.Command )
@@ -107,9 +107,9 @@ void MESSAGE_CLIENT_C::Process ()
             default:                            // any other message goes nowher
                 break;
             }
-        if ( ++this->CuurentBufferTop == BUFFER_COUNT )
-            this->CuurentBufferTop = 0;
-        this->CountBuffersInUse--;
+        if ( ++CuurentBufferTop == BUFFER_COUNT )
+            CuurentBufferTop = 0;
+        CountBuffersInUse--;
         }
     }
 

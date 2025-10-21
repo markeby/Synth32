@@ -47,7 +47,7 @@ void MidiMapMode ()
     {
     if ( !MapSelectMode )
         {
-        TemplateSelect (XL_MIDI_MAP_MAPPING);
+        LaunchControl.SelectTemplate (XL_MIDI_MAP_MAPPING);
         DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
         LoadSaveMode = false;
         MapSelectMode = true;
@@ -62,7 +62,7 @@ void MidiMapMode ()
 void MapModeBump (short down)
     {
     short z;
-    ushort zi = CurrentMapSelected;
+    ushort zi = SelectedMap;
 
     while ( true )
         {
@@ -101,7 +101,7 @@ void MapModeBump (short down)
             zi -= MAP_COUNT;
         }
 
-    DisplayMessage.SendMapVoiceMidi (CurrentMapSelected, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, z);
+    DisplayMessage.SendMapVoiceMidi (SelectedMap, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, z);
     }
 
 //#####################################################################
@@ -111,15 +111,15 @@ void ChangeMapSelect (short right)
         {
         if ( right == 0 )   // go left
             {
-            if ( --CurrentMapSelected < 0 )
-                CurrentMapSelected = (MAP_COUNT * GROUP_COUNT) - 2;
+            if ( --SelectedMap < 0 )
+                SelectedMap = (MAP_COUNT * GROUP_COUNT) - 2;
             }
         else                // not left so must be right
             {
-            if ( ++CurrentMapSelected >= ((MAP_COUNT * GROUP_COUNT) - 1) )
-                CurrentMapSelected = 0;
+            if ( ++SelectedMap >= ((MAP_COUNT * GROUP_COUNT) - 1) )
+                SelectedMap = 0;
             }
-        updateMapModeDisplay (CurrentMapSelected);
+        updateMapModeDisplay (SelectedMap);
         }
     }
 
@@ -291,6 +291,6 @@ void OpenLoadSavePage ()
     DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_LOAD_SAVE);
     LoadSaveMode = true;
     DisplayMessage.SendLoadSave (load_save_selection);
-    TemplateSelect (XL_MIDI_MAP_LOADSAVE);
+    LaunchControl.SelectTemplate (XL_MIDI_MAP_LOADSAVE);
     }
 

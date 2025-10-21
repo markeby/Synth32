@@ -226,22 +226,32 @@ void LFO_METER_WIDGET_C::Select (bool sel)
     }
 
 //#######################################################################
-void ADSR_METER_WIDGET_C::Damper (bool sel)
+void ADSR_METER_WIDGET_C::Damper (byte mode)
     {
+    lv_color_t   color;
+    LedDamper = mode;
+
     if ( LedRed )
         return;
-    if ( sel )
+
+    switch ( LedDamper )
         {
-        lv_led_set_color (Led, lv_palette_main (LV_PALETTE_BLUE));
-        lv_led_on (Led);
-        LedBlue = true;
+        case 0:     // DAMPER::OFF
+            color = lv_color_white ();
+            break;
+        case 1:     // DAMPER::NORMAL
+            color = lv_palette_main (LV_PALETTE_TEAL);
+            break;
+        case 2:     // DAMPER::INVERT
+            color = lv_palette_main (LV_PALETTE_BLUE);
+            break;
+        default:
+            return;     // if we get here, something really screwed up...
+            break;
         }
-    else
-        {
-        LedBlue = false;
-        lv_led_set_color (Led,  lv_color_white());
-        lv_led_on (Led);
-        }
+
+    lv_led_set_color (Led, color);
+    lv_led_on (Led);
     }
 
 //#######################################################################
@@ -249,14 +259,14 @@ void ADSR_METER_WIDGET_C::Mute (bool sel)
     {
     if ( sel )
         {
+        LedRed = true;
         lv_led_set_color (Led, lv_palette_main (LV_PALETTE_RED));
         lv_led_on (Led);
-        LedRed = true;
         }
     else
         {
         LedRed = false;
-        Damper (LedBlue);
+        Damper (LedDamper);
         }
     }
 

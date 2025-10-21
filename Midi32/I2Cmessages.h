@@ -68,8 +68,7 @@ public:
     void TuningNote (byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::NOTE,
                           value);
         }
@@ -78,8 +77,7 @@ public:
     void TuningDtoA (short value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::VALUE,
                           value);
         }
@@ -88,8 +86,7 @@ public:
     void TuningSelect (byte ch)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          ch,
+                          0, ch,
                           DISP_MESSAGE_N::EFFECT_C::SELECTED,
                           0);
         }
@@ -98,8 +95,7 @@ public:
     void TuningSelectSecond (byte ch)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          ch,
+                          0, ch,
                           DISP_MESSAGE_N::EFFECT_C::ALTERNATE,
                           0);
         }
@@ -108,8 +104,7 @@ public:
     void TuningLevel (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          channel,
+                          0, channel,
                           DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                           value);
         }
@@ -118,8 +113,7 @@ public:
     void TuningFilter (byte channel, byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          channel,
+                          0, channel,
                           DISP_MESSAGE_N::EFFECT_C::FILTER,
                           value);
         }
@@ -128,8 +122,7 @@ public:
     void TuningControl (byte value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::CONTROL,
                           value);
         }
@@ -144,20 +137,14 @@ public:
     void SendMapVoiceMidi (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MAP,
-                          0,
-                          channel,
-                          effect,
-                          value);
+                          0, channel, effect, value);
         }
 
     //#################################################
     void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
-                          index,
-                          channel,
-                          effect,
-                          value);
+                          index, channel, effect, value);
         }
 
     //#################################################
@@ -165,26 +152,21 @@ public:
     void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
-                          mapi,
-                          channel,
-                          effect,
-                          value);
+                          mapi, channel, effect, value);
         }
 
     //#################################################
-    void OscDamperMode (byte channel, bool sel)
+    void OscDamperMode (byte channel, byte mode)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::DAMPER,
-                             (( sel ) ? 1 : 0));
+                             mode);
         }
 
     //#################################################
     void OscMute (bool sel)
         {
-        this->SendUpdateOsc (0,
-                             0,
+        this->SendUpdateOsc (0, 0,
                              DISP_MESSAGE_N::EFFECT_C::MUTE,
                              (( sel ) ? 1 : 0));
         }
@@ -192,8 +174,7 @@ public:
     //#################################################
     void OscSelectedLevel (byte channel, bool sel)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::SELECTED,
                              (( sel ) ? 1 : 0));
         }
@@ -201,8 +182,7 @@ public:
     //#################################################
     void OscAttackTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
                              value);
         }
@@ -210,8 +190,7 @@ public:
     //#################################################
     void OscMaxLevel (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                              value);
         }
@@ -219,8 +198,7 @@ public:
     //#################################################
     void OscDecayTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
                              value);
         }
@@ -228,8 +206,7 @@ public:
     //#################################################
     void OscReleaseTime (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
                              value);
         }
@@ -237,8 +214,7 @@ public:
     //#################################################
     void OscSustainLevel (byte channel, uint16_t value)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
                              value);
         }
@@ -246,8 +222,7 @@ public:
     //#################################################
     void OscRampDirection (bool sel)
         {
-        this->SendUpdateOsc (0,
-                             (byte)(DISP_MESSAGE_N::VOICE_OPT_C::RAMP),
+        this->SendUpdateOsc (0, (byte)(DISP_MESSAGE_N::VOICE_OPT_C::RAMP),
                              DISP_MESSAGE_N::EFFECT_C::RAMP_DIRECTION,
                              (( sel ) ? 1 : 0));
         }
@@ -255,8 +230,7 @@ public:
     //#################################################
     void OscPulseWidth (byte width)
         {
-        this->SendUpdateOsc (0,
-                             (byte)(DISP_MESSAGE_N::VOICE_OPT_C::PULSE),
+        this->SendUpdateOsc (0, (byte)(DISP_MESSAGE_N::VOICE_OPT_C::PULSE),
                              DISP_MESSAGE_N::EFFECT_C::PULSE_WIDTH,
                              width);
         }
@@ -266,17 +240,13 @@ public:
     void SendUpdateFlt (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER,
-                          mapi,
-                          channel,
-                          effect,
-                          value);
+                          mapi, channel, effect, value);
         }
 
     //#################################################
     void FltSelected (byte channel, bool sel)
         {
-        this->SendUpdateOsc (0,
-                             channel,
+        this->SendUpdateOsc (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::SELECTED,
                              (( sel ) ? 1 : 0));
         }
@@ -284,8 +254,7 @@ public:
     //#################################################
     void FltAttackTime (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
                              value);
         }
@@ -293,8 +262,7 @@ public:
     //#################################################
     void FltDecayTime (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
                              value);
         }
@@ -302,8 +270,7 @@ public:
     //#################################################
     void FltReleaseTime (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
                              value);
         }
@@ -311,8 +278,7 @@ public:
     //#################################################
     void FltStart (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL,
                              value);
         }
@@ -320,8 +286,7 @@ public:
     //#################################################
     void FltEnd (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
                              value);
         }
@@ -329,8 +294,7 @@ public:
     //#################################################
     void FltSustain (byte channel, uint16_t value)
         {
-        this->SendUpdateFlt (0,
-                             channel,
+        this->SendUpdateFlt (0, channel,
                              DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
                              value);
         }
@@ -338,8 +302,7 @@ public:
     //#################################################
     void FltOut (byte fmap)
         {
-        this->SendUpdateFlt (0,
-                             0,
+        this->SendUpdateFlt (0, 0,
                              DISP_MESSAGE_N::EFFECT_C::MAP_VOICE,
                              fmap);
         }
@@ -347,8 +310,7 @@ public:
     //#################################################
     void FltCtrl (byte fn, byte value)
         {
-        this->SendUpdateFlt (0,
-                             fn,
+        this->SendUpdateFlt (0, fn,
                              DISP_MESSAGE_N::EFFECT_C::CONTROL,
                              value);
         }
@@ -429,8 +391,7 @@ public:
     void SendLoadSave (uint16_t value)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::VALUE,
                           value);
         }
@@ -438,8 +399,7 @@ public:
     void LoadMessage (void)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::MESSAGE,
                           1);
         }
@@ -447,8 +407,7 @@ public:
     void SaveMessage (void)
         {
         this->SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_LOAD_SAVE,
-                          0,
-                          0,
+                          0, 0,
                           DISP_MESSAGE_N::EFFECT_C::MESSAGE,
                           2);
         }

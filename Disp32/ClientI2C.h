@@ -41,20 +41,20 @@ public:
     //###################################################################
     byte* GetNextBuffer (void)
         {
-        if ( this->CountBuffersInUse ==  BUFFER_COUNT )   // if buffer overrun
+        if ( CountBuffersInUse ==  BUFFER_COUNT )   // if buffer overrun
             {
-            this->CountBuffersInUse--;                    // Error message and compensate
+            CountBuffersInUse--;                    // Error message and compensate
             printf ("***ERROR*** Client buffer overrun!\n");
             }
-        return ((byte*)&(this->Buffers[this->NextBufferIndex]));
+        return ((byte*)&(Buffers[NextBufferIndex]));
         }
 
     //###################################################################
     void NextBufferGood (void)
         {
-        if ( ++this->NextBufferIndex == BUFFER_COUNT )    // bump buffer and test for roll over
-            this->NextBufferIndex = 0;
-        this->CountBuffersInUse++;            // Add in use count for overrun checking
+        if ( ++NextBufferIndex == BUFFER_COUNT )    // bump buffer and test for roll over
+            NextBufferIndex = 0;
+        CountBuffersInUse++;            // Add in use count for overrun checking
         }
     };
 

@@ -25,12 +25,34 @@ static const char* LabelM = "M";
 
 using namespace DISP_MESSAGE_N;
 
+//#####################################################################
+static void UpdateButtonsLFO ()
+    {
+    bool state;
+
+    for (int idx = 0;  idx < 2;  idx++ )
+        {
+        for ( int z = 0;  z < SOURCE_CNT_LFO;  z++ )
+            LaunchControl.SetButtonStateRG (( idx ) ? z + 4 : z, SynthConfig.GetSelect (idx, z));
+        state = SynthConfig.GetRampDir (idx);
+        int zf = ( idx ) ? 7 : 3;
+        LaunchControl.SetButtonStateAG (zf, SynthConfig.GetRampDir (idx));
+        LaunchControl.SetButtonStateRG (zf, SynthConfig.GetModLevelAlt (idx));
+        }
+
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
+        LaunchControl.SetButtonStateRG (z + 8, SynthConfig.GetModSoftMixer (z));
+
+    LaunchControl.TemplateRefresh ();
+    }
+
 //#######################################################################
 void UpdateLfoDisplay ()
     {
-    SYNTH_VOICE_CONFIG_C& sc = SynthConfig.Voice[CurrentMapSelected];    // Configuration data for this voice pair
+    SYNTH_VOICE_CONFIG_C& sc = SynthConfig.Voice[SelectedMap];    // Configuration data for this voice pair
 
     DisplayMessage.Page (PAGE_C::PAGE_MOD);
+    LaunchControl.SelectTemplate (XL_MIDI_MAP_LFO);
 
     for ( int z = 0;  z < 2;  z++ )
         {
@@ -40,39 +62,7 @@ void UpdateLfoDisplay ()
         DisplayMessage.SetModLevelAlt    (z, SynthConfig.GetModLevelAlt (z));
         }
     DisplayMessage.LfoSoftFreq (SynthConfig.GetSoftFreq ());
-    UpdateModButtons ();
-    TemplateSelect (XL_MIDI_MAP_LFO);
-    }
-
-//#####################################################################
-void UpdateModButtons ()
-    {
-    bool state;
-    byte* pb = SynthConfig.GetButtonStateLfoPtr ();
-
-    for (int idx = 0;  idx < 2;  idx++ )
-        {
-        for ( int z = 0;  z < SOURCE_CNT_LFO;  z++ )
-            {
-            state = SynthConfig.GetSelect(idx, z);
-            int zf =  ( idx ) ? z + 4 : z;
-            pb[zf] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-            }
-        state = SynthConfig.GetRampDir (idx);
-        short zf = ( idx ) ? 7 : 3;
-        pb[zf] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-
-        bool state = SynthConfig.GetModLevelAlt (idx);
-        pb[idx + 14] = (state) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-        }
-
-    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++)
-        {
-        bool state = SynthConfig.GetModSoftMixer (z);
-        pb[z + 8] = ( state ) ? (byte)XL_LED::RED : (byte)XL_LED::GREEN;
-        }
-
-    LaunchControl.TemplateRefresh ();
+    UpdateButtonsLFO ();
     }
 
 //#######################################################################
@@ -148,7 +138,7 @@ void SelectModVCA (byte ch, bool state)
         else
             VoiceArray[z]->SetSoftLFO (ch, false);
         }
-    UpdateModButtons ();
+    UpdateButtonsLFO ();
     }
 
 //#####################################################################
@@ -169,7 +159,7 @@ void SelectModVCO (short index, short ch, bool state)
     SynthConfig.SetSelect (index, ch, state);
     Lfo[index].SetWave (ch, state);
     DisplayMessage.LfoHardSelect (index, ch, state);
-    UpdateModButtons ();
+    UpdateButtonsLFO ();
     }
 
 //#####################################################################
@@ -184,7 +174,7 @@ void SetModRampDir (short index, bool state)
     SynthConfig.SetRampDir (index, state);
     Lfo[index].SetRampDir (state);
     DisplayMessage.LfoHardRampSlope (index, state);
-    UpdateModButtons ();
+    UpdateButtonsLFO ();
     }
 
 //#####################################################################
@@ -199,7 +189,7 @@ void SetModLevelAlt  (short index, bool state)
     SynthConfig.SetModLevelAlt (index, state);
     Lfo[index].SetModLevelAlt (state);
     DisplayMessage.SetModLevelAlt (index, state);
-    UpdateModButtons ();
+    UpdateButtonsLFO ();
     }
 
 

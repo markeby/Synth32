@@ -56,7 +56,7 @@ public:
     void     Mute               (bool state)                        { Osc.Mute (state); }
     void     SetSoftLFO         (byte fn, bool sel)                 { Osc.SetSoftLFO (fn, sel); }
 
-    void     SetDamperMode      (byte fn, bool sel)                 { Osc.SetDamperMode (fn, sel); }
+    void     SetDamperMode      (byte fn, DAMPER mode)              { Osc.SetDamperMode (fn, mode); }
     void     SetOscAttackTime   (byte fn, float time)               { Osc.SetAttackTime (fn, time); }
     float    GetOscAttackTime   (byte fn)                           { return (Osc.GetAttackTime   (fn)); }
     void     SetOscDecayTime    (byte fn, float time)               { Osc.SetDecayTime (fn, time); }

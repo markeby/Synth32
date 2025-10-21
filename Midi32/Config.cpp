@@ -52,42 +52,33 @@
 //#######################################################################
 void SYNTH_VOICE_CONFIG_C::Save (const char* name)
     {
-    this->Name = name;
-    Settings.PutConfig (name, &(this->Cs), sizeof (this->Cs));
+    Name = name;
+    Settings.PutConfig (name, &(Cs), sizeof (Cs));
     }
 
 //#######################################################################
 void SYNTH_VOICE_CONFIG_C::Load (const char* name)
     {
-    if ( Settings.GetConfig (name, &(this->Cs), sizeof (this->Cs)) )
-        printf ("### Error loading voice config!\n");
-    this->InitButtonsXL ();
-    }
+    int zs = sizeof (Cs);
 
-//#######################################################################
-void SYNTH_VOICE_CONFIG_C::InitButtonsXL ()
-    {
-    for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
-        {
-        this->ButtonStateOsc[z] = XL_MidiMapArray[XL_MIDI_MAP_OSC][XL_BUTTON_START + z].Color;
-        this->ButtonStateFlt[z] = XL_MidiMapArray[XL_MIDI_MAP_FLT][XL_BUTTON_START + z].Color;
-        }
+    if ( Settings.GetConfig (name, &Cs, zs) )
+        printf ("### Error loading voice config!\n");
     }
 
 //#######################################################################
 //#######################################################################
     SYNTH_CONFIG_C::SYNTH_CONFIG_C ()
     {
-    this->Cs.SoftFrequency = 1;
+    Cs.SoftFrequency = 1;
     for ( short z = 0;  z < 4;  z++ )
-        this->Cs.LfoMidi[z];
+        Cs.LfoMidi[z];
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        this->Cs.SoftMixerLFO[z] = false;
+        Cs.SoftMixerLFO[z] = false;
     for ( short z = 0;  z < 2;  z++ )
         {
-        this->Cs.CfgLFO[z].Frequency  = 1;
-        this->Cs.CfgLFO[z].PulseWidth = 2048;
-        this->Cs.CfgLFO[z].RampDir    = false;
+        Cs.CfgLFO[z].Frequency  = 1;
+        Cs.CfgLFO[z].PulseWidth = 2048;
+        Cs.CfgLFO[z].RampDir    = false;
         for ( short z = 0;  z < SOURCE_CNT_LFO;  z++ )
             this->Cs.CfgLFO[z].Select[z] = false;
         }
@@ -104,12 +95,12 @@ void SYNTH_CONFIG_C::Save (short num)
     else
         sb = String (num) + "FL";
 
-    this->Name = sb;
-    Settings.PutConfig (sb.c_str (), &(this->Cs), sizeof (Cs));
+    Name = sb;
+    Settings.PutConfig (sb.c_str (), &(Cs), sizeof (Cs));
     for ( int z = 0;  z < MAP_COUNT;  z++ )
         {
         s = sb + String (z);
-        this->Voice[z].Save(s.c_str());
+        Voice[z].Save(s.c_str());
         }
     }
 
@@ -118,27 +109,20 @@ void SYNTH_CONFIG_C::Load (short num)
     {
     String s;
     String sb;
+    int    zs = sizeof (Cs);
 
     if ( num == 0 )                     // load default configuration
         sb = "DEF";
     else
         sb = String (num) + "FL";
 
-    if (Settings.GetConfig (sb.c_str(), &(this->Cs), sizeof(Cs)) )
+    if (Settings.GetConfig (sb.c_str(), &Cs, zs) )
         return;
     for ( int z = 0;  z < MAP_COUNT;  z++ )
         {
         s = sb + String (z);
-        this->Voice[z].Load (s.c_str ());
+        Voice[z].Load (s.c_str ());
         }
-    this->InitButtonsXL ();
-    }
-
-//#######################################################################
-void SYNTH_CONFIG_C::InitButtonsXL ()
-    {
-    for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
-        this->ButtonStateLfo[z] = XL_MidiMapArray[XL_MIDI_MAP_LFO][XL_BUTTON_START + z].Color;
     }
 
 

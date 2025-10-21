@@ -11,7 +11,7 @@
 #define NOVATION_LOOP_COUNT     1500
 
 //#######################################################################
-enum class XL_LED: byte
+enum class XL: byte
     {
     RED_FLASH       = 11,
     OFF             = 12,
@@ -33,37 +33,29 @@ class NOVATION_XL_C
 private:
     short       CurrentMap;
     short       FlashCounter;
-    XL_MIDI_MAP (*pMidiMap)[XL_MIDI_MAP_SIZE];
-    byte        *pButtonState;
     bool        ButtonChange;
     bool        FlashState;
     short       Counter;
+    byte        ButtonState[XL_BUTTON_COUNT];
 
 // located in FrontEnd.cpp
 private:
-    void    SendTo          (unsigned length, byte* buff);
-    void    ResetAllLED     (byte index);
-public:
-    void    Begin           (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE]);
+    void    SendTo              (unsigned length, byte* buff);
+    void    ResetAllLED         (byte index);
+    void    TemplateReset       (byte index);
+    void    SetColor            (byte index, byte led, XL color);
 
-// located in Novation.cpp
 public:
-            NOVATION_XL_C   (void);
-    void    Loop            (void);
-    void    TemplateReset   (byte index);
-    void    TemplateRefresh (void)              { ButtonChange = true; }
-
-    void    SelectTemplate  (byte index, byte* pbuttons=nullptr);
-    void    SetColor        (byte index, byte led, XL_LED color);
-    void    SetColor        (byte led, XL_LED color)                { SetColor (CurrentMap, led,  color); }
-    void    ButtonColor     (byte led, XL_LED color)
-        {
-        if ( pButtonState == nullptr )
-            return;
-        pButtonState[led] = (byte)color;
-        ButtonChange = true;
-        }
-    void    UpdateButtons   (void);
-    short   GetCurrentMap   (void)                                  { return (CurrentMap); }
+            NOVATION_XL_C       (void);
+    void    Begin               (void);
+    void    Loop                (void);
+    void    SelectTemplate      (byte index);
+    void    TemplateRefresh     (void)                              { ButtonChange = true; }
+    void    UpdateButtons       (void);
+    short   GetCurrentMap       (void)                              { return (CurrentMap); }
+    void    SetButtonState      (int index, byte value)             { ButtonState[index] = value; }
+    void    SetButtonStateAG    (int index, bool state)             { SetButtonState (index, ( state ) ? (byte)XL::AMBER : (byte)XL::GREEN); }
+    void    SetButtonStateRG    (int index, bool state)             { SetButtonState (index, ( state ) ? (byte)XL::RED : (byte)XL::GREEN); }
+    void    SetColorTri         (int index, byte tri);
     };
 

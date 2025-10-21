@@ -19,6 +19,14 @@ enum class ESTATE
     RELEASE
     };
 
+enum class DAMPER : byte
+    {
+    OFF = 0,
+    NORMAL,
+    INVERT,
+    MAX
+    };
+
 //#######################################################################
 class ENVELOPE_C
     {
@@ -35,7 +43,7 @@ private:
     bool        Updated;        // Flag indicating update output
     bool        PeakLevel;      // Flag indicating sustain and peak are the same
     bool        UseSoftLFO;     // Flag to enable sofware LFO
-    bool        Damper;         // Mode to utilize string damper
+    DAMPER      Damper;         // Mode to utilize string damper
 
     // User supplied inputs
     bool        DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
@@ -61,28 +69,23 @@ private:
     uint16_t    DevicePortIO;
 
 public:
-            ENVELOPE_C      (uint8_t index, String name, uint16_t device, uint8_t& usecount);
-    void    Clear           (void);
-    void    Mute            (bool state);
-    void    Process         (float deltaTime);
-    void    SetCurrent      (float data);
-    void    SetOverride     (uint32_t data);
-    void    Update          (void);
-    void    Start           (void);
-    void    End             (void);
-    void    SetTime         (ESTATE state, float time);
-    float   GetTime         (ESTATE state);
-    void    SetLevel        (ESTATE state, float percent);
-    float   GetLevel        (ESTATE state);
-    void    SetSoftLFO      (bool sel);
-    void    SetDamperMode   (bool sel)
-        { Damper = sel; }
-
-    void    SetDualUse (bool sel)
-        { DualUse = sel; }
-
-    uint16_t GetPortIO (void)                 // Return D/A channel number
-        { return (DevicePortIO); }
+                ENVELOPE_C      (uint8_t index, String name, uint16_t device, uint8_t& usecount);
+    void        Clear           (void);
+    void        Mute            (bool state);
+    void        Process         (float deltaTime);
+    void        SetCurrent      (float data);
+    void        SetOverride     (uint32_t data);
+    void        Update          (void);
+    void        Start           (void);
+    void        End             (void);
+    void        SetTime         (ESTATE state, float time);
+    float       GetTime         (ESTATE state);
+    void        SetLevel        (ESTATE state, float percent);
+    float       GetLevel        (ESTATE state);
+    void        SetSoftLFO      (bool sel);
+    void        SetDamperMode   (DAMPER mode)   { Damper = mode; }
+    void        SetDualUse      (bool sel)      { DualUse = sel; }
+    uint16_t    GetPortIO       (void)          { return (DevicePortIO); }  // Return D/A channel number
 
     int IsActive (void)
         { return (Active); }

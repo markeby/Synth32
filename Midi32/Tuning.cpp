@@ -269,7 +269,7 @@ void StartCalibration ()
         return;
 
     DisplayMessage.PageCalibration ();
-    TemplateSelect (XL_MIDI_MAP_TUNING);
+    LaunchControl.SelectTemplate (XL_MIDI_MAP_TUNING);
     DBG ("Starting Calibration");
 
     Lfo[0].SetOffset(0);

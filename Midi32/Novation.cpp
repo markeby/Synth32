@@ -12,27 +12,19 @@
 
 using namespace MIDI_NAMESPACE;
 
-byte dummyButtons[XL_BUTTON_COUNT];
-
 //#######################################################################
     NOVATION_XL_C::NOVATION_XL_C ()
     {
     CurrentMap   = 0;
     FlashState   = false;
-    pButtonState = nullptr;
     Counter      = NOVATION_LOOP_COUNT;
     ButtonChange = false;
-
-    memset (dummyButtons, 0x0C, sizeof (dummyButtons));
-    pButtonState = dummyButtons;
     }
 
 //#######################################################################
-void NOVATION_XL_C::Begin (XL_MIDI_MAP (*xl_map)[XL_MIDI_MAP_SIZE])
+void NOVATION_XL_C::Begin ()
     {
-    pMidiMap = xl_map;
-
-    for ( short z = 0;  z < 20;  z++ )
+    for ( short z = 0;  z < 20;  z++ )      // read in a bunch of stuff so that we can start using this device.
         {
         Usb.Task    ();
         Midi_0.read ();
@@ -53,11 +45,41 @@ void NOVATION_XL_C::SendTo (unsigned length, byte* buff)
     Midi_0.sendSysEx (length, buff, false);
     }
 
+//#####################################################################
+void NOVATION_XL_C::SetColor (byte index, byte led, XL color)
+    {
+    static byte midi_color_sysex[9] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78 };
+
+    delay (10);
+    midi_color_sysex[6] = index;
+    midi_color_sysex[7] = led;
+    midi_color_sysex[8] = (byte)color;
+    SendTo (sizeof (midi_color_sysex), midi_color_sysex);
+    }
+
 //#######################################################################
 void NOVATION_XL_C::ResetAllLED (byte index)
     {
     Midi_0.send ((MidiType)(0x90 | index), 0, 0, 0);
     delay (100);
+    }
+
+//#######################################################################
+void NOVATION_XL_C::SetColorTri (int index, byte tri)
+    {
+    switch ( tri )
+        {
+        case 1:     // DAMPER::NORMAL
+            tri = (byte)XL::AMBER;
+            break;
+        case 2:     // DAMPER::INVERT
+            tri = (byte)XL::GREEN_LOW;
+            break;
+        default:    // DAMPER::OFF
+            tri = (byte)XL::GREEN;
+            break;
+        }
+    SetButtonState (index, tri);
     }
 
 //#######################################################################
@@ -72,11 +94,27 @@ void NOVATION_XL_C::TemplateReset (byte index)
     for ( int z = 0;  z < (XL_MIDI_MAP_SIZE - 8);  z++ )
         {
         midi_sysex_led[zi] = z;                                         // setup index of LED
-        midi_sysex_led[zi + 1] = pMidiMap[index][z].Color;        // get color value for LED
+        midi_sysex_led[zi + 1] = XL_MidiMapArray[index][z].Color;       // get color value for LED
         zi += 2;                                                        // bump target array index
         }
     delay (100);
-    SendTo (sizeof (midi_sysex_led), midi_sysex_led);             // Send message to set all LEDs
+    SendTo (sizeof (midi_sysex_led), midi_sysex_led);                    // Send message to set all LEDs
+
+    for ( int z = 0;  z < XL_BUTTON_COUNT;  z++ )                       // Initialize button state map for LEDs
+        ButtonState[z] = XL_MidiMapArray[index][z].Color;
+    }
+
+//#######################################################################
+void NOVATION_XL_C::SelectTemplate (byte index)
+    {
+    static byte midi_msg_template[7] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x77, 0x00 };
+
+    delay (10);
+    midi_msg_template[6] = index;
+    CurrentMap           = index;
+    SendTo (sizeof (midi_msg_template), midi_msg_template);
+    TemplateReset (index);
+//    UpdateButtons ();
     }
 
 //#######################################################################
@@ -101,7 +139,7 @@ void NOVATION_XL_C::Loop ()
                 break;
             case XL_MIDI_MAP_MAPPING:
                 FlashState = !FlashState;
-                SetColor(XL_MIDI_MAP_MAPPING, 40, ( FlashState ) ? XL_LED::AMBER : XL_LED::OFF);
+                SetColor (XL_MIDI_MAP_MAPPING, 40, ( FlashState ) ? XL::AMBER : XL::OFF);
                 break;
             case XL_MIDI_MAP_TUNING:
                 break;
@@ -112,51 +150,20 @@ void NOVATION_XL_C::Loop ()
         }
     }
 
-//#######################################################################
-void NOVATION_XL_C::SelectTemplate (byte index, byte* pbuttons)
-    {
-    static byte midi_msg_template[7] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x77, 0x00 };
-    if ( pbuttons == nullptr )
-        pButtonState = dummyButtons;
-    else
-        pButtonState = pbuttons;
-    delay (10);
-    midi_msg_template[6] = index;
-    CurrentMap     = index;
-    SendTo (sizeof (midi_msg_template), midi_msg_template);
-    TemplateReset (index);
-    UpdateButtons ();
-    }
-
 //#####################################################################
 void NOVATION_XL_C::UpdateButtons ()
     {
     static byte midi_button_sysex[7 + (XL_BUTTON_COUNT * 2)] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78, 0x00 };
     String st;
 
-    if ( pButtonState != nullptr )
+    delay(10);
+    midi_button_sysex[6] = CurrentMap;
+    for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
         {
-        delay(10);
-        midi_button_sysex[6] = CurrentMap;
-        for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
-            {
-            midi_button_sysex[(z * 2) + 7] = XL_BUTTON_START + z;
-            midi_button_sysex[(z * 2) + 8] = pButtonState[z];
-            }
-        SendTo (sizeof (midi_button_sysex), midi_button_sysex);
+        midi_button_sysex[(z * 2) + 7] = XL_BUTTON_START + z;
+        midi_button_sysex[(z * 2) + 8] = ButtonState[z];
         }
-    }
-
-//#####################################################################
-void NOVATION_XL_C::SetColor (byte index, byte led, XL_LED color)
-    {
-    static byte midi_color_sysex[9] = { 0x00, 0x20, 0x29, 0x02, 0x11, 0x78 };
-
-    delay (10);
-    midi_color_sysex[6] = index;
-    midi_color_sysex[7] = led;
-    midi_color_sysex[8] = (byte)color;
-    SendTo (sizeof (midi_color_sysex), midi_color_sysex);
+    SendTo (sizeof (midi_button_sysex), midi_button_sysex);
     }
 
 

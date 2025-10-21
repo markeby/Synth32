@@ -38,11 +38,11 @@ extern bool             ResolutionMode;
 extern bool             MapSelectMode;
 extern bool             LoadSaveMode;
 extern SYNTH_CONFIG_C   SynthConfig;
-extern byte             CurrentMidiSelected;
-extern short            CurrentMapSelected;
-extern short            CurrentVoiceSelected;
-extern short            CurrentFilterSelected;
-extern short            CurrentConfigSelected;
+extern byte             SelectedMidi;
+extern short            SelectedMap;
+extern short            SelectedVoice;
+extern short            SelectedFilter;
+extern short            SelectedConfig;
 extern short            CurrentDisplayPage;         // Current index of page on display
 
 extern NOVATION_XL_C    LaunchControl;              // Novation LaunchControl XL control and interface module
@@ -66,7 +66,6 @@ void LoopSynth                  (void);
 void MasterVolume               (short md);
 void ClearSynth                 (void);
 void PageAdvance                (void);
-void TemplateSelect             (byte index);
 
 //#######################################################################
 // MIDI_Control.cpp
@@ -83,7 +82,6 @@ void InitMidiSequence           (void);
 //#######################################################################
 // Control_LFO.cpp
 void UpdateLfoDisplay           (void);
-void UpdateModButtons           (void);
 void SelectModVCA               (byte ch);
 void SelectModVCA               (byte ch, bool state);
 void FreqLFO                    (short ch, short data);
@@ -113,8 +111,8 @@ void OpenLoadSavePage           (void);
 void VoiceDamperToggle          (short ch);
 void MuteVoicesReset            (void);
 void MuteVoiceToggle            (void);
-void UpdateOscDisplay           (void);
-void UpdateFltDisplay           (void);
+void StartOscDisplay           (void);
+void StartFltDisplay           (void);
 void VoiceLevelSelect           (short ch, bool state);
 void SetLevel                   (short ch, short data);
 void SetAttackTime              (short ch, short data);

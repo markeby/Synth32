@@ -199,7 +199,7 @@ void MONITOR_C::MenuSel (void)
                 case 'd':
                     Settings.SaveDebugFlags ();
                     Serial << "  Saving debug flags" << endl;
-                    this->Mode (MENU);
+                    Mode (MENU);
                     break;
                 case 'p':
                     Serial << "\n\n << Enter single digit page number >";
@@ -304,8 +304,8 @@ void MONITOR_C::PageSelect (void)
 MONITOR_C::MONITOR_C (void) : InputMode (MENU), InputString ("")
     {
     Serial.begin (115200);
-    this->InputString = "";
-    this->InputMode   = MENU;
+    InputString = "";
+    InputMode   = MENU;
     }
 
 //#######################################################################
@@ -337,17 +337,17 @@ void MONITOR_C::Loop (void)
             switch ( InputMode )
                 {
                 case CMD:
-                    this->MenuSel ();
+                    MenuSel ();
                     break;
                 case INSSID:
                 case INPWD:
-                    this->TextIn ();
+                    TextIn ();
                     break;
                 case PAGE:
                     PageSelect ();
                     break;
                 case ZAP:
-                    if ( this->PromptZap () )
+                    if ( PromptZap () )
                         Mode(MENU);
                     break;
                 default:

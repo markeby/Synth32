@@ -57,7 +57,7 @@ void cb_ControllerControl (byte mchan, byte type, byte value)
         case 0x60 ... 0x67:
             {
             index = type - 0x30;
-            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()][index];
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()] [index];
             DBG ("%s > %d    ", m.Desc, value);
             if ( m.CallBack != nullptr )
                 m.CallBack (m.Index, value);
@@ -67,7 +67,7 @@ void cb_ControllerControl (byte mchan, byte type, byte value)
             {
             index     = type - 0x30;                         // offset to start of control map
             bool tgl = value > 0x3C;                        // use color green as threshold for button down
-            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()]  [index];
+            XL_MIDI_MAP& m = XL_MidiMapArray[LaunchControl.GetCurrentMap()] [index];
             DBG ("%s %s", m.Desc, (( tgl ) ? "Dn" : "Up"));
 
             if ( !tgl && (m.CallBack != nullptr) )
@@ -368,8 +368,8 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x1D, "N ",                      dummyButton         },  // 75 0x4B  27
         {     0,   0x1D, "N ",                      dummyButton         },  // 76 0x4C  28
         {     0,   0x1D, "N ",                      dummyButton         },  // 77 0x4D  29
-        {     0,   0x3C, "Freq ctrl mode advance",  freqCtrlModeAdv     },  // 78 0x4E  30
-        {     1,   0x3C, "Q ctrl mode advance",     freqCtrlModeAdv     },  // 79 0x4D  31
+        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
+        {     0,   0x3C, "Freq ctrl mode advance",  freqCtrlModeAdv     },  // 79 0x4D  31
         {     0,   0x3C, "Select Bypass",           selectFilter        },  // 80 0x50  32
         {     1,   0x3C, "Select LP",               selectFilter        },  // 81 0x51  33
         {     2,   0x3C, "Select LBP",              selectFilter        },  // 82 0x52  34
@@ -377,7 +377,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     4,   0x3C, "Select HP",               selectFilter        },  // 84 0x54  36
         {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
         {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button
+        {     1,   0x3C, "Q ctrl mode advance",     freqCtrlModeAdv     },  // 87 0x57  39  last button
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
@@ -632,7 +632,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
 //#######################################################################
 void InitMidiControl ()
     {
-    LaunchControl.Begin (XL_MidiMapArray);
+    LaunchControl.Begin ();
 
 //    Midi_0.setHandleNoteOn               (cb_KeyDown_Novation);
 //    Midi_0.setHandleNoteOff              (cb_KeyUp_Novation);

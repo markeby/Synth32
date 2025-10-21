@@ -27,22 +27,14 @@ public:
           TEXT_INFO_C   (void);
     void  BeginText     (lv_obj_t* base, const char* s, const char* su, short y, uint32_t color);
 
-    void BeginText (lv_obj_t* base, const char* s, const char* su, short y)
-        { this->BeginText (base, s, su, y, 0xD0D0D0);  }
-    void SetValid (bool state)
-        { this->Valid = state; }
-    bool GetValid (void)
-        { return (this-Valid); }
-    void SetLabel (const char* s)
-        { lv_label_set_text (this->Value, s); }
-    void  SetLabelColor (uint32_t color)
-        { lv_style_set_text_color (&this->StyleLabel, lv_color_hex (color)); }
-    void  SetValueColor (uint32_t color)
-        { lv_style_set_text_color (&this->StyleValue, lv_color_hex (color)); }
-    void TextFloat (float f)
-        { lv_label_set_text_fmt (this->Value, "%.3f Hz", f); }
-    void TextInt (int d)
-        { lv_label_set_text_fmt (this->Value, "%d", d); }
+    void BeginText (lv_obj_t* base, const char* s, const char* su, short y)     { BeginText (base, s, su, y, 0xD0D0D0);  }
+    void SetValid (bool state)                                                  { Valid = state; }
+    bool GetValid (void)                                                        { return (Valid); }
+    void SetLabel (const char* s)                                               { lv_label_set_text (Value, s); }
+    void SetLabelColor (uint32_t color)                                         { lv_style_set_text_color (&StyleLabel, lv_color_hex (color)); }
+    void SetValueColor (uint32_t color)                                         { lv_style_set_text_color (&StyleValue, lv_color_hex (color)); }
+    void TextFloat (float f)                                                    { lv_label_set_text_fmt (Value, "%.3f Hz", f); }
+    void TextInt (int d)                                                        { lv_label_set_text_fmt (Value, "%d", d); }
 
     };
 
@@ -87,13 +79,13 @@ private:
     TEXT_INFO_C             Decay;
     lv_meter_indicator_t*   GaugeRelease;
     TEXT_INFO_C             Release;
-    bool                    LedBlue;
     bool                    LedRed;
+    byte                    LedDamper;
 
 public:
           ADSR_METER_WIDGET_C (lv_obj_t* base, short x, short y);
     void  Volume              (lv_obj_t* base);
-    void  Damper              (bool sel);
+    void  Damper              (byte mode);
     void  Mute                (bool sel);
     void  SetAttack           (int val);
     void  SetDecay            (int val);

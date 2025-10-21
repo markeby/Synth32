@@ -99,8 +99,8 @@ void ClearSynth ()
 //#######################################################################
 void PageAdvance ()
     {
-    byte  m    = CurrentMidiSelected;
-    short next = CurrentMapSelected + 1;
+    byte  m    = SelectedMidi;
+    short next = SelectedMap + 1;
 
     if ( LoadSaveMode || ResolutionMode || MapSelectMode )
         {
@@ -113,65 +113,65 @@ void PageAdvance ()
 
     while ( next < MAP_COUNT )
         {
-        CurrentFilterSelected = -1;
+        SelectedFilter = -1;
         if ( m == SynthConfig.Voice[next].GetVoiceMidi () )
             {
             next++;
             continue;
             }
-        CurrentMapSelected    = next;
-        CurrentConfigSelected = next;
-        CurrentVoiceSelected  = next << 1;
-        CurrentMidiSelected   = SynthConfig.Voice[next].GetVoiceMidi ();
-        UpdateOscDisplay ();
+        SelectedMap    = next;
+        SelectedConfig = next;
+        SelectedVoice  = next << 1;
+        SelectedMidi   = SynthConfig.Voice[next].GetVoiceMidi ();
+        StartOscDisplay ();
         return;
         }
 
     short index = next - MAP_COUNT;
     if ( next == MAP_COUNT )
         {
-        CurrentVoiceSelected  = -1;
-        CurrentMapSelected    = next;
-        CurrentConfigSelected = index;
-        CurrentFilterSelected = index << 1;
-        CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
-        UpdateFltDisplay ();
+        SelectedVoice  = -1;
+        SelectedMap    = next;
+        SelectedConfig = index;
+        SelectedFilter = index << 1;
+        SelectedMidi   = SynthConfig.Voice[index].GetVoiceMidi ();
+        StartFltDisplay ();
         return;
         }
 
     while ( next < (MAP_COUNT * 2) )
         {
-        CurrentVoiceSelected = -1;
+        SelectedVoice = -1;
         if ( m == SynthConfig.Voice[index].GetVoiceMidi () )
             {
             next++;
             continue;
             }
-        CurrentMapSelected    = next;
-        CurrentConfigSelected = index;
-        CurrentFilterSelected = index << 1;
-        CurrentMidiSelected   = SynthConfig.Voice[index].GetVoiceMidi ();
-        UpdateFltDisplay ();
+        SelectedMap    = next;
+        SelectedConfig = index;
+        SelectedFilter = index << 1;
+        SelectedMidi   = SynthConfig.Voice[index].GetVoiceMidi ();
+        StartFltDisplay ();
         return;
         }
 
     index = next - (MAP_COUNT * 2) + 2;
     if ( DisplayMessage.Page () == (byte)PAGE_C::PAGE_MOD )
         {
-        CurrentMapSelected    = 0;
-        CurrentVoiceSelected  = 0;
-        CurrentConfigSelected = 0;
-        CurrentFilterSelected = -1;
-        CurrentMidiSelected   = SynthConfig.Voice[0].GetVoiceMidi ();
-        UpdateOscDisplay ();
+        SelectedMap    = 0;
+        SelectedVoice  = 0;
+        SelectedConfig = 0;
+        SelectedFilter = -1;
+        SelectedMidi   = SynthConfig.Voice[0].GetVoiceMidi ();
+        StartOscDisplay ();
         }
     else
         {
-        CurrentMapSelected    = next;
-        CurrentMidiSelected   = 0;
-        CurrentFilterSelected = -1;       // de-select functions to disable
-        CurrentVoiceSelected  = -1;
-        CurrentConfigSelected = -1;
+        SelectedMap    = next;
+        SelectedMidi   = 0;
+        SelectedFilter = -1;       // de-select functions to disable
+        SelectedVoice  = -1;
+        SelectedConfig = -1;
         UpdateLfoDisplay ();
         }
     }
@@ -249,29 +249,6 @@ void LoopSynth ()
     }
 
 //#####################################################################
-void TemplateSelect (byte index)
-    {
-    byte *pb = nullptr;
-
-    switch ( index )
-        {
-        case XL_MIDI_MAP_OSC:
-            pb = SynthConfig.Voice[CurrentVoiceSelected >> 1].GetButtonStateOscPtr ();
-            break;
-        case XL_MIDI_MAP_FLT:
-            pb = SynthConfig.Voice[CurrentFilterSelected >> 1].GetButtonStateFltPtr ();
-            break;
-        case XL_MIDI_MAP_LFO:
-            pb = SynthConfig.GetButtonStateLfoPtr ();
-            break;
-        default:
-            break;
-        }
-
-    LaunchControl.SelectTemplate (index, pb);
-    }
-
-//#####################################################################
 void SystemExDebug (byte* array, unsigned size)
     {
     for ( short z = 0;  z < size;  z += 16 )
@@ -297,11 +274,11 @@ bool            ResolutionMode          = false;
 bool            MapSelectMode           = false;
 bool            LoadSaveMode            = false;
 SYNTH_CONFIG_C  SynthConfig;
-byte            CurrentMidiSelected     = 0;
-short           CurrentMapSelected      = -1;
-short           CurrentVoiceSelected    = -1;
-short           CurrentFilterSelected   = -1;
-short           CurrentConfigSelected   = -1;
+byte            SelectedMidi     = 0;
+short           SelectedMap      = -1;
+short           SelectedVoice    = -1;
+short           SelectedFilter   = -1;
+short           SelectedConfig   = -1;
 short           CurrentDisplayPage      = 0;
 
 NOVATION_XL_C   LaunchControl;

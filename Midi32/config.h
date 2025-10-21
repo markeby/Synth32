@@ -143,7 +143,7 @@ private:
 
     typedef struct
         {
-        bool    Damper;
+        byte    Damper;
         float   MaxLevel;
         float   MinLevel;
         float   SustainLevel;
@@ -166,28 +166,18 @@ private:
 
     String  Name;
     bool    Mute;
-    byte    ButtonStateOsc[XL_BUTTON_COUNT];
-    byte    ButtonStateFlt[XL_BUTTON_COUNT];
 
 public:
     bool    SelectedOscEnvelope[OSC_MIXER_COUNT];
     bool    SelectedFltEnvelope[FILTER_DEVICES];
 
-         SYNTH_VOICE_CONFIG_C    (void);
-    void Save                    (const char* name);
-    void Load                    (const char* name);
-    void InitButtonsXL           (void);
-
+           SYNTH_VOICE_CONFIG_C  (void);
+    void   Save                  (const char* name);
+    void   Load                  (const char* name);
     void   SetMute               (bool state)               { Mute = state; }
     bool   IsMute                (void)                     { return (Mute); }
-    void   SetDamperMode         (byte index, bool sel)     { Cs.OscEnv[index].Damper = sel; }
-    bool   GetDamperMode         (byte index)               { return (Cs.OscEnv[index].Damper); }
-    void   SetButtonStateOsc     (int index, byte value)    { ButtonStateOsc[index] = value; }
-    byte   GetButtonStateOsc     (int index)                { return (ButtonStateOsc[index]); }
-    byte*  GetButtonStateOscPtr  ()                         { return (ButtonStateOsc); }
-    void   SetButtonStateFlt     (int index, byte value)    { ButtonStateFlt[index] = value; }
-    byte   GetButtonStateFlt     (int index)                { return (ButtonStateFlt[index]); }
-    byte*  GetButtonStateFltPtr  ()                         { return (ButtonStateFlt); }
+    void   SetDamperMode         (byte index, byte mode)    { Cs.OscEnv[index].Damper = mode; }
+    byte   GetDamperMode         (byte index)               { return (Cs.OscEnv[index].Damper); }
     void   SetName               (String& name)             { Name = name;}
     String Getname               (void)                     { return (Name); }
     void   SetVoiceMidi          (byte data)                { Cs.MapVoiceMidi = data; }
@@ -245,8 +235,7 @@ private:
             } CfgLFO[2];
         } Cs;
 
-    String          Name;
-    byte    ButtonStateLfo[XL_BUTTON_COUNT];
+    String  Name;
 
 public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
@@ -254,9 +243,7 @@ public:
             SYNTH_CONFIG_C      (void);
     void    Save                (short num);
     void    Load                (short num);
-    void    InitButtonsXL       (void);
 
-    byte*  GetButtonStateLfoPtr (void)                                  { return (ButtonStateLfo); }
     void   SetName              (String& name)                          { Name = name; }
     String Getname              (void)                                  { return (Name); }
     void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
