@@ -269,6 +269,7 @@ KEY_T           Up;
 ENV_GENERATOR_C EnvADSL;
 SYNTH_LFO_C     Lfo[2];
 VOICE_C*        VoiceArray[VOICE_COUNT];
+bool            DamperPedal;
 
 bool            ResolutionMode          = false;
 bool            MapSelectMode           = false;

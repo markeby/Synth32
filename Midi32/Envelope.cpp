@@ -5,6 +5,8 @@
 // Date:       6/25/2024
 //#######################################################################
 #include <Arduino.h>
+
+#include "FrontEnd.h"
 #include "Envelope.h"
 #include "SoftLFO.h"
 
@@ -65,7 +67,7 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     ReleaseTime   = 0;
     Active        = 0;
     UseSoftLFO    = false;
-    Damper        = DAMPER::OFF;
+    DamperMode    = DAMPER::OFF;
     Clear ();
     }
 
@@ -269,20 +271,7 @@ void ENVELOPE_C::Process (float deltaTime)
             NoDecay = false;
             if ( DecayTime < 8.0 )
                 NoDecay = true;
-            else
-                {
-                if ( Bottom < Top )             // if envelope is going to be running forwards...
-                    {
-                    // Make sure sustain doesn't exceed top or bottom in the currect direction
-//                    if ( (Sustain < Bottom) || (Sustain > Top) )
-//                        NoDecay = true;         // This case makes sustain a pointless parameter
-                    }
-                else
-                    {
-//                    if ( (Sustain > Bottom) || (Sustain < Top) )
-//                        NoDecay = true;         // This case makes sustain a pointless parameter
-                     }
-                }
+
             Timer       = 0.0;
             Delta       = Top - Bottom ;
             PeakLevel   = false;
@@ -371,7 +360,24 @@ void ENVELOPE_C::Process (float deltaTime)
                 Current = Bottom + ((Timer / ReleaseTime) * Delta);
                 Updated = true;
                 DBG ("Timer > %f mSec at level %f", Timer, Current);
-                return;
+
+                // Process string damper
+                bool damper = false;
+                switch ( DamperMode )
+                    {
+                    default:
+                        break;
+                    case DAMPER::NORMAL:
+                        if ( DamperPedal )      damper = false;
+                        else                    damper = true;
+                        break;
+                    case DAMPER::INVERT:
+                        if ( DamperPedal )      damper = true;
+                        else                    damper = false;
+                        break;
+                    }
+                if ( !damper )
+                    return;
                 }
             Clear ();          // We got to here so this envelope process in finished.
             return;

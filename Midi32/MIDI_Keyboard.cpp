@@ -14,6 +14,7 @@
 #include "MidiConf.h"
 
 #ifdef DEBUG_SYNTH
+//#define DEBUG_MIDI_MSG
 static const char* Label  = "TOP";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #else
@@ -213,7 +214,6 @@ G49_BUTTON_MAP switchMap[] =
 //#######################################################################
 static void cb_Control_Keyboard (byte mchan, byte type, byte value)
     {
-    type -= 16;                 // all controls start at 16
     switch ( mchan )
         {
         case 1:
@@ -228,13 +228,11 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                     break;
 
                 case 0x40:      // Damper pedal (sustain)
-                    {
-                    bool zb;
-
-                    if ( value < 64 )       zb = false;
-                    else                    zb = true;
-                    DBG ("Damper pdeal: %s", (( zb ) ? "ON" : "OFF"));
-                    }
+                    if ( value < 64 )
+                        DamperPedal = false;
+                    else
+                        DamperPedal = true;
+                    DBG ("Damper pdeal: %s", (( DamperPedal ) ? "ON" : "OFF"));
                     break;
 
                 default:
@@ -244,6 +242,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
 
         case 2:
             {
+            type -= 16;                 // all controls start at 16
             G49_VARIABLE_MAP& m = faderMap[type];
             DBG ("%s > %d", m.Desc, value);
             if ( m.CallBack != nullptr )
@@ -253,6 +252,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
 
         case 3:
             {
+            type -= 16;                 // all controls start at 16
             G49_VARIABLE_MAP& m = encoderMap[type];
             int z = m.Value + (value & 0x1F) * ((value & 0x40) ? -1 : 1);
             if ( z > 4095 )   z = 4095;
@@ -265,6 +265,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
 
         case 4:
             {
+            type -= 16;                 // all controls start at 16
             if ( SetTuning )
                 {
                 switch ( type )
@@ -311,7 +312,6 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
 
         case 5:
             {
-            type += 16;
             G49_BUTTON_MAP& m = switchMap[type];
             m.State = !m.State;
             DBG ("%s %d", m.Desc, m.State);
@@ -319,6 +319,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                 m.CallBack (m.Index, m.State);
             }
             break;
+
         default:
             break;
         }

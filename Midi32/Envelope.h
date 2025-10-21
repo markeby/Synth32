@@ -43,10 +43,10 @@ private:
     bool        Updated;        // Flag indicating update output
     bool        PeakLevel;      // Flag indicating sustain and peak are the same
     bool        UseSoftLFO;     // Flag to enable sofware LFO
-    DAMPER      Damper;         // Mode to utilize string damper
 
     // User supplied inputs
     bool        DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
+    DAMPER      DamperMode;     // Mode to utilize string damper
     float       Top;            // Fraction of one (percent).
     float       Bottom;         // Fraction of one (percent).
     float       SetSustain;     // The settin of sustain level up to one.
@@ -83,7 +83,7 @@ public:
     void        SetLevel        (ESTATE state, float percent);
     float       GetLevel        (ESTATE state);
     void        SetSoftLFO      (bool sel);
-    void        SetDamperMode   (DAMPER mode)   { Damper = mode; }
+    void        SetDamperMode   (DAMPER mode)   { DamperMode = mode; }
     void        SetDualUse      (bool sel)      { DualUse = sel; }
     uint16_t    GetPortIO       (void)          { return (DevicePortIO); }  // Return D/A channel number
 
