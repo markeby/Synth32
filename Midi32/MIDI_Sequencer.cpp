@@ -78,9 +78,32 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
     DBG ("Control change: 0x%2.2X  value 0x%2.2X", type, value);
     switch ( type )
         {
-        case 0x78:      // [Channel Mode Message] All Sound Off
-            DBG ("[Channel Mode Message] All Sound Off");
-            ClearSynth ();
+        case 0x00:
+            DBG ("Bank select: %d", value);
+            break;
+
+        case 0x01:      // Modulation wheel
+            DBG ("Modulation whee:l %d", value);
+            break;
+
+        case 0x06:
+            DBG ("Data Entry MSB: %d", value);
+            break;
+
+        case 0x07:      // Channel volume
+            DBG ("Channel volume: %d", value);
+            break;
+
+        case 0x0B:
+            DBG ("Expression Controller: %d", value);
+            break;
+
+        case 0x20:
+            DBG ("Bank select LSB: %d", value);
+            break;
+
+        case 0x21:      // LSB Modulation wheel
+            DBG ("Modulation wheel: LSB %d", value);
             break;
 
         case 0x40:      // Damper pedal (sustain)
@@ -89,43 +112,25 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
             DBG ("Damper pdeal: %s", (( zl ) ? "ON" : "OFF"));
             break;
 
-        case 0x0B:
-            DBG ("Expression Controller: %d", value);
+        case 0x5B:
+            DBG ("Effects 1 Depth: %d", value);
             break;
 
         case 0x5D:
             DBG ("Effects 3 Depth: %d", value);
             break;
-        case 0x5B:
-            DBG ("Effects 1 Depth: %d", value);
-            break;
-
-        case 0x07:      // Channel volume
-            DBG ("Channel volume: %d", value);
-            break;
-
-        case 0x01:      // Modulation wheel
-            DBG ("Modulation whee:l %d", value);
-            break;
-        case 0x21:      // LSB Modulation wheel
-            DBG ("Modulation wheel: LSB %d", value);
-            break;
-
-        case 0x00:
-            DBG ("Bank select: %d", value);
-            break;
-        case 0x20:
-            DBG ("Bank select LSB: %d", value);
-            break;
 
         case 0x64:
             DBG ("RPN LSB: %d", value);
             break;
+
         case 0x65:
             DBG ("RPN MSB: %d", value);
             break;
-        case 0x06:
-            DBG ("Data Entry MSB: %d", value);
+
+        case 0x78:      // [Channel Mode Message] All Sound Off
+            DBG ("[Channel Mode Message] All Sound Off");
+            ClearSynth ();
             break;
 
         default:

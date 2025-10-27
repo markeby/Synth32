@@ -81,8 +81,8 @@ public:
 
     void PitchBend (byte mchan, short value)
         {
-        if ( mchan == this->Midi )
-            this->PitchBend (value);
+        if ( mchan == Midi )
+            PitchBend (value);
         }
 
     void  SetMidi (byte data)
@@ -95,31 +95,31 @@ public:
         { this->Offset = val;  }
 
     short GetOffset  (void)
-        { return (this->Offset); }
+        { return (Offset); }
 
     bool GetWave (short ch)
-        { return (this->Level[ch].Select); }
+        { return (Level[ch].Select); }
 
     bool GetRampDir (void)
-        { return (this->RampSlope); }
+        { return (RampSlope); }
 
     void SetFreqCoarse (short value)
-        { this->CurrentFreqCoarse = value; this->ProcessFreq (); }
+        { CurrentFreqCoarse = value; ProcessFreq (); }
 
     void SetFreqFine (short value)
-        { this->CurrentFreqFine = value; this->ProcessFreq (); }
+        { CurrentFreqFine = value; ProcessFreq (); }
 
     short GetFreq (void)
-        { return (this->CurrentFreq); }
+        { return (CurrentFreq); }
 
     void SetFreq (short value)
-        { this->CurrentFreq = value; this->OutputFreqIO (); }
+        { this->CurrentFreq = value; OutputFreqIO (); }
 
     void SetModLevelAlt (bool state)
-        { this->ModLevelAlt = state; }
+        { ModLevelAlt = state; }
 
     bool GetModLevelAlt (void)
-        { return (this->ModLevelAlt); }
+        { return (ModLevelAlt); }
     };
 
 

@@ -64,6 +64,7 @@ void MapModeBump (short down)
     short z;
     ushort zi = SelectedMap;
 
+    DBG ("Selected bump %d", down);
     while ( true )
         {
         if ( zi < MAP_COUNT )
@@ -107,6 +108,7 @@ void MapModeBump (short down)
 //#####################################################################
 void ChangeMapSelect (short right)
     {
+    DBG ("Map Change %d", right);
     if ( MapSelectMode )
         {
         if ( right == 0 )   // go left
@@ -219,7 +221,7 @@ void ResolveMapAllocation ()
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         SelectModVCA (z, SynthConfig.GetModSoftMixer (z));
 
-    SoftLFO.SetFreq             (SynthConfig.GetSoftFreq    ());
+    SoftLFO.SetFreq       (SynthConfig.GetSoftFreq    ());
     Lfo[0].SetFreq        (SynthConfig.GetFrequency   (0));
     Lfo[1].SetFreq        (SynthConfig.GetFrequency   (1));
     Lfo[0].SetPulseWidth  (SynthConfig.GetPulseWidth  (0));

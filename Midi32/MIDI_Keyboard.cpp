@@ -279,6 +279,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                             VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelectSecond (type);
                             selection_time = 0;
+                            TuningOutputBitFlip (7);
                             }
                         else
                             {
@@ -287,6 +288,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                             VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelect (type);
                             selection_time = RunTime;
+                            TuningOutputBitFlip (7);
                             }
                         }
                         break;

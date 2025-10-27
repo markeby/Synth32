@@ -118,7 +118,8 @@ void FreqLFO (short ch, short data)
 //#######################################################################
 void PitchBender (byte mchan, short value)
     {
-    value = (value + 8192) >> 2;
+//    value = (short)((float)value *  0.014404296875) + (DA_MAX >> 1);
+    value = (short)((float)value * 0.0146 * 2) + (DA_MAX >> 1);
     Lfo[0].PitchBend (mchan, value);
     Lfo[1].PitchBend (mchan, value);
     DBG ("Pitch Bend value = %d", value);

@@ -12,15 +12,15 @@
 class SOFT_LFO_C
     {
 private:
-    short   CurrentFreqCoarse;
-    short   CurrentFreqFine;
-    short   CurrentFreq;
-    float   Frequency;
-    float   WaveLength;
-    float   Current;
-    float   Sine;
-    float   Modulation;
-    byte    Midi;
+    short   _FreqCoarse;
+    short   _FreqFine;
+    short   _Freq;
+    float   _Frequency;
+    float   _WaveLength;
+    float   _Current;
+    float   _Sine;
+    float   _Modulation;
+    byte    _Midi;
 
     void OutputFrequency    (void);
     void ProcessFreq        (void);
@@ -31,25 +31,24 @@ public:
     void Multiplier     (byte mchan, float value);
 
     void  SetMidi (byte mchan)
-        { this->Midi = mchan; }
+        { _Midi = mchan; }
 
     byte  GetMidi (void)
-        { return (this->Midi); }
+        { return (_Midi); }
 
     float GetSin (void)
-        { return (( this->Modulation > .05 ) ? this->Sine : 0.0); }
+        { return (( _Modulation > .05 ) ? _Sine : 0.0); }
 
     void SetFreqCoarse (short value)
-        { this->CurrentFreqCoarse = value; this->ProcessFreq (); }
+        { _FreqCoarse = value; ProcessFreq (); }
 
-    void SetFreqFine (short value)
-        { this->CurrentFreqFine = value; this->ProcessFreq (); }
+    void SetFreqFine (short value);
 
     short GetFreq (void)
-        { return (this->CurrentFreq); }
+        { return (_Freq); }
 
     void SetFreq (short value)
-        { this->CurrentFreq = value; this->OutputFrequency (); }
+        { _Freq = value; OutputFrequency (); }
     };
 
 extern SOFT_LFO_C SoftLFO;
