@@ -13,9 +13,12 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label  = "TOP";
+static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,mchan,args);}}
 #else
 #define DBG(args...)
+#define DBGM(args...)
 #endif
 
 //-------------------------------------------------------------------
@@ -73,11 +76,6 @@ void cb_ControllerControl (byte mchan, byte type, byte value)
             if ( !tgl && (m.CallBack != nullptr) )
                 m.CallBack (m.Index, (short)tgl);
             }
-            break;
-
-        case 120 ... 127:           // all notes stop
-            DBG ("All note clear");
-            ClearSynth ();
             break;
 
         default:
@@ -230,17 +228,17 @@ static void sendDir (short index, short data)
     {
     if ( MapSelectMode )
         MapModeBump (( index ) ? -1 : 1);
-    else if ( LoadSaveMode )
+    else if ( LoadMode || SaveMode)
         LoadSaveBump (( index ) ? -1 : 1);
     }
 
 //########################################################
 static void loadConfig (short index, short data)
     {
-    if ( LoadSaveMode )
+    if ( LoadMode )
         LoadSelectedConfig ();
-    else
-        OpenLoadSavePage ();
+    else if ( !SaveMode )
+        OpenLoadSavePage(false);
     }
 
 //########################################################
@@ -248,10 +246,10 @@ static void saveConfig (short index, short data)
     {
     if ( MapSelectMode )
         SaveDefaultConfig ();
-    else if ( LoadSaveMode )
+    else if ( SaveMode )
         SaveSelectedConfig ();
-    else
-        OpenLoadSavePage ();
+    else if ( !LoadMode )
+        OpenLoadSavePage (true);
      }
 
 //########################################################

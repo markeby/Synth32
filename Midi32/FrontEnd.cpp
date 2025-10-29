@@ -90,23 +90,17 @@ void MasterVolume (short md)
     }
 
 //#######################################################################
-void ClearSynth ()
-    {
-    for ( int z = 0;  z < VOICE_COUNT; z++ )
-        VoiceArray[z]->Clear ();
-    }
-
-//#######################################################################
 void PageAdvance ()
     {
     byte  m    = SelectedMidi;
     short next = SelectedMap + 1;
 
-    if ( LoadSaveMode || ResolutionMode || MapSelectMode )
+    if ( LoadMode || SaveMode|| ResolutionMode || MapSelectMode )
         {
         next = 0;
         m = 0;
-        LoadSaveMode   = false;
+        LoadMode       = false;
+        SaveMode       = false;
         ResolutionMode = false;
         MapSelectMode  = false;
         }
@@ -266,23 +260,22 @@ void SystemExDebug (byte* array, unsigned size)
 KEY_T           Down;
 KEY_T           Up;
 
-ENV_GENERATOR_C EnvADSL;
-SYNTH_LFO_C     Lfo[2];
-VOICE_C*        VoiceArray[VOICE_COUNT];
-bool            DamperPedal;
-
-bool            ResolutionMode          = false;
-bool            MapSelectMode           = false;
-bool            LoadSaveMode            = false;
-SYNTH_CONFIG_C  SynthConfig;
-byte            SelectedMidi     = 0;
-short           SelectedMap      = -1;
-short           SelectedVoice    = -1;
-short           SelectedFilter   = -1;
-short           SelectedConfig   = -1;
-short           CurrentDisplayPage      = 0;
-
-NOVATION_XL_C   LaunchControl;
+ENV_GENERATOR_C EnvADSL;                    //Envelope generator spawn tool
+SYNTH_CONFIG_C  SynthConfig;                //Synth configuration saveable
+NOVATION_XL_C   LaunchControl;              //Novation controller
+SYNTH_LFO_C     Lfo[2];                     //Hardware LFOs
+VOICE_C*        VoiceArray[VOICE_COUNT];    //Oscillators, filters, routing controls
+byte            PitchBendFactor[MAX_MIDI] = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+bool            ResolutionMode      = false;
+bool            MapSelectMode       = false;
+bool            LoadMode            = false;
+bool            SaveMode            = false;
+byte            SelectedMidi        = 0;
+short           SelectedMap         = -1;
+short           SelectedVoice       = -1;
+short           SelectedFilter      = -1;
+short           SelectedConfig      = -1;
+short           CurrentDisplayPage  = 0;
 
 bool            SetTuning               = false;
 short           CalibrationBaseDigital;

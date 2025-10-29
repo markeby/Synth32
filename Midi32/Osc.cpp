@@ -148,4 +148,17 @@ void OSC_C::Mute (bool state)
         Mix[z]->Mute (state);
     }
 
+//#######################################################################
+void OSC_C::Expression (float level)
+    {
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        Mix[z]->Expression (level);
+    }
+
+//#######################################################################
+void OSC_C::Damper (bool state)
+    {
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        Mix[z]->Damper (state);
+    }
 

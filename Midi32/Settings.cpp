@@ -6,6 +6,7 @@
 //#######################################################################
 #include <Arduino.h>
 #include <Preferences.h>
+#include <SPIFFS.h>
 #include "Settings.h"
 #include "FrontEnd.h"
 

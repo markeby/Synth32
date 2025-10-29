@@ -19,6 +19,7 @@ private:
     float   _WaveLength;
     float   _Current;
     float   _Sine;
+    float   _Triangle;
     float   _Modulation;
     byte    _Midi;
 
@@ -26,29 +27,18 @@ private:
     void ProcessFreq        (void);
 
 public:
-         SOFT_LFO_C     (void);
-    void Loop           (float millisec);
-    void Multiplier     (byte mchan, float value);
-
-    void  SetMidi (byte mchan)
-        { _Midi = mchan; }
-
-    byte  GetMidi (void)
-        { return (_Midi); }
-
-    float GetSin (void)
-        { return (( _Modulation > .05 ) ? _Sine : 0.0); }
-
-    void SetFreqCoarse (short value)
-        { _FreqCoarse = value; ProcessFreq (); }
-
-    void SetFreqFine (short value);
-
-    short GetFreq (void)
-        { return (_Freq); }
-
-    void SetFreq (short value)
-        { _Freq = value; OutputFrequency (); }
+          SOFT_LFO_C    (void);
+    void  Loop          (float millisec);
+    void  Multiplier    (byte mchan, float value);
+    void  ResetControl  (void)              {  _Modulation = 0; }
+    void  SetMidi       (byte mchan)        { _Midi = mchan; }
+    byte  GetMidi       (void)              { return (_Midi); }
+    float GetTri        (void)              { return (( _Modulation > .005 ) ? _Triangle : 0.0); }
+    float GetSin        (void)              { return (( _Modulation > .005 ) ? _Sine : 0.0); }
+    void  SetFreqCoarse (short value)       { _FreqCoarse = value; ProcessFreq (); }
+    void  SetFreqFine   (short value);
+    short GetFreq       (void)              { return (_Freq); }
+    void  SetFreq       (short value)       { _Freq = value; OutputFrequency (); }
     };
 
 extern SOFT_LFO_C SoftLFO;

@@ -41,8 +41,8 @@ void MONITOR_C::DumpStats (void)
     {
     static const char* hh = " ## ";
 
-//    Serial << "==========================================" << endl;
-//    printBeforeSetupInfo ();
+    Serial << "==========================================" << endl;
+    printBeforeSetupInfo ();
     Serial << "==========================================" << endl << endl;
     Serial << hh << "total sketch code = " << ESP.getFreeSketchSpace () << endl;
     Serial << hh << "      sketch size = " << Settings.GetSketchSize () << endl;

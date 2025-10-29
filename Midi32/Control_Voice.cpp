@@ -389,4 +389,11 @@ void FreqCtrlModeAdv (short index)
     updateFltButtons ();
     }
 
+//#######################################################################
+void Damper (byte mchan, bool state)
+    {
+    for ( int z = 0;  z < VOICE_COUNT;  z++)
+        VoiceArray[z]->Damper (mchan, state);
+    }
+
 

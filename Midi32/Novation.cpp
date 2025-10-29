@@ -15,10 +15,10 @@ using namespace MIDI_NAMESPACE;
 //#######################################################################
     NOVATION_XL_C::NOVATION_XL_C ()
     {
-    CurrentMap   = 0;
-    FlashState   = false;
-    Counter      = NOVATION_LOOP_COUNT;
-    ButtonChange = false;
+    _CurrentMap   = 0;
+    _FlashState   = false;
+    _Counter      = NOVATION_LOOP_COUNT;
+    _ButtonChange = false;
     }
 
 //#######################################################################
@@ -101,7 +101,7 @@ void NOVATION_XL_C::TemplateReset (byte index)
     SendTo (sizeof (midi_sysex_led), midi_sysex_led);                    // Send message to set all LEDs
 
     for ( int z = 0;  z < XL_BUTTON_COUNT;  z++ )                       // Initialize button state map for LEDs
-        ButtonState[z] = XL_MidiMapArray[index][z].Color;
+        _ButtonState[z] = XL_MidiMapArray[index][z].Color;
     }
 
 //#######################################################################
@@ -111,7 +111,7 @@ void NOVATION_XL_C::SelectTemplate (byte index)
 
     delay (10);
     midi_msg_template[6] = index;
-    CurrentMap           = index;
+    _CurrentMap           = index;
     SendTo (sizeof (midi_msg_template), midi_msg_template);
     TemplateReset (index);
 //    UpdateButtons ();
@@ -120,33 +120,44 @@ void NOVATION_XL_C::SelectTemplate (byte index)
 //#######################################################################
 void NOVATION_XL_C::Loop ()
     {
-    if ( --Counter == 0 )
+    if ( --_Counter == 0 )
         {
-        Counter = NOVATION_LOOP_COUNT;
-        switch ( CurrentMap  )
+        _Counter = NOVATION_LOOP_COUNT;
+        switch ( _CurrentMap  )
             {
             case XL_MIDI_MAP_OSC:
-                if ( ButtonChange )
+                if ( _ButtonChange )
                     UpdateButtons ();
                 break;
+
             case XL_MIDI_MAP_FLT:
-                if ( ButtonChange )
+                if ( _ButtonChange )
                     UpdateButtons ();
                 break;
+
             case XL_MIDI_MAP_LFO:
-                if ( ButtonChange )
+                if ( _ButtonChange )
                     UpdateButtons ();
                 break;
+
             case XL_MIDI_MAP_MAPPING:
-                FlashState = !FlashState;
-                SetColor (XL_MIDI_MAP_MAPPING, 40, ( FlashState ) ? XL::AMBER : XL::OFF);
+                _FlashState = !_FlashState;
+                SetColor (XL_MIDI_MAP_MAPPING, 40, ( _FlashState ) ? XL::AMBER : XL::OFF);
                 break;
+
+            case XL_MIDI_MAP_LOADSAVE:
+                _FlashState = !_FlashState;
+                SetColor (XL_MIDI_MAP_LOADSAVE, ( _SaveFlag ) ? 41 : 42, ( _FlashState ) ? XL::AMBER : XL::OFF);
+                SetColor (XL_MIDI_MAP_LOADSAVE, ( _SaveFlag ) ? 42 : 41, XL::OFF);
+                break;
+
             case XL_MIDI_MAP_TUNING:
                 break;
+
             default:        // should never get here
                 break;
             }
-        ButtonChange = false;
+        _ButtonChange = false;
         }
     }
 
@@ -157,11 +168,11 @@ void NOVATION_XL_C::UpdateButtons ()
     String st;
 
     delay(10);
-    midi_button_sysex[6] = CurrentMap;
+    midi_button_sysex[6] = _CurrentMap;
     for ( short z = 0;  z < XL_BUTTON_COUNT;  z++ )
         {
         midi_button_sysex[(z * 2) + 7] = XL_BUTTON_START + z;
-        midi_button_sysex[(z * 2) + 8] = ButtonState[z];
+        midi_button_sysex[(z * 2) + 8] = _ButtonState[z];
         }
     SendTo (sizeof (midi_button_sysex), midi_button_sysex);
     }

@@ -33,11 +33,12 @@ extern KEY_T            Up;
 extern ENV_GENERATOR_C  EnvADSL;                    // Envelope generator creation class
 extern SYNTH_LFO_C      Lfo[2];                     // Array of LFO interfaces
 extern VOICE_C*         VoiceArray[VOICE_COUNT];    // Pointers to each of the voice module devices
-extern bool             DamperPedal;
+extern byte            PitchBendFactor[MAX_MIDI];
 
 extern bool             ResolutionMode;
 extern bool             MapSelectMode;
-extern bool             LoadSaveMode;
+extern bool             LoadMode;
+extern bool             SaveMode;
 extern SYNTH_CONFIG_C   SynthConfig;
 extern byte             SelectedMidi;
 extern short            SelectedMap;
@@ -65,7 +66,6 @@ void InitializeSynth        (short voice, short mixer, short noise_digital, shor
 void SystemExDebug          (byte* array, unsigned size);
 void LoopSynth              (void);
 void MasterVolume           (short md);
-void ClearSynth             (void);
 void PageAdvance            (void);
 
 //#######################################################################
@@ -79,6 +79,7 @@ void InitMidiKeyboard       (void);
 //#######################################################################
 // MIDI_Sequencer.cpp
 void InitMidiSequence       (void);
+void MidiParamReset         (void);
 
 //#######################################################################
 // Control_LFO.cpp
@@ -105,7 +106,7 @@ void LoadDefaultConfig      (void);
 void LoadSelectedConfig     (void);
 void SaveSelectedConfig     (void);
 void LoadSaveBump           (short down);
-void OpenLoadSavePage       (void);
+void OpenLoadSavePage       (bool save);
 
 //#######################################################################
 // Control_Voice.cpp
@@ -126,6 +127,8 @@ void FltStart               (short ch, short data);
 void FltEnd                 (short ch, short data);
 void SelectFilter           (short index);
 void FreqCtrlModeAdv        (short index);
+void Damper                 (byte mchan, bool state);
+
 
 //#######################################################################
 // Tuning.cpp

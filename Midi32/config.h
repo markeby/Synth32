@@ -235,8 +235,6 @@ private:
             } CfgLFO[2];
         } Cs;
 
-    String  Name;
-
 public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
 
@@ -244,8 +242,6 @@ public:
     void    Save                (short num);
     void    Load                (short num);
 
-    void   SetName              (String& name)                          { Name = name; }
-    String Getname              (void)                                  { return (Name); }
     void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
     short  GetSoftFreq          (void)                                  { return (Cs.SoftFrequency); };
     void   SetModMidi           (byte index, short data)                { Cs.LfoMidi[index] = data; }

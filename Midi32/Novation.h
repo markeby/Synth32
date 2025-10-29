@@ -31,12 +31,13 @@ enum class XL: byte
 class NOVATION_XL_C
     {
 private:
-    short       CurrentMap;
-    short       FlashCounter;
-    bool        ButtonChange;
-    bool        FlashState;
-    short       Counter;
-    byte        ButtonState[XL_BUTTON_COUNT];
+    short       _CurrentMap;
+    short       _FlashCounter;
+    bool        _ButtonChange;
+    bool        _FlashState;
+    short       _Counter;
+    bool        _SaveFlag;
+    byte        _ButtonState[XL_BUTTON_COUNT];
 
 // located in FrontEnd.cpp
 private:
@@ -50,10 +51,11 @@ public:
     void    Begin               (void);
     void    Loop                (void);
     void    SelectTemplate      (byte index);
-    void    TemplateRefresh     (void)                              { ButtonChange = true; }
+    void    LoadSave            (bool save)                         { _SaveFlag = save; }
+    void    TemplateRefresh     (void)                              { _ButtonChange = true; }
     void    UpdateButtons       (void);
-    short   GetCurrentMap       (void)                              { return (CurrentMap); }
-    void    SetButtonState      (int index, byte value)             { ButtonState[index] = value; }
+    short   GetCurrentMap       (void)                              { return (_CurrentMap); }
+    void    SetButtonState      (int index, byte value)             { _ButtonState[index] = value; }
     void    SetButtonStateAG    (int index, bool state)             { SetButtonState (index, ( state ) ? (byte)XL::AMBER : (byte)XL::GREEN); }
     void    SetButtonStateRG    (int index, bool state)             { SetButtonState (index, ( state ) ? (byte)XL::RED : (byte)XL::GREEN); }
     void    SetColorTri         (int index, byte tri);

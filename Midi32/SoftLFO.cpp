@@ -43,7 +43,7 @@ void SOFT_LFO_C::OutputFrequency ()
     {
     _Frequency = _Freq * 0.014648;
     _WaveLength = 1000 / _Frequency;
-    DBG ("Frequency = %f Hz  Wavelength = %f ms", _Frequency, _WaveLength);
+    DBG ("Frequency = %f Hz  Sine Wavelength = %f ms", _Frequency, _WaveLength);
     }
 
 //#######################################################################
@@ -54,13 +54,20 @@ void SOFT_LFO_C::Loop (float millisec)
     if ( _Current > _WaveLength )
         _Current -= _WaveLength;
 
-    // Determine percentage of wavelength achieved and convert to radians
-    float zf = _Current / _WaveLength;
+    float zr = _Current / _WaveLength;  //Determine percentage of wavelength achieved and convert to radians
+    float zt = zr * 2;                  //Double that value to use 1.0 as direction change downward for triangle
 
-    // Calculate position in sine wave and factor in modulation wheel position
-    _Sine = (sin (zf  * 6.28) + 1.0) * _Modulation;
+    //Calculate position in triangle wave
+    if ( zt > 1.0 )                 //going down
+        zt = (1 - (zt - 1) - 0.5) * 2;
+    else                            //going up
+        zt = (zt - 0.5) * 2;
+    _Triangle = zt * _Modulation;   //Factor in modulation wheel position
 
-//    I2cDevices.D2Analog (184, (uint16_t)(this->Sine * 2047.0));     // for calibration
+    //Calculate position in sine wave
+    zr = sin (zr  * 6.28);
+    _Sine = zr * _Modulation;       //Factor in modulation wheel position
+//    I2cDevices.D2Analog (180, (uint16_t)(this->Sine * 2047.0));     // for calibration testing
     }
 
 //#######################################################################

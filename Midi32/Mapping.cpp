@@ -49,7 +49,8 @@ void MidiMapMode ()
         {
         LaunchControl.SelectTemplate (XL_MIDI_MAP_MAPPING);
         DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
-        LoadSaveMode = false;
+        LoadMode     = false;
+        SaveMode     = false;
         MapSelectMode = true;
         for ( int z = (MAP_COUNT * GROUP_COUNT) - 1;  z >= 0;  z-- )
             updateMapModeDisplay (z);
@@ -128,7 +129,8 @@ void ChangeMapSelect (short right)
 //#####################################################################
 void ResolveMapAllocation ()
     {
-    LoadSaveMode   = false;
+    LoadMode       = false;
+    SaveMode       = false;
     MapSelectMode  = false;
     ResolutionMode = true;
     DisplayMessage.Unlock ();
@@ -288,11 +290,13 @@ void LoadSaveBump (short down)
     }
 
 //#####################################################################
-void OpenLoadSavePage ()
+void OpenLoadSavePage (bool save)
     {
     DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_LOAD_SAVE);
-    LoadSaveMode = true;
+    SaveMode = save;
+    LoadMode = !save;
     DisplayMessage.SendLoadSave (load_save_selection);
+    LaunchControl.LoadSave (save);
     LaunchControl.SelectTemplate (XL_MIDI_MAP_LOADSAVE);
     }
 

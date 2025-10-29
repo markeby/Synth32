@@ -309,7 +309,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     int         x = 0;
     int         y = 40;
 
-    CreateLFO (0, x, y, base, "Frequency 1", "A1-A2", "TF4", "A3", "   TF1", "   TF2", "   TF3");
+    CreateLFO (0, x, y, base, "Vibrato 1", "A1-A2", "TF4", "A3", "   TF1", "   TF2", "   TF3");
     UpdateHardButtons (0, 0, false);
     UpdateHardButtons (0, 1, false);
     UpdateHardButtons (0, 2, false);
@@ -317,7 +317,7 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     x += 202;
     y = 40;
 
-    CreateLFO (1, x, y, base, "Frequency 2", "A5-A6", "TF8", "A7", "   TF5", "   TF6", "   TF7");
+    CreateLFO (1, x, y, base, "Vibrato 2", "A5-A6", "TF8", "A7", "   TF5", "   TF6", "   TF7");
     UpdateHardButtons (1, 0, false);
     UpdateHardButtons (1, 1, false);
     UpdateHardButtons (1, 2, false);
@@ -334,23 +334,23 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     lv_obj_set_style_pad_left   (panel, 2, 0);
     lv_obj_set_style_pad_right  (panel, 2, 0);
 
-    TitleSoft = new TITLE_WIDGET_C (panel, "Amplitide 1");
-    MeterSoft = new LFO_METER_WIDGET_C (panel, 9, 20, true, "  E1");
+    TitleSoft = new TITLE_WIDGET_C (panel, "Tremolo 1");
+    MeterSoft = new LFO_METER_WIDGET_C (panel, 9, 20, true, "P1-P2");
 
     y = 190;
-    SoftLabelSine.BeginText (panel, "   F1", "", y);
+    SoftLabelSine.BeginText (panel, "  TC1", "", y);
     UpdateSoftButtons (0, false);
     y += 14;
-    SoftLabelTriangle.BeginText (panel, "   F2", "", y);
+    SoftLabelTriangle.BeginText (panel, "  TC2", "", y);
     UpdateSoftButtons (1, false);
     y += 14;
-    SoftLabelRamp.BeginText (panel, "   F3", "", y);
+    SoftLabelRamp.BeginText (panel, "  TC3", "", y);
     UpdateSoftButtons (2, false);
     y += 14;
-    SoftLabelPulse.BeginText (panel, "   F4", "", y);
+    SoftLabelPulse.BeginText (panel, "  TC4", "", y);
     UpdateSoftButtons (3, false);
     y += 14;
-    SoftLabelNoise.BeginText (panel, "   F5", "", y);
+    SoftLabelNoise.BeginText (panel, "  TC5", "", y);
     UpdateSoftButtons (4, false);
     SoftInUse[0] = SoftInUse[1] = SoftInUse[2] = SoftInUse[3] = SoftInUse[4] = false;
     }

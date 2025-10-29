@@ -101,6 +101,7 @@ bool        DebugSeq            = false;
 static uint64_t startTime       = 0;
 
 //#######################################################################
+//#######################################################################
 inline void TimeDelta (void)
     {
     static uint64_t strt = 0;       // Starting time for next frame delta calculation

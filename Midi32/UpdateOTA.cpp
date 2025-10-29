@@ -8,6 +8,7 @@
 #include <ESPmDNS.h>
 #include <NetworkUdp.h>
 #include <ArduinoOTA.h>
+#include <SPIFFS.h>
 
 #include "UpdateOTA.h"
 
@@ -27,7 +28,10 @@ void OTA_C::WaitWiFi ()
                 if ( ArduinoOTA.getCommand () == U_FLASH )
                     type = "pgm";
                 else  // U_SPIFFS
+                    {
                     type = "file";
+                    SPIFFS.end ();
+                    }
 
                 // NOTE: if updating SPIFFS this would be the place to unmount SPIFFS using SPIFFS.end()
                 printf  ("\n\nStart updating %s\n", type.c_str ());

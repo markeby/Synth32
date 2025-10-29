@@ -68,8 +68,10 @@ public:
     void    PulseWidth          (float percent);
 
     //#######################################################################
+    void    Expression          (float level);
     void    SetSoftLFO          (byte wave, bool sel)               { Mix[wave]->SetSoftLFO (sel); }
     void    SetDamperMode       (byte wave, DAMPER mode)            { Mix[wave]->SetDamperMode (mode); }
+    void    Damper              (bool state);
     void    SetAttackTime       (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::ATTACK, time); }
     float   GetAttackTime       (byte wave)                         { return (Mix[wave]->GetTime  (ESTATE::ATTACK)); }
     void    SetDecayTime        (byte wave, float time)             { Mix[wave]->SetTime  (ESTATE::DECAY, time); }

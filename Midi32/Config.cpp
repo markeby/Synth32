@@ -4,6 +4,7 @@
 // Creator:    markeby
 // Date:       2/16/2025
 //#######################################################################
+#include <ArduinoJson.h>
 #include "Config.h"
 #include "Settings.h"
 
@@ -21,14 +22,14 @@
 
     for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
-        Cs.OscEnv[z].AttackTime   = 1.0;      // All envelopes initialize
+        Cs.OscEnv[z].AttackTime   = 1.0;        // All envelopes initialize
         Cs.OscEnv[z].DecayTime    = 1.0;
         Cs.OscEnv[z].ReleaseTime  = 1.0;
         Cs.OscEnv[z].SustainLevel = 0.0;
         Cs.OscEnv[z].MaxLevel     = 0.0;
         Cs.OscEnv[z].MinLevel     = 0.0;
         SelectedOscEnvelope[z]    = false;
-        if ( z < FILTER_DEVICES )                                // filter initialization
+        if ( z < FILTER_DEVICES )               // filter initialization
             {
             Cs.FltEnv[z].AttackTime   = 1.0;
             Cs.FltEnv[z].DecayTime    = 1.0;
@@ -52,7 +53,6 @@
 //#######################################################################
 void SYNTH_VOICE_CONFIG_C::Save (const char* name)
     {
-    Name = name;
     Settings.PutConfig (name, &(Cs), sizeof (Cs));
     }
 
@@ -95,7 +95,6 @@ void SYNTH_CONFIG_C::Save (short num)
     else
         sb = String (num) + "FL";
 
-    Name = sb;
     Settings.PutConfig (sb.c_str (), &(Cs), sizeof (Cs));
     for ( int z = 0;  z < MAP_COUNT;  z++ )
         {
@@ -124,5 +123,4 @@ void SYNTH_CONFIG_C::Load (short num)
         Voice[z].Load (s.c_str ());
         }
     }
-
 

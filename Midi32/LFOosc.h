@@ -29,26 +29,26 @@ enum class LFO_D_A_OFF {
 class   SYNTH_LFO_C
     {
 private:
-    bool    Valid;
-    int     Active;
-    int     Number;
-    byte    OscPortIO;
-    byte    PwmPortIO;
-    byte    BendPortIO;
-    short   Offset;
-    byte    SlopePortO;
-    byte    HardResetPortIO;
-    byte    Midi;
-    byte    InUse;
-    bool    UpdateNeded;
-    short   CurrentFreqCoarse;
-    short   CurrentFreqFine;
-    short   CurrentFreq;
-    float   CurrentWidth;
-    byte    CurrentLevel;
-    bool    RampSlope;
-    bool    ResetOn;
-    bool    ModLevelAlt;
+    bool    _Valid;
+    int     _Active;
+    int     _Number;
+    byte    _OscPortIO;
+    byte    _PwmPortIO;
+    byte    _BendPortIO;
+    short   _Offset;
+    byte    _SlopePortO;
+    byte    _HardResetPortIO;
+    byte    _Midi;
+    byte    _InUse;
+    bool    _UpdateNeded;
+    short   _CurrentFreqCoarse;
+    short   _CurrentFreqFine;
+    short   _CurrentFreq;
+    float   _CurrentWidth;
+    byte    _CurrentLevel;
+    bool    _RampSlope;
+    bool    _ResetOn;
+    bool    _ModLevelAlt;
 
     typedef struct
         {
@@ -59,7 +59,7 @@ private:
         String      Name;
         } WAVE_LEVEL_T;
 
-    WAVE_LEVEL_T    Level[SOURCE_CNT_LFO];
+    WAVE_LEVEL_T    _Level[SOURCE_CNT_LFO];
 
     void ClearState         (void);
     void SetInternalLevel   (uint8_t ch, uint8_t data);
@@ -74,6 +74,7 @@ public:
     void SetLevel           (uint8_t ch, uint8_t data);
     void SetWave            (short ch, bool state);
     void SetLevelMidi       (byte mchan, uint8_t data);
+    void ResetControl       (void);
     void PitchBend          (short value);
     void SetRampDir         (bool state);
     void HardReset          (byte mchan);
@@ -81,45 +82,45 @@ public:
 
     void PitchBend (byte mchan, short value)
         {
-        if ( mchan == Midi )
+        if ( mchan == _Midi )
             PitchBend (value);
         }
 
     void  SetMidi (byte data)
-        { Midi = data; }
+        { _Midi = data; }
 
     byte  GetMidi (void)
-        { return (Midi); }
+        { return (_Midi); }
 
     void  SetOffset  (short val)
-        { this->Offset = val;  }
+        { _Offset = val;  }
 
     short GetOffset  (void)
-        { return (Offset); }
+        { return (_Offset); }
 
     bool GetWave (short ch)
-        { return (Level[ch].Select); }
+        { return (_Level[ch].Select); }
 
     bool GetRampDir (void)
-        { return (RampSlope); }
+        { return (_RampSlope); }
 
     void SetFreqCoarse (short value)
-        { CurrentFreqCoarse = value; ProcessFreq (); }
+        { _CurrentFreqCoarse = value; ProcessFreq (); }
 
     void SetFreqFine (short value)
-        { CurrentFreqFine = value; ProcessFreq (); }
+        { _CurrentFreqFine = value; ProcessFreq (); }
 
     short GetFreq (void)
-        { return (CurrentFreq); }
+        { return (_CurrentFreq); }
 
     void SetFreq (short value)
-        { this->CurrentFreq = value; OutputFreqIO (); }
+        { _CurrentFreq = value; OutputFreqIO (); }
 
     void SetModLevelAlt (bool state)
-        { ModLevelAlt = state; }
+        { _ModLevelAlt = state; }
 
     bool GetModLevelAlt (void)
-        { return (ModLevelAlt); }
+        { return (_ModLevelAlt); }
     };
 
 

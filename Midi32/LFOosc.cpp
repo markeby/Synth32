@@ -14,25 +14,25 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "LFO";
-#define DBG(args...) {if(DebugSynth){DebugMsg(Label,Number,args);}}
+#define DBG(args...) {if(DebugSynth){DebugMsg(Label,_Number,args);}}
 #else
 #define DBG(args...)
 #endif
 
-static  const char*     _MixerNames[] = { "sine", "saw", "pulse" };
+static  const char*     mixerNames[] = { "sine", "saw", "pulse" };
 
 //#######################################################################
 SYNTH_LFO_C::SYNTH_LFO_C ()
     {
-    this->Valid         = false;
-    this->UpdateNeded   = false;
-    this->CurrentLevel  = 0;
-    this->CurrentFreq   = 0.0;
-    this->ResetOn       = false;
-    this->RampSlope     = false;
-    this->InUse         = 0;
-    this->Midi          = 1;
-    this->Offset        = 0;
+    _Valid         = false;
+    _UpdateNeded   = false;
+    _CurrentLevel  = 0;
+    _CurrentFreq   = 0.0;
+    _ResetOn       = false;
+    _RampSlope     = false;
+    _InUse         = 0;
+    _Midi          = 1;
+    _Offset        = 0;
     }
 
 //#######################################################################
@@ -40,7 +40,7 @@ void SYNTH_LFO_C::ClearState ()
     {
     for ( int z = 0;  z < SOURCE_CNT_LFO;  z++)
         {
-        SYNTH_LFO_C::WAVE_LEVEL_T& m = this->Level[z];
+        SYNTH_LFO_C::WAVE_LEVEL_T& m = _Level[z];
         I2cDevices.D2Analog (m.Port, 0);
         }
     }
@@ -49,23 +49,23 @@ void SYNTH_LFO_C::ClearState ()
 void SYNTH_LFO_C::SetLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    this->Level[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
+    _Level[ch].MaximumLevel =  (z > MAX_DA ) ? MAX_DA : z;
 
-    DBG ("Level limit > %d", this->Level[ch].MaximumLevel);
+    DBG ("Level limit > %d", _Level[ch].MaximumLevel);
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetInternalLevel (uint8_t ch, uint8_t data)
     {
     int z = (int)((data * 0.007874) * (float)MAX_DA);
-    z = (z > Level[ch].MaximumLevel ) ? Level[ch].MaximumLevel : z;
+    z = (z > _Level[ch].MaximumLevel ) ? _Level[ch].MaximumLevel : z;
 
-    if ( z != Level[ch].CurrentLevel )
+    if ( z != _Level[ch].CurrentLevel )
         {
-        Level[ch].CurrentLevel = z;
-        I2cDevices.D2Analog (Level[ch].Port,  z);
-        UpdateNeded = true;
-        DBG ("%s level > %d", Level[ch].Name, z);
+        _Level[ch].CurrentLevel = z;
+        I2cDevices.D2Analog (_Level[ch].Port,  z);
+        _UpdateNeded = true;
+        DBG ("%s level > %d", _Level[ch].Name, z);
         }
     }
 
@@ -73,35 +73,35 @@ void SYNTH_LFO_C::SetInternalLevel (uint8_t ch, uint8_t data)
 //#######################################################################
 void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
     {
-    Number = num;
+    _Number = num;
     // D/A configurations
-    OscPortIO  = first_device + uint8_t(LFO_D_A_OFF::FREQ);
-    PwmPortIO  = first_device + uint8_t(LFO_D_A_OFF::WIDTH);
-    BendPortIO = first_device + uint8_t(LFO_D_A_OFF::BEND);
-    Level[int(LFO_SHAPE::RAMP)].Port  = first_device + uint8_t(LFO_D_A_OFF::RAMP);
-    Level[int(LFO_SHAPE::PULSE)].Port = first_device + uint8_t(LFO_D_A_OFF::PULSE);
-    Level[int(LFO_SHAPE::SINE)].Port  = first_device + uint8_t(LFO_D_A_OFF::SINE);
-    SlopePortO       = lfo_digital;
-    HardResetPortIO  = lfo_digital + 1;
-    Midi             = 0;
+    _OscPortIO  = first_device + uint8_t(LFO_D_A_OFF::FREQ);
+    _PwmPortIO  = first_device + uint8_t(LFO_D_A_OFF::WIDTH);
+    _BendPortIO = first_device + uint8_t(LFO_D_A_OFF::BEND);
+    _Level[int(LFO_SHAPE::RAMP)].Port  = first_device + uint8_t(LFO_D_A_OFF::RAMP);
+    _Level[int(LFO_SHAPE::PULSE)].Port = first_device + uint8_t(LFO_D_A_OFF::PULSE);
+    _Level[int(LFO_SHAPE::SINE)].Port  = first_device + uint8_t(LFO_D_A_OFF::SINE);
+    _SlopePortO       = lfo_digital;
+    _HardResetPortIO  = lfo_digital + 1;
+    _Midi             = 0;
 
     // Initialize mixers
 
     for ( int z = 0;  z < SOURCE_CNT_LFO;  z++ )
         {
-        Level[z].Name         = _MixerNames[z];
-        Level[z].CurrentLevel = 0;
-        Level[z].MaximumLevel = MAX_DA;
+        _Level[z].Name         = mixerNames[z];
+        _Level[z].CurrentLevel = 0;
+        _Level[z].MaximumLevel = MAX_DA;
         }
 
     if ( I2cDevices.IsPortValid (first_device) && I2cDevices.IsPortValid (first_device + 5) )
         {
-        Valid = true;
-        Offset = Settings.GetOffsetLFO (num);
+        _Valid = true;
+        _Offset = Settings.GetOffsetLFO (num);
         ClearState ();
         PitchBend (PITCH_BEND_CENTER);
         if ( DebugSynth )
-            printf ("\t  >> LFO %d started for device %d\n", this->Number, first_device);
+            printf ("\t  >> LFO %d started for device %d\n", _Number, first_device);
         }
     else
         printf ("\t  ** LFO %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
@@ -110,115 +110,123 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
 //#######################################################################
 void SYNTH_LFO_C::Clear ()
     {
-    this->ClearState ();
+    ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
 void SYNTH_LFO_C::ProcessFreq ()
     {
-    CurrentFreq = (CurrentFreqCoarse * MIDI_MULTIPLIER) + (CurrentFreqFine * (MIDI_MULTIPLIER * 0.01));
-    if ( CurrentFreq > DA_MAX )
-        CurrentFreq = DA_MAX;
+    _CurrentFreq = (_CurrentFreqCoarse * MIDI_MULTIPLIER) + (_CurrentFreqFine * (MIDI_MULTIPLIER * 0.01));
+    if ( _CurrentFreq > DA_MAX )
+        _CurrentFreq = DA_MAX;
     OutputFreqIO ();
     }
 
 //#######################################################################
 void SYNTH_LFO_C::OutputFreqIO ()
     {
-    DBG ("Set frequency %d", this->CurrentFreq);
-    I2cDevices.D2Analog (this->OscPortIO, this->CurrentFreq);
+    DBG ("Set frequency %d", _CurrentFreq);
+    I2cDevices.D2Analog (_OscPortIO, _CurrentFreq);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetPulseWidth (short value)
     {
-    this->CurrentWidth = value;
+    _CurrentWidth = value;
     DBG ("Set pulse width %d", value);
-    I2cDevices.D2Analog (this->PwmPortIO, DA_MAX - value);
+    I2cDevices.D2Analog (_PwmPortIO, DA_MAX - value);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetWave (short ch, bool state)
     {
-    this->Level[ch].Select = state;
+    _Level[ch].Select = state;
     if ( state )
         {
-        InUse++;
-        SetInternalLevel (ch, CurrentLevel);
+        _InUse++;
+        SetInternalLevel (ch, _CurrentLevel);
         }
     else
         {
-        InUse--;
+        _InUse--;
         SetInternalLevel (ch, 0);
         }
 
-    if ( UpdateNeded )
+    if ( _UpdateNeded )
         {
         I2cDevices.UpdateAnalog ();     // Update D/A ports
-        UpdateNeded = false;
+        _UpdateNeded = false;
         }
 
-    DBG ("%s(%d) selected %s", Level[ch].Name, ch, ((state) ? "ON" : "off"));
+    DBG ("%s(%d) selected %s", _Level[ch].Name, ch, ((state) ? "ON" : "off"));
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetLevelMidi (byte mchan, uint8_t data)
     {
-    if ( mchan == this->Midi )
+    if ( mchan == _Midi )
         {
-        this->CurrentLevel = data;
+        _CurrentLevel = data;
         for (int z = 0;  z < SOURCE_CNT_LFO;  z++ )
             {
-            if ( this->Level[z].Select )
-                this->SetInternalLevel (z, data);
+            if ( _Level[z].Select )
+                SetInternalLevel (z, data);
             else
-                this->SetInternalLevel (z, 0);
+                SetInternalLevel (z, 0);
             }
-        if ( this->UpdateNeded )
+        if ( _UpdateNeded )
             {
             I2cDevices.UpdateAnalog ();     // Update D/A ports
-            this->UpdateNeded = false;
+            _UpdateNeded = false;
             }
-        if ( InUse )
-            DisplayMessage.LfoHardLevel (this->Number, data);
+        if ( _InUse )
+            DisplayMessage.LfoHardLevel (_Number, data);
         }
+    }
+
+//#######################################################################
+void SYNTH_LFO_C::ResetControl ()
+    {
+    for (int z = 0;  z < SOURCE_CNT_LFO;  z++ )     //zero out gain on all sources
+        SetInternalLevel (z, 0);
+    PitchBend (MAX_DA >> 1);                        //zero out pitch bend
     }
 
 //#######################################################################
 void SYNTH_LFO_C::PitchBend (short value)
     {
-    I2cDevices.D2Analog (this->BendPortIO, value + this->Offset);
+    I2cDevices.D2Analog (_BendPortIO, value + _Offset);
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetRampDir (bool state)
     {
-    this->RampSlope = state;
-    I2cDevices.DigitalOut           (this->SlopePortO, state);
-    I2cDevices.UpdateDigital        ();
+    _RampSlope = state;
+    I2cDevices.DigitalOut     (_SlopePortO, state);
+    I2cDevices.UpdateDigital  ();
     }
 
 //#######################################################################
 void SYNTH_LFO_C::HardReset (byte mchan)
     {
-    if ( mchan == this->Midi )
+    if ( mchan == _Midi )
         {
-        I2cDevices.DigitalOut (this->HardResetPortIO, true);
-        this->ResetOn = true;
+        I2cDevices.DigitalOut (_HardResetPortIO, true);
+        _ResetOn = true;
         }
     }
 
 //#######################################################################
 void SYNTH_LFO_C::Loop (void)
     {
-    if (  this->ResetOn )
+    if (  _ResetOn )
         {
-        I2cDevices.DigitalOut (this->HardResetPortIO, false);
-        this->ResetOn = false;
+        I2cDevices.DigitalOut (_HardResetPortIO, false);
+        _ResetOn = false;
         }
     }
 

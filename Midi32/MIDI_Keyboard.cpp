@@ -16,16 +16,20 @@
 #ifdef DEBUG_SYNTH
 //#define DEBUG_MIDI_MSG
 static const char* Label  = "TOP";
+static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
+#define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,mchan,args);}}
 #else
 #define DBG(args...)
+#define DBGM(args...)
 #endif
 
 using namespace MIDI_NAMESPACE;
 using namespace DISP_MESSAGE_N;
 
 //########################################################
-bool kaptureMidiKeyboard = false;
+bool kaptureMidiKeyboard  = true;
+byte keyboardMidiOverride = 0;
 
 //--------------------------------------------------------
 static void cb_KeyDown_Keyboard (byte mchan, byte key, byte velocity)
@@ -35,7 +39,9 @@ static void cb_KeyDown_Keyboard (byte mchan, byte key, byte velocity)
         if ( SelectedMidi > 0 )
             mchan = SelectedMidi;
         }
-    DBG ("Key down: %d  velocity: %d", key, velocity);
+    else if ( keyboardMidiOverride )
+        mchan = keyboardMidiOverride;
+    DBGM("Key down: %d  velocity: %d", key, velocity);
     KeyDown(mchan, key, velocity);
     }
 
@@ -47,19 +53,36 @@ static void  cb_KeyUp_Keyboard (byte mchan, byte key, byte velocity)
         if ( SelectedMidi > 0 )
             mchan = SelectedMidi;
         }
-    DBG ("Key up: %d  velocity: %d", key, velocity);
+    else if ( keyboardMidiOverride )
+        mchan = keyboardMidiOverride;
+    DBGM ("Key up: %d  velocity: %d", key, velocity);
     KeyUp (mchan, key, velocity);
     }
 
 //--------------------------------------------------------
-static void cb_PitchBend_Keyboard (byte mchan, int value)
+static void  cb_AfterTouchPoly (byte mchan, byte key, byte velocity)
     {
-    DBG ("Keyboard pitch bend %d", value);
     if ( kaptureMidiKeyboard )
         {
         if ( SelectedMidi > 0 )
             mchan = SelectedMidi;
         }
+    else if ( keyboardMidiOverride )
+        mchan = keyboardMidiOverride;
+    DBGM ("AfterTrouch key: %d  velocity: %d", key, velocity);
+    }
+
+//--------------------------------------------------------
+static void cb_PitchBend_Keyboard (byte mchan, int value)
+    {
+    if ( kaptureMidiKeyboard )
+        {
+        if ( SelectedMidi > 0 )
+            mchan = SelectedMidi;
+        }
+    else if ( keyboardMidiOverride )
+        mchan = keyboardMidiOverride;
+    DBGM ("Keyboard pitch bend %d", value);
     PitchBender (mchan, value);
     }
 
@@ -91,12 +114,26 @@ static void cb_Error_Keyboard (int8_t err)
 
 //########################################################
 //########################################################
-static void tuneReset (int index, bool state)
+static void stopKey (int index, bool state)
     {
-    if ( state )
-        StartCalibration ();
-    else
-        Monitor.Reset ();
+    static int      count    = 0;
+    static uint64_t lasttime = 0;
+
+    if ( (RunTime - lasttime) > 1000000L )      // Looking to count every hit within 1 second
+        count = 0;
+    lasttime = RunTime;
+    count++;
+
+    if ( count > 2 )
+        {
+        if ( SetTuning )
+            Monitor.Reset();
+        else
+            StartCalibration ();
+        }
+    else if ( count < 2 )
+        MidiParamReset();
+
     }
 //########################################################
 static void tuneUpDown (int index, bool state)
@@ -105,12 +142,18 @@ static void tuneUpDown (int index, bool state)
     }
 
 //########################################################
-static void tuneBump (int index, bool state)
+static void playKey (int index, bool state)
     {
     if ( SetTuning )
         TuningBump (state);
     else
+        {
         kaptureMidiKeyboard = state;
+        if ( state )
+            keyboardMidiOverride = 0;
+        else
+            keyboardMidiOverride = SelectedMidi;
+        }
     }
 
 //########################################################
@@ -205,8 +248,8 @@ G49_BUTTON_MAP switchMap[] =
         {  7,   false,  "N ",           nullptr,    },  //  16  16
         {  0,   false,  "Tune -",       tuneUpDown  },  //  17  1
         {  1,   false,  "Tune +",       tuneUpDown  },  //  17  2
-        { 22,   false,  "Tune/Reset",   tuneReset   },  //  17  3
-        { 23,   false,  "Tune -/+",     tuneBump    },  //  17  4
+        { 22,   false,  "Tune/Reset",   stopKey     },  //  17  3
+        { 23,   false,  "Tune -/+",     playKey     },  //  17  4
         { 24,   false,  "Tuning save",  tunningSave },  //  17  5
      };
 
@@ -214,9 +257,17 @@ G49_BUTTON_MAP switchMap[] =
 //#######################################################################
 static void cb_Control_Keyboard (byte mchan, byte type, byte value)
     {
+    bool zl;
+
+
     switch ( mchan )
         {
         case 1:
+            if ( kaptureMidiKeyboard )
+                {
+                if ( SelectedMidi > 0 )
+                    mchan = SelectedMidi;
+                }
             switch ( type )
                 {
                 case 1:
@@ -228,11 +279,10 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                     break;
 
                 case 0x40:      // Damper pedal (sustain)
-                    if ( value < 64 )
-                        DamperPedal = false;
-                    else
-                        DamperPedal = true;
-                    DBG ("Damper pdeal: %s", (( DamperPedal ) ? "ON" : "OFF"));
+                    if ( value < 64 )   zl = false;
+                    else                zl = true;
+                    Damper (mchan, zl);
+                    DBG ("Damper pdeal: %s", (( zl ) ? "ON" : "OFF"));
                     break;
 
                 default:
@@ -335,7 +385,7 @@ void InitMidiKeyboard ()
     Midi_1.setHandleControlChange        (cb_Control_Keyboard);
     Midi_1.setHandlePitchBend            (cb_PitchBend_Keyboard);
     Midi_1.setHandleError                (cb_Error_Keyboard);
-//    Midi_1.setHandleAfterTouchPoly       (AfterTouchPolyCallback fptr);
+    Midi_1.setHandleAfterTouchPoly       (cb_AfterTouchPoly);
 //    Midi_1.setHandleProgramChange        (ProgramChangeCallback fptr);
 //    Midi_1.setHandleAfterTouchChannel    (AfterTouchChannelCallback fptr);
 //    Midi_1.setHandleTimeCodeQuarterFrame (TimeCodeQuarterFrameCallback fptr);

@@ -13,25 +13,32 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label  = "SEQ";
+static const char* LabelM = "M";
+
 #define DBG(args...) {if(DebugSeq){DebugMsg(Label,mchan,args);}}
+#define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,mchan,args);}}
 #else
 #define DBG(args...)
+#define DBGM(args...)
 #endif
 
 //########################################################
+static int rpnMSB = 127;
+static int rpnLSB = 127;
+
 using namespace MIDI_NAMESPACE;
 
 //--------------------------------------------------------
 static void cb_KeyDown_Seq (byte mchan, byte key, byte velocity)
     {
-    DBG ("Key down: %d  velocity: %d", key, velocity);
+    DBGM ("Key down: %d  velocity: %d", key, velocity);
     KeyDown (mchan, key, velocity);
     }
 
 //--------------------------------------------------------
 static void cb_KeyUp_Seq (byte mchan, byte key, byte velocity)
     {
-    DBG ("Key up: %d  velocity: %d", key, velocity);
+    DBGM ("Key up: %d  velocity: %d", key, velocity);
     KeyUp (mchan, key, velocity);
     }
 
@@ -72,65 +79,115 @@ static void cb_Error_Seq (int8_t err)
 //--------------------------------------------------------
 void cb_ControlSequence (byte mchan, byte type, byte value)
     {
-    int  z;
-    bool zl;
+    int   z;
+    bool  zl;
+    float zf;
 
-    DBG ("Control change: 0x%2.2X  value 0x%2.2X", type, value);
+    DBGM ("Control change: 0x%2.2X  value 0x%2.2X", type, value);
     switch ( type )
         {
         case 0x00:
-            DBG ("Bank select: %d", value);
+            DBG ("nu Bank select: %d", value);
             break;
 
         case 0x01:      // Modulation wheel
             DBG ("Modulation whee:l %d", value);
+            Lfo[0].SetLevelMidi (mchan, value);
+            Lfo[1].SetLevelMidi (mchan, value);
+            SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER);
             break;
 
         case 0x06:
             DBG ("Data Entry MSB: %d", value);
+            switch ( rpnMSB )
+                {
+                case 0:
+                    switch ( rpnLSB )
+                        {
+                        case 0:
+                            DBG("Pitch Bend %d simitones",  value)
+                            PitchBendFactor[mchan] = value;
+                            break;
+                        default:
+                            break;
+                        }
+                    break;
+                default:
+                    break;
+                }
             break;
 
         case 0x07:      // Channel volume
-            DBG ("Channel volume: %d", value);
+            DBG ("nu Channel volume: %d", value);
             break;
 
         case 0x0B:
             DBG ("Expression Controller: %d", value);
+            zf = value * PRS_SCALER;
+            for ( z = 0;  z < VOICE_COUNT;  z++)
+                VoiceArray[z]->Expression (mchan, zf);
             break;
 
         case 0x20:
-            DBG ("Bank select LSB: %d", value);
+            DBG ("nu Bank select LSB: %d", value);
             break;
 
         case 0x21:      // LSB Modulation wheel
-            DBG ("Modulation wheel: LSB %d", value);
+            DBG ("nu Modulation wheel: LSB %d", value);
             break;
 
         case 0x40:      // Damper pedal (sustain)
-            if ( value < 64 )       zl = false;
-            else                    zl = true;
+            if ( value < 64 )   zl = false;
+            else                zl = true;
             DBG ("Damper pdeal: %s", (( zl ) ? "ON" : "OFF"));
+            Damper (mchan,  zl);
+            break;
+
+        case 0x41:
+            if ( value < 64 )   zl = false;
+            else                zl = true;
+            DBG ("nu Portamento:  %d", (( zl ) ? "ON" : "OFF"));
+            break;
+
+        case 0x42:
+            if ( value < 64 )   zl = false;
+            else                zl = true;
+            DBG ("nu Sostenuto:  %d", (( zl ) ? "ON" : "OFF"));
+            break;
+
+        case 0x43:
+            if ( value < 64 )   zl = false;
+            else                zl = true;
+            DBG ("nu Soft pedal:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x5B:
-            DBG ("Effects 1 Depth: %d", value);
+            DBG ("nu Reverb send level: %d", value);
             break;
 
         case 0x5D:
-            DBG ("Effects 3 Depth: %d", value);
+            DBG ("nu Chorus send level: %d", value);
             break;
 
         case 0x64:
             DBG ("RPN LSB: %d", value);
+            rpnLSB = value;
             break;
 
         case 0x65:
             DBG ("RPN MSB: %d", value);
+            rpnMSB = value;
             break;
 
         case 0x78:      // [Channel Mode Message] All Sound Off
-            DBG ("[Channel Mode Message] All Sound Off");
-            ClearSynth ();
+            DBG ("[Channel Mode Message] All sound off");
+            for ( z = 0;  z < VOICE_COUNT; z++ )
+                VoiceArray[z]->Clear (mchan);
+            break;
+
+        case 0x79:
+            DBG ("[Channel Mode Message] Reset all controllers");
+            MidiParamReset ();
             break;
 
         default:
@@ -168,4 +225,24 @@ void InitMidiSequence ()
     Midi_2.setHandleMessage              (c_Message_Seq);
 #endif
     }
+
+//#######################################################################
+void MidiParamReset ()
+    {
+    rpnMSB = 127;
+    rpnLSB = 127;
+    Lfo[0].ResetControl  ();
+    Lfo[1].ResetControl  ();
+    SoftLFO.ResetControl ();
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        {
+        VoiceArray[z]->Expression        (z, 1.0);
+        VoiceArray[z]->ChannelAfterTouch (0);
+        VoiceArray[z]->Damper            (z, false);
+        }
+    // Portamento off
+    // Sostenuto off
+    // Soft off
+    }
+
 

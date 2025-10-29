@@ -32,46 +32,50 @@ class ENVELOPE_C
     {
 private:
     // State change
-    int         Active;
-    bool        TriggerEnd;
+    int         _Active;
+    bool        _TriggerEnd;
 
     // Runtime state
-    byte&       UseCount;       // increment started and decriment as idle
-    ESTATE      State;          // Current state of this mixer channel
+    byte&       _UseCount;       // increment started and decriment as idle
+    ESTATE      _State;          // Current state of this mixer channel
 
-    bool        Muted;          // Do not respond to Start directive
-    bool        Updated;        // Flag indicating update output
-    bool        PeakLevel;      // Flag indicating sustain and peak are the same
-    bool        UseSoftLFO;     // Flag to enable sofware LFO
+    bool        _Muted;          // Do not respond to Start directive
+    bool        _Updated;        // Flag indicating update output
+    bool        _PeakLevel;      // Flag indicating sustain and peak are the same
+    bool        _UseSoftLFO;     // Flag to enable sofware LFO
 
     // User supplied inputs
-    bool        DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
-    DAMPER      DamperMode;     // Mode to utilize string damper
-    float       Top;            // Fraction of one (percent).
-    float       Bottom;         // Fraction of one (percent).
-    float       SetSustain;     // The settin of sustain level up to one.
-    float       AttackTime;     // Attack time in uSec.
-    float       DecayTime;      // Decay time to sustatin level in uSec.
-    float       ReleaseTime;    // How long to end back at base level in uSec.
+    bool        _DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
+    DAMPER      _DamperMode;     // Mode to utilize string damper
+    float       _Top;            // Fraction of one (percent).
+    float       _Bottom;         // Fraction of one (percent).
+    float       _SetSustain;     // The settin of sustain level up to one.
+    float       _AttackTime;     // Attack time in uSec.
+    float       _DecayTime;      // Decay time to sustatin level in uSec.
+    float       _ReleaseTime;    // How long to end back at base level in uSec.
+    float       _Expression;    // Final volume multiplier
+    bool        _Damper;        // state of damper pedal
 
     // runtime calculations
-    float       Delta;          // Distance for the current state.
-    float       Sustain;        // The usable Sustain level up to one
-    bool        NoDecay;        // Decay time set so low that there is no decay.  Sustain serves no purpose then.
-    float       Timer;          // Timer loaded with state time
-    float       TargetTime;     // Timer is incrimented until this time is exceeded
-    float       Current;        // Current level zero to one
-    float       Target;
+    float       _Delta;          // Distance for the current state.
+    float       _Sustain;        // The usable Sustain level up to one
+    bool        _NoDecay;        // Decay time set so low that there is no decay.  Sustain serves no purpose then.
+    float       _Timer;          // Timer loaded with state time
+    float       _TargetTime;     // Timer is incrimented until this time is exceeded
+    float       _Current;        // Current level zero to one
+    float       _Target;
 
     // Fixed parameters at initialization
-    String      Name;
-    byte        Index;
-    uint16_t    DevicePortIO;
+    String      _Name;
+    byte        _Index;
+    uint16_t    _DevicePortIO;
 
 public:
                 ENVELOPE_C      (uint8_t index, String name, uint16_t device, uint8_t& usecount);
     void        Clear           (void);
     void        Mute            (bool state);
+    void        Expression      (float level)       { _Expression = level; }
+    void        Damper          (bool state)        { _Damper = state; }
     void        Process         (float deltaTime);
     void        SetCurrent      (float data);
     void        SetOverride     (uint32_t data);
@@ -83,24 +87,23 @@ public:
     void        SetLevel        (ESTATE state, float percent);
     float       GetLevel        (ESTATE state);
     void        SetSoftLFO      (bool sel);
-    void        SetDamperMode   (DAMPER mode)   { DamperMode = mode; }
-    void        SetDualUse      (bool sel)      { DualUse = sel; }
-    uint16_t    GetPortIO       (void)          { return (DevicePortIO); }  // Return D/A channel number
+    void        SetDamperMode   (DAMPER mode)   { _DamperMode = mode; }
+    void        SetDualUse      (bool sel)      { _DualUse = sel; }
+    uint16_t    GetPortIO       (void)          { return (_DevicePortIO); }  // Return D/A channel number
 
     int IsActive (void)
-        { return (Active); }
+        { return (_Active); }
     };  // end ENVELOPE_C
 
 //#######################################################################
 class ENV_GENERATOR_C
     {
 private:
-    std::deque<ENVELOPE_C>  Envelopes;
+    std::deque<ENVELOPE_C>  _Envelopes;
 
 public:
-                ENV_GENERATOR_C    (void);
-                ~ENV_GENERATOR_C   (void)   {}
-    ENVELOPE_C*  NewADSR                (uint8_t index, String name, uint16_t device, uint8_t& usecount);
-    void         Loop                   (void);
+                ENV_GENERATOR_C     (void);
+    ENVELOPE_C*  NewADSR            (uint8_t index, String name, uint16_t device, uint8_t& usecount);
+    void         Loop               (void);
     };
 
