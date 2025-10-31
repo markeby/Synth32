@@ -6,6 +6,7 @@
 //#######################################################################
 #pragma once
 #include <Streaming.h>
+#include <ArduinoJson.h>
 
 #include <SynthCommon.h>
 #include "I2Cdevices.h"
@@ -164,57 +165,64 @@ private:
         ENVELOPE_T  FltEnv[FILTER_DEVICES];
         }   Cs;
 
-    String  Name;
-    bool    Mute;
+    String Name;
+    bool   Mute;
+
+    void   CreateEnvJSON        (JsonVariant cfg, ENVELOPE_T& env);
+    void   LoadEnvJSON          (JsonVariant cfg, ENVELOPE_T& env);
 
 public:
-    bool    SelectedOscEnvelope[OSC_MIXER_COUNT];
-    bool    SelectedFltEnvelope[FILTER_DEVICES];
+    bool   SelectedOscEnvelope[OSC_MIXER_COUNT];
+    bool   SelectedFltEnvelope[FILTER_DEVICES];
 
-           SYNTH_VOICE_CONFIG_C  (void);
-    void   Save                  (const char* name);
-    void   Load                  (const char* name);
-    void   SetMute               (bool state)               { Mute = state; }
-    bool   IsMute                (void)                     { return (Mute); }
-    void   SetDamperMode         (byte index, byte mode)    { Cs.OscEnv[index].Damper = mode; }
-    byte   GetDamperMode         (byte index)               { return (Cs.OscEnv[index].Damper); }
-    void   SetName               (String& name)             { Name = name;}
-    String Getname               (void)                     { return (Name); }
-    void   SetVoiceMidi          (byte data)                { Cs.MapVoiceMidi = data; }
-    byte   GetVoiceMidi          (void)                     { return (Cs.MapVoiceMidi); }
-    void   SetVoiceNoise         (short data)               { Cs.MapVoiceNoise = data; }
-    short  GetVoiceNoise         (void)                     { return (Cs.MapVoiceNoise); }
-    void   SetRampDirection      (bool data)                { Cs.RampDirection = data; }
-    bool   GetRampDirection      (void)                     { return (Cs.RampDirection); }
-    void   SetPulseWidth         (float data)               { Cs.PulseWidth = data; }
-    float  GetPulseWidth         (void)                     { return (Cs.PulseWidth); }
-    void   SetOscMaxLevel        (byte index, float data)   { Cs.OscEnv[index].MaxLevel = data; }
-    float  GetOscMaxLevel        (byte index)               { return (Cs.OscEnv[index].MaxLevel); }
-    void   SetOscSustainLevel    (byte index, float data)   { Cs.OscEnv[index].SustainLevel = data; }
-    float  GetOscSustainLevel    (byte index)               { return (Cs.OscEnv[index].SustainLevel); }
-    void   SetOscAttackTime      (byte index, float data)   { Cs.OscEnv[index].AttackTime = data; }
-    float  GetOscAttackTime      (byte index)               { return (Cs.OscEnv[index].AttackTime); }
-    void   SetOscDecayTime       (byte index, float data)   { Cs.OscEnv[index].DecayTime = data; }
-    float  GetOscDecayTime       (byte index)               { return (Cs.OscEnv[index].DecayTime); }
-    void   SetOscReleaseTime     (byte index, float data)   { Cs.OscEnv[index].ReleaseTime = data; }
-    float  GetOscReleaseTime     (byte index)               { return (Cs.OscEnv[index].ReleaseTime); }
+    void   CreateJSON           (JsonVariant cfg);
+    void   LoadJSON             (JsonVariant cfg);
 
-    void   SetFltStart           (byte index, float data)   { Cs.FltEnv[index].MinLevel = data; }
-    float  GetFltStart           (byte index)               { return (Cs.FltEnv[index].MinLevel); }
-    void   SetFltEnd             (byte index, float data)   { Cs.FltEnv[index].MaxLevel = data; }
-    float  GetFltEnd             (byte index)               { return (Cs.FltEnv[index].MaxLevel); }
-    void   SetFltSustainLevel    (byte index, float data)   { Cs.FltEnv[index].SustainLevel = data; }
-    float  GetFltSustainLevel    (byte index)               { return (Cs.FltEnv[index].SustainLevel); }
-    void   SetFltAttackTime      (byte index, float data)   { Cs.FltEnv[index].AttackTime = data; }
-    float  GetFltAttackTime      (byte index)               { return (Cs.FltEnv[index].AttackTime); }
-    void   SetFltDecayTime       (byte index, float data)   { Cs.FltEnv[index].DecayTime = data; }
-    float  GetFltDecayTime       (byte index)               { return (Cs.FltEnv[index].DecayTime); }
-    void   SetFltReleaseTime     (byte index, float data)   { Cs.FltEnv[index].ReleaseTime = data; }
-    float  GetFltReleaseTime     (byte index)               { return (Cs.FltEnv[index].ReleaseTime); }
-    void   SetOutputMask         (byte chanmap)             { Cs.OutputMask = chanmap; }
-    byte   GetOutputMask         (void)                     { return (Cs.OutputMask); }
-    void   SetFltCtrl            (byte index, int data)     { Cs.FilterCtrl[index] = data; }
-    byte   GetFltCtrl            (byte index)               { return (Cs.FilterCtrl[index]); }
+           SYNTH_VOICE_CONFIG_C (void);
+    void   Save                 (const char* name);
+    void   Load                 (const char* name);
+
+    void   SetMute              (bool state)               { Mute = state; }
+    bool   IsMute               (void)                     { return (Mute); }
+    void   SetDamperMode        (byte index, byte mode)    { Cs.OscEnv[index].Damper = mode; }
+    byte   GetDamperMode        (byte index)               { return (Cs.OscEnv[index].Damper); }
+    void   SetName              (String& name)             { Name = name;}
+    String Getname              (void)                     { return (Name); }
+    void   SetVoiceMidi         (byte data)                { Cs.MapVoiceMidi = data; }
+    byte   GetVoiceMidi         (void)                     { return (Cs.MapVoiceMidi); }
+    void   SetVoiceNoise        (short data)               { Cs.MapVoiceNoise = data; }
+    short  GetVoiceNoise        (void)                     { return (Cs.MapVoiceNoise); }
+    void   SetRampDirection     (bool data)                { Cs.RampDirection = data; }
+    bool   GetRampDirection     (void)                     { return (Cs.RampDirection); }
+    void   SetPulseWidth        (float data)               { Cs.PulseWidth = data; }
+    float  GetPulseWidth        (void)                     { return (Cs.PulseWidth); }
+    void   SetOscMaxLevel       (byte index, float data)   { Cs.OscEnv[index].MaxLevel = data; }
+    float  GetOscMaxLevel       (byte index)               { return (Cs.OscEnv[index].MaxLevel); }
+    void   SetOscSustainLevel   (byte index, float data)   { Cs.OscEnv[index].SustainLevel = data; }
+    float  GetOscSustainLevel   (byte index)               { return (Cs.OscEnv[index].SustainLevel); }
+    void   SetOscAttackTime     (byte index, float data)   { Cs.OscEnv[index].AttackTime = data; }
+    float  GetOscAttackTime     (byte index)               { return (Cs.OscEnv[index].AttackTime); }
+    void   SetOscDecayTime      (byte index, float data)   { Cs.OscEnv[index].DecayTime = data; }
+    float  GetOscDecayTime      (byte index)               { return (Cs.OscEnv[index].DecayTime); }
+    void   SetOscReleaseTime    (byte index, float data)   { Cs.OscEnv[index].ReleaseTime = data; }
+    float  GetOscReleaseTime    (byte index)               { return (Cs.OscEnv[index].ReleaseTime); }
+
+    void   SetFltStart          (byte index, float data)   { Cs.FltEnv[index].MinLevel = data; }
+    float  GetFltStart          (byte index)               { return (Cs.FltEnv[index].MinLevel); }
+    void   SetFltEnd            (byte index, float data)   { Cs.FltEnv[index].MaxLevel = data; }
+    float  GetFltEnd            (byte index)               { return (Cs.FltEnv[index].MaxLevel); }
+    void   SetFltSustainLevel   (byte index, float data)   { Cs.FltEnv[index].SustainLevel = data; }
+    float  GetFltSustainLevel   (byte index)               { return (Cs.FltEnv[index].SustainLevel); }
+    void   SetFltAttackTime     (byte index, float data)   { Cs.FltEnv[index].AttackTime = data; }
+    float  GetFltAttackTime     (byte index)               { return (Cs.FltEnv[index].AttackTime); }
+    void   SetFltDecayTime      (byte index, float data)   { Cs.FltEnv[index].DecayTime = data; }
+    float  GetFltDecayTime      (byte index)               { return (Cs.FltEnv[index].DecayTime); }
+    void   SetFltReleaseTime    (byte index, float data)   { Cs.FltEnv[index].ReleaseTime = data; }
+    float  GetFltReleaseTime    (byte index)               { return (Cs.FltEnv[index].ReleaseTime); }
+    void   SetOutputMask        (byte chanmap)             { Cs.OutputMask = chanmap; }
+    byte   GetOutputMask        (void)                     { return (Cs.OutputMask); }
+    void   SetFltCtrl           (byte index, int data)     { Cs.FilterCtrl[index] = data; }
+    byte   GetFltCtrl           (byte index)               { return (Cs.FilterCtrl[index]); }
     };
 
 class SYNTH_CONFIG_C
@@ -239,8 +247,11 @@ public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
 
             SYNTH_CONFIG_C      (void);
+            bool   Begin        (void);
     void    Save                (short num);
     void    Load                (short num);
+    void    CreateJSON          (JsonDocument& cfg, short num);
+    void    LoadJSON            (JsonDocument& cfg, short num);
 
     void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
     short  GetSoftFreq          (void)                                  { return (Cs.SoftFrequency); };

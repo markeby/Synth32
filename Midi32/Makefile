@@ -19,7 +19,7 @@ SHARED := ../Common
 LIBS := --library $(SHARED) 
 
 # header files
-INCLUDES := config.h UpdateOTA.h Debug.h I2Cdevices.h I2Cmessages.h Envelope.h FrontEnd.h \
+INCLUDES := config.h UpdateOTA.h Debug.h I2Cdevices.h I2Cmessages.h Envelope.h FrontEnd.h ConfigJSON.h \
             LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h Voice.h Filter4.h Novation.h \
 	        $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h  
  
@@ -31,6 +31,7 @@ SOURCES := $(PROJECT) Config.cpp SerialMonitor.cpp UpdateOTA.cpp I2Cdevices.cpp 
    
 # serial port for uploading
 DEFAULT_PORT := COM3
+#DEFAULT_PORT := COM8
   
 # IP address for uploading
 UPLOAD_OTA := 192.168.2.21

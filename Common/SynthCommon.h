@@ -23,6 +23,7 @@
 
 // number of LFO sources
 #define SOURCE_CNT_LFO      3
+#define SOURCE_HWD_LFO      2
 
 // maximum number of entries on mapping page
 #define MAP_COUNT           (VOICE_COUNT / 2)

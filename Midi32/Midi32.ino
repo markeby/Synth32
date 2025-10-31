@@ -196,6 +196,9 @@ void setup (void)
             }
         }
 
+    printf ("\t>>> Starting file system.\n");
+//    if ( SynthConfig.Begin () )
+//        SystemFail = true;
     if ( SystemFail )
         printf ("\n\n*******  Synth interface is not operational *******\n\n\n");
     else

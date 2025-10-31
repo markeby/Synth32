@@ -38,7 +38,6 @@ void InitializeSynth (short voice, short mixer, short noise_digital, short lfo_c
     // Setup ports for calibration
     CalibrationBaseDigital = mod_mux_digital;
 
-    printf ("\t>>>\tSynth channels\n");
     short osc = voice;
     volumeMaster    = mixer + 8;        // Master volume port
     volumeOscMaster = mixer + 9;        // Oscillator master volume port

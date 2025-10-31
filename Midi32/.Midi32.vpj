@@ -115,6 +115,7 @@
                 <F N="../Common/SynthCommon.h"/>
             </Folder>
             <F N="Config.h"/>
+            <F N="ConfigJSON.h"/>
             <F N="Debug.h"/>
             <F N="Envelope.h"/>
             <F N="Filter4.h"/>
