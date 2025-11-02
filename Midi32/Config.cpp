@@ -10,8 +10,12 @@
 
 #include "Config.h"
 #include "Settings.h"
-
 #include "ConfigJSON.h"
+#include "Debug.h"
+
+static const char* LabelD = "CFG";
+#define ERROR(args...) {ErrorMsg (LabelD, __FUNCTION__, args);}
+#define DBGM(args...) {if(DebugDisp){ DebugMsg(LabelD,DEBUG_NO_INDEX,args);}}
 
 //#######################################################################
 //#######################################################################
@@ -56,23 +60,10 @@
     }
 
 //#######################################################################
-void SYNTH_VOICE_CONFIG_C::Save (const char* name)
+JsonDocument SYNTH_VOICE_CONFIG_C::CreateEnvJSON (ENVELOPE_T& env)
     {
-    Settings.PutConfig (name, &(Cs), sizeof (Cs));
-    }
+    JsonDocument cfg;
 
-//#######################################################################
-void SYNTH_VOICE_CONFIG_C::Load (const char* name)
-    {
-    int zs = sizeof (Cs);
-
-    if ( Settings.GetConfig (name, &Cs, zs) )
-        printf ("### Error loading voice config!\n");
-    }
-
-//#######################################################################
-void SYNTH_VOICE_CONFIG_C::CreateEnvJSON (JsonVariant cfg, ENVELOPE_T& env)
-    {
     cfg[k_Damper]  = env.Damper;
     cfg[k_Max]     = env.MaxLevel;
     cfg[k_Min]     = env.MinLevel;
@@ -80,6 +71,28 @@ void SYNTH_VOICE_CONFIG_C::CreateEnvJSON (JsonVariant cfg, ENVELOPE_T& env)
     cfg[k_Attack]  = env.AttackTime;
     cfg[k_Decay]   = env.DecayTime;
     cfg[k_Release] = env.ReleaseTime;
+    return (cfg);
+    }
+
+//#######################################################################
+JsonDocument SYNTH_VOICE_CONFIG_C::CreateJSON ()
+    {
+    int z;
+    JsonDocument cfg;
+
+    cfg[k_Midi]       = Cs.MapVoiceMidi;
+    cfg[k_OutEnable]  = Cs.OutputEnable;
+    cfg[k_Noise]      = Cs.MapVoiceNoise;
+    cfg[k_PulseWidth] = Cs.PulseWidth;
+    cfg[k_Ramp]       = Cs.RampDirection;
+    cfg[k_OutMask]    = Cs.OutputMask;
+    for ( z = 0;  z < FILTER_DEVICES;  z++ )
+        cfg[k_FilterCtrl][z] = Cs.FilterCtrl[z];
+    for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
+        cfg[k_OscEnv][z] = CreateEnvJSON (Cs.OscEnv[z]);
+    for ( z = 0;  z < FILTER_DEVICES;  z++ )
+        cfg[k_FltEnv][z] = CreateEnvJSON (Cs.FltEnv[z]);
+    return (cfg);
     }
 
 //#######################################################################
@@ -95,26 +108,7 @@ void SYNTH_VOICE_CONFIG_C::LoadEnvJSON (JsonVariant cfg, SYNTH_VOICE_CONFIG_C::E
     }
 
 //#######################################################################
-void SYNTH_VOICE_CONFIG_C::CreateJSON (JsonVariant cfg)
-    {
-    int z;
-
-    cfg[k_Midi]       = Cs.MapVoiceMidi;
-    cfg[k_OutEnable]  = Cs.OutputEnable;
-    cfg[k_Noise]      = Cs.MapVoiceNoise;
-    cfg[k_PulseWidth] = Cs.PulseWidth;
-    cfg[k_Ramp]       = Cs.RampDirection;
-    cfg[k_OutMask]    = Cs.OutputMask;
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        cfg[k_FilterCtrl][z] = Cs.FilterCtrl[z];
-    for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
-        CreateEnvJSON (cfg[k_OscEnv][z], Cs.OscEnv[z]);
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        CreateEnvJSON (cfg[k_FltEnv][z], Cs.FltEnv[z]);
-    }
-
-//#######################################################################
-void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonVariant cfg)
+void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonObject cfg)
     {
     int z;
 
@@ -131,6 +125,7 @@ void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonVariant cfg)
     for ( z = 0;  z < FILTER_DEVICES;  z++ )
         LoadEnvJSON (cfg[k_FltEnv][z], Cs.FltEnv[z]);
     }
+
 
 //#######################################################################
 //#######################################################################
@@ -154,77 +149,42 @@ void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonVariant cfg)
 //#######################################################################
 bool SYNTH_CONFIG_C::Begin ()
     {
-    if ( !SPIFFS.begin (true) )         // startup SPIFFS but initialize if failed
+    if ( !SPIFFS.begin (true) )
         {
-         if ( !SPIFFS.begin (false) )   //  let's try again.
-             {
-             printf ("\n\n*****  File system is not operational *****\n\n\n");
-             return true;
-             }
-        }
-    printf("Listing directory\n");
-    File root = SPIFFS.open ("/", FILE_READ, true);
-    if ( !root.isDirectory() )
-        {
-        printf ("\n\n*****  File system cannot be opened *****\n\n\n");
+        printf ("SPIFFS Mount Failed\n");
         return true;
         }
-
-    File file = root.openNextFile();
-    while (file)
-        {
-        if (file.isDirectory())
-            printf ("  DIR : %s/n", file.name());
-        else
-            printf ("  FILE: %s\tSIZE: %d/n", file.name(), file.size());
-        file = root.openNextFile();
-        }
+    return (DirectoryMonitor ());
     }
 
 //#######################################################################
-void SYNTH_CONFIG_C::Save (short num)
+void SYNTH_CONFIG_C::SaveConfig (short num)
     {
    String s;
-   String sb;
+
+    JsonDocument cfg = CreateJSON ();
 
     if ( num == 0 )                     // load default configuration
-        sb = "DEF";
+        s = "/DEFAULT.syc";
     else
-        sb = String (num) + "FL";
+        s = "/PRE-" + String (num) + ".syc";
 
-    Settings.PutConfig (sb.c_str (), &(Cs), sizeof (Cs));
-    for ( int z = 0;  z < MAP_COUNT;  z++ )
+    File file = SPIFFS.open (s, FILE_WRITE);
+    if ( !file )
         {
-        s = sb + String (z);
-        Voice[z].Save(s.c_str());
-        }
-    }
-
-//#######################################################################
-void SYNTH_CONFIG_C::Load (short num)
-    {
-    String s;
-    String sb;
-    int    zs = sizeof (Cs);
-
-    if ( num == 0 )                     // load default configuration
-        sb = "DEF";
-    else
-        sb = String (num) + "FL";
-
-    if (Settings.GetConfig (sb.c_str(), &Cs, zs) )
+        Serial.println("- failed to open file for writing");
         return;
-    for ( int z = 0;  z < MAP_COUNT;  z++ )
-        {
-        s = sb + String (z);
-        Voice[z].Load (s.c_str ());
         }
+
+    serializeJson (cfg, file);
+    file.close();
     }
 
 //#######################################################################
-void SYNTH_CONFIG_C::CreateJSON (JsonDocument& cfg, short num)
+JsonDocument SYNTH_CONFIG_C::CreateJSON ()
     {
     int    z;
+    JsonDocument cfg;
 
     cfg[k_SoftFreq] = Cs.SoftFrequency;
     for ( z = 0;  z < MAP_COUNT;  z++ )
@@ -243,15 +203,43 @@ void SYNTH_CONFIG_C::CreateJSON (JsonDocument& cfg, short num)
     for ( z = 0;  z < MAP_COUNT;  z++ )
         {
         String s = String (z);
-        Voice[z].CreateJSON (cfg[s.c_str ()]);
+        cfg[s.c_str ()] = Voice[z].CreateJSON ();
         }
 
-    serializeJson (cfg, Serial);
-    DbgN;
+    return (cfg);
     }
 
 //#######################################################################
-void SYNTH_CONFIG_C::LoadJSON (JsonDocument& cfg, short num)
+void SYNTH_CONFIG_C::LoadConfig (short num)
+    {
+    String s;
+
+    JsonDocument cfg;
+
+    if ( num == 0 )                     // load default configuration
+        s = "/DEFAULT.syc";
+    else
+        s = "/PRE-" + String (num) + ".syc";
+
+    File file = SPIFFS.open (s);
+    if ( !file )
+        ERROR ("Error openeing $s", s.c_str ());
+    if ( file.available () )
+        {
+        file.readBytes (SpiffsBuffer,  MAX_BUFFER -2);
+        DeserializationError error = deserializeJson (cfg, SpiffsBuffer);
+        if (error)
+            {
+            printf ("deserializeJson() failed: %s", error.f_str ());
+            return;
+            }
+        }
+    file.close ();
+    LoadConfigJSON (cfg);
+    }
+
+//#######################################################################
+void SYNTH_CONFIG_C::LoadConfigJSON (JsonDocument cfg)
     {
     int    z;
 
@@ -276,4 +264,70 @@ void SYNTH_CONFIG_C::LoadJSON (JsonDocument& cfg, short num)
         }
     }
 
+//#######################################################################
+bool SYNTH_CONFIG_C::DirectoryMonitor ()
+    {
+    bool bigflag = false;
+
+    File root = SPIFFS.open("/");
+    if ( !root )
+        {
+        printf ("\t\t>## failed to open root directory\n");
+        return true;
+        }
+    if ( !root.isDirectory() )
+        {
+        printf ("\t>## not a directory\n");
+        return true;
+        }
+
+    printf ("\n\t      Synth Directory\n");
+    File fname = root.openNextFile();
+    while (fname)
+        {
+        if ( !fname.isDirectory() )
+            {
+            printf ("\t   %s\t    %d\n", fname.name (), fname.size ());
+            if ( fname.size () > (MAX_BUFFER- 4) )
+                bigflag = true;
+            String s = fname.name();
+            }
+        fname = root.openNextFile ();
+        }
+    printf("\n");
+    if ( bigflag )
+        printf("\n#### ERROR -- SPIFFS read buffer allocation exceeds the current size of %d\n\n", MAX_BUFFER);
+    return false;
+    }
+
+//#######################################################################
+void SYNTH_CONFIG_C::DumpFiles ()
+    {
+    printf("\tSynth configuration file dump\n\n");
+    File root = SPIFFS.open("/");
+    if ( root )
+        {
+        if ( root.isDirectory() )
+            {
+            File fname = root.openNextFile();
+            while (fname)
+                {
+                if ( !fname.isDirectory() )
+                    {
+                    String name = fname.name ();
+                    String path = String("/") + name;
+                    printf ("> %s\n", name.c_str ());
+                    File file = SPIFFS.open (path.c_str ());
+                    if ( !file )
+                        ERROR ("Error openeing $s", name.c_str ());
+                    while ( file.available () )
+                        Serial.write (file.read());
+                    printf ("\n\n");
+                    file.close ();
+                    }
+                fname = root.openNextFile ();
+                }
+            }
+        }
+    }
 

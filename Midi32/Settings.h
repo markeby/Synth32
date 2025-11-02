@@ -61,12 +61,6 @@ public:
     void     PutOscBank          (uint8_t num, uint16_t* pbank);
     short    GetOffsetLFO        (uint8_t num);
     void     SetOffsetLFO        (uint8_t num, short offset);
-
-    //----------------------------------------
-    // Synth configure storage
-    //----------------------------------------
-    bool     GetConfig    (const char* name, void* ptr, size_t len);
-    void     PutConfig    (const char* name, const void* ptr, size_t len);
     };
 
 //#######################################################################

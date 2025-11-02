@@ -251,14 +251,14 @@ void ResolveMapAllocation ()
 //#####################################################################
 void SaveDefaultConfig ()
     {
-    SynthConfig.Save (0);
+    SynthConfig.SaveConfig (0);
     ResolveMapAllocation ();
     }
 
 //#####################################################################
 void LoadDefaultConfig ()
     {
-    SynthConfig.Load (0);
+    SynthConfig.LoadConfig (0);
     ResolveMapAllocation ();
     }
 
@@ -266,7 +266,7 @@ void LoadDefaultConfig ()
 void LoadSelectedConfig ()
     {
     DisplayMessage.LoadMessage ();
-    SynthConfig.Load (load_save_selection);
+    SynthConfig.LoadConfig (load_save_selection);
     ResolveMapAllocation ();
     }
 
@@ -274,7 +274,7 @@ void LoadSelectedConfig ()
 void SaveSelectedConfig ()
     {
     DisplayMessage.SaveMessage ();
-    SynthConfig.Save (load_save_selection);
+    SynthConfig.SaveConfig (load_save_selection);
     ResolveMapAllocation ();
     }
 

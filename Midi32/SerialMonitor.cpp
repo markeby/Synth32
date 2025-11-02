@@ -246,6 +246,10 @@ void MONITOR_C::MenuSel (void)
                     InputPrompt ("  Enter PWD");
                     Mode (INPWD);
                     break;
+                case 'F':
+                    SynthConfig.DumpFiles ();
+                    Mode (MENU);
+                    break;
                 case 'C':
                     InputPrompt ("  Clearing configuration settings");
                     Mode (CLR_CONFIG);
@@ -289,6 +293,7 @@ void MONITOR_C::Menu (void)
     Serial << StateDebug (DebugDisp ) << "\t5   - Debug Display Interface" << endl;
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
+    Serial << "\tF   - Dump json files" << endl;
     Serial << endl;
     Serial << "\tz   - Test function #1" << endl;
     Serial << "\tx   - Test function #2" << endl;

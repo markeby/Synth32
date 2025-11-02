@@ -42,7 +42,7 @@ void ENV_GENERATOR_C::Loop ()
     {
     for ( deque<ENVELOPE_C>::iterator it = _Envelopes.begin();  it != _Envelopes.end();  ++it )
         {
-        if ( it->IsActive () )                      // if we ain't doing it then we don't need to run this.
+        if ( it->IsActive () )                      // if we ain't active then we don't need to run this.
             {
             it->Process (DeltaTimeMilli);
             it->Update ();

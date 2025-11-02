@@ -201,33 +201,5 @@ void SETTINGS_C::SetOffsetLFO (uint8_t num, short offset)
     Prefs.end      ();
     }
 
-//#######################################################################
-bool SETTINGS_C::GetConfig (const char* name, void* ptr, size_t len)
-    {
-    size_t rtn = 0;
-
-    Prefs.begin (synthConfig, false);
-    if ( Prefs.isKey (name) )
-        rtn = Prefs.getBytes (name, ptr, len);
-    Prefs.end();
-    if ( rtn == len )
-        return (false);
-    return (true);
-    }
-
-//#######################################################################
-void SETTINGS_C::PutConfig (const char* name, const void* ptr, size_t len)
-    {
-    bool zbl;
-    size_t rtn;
-
-    Prefs.begin (synthConfig, false);
-    if ( Prefs.isKey (name) )
-        zbl = Prefs.remove (name);
-    rtn = Prefs.putBytes (name, ptr, len);
-    Prefs.end ();
-    }
-
-//#######################################################################
 SETTINGS_C Settings;        // Settings storage and retrieval
 

@@ -196,11 +196,8 @@ void setup (void)
             }
         }
 
-    printf ("\t>>> Starting file system.\n");
-//    if ( SynthConfig.Begin () )
-//        SystemFail = true;
     if ( SystemFail )
-        printf ("\n\n*******  Synth interface is not operational *******\n\n\n");
+        printf ("\n\n*******  Synth system is not operational *******\n\n\n");
     else
         {
         printf ("\t>>> Starting display communications.\n");
@@ -226,11 +223,19 @@ void setup (void)
 
         // Setup initial state of synth
         InitializeSynth (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
-        SynthActive = true;
-        LoadDefaultConfig ();
-        printf ("\t>>> Synth ready.\a\a\n");
-        if ( SystemError )
-            printf ("\n\t>## Not all synth interface registers are active.\n\n");
+        if ( SynthConfig.Begin () )
+            SystemFail = true;
+
+        if ( !SystemFail )
+            {
+            SynthActive = true;
+            LoadDefaultConfig ();
+            printf ("\t>>> Synth ready.\a\a\n");
+            if ( SystemError )
+                printf ("\n\t>## Not all synth interface registers are active.\n\n");
+            }
+        else
+            printf ("\n\n*******  Synth system is not operational *******\n\n\n");
         }
     }
 

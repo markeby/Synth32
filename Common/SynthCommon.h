@@ -58,4 +58,6 @@
 #define PRS_SCALER          0.007874
 #define PRS_UNSCALER        127.1
 
+// Misc. constants
+#define MAX_BUFFER          4096
 

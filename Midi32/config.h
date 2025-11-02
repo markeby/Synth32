@@ -7,6 +7,7 @@
 #pragma once
 #include <Streaming.h>
 #include <ArduinoJson.h>
+#include <deque>
 
 #include <SynthCommon.h>
 #include "I2Cdevices.h"
@@ -168,19 +169,17 @@ private:
     String Name;
     bool   Mute;
 
-    void   CreateEnvJSON        (JsonVariant cfg, ENVELOPE_T& env);
-    void   LoadEnvJSON          (JsonVariant cfg, ENVELOPE_T& env);
+    JsonDocument CreateEnvJSON  (ENVELOPE_T& env);
+    void         LoadEnvJSON    (JsonVariant cfg, ENVELOPE_T& env);
 
 public:
     bool   SelectedOscEnvelope[OSC_MIXER_COUNT];
     bool   SelectedFltEnvelope[FILTER_DEVICES];
 
-    void   CreateJSON           (JsonVariant cfg);
-    void   LoadJSON             (JsonVariant cfg);
 
            SYNTH_VOICE_CONFIG_C (void);
-    void   Save                 (const char* name);
-    void   Load                 (const char* name);
+    JsonDocument   CreateJSON   (void);
+    void           LoadJSON     (JsonObject cfg);
 
     void   SetMute              (bool state)               { Mute = state; }
     bool   IsMute               (void)                     { return (Mute); }
@@ -243,15 +242,19 @@ private:
             } CfgLFO[2];
         } Cs;
 
+    char           SpiffsBuffer[MAX_BUFFER];
+    JsonDocument   CreateJSON   (void);
+    void           LoadConfigJSON     (JsonDocument cfg);
+
 public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
 
             SYNTH_CONFIG_C      (void);
-            bool   Begin        (void);
-    void    Save                (short num);
-    void    Load                (short num);
-    void    CreateJSON          (JsonDocument& cfg, short num);
-    void    LoadJSON            (JsonDocument& cfg, short num);
+    bool   Begin                (void);
+    bool   DirectoryMonitor     (void);
+    void   SaveConfig           (short num);
+    void   LoadConfig           (short num);
+    void   DumpFiles            (void);
 
     void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
     short  GetSoftFreq          (void)                                  { return (Cs.SoftFrequency); };
