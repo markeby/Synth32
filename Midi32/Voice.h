@@ -58,6 +58,7 @@ public:
     void     Mute               (bool state)                        { _Osc.Mute (state); }
     void     SetSoftLFO         (byte fn, bool sel)                 { _Osc.SetSoftLFO (fn, sel); }
 
+    void     Expression         (float level)                       { _Osc.Expression (level); }
     void     Expression         (byte mchan, float level)           { if ( mchan == _Midi ) _Osc.Expression (level); }
     void     Damper             (byte mchan, bool state)            { if ( mchan == _Midi ) _Osc.Damper (state); }
     void     ChannelAfterTouch  (byte level)                        { _ChannelAfterTouch = level; }

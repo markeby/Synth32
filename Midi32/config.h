@@ -106,7 +106,6 @@ typedef struct
     void       (*CallBack)(short chan, short data);
     }  XL_MIDI_MAP;
 
-
 typedef byte  LED_NOTE_MAP;
 
 //#################################################
@@ -166,6 +165,7 @@ private:
         short       OutputEnable;
         short       MapVoiceNoise;
         float       PulseWidth;
+        float       MasterLevel;
         bool        RampDirection;
         byte        OutputMask;
         byte        FilterCtrl[FILTER_DEVICES];
@@ -200,6 +200,8 @@ public:
     short  GetVoiceNoise        (void)                     { return (Cs.MapVoiceNoise); }
     void   SetRampDirection     (bool data)                { Cs.RampDirection = data; }
     bool   GetRampDirection     (void)                     { return (Cs.RampDirection); }
+    void   SetMasterLevel       (float data)               { Cs.MasterLevel = data; }
+    float  GetMasterLevel       (void)                     { return (Cs.MasterLevel); }
     void   SetPulseWidth        (float data)               { Cs.PulseWidth = data; }
     float  GetPulseWidth        (void)                     { return (Cs.PulseWidth); }
     void   SetOscMaxLevel       (byte index, float data)   { Cs.OscEnv[index].MaxLevel = data; }

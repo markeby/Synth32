@@ -77,6 +77,7 @@ void StartOscDisplay ()
         DisplayMessage.OscSelectedLevel (z, sc.SelectedOscEnvelope[z]);
         }
     DisplayMessage.OscPulseWidth   (sc.GetPulseWidth () * PRS_UNSCALER);
+    DisplayMessage.MasterLevel   (sc.GetMasterLevel () * PRS_UNSCALER);
     }
 
 //#######################################################################
@@ -150,6 +151,22 @@ void MuteVoiceToggle ()
         }
     DisplayMessage.OscMute (state);
     updateOscButtons ();
+    }
+
+//#####################################################################
+void SetMasterLevel (short ch, short data)
+    {
+    float val = (float)data * PRS_SCALER;
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        {
+        if ( SelectedMidi == VoiceArray[z]->GetMidi () )
+            {
+            SynthConfig.Voice[z >> 1].SetMasterLevel (val);
+            VoiceArray[z]->Expression (val);
+            }
+        }
+
+    DisplayMessage.MasterLevel (data);
     }
 
 //#####################################################################
@@ -294,7 +311,7 @@ void SetSustainLevel (short ch, short data)
     }
 
 //#######################################################################
-void ToggleRampDirection (short ch)
+void ToggleRampDirection (short ch, short data)
     {
     bool zb = !SynthConfig.Voice[SelectedConfig].GetRampDirection ();
     for ( int z = 0;  z < VOICE_COUNT;  z++)

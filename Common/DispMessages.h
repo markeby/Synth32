@@ -149,6 +149,7 @@ namespace DISP_MESSAGE_N
     enum class EFFECT_C: byte
         {
         SELECTED = 0,
+        MASTER_LEVEL,
         BASE_LEVEL,
         MAX_LEVEL,
         ATTACK_TIME,

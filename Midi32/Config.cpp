@@ -22,6 +22,7 @@ static const char* LabelD = "CFG";
     SYNTH_VOICE_CONFIG_C::SYNTH_VOICE_CONFIG_C ()
     {
     Mute = false;
+    Cs.MasterLevel   = 1.0;
     Cs.MapVoiceMidi  = 1;
     Cs.MapVoiceNoise = 0;
     Cs.OutputEnable  = 0;
@@ -80,12 +81,13 @@ JsonDocument SYNTH_VOICE_CONFIG_C::CreateJSON ()
     int          z;
     JsonDocument cfg;
 
-    cfg[k_Midi]       = Cs.MapVoiceMidi;
-    cfg[k_OutEnable]  = Cs.OutputEnable;
-    cfg[k_Noise]      = Cs.MapVoiceNoise;
-    cfg[k_PulseWidth] = Cs.PulseWidth;
-    cfg[k_Ramp]       = Cs.RampDirection;
-    cfg[k_OutMask]    = Cs.OutputMask;
+    cfg[k_Midi]        = Cs.MapVoiceMidi;
+    cfg[k_OutEnable]   = Cs.OutputEnable;
+    cfg[k_Noise]       = Cs.MapVoiceNoise;
+    cfg[k_PulseWidth]  = Cs.PulseWidth;
+    cfg[k_MasterLevel] = Cs.MasterLevel;
+    cfg[k_Ramp]        = Cs.RampDirection;
+    cfg[k_OutMask]     = Cs.OutputMask;
     for ( z = 0;  z < FILTER_DEVICES;  z++ )
         cfg[k_FilterCtrl][z] = Cs.FilterCtrl[z];
     for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
@@ -115,6 +117,7 @@ void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonObject cfg)
     Cs.MapVoiceMidi  = cfg[k_Midi];
     Cs.OutputEnable  = cfg[k_OutEnable];
     Cs.MapVoiceNoise = cfg[k_Noise];
+    Cs.MasterLevel   = cfg[k_MasterLevel];
     Cs.PulseWidth    = cfg[k_PulseWidth];
     Cs.RampDirection = cfg[k_Ramp];
     Cs.OutputMask    = cfg[k_OutMask];

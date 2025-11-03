@@ -48,6 +48,7 @@ private:
     ADSR_METER_WIDGET_C*    MeterADSR[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         MaxLevel[OSC_MIXER_COUNT];
     LEVEL_WIDGET_C*         SustainLevel[OSC_MIXER_COUNT];
+    LEVEL_WIDGET_C*         MasterLevel;
     RAMP_WIDGET_C*          RampDir;
     PULSE_WIDGET_C*         PulseWidth;
     byte                    Midi;

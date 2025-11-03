@@ -40,20 +40,20 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     short x = 2;
 
     Label = lv_label_create (base);
-    lv_obj_align (Label, LV_ALIGN_TOP_LEFT, 0, y);
+    lv_obj_align (Label, LV_ALIGN_TOP_LEFT, -2, y);
     lv_label_set_text (Label, s);
     lv_obj_add_style (Label, &StyleLabel, 0);
     lv_style_set_text_color (&StyleLabel, lv_color_hex (color));
 
     Value = lv_label_create(base);
-    lv_obj_align (Value, LV_ALIGN_TOP_LEFT, 62, y);
+    lv_obj_align (Value, LV_ALIGN_TOP_LEFT, 58, y);
     lv_obj_add_style (Value, &StyleValue, 0);
     lv_style_set_text_color (&StyleValue, lv_color_hex (color));
 
     if ( strlen (su) > 0 )
         {
         Unit = lv_label_create(base);
-        lv_obj_align (Unit, LV_ALIGN_TOP_RIGHT, -11, y);
+        lv_obj_align (Unit, LV_ALIGN_TOP_RIGHT, -4, y);
         lv_label_set_text (Unit, su);
         lv_obj_add_style (Unit, &StyleValue, 0);
         }
@@ -196,7 +196,7 @@ void LFO_METER_WIDGET_C::Select (bool sel)
     {
     Meter = lv_meter_create (base);
     lv_obj_align (Meter, LV_ALIGN_TOP_MID, x, y);
-    lv_obj_set_size (Meter, 142, 142);
+    lv_obj_set_size (Meter, 122, 122);
 
     lv_obj_remove_style (Meter, NULL, LV_PART_INDICATOR);       // Remove the circle from the middle
 
@@ -302,7 +302,7 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
 
     // Create the panel for placing the fader
     Panel = lv_obj_create (base);
-    lv_obj_set_size             (Panel, 75, size + 50);
+    lv_obj_set_size             (Panel, 63, size + 50);
     lv_obj_set_pos              (Panel, x, y);
     lv_obj_set_style_pad_top    (Panel, 1, 0);
     lv_obj_set_style_pad_left   (Panel, 2, 0);
@@ -316,6 +316,7 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
     Label  = lv_label_create (Panel);
     lv_obj_align            (Label, LV_ALIGN_TOP_MID, 0, 0);
     lv_label_set_text       (Label, title);
+    Title = title;
     lv_obj_add_style        (Label, &StyleLabel, 0);
 
     lv_style_init         (&StyleMain);
@@ -379,6 +380,30 @@ void LEVEL_WIDGET_C::Active (bool state)
     lv_obj_invalidate       (Panel);
     }
 
+//#######################################################################
+void LEVEL_WIDGET_C::Mute (bool state)
+    {
+    lv_color_t color;
+    String     s;
+
+    if ( state )
+        {
+        s = "MUTE";
+        color = lv_palette_main (LV_PALETTE_RED);
+        }
+    else
+        {
+        s = Title;
+        color = lv_palette_lighten (Palette, 1);
+        }
+
+    lv_label_set_text       (Label, s.c_str ());
+    lv_style_set_text_color (&StyleLabel,     color);
+    lv_style_set_bg_color   (&StyleIndicator, color);
+    lv_style_set_bg_color   (&StyleKnob,      color);
+    lv_style_set_text_color (&StyleValue,     color);
+    lv_obj_invalidate       (Panel);
+    }
 
 //#######################################################################
 void LEVEL_WIDGET_C::SetLevel (int val)

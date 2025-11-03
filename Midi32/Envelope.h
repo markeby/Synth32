@@ -53,8 +53,9 @@ private:
     float       _AttackTime;     // Attack time in uSec.
     float       _DecayTime;      // Decay time to sustatin level in uSec.
     float       _ReleaseTime;    // How long to end back at base level in uSec.
-    float       _Expression;    // Final volume multiplier
-    bool        _Damper;        // state of damper pedal
+    float       _Expression;     // Final volume multiplier
+    bool        _Damper;         // state of damper pedal
+
 
     // runtime calculations
     float       _Delta;          // Distance for the current state.

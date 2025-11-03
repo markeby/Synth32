@@ -188,6 +188,14 @@ public:
         }
 
     //#################################################
+    void MasterLevel (uint16_t value)
+        {
+        SendUpdateOsc (0, 0,
+                       DISP_MESSAGE_N::EFFECT_C::MASTER_LEVEL,
+                       value);
+        }
+
+    //#################################################
     void OscMaxLevel (byte channel, uint16_t value)
         {
         SendUpdateOsc (0, channel,

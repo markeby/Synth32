@@ -206,7 +206,7 @@ void PAGE_FILTER_C::UpdatePage (byte fn, EFFECT_C effect, short value)
 
 //#######################################################################
 //#######################################################################
-static const char* OscKeys[]   = { "1", "2", "3", "4", "5" };
+static const char* OscKeys[]   = { "1", "2", "3", "4", "5", "8" };
     PAGE_OSC_C::PAGE_OSC_C (lv_obj_t* base) : PAGE_TITLE_C (base, "Voice Midi 1")
     {
     int x = 0;
@@ -216,7 +216,7 @@ static const char* OscKeys[]   = { "1", "2", "3", "4", "5" };
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         {
         lv_obj_t* panel = lv_obj_create (base);
-        lv_obj_set_size             (panel, 159, 440);
+        lv_obj_set_size             (panel, 145, 440);
         lv_obj_set_pos              (panel, x, y);
         lv_obj_set_style_pad_top    (panel, 0, 0);
         lv_obj_set_style_pad_bottom (panel, 0, 0);
@@ -229,7 +229,7 @@ static const char* OscKeys[]   = { "1", "2", "3", "4", "5" };
         TitleControl[z] = new TITLE_WIDGET_C      (panel, VoiceOptText[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
         MaxLevel[z]     = new LEVEL_WIDGET_C      (panel, "MAX",     OscKeys[z],  0, 210, LV_PALETTE_INDIGO);
-        SustainLevel[z] = new LEVEL_WIDGET_C      (panel, "SUSTAIN", OscKeys[z], 73, 210, LV_PALETTE_ORANGE);
+        SustainLevel[z] = new LEVEL_WIDGET_C      (panel, "SUSTAIN", OscKeys[z], 70, 210, LV_PALETTE_ORANGE);
         SustainLevel[z]->Active (false);
 
         switch ( z )
@@ -244,8 +244,10 @@ static const char* OscKeys[]   = { "1", "2", "3", "4", "5" };
                 break;
             }
 
-        x += 158;
+        x += 145;
         }
+
+    MasterLevel = new LEVEL_WIDGET_C (base, "MASTER", OscKeys[5],  727, 252, LV_PALETTE_INDIGO);
     }
 
 //#######################################################################
@@ -261,12 +263,16 @@ void PAGE_OSC_C::UpdatePage (byte ch, EFFECT_C effect, short value)
     {
     switch ( effect )
         {
+        case EFFECT_C::MASTER_LEVEL:
+            MasterLevel->SetLevel (value);
+            break;
         case EFFECT_C::DAMPER:
             MeterADSR[ch]->Damper (value);
             break;
         case EFFECT_C::MUTE:
-            for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
-                MeterADSR[z]->Mute (value);
+//            for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
+//                MeterADSR[z]->Mute (value);
+            MasterLevel->Mute (value);
             break;
         case EFFECT_C::SELECTED:
             MaxLevel[ch]->Active (!value);

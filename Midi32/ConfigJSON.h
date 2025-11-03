@@ -35,6 +35,7 @@ const char* k_Midi          = "Midi";
 const char* k_OutEnable     = "OutEnable";
 const char* k_Noise         = "Noise";
 const char* k_PulseWidth    = "PulseWidth";
+const char* k_MasterLevel   = "MasterLevel";
 const char* k_Ramp          = "Ramp";
 const char* k_OutMask       = "OutMask";
 const char* k_FilterCtrl    = "FilterCtrl";
