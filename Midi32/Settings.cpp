@@ -25,8 +25,6 @@ static const char* synthTuning    = "SynthP";   // Tuning directory
 static const char* synthKeyBank   = "BANK";     // Keyboard bank prefix "BANKx"
 static const char* synthKeyBender = "BEND";     // LFO/Bender offset "BENDx"
 
-static const char* synthConfig    = "SynthC";   // Configureation directory
-
 //#######################################################################
 void SETTINGS_C::ClearAllSys (void)
     {
@@ -131,51 +129,6 @@ void SETTINGS_C::Begin (void)
     SketchSizePrev = GetSystemParam (sysKeySketch);
     SketchSize = ESP.getSketchSize ();
     PutSystemParam (sysKeySketch, SketchSize);
-    }
-
-//#######################################################################
-//#######################################################################
-void SETTINGS_C::ClearTuning (void)
-    {
-    Prefs.begin (synthTuning, false);
-    Prefs.clear ();
-    Prefs.end();
-    }
-
-//#######################################################################
-void SETTINGS_C::ClearConfig(void)
-    {
-    Prefs.begin (synthConfig, false);
-    Prefs.clear ();
-    Prefs.end ();
-    }
-
-//#######################################################################
-bool SETTINGS_C::GetOscBank (uint8_t num, uint16_t* pbank)
-    {
-    char buf[8];
-    bool exist = true;
-
-    sprintf     (buf, "%s%d", synthKeyBank, num);
-    Prefs.begin (synthTuning, false);
-    if (  Prefs.isKey ((const char *)buf) )
-        {
-        bool zb = Prefs.getBytes((const char *)buf, pbank, KEYS_FULL * sizeof(uint16_t));
-        exist = false;
-        }
-    Prefs.end ();
-    return (exist);
-    }
-
-//#######################################################################
-void SETTINGS_C::PutOscBank (uint8_t num, uint16_t* pbank)
-    {
-    char buf[8];
-
-    sprintf        (buf, "%s%d", synthKeyBank, num);
-    Prefs.begin    (synthTuning, false);
-    Prefs.putBytes ((const char *)buf, pbank, KEYS_FULL * sizeof (uint16_t));
-    Prefs.end      ();
     }
 
 //#######################################################################

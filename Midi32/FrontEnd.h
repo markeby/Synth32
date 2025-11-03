@@ -62,7 +62,7 @@ inline void KeyUp (byte mchan, byte key, byte velocity)
 
 //#######################################################################
 // FrontEnd.cpp
-void InitializeSynth        (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d);
+void InitializeSynth        (void);
 void SystemExDebug          (byte* array, unsigned size);
 void LoopSynth              (void);
 void MasterVolume           (short md);

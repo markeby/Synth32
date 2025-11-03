@@ -5,6 +5,7 @@
 // Date:       8/1/2022
 //#######################################################################
 #pragma once
+#include "config.h"
 #include "Osc.h"
 #include "Filter4.h"
 
@@ -99,7 +100,6 @@ public:
     void     SetTuningFlt       (byte fn, uint16_t level)           { _Flt.SetTuning (fn, level); }
     bool     TuningState        (void)                              { return (_TuningOn); }
     void     TuningState        (bool state)                        { _TuningOn = state; SetTuningNote (_Osc.LastNote ()); }
-    ushort*  GetBankAddr        (void)                              { return (_Osc.GetBankAddr ()); }
     short    LastDA             (void)                              { return (_Osc.LastDA ()); }
     };
 

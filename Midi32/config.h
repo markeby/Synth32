@@ -7,7 +7,8 @@
 #pragma once
 #include <Streaming.h>
 #include <ArduinoJson.h>
-#include <deque>
+#include <FS.h>
+#include <SPIFFS.h>
 
 #include <SynthCommon.h>
 #include "I2Cdevices.h"
@@ -133,7 +134,13 @@ extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_S
 //#################################################
 //  I2C bus interfaces
 //#################################################
-extern  I2C_INTERFACE_C I2cDevices;
+extern  I2C_INTERFACE_C         I2cDevices;
+#define START_MIXER             0
+#define START_NOISE_DIGITAL     12
+#define START_LFO_CONTROL       28
+#define START_MOD_MUX           48
+#define START_A_D               64
+#define START_VOICE_CONTROL     68
 
 //#################################################
 //    Synthesizer configuration storage
@@ -242,35 +249,47 @@ private:
             } CfgLFO[2];
         } Cs;
 
-    char           SpiffsBuffer[MAX_BUFFER];
-    JsonDocument   CreateJSON   (void);
-    void           LoadConfigJSON     (JsonDocument cfg);
+    uint16_t     OctaveArray[VOICE_COUNT][KEYS_FULL];
+    char         SpiffsBuffer[MAX_BUFFER];
+    JsonDocument CreateConfigJSON   (void);
+
+    void        LoadConfigJSON  (JsonDocument cfg);
+    File        OpenRead        (const char* s);
+    File        OpenWrite       (const char* s);
+    File        OpenRead        (String s)                             { return (OpenRead (s.c_str ())); }
+    File        OpenWrite       (String s)                             { return (OpenWrite (s.c_str ())); }
+    void        LoadTuning      (void);
 
 public:
     SYNTH_VOICE_CONFIG_C  Voice[VOICE_COUNT];
 
-            SYNTH_CONFIG_C      (void);
-    bool   Begin                (void);
-    bool   DirectoryMonitor     (void);
-    void   SaveConfig           (short num);
-    void   LoadConfig           (short num);
-    void   DumpFiles            (void);
+                SYNTH_CONFIG_C  (void);
+    bool        Begin           (void);
+    bool        DirectoryDump   (void);
+    void        SaveConfig      (short num);
+    void        LoadConfig      (short num);
+    void        DumpFiles       (void);
+    void        SaveTuning      (void);
 
-    void   SetSoftFreq          (short data)                            { Cs.SoftFrequency = data; }
-    short  GetSoftFreq          (void)                                  { return (Cs.SoftFrequency); };
-    void   SetModMidi           (byte index, short data)                { Cs.LfoMidi[index] = data; }
-    short  GetModMidi           (byte index)                            { return (Cs.LfoMidi[index]); };
-    void   SetModSoftMixer      (short index, bool data)                { Cs.SoftMixerLFO[index] = data; }
-    bool   GetModSoftMixer      (short unit)                            { return (Cs.SoftMixerLFO[unit]); }
-    void   SetSelect            (short unit, short index, bool data)    { Cs.CfgLFO[unit].Select[index] = data; }
-    bool   GetSelect            (short unit, short index)               { return (Cs.CfgLFO[unit].Select[index]); }
-    void   SetRampDir           (short unit, bool data)                 { Cs.CfgLFO[unit].RampDir = data; }
-    bool   GetRampDir           (short unit)                            { return (Cs.CfgLFO[unit].RampDir); }
-    void   SetFrequency         (short unit, short data)                { Cs.CfgLFO[unit].Frequency = data; }
-    short  GetFrequency         (short unit)                            { return (Cs.CfgLFO[unit].Frequency); }
-    void   SetPulseWidth        (short unit, short data)                { Cs.CfgLFO[unit].PulseWidth = data; }
-    short  GetPulseWidth        (short unit)                            { return (Cs.CfgLFO[unit].PulseWidth); }
-    void   SetModLevelAlt       (short unit, bool data)                 { Cs.CfgLFO[unit].ModLevelAlt = data; }
-    bool   GetModLevelAlt       (short unit)                            { return (Cs.CfgLFO[unit].ModLevelAlt); }
+    uint16_t*   GetOctaveArray  (int index)                             { return (OctaveArray[index]); }
+    void        SetSoftFreq     (short data)                            { Cs.SoftFrequency = data; }
+    short       GetSoftFreq     (void)                                  { return (Cs.SoftFrequency); };
+    void        SetModMidi      (byte index, short data)                { Cs.LfoMidi[index] = data; }
+    short       GetModMidi      (byte index)                            { return (Cs.LfoMidi[index]); };
+    void        SetModSoftMixer (short index, bool data)                { Cs.SoftMixerLFO[index] = data; }
+    bool        GetModSoftMixer (short unit)                            { return (Cs.SoftMixerLFO[unit]); }
+    void        SetSelect       (short unit, short index, bool data)    { Cs.CfgLFO[unit].Select[index] = data; }
+    bool        GetSelect       (short unit, short index)               { return (Cs.CfgLFO[unit].Select[index]); }
+    void        SetRampDir      (short unit, bool data)                 { Cs.CfgLFO[unit].RampDir = data; }
+    bool        GetRampDir      (short unit)                            { return (Cs.CfgLFO[unit].RampDir); }
+    void        SetFrequency    (short unit, short data)                { Cs.CfgLFO[unit].Frequency = data; }
+    short       GetFrequency    (short unit)                            { return (Cs.CfgLFO[unit].Frequency); }
+    void        SetPulseWidth   (short unit, short data)                { Cs.CfgLFO[unit].PulseWidth = data; }
+    short       GetPulseWidth   (short unit)                            { return (Cs.CfgLFO[unit].PulseWidth); }
+    void        SetModLevelAlt  (short unit, bool data)                 { Cs.CfgLFO[unit].ModLevelAlt = data; }
+    bool        GetModLevelAlt  (short unit)                            { return (Cs.CfgLFO[unit].ModLevelAlt); }
     };
+
+//#################################################
+extern SYNTH_CONFIG_C  SynthConfig;
 

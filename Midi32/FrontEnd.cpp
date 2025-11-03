@@ -33,12 +33,21 @@ using namespace DISP_MESSAGE_N;
 
 //#######################################################################
 //#######################################################################
-void InitializeSynth (short voice, short mixer, short noise_digital, short lfo_control, short mod_mux_digital, short start_a_d)
+void InitializeSynth ()
     {
+    // I2C device index initialization
+    short voice           = START_VOICE_CONTROL;
+    short osc             = START_VOICE_CONTROL;
+    short mixer           = START_MIXER;
+    short noise_digital   = START_NOISE_DIGITAL;
+    short lfo_control     = START_LFO_CONTROL;
+    short mod_mux_digital = START_MOD_MUX;
+    short start_a_d       = START_A_D;
+
     // Setup ports for calibration
     CalibrationBaseDigital = mod_mux_digital;
 
-    short osc = voice;
+    // setup I2C indexes for mixers
     volumeMaster    = mixer + 8;        // Master volume port
     volumeOscMaster = mixer + 9;        // Oscillator master volume port
     volumeFltMaster = mixer + 10;       // Filter master volume port
@@ -260,7 +269,6 @@ KEY_T           Down;
 KEY_T           Up;
 
 ENV_GENERATOR_C EnvADSL;                    //Envelope generator spawn tool
-SYNTH_CONFIG_C  SynthConfig;                //Synth configuration saveable
 NOVATION_XL_C   LaunchControl;              //Novation controller
 SYNTH_LFO_C     Lfo[2];                     //Hardware LFOs
 VOICE_C*        VoiceArray[VOICE_COUNT];    //Oscillators, filters, routing controls

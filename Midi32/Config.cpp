@@ -77,7 +77,7 @@ JsonDocument SYNTH_VOICE_CONFIG_C::CreateEnvJSON (ENVELOPE_T& env)
 //#######################################################################
 JsonDocument SYNTH_VOICE_CONFIG_C::CreateJSON ()
     {
-    int z;
+    int          z;
     JsonDocument cfg;
 
     cfg[k_Midi]       = Cs.MapVoiceMidi;
@@ -131,18 +131,39 @@ void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonObject cfg)
 //#######################################################################
     SYNTH_CONFIG_C::SYNTH_CONFIG_C ()
     {
+    int z;
+
     Cs.SoftFrequency = 1;
-    for ( short z = 0;  z < 4;  z++ )
+    for ( int z = 0;  z < 4;  z++ )
         Cs.LfoMidi[z];
-    for ( short z = 0;  z < OSC_MIXER_COUNT;  z++ )
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         Cs.SoftMixerLFO[z] = false;
-    for ( short z = 0;  z < 2;  z++ )
+    for ( int z = 0;  z < 2;  z++ )
         {
         Cs.CfgLFO[z].Frequency  = 1;
         Cs.CfgLFO[z].PulseWidth = 2048;
         Cs.CfgLFO[z].RampDir    = false;
-        for ( short z = 0;  z < SOURCE_CNT_LFO;  z++ )
-            this->Cs.CfgLFO[z].Select[z] = false;
+        for ( int zz = 0;  zz < SOURCE_CNT_LFO;  zz++ )
+            this->Cs.CfgLFO[z].Select[zz] = false;
+        }
+
+    // Configure keyboard MIDI frequencies
+    memset (OctaveArray, 0, sizeof (OctaveArray));
+    for ( int z = 0, n = 0;  z < KEYS_FULL; z++, n++ )          // initialize at even intervals.
+        {
+        uint16_t onote = 0;
+        if ( z < KEYS_FIRST )
+            n = 0;
+        else if ( z <= KEYS_LAST )
+            onote = (n * (DA_RANGE / KEYS_SYNTH )) - 11;
+        OctaveArray[0][z] = onote;
+        OctaveArray[1][z] = onote;
+        OctaveArray[2][z] = onote;
+        OctaveArray[3][z] = onote;
+        OctaveArray[4][z] = onote;
+        OctaveArray[5][z] = onote;
+        OctaveArray[6][z] = onote;
+        OctaveArray[7][z] = onote;
         }
     }
 
@@ -154,36 +175,56 @@ bool SYNTH_CONFIG_C::Begin ()
         printf ("SPIFFS Mount Failed\n");
         return true;
         }
-    return (DirectoryMonitor ());
+
+    LoadTuning ();
+    return (DirectoryDump ());
+    }
+
+//#######################################################################
+File SYNTH_CONFIG_C::OpenWrite (const char* s)
+    {
+    File file = SPIFFS.open(s, FILE_WRITE);
+    if ( !file )
+        {
+        ERROR ("Failed to open file %s for writing", s);
+        }
+    return (file);
+    }
+
+//#######################################################################
+File SYNTH_CONFIG_C::OpenRead (const char* s)
+    {
+    File file = SPIFFS.open (s);
+    if ( !file )
+        {
+        ERROR ("Failed to open file %s for reading", s);
+        }
+    return (file);
     }
 
 //#######################################################################
 void SYNTH_CONFIG_C::SaveConfig (short num)
     {
-   String s;
-
-    JsonDocument cfg = CreateJSON ();
+    String       s;
+    JsonDocument cfg = CreateConfigJSON ();
 
     if ( num == 0 )                     // load default configuration
-        s = "/DEFAULT.syc";
+        s = n_DefaultConfig;
     else
-        s = "/PRE-" + String (num) + ".syc";
+        s = n_PresetConfig + String (num) + n_SynthConfig;
 
-    File file = SPIFFS.open (s, FILE_WRITE);
-    if ( !file )
-        {
-        Serial.println("- failed to open file for writing");
+    File file;
+    if ( !(file = OpenWrite (s)) )
         return;
-        }
 
     serializeJson (cfg, file);
     file.close();
     }
 
 //#######################################################################
-JsonDocument SYNTH_CONFIG_C::CreateJSON ()
+JsonDocument SYNTH_CONFIG_C::CreateConfigJSON ()
     {
-    int    z;
+    int          z;
     JsonDocument cfg;
 
     cfg[k_SoftFreq] = Cs.SoftFrequency;
@@ -212,26 +253,25 @@ JsonDocument SYNTH_CONFIG_C::CreateJSON ()
 //#######################################################################
 void SYNTH_CONFIG_C::LoadConfig (short num)
     {
-    String s;
-
+    String       s;
+    File         file;
     JsonDocument cfg;
 
     if ( num == 0 )                     // load default configuration
-        s = "/DEFAULT.syc";
+        s = n_DefaultConfig;
     else
-        s = "/PRE-" + String (num) + ".syc";
+        s = n_PresetConfig + String (num) + n_SynthConfig;
 
-    File file = SPIFFS.open (s);
-    if ( !file )
-        ERROR ("Error openeing $s", s.c_str ());
+    if ( !(file = OpenRead (s)) )
+        return;
+
     if ( file.available () )
         {
-        file.readBytes (SpiffsBuffer,  MAX_BUFFER -2);
+        file.readBytes (SpiffsBuffer,  MAX_BUFFER - 2);
         DeserializationError error = deserializeJson (cfg, SpiffsBuffer);
         if (error)
             {
-            printf ("deserializeJson() failed: %s", error.f_str ());
-            return;
+            ERROR ("deserializeJson() loading config %s failed: %s", s.c_str (), error.f_str ());
             }
         }
     file.close ();
@@ -265,21 +305,13 @@ void SYNTH_CONFIG_C::LoadConfigJSON (JsonDocument cfg)
     }
 
 //#######################################################################
-bool SYNTH_CONFIG_C::DirectoryMonitor ()
+bool SYNTH_CONFIG_C::DirectoryDump ()
     {
+    File root;
     bool bigflag = false;
 
-    File root = SPIFFS.open("/");
-    if ( !root )
-        {
-        printf ("\t\t>## failed to open root directory\n");
+    if ( !(root = OpenRead ("/")) )
         return true;
-        }
-    if ( !root.isDirectory() )
-        {
-        printf ("\t>## not a directory\n");
-        return true;
-        }
 
     printf ("\n\t      Synth Directory\n");
     File fname = root.openNextFile();
@@ -294,40 +326,92 @@ bool SYNTH_CONFIG_C::DirectoryMonitor ()
             }
         fname = root.openNextFile ();
         }
-    printf("\n");
+    printf ("\n");
     if ( bigflag )
-        printf("\n#### ERROR -- SPIFFS read buffer allocation exceeds the current size of %d\n\n", MAX_BUFFER);
+        ERROR ("SPIFFS read buffer allocation exceeds the current size of %d\n\n", MAX_BUFFER);
     return false;
     }
 
 //#######################################################################
 void SYNTH_CONFIG_C::DumpFiles ()
     {
-    printf("\tSynth configuration file dump\n\n");
-    File root = SPIFFS.open("/");
-    if ( root )
+    File root;
+    File file;
+
+    printf ("\tSynth configuration file dump\n\n");
+    if ( !(root = OpenRead ("/")) )
+        return;
+    File fname = root.openNextFile();
+    while (fname)
         {
-        if ( root.isDirectory() )
+        String name = fname.name ();
+        String path = String("/") + name;
+        printf ("> %s\n", name.c_str ());
+        file = OpenRead (path);
+        DbgD (file);
+        if ( file )
             {
-            File fname = root.openNextFile();
-            while (fname)
-                {
-                if ( !fname.isDirectory() )
-                    {
-                    String name = fname.name ();
-                    String path = String("/") + name;
-                    printf ("> %s\n", name.c_str ());
-                    File file = SPIFFS.open (path.c_str ());
-                    if ( !file )
-                        ERROR ("Error openeing $s", name.c_str ());
-                    while ( file.available () )
-                        Serial.write (file.read());
-                    printf ("\n\n");
-                    file.close ();
-                    }
-                fname = root.openNextFile ();
-                }
+            while ( file.available () )
+                Serial.write (file.read ());
+            printf ("\n\n");
+            file.close ();
             }
+        fname = root.openNextFile ();
         }
     }
+
+//#######################################################################
+void SYNTH_CONFIG_C::LoadTuning ()
+    {
+    String       s;
+    File         file;
+    JsonDocument cfg;
+    int          z = 0;
+
+    if ( !(file = OpenRead (n_Tuning)) )
+        return;
+    if ( file.available () )
+        {
+        file.readBytes (SpiffsBuffer,  MAX_BUFFER - 2);
+        DeserializationError error = deserializeJson (cfg, SpiffsBuffer);
+        if (error)
+            {
+            ERROR ("deserializeJson() of tuning failed: %s", error.f_str ());
+            }
+
+        for ( z = 0;  z < VOICE_COUNT;  z++ )
+            {
+            String s = String (z);
+            for ( int zz = 0;  zz < KEYS_FULL;  zz++ )
+                 OctaveArray[z][zz] = cfg[k_Tuning][s.c_str ()][zz];
+            }
+        }
+    file.close ();
+    if ( z == 0 )
+        ERROR ("Tuning data not available to load.  Falling back on default.");
+    }
+
+//#######################################################################
+void SYNTH_CONFIG_C::SaveTuning ()
+    {
+    String       s;
+    JsonDocument cfg;
+
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        {
+        String s = String (z);
+        for ( int zz = 0;  zz < KEYS_FULL;  zz++ )
+            cfg[k_Tuning][s.c_str ()][zz] = OctaveArray[z][zz];
+        }
+
+    File file;
+    if ( !(file = OpenWrite (n_Tuning)) )
+        return;
+
+    serializeJson (cfg, file);
+    file.close();
+    }
+
+//#######################################################################
+SYNTH_CONFIG_C  SynthConfig;
 

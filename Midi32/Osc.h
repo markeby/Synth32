@@ -42,7 +42,7 @@ class   OSC_C
     {
 private:
     ENVELOPE_C*             Mix[OSC_MIXER_COUNT];
-    uint16_t                OctaveArray[KEYS_FULL];
+    uint16_t*               _OctaveArray;
 
     bool                    Valid;          // Completed init and good for use
     byte                    Number;
@@ -82,7 +82,6 @@ public:
     float   GetSustainLevel     (byte wave)                         { return (Mix[wave]->GetLevel (ESTATE::SUSTAIN)); }
     void    SetLevel            (byte wave, float level_percent)    { Mix[wave]->SetLevel (ESTATE::ATTACK, level_percent); }
     float   GetLevel            (byte wave)                         { return (Mix[wave]->GetLevel (ESTATE::ATTACK)); }
-    ushort* GetBankAddr         (void)                              { return (OctaveArray); }
     byte    LastNote            (void)                              { return (CurrentNote); }
     short   LastDA              (void)                              { return (CurrentDA); }
     };

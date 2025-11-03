@@ -179,8 +179,7 @@ void SaveTuning ()
     if ( SetTuning )
         {
         DBG ("Saving synth keyboard arrays");
-        for ( int z = 0;  z < VOICE_COUNT;  z++ )
-            Settings.PutOscBank (z, VoiceArray[z]->GetBankAddr ());
+        SynthConfig.SaveTuning ();
         }
     }
 

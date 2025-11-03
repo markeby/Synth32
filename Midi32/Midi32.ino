@@ -64,16 +64,6 @@ I2C_LOCATION_T  DevicesI2C[] =
       { 255, 255, 255, 255, 255, 255, nullptr }
     };
 
-//#################################################
-//  Synth I2C interface starting indexes
-//#################################################
-#define START_MIXER             0
-#define START_NOISE_DIGITAL     12
-#define START_LFO_CONTROL       28
-#define START_MOD_MUX           48
-#define START_A_D               64
-#define START_VOICE_CONTROL     68
-
 //#######################################################################
 USB Usb;
     UHS2MIDI_CREATE_INSTANCE(&Usb, MIDI_PORT, Midi_0);      // Novation MIDI device
@@ -221,16 +211,18 @@ void setup (void)
         Midi_2.begin (MIDI_CHANNEL_OMNI);
         printf ("\t>>>\tSerial2 midi ready\n");
 
-        // Setup initial state of synth
-        InitializeSynth (START_VOICE_CONTROL, START_MIXER, START_NOISE_DIGITAL, START_LFO_CONTROL, START_MOD_MUX, START_A_D);
         if ( SynthConfig.Begin () )
             SystemFail = true;
 
         if ( !SystemFail )
             {
+            // Setup initial state of synth
+            InitializeSynth ();
+
             SynthActive = true;
+            printf ("\t>>> Loading default configuration\n");
             LoadDefaultConfig ();
-            printf ("\t>>> Synth ready.\a\a\n");
+            printf ("\t>>> Synth ready\n");
             if ( SystemError )
                 printf ("\n\t>## Not all synth interface registers are active.\n\n");
             }

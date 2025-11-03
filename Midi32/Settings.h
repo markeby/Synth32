@@ -53,14 +53,10 @@ public:
         { return (SketchSizePrev); }
 
     //----------------------------------------
-    // Synth tuning storage
+    // Synth calibration storage
     //----------------------------------------
-    void     ClearTuning         (void);
-    void     ClearConfig         (void);
-    bool     GetOscBank          (uint8_t num, uint16_t* pbank);
-    void     PutOscBank          (uint8_t num, uint16_t* pbank);
-    short    GetOffsetLFO        (uint8_t num);
-    void     SetOffsetLFO        (uint8_t num, short offset);
+    short    GetOffsetLFO        (uint8_t num);                     // Load the saved calibration offsets
+    void     SetOffsetLFO        (uint8_t num, short offset);       // Save calibration offsets
     };
 
 //#######################################################################

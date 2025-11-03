@@ -27,6 +27,8 @@ void  BootDebug      (void);
 #define DbgX(x) {printf("==> %s:%d %s = 0x%X\n",__FILE__,__LINE__, #x, x);}
 #define DbgF(f) {printf("==> %s:%d %s = %f\n",__FILE__,__LINE__, #f, f);}
 #define DbgS(s) {printf("==> %s:%d %s = %s\n",__FILE__,__LINE__, #s, s);}
+#define DbgSt(s) {printf("==> %s:%d %s = %s\n",__FILE__,__LINE__, #s, s.c_str());}
+
 #define DbgN    {printf("\n");}
 
 

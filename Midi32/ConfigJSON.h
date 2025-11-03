@@ -8,37 +8,49 @@
 //###########################################
 // Configuration top level keys
 //###########################################
-char* k_SoftFreq     = "SoftFreq";
-char* k_LfoMidi      = "LfoMidi";
-char* k_SoftMixerLFO = "SoftMixerLFO";
-char* k_CfgLFO       = "CfgLFO";
-char* k_Freq         = "Freq";
-char* k_PulseW       = "PulseW";
-char* k_ModAlt       = "ModAlt";
-char* k_Sel          = "Sel";
+const char* k_SoftFreq      = "SoftFreq";
+const char* k_LfoMidi       = "LfoMidi";
+const char* k_SoftMixerLFO  = "SoftMixerLFO";
+const char* k_CfgLFO        = "CfgLFO";
+const char* k_Freq          = "Freq";
+const char* k_PulseW        = "PulseW";
+const char* k_ModAlt        = "ModAlt";
+const char* k_Sel           = "Sel";
 
 //###########################################
 // Configuration envelope keys
 //###########################################
-char*  k_Damper      = "Damper";
-char*  k_Max         = "Max";
-char*  k_Min         = "Min";
-char*  k_Sustain     = "Sustain";
-char*  k_Attack      = "Attack";
-char*  k_Decay       = "Decay";
-char*  k_Release     = "Release";
+const char* k_Damper        = "Damper";
+const char* k_Max           = "Max";
+const char* k_Min           = "Min";
+const char* k_Sustain       = "Sustain";
+const char* k_Attack        = "Attack";
+const char* k_Decay         = "Decay";
+const char* k_Release       = "Release";
 
 //###########################################
 // Configuration voice keys
 //###########################################
-char*  k_Midi        = "Midi";
-char*  k_OutEnable   = "OutEnable";
-char*  k_Noise       = "Noise";
-char*  k_PulseWidth  = "PulseWidth";
-char*  k_Ramp        = "Ramp";
-char*  k_OutMask     = "OutMask";
-char*  k_FilterCtrl  = "FilterCtrl";
-char*  k_OscEnv      = "OscEnv";
-char*  k_FltEnv      = "FltEnv";
+const char* k_Midi          = "Midi";
+const char* k_OutEnable     = "OutEnable";
+const char* k_Noise         = "Noise";
+const char* k_PulseWidth    = "PulseWidth";
+const char* k_Ramp          = "Ramp";
+const char* k_OutMask       = "OutMask";
+const char* k_FilterCtrl    = "FilterCtrl";
+const char* k_OscEnv        = "OscEnv";
+const char* k_FltEnv        = "FltEnv";
 
+//###########################################
+// Tuning keys
+//###########################################
+const char* k_Tuning        = "Tuning";
+
+//###########################################
+// File namimg
+//###########################################
+const char* n_Tuning        = "/Tuning.kbd";
+const char* n_DefaultConfig = "/DEFAULT.syc";
+const char* n_PresetConfig  = "/PRE-";
+const char* n_SynthConfig   = ".syc";
 

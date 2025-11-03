@@ -127,16 +127,6 @@ bool MONITOR_C::PromptZap (void)
         case 'Y':
             switch ( InputMode )
                 {
-                case CLR_TUNING:
-                    Settings.ClearTuning ();
-                    Serial << 9 << endl << "\nCleared tuning settings." << endl;
-                    ESP.restart ();
-                    break;
-                case CLR_CONFIG:
-                    Settings.ClearConfig ();
-                    Serial << 9 << endl << "\nCleared configuration settings." << endl;
-                    ESP.restart ();
-                    break;
                 default:
                     break;
                 }
@@ -250,14 +240,6 @@ void MONITOR_C::MenuSel (void)
                     SynthConfig.DumpFiles ();
                     Mode (MENU);
                     break;
-                case 'C':
-                    InputPrompt ("  Clearing configuration settings");
-                    Mode (CLR_CONFIG);
-                    break;
-                case 'T':
-                    InputPrompt ("  Clearing tuning settings");
-                    Mode (CLR_TUNING);
-                    break;
                 case ' ':           // Just move the cursor down a couple of lines
                     Serial << "...\n\n";
                     break;
@@ -295,15 +277,13 @@ void MONITOR_C::Menu (void)
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << "\tF   - Dump json files" << endl;
     Serial << endl;
-    Serial << "\tz   - Test function #1" << endl;
-    Serial << "\tx   - Test function #2" << endl;
-    Serial << "\tc   - Test function #3" << endl;
-    Serial << "\tv   - Test function #4" << endl;
+//    Serial << "\tz   - Test function #1" << endl;
+//    Serial << "\tx   - Test function #2" << endl;
+//    Serial << "\tc   - Test function #3" << endl;
+//    Serial << "\tv   - Test function #4" << endl;
     Serial << endl;
     Serial << "\tS   - SSID" << endl;
     Serial << "\tP   - Password" << endl;
-    Serial << "\tC   - Clear configuration settings" << endl;
-    Serial << "\tT   - Clear tuning settings" << endl;
     Serial << "\tF12 - Reset" << endl;
     Serial << endl;
     }
@@ -369,7 +349,6 @@ void MONITOR_C::Loop (void)
                 case VARIABLE:
                     TextIn ();
                     break;
-                case CLR_TUNING:
                 case CLR_CONFIG:
                     if ( PromptZap () )
                         Mode (MENU);
