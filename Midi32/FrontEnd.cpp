@@ -102,6 +102,7 @@ void PageAdvance ()
     {
     byte  m    = SelectedMidi;
     short next = SelectedMap + 1;
+    short index;
 
     if ( LoadMode || SaveMode|| ResolutionMode || MapSelectMode )
         {
@@ -129,7 +130,7 @@ void PageAdvance ()
         return;
         }
 
-    short index = next - MAP_COUNT;
+    index = next - MAP_COUNT;
     if ( next == MAP_COUNT )
         {
         SelectedVoice  = -1;
@@ -143,6 +144,7 @@ void PageAdvance ()
 
     while ( next < (MAP_COUNT * 2) )
         {
+        index = next - MAP_COUNT;
         SelectedVoice = -1;
         if ( m == SynthConfig.Voice[index].GetVoiceMidi () )
             {

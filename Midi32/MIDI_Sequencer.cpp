@@ -87,7 +87,7 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
     switch ( type )
         {
         case 0x00:
-            DBG ("nu Bank select: %d", value);
+            DBG ("n/u Bank select: %d", value);
             break;
 
         case 0x01:      // Modulation wheel
@@ -118,7 +118,7 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
             break;
 
         case 0x07:      // Channel volume
-            DBG ("nu Channel volume: %d", value);
+            DBG ("n/u Channel volume: %d", value);
             break;
 
         case 0x0B:
@@ -128,12 +128,16 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
                 VoiceArray[z]->Expression (mchan, zf);
             break;
 
+        case 0x10:
+            DBG ("n/u Pan: %d", value);
+            break;
+
         case 0x20:
-            DBG ("nu Bank select LSB: %d", value);
+            DBG ("n/u Bank select LSB: %d", value);
             break;
 
         case 0x21:      // LSB Modulation wheel
-            DBG ("nu Modulation wheel: LSB %d", value);
+            DBG ("n/u Modulation wheel: LSB %d", value);
             break;
 
         case 0x40:      // Damper pedal (sustain)
@@ -146,27 +150,27 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
         case 0x41:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("nu Portamento:  %d", (( zl ) ? "ON" : "OFF"));
+            DBG ("n/u Portamento:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x42:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("nu Sostenuto:  %d", (( zl ) ? "ON" : "OFF"));
+            DBG ("nun/uSostenuto:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x43:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("nu Soft pedal:  %d", (( zl ) ? "ON" : "OFF"));
+            DBG ("n/u Soft pedal:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x5B:
-            DBG ("nu Reverb send level: %d", value);
+            DBG ("n/u Reverb send level: %d", value);
             break;
 
         case 0x5D:
-            DBG ("nu Chorus send level: %d", value);
+            DBG ("n/u Chorus send level: %d", value);
             break;
 
         case 0x64:
