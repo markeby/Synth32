@@ -115,7 +115,7 @@ private:
     String          Title;
 
 public:
-         LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, lv_palette_t p);
+         LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, short w, lv_palette_t p);
     void Active         (bool state);
     void SetLevel       (int val);
     void Mute           (bool sel);

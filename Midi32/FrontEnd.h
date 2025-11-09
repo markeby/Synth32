@@ -33,7 +33,7 @@ extern KEY_T            Up;
 extern ENV_GENERATOR_C  EnvADSL;                    // Envelope generator creation class
 extern SYNTH_LFO_C      Lfo[2];                     // Array of LFO interfaces
 extern VOICE_C*         VoiceArray[VOICE_COUNT];    // Pointers to each of the voice module devices
-extern byte            PitchBendFactor[MAX_MIDI];
+extern byte             PitchBendFactor[MAX_MIDI];
 
 extern bool             ResolutionMode;
 extern bool             MapSelectMode;
@@ -134,6 +134,7 @@ void Damper                 (byte mchan, bool state);
 //#######################################################################
 // Tuning.cpp
 void Tuning                 (void);
+void RecoverTuning          (void);
 void StartTuning            (void);
 void TuningAdjust           (bool up);
 void SetTuningLevel         (short ch, short data);

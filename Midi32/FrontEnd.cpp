@@ -15,7 +15,6 @@
 
 #ifdef DEBUG_SYNTH
 static const char* Label  = "TOP";
-static const char* LabelM = "M";
 #define DBG(args...) {if(DebugSynth){DebugMsg(Label,DEBUG_NO_INDEX,args);}}
 #else
 #define DBG(args...)
@@ -232,11 +231,11 @@ void LoopSynth ()
                 doit = oldest;
             if ( doit >= 0 )                                // only process valid channels
                 {
+                DBG ("Key down > %d   Velocity > %d  Port > %d", Down.Key, Down.Velocity, doit);
                 Lfo[0].HardReset (Down.Trigger);
                 Lfo[1].HardReset (Down.Trigger);
                 VoiceArray[doit]->NoteSet (Down.Trigger, Down.Key, Down.Velocity);   // set the channel
                 }
-            DBG ("Key down > %d   Velocity > %d  Port > %d", Down.Key, Down.Velocity, doit);
             Down.Trigger = 0;                         // release the trigger
             }
 

@@ -252,7 +252,10 @@ void loop (void)
         if ( DisplayMessage.Loop () )
             {
             printf ("\n\t>>> Display reset requested\n");
-            ResolveMapAllocation ();
+            if ( SetTuning )
+                RecoverTuning ();
+            else
+                ResolveMapAllocation();
             }
         I2cDevices.Loop ();
         }

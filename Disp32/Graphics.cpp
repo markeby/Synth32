@@ -65,9 +65,9 @@ static const char* filterKeys[]   = { "1", "4", "2", "5", "3", "6" };
 
         title           = new TITLE_WIDGET_C (panel, filterTitle[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 23);
-        ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START",   filterKeys[z],   0, 210, LV_PALETTE_INDIGO);
-        ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END",     filterKeys[z + 2],  73, 210, LV_PALETTE_TEAL);
-        ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", filterKeys[z + 4], 146, 210, LV_PALETTE_ORANGE);
+        ValueStart[z]   = new LEVEL_WIDGET_C (panel, "START",   filterKeys[z],   0, 210, 63, LV_PALETTE_INDIGO);
+        ValueEnd[z]     = new LEVEL_WIDGET_C (panel, "END",     filterKeys[z + 2],  73, 210, 63, LV_PALETTE_TEAL);
+        ValueSustain[z] = new LEVEL_WIDGET_C (panel, "SUSTAIN", filterKeys[z + 4], 146, 210, 63, LV_PALETTE_ORANGE);
 
         x += 360;
         }
@@ -228,8 +228,8 @@ static const char* OscKeys[]   = { "1", "2", "3", "4", "5", "8" };
         KeyLabel (panel, key.c_str (), 0, 0);
         TitleControl[z] = new TITLE_WIDGET_C      (panel, VoiceOptText[z]);
         MeterADSR[z]    = new ADSR_METER_WIDGET_C (panel, 0, 18);
-        MaxLevel[z]     = new LEVEL_WIDGET_C      (panel, "MAX",     OscKeys[z],  0, 210, LV_PALETTE_INDIGO);
-        SustainLevel[z] = new LEVEL_WIDGET_C      (panel, "SUSTAIN", OscKeys[z], 70, 210, LV_PALETTE_ORANGE);
+        MaxLevel[z]     = new LEVEL_WIDGET_C      (panel, "MAX",     OscKeys[z],  0, 210, 63, LV_PALETTE_INDIGO);
+        SustainLevel[z] = new LEVEL_WIDGET_C      (panel, "SUSTAIN", OscKeys[z], 70, 210, 63, LV_PALETTE_ORANGE);
         SustainLevel[z]->Active (false);
 
         switch ( z )
@@ -247,7 +247,7 @@ static const char* OscKeys[]   = { "1", "2", "3", "4", "5", "8" };
         x += 145;
         }
 
-    MasterLevel = new LEVEL_WIDGET_C (base, "MASTER", OscKeys[5],  727, 252, LV_PALETTE_INDIGO);
+    MasterLevel = new LEVEL_WIDGET_C (base, "MASTER", OscKeys[5],  727, 252, 63, LV_PALETTE_INDIGO);
     }
 
 //#######################################################################
@@ -649,11 +649,11 @@ static const char* TuneKeys[]   = { "7", "8" };
 
     x = 19;
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++, x+=90 )
-        LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceOptText[z], OscKeys[z], x, y, LV_PALETTE_INDIGO);
+        LevelTuning[z] = new LEVEL_WIDGET_C (base, VoiceOptText[z], OscKeys[z], x, y, 80, LV_PALETTE_INDIGO);
 
     x += 81;
     for ( int z = 0;  z < FILTER_DEVICES; z++, x+=90 )
-        LevelFilter[z] = new LEVEL_WIDGET_C (base, filterTitle[z], TuneKeys[z], x, y, LV_PALETTE_INDIGO);
+        LevelFilter[z] = new LEVEL_WIDGET_C (base, filterTitle[z], TuneKeys[z], x, y, 80, LV_PALETTE_INDIGO);
     }
 
 //#######################################################################

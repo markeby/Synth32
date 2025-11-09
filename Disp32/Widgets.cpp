@@ -293,7 +293,7 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
 
 //#######################################################################
 //#######################################################################
-    LEVEL_WIDGET_C::LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, lv_palette_t p)
+    LEVEL_WIDGET_C::LEVEL_WIDGET_C (lv_obj_t* base, const char* title, const char* ks, short x, short y, short w, lv_palette_t p)
     {
     short size = 127;
 
@@ -302,7 +302,7 @@ void ADSR_METER_WIDGET_C::SetRelease (int val)
 
     // Create the panel for placing the fader
     Panel = lv_obj_create (base);
-    lv_obj_set_size             (Panel, 63, size + 50);
+    lv_obj_set_size             (Panel, w, size + 50);
     lv_obj_set_pos              (Panel, x, y);
     lv_obj_set_style_pad_top    (Panel, 1, 0);
     lv_obj_set_style_pad_left   (Panel, 2, 0);
@@ -586,7 +586,7 @@ static const char* fltText[] = { "OSC", "LP", "LBP", "UBP", "HP" };
         lv_label_set_recolor (Osc[z], true);
         lv_obj_align (Osc[z], LV_ALIGN_BOTTOM_LEFT, x, -4);
         lv_obj_add_style (Osc[z], &Style, 0);
-        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
+        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z + 1);
         }
     }
 
@@ -594,8 +594,8 @@ static const char* fltText[] = { "OSC", "LP", "LBP", "UBP", "HP" };
 void TUNE_OSC_WIDGET_C::Set (short chan)
     {
     for ( short z = 0;  z < VOICE_COUNT;  z++ )
-        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z);
-    lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan);
+        lv_label_set_text_fmt (Osc[z], "#D0D0D0 %d#", z + 1);
+    lv_label_set_text_fmt (Osc[chan], "#000000 %d#", chan + 1);
     }
 
 //#######################################################################

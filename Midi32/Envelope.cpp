@@ -57,6 +57,7 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     _Name         = name;
     _DevicePortIO = device;
     _Index        = index;
+    _Muted        = false;
     _DualUse      = false;
     _Current      = 0;
     _Top          = 0;
@@ -76,6 +77,7 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
 void ENVELOPE_C::Mute (bool state)
     {
     _Muted = state;
+    DBG ("Mute set to %d", state);
     Clear ();
     }
 

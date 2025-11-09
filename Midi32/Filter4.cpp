@@ -11,7 +11,7 @@
 #include "Debug.h"
 
 #ifdef DEBUG_SYNTH
-static const char* Label = "VCO";
+static const char* Label = "FLT";
 #define DBG(args...) {if(DebugSynth){ DebugMsg(Label,Number,args);}}
 #else
 #define DBG(args...)
@@ -83,6 +83,7 @@ void FLT4_C::SetOutMap (byte fmap)
 //#######################################################################
 void FLT4_C::NoteSet (byte key, byte velocity)
     {
+    DBG ("FIlter Note set by %d with velocity %d", key, velocity);
     if ( ControlSrc[0] == FILTER_CTRL_C::ENVELOPE )
         {
         Funct[0]->Clear ();

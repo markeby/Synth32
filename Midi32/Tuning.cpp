@@ -92,6 +92,13 @@ void Tuning ()
     }
 
 //#######################################################################
+void RecoverTuning ()
+    {
+    DisplayMessage.PageTuning ();
+    change_settings = true;
+    }
+
+//#######################################################################
 void StartTuning ()
     {
     uint16_t zb = 0;
