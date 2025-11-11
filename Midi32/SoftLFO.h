@@ -28,13 +28,13 @@ private:
 
 public:
           SOFT_LFO_C    (void);
-    void  Loop          (float millisec);
+    void  Loop          (void);
     void  Multiplier    (byte mchan, float value);
     void  ResetControl  (void)              {  _Modulation = 0; }
     void  SetMidi       (byte mchan)        { _Midi = mchan; }
     byte  GetMidi       (void)              { return (_Midi); }
-    float GetTri        (void)              { return (( _Modulation > .005 ) ? _Triangle : 0.0); }
-    float GetSin        (void)              { return (( _Modulation > .005 ) ? _Sine : 0.0); }
+    float GetTri        (void)              { return (_Triangle * _Modulation); }
+    float GetSin        (void)              { return (_Sine * _Modulation); }
     void  SetFreqCoarse (short value)       { _FreqCoarse = value; ProcessFreq (); }
     void  SetFreqFine   (short value);
     short GetFreq       (void)              { return (_Freq); }

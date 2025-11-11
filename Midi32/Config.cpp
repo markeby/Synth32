@@ -25,7 +25,6 @@ static const char* LabelD = "CFG";
     Cs.MasterLevel   = 1.0;
     Cs.MapVoiceMidi  = 1;
     Cs.MapVoiceNoise = 0;
-    Cs.OutputEnable  = 0;
     Cs.OutputMask  = 0;
     Cs.RampDirection = false;
     Cs.PulseWidth    = 2048;
@@ -39,18 +38,17 @@ static const char* LabelD = "CFG";
         Cs.OscEnv[z].MaxLevel     = 0.0;
         Cs.OscEnv[z].MinLevel     = 0.0;
         SelectedOscEnvelope[z]    = false;
-        if ( z < FILTER_DEVICES )               // filter initialization
-            {
-            Cs.FltEnv[z].AttackTime   = 1.0;
-            Cs.FltEnv[z].DecayTime    = 1.0;
-            Cs.FltEnv[z].ReleaseTime  = 1.0;
-            Cs.FltEnv[z].SustainLevel = 0.0;
-            Cs.FltEnv[z].MaxLevel     = 0.0;
-            Cs.FltEnv[z].MinLevel     = 0.0;
-            Cs.FilterCtrl[2]          = 0;
-            SelectedFltEnvelope[z]    = false;
-            }
         }
+
+    Cs.FltEnv.AttackTime   = 1.0;
+    Cs.FltEnv.DecayTime    = 1.0;
+    Cs.FltEnv.ReleaseTime  = 1.0;
+    Cs.FltEnv.SustainLevel = 0.0;
+    Cs.FltEnv.MaxLevel     = 0.0;
+    Cs.FltEnv.MinLevel     = 0.0;
+    Cs.FilterQ             = 0.5;
+    Cs.FilterCtrl          = 0;
+    SelectedFltEnvelope    = false;
 
     // Default preload state
     int preset = 1;
@@ -78,22 +76,19 @@ JsonDocument SYNTH_VOICE_CONFIG_C::CreateEnvJSON (ENVELOPE_T& env)
 //#######################################################################
 JsonDocument SYNTH_VOICE_CONFIG_C::CreateJSON ()
     {
-    int          z;
     JsonDocument cfg;
 
     cfg[k_Midi]        = Cs.MapVoiceMidi;
-    cfg[k_OutEnable]   = Cs.OutputEnable;
     cfg[k_Noise]       = Cs.MapVoiceNoise;
     cfg[k_PulseWidth]  = Cs.PulseWidth;
     cfg[k_MasterLevel] = Cs.MasterLevel;
     cfg[k_Ramp]        = Cs.RampDirection;
     cfg[k_OutMask]     = Cs.OutputMask;
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        cfg[k_FilterCtrl][z] = Cs.FilterCtrl[z];
-    for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
+    cfg[k_FilterQ]     = Cs.FilterQ;
+    cfg[k_FilterCtrl]  = Cs.FilterCtrl;
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         cfg[k_OscEnv][z] = CreateEnvJSON (Cs.OscEnv[z]);
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        cfg[k_FltEnv][z] = CreateEnvJSON (Cs.FltEnv[z]);
+    cfg[k_FltEnv] = CreateEnvJSON (Cs.FltEnv);
     return (cfg);
     }
 
@@ -115,18 +110,16 @@ void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonObject cfg)
     int z;
 
     Cs.MapVoiceMidi  = cfg[k_Midi];
-    Cs.OutputEnable  = cfg[k_OutEnable];
     Cs.MapVoiceNoise = cfg[k_Noise];
     Cs.MasterLevel   = cfg[k_MasterLevel];
     Cs.PulseWidth    = cfg[k_PulseWidth];
     Cs.RampDirection = cfg[k_Ramp];
     Cs.OutputMask    = cfg[k_OutMask];
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        Cs.FilterCtrl[z] = cfg[k_FilterCtrl][z];
+    Cs.FilterQ       = cfg[k_FilterQ];
+    Cs.FilterCtrl    = cfg[k_FilterCtrl];
     for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
         LoadEnvJSON (cfg[k_OscEnv][z], Cs.OscEnv[z]);
-    for ( z = 0;  z < FILTER_DEVICES;  z++ )
-        LoadEnvJSON (cfg[k_FltEnv][z], Cs.FltEnv[z]);
+    LoadEnvJSON (cfg[k_FltEnv], Cs.FltEnv);
     }
 
 
@@ -351,7 +344,6 @@ void SYNTH_CONFIG_C::DumpFiles ()
         String path = String("/") + name;
         printf ("> %s\n", name.c_str ());
         file = OpenRead (path);
-        DbgD (file);
         if ( file )
             {
             while ( file.available () )

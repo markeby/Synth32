@@ -23,7 +23,7 @@ I2C_CLUSTERS_T  BusI2C[] = { 0, 1, 7, -1 };
 I2C_LOCATION_T  DevicesI2C[] =
 //    Cluster   Slice   Port   DtoA  AtoD    Dig     Name
     {
-      { 1,        7,     0x38,     0,    0,      8, "Dig 0   - 7"   }, // Test position for new MUXmixer
+      { 1,        7,     0x38,     0,    0,      8, "Dig 0   - 7"   }, // MUXmixer
       { 1,        7,     0x60,     4,    0,      0, "D/A 8   - 11"  },
       { 1,        6,     0x21,     0,    0,     16, "Dig 12  - 27"  }, // Noise output
       { 1,        5,     0x38,     0,    0,      8, "Dig 28  - 35"  }, // LFO controls
@@ -247,7 +247,6 @@ void loop (void)
 
     if ( SynthActive )
         {
-        SoftLFO.Loop (DeltaTimeMilli);      // Process sine wave for envelope generator level modulation
         LoopSynth ();
         if ( DisplayMessage.Loop () )
             {

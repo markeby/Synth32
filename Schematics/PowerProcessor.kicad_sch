@@ -7,7 +7,7 @@
 	(lib_symbols)
 	(rectangle
 		(start 120.396 16.256)
-		(end 145.796 35.306)
+		(end 145.796 29.21)
 		(stroke
 			(width 0)
 			(type default)
@@ -41,9 +41,21 @@
 		)
 		(uuid c013db11-e203-4932-a8f2-314f76bb8177)
 	)
-	(text "MIDI\nConnector"
+	(rectangle
+		(start 120.396 31.496)
+		(end 145.796 44.45)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(fill
+			(type none)
+		)
+		(uuid f9dc9373-44a6-4917-87f9-72efdc876a11)
+	)
+	(text "MIDI\nConnector\n1"
 		(exclude_from_sim no)
-		(at 133.35 22.86 0)
+		(at 129.794 27.178 0)
 		(effects
 			(font
 				(size 2.032 2.032)
@@ -51,6 +63,17 @@
 			(justify bottom)
 		)
 		(uuid "2b52c995-1200-4b8e-bbfb-875a31a31466")
+	)
+	(text "MIDI\nConnector\n2\n"
+		(exclude_from_sim no)
+		(at 130.048 42.672 0)
+		(effects
+			(font
+				(size 2.032 2.032)
+			)
+			(justify bottom)
+		)
+		(uuid "6b553af2-da12-49c2-87ca-c701886a1208")
 	)
 	(text "USB	Power Distribution"
 		(exclude_from_sim no)
@@ -73,12 +96,6 @@
 			(justify left bottom)
 		)
 		(uuid "c1658713-00b6-4b85-bbe5-238711a94d79")
-	)
-	(junction
-		(at 242.57 54.61)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f4548091-2c0f-4444-a646-cfa109639b4b")
 	)
 	(bus
 		(pts
@@ -142,7 +159,17 @@
 	)
 	(bus
 		(pts
-			(xy 167.64 36.83) (xy 167.64 27.94)
+			(xy 259.08 57.15) (xy 247.65 57.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "66b990d5-0b1c-407b-94f8-3d2725ffda16")
+	)
+	(bus
+		(pts
+			(xy 151.13 33.02) (xy 151.13 22.86)
 		)
 		(stroke
 			(width 0)
@@ -152,17 +179,7 @@
 	)
 	(bus
 		(pts
-			(xy 262.89 54.61) (xy 242.57 54.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9a437440-86c6-475d-8f86-7dc2cd4abf89")
-	)
-	(bus
-		(pts
-			(xy 167.64 27.94) (xy 142.24 27.94)
+			(xy 151.13 22.86) (xy 142.24 22.86)
 		)
 		(stroke
 			(width 0)
@@ -182,17 +199,17 @@
 	)
 	(bus
 		(pts
-			(xy 242.57 90.17) (xy 262.89 90.17)
+			(xy 247.65 57.15) (xy 247.65 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c831d190-5515-46a7-880e-97b3ca90b55a")
+		(uuid "ac6c94da-ef58-450a-af90-a23efc35b872")
 	)
 	(bus
 		(pts
-			(xy 167.64 36.83) (xy 179.07 36.83)
+			(xy 151.13 33.02) (xy 177.8 33.02)
 		)
 		(stroke
 			(width 0)
@@ -212,23 +229,33 @@
 	)
 	(bus
 		(pts
-			(xy 242.57 54.61) (xy 242.57 90.17)
+			(xy 92.71 46.99) (xy 179.07 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dc04c182-fe90-4d32-a325-17cbdc12739d")
+		(uuid "e267476a-3bbd-434d-8740-e2712d7b9a2e")
 	)
 	(bus
 		(pts
-			(xy 92.71 45.72) (xy 179.07 45.72)
+			(xy 247.65 78.74) (xy 259.08 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e7ff93c9-a68a-4066-b7d1-46b52faa6bd5")
+		(uuid "eea68223-0ab8-4c9f-b670-ae00a912d889")
+	)
+	(bus
+		(pts
+			(xy 143.51 38.1) (xy 177.8 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f13035e2-2291-4d29-8834-c87d7c48ae45")
 	)
 	(bus
 		(pts
@@ -242,7 +269,7 @@
 	)
 	(bus
 		(pts
-			(xy 242.57 54.61) (xy 215.9 54.61)
+			(xy 215.9 54.61) (xy 259.08 54.61)
 		)
 		(stroke
 			(width 0)
@@ -262,7 +289,7 @@
 	)
 	(hierarchical_label "J29"
 		(shape bidirectional)
-		(at 262.89 54.61 0)
+		(at 259.08 54.61 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -273,7 +300,7 @@
 	)
 	(hierarchical_label "J29"
 		(shape bidirectional)
-		(at 179.07 36.83 0)
+		(at 177.8 33.02 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -281,6 +308,17 @@
 			(justify left)
 		)
 		(uuid "0dda99c9-0317-468c-9c21-7c1752d3089a")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
+		(at 259.08 57.15 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "20bcd884-5c8c-429a-b8da-b6d00b2ce908")
 	)
 	(hierarchical_label "J9"
 		(shape input)
@@ -306,7 +344,7 @@
 	)
 	(hierarchical_label "J29"
 		(shape bidirectional)
-		(at 179.07 45.72 0)
+		(at 179.07 46.99 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -372,7 +410,7 @@
 	)
 	(hierarchical_label "J30"
 		(shape output)
-		(at 142.24 27.94 180)
+		(at 142.24 22.86 180)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -392,9 +430,20 @@
 		)
 		(uuid "7aaca99b-7034-4099-bec4-6a675b61e63a")
 	)
+	(hierarchical_label "J30"
+		(shape output)
+		(at 143.51 38.1 180)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify right)
+		)
+		(uuid "825490e0-e9be-4ba2-a039-9c01706ecc0d")
+	)
 	(hierarchical_label "J29"
 		(shape bidirectional)
-		(at 262.89 90.17 0)
+		(at 259.08 78.74 0)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -427,6 +476,17 @@
 	)
 	(hierarchical_label "J29"
 		(shape bidirectional)
+		(at 177.8 38.1 0)
+		(effects
+			(font
+				(size 1.016 1.016)
+			)
+			(justify left)
+		)
+		(uuid "d315bf9a-2b1a-40f5-8ebe-61d6ff7faf05")
+	)
+	(hierarchical_label "J29"
+		(shape bidirectional)
 		(at 118.11 62.23 0)
 		(effects
 			(font
@@ -449,7 +509,7 @@
 	)
 	(hierarchical_label "J30"
 		(shape output)
-		(at 92.71 45.72 180)
+		(at 92.71 46.99 180)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -533,6 +593,8 @@
 			(effects
 				(font
 					(size 2.032 2.032)
+					(thickness 0.254)
+					(italic yes)
 				)
 				(justify left bottom)
 			)
@@ -556,8 +618,8 @@
 		)
 	)
 	(sheet
-		(at 257.81 76.2)
-		(size 60.96 34.29)
+		(at 257.81 72.39)
+		(size 39.37 11.43)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -570,17 +632,19 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "28ef12e1-08ba-4849-92c9-fc35a7a20bc2")
-		(property "Sheetname" "I2C Multilplex2"
-			(at 275.082 79.756 0)
+		(property "Sheetname" "I2C Multilplexer 16x"
+			(at 262.636 75.946 0)
 			(effects
 				(font
 					(size 2.032 2.032)
+					(thickness 0.254)
+					(italic yes)
 				)
 				(justify left bottom)
 			)
 		)
 		(property "Sheetfile" "I2C_Multiplax.kicad_sch"
-			(at 257.81 125.0446 0)
+			(at 257.81 121.2346 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -598,8 +662,8 @@
 		)
 	)
 	(sheet
-		(at 257.81 34.29)
-		(size 60.96 34.29)
+		(at 257.81 48.26)
+		(size 39.37 12.7)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -612,17 +676,19 @@
 			(color 0 0 0 0.0000)
 		)
 		(uuid "33e457f4-5b81-46f5-9d52-61db4533dabb")
-		(property "Sheetname" "DigitalToAnalog-3"
-			(at 273.812 38.1 0)
+		(property "Sheetname" "DigitalToAnalog-8"
+			(at 262.636 51.816 0)
 			(effects
 				(font
 					(size 2.032 2.032)
+					(thickness 0.254)
+					(italic yes)
 				)
 				(justify left bottom)
 			)
 		)
 		(property "Sheetfile" "Analog-1.kicad_sch"
-			(at 260.1214 104.648 0)
+			(at 260.1214 118.618 0)
 			(effects
 				(font
 					(size 1.016 1.016)
@@ -659,6 +725,8 @@
 			(effects
 				(font
 					(size 2.032 2.032)
+					(thickness 0.254)
+					(italic yes)
 				)
 				(justify left bottom)
 			)
@@ -701,6 +769,8 @@
 			(effects
 				(font
 					(size 2.032 2.032)
+					(thickness 0.254)
+					(italic yes)
 				)
 				(justify left bottom)
 			)

@@ -39,6 +39,7 @@ const char* k_MasterLevel   = "MasterLevel";
 const char* k_Ramp          = "Ramp";
 const char* k_OutMask       = "OutMask";
 const char* k_FilterCtrl    = "FilterCtrl";
+const char* k_FilterQ       = "FilterQ";
 const char* k_OscEnv        = "OscEnv";
 const char* k_FltEnv        = "FltEnv";
 

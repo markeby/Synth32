@@ -47,10 +47,13 @@ void SOFT_LFO_C::OutputFrequency ()
     }
 
 //#######################################################################
-void SOFT_LFO_C::Loop (float millisec)
+// Generator for sin  and triangle waves
+//  - Output is -1 to +1
+//#######################################################################
+void SOFT_LFO_C::Loop ()
     {
     // Calculate current position of wavelength and remove overflow
-    _Current += millisec;
+    _Current += DeltaTimeMilli;
     if ( _Current > _WaveLength )
         _Current -= _WaveLength;
 
@@ -59,15 +62,19 @@ void SOFT_LFO_C::Loop (float millisec)
 
     //Calculate position in triangle wave
     if ( zt > 1.0 )                 //going down
-        zt = (1 - (zt - 1) - 0.5) * 2;
+        _Triangle = (1 - (zt - 1) - 0.5) * 2;
     else                            //going up
-        zt = (zt - 0.5) * 2;
-    _Triangle = zt * _Modulation;   //Factor in modulation wheel position
+        _Triangle = (zt - 0.5) * 2;
 
-    //Calculate position in sine wave
-    zr = sin (zr  * 6.28);
-    _Sine = zr * _Modulation;       //Factor in modulation wheel position
-//    I2cDevices.D2Analog (180, (uint16_t)(this->Sine * 2047.0));     // for calibration testing
+    _Sine = sin (zr  * 6.28);       //Calculate position in sine wave
+
+#if 0
+    uint16_t zs = (uint16_t)((_Sine + 1.0) * 2047.0);
+    uint16_t zz = (uint16_t)((_Triangle + 1.0) * 2047.0);
+    I2cDevices.D2Analog (181, zz);     // for calibration testing
+    I2cDevices.D2Analog (180, zs);     // for calibration testing
+    I2cDevices.UpdateAnalog  ();
+#endif
     }
 
 //#######################################################################

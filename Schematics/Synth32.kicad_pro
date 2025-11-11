@@ -411,7 +411,7 @@
     ],
     [
       "0961503a-ee36-4d85-ba6e-69b8d022a06b",
-      "Osc 2 Carrier"
+      "Carrier Osc"
     ],
     [
       "368144d6-e85e-4968-b172-9b7cebe9c4ab",
@@ -427,7 +427,7 @@
     ],
     [
       "4ee2fb70-c02b-45ff-b6fc-7c263225c33f",
-      "3 State VCF (page 8)"
+      "3 State VCF"
     ],
     [
       "e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c",
@@ -435,7 +435,7 @@
     ],
     [
       "a58131de-3c81-4e3c-a577-8b273e08214f",
-      "10 Chan Mixer1"
+      "Audio Mixer 10"
     ],
     [
       "33a531ad-adab-44e4-8605-e758909b7125",
@@ -443,11 +443,11 @@
     ],
     [
       "28ef12e1-08ba-4849-92c9-fc35a7a20bc2",
-      "I2C Multilplex2"
+      "I2C Multilplexer 16x"
     ],
     [
       "33e457f4-5b81-46f5-9d52-61db4533dabb",
-      "DigitalToAnalog-3"
+      "DigitalToAnalog-8"
     ],
     [
       "aad42c90-a42a-4d30-bdda-262c4c717c2c",

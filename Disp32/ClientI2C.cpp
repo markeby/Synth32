@@ -104,6 +104,9 @@ void MESSAGE_CLIENT_C::Process ()
             case CMD_C::PAGE_SHOW:              // 3 byte message
                 Graphics.PageSelect ((PAGE_C)ptop.Bytes[2]);
                 break;
+            case CMD_C::GENERAL_PAGE_UPDATE:
+                Graphics.GeneralCommand (ptop.Index, (byte)ptop.Channel, ptop.Effect, value);
+                break;
             default:                            // any other message goes nowher
                 break;
             }

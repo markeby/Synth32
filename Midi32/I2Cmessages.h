@@ -104,27 +104,21 @@ public:
     void TuningLevel (byte channel, byte value)
         {
         SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                    0, channel,
-                    DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
-                    value);
+                    0, channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         }
 
     //#################################################
     void TuningFilter (byte channel, byte value)
         {
         SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                    0, channel,
-                    DISP_MESSAGE_N::EFFECT_C::FILTER,
-                    value);
+                    0, channel, DISP_MESSAGE_N::EFFECT_C::FILTER, value);
         }
 
     //#################################################
     void TuningControl (byte value)
         {
         SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_TUNING,
-                    0, 0,
-                    DISP_MESSAGE_N::EFFECT_C::CONTROL,
-                    value);
+                    0, 0, DISP_MESSAGE_N::EFFECT_C::CONTROL, value);
         }
 
     //#################################################
@@ -136,95 +130,81 @@ public:
     //#################################################
     void SendMapVoiceMidi (byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MAP,
-                    0, channel, effect, value);
+        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MAP, 0, channel, effect, value);
         }
 
     //#################################################
     void SendUpdateMod (byte channel, byte index, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD,
-                    index, channel, effect, value);
+        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_MOD, index, channel, effect, value);
+        }
+
+    //#################################################
+    //#################################################
+    void SendGeneral (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
+        {
+        SendUpdate(DISP_MESSAGE_N::CMD_C::GENERAL_PAGE_UPDATE, mapi, channel, effect, value);
         }
 
     //#################################################
     //#################################################
     void SendUpdateOsc (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE,
-                    mapi, channel, effect, value);
+        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_VOICE, mapi, channel, effect, value);
         }
 
     //#################################################
     void OscDamperMode (byte channel, byte mode)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::DAMPER,
-                       mode);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::DAMPER, mode);
         }
 
     //#################################################
     void OscMute (bool sel)
         {
-        SendUpdateOsc (0, 0,
-                       DISP_MESSAGE_N::EFFECT_C::MUTE,
-                       (( sel ) ? 1 : 0));
+        SendUpdateOsc (0, 0, DISP_MESSAGE_N::EFFECT_C::MUTE, (( sel ) ? 1 : 0));
         }
 
     //#################################################
     void OscSelectedLevel (byte channel, bool sel)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::SELECTED,
-                       (( sel ) ? 1 : 0));
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( sel ) ? 1 : 0));
         }
 
     //#################################################
     void OscAttackTime (byte channel, uint16_t value)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
-                       value);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
         }
 
     //#################################################
     void MasterLevel (uint16_t value)
         {
-        SendUpdateOsc (0, 0,
-                       DISP_MESSAGE_N::EFFECT_C::MASTER_LEVEL,
-                       value);
+        SendGeneral (0, 0, DISP_MESSAGE_N::EFFECT_C::MASTER_LEVEL, value);
         }
 
     //#################################################
     void OscMaxLevel (byte channel, uint16_t value)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
-                       value);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         }
 
     //#################################################
     void OscDecayTime (byte channel, uint16_t value)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
-                       value);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
         }
 
     //#################################################
     void OscReleaseTime (byte channel, uint16_t value)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
-                       value);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
         }
 
     //#################################################
     void OscSustainLevel (byte channel, uint16_t value)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
-                       value);
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
         }
 
     //#################################################
@@ -247,81 +227,68 @@ public:
     //#################################################
     void SendUpdateFlt (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER,
-                    mapi, channel, effect, value);
+        SendUpdate (DISP_MESSAGE_N::CMD_C::UPDATE_PAGE_FILTER, mapi, channel, effect, value);
         }
 
     //#################################################
-    void FltSelected (byte channel, bool sel)
+    void FltSelected (bool sel)
         {
-        SendUpdateOsc (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::SELECTED,
-                       (( sel ) ? 1 : 0));
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( sel ) ? 1 : 0));
         }
 
     //#################################################
-    void FltAttackTime (byte channel, uint16_t value)
+    void FltAttackTime (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
         }
 
     //#################################################
-    void FltDecayTime (byte channel, uint16_t value)
+    void FltDecayTime (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::DECAY_TIME,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
         }
 
     //#################################################
-    void FltReleaseTime (byte channel, uint16_t value)
+    void FltReleaseTime (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
         }
 
     //#################################################
-    void FltStart (byte channel, uint16_t value)
+    void FltStart (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL, value);
         }
 
     //#################################################
-    void FltEnd (byte channel, uint16_t value)
+    void FltEnd (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         }
 
     //#################################################
-    void FltSustain (byte channel, uint16_t value)
+    void FltSustain (uint16_t value)
         {
-        SendUpdateFlt (0, channel,
-                       DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL,
-                       value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
         }
 
     //#################################################
     void FltOut (byte fmap)
         {
-        SendUpdateFlt (0, 0,
-                             DISP_MESSAGE_N::EFFECT_C::MAP_VOICE,
-                             fmap);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, fmap);
         }
 
     //#################################################
-    void FltCtrl (byte fn, byte value)
+    void FltCtrl (byte value)
         {
-        SendUpdateFlt (0, fn,
-                             DISP_MESSAGE_N::EFFECT_C::CONTROL,
-                             value);
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::CONTROL, value);
         }
+
+    //#################################################
+   void FltQ (byte value)
+       {
+       SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::Q, value);
+       }
 
     //#################################################
     //#################################################

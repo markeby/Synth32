@@ -221,7 +221,7 @@ void ENVELOPE_C::SetCurrent (float data)
     }
 
 //#######################################################################
-void ENVELOPE_C::SetOverride (uint32_t data)
+void ENVELOPE_C::SetOverride (uint16_t data)
     {
     I2cDevices.D2Analog (_DevicePortIO, data);
     }
@@ -236,7 +236,7 @@ void ENVELOPE_C::Update ()
         output = _Current;
         if ( _UseSoftLFO )
             {
-            output += output * SoftLFO.GetTri ();
+            output += output * (SoftLFO.GetTri () * _ScaleLFO);
             if ( output > 1.0 )
                 output = 1.0;
             if ( output < 0.0 )

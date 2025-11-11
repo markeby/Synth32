@@ -98,10 +98,10 @@ void NOVATION_XL_C::TemplateReset (byte index)
         zi += 2;                                                        // bump target array index
         }
     delay (100);
-    SendTo (sizeof (midi_sysex_led), midi_sysex_led);                    // Send message to set all LEDs
+    SendTo (sizeof (midi_sysex_led), midi_sysex_led);                   // Send message to set all LEDs
 
     for ( int z = 0;  z < XL_BUTTON_COUNT;  z++ )                       // Initialize button state map for LEDs
-        _ButtonState[z] = XL_MidiMapArray[index][z].Color;
+        _ButtonState[z] = XL_MidiMapArray[index][z + XL_BUTTON_START].Color;
     }
 
 //#######################################################################

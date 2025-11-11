@@ -48,12 +48,12 @@ void MidiMapMode ()
     if ( !MapSelectMode )
         {
         LaunchControl.SelectTemplate (XL_MIDI_MAP_MAPPING);
-        DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
         LoadMode     = false;
         SaveMode     = false;
         MapSelectMode = true;
         for ( int z = (MAP_COUNT * GROUP_COUNT) - 1;  z >= 0;  z-- )
             updateMapModeDisplay (z);
+        DisplayMessage.Page (DISP_MESSAGE_N::PAGE_C::PAGE_MIDI_MAP);
         }
     else
         ResolveMapAllocation ();
@@ -189,26 +189,26 @@ void ResolveMapAllocation ()
             v0.SetMaxLevel        (v, sc.GetOscMaxLevel (v));
             v1.SetMaxLevel        (v, sc.GetOscMaxLevel (v));
             sc.SelectedOscEnvelope[v] = false;
-
-            if ( v < FILTER_DEVICES )                            // filter envelopes setup here
-                {
-                v0.SetFltAttackTime  (v, sc.GetFltAttackTime (v));
-                v1.SetFltAttackTime  (v, sc.GetFltAttackTime (v));
-                v0.SetFltDecayTime   (v, sc.GetFltDecayTime (v));
-                v1.SetFltDecayTime   (v, sc.GetFltDecayTime (v));
-                v0.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
-                v1.SetFltReleaseTime (v, sc.GetFltReleaseTime (v));
-                v0.SetFltSustain     (v, sc.GetFltSustainLevel (v));
-                v1.SetFltSustain     (v, sc.GetFltSustainLevel (v));
-                v0.SetFltStart       (v, sc.GetFltStart (v));
-                v1.SetFltStart       (v, sc.GetFltStart (v));
-                v0.SetFltEnd         (v, sc.GetFltEnd (v));
-                v1.SetFltEnd         (v, sc.GetFltEnd (v));
-                v0.SetFltCtrl        (v, sc.GetFltCtrl (v));
-                v1.SetFltCtrl        (v, sc.GetFltCtrl (v));
-                sc.SelectedFltEnvelope[v] = false;
-                }
             }
+
+        v0.SetFltAttackTime  (sc.GetFltAttackTime ());
+        v1.SetFltAttackTime  (sc.GetFltAttackTime ());
+        v0.SetFltDecayTime   (sc.GetFltDecayTime ());
+        v1.SetFltDecayTime   (sc.GetFltDecayTime ());
+        v0.SetFltReleaseTime (sc.GetFltReleaseTime ());
+        v1.SetFltReleaseTime (sc.GetFltReleaseTime ());
+        v0.SetFltSustain     (sc.GetFltSustainLevel ());
+        v1.SetFltSustain     (sc.GetFltSustainLevel ());
+        v0.SetFltStart       (sc.GetFltStart ());
+        v1.SetFltStart       (sc.GetFltStart ());
+        v0.SetFltEnd         (sc.GetFltEnd ());
+        v1.SetFltEnd         (sc.GetFltEnd ());
+        v0.SetFltQ           (sc.GetFltQ ());
+        v1.SetFltQ           (sc.GetFltQ ());
+        v0.SetFltCtrl        (sc.GetFltCtrl ());
+        v1.SetFltCtrl        (sc.GetFltCtrl ());
+        sc.SelectedFltEnvelope = false;
+
         v0.SetRampDirection (sc.GetRampDirection ());
         v1.SetRampDirection (sc.GetRampDirection ());
         v0.SetPulseWidth    (sc.GetPulseWidth    ());

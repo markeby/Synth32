@@ -195,6 +195,7 @@ void LoopSynth ()
 
     if ( !SetTuning )
         {
+        SoftLFO.Loop ();
         if ( Up.Trigger )
             {
             DBG ("Key up > %d", Up.Key);

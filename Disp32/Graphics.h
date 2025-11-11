@@ -65,20 +65,22 @@ public:
 class PAGE_FILTER_C : protected PAGE_TITLE_C
     {
 private:
-    ADSR_METER_WIDGET_C*    MeterADSR[2];
-    LEVEL_WIDGET_C*         ValueStart[2];
-    LEVEL_WIDGET_C*         ValueEnd[2];
-    LEVEL_WIDGET_C*         ValueSustain[2];
-    lv_obj_t*               Output[5];
-    lv_obj_t*               Ctrl[2][4];
-    byte                    Midi;
+    ADSR_METER_WIDGET_C*    _MeterADSR;
+    LEVEL_WIDGET_C*         _ValueStart;
+    LEVEL_WIDGET_C*         _ValueEnd;
+    LEVEL_WIDGET_C*         _ValueSustain;
+    LEVEL_WIDGET_C*         _Q;
+    LEVEL_WIDGET_C*         _MasterLevel;
+    lv_obj_t*               _Output[5];
+    lv_obj_t*               _Ctrl[4];
+    byte                    _Midi;
 
 public:
               PAGE_FILTER_C (lv_obj_t* base);
-    void      UpdatePage    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void      UpdatePage    (DISP_MESSAGE_N::EFFECT_C effect, short value);
     void      SetMidi       (byte midi);
     void      Select        (byte fmap);
-    void      Control       (byte fn, byte select);
+    void      Control       (byte select);
     };
 
 //############################################
@@ -230,8 +232,9 @@ public:
     void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
     void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
-    void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (ch, effect, value); }
+    void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (effect, value); }
     void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
+    void    GeneralCommand      (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };
 
 extern GRPH_C  Graphics;

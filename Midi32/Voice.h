@@ -56,7 +56,8 @@ public:
     void     SetMidi            (byte mchan)                        { _Midi = mchan; }
     byte     GetMidi            (void)                              { return (_Midi); }
     void     Mute               (bool state)                        { _Osc.Mute (state); }
-    void     SetSoftLFO         (byte fn, bool sel)                 { _Osc.SetSoftLFO (fn, sel); }
+    void     SetSoftLFOtoVCA    (byte fn, bool sel)                 { _Osc.SetSoftLFO (fn, sel); }
+    void     SetSoftLFOtoVCF    (bool sel)                          { _Flt.SetSoftLFO (sel); }
 
     void     Expression         (float level)                       { _Osc.Expression (level); }
     void     Expression         (byte mchan, float level)           { if ( mchan == _Midi ) _Osc.Expression (level); }
@@ -78,27 +79,28 @@ public:
     void     SetPulseWidth      (float percent)                     { _Osc.PulseWidth (percent);  _PulseWidthSet = percent; }
     float    GetPulseWidth      (void)                              { return (_PulseWidthSet); }
 
-    void     SetFltAttackTime   (byte fn, float time)               { _Flt.SetAttackTime (fn, time); }
-    float    GetFltAttackTime   (byte fn)                           { return (_Flt.GetAttackTime (fn)); }
-    void     SetFltDecayTime    (byte fn, float time)               { _Flt.SetDecayTime (fn, time); }
-    float    GetFltDecayTime    (byte fn)                           { return (_Flt.GetDecayTime (fn)); }
-    void     SetFltReleaseTime  (byte fn, float time)               { _Flt.SetReleaseTime (fn, time); }
-    float    GetFltReleaseTime  (byte fn)                           { return (_Flt.GetReleaseTime (fn)); }
-    void     SetFltSustain      (byte fn, float level_percent)      { _Flt.SetSustainLevel (fn, level_percent); }
-    float    GetFltSustain      (byte fn)                           { return (_Flt.GetSustainLevel (fn)); }
-    void     SetFltStart        (byte fn, float level_percent)      { _Flt.SetStart (fn, level_percent); }
-    float    GetFltStart        (byte fn)                           { return (_Flt.GetStart (fn)); }
-    void     SetFltEnd          (byte fn, float level_percent)      { _Flt.SetEnd (fn, level_percent); }
-    float    GetFltEnd          (byte fn)                           { return (_Flt.GetEnd (fn)); }
+    void     SetFltAttackTime   (float time)                        { _Flt.SetAttackTime (time); }
+    float    GetFltAttackTime   (void)                              { return (_Flt.GetAttackTime ()); }
+    void     SetFltDecayTime    (float time)                        { _Flt.SetDecayTime ( time); }
+    float    GetFltDecayTime    (void)                              { return (_Flt.GetDecayTime ()); }
+    void     SetFltReleaseTime  (float time)                        { _Flt.SetReleaseTime (time); }
+    float    GetFltReleaseTime  (void)                              { return (_Flt.GetReleaseTime ()); }
+    void     SetFltSustain      (float level_percent)               { _Flt.SetSustainLevel (level_percent); }
+    float    GetFltSustain      (void)                              { return (_Flt.GetSustainLevel ()); }
+    void     SetFltStart        (float level_percent)               { _Flt.SetStart (level_percent); }
+    float    GetFltStart        (void)                              { return (_Flt.GetStart ()); }
+    void     SetFltEnd          (float level_percent)               { _Flt.SetEnd (level_percent); }
+    float    GetFltEnd          (void)                              { return (_Flt.GetEnd ()); }
     void     SetOutputMask      (byte bitmap);
     byte     GetOutputMask      (void)                              { return (_Flt.GetOutMap ()); }
-    void     SetFltCtrl         (byte fn, int value)                { _Flt.SetCtrl (fn, value); }
-    void     SetFltCtrl         (int value)                         { _Flt.SetCtrl (0, value); _Flt.SetCtrl (1, value); }
-    int      GetFltCtrl         (byte fn)                           { return ((int)_Flt.GetCtrl (fn)); }
+    void     SetFltCtrl         (int value)                         { _Flt.SetCtrl (value); }
+    int      GetFltCtrl         (void)                              { return ((int)_Flt.GetCtrl ()); }
+    void     SetFltQ            (float level_percent)               { _Flt.SetQ (level_percent); }
+    float    GetFltQ            (void)                              { return (_Flt.GetQ ()); }
 
     void     SetTuningNote      (byte note)                         { _Osc.SetTuningNote   (note); }
     void     SetTuningVolume    (byte select, uint16_t level)       { _Osc.SetTuningVolume (select, level); }
-    void     SetTuningFlt       (byte fn, uint16_t level)           { _Flt.SetTuning (fn, level); }
+    void     SetTuningFlt       (int select, uint16_t level)        { _Flt.SetTuning (select, level); }
     bool     TuningState        (void)                              { return (_TuningOn); }
     void     TuningState        (bool state)                        { _TuningOn = state; SetTuningNote (_Osc.LastNote ()); }
     short    LastDA             (void)                              { return (_Osc.LastDA ()); }

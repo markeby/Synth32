@@ -36,34 +36,35 @@ private:
     bool        _TriggerEnd;
 
     // Runtime state
-    byte&       _UseCount;       // increment started and decriment as idle
-    ESTATE      _State;          // Current state of this mixer channel
+    byte&       _UseCount;      // increment started and decriment as idle
+    ESTATE      _State;         // Current state of this mixer channel
 
-    bool        _Muted;          // Do not respond to Start directive
-    bool        _Updated;        // Flag indicating update output
-    bool        _PeakLevel;      // Flag indicating sustain and peak are the same
-    bool        _UseSoftLFO;     // Flag to enable sofware LFO
+    bool        _Muted;         // Do not respond to Start directive
+    bool        _Updated;       // Flag indicating update output
+    bool        _PeakLevel;     // Flag indicating sustain and peak are the same
 
     // User supplied inputs
-    bool        _DualUse;        // Dual usage flag  (false = VCA,  true = VCF,other)
-    DAMPER      _DamperMode;     // Mode to utilize string damper
-    float       _Top;            // Fraction of one (percent).
-    float       _Bottom;         // Fraction of one (percent).
-    float       _SetSustain;     // The settin of sustain level up to one.
-    float       _AttackTime;     // Attack time in uSec.
-    float       _DecayTime;      // Decay time to sustatin level in uSec.
-    float       _ReleaseTime;    // How long to end back at base level in uSec.
-    float       _Expression;     // Final volume multiplier
-    bool        _Damper;         // state of damper pedal
+    bool        _DualUse;       // Dual usage flag  (false = VCA,  true = VCF,other)
+    bool        _UseSoftLFO;    // Flag to enable sofware LFO
+    float       _ScaleLFO;      // Scale reduction multiplier for LFO
+    DAMPER      _DamperMode;    // Mode to utilize string damper
+    float       _Top;           // Fraction of one (percent).
+    float       _Bottom;        // Fraction of one (percent).
+    float       _SetSustain;    // The settin of sustain level up to one.
+    float       _AttackTime;    // Attack time in uSec.
+    float       _DecayTime;     // Decay time to sustatin level in uSec.
+    float       _ReleaseTime;   // How long to end back at base level in uSec.
+    float       _Expression;    // Final volume multiplier
+    bool        _Damper;        // state of damper pedal
 
 
     // runtime calculations
-    float       _Delta;          // Distance for the current state.
-    float       _Sustain;        // The usable Sustain level up to one
-    bool        _NoDecay;        // Decay time set so low that there is no decay.  Sustain serves no purpose then.
-    float       _Timer;          // Timer loaded with state time
-    float       _TargetTime;     // Timer is incrimented until this time is exceeded
-    float       _Current;        // Current level zero to one
+    float       _Delta;         // Distance for the current state.
+    float       _Sustain;       // The usable Sustain level up to one
+    bool        _NoDecay;       // Decay time set so low that there is no decay.  Sustain serves no purpose then.
+    float       _Timer;         // Timer loaded with state time
+    float       _TargetTime;    // Timer is incrimented until this time is exceeded
+    float       _Current;       // Current level zero to one
     float       _Target;
 
     // Fixed parameters at initialization
@@ -79,9 +80,10 @@ public:
     void        Damper          (bool state)        { _Damper = state; }
     void        Process         (float deltaTime);
     void        SetCurrent      (float data);
-    void        SetOverride     (uint32_t data);
+    void        SetOverride     (uint16_t data);
     void        Update          (void);
     void        Start           (void);
+    void        Start           (bool modstate)     { _UseSoftLFO = modstate; _ScaleLFO = 0.2; Start (); }
     void        End             (void);
     void        SetTime         (ESTATE state, float time);
     float       GetTime         (ESTATE state);

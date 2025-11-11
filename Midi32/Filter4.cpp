@@ -11,47 +11,44 @@
 #include "Debug.h"
 
 #ifdef DEBUG_SYNTH
-static const char* Label = "FLT";
-#define DBG(args...) {if(DebugSynth){ DebugMsg(Label,Number,args);}}
+static const char* label = "FLT";
+#define DBG(args...) {if(DebugSynth){ DebugMsg(label,_Number,args);}}
 #else
 #define DBG(args...)
 #endif
 
-static const char*  envNames[]    = { "Freq", "Q" };
 static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
 //#######################################################################
     FLT4_C::FLT4_C ()
     {
-    Valid  = false;
+    _Valid  = false;
     }
 
 //#######################################################################
 void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
     {
-    Number = num;
+    _Number = num;
     // D/A configuration
-    FreqIO   = first_device;
-    QuIO     = first_device + 1;
-    Funct[0] = envgen.NewADSR (num, envNames[0], FreqIO, usecount);
-    Funct[0]->SetDualUse (true);
-    Funct[1] = envgen.NewADSR (num, envNames[1], QuIO,   usecount);
-    Funct[1]->SetDualUse (true);
+    _FreqIO   = first_device;
+    _QuIO     = first_device + 1;
+    _Envelope = envgen.NewADSR (num, "Freq", _FreqIO, usecount);
+    _Envelope->SetDualUse (true);
 
     short dig = first_device + 4;       // get first digital switch
     if ( num & 1 )                      //   odd numbered units need 2 more
         dig += 2;
 
-    OutSwitch[0] = dig++;
-    OutSwitch[1] = dig++;
-    OutSwitch[2] = dig++;
-    OutSwitch[3] = dig;
-    OutMap       = 0;
+    _OutSwitch[0] = dig++;
+    _OutSwitch[1] = dig++;
+    _OutSwitch[2] = dig++;
+    _OutSwitch[3] = dig;
+    _OutMap       = 0;
 
-    if ( I2cDevices.IsPortValid (FreqIO) && I2cDevices.IsPortValid (QuIO) && I2cDevices.IsPortValid (OutSwitch[0]) )
+    if ( I2cDevices.IsPortValid (_FreqIO) && I2cDevices.IsPortValid (_QuIO) && I2cDevices.IsPortValid (_OutSwitch[0]) )
         {
         if ( DebugSynth )
             printf("\t  >> VCF %d started for device %d\n", num, first_device);
-        Valid = true;
+        _Valid = true;
         }
     else
         printf("\t  ** VCF %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
@@ -60,8 +57,7 @@ void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR
 //#######################################################################
 void FLT4_C::ClearState ()
     {
-    Funct[0]->Clear ();
-    Funct[1]->Clear ();
+    _Envelope->Clear ();
     }
 
 //#######################################################################
@@ -72,48 +68,69 @@ void FLT4_C::Clear ()
     }
 
 //#######################################################################
+void FLT4_C::SetQ (float level_percent)
+    {
+    _Q = level_percent;
+    short z = (short)(level_percent * (float)DA_MAX);
+    I2cDevices.D2Analog (_QuIO, z);
+    }
+
+//#######################################################################
 void FLT4_C::SetOutMap (byte fmap)
     {
-    OutMap = fmap;
+    _OutMap = fmap;
 
     for ( short z = 0;  z < 4;  z++ )
-        I2cDevices.DigitalOut (OutSwitch[z], (fmap >> z) & 1);
+        I2cDevices.DigitalOut (_OutSwitch[z], (fmap >> z) & 1);
+    }
+
+//#######################################################################
+void FLT4_C::SetTuning (int select, uint16_t level)
+    {
+    if ( select )
+        I2cDevices.D2Analog (_QuIO, level);
+    else
+        _Envelope->SetOverride (level);
     }
 
 //#######################################################################
 void FLT4_C::NoteSet (byte key, byte velocity)
     {
     DBG ("FIlter Note set by %d with velocity %d", key, velocity);
-    if ( ControlSrc[0] == FILTER_CTRL_C::ENVELOPE )
+    _Envelope->Clear ();
+    switch ( _ControlSrc )
         {
-        Funct[0]->Clear ();
-        Funct[0]->Start ();
-        }
-    if ( ControlSrc[1] == FILTER_CTRL_C::ENVELOPE )
-        {
-        Funct[1]->Clear ();
-        Funct[1]->Start ();
+        case FILTER_CTRL_C::FIXED:
+            break;
+        case FILTER_CTRL_C::ENVELOPE:
+            _Envelope->Start (false);
+            break;
+        case FILTER_CTRL_C::MODULATE:
+            _Envelope->Start (true);
+            break;
+        case FILTER_CTRL_C::MODWHEEL:
+            break;
+        default:
+            break;
         }
     }
 
 //#######################################################################
 void FLT4_C::NoteClear ()
     {
-    if ( ControlSrc[0] == FILTER_CTRL_C::ENVELOPE )
-        Funct[0]->End ();
-    if ( ControlSrc[1] == FILTER_CTRL_C::ENVELOPE )
-        Funct[1]->End ();
+    if ( _ControlSrc >= FILTER_CTRL_C::ENVELOPE )
+        _Envelope->End ();
     }
 
 //#######################################################################
-void FLT4_C::SetStart (byte fn, float level_percent)
+void FLT4_C::SetStart (float level_percent)
     {
-    Funct[fn]->SetLevel(ESTATE::START, level_percent);
+    _Envelope->SetLevel (ESTATE::START, level_percent);
 
-    switch ( ControlSrc[fn] )
+    switch ( _ControlSrc )
         {
         case FILTER_CTRL_C::FIXED:
-            Funct[fn]->SetCurrent (level_percent);
+            _Envelope->SetCurrent (level_percent);
             break;
         case FILTER_CTRL_C::ENVELOPE:
             break;

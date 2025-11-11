@@ -51,7 +51,6 @@ void UpdateLfoDisplay ()
     {
     SYNTH_VOICE_CONFIG_C& sc = SynthConfig.Voice[SelectedMap];    // Configuration data for this voice pair
 
-    DisplayMessage.Page (PAGE_C::PAGE_MOD);
     LaunchControl.SelectTemplate (XL_MIDI_MAP_LFO);
 
     for ( int z = 0;  z < 2;  z++ )
@@ -63,6 +62,7 @@ void UpdateLfoDisplay ()
         }
     DisplayMessage.LfoSoftFreq (SynthConfig.GetSoftFreq ());
     UpdateButtonsLFO ();
+    DisplayMessage.Page (PAGE_C::PAGE_MOD);
     }
 
 //#######################################################################
@@ -135,9 +135,26 @@ void SelectModVCA (byte ch, bool state)
     for ( int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( VoiceArray[z]->GetMidi () == SoftLFO.GetMidi () )
-            VoiceArray[z]->SetSoftLFO (ch, state);
+            VoiceArray[z]->SetSoftLFOtoVCA (ch, state);
         else
-            VoiceArray[z]->SetSoftLFO (ch, false);
+            VoiceArray[z]->SetSoftLFOtoVCA (ch, false);
+        }
+    UpdateButtonsLFO ();
+    }
+
+//#####################################################################
+void SelectModVCF (byte ch, bool state)
+    {
+    SynthConfig.SetModSoftMixer (ch, state);
+
+    DisplayMessage.LfoSoftSelect (ch, state);
+
+    for ( int z = 0;  z < VOICE_COUNT;  z++)
+        {
+        if ( VoiceArray[z]->GetMidi () == SoftLFO.GetMidi () )
+            VoiceArray[z]->SetSoftLFOtoVCF (state);
+        else
+            VoiceArray[z]->SetSoftLFOtoVCF (false);
         }
     UpdateButtonsLFO ();
     }

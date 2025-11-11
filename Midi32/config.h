@@ -162,15 +162,15 @@ private:
     struct
         {
         byte        MapVoiceMidi;
-        short       OutputEnable;
         short       MapVoiceNoise;
         float       PulseWidth;
         float       MasterLevel;
         bool        RampDirection;
         byte        OutputMask;
-        byte        FilterCtrl[FILTER_DEVICES];
+        float       FilterQ;
+        byte        FilterCtrl;
         ENVELOPE_T  OscEnv[OSC_MIXER_COUNT];
-        ENVELOPE_T  FltEnv[FILTER_DEVICES];
+        ENVELOPE_T  FltEnv;
         }   Cs;
 
     String Name;
@@ -181,7 +181,7 @@ private:
 
 public:
     bool   SelectedOscEnvelope[OSC_MIXER_COUNT];
-    bool   SelectedFltEnvelope[FILTER_DEVICES];
+    bool   SelectedFltEnvelope;
 
 
            SYNTH_VOICE_CONFIG_C (void);
@@ -215,22 +215,24 @@ public:
     void   SetOscReleaseTime    (byte index, float data)   { Cs.OscEnv[index].ReleaseTime = data; }
     float  GetOscReleaseTime    (byte index)               { return (Cs.OscEnv[index].ReleaseTime); }
 
-    void   SetFltStart          (byte index, float data)   { Cs.FltEnv[index].MinLevel = data; }
-    float  GetFltStart          (byte index)               { return (Cs.FltEnv[index].MinLevel); }
-    void   SetFltEnd            (byte index, float data)   { Cs.FltEnv[index].MaxLevel = data; }
-    float  GetFltEnd            (byte index)               { return (Cs.FltEnv[index].MaxLevel); }
-    void   SetFltSustainLevel   (byte index, float data)   { Cs.FltEnv[index].SustainLevel = data; }
-    float  GetFltSustainLevel   (byte index)               { return (Cs.FltEnv[index].SustainLevel); }
-    void   SetFltAttackTime     (byte index, float data)   { Cs.FltEnv[index].AttackTime = data; }
-    float  GetFltAttackTime     (byte index)               { return (Cs.FltEnv[index].AttackTime); }
-    void   SetFltDecayTime      (byte index, float data)   { Cs.FltEnv[index].DecayTime = data; }
-    float  GetFltDecayTime      (byte index)               { return (Cs.FltEnv[index].DecayTime); }
-    void   SetFltReleaseTime    (byte index, float data)   { Cs.FltEnv[index].ReleaseTime = data; }
-    float  GetFltReleaseTime    (byte index)               { return (Cs.FltEnv[index].ReleaseTime); }
-    void   SetOutputMask        (byte chanmap)             { Cs.OutputMask = chanmap; }
-    byte   GetOutputMask        (void)                     { return (Cs.OutputMask); }
-    void   SetFltCtrl           (byte index, int data)     { Cs.FilterCtrl[index] = data; }
-    byte   GetFltCtrl           (byte index)               { return (Cs.FilterCtrl[index]); }
+    void   SetFltStart          (float data)                { Cs.FltEnv.MinLevel = data; }
+    float  GetFltStart          (void)                      { return (Cs.FltEnv.MinLevel); }
+    void   SetFltEnd            (float data)                { Cs.FltEnv.MaxLevel = data; }
+    float  GetFltEnd            (void)                      { return (Cs.FltEnv.MaxLevel); }
+    void   SetFltSustainLevel   (float data)                { Cs.FltEnv.SustainLevel = data; }
+    float  GetFltSustainLevel   (void)                      { return (Cs.FltEnv.SustainLevel); }
+    void   SetFltAttackTime     (float data)                { Cs.FltEnv.AttackTime = data; }
+    float  GetFltAttackTime     (void)                      { return (Cs.FltEnv.AttackTime); }
+    void   SetFltDecayTime      (float data)                { Cs.FltEnv.DecayTime = data; }
+    float  GetFltDecayTime      (void)                      { return (Cs.FltEnv.DecayTime); }
+    void   SetFltReleaseTime    (float data)                { Cs.FltEnv.ReleaseTime = data; }
+    float  GetFltReleaseTime    (void)                      { return (Cs.FltEnv.ReleaseTime); }
+    void   SetOutputMask        (byte chanmap)              { Cs.OutputMask = chanmap; }
+    byte   GetOutputMask        (void)                      { return (Cs.OutputMask); }
+    void   SetFltCtrl           (int data)                  { Cs.FilterCtrl = data; }
+    byte   GetFltCtrl           (void)                      { return (Cs.FilterCtrl); }
+    void   SetFltQ              (float data)                { Cs.FilterQ = data; }
+    float  GetFltQ              (void)                      { return (Cs.FilterQ); }
     };
 
 class SYNTH_CONFIG_C

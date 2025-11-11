@@ -274,7 +274,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                     // mod wheel
                     Lfo[0].SetLevelMidi (mchan, value);
                     Lfo[1].SetLevelMidi (mchan, value);
-                    SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER * 0.5);
+                    SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER);
                     DBG ("MIDI channel = %d   modulation = %d    ", mchan, value);
                     break;
 

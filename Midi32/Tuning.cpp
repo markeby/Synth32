@@ -25,7 +25,8 @@ static constexpr float fsr6_144 = (6.144 / 32767.0) * 1000;
 
 static bool    change_settings = false;
 static ushort  oscillator_level[OSC_MIXER_COUNT+1];
-static ushort  level_filter[FILTER_DEVICES];
+static ushort  level_filter;
+static ushort  level_q;
 static byte    output_select;
 static ushort  calibration_reference;
 static short   calibration_phase;
@@ -67,22 +68,20 @@ void Tuning ()
                         VoiceArray[zc]->SetTuningVolume(z, 0);
                     }
                 }
-            for ( int z = 0;  z < FILTER_DEVICES;  z++ )
-                {
-                VoiceArray[zc]->SetTuningFlt (z, level_filter[z]);
-                if ( VoiceArray[zc]->TuningState () )
-                    VoiceArray[zc]->SetOutputMask (output_select);
-                else
-                    VoiceArray[zc]->SetOutputMask (0);
-                }
+            VoiceArray[zc]->SetTuningFlt (0, level_filter);
+            VoiceArray[zc]->SetTuningFlt (1, level_q);
+            if ( VoiceArray[zc]->TuningState () )
+                VoiceArray[zc]->SetOutputMask (output_select);
+            else
+                VoiceArray[zc]->SetOutputMask (0);
             }
         }
 
     if ( change_settings )
         {
         DisplayMessage.TuningControl (output_select);
-        for ( int z = 0;  z < FILTER_DEVICES;  z++ )
-            DisplayMessage.TuningFilter (z, level_filter[z] * MIDI_INV_MULTIPLIER);
+        DisplayMessage.TuningFilter (0, level_filter * MIDI_INV_MULTIPLIER);
+        DisplayMessage.TuningFilter (1, level_q * MIDI_INV_MULTIPLIER);
         }
 
     change_settings = false;     // Indicate complete and ready for next not change
@@ -94,6 +93,7 @@ void Tuning ()
 //#######################################################################
 void RecoverTuning ()
     {
+    DisplayMessage.Unlock ();
     DisplayMessage.PageTuning ();
     change_settings = true;
     }
@@ -116,11 +116,9 @@ void StartTuning ()
             DisplayMessage.TuningLevel (z, 0);
             }
 
-        for ( int z = 0;  z < FILTER_DEVICES;  z++ )
-            {
-            level_filter[z] = 0;
-            DisplayMessage.TuningFilter (z, 0);
-            }
+        level_filter = 0;
+        DisplayMessage.TuningFilter (0, 0);
+        DisplayMessage.TuningFilter (1, 0);
         output_select = 0x01;
         VoiceArray[0]->TuningState (true);
         byte note = KEYS_FIRST;                    // start at the C0
@@ -161,7 +159,10 @@ void SetTuningLevel (short ch, short data)
 //#######################################################################
 void SetTuningFilter (short ch, short data)
     {
-    level_filter[ch] = data * MIDI_MULTIPLIER;
+    if ( ch == 1 )
+        level_q = data * MIDI_MULTIPLIER;
+    else
+        level_filter = data * MIDI_MULTIPLIER;
     change_settings = true;
     }
 

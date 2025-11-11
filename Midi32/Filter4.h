@@ -23,17 +23,18 @@ enum class FILTER_CTRL_C: int
 class   FLT4_C
     {
 private:
-    ENVELOPE_C*             Funct[FILTER_DEVICES];
-    FILTER_CTRL_C           ControlSrc[FILTER_DEVICES];
+    ENVELOPE_C*         _Envelope;
+    FILTER_CTRL_C       _ControlSrc;
 
-    bool                    Valid;          // Completed init and good for use
-    byte                    Number;
-    short                   FreqIO;
-    short                   QuIO;
-    short                   OutSwitch[FILTER_OUTPUTS];
-    byte                    OutMap;
+    bool                _Valid;          // Completed init and good for use
+    byte                _Number;
+    short               _FreqIO;
+    short               _QuIO;
+    float               _Q;
+    short               _OutSwitch[FILTER_OUTPUTS];
+    byte                _OutMap;
 
-    void    ClearState      (void);
+    void    ClearState  (void);
 
 public:
                     FLT4_C              (void);
@@ -42,22 +43,25 @@ public:
     void            NoteSet             (byte key, byte velocity);
     void            NoteClear           (void);
 
-    void            SetAttackTime       (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::ATTACK, time); }
-    float           GetAttackTime       (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::ATTACK)); }
-    void            SetDecayTime        (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::DECAY, time); }
-    float           GetDecayTime        (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::DECAY)); }
-    void            SetReleaseTime      (byte fn, float time)               { Funct[fn]->SetTime  (ESTATE::RELEASE, time); }
-    float           GetReleaseTime      (byte fn)                           { return (Funct[fn]->GetTime  (ESTATE::RELEASE)); }
-    void            SetSustainLevel     (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::SUSTAIN, level_percent); }
-    float           GetSustainLevel     (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::SUSTAIN)); }
-    void            SetStart            (byte fn, float level_percent);
-    float           GetStart            (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::START)); }
-    void            SetEnd              (byte fn, float level_percent)      { Funct[fn]->SetLevel (ESTATE::ATTACK, level_percent); }
-    float           GetEnd              (byte fn)                           { return (Funct[fn]->GetLevel (ESTATE::ATTACK)); }
-    void            SetCtrl             (byte fn, byte value)               { ControlSrc[fn] = (FILTER_CTRL_C)value; }
-    FILTER_CTRL_C   GetCtrl             (byte fn)                           { return (ControlSrc[fn]); }
+    void            SetSoftLFO          (bool sel)                 { _Envelope->SetSoftLFO (sel); }
+    void            SetAttackTime       (float time)               { _Envelope->SetTime  (ESTATE::ATTACK, time); }
+    float           GetAttackTime       (void)                     { return (_Envelope->GetTime  (ESTATE::ATTACK)); }
+    void            SetDecayTime        (float time)               { _Envelope->SetTime  (ESTATE::DECAY, time); }
+    float           GetDecayTime        (void)                     { return (_Envelope->GetTime  (ESTATE::DECAY)); }
+    void            SetReleaseTime      (float time)               { _Envelope->SetTime  (ESTATE::RELEASE, time); }
+    float           GetReleaseTime      (void)                     { return (_Envelope->GetTime  (ESTATE::RELEASE)); }
+    void            SetSustainLevel     (float level_percent)      { _Envelope->SetLevel (ESTATE::SUSTAIN, level_percent); }
+    float           GetSustainLevel     (void)                     { return (_Envelope->GetLevel (ESTATE::SUSTAIN)); }
+    void            SetStart            (float level_percent);
+    float           GetStart            (void)                     { return (_Envelope->GetLevel (ESTATE::START)); }
+    void            SetEnd              (float level_percent)      { _Envelope->SetLevel (ESTATE::ATTACK, level_percent); }
+    float           GetEnd              (void)                     { return (_Envelope->GetLevel (ESTATE::ATTACK)); }
+    void            SetQ                (float level_percent);
+    float           GetQ                (void)                     { return (_Q); }
+    void            SetCtrl             (byte value)               { _ControlSrc = (FILTER_CTRL_C)value; }
+    FILTER_CTRL_C   GetCtrl             (void)                     { return (_ControlSrc); }
     void            SetOutMap           (byte fmap);
-    byte            GetOutMap           (void)                              { return (OutMap << 1); }
-    void            SetTuning           (byte fn, uint32_t level)           { Funct[fn]->SetOverride (level); }
+    byte            GetOutMap           (void)                     { return (_OutMap << 1); }
+    void            SetTuning           (int select, uint16_t level);
     };
 

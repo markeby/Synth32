@@ -47,6 +47,7 @@ namespace DISP_MESSAGE_N
         UPDATE_PAGE_MAP,
         UPDATE_PAGE_TUNING,
         UPDATE_PAGE_LOAD_SAVE,
+        GENERAL_PAGE_UPDATE,
         };
 
     //###########################################
@@ -170,6 +171,7 @@ namespace DISP_MESSAGE_N
         FILTER,
         DAMPER,
         MUTE,
+        Q,
         };
 
     //###########################################
@@ -179,6 +181,7 @@ namespace DISP_MESSAGE_N
     char* EffectText[] =
         {
         "SELECTED",
+        "MASTER_LEVEL",
         "BASE_LEVEL",
         "MAX_LEVEL",
         "ATTACK_TIME",
@@ -199,6 +202,7 @@ namespace DISP_MESSAGE_N
         "FILTER",
         "DAMPER",
         "MUTE",
+        "Q",
         };
     #else
     extern char* EffectText[];
