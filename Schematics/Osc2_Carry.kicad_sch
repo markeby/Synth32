@@ -2443,20 +2443,22 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U14"
-				(at 2.286 4.064 0)
+			(property "Reference" "U31"
+				(at -1.27 1.27 0)
 				(effects
 					(font
 						(size 0.889 0.889)
 					)
+					(justify left)
 				)
 			)
 			(property "Value" "LM358"
-				(at 3.048 2.794 0)
+				(at -1.27 -1.27 0)
 				(effects
 					(font
 						(size 0.889 0.889)
 					)
+					(justify left)
 				)
 			)
 			(property "Footprint" ""
@@ -2531,14 +2533,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2549,14 +2551,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2567,14 +2569,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2599,14 +2601,14 @@
 					(name "+"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "5"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2617,14 +2619,14 @@
 					(name "-"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2635,14 +2637,14 @@
 					(name "~"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
 					(number "7"
 						(effects
 							(font
-								(size 0.889 0.889)
+								(size 1.27 1.27)
 							)
 						)
 					)
@@ -2901,6 +2903,260 @@
 				)
 			)
 			(symbol "LM358_5_3_1"
+				(pin power_in line
+					(at -2.54 7.62 270)
+					(length 3.81)
+					(name "V+"
+						(effects
+							(font
+								(size 0.889 0.889)
+							)
+						)
+					)
+					(number "8"
+						(effects
+							(font
+								(size 0.889 0.889)
+							)
+						)
+					)
+				)
+				(pin power_in line
+					(at -2.54 -7.62 90)
+					(length 3.81)
+					(name "V-"
+						(effects
+							(font
+								(size 0.889 0.889)
+							)
+						)
+					)
+					(number "4"
+						(effects
+							(font
+								(size 0.889 0.889)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "LM358_6"
+			(pin_names
+				(offset 0.127)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "U31"
+				(at -1.27 1.27 0)
+				(effects
+					(font
+						(size 0.889 0.889)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "LM358"
+				(at -1.27 -1.27 0)
+				(effects
+					(font
+						(size 0.889 0.889)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm2904-n.pdf"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Low-Power, Dual Operational Amplifiers, DIP-8/SOIC-8/TO-99-8"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_locked" ""
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "dual opamp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "SOIC*3.9x4.9mm*P1.27mm* DIP*W7.62mm* TO*99* OnSemi*Micro8* TSSOP*3x3mm*P0.65mm* TSSOP*4.4x3mm*P0.65mm* MSOP*3x3mm*P0.65mm* SSOP*3.9x4.9mm*P0.635mm* LFCSP*2x2mm*P0.5mm* *SIP* SOIC*5.3x6.2mm*P1.27mm*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "LM358_6_1_1"
+				(polyline
+					(pts
+						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "3"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "LM358_6_2_1"
+				(polyline
+					(pts
+						(xy -5.08 5.08) (xy 5.08 0) (xy -5.08 -5.08) (xy -5.08 5.08)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+				(pin input line
+					(at -7.62 2.54 0)
+					(length 2.54)
+					(name "+"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "5"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin input line
+					(at -7.62 -2.54 0)
+					(length 2.54)
+					(name "-"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "6"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin output line
+					(at 7.62 0 180)
+					(length 2.54)
+					(name "~"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "7"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "LM358_6_3_1"
 				(pin power_in line
 					(at -2.54 7.62 270)
 					(length 3.81)
@@ -5097,17 +5353,6 @@
 		)
 		(uuid "2c9f860c-61b7-496f-a16d-30ea57dcb583")
 	)
-	(text "Note 1: Adjust for C0 to C8"
-		(exclude_from_sim no)
-		(at 279.146 181.102 0)
-		(effects
-			(font
-				(size 1.5748 1.5748)
-			)
-			(justify left top)
-		)
-		(uuid "2ee61121-2f23-49d4-b4d3-5e2d03140e21")
-	)
 	(text "_{TRIM}"
 		(exclude_from_sim no)
 		(at 121.666 65.024 0)
@@ -5166,16 +5411,6 @@
 		)
 		(uuid "3898e0e1-d6d7-460f-899b-687c76aaf63f")
 	)
-	(text "[Note 1]"
-		(exclude_from_sim no)
-		(at 312.674 29.972 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "3cdb66e3-621e-4654-b5e6-3e353ca94698")
-	)
 	(text "Osc #1"
 		(exclude_from_sim no)
 		(at 289.306 154.94 0)
@@ -5230,16 +5465,6 @@
 			(justify left bottom)
 		)
 		(uuid "4bc726f3-f3b5-4006-b20e-1205e93688d6")
-	)
-	(text "[Note 1]"
-		(exclude_from_sim no)
-		(at 167.894 29.21 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "4d7b4a66-2489-4434-8976-4f1f438ed20f")
 	)
 	(text "+12V"
 		(exclude_from_sim no)
@@ -8747,7 +8972,7 @@
 	)
 	(wire
 		(pts
-			(xy 124.46 110.49) (xy 120.65 110.49)
+			(xy 127 110.49) (xy 120.65 110.49)
 		)
 		(stroke
 			(width 0)
@@ -9407,7 +9632,7 @@
 	)
 	(wire
 		(pts
-			(xy 129.54 110.49) (xy 140.97 110.49)
+			(xy 132.08 110.49) (xy 140.97 110.49)
 		)
 		(stroke
 			(width 0)
@@ -11174,19 +11399,21 @@
 		(fields_autoplaced yes)
 		(uuid "24c26bf9-3a21-4b4d-8c6d-603bb82a9477")
 		(property "Reference" "U31"
-			(at 288.036 92.456 0)
+			(at 284.48 95.25 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Value" "LM358"
-			(at 288.798 93.726 0)
+			(at 284.48 97.79 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -13027,7 +13254,7 @@
 		)
 	)
 	(symbol
-		(lib_name "LM358_3")
+		(lib_name "LM358_6")
 		(lib_id "Amplifier_Operational:LM358")
 		(at 285.75 59.69 0)
 		(unit 1)
@@ -13037,19 +13264,21 @@
 		(dnp no)
 		(uuid "71bd75cc-2860-42c9-8a4f-75dfdaf9327e")
 		(property "Reference" "U31"
-			(at 288.544 55.626 0)
+			(at 284.48 58.42 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Value" "LM358"
-			(at 288.798 56.896 0)
+			(at 284.48 60.96 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
@@ -13827,7 +14056,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Small_US")
-		(at 127 110.49 90)
+		(at 129.54 110.49 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13835,7 +14064,7 @@
 		(dnp no)
 		(uuid "93d33304-5ce0-497e-b0fe-55753755523f")
 		(property "Reference" "R11"
-			(at 130.048 109.474 90)
+			(at 132.588 109.474 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13843,7 +14072,7 @@
 			)
 		)
 		(property "Value" "20k"
-			(at 131.826 111.76 90)
+			(at 134.366 111.76 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -13851,7 +14080,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 127 110.49 0)
+			(at 129.54 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13860,7 +14089,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 127 110.49 0)
+			(at 129.54 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13869,7 +14098,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 127 110.49 0)
+			(at 129.54 110.49 0)
 			(effects
 				(font
 					(size 1.27 1.27)

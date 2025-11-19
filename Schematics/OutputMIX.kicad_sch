@@ -12806,6 +12806,16 @@
 	)
 	(text "Oscillator Input"
 		(exclude_from_sim no)
+		(at 225.044 158.242 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "264be81d-539a-4126-b276-fc0df3a5989a")
+	)
+	(text "LP VCF Input"
+		(exclude_from_sim no)
 		(at 64.516 15.494 0)
 		(effects
 			(font
@@ -12874,7 +12884,7 @@
 		)
 		(uuid "c97a47c1-233a-4c36-95c3-ef7935782d44")
 	)
-	(text "Filter Input"
+	(text "3 State Filter Input"
 		(exclude_from_sim no)
 		(at 182.626 15.494 0)
 		(effects
@@ -12906,7 +12916,7 @@
 		)
 		(uuid "fbf59bfc-6fa5-4e05-8442-853e698fed5a")
 	)
-	(text "Oscillator switch"
+	(text "Low Pass switch"
 		(exclude_from_sim no)
 		(at 170.18 71.628 0)
 		(effects
@@ -13541,6 +13551,12 @@
 		(uuid "a0455b5e-a639-4307-831b-a2b054873f05")
 	)
 	(junction
+		(at 247.65 156.21)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "a0a5c215-e756-42a6-8586-f0f9fd56a650")
+	)
+	(junction
 		(at 123.19 36.83)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -14151,6 +14167,16 @@
 			(type default)
 		)
 		(uuid "0e7d5ca0-8e1f-4584-b3dd-50c809e99db5")
+	)
+	(wire
+		(pts
+			(xy 232.41 151.13) (xy 237.49 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0ea482b3-5d11-4f0b-b584-387673b18fa0")
 	)
 	(wire
 		(pts
@@ -15024,6 +15050,16 @@
 	)
 	(wire
 		(pts
+			(xy 232.41 152.4) (xy 232.41 151.13)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "39fd63f8-7401-4caa-9b41-a23620d8d66a")
+	)
+	(wire
+		(pts
 			(xy 86.36 53.34) (xy 86.36 58.42)
 		)
 		(stroke
@@ -15141,6 +15177,16 @@
 			(type default)
 		)
 		(uuid "3c893ae6-7ef2-4df1-9b6e-e8ae21817c7f")
+	)
+	(wire
+		(pts
+			(xy 231.14 154.94) (xy 232.41 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3d3722cd-654e-42aa-b9b8-261ac1b41384")
 	)
 	(wire
 		(pts
@@ -15454,7 +15500,7 @@
 	)
 	(polyline
 		(pts
-			(xy 215.9 176.53) (xy 334.01 176.53)
+			(xy 212.09 176.53) (xy 334.01 176.53)
 		)
 		(stroke
 			(width 0)
@@ -18404,7 +18450,7 @@
 	)
 	(wire
 		(pts
-			(xy 247.65 151.13) (xy 229.87 151.13)
+			(xy 247.65 151.13) (xy 242.57 151.13)
 		)
 		(stroke
 			(width 0)
@@ -18421,6 +18467,16 @@
 			(type default)
 		)
 		(uuid "baeec3b7-5597-48ac-a77d-8b0ad2c77b52")
+	)
+	(wire
+		(pts
+			(xy 231.14 152.4) (xy 232.41 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb23b21c-7000-46be-bf8f-c3184165fd20")
 	)
 	(wire
 		(pts
@@ -18701,6 +18757,16 @@
 			(type default)
 		)
 		(uuid "c4fbdf7c-555d-4fdb-831d-33b39dab146c")
+	)
+	(wire
+		(pts
+			(xy 232.41 156.21) (xy 247.65 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c54da2da-dd6d-407b-a728-299806d1c1ca")
 	)
 	(wire
 		(pts
@@ -19434,6 +19500,16 @@
 	)
 	(wire
 		(pts
+			(xy 232.41 154.94) (xy 232.41 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e49bcd1b-71a5-4fbf-be93-6d79433cd460")
+	)
+	(wire
+		(pts
 			(xy 107.95 133.35) (xy 127 133.35)
 		)
 		(stroke
@@ -20112,7 +20188,7 @@
 		)
 		(uuid "ffd9917b-e1ad-456c-92cf-c82714db3551")
 	)
-	(label "Osc6"
+	(label "LP6"
 		(at 139.7 160.02 0)
 		(effects
 			(font
@@ -20229,7 +20305,7 @@
 		)
 		(uuid "21f74311-1350-4d39-991f-712b562df4f5")
 	)
-	(label "Osc2"
+	(label "LP2"
 		(at 68.58 24.13 0)
 		(effects
 			(font
@@ -20255,7 +20331,7 @@
 		)
 		(uuid "276f78b9-a801-440e-9706-ec2385752536")
 	)
-	(label "Osc3"
+	(label "LP3"
 		(at 139.7 104.14 0)
 		(effects
 			(font
@@ -20333,7 +20409,7 @@
 		)
 		(uuid "60ec08f2-0c2d-4467-8e2e-8a1d06a671ea")
 	)
-	(label "Osc4"
+	(label "LP4"
 		(at 139.7 109.22 0)
 		(effects
 			(font
@@ -20346,7 +20422,7 @@
 		)
 		(uuid "6352bed0-8071-4e77-9a7e-e22c7b3ad0e7")
 	)
-	(label "Osc7"
+	(label "LP7"
 		(at 139.7 165.1 0)
 		(effects
 			(font
@@ -20474,7 +20550,7 @@
 		)
 		(uuid "80760866-c3a6-47cf-a88c-e981c79462a4")
 	)
-	(label "Osc5"
+	(label "LP5"
 		(at 139.7 154.94 0)
 		(effects
 			(font
@@ -20500,7 +20576,7 @@
 		)
 		(uuid "84be891f-38f8-4d0e-8fbf-aefcd49de2af")
 	)
-	(label "Osc5"
+	(label "LP5"
 		(at 125.73 36.83 0)
 		(effects
 			(font
@@ -20552,7 +20628,7 @@
 		)
 		(uuid "9bf8189d-97ba-4cd6-8028-a717036b2b75")
 	)
-	(label "Osc6"
+	(label "LP6"
 		(at 125.73 24.13 0)
 		(effects
 			(font
@@ -20565,7 +20641,7 @@
 		)
 		(uuid "a58960b8-189c-438b-b9aa-15e5ae3a6a96")
 	)
-	(label "Osc1"
+	(label "LP1"
 		(at 68.58 36.83 0)
 		(effects
 			(font
@@ -20630,7 +20706,7 @@
 		)
 		(uuid "b899a266-e835-4448-a9f6-f243e5859ab2")
 	)
-	(label "Osc8"
+	(label "LP8"
 		(at 125.73 49.53 0)
 		(effects
 			(font
@@ -20643,7 +20719,7 @@
 		)
 		(uuid "b8b6da07-3b7f-44f5-8d83-b803d671b162")
 	)
-	(label "Osc2"
+	(label "LP2"
 		(at 139.7 99.06 0)
 		(effects
 			(font
@@ -20669,7 +20745,7 @@
 		)
 		(uuid "bdc2fad2-d8d1-49fa-9450-fb3bbaedd948")
 	)
-	(label "Osc8"
+	(label "LP8"
 		(at 139.7 170.18 0)
 		(effects
 			(font
@@ -20732,7 +20808,7 @@
 		)
 		(uuid "d293ede8-e4b1-48ee-8c0d-dddf698c4c57")
 	)
-	(label "Osc7"
+	(label "LP7"
 		(at 125.73 62.23 0)
 		(effects
 			(font
@@ -20810,7 +20886,7 @@
 		)
 		(uuid "e37df564-5b4d-4595-8185-04c3b2e385bb")
 	)
-	(label "Osc4"
+	(label "LP4"
 		(at 68.58 49.53 0)
 		(effects
 			(font
@@ -20836,7 +20912,7 @@
 		)
 		(uuid "e7b7dfa0-3296-4be8-aa07-fdaa494aa808")
 	)
-	(label "Osc1"
+	(label "LP1"
 		(at 139.7 93.98 0)
 		(effects
 			(font
@@ -20862,7 +20938,7 @@
 		)
 		(uuid "f3f6f10b-ae50-4142-b859-9f2ad7ba23d6")
 	)
-	(label "Osc3"
+	(label "LP3"
 		(at 68.58 62.23 0)
 		(effects
 			(font
@@ -22756,6 +22832,77 @@
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c"
 					(reference "#PWR0365")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "My Connectors:Conn_01x02")
+		(at 226.06 152.4 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "25169253-7a78-4b96-807b-9773e1b6c7d3")
+		(property "Reference" "J270"
+			(at 227.076 150.368 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Conn_01x02"
+			(at 223.52 154.9399 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 226.06 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Generic connector, single row, 01x02, script generated (kicad-library-utils/schlib/autogen/connector/)"
+			(at 226.06 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "bd481fe9-399d-421e-b7e6-3242da9557c3")
+		)
+		(pin "1"
+			(uuid "07b95ecd-d8e8-4036-b367-5b523154d836")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c"
+					(reference "J270")
 					(unit 1)
 				)
 			)
@@ -28802,6 +28949,75 @@
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c"
 					(reference "#PWR0502")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small_US")
+		(at 240.03 151.13 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "88ab846d-ac22-44b1-b9ad-384869ff1ad7")
+		(property "Reference" "R837"
+			(at 241.3 150.114 90)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "49.9k"
+			(at 238.252 150.114 90)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 240.03 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 240.03 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 240.03 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dfb00117-303d-43e7-a488-9d268dc21aae")
+		)
+		(pin "2"
+			(uuid "f4a867a1-6f14-417f-82c2-7abaf04088dd")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c"
+					(reference "R837")
 					(unit 1)
 				)
 			)

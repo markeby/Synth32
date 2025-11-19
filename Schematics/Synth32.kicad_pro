@@ -406,12 +406,36 @@
       "AudioControl"
     ],
     [
+      "a58131de-3c81-4e3c-a577-8b273e08214f",
+      "Audio Mixer 10"
+    ],
+    [
+      "e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c",
+      "Output Mixer"
+    ],
+    [
+      "92ea8d6c-7c0a-471f-be0b-71be39e4a0a2",
+      "Filter Input MUX"
+    ],
+    [
       "183602d7-24c4-4572-8c8c-985858bcd8c5",
       "VCO"
     ],
     [
       "0961503a-ee36-4d85-ba6e-69b8d022a06b",
-      "Carrier Osc"
+      "VCO Carrier"
+    ],
+    [
+      "4ee2fb70-c02b-45ff-b6fc-7c263225c33f",
+      "3 State VCF"
+    ],
+    [
+      "2b3fba1a-34cc-422e-bc17-be1afa517ff3",
+      "LP VCF"
+    ],
+    [
+      "2f61a74c-8340-4b87-89bb-d97f9ff08b40",
+      "L P Carrier"
     ],
     [
       "368144d6-e85e-4968-b172-9b7cebe9c4ab",
@@ -424,18 +448,6 @@
     [
       "70dff70b-ca0e-4131-a269-eb5144bb09a1",
       "Modulation Control2"
-    ],
-    [
-      "4ee2fb70-c02b-45ff-b6fc-7c263225c33f",
-      "3 State VCF"
-    ],
-    [
-      "e229fcb1-b6f4-4b19-b740-d1e1a6c9a14c",
-      "Output Mixer"
-    ],
-    [
-      "a58131de-3c81-4e3c-a577-8b273e08214f",
-      "Audio Mixer 10"
     ],
     [
       "33a531ad-adab-44e4-8605-e758909b7125",

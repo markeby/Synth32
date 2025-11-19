@@ -4002,6 +4002,144 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C_Polarized_Small_US")
+		(at 39.37 189.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "30e58057-4308-437e-86eb-55094b249472")
+		(property "Reference" "C174"
+			(at 39.497 187.706 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10µF"
+			(at 39.751 191.008 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 39.37 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 39.37 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 39.37 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b7226064-25a7-44b2-b4ce-25d9f32d6685")
+		)
+		(pin "2"
+			(uuid "4c423716-e2d1-487d-9c41-d1e289182e11")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "C174")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Small")
+		(at 49.53 189.23 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "382425a9-814d-4a59-8c3a-50d16badd450")
+		(property "Reference" "C188"
+			(at 49.657 187.706 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "0.1µF"
+			(at 49.657 190.754 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 49.53 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 49.53 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 49.53 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "726147b7-1b6c-47ae-90ca-a40a65faa288")
+		)
+		(pin "2"
+			(uuid "792f07d9-166b-4562-ba74-a35d203e656c")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "C188")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 43.18 60.96 90)
 		(mirror x)
@@ -4421,71 +4559,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 56.515 186.69 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "4babf3d3-1770-42fe-82ed-09b99c0fdbd8")
-		(property "Reference" "#PWR085"
-			(at 56.515 193.04 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 56.4642 190.1444 0)
-			(effects
-				(font
-					(size 0.762 0.762)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 56.515 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 56.515 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 56.515 186.69 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e94c9615-75cd-45fd-a753-26829f7988dc")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "#PWR085")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_name "Conn_01x02_1")
 		(lib_id "Connector_keyed_kicad_sym:Conn_01x02")
 		(at 26.67 111.76 0)
@@ -4558,15 +4631,16 @@
 	)
 	(symbol
 		(lib_id "Device:C_Small")
-		(at 49.53 189.23 0)
+		(at 43.18 111.76 90)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5ab0cf65-ef3f-4289-bd76-6c2291ef6228")
-		(property "Reference" "C188"
-			(at 49.657 187.706 0)
+		(uuid "4dc039cd-19ba-4146-a756-f0a4e695968c")
+		(property "Reference" "C186"
+			(at 47.498 110.998 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -4574,8 +4648,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "0.1µF"
-			(at 49.657 190.754 0)
+		(property "Value" "10µF"
+			(at 42.418 110.998 90)
 			(effects
 				(font
 					(size 0.889 0.889)
@@ -4584,7 +4658,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 49.53 189.23 0)
+			(at 43.18 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4593,7 +4667,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 49.53 189.23 0)
+			(at 43.18 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4602,7 +4676,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 49.53 189.23 0)
+			(at 43.18 111.76 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4611,87 +4685,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "726147b7-1b6c-47ae-90ca-a40a65faa288")
+			(uuid "48b0549d-e949-4fcb-ad8b-ea5e9f284508")
 		)
 		(pin "2"
-			(uuid "792f07d9-166b-4562-ba74-a35d203e656c")
+			(uuid "b08cb67c-ae58-4a71-8b7e-e87c8f6cb972")
 		)
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "C188")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector_Generic:Conn_01x03")
-		(at 26.67 184.15 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "63cc467b-a227-4d25-a860-a67f87eb8e3b")
-		(property "Reference" "J124"
-			(at 26.4668 178.6128 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "Conn_01x03"
-			(at 26.67 177.165 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 26.67 184.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 26.67 184.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 26.67 184.15 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "f56947c4-5813-4bb0-872b-c7a7107ec3d1")
-		)
-		(pin "2"
-			(uuid "ae6a764e-5759-4cd9-a02c-a0a3d257b0c1")
-		)
-		(pin "3"
-			(uuid "08d06251-6523-4c9b-899d-fcc0e07f2cfc")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "J124")
+					(reference "C186")
 					(unit 1)
 				)
 			)
@@ -4988,71 +4990,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDA")
-		(at 36.83 118.11 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "750721f4-02e3-45a4-b81e-363a094710fd")
-		(property "Reference" "#PWR084"
-			(at 36.83 124.46 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 36.7792 121.5644 0)
-			(effects
-				(font
-					(size 0.762 0.762)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 36.83 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 36.83 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 36.83 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a55f43dc-222f-4726-b5d9-e6d9d0ae88bf")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "#PWR084")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 52.07 91.44 90)
 		(unit 1)
@@ -5191,34 +5128,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Small")
-		(at 49.53 179.07 0)
+		(lib_id "power:GNDA")
+		(at 56.515 186.69 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "7df76eec-9385-4cc0-8053-6f03dc810635")
-		(property "Reference" "C187"
-			(at 49.657 177.546 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "0.1µF"
-			(at 49.657 180.594 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 49.53 179.07 0)
+		(uuid "7ca0388a-19b4-4e01-aa99-124d025ad16f")
+		(property "Reference" "#PWR085"
+			(at 56.515 193.04 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5226,8 +5145,25 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 49.53 179.07 0)
+		(property "Value" "GNDA"
+			(at 56.4642 190.1444 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 56.515 186.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 56.515 186.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5236,7 +5172,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 49.53 179.07 0)
+			(at 56.515 186.69 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5245,15 +5181,84 @@
 			)
 		)
 		(pin "1"
-			(uuid "68b7285e-c95f-40ee-ae94-0fd3d15abba1")
-		)
-		(pin "2"
-			(uuid "61678b78-0684-497c-a73f-4e0441d1f958")
+			(uuid "e94c9615-75cd-45fd-a753-26829f7988dc")
 		)
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "C187")
+					(reference "#PWR085")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Potentiometer_US")
+		(at 88.9 80.01 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "82802c98-2419-4c6d-8d96-73ad4447de5c")
+		(property "Reference" "RV18"
+			(at 92.703 78.1245 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "100k"
+			(at 92.71 82.55 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 88.9 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 88.9 80.01 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin ""
+			(uuid "c9817f3e-361d-497d-8129-0289ae8715fe")
+		)
+		(pin ""
+			(uuid "182e5d81-b801-4474-8b9c-65ff56606730")
+		)
+		(pin ""
+			(uuid "84911efa-775e-44a6-9bf5-5d0977f2185e")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "RV18")
 					(unit 1)
 				)
 			)
@@ -5392,76 +5397,6 @@
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
 					(reference "R268")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:C_Small")
-		(at 43.18 111.76 90)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "868d1db8-74e0-436a-b628-267982432918")
-		(property "Reference" "C186"
-			(at 47.498 110.998 90)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10µF"
-			(at 42.418 110.998 90)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 43.18 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 43.18 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 43.18 111.76 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "48b0549d-e949-4fcb-ad8b-ea5e9f284508")
-		)
-		(pin "2"
-			(uuid "b08cb67c-ae58-4a71-8b7e-e87c8f6cb972")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "C186")
 					(unit 1)
 				)
 			)
@@ -5813,71 +5748,6 @@
 	)
 	(symbol
 		(lib_id "power:GNDA")
-		(at 88.9 88.9 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "906fabfa-cc10-46a9-9757-8278b67bc7df")
-		(property "Reference" "#PWR089"
-			(at 88.9 95.25 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GNDA"
-			(at 88.8492 92.3544 0)
-			(effects
-				(font
-					(size 0.762 0.762)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 88.9 88.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "314f1895-6090-4b36-8dca-748273594626")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "#PWR089")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDA")
 		(at 149.86 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
@@ -6222,6 +6092,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDA")
+		(at 36.83 118.11 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "abae59a9-3198-4e4d-8092-a422d96e4e9b")
+		(property "Reference" "#PWR084"
+			(at 36.83 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GNDA"
+			(at 36.7792 121.5644 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 36.83 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 36.83 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 36.83 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a55f43dc-222f-4726-b5d9-e6d9d0ae88bf")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "#PWR084")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 43.18 30.48 90)
 		(mirror x)
@@ -6448,34 +6383,34 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_Small_US")
-		(at 39.37 189.23 0)
+		(lib_id "Device:R_Potentiometer_US")
+		(at 88.9 60.96 270)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b7086590-7070-4323-b132-d79cc09db275")
-		(property "Reference" "C174"
-			(at 39.497 187.706 0)
+		(uuid "b8fdbc19-df46-4726-bbfd-5ed2e3895d12")
+		(property "Reference" "RV17"
+			(at 92.456 62.992 90)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
-		(property "Value" "10µF"
-			(at 39.751 191.008 0)
+		(property "Value" "100k"
+			(at 87.884 62.992 90)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
-				(justify left)
+				(justify right)
 			)
 		)
 		(property "Footprint" ""
-			(at 39.37 189.23 0)
+			(at 88.9 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6484,7 +6419,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 39.37 189.23 0)
+			(at 88.9 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6493,7 +6428,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 39.37 189.23 0)
+			(at 88.9 60.96 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6501,16 +6436,19 @@
 				(hide yes)
 			)
 		)
-		(pin "1"
-			(uuid "b7226064-25a7-44b2-b4ce-25d9f32d6685")
+		(pin ""
+			(uuid "124a3b46-0162-477a-9c56-d5469f209add")
 		)
-		(pin "2"
-			(uuid "4c423716-e2d1-487d-9c41-d1e289182e11")
+		(pin ""
+			(uuid "24267e8c-a523-476a-81bf-903515ed1796")
+		)
+		(pin ""
+			(uuid "587787ff-7dd5-4c80-af74-f87b937eed5a")
 		)
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "C174")
+					(reference "RV17")
 					(unit 1)
 				)
 			)
@@ -6586,75 +6524,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:C_Polarized_Small_US")
-		(at 39.37 179.07 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "c56ca61f-49fa-4098-8f2c-f62ea790ade6")
-		(property "Reference" "C69"
-			(at 39.497 177.546 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10µF"
-			(at 39.497 180.848 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 39.37 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 39.37 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 39.37 179.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "5f402c80-e030-4273-8a41-5b0b00f5219c")
-		)
-		(pin "2"
-			(uuid "1791949d-847c-41b6-9356-92fd8a59c105")
-		)
-		(instances
-			(project "Synth32"
-				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "C69")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small_US")
 		(at 135.89 80.01 90)
 		(unit 1)
@@ -6716,6 +6585,75 @@
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
 					(reference "R332")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C_Polarized_Small_US")
+		(at 39.37 179.07 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "cf5d2657-4a41-4aa4-95cc-f7367cb80e4d")
+		(property "Reference" "C69"
+			(at 39.497 177.546 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10µF"
+			(at 39.497 180.848 0)
+			(effects
+				(font
+					(size 0.889 0.889)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 39.37 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 39.37 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 39.37 179.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5f402c80-e030-4273-8a41-5b0b00f5219c")
+		)
+		(pin "2"
+			(uuid "1791949d-847c-41b6-9356-92fd8a59c105")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "C69")
 					(unit 1)
 				)
 			)
@@ -6879,6 +6817,78 @@
 		)
 	)
 	(symbol
+		(lib_id "Connector_Generic:Conn_01x03")
+		(at 26.67 184.15 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e30f696f-e32f-4b74-a070-2f09e718d281")
+		(property "Reference" "J124"
+			(at 26.4668 178.6128 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "Conn_01x03"
+			(at 26.67 177.165 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 26.67 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 26.67 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 26.67 184.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "f56947c4-5813-4bb0-872b-c7a7107ec3d1")
+		)
+		(pin "2"
+			(uuid "ae6a764e-5759-4cd9-a02c-a0a3d257b0c1")
+		)
+		(pin "3"
+			(uuid "08d06251-6523-4c9b-899d-fcc0e07f2cfc")
+		)
+		(instances
+			(project "Synth32"
+				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
+					(reference "J124")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_name "Conn_01x02_1")
 		(lib_id "Connector_keyed_kicad_sym:Conn_01x02")
 		(at 26.67 81.28 0)
@@ -7020,34 +7030,34 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Potentiometer_US")
-		(at 88.9 60.96 270)
+		(lib_id "Device:C_Small")
+		(at 49.53 179.07 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "eaf781c2-a4e1-4cac-a1e5-06329fb13e46")
-		(property "Reference" "RV17"
-			(at 92.456 62.992 90)
+		(uuid "ed158cac-1031-4431-9173-e5fe67b2b603")
+		(property "Reference" "C187"
+			(at 49.657 177.546 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
-		(property "Value" "100k"
-			(at 87.884 62.992 90)
+		(property "Value" "0.1µF"
+			(at 49.657 180.594 0)
 			(effects
 				(font
 					(size 0.889 0.889)
 				)
-				(justify right)
+				(justify left)
 			)
 		)
 		(property "Footprint" ""
-			(at 88.9 60.96 0)
+			(at 49.53 179.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7056,7 +7066,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 88.9 60.96 0)
+			(at 49.53 179.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7065,7 +7075,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 60.96 0)
+			(at 49.53 179.07 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7073,19 +7083,16 @@
 				(hide yes)
 			)
 		)
-		(pin ""
-			(uuid "124a3b46-0162-477a-9c56-d5469f209add")
+		(pin "1"
+			(uuid "68b7285e-c95f-40ee-ae94-0fd3d15abba1")
 		)
-		(pin ""
-			(uuid "24267e8c-a523-476a-81bf-903515ed1796")
-		)
-		(pin ""
-			(uuid "587787ff-7dd5-4c80-af74-f87b937eed5a")
+		(pin "2"
+			(uuid "61678b78-0684-497c-a73f-4e0441d1f958")
 		)
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "RV17")
+					(reference "C187")
 					(unit 1)
 				)
 			)
@@ -7163,34 +7170,16 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:R_Potentiometer_US")
-		(at 88.9 80.01 0)
+		(lib_id "power:GNDA")
+		(at 88.9 88.9 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "fb8d8437-74cf-4de3-bb57-18e9c8f452af")
-		(property "Reference" "RV18"
-			(at 92.703 78.1245 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "100k"
-			(at 92.71 82.55 0)
-			(effects
-				(font
-					(size 0.889 0.889)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 80.01 0)
+		(uuid "fb20a15c-a110-468e-a459-75fb6b07226c")
+		(property "Reference" "#PWR089"
+			(at 88.9 95.25 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7198,8 +7187,25 @@
 				(hide yes)
 			)
 		)
-		(property "Datasheet" "~"
-			(at 88.9 80.01 0)
+		(property "Value" "GNDA"
+			(at 88.8492 92.3544 0)
+			(effects
+				(font
+					(size 0.762 0.762)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 88.9 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 88.9 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7208,7 +7214,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 80.01 0)
+			(at 88.9 88.9 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7216,19 +7222,13 @@
 				(hide yes)
 			)
 		)
-		(pin ""
-			(uuid "c9817f3e-361d-497d-8129-0289ae8715fe")
-		)
-		(pin ""
-			(uuid "182e5d81-b801-4474-8b9c-65ff56606730")
-		)
-		(pin ""
-			(uuid "84911efa-775e-44a6-9bf5-5d0977f2185e")
+		(pin "1"
+			(uuid "314f1895-6090-4b36-8dca-748273594626")
 		)
 		(instances
 			(project "Synth32"
 				(path "/718f017d-28fe-4e29-b548-40db8e21cec7/92fe7bea-64b6-40b3-8e51-c7dbcedff8cc/a58131de-3c81-4e3c-a577-8b273e08214f"
-					(reference "RV18")
+					(reference "#PWR089")
 					(unit 1)
 				)
 			)

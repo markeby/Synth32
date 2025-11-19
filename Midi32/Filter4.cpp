@@ -31,8 +31,15 @@ void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR
     // D/A configuration
     _FreqIO   = first_device;
     _QuIO     = first_device + 1;
+    if ( num == 0 )                 // hack
+        {                           // hack
+        _FreqIO = 180;              // hack
+        _QuIO = 181;                // hack
+        }
+
     _Envelope = envgen.NewADSR (num, "Freq", _FreqIO, usecount);
     _Envelope->SetDualUse (true);
+
 
     short dig = first_device + 4;       // get first digital switch
     if ( num & 1 )                      //   odd numbered units need 2 more
