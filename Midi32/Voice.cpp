@@ -18,7 +18,8 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, 
     _Midi                 = 1;
     _TuningOn             = false;
 
-    _DigitalOutOscillator = mixer;
+    _DigitalOutLpFilter   = mixer;
+    _DigitalOutOscillator = mixer + 8;
     _NoiseDigitalIO       = noise_digitinal;
     NoiseReset ();
 

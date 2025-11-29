@@ -24,7 +24,7 @@ static const char* Label  = "TOP";
 static short    volumeMaster;
 static short    volumeOscMaster;
 static short    volumeFltMaster;
-static short    volumeSprMaster;
+static short    volumeFltLPMaster;
 
 //###################################################################
 using namespace MIDI_NAMESPACE;
@@ -47,15 +47,15 @@ void InitializeSynth ()
     CalibrationBaseDigital = mod_mux_digital;
 
     // setup I2C indexes for mixers
-    volumeMaster    = mixer + 8;        // Master volume port
-    volumeOscMaster = mixer + 9;        // Oscillator master volume port
-    volumeFltMaster = mixer + 10;       // Filter master volume port
-    volumeSprMaster = mixer + 11;       // Spare master volume port
+    volumeMaster      = mixer + 16;       // Master volume port
+    volumeFltLPMaster = mixer + 17;       // LP filter master volume port
+    volumeFltMaster   = mixer + 18;       // Filter master volume port
+    volumeOscMaster   = mixer + 19;       // Oscillator master volume port
 
     MasterVolume (45);
     I2cDevices.D2Analog      (volumeOscMaster, 0);
     I2cDevices.D2Analog      (volumeFltMaster, 0);
-    I2cDevices.D2Analog      (volumeSprMaster, DA_MAX);     // mute for now
+    I2cDevices.D2Analog      (volumeFltLPMaster, 0);
     I2cDevices.UpdateAnalog  ();
 
     for ( int z = 0;  z < VOICE_COUNT;  z++ )

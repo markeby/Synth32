@@ -4,6 +4,9 @@
 	(generator_version "9.0")
 	(uuid "b2c04166-ccae-4b03-962d-6b704d88fb9e")
 	(paper "USLegal")
+	(title_block
+		(date "2025-11-28")
+	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:TL072"
 			(pin_names

@@ -4,6 +4,9 @@
 	(generator_version "9.0")
 	(uuid "52f89f15-738b-44ea-b3f6-97e0aaa596b8")
 	(paper "USLegal")
+	(title_block
+		(date "2025-11-28")
+	)
 	(lib_symbols
 		(symbol "Connector:AudioJack2"
 			(exclude_from_sim no)

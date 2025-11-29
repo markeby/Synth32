@@ -5,7 +5,7 @@
 	(uuid "c9311693-a187-4ace-8e53-d54731b6ff9d")
 	(paper "USLegal")
 	(title_block
-		(date "2025-03-10")
+		(date "2025-11-28")
 	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:LM324"

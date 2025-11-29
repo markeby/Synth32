@@ -244,8 +244,24 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
+                    {
+                    static short z1 = 0;
+
+                    z1 = z1 ^ 1;
+                    I2cDevices.DigitalOut(208, z1);
+                    I2cDevices.UpdateDigital();
+                    DbgD(z1);
+                    }
                     break;
                 case 'x':           // Test function #2
+                    {
+                    static short x1 = 0;
+
+                    x1 = x1 ^ 1;
+                    I2cDevices.DigitalOut(209, x1);
+                    I2cDevices.UpdateDigital();
+                    DbgD(x1);
+                    }
                     break;
                 case 'c':           // Test function #3
                     break;

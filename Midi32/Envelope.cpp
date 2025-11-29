@@ -74,6 +74,20 @@ ENVELOPE_C::ENVELOPE_C (uint8_t index, String name, uint16_t device, uint8_t& us
     }
 
 //#######################################################################
+void ENVELOPE_C::Clear ()
+    {
+    if ( _Active && _UseCount )
+        _UseCount--;
+    _Active        = false;
+    _TriggerEnd    = false;
+    _State         = ESTATE::IDLE;
+    _Current       = _Bottom;
+    _Updated       = true;
+    DBG("clearing");
+    Update ();
+    }
+
+//#######################################################################
 void ENVELOPE_C::Mute (bool state)
     {
     _Muted = state;
@@ -197,19 +211,6 @@ void ENVELOPE_C::End ()
         return;
     _TriggerEnd = true;
     _State = ESTATE::IDLE;
-    }
-
-//#######################################################################
-void ENVELOPE_C::Clear ()
-    {
-    if ( _Active && _UseCount )     _UseCount--;
-    _Active        = false;
-    _TriggerEnd    = false;
-    _State         = ESTATE::IDLE;
-    _Current       = _Bottom;
-    _Updated       = true;
-    DBG ("clearing");
-    Update ();
     }
 
 //#######################################################################

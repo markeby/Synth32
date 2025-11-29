@@ -135,11 +135,11 @@ extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_S
 //#################################################
 extern  I2C_INTERFACE_C         I2cDevices;
 #define START_MIXER             0
-#define START_NOISE_DIGITAL     12
-#define START_LFO_CONTROL       28
-#define START_MOD_MUX           48
-#define START_A_D               64
-#define START_VOICE_CONTROL     68
+#define START_NOISE_DIGITAL     20
+#define START_LFO_CONTROL       36
+#define START_MOD_MUX           56
+#define START_A_D               72
+#define START_VOICE_CONTROL     76
 
 //#################################################
 //    Synthesizer configuration storage

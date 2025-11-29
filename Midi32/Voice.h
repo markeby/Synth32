@@ -29,6 +29,7 @@ private:
     bool    _RampDirection;
     float   _PulseWidthSet;
     short   _DigitalOutOscillator;
+    short   _DigitalOutLpFilter;
 
     FLT4_C  _Flt;
 
