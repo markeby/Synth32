@@ -18,10 +18,10 @@ Utilizing components from the following manufacturers:
   - Display module
 
 The core of the system is an ESP-WROOM-32 ESP32 ESP-32S development board with a  USB development shield to interface a midi keyboard.
-Any midi controller will work.  I am using an inexpensive Smason Graphite 49 on the serial MIDI and a Novation LaunchControl XL on the USB MIDI.
+Any midi controller will work.  I am using an inexpensive Samson Graphite 49 on the serial MIDI and a Novation LaunchControl XL on the USB MIDI.
 I intend to add bluetooth MIDI input as well.
 
-The design is for 8 simultanous notes whether they be all of the same effect or split the keyboard to have dual effects but still be able to play cords.
+The design is for 8 simultanous notes whether they be all of the same effect or split into as many as four voice pairs with unique sound each.  
 
 There is a second serial MIDI port for sequencer input.  I am currently usinc Logic Pro on a Macbook Air M1. 
 
