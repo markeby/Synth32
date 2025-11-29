@@ -36,6 +36,6 @@ The tools used are:
 - Arduino-cli 
 - ESP32 version 3.1.1 "arduino-cli core install esp32:esp32@3.1.1"
 - Gnu make for Windows (could be used in Linux as well)
-- Arduino IDE - I only am using the loader tool for OTA updates of the primary processor
-- SimplySerial - The best serial terminal software I have seen for this application debugging.  
-  Thanks Edward Wright (fasteddy516).
+- Espressif frameworks tools to upload utilizing OTA libraries. 
+- [SimplySerial](https://github.com/fasteddy516/SimplySerial) - The best serial terminal software I have seen for this application debugging.  
+  Thanks [Edward Wright (fasteddy516)](https://github.com/fasteddy516).
