@@ -8,7 +8,7 @@ Utilizing components from the following manufacturers:
 
 - Espressif 
   - ESP32 processors
-- Sound Semiconductor, FatKeys™
+- Sound Semiconductor, FatKeysâ„¢
   - VCO, VCF, VCA
 - Adafruit
   - D/A Converter modules, I/O Expanders
@@ -39,4 +39,7 @@ The tools used are:
 - Espressif frameworks tools to upload utilizing OTA libraries. 
 - [SimplySerial](https://github.com/fasteddy516/SimplySerial) - The best serial terminal software I have seen for this application debugging.  
   Thanks [Edward Wright (fasteddy516)](https://github.com/fasteddy516).
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
