@@ -115,9 +115,21 @@ static void pulseWidth (short ch, short data)
 //  Filter controls
 //########################################################
 //########################################################
-static void freqCtrlModeAdv (short ch, short data)
+static void fltCtrlModeAdv (short ch, short data)
     {
-    FreqCtrlModeAdv ();
+    FltCtrlModeAdv (ch);
+    }
+
+//########################################################
+static void fltLpPoleAdv (short ch, short data)
+    {
+    FltLpPoleAdv ();
+    }
+
+//########################################################
+static void fltLpSelQ (short ch, short data)
+    {
+    FltLpQSelAdv ();
     }
 
 //########################################################
@@ -247,22 +259,22 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     5,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     6,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {   127,   0x3C, "Pulse Width",             pulseWidth          },  // 71 0x47  23
-        {     0,   0x3C, "Set Sine L/S",            setLevelSelect      },  // 72 0x48  24  First button
-        {     1,   0x3C, "Set Triangle L/S",        setLevelSelect      },  // 73 0x49  25
-        {     2,   0x3C, "Set Ramp  L/S",           setLevelSelect      },  // 74 0x4A  26
-        {     3,   0x3C, "Set Pulse L/S ",          setLevelSelect      },  // 75 0x4B  27
-        {     4,   0x3C, "Set Noise L/S ",          setLevelSelect      },  // 76 0x4C  28
-        {     5,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29
-        {     6,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     7,   0x3C, "Sawtooth Dir",            ToggleRampDirection },  // 79 0x4D  31
-        {     0,   0x3C, "Sine Damper on",          DamperToggle        },  // 80 0x50  32
-        {     1,   0x3C, "Triangle Damper on",      DamperToggle        },  // 81 0x51  33
-        {     2,   0x3C, "Ramp Damper on",          DamperToggle        },  // 82 0x52  34
-        {     3,   0x3C, "Pulse Damper on",         DamperToggle        },  // 83 0x53  35
-        {     4,   0x3C, "Noise Damper on",         DamperToggle        },  // 84 0x54  36
-        {    13,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
-        {    14,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {    15,   0x3C, "Mute Voice",              MuteVoiceToggle     },  // 87 0x57  39  last button
+        {     0,   0x3C, "Set Sine L/S",            setLevelSelect      },  // 72 0x48  24  TF1
+        {     1,   0x3C, "Set Triangle L/S",        setLevelSelect      },  // 73 0x49  25  TF2
+        {     2,   0x3C, "Set Ramp  L/S",           setLevelSelect      },  // 74 0x4A  26  TF3
+        {     3,   0x3C, "Set Pulse L/S ",          setLevelSelect      },  // 75 0x4B  27  TF4
+        {     4,   0x3C, "Set Noise L/S ",          setLevelSelect      },  // 76 0x4C  28  TF5
+        {     5,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
+        {     6,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30  TF7
+        {     7,   0x3C, "Sawtooth Dir",            ToggleRampDirection },  // 79 0x4D  31  TF8
+        {     0,   0x3C, "Sine Damper on",          DamperToggle        },  // 80 0x50  32  TC1
+        {     1,   0x3C, "Triangle Damper on",      DamperToggle        },  // 81 0x51  33  TC2
+        {     2,   0x3C, "Ramp Damper on",          DamperToggle        },  // 82 0x52  34  TC3
+        {     3,   0x3C, "Pulse Damper on",         DamperToggle        },  // 83 0x53  35  TC4
+        {     4,   0x3C, "Noise Damper on",         DamperToggle        },  // 84 0x54  36  TC5
+        {    13,   0x0C, "N ",                      nullptr             },  // 85 0x55  37  TC6
+        {    14,   0x0C, "N ",                      nullptr             },  // 86 0x56  38  TC7
+        {    15,   0x3C, "Mute Voice",              MuteVoiceToggle     },  // 87 0x57  39  TC8
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
@@ -271,7 +283,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     1,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,   0x0C, "N ",                      nullptr             },  // 94 0x5E  46
         {     1,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "Level Sine",              SetLevel            },  // 96 0x60  48
+        {     0,      0, "Level Sine",              SetLevel            },  // 96 0x60  48  First Fader
         {     1,      0, "Level Triangle",          SetLevel            },  // 97 0x61  49
         {     2,      0, "Level Ramp",              SetLevel            },  // 98 0x62  50
         {     3,      0, "Level Pulse",             SetLevel            },  // 99 0x63  51
@@ -281,62 +293,62 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,      0, "Master level",            SetMasterLevel      },  //103 0x67  55
       },
 // XL_MIDI_MAP_FILTER
-      { {     8,   0x3C, "Attack Freq",             SetAttackTime       },  // 48 0x30  0
+      { {     0,   0x2E, "FLT4 Attack",             SetAttackTime       },  // 48 0x30  0
         {     0,   0x0C, "N ",                      nullptr             },  // 49 0x31  1
         {     0,   0x0C, "N ",                      nullptr             },  // 50 0x32  2
-        {     9,   0x0C, "N ",                      nullptr             },  // 51 0x33  3
-        {     0,   0x0C, "N ",                      nullptr             },  // 52 0x34  4
+        {     0,   0x0C, "N ",                      nullptr             },  // 51 0x33  3
+        {     1,   0x0D, "LP Attack",               SetAttackTime       },  // 52 0x34  4
         {     0,   0x0C, "N ",                      nullptr             },  // 53 0x35  5
         {     0,   0x0C, "N ",                      nullptr             },  // 54 0x36  6
         {     0,   0x0C, "N ",                      nullptr             },  // 55 0x37  7
-        {     8,   0x3C, "Decay Freq",              SetDecayTime        },  // 56 0x38  8
+        {     0,   0x2E, "FLT4 Decay",              SetDecayTime        },  // 56 0x38  8
         {     0,   0x0C, "N ",                      nullptr             },  // 57 0x39  9
         {     0,   0x0C, "N ",                      nullptr             },  // 58 0x3A  10
-        {     9,   0x0C, "N ",                      nullptr             },  // 59 0x3B  11
-        {     0,   0x0C, "N ",                      nullptr             },  // 60 0x3C  12
+        {     0,   0x0C, "N ",                      nullptr             },  // 59 0x3B  11
+        {     1,   0x0D, "LP Decay",                SetDecayTime        },  // 60 0x3C  12
         {     0,   0x0C, "N ",                      nullptr             },  // 61 0x3D  13
         {     0,   0x0C, "N ",                      nullptr             },  // 62 0x3E  14
         {     0,   0x0C, "N ",                      nullptr             },  // 63 0x3F  15
-        {     8,   0x3C, "Release Freq",            SetReleaseTime      },  // 64 0x40  16
+        {     0,   0x2E, "FLT4 Release",            SetReleaseTime      },  // 64 0x40  16
         {     0,   0x0C, "N ",                      nullptr             },  // 65 0x41  17
         {     0,   0x0C, "N ",                      nullptr             },  // 66 0x42  18
-        {     9,   0x0C, "N ",                      nullptr             },  // 67 0x43  19
-        {     0,   0x0C, "N ",                      nullptr             },  // 68 0x44  20
+        {     0,   0x0C, "N ",                      nullptr             },  // 67 0x43  19
+        {     1,   0x0D, "LP Release",              SetReleaseTime      },  // 68 0x44  20
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x3C, "N ",                      dummyButton         },  // 72 0x48  24  First button
-        {     0,   0x3C, "N ",                      dummyButton         },  // 73 0x49  25
-        {     0,   0x3C, "N ",                      dummyButton         },  // 74 0x4A  26
-        {     0,   0x2E, "N ",                      dummyButton         },  // 75 0x4B  27
-        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28
-        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29
-        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     0,   0x3C, "Freq ctrl mode advance",  freqCtrlModeAdv     },  // 79 0x4D  31
-        {     0,   0x3C, "Select Bypass",           selectFilter        },  // 80 0x50  32
-        {     1,   0x3C, "Select LP",               selectFilter        },  // 81 0x51  33
-        {     2,   0x3C, "Select LBP",              selectFilter        },  // 82 0x52  34
-        {     3,   0x3C, "Select UBP",              selectFilter        },  // 83 0x53  35
-        {     4,   0x3C, "Select HP",               selectFilter        },  // 84 0x54  36
-        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
-        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button
+        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  TF1
+        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25  TF2
+        {     0,   0x2E, "FLT4 Control select",     fltCtrlModeAdv      },  // 74 0x4A  26  TF3
+        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27  TF4
+        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28  TF5
+        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
+        {     1,   0x0D, "LP Control select",       fltCtrlModeAdv      },  // 78 0x4E  30  TF7
+        {     0,   0x0D, "LP Q select",             fltLpSelQ           },  // 79 0x4D  31  TF8
+        {     0,   0x3C, "Select Bypass",           selectFilter        },  // 80 0x50  32  TC1
+        {     1,   0x3C, "Select LP",               selectFilter        },  // 81 0x51  33  TC2
+        {     2,   0x3C, "Select LBP",              selectFilter        },  // 82 0x52  34  TC3
+        {     3,   0x3C, "Select UBP",              selectFilter        },  // 83 0x53  35  TC4
+        {     4,   0x3C, "Select HP",               selectFilter        },  // 84 0x54  36  TC5
+        {     5,   0x3C, "Select 4P LP",            selectFilter        },  // 85 0x55  37  TC6
+        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38  TC7
+        {     0,   0x0D, "LP Pole select",          fltLpPoleAdv        },  // 87 0x57  39  TC8
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
         {     3,   0x3F, "Page Advance",            pageAdvance         },  // 91 0x5B  43
         {     0,   0x0C, "N ",                      nullptr             },  // 92 0x5C  44
-        {     1,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
+        {     0,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,   0x0C, "N ",                      nullptr             },  // 94 0x5E  46
-        {     1,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
-        {     8,      0, "FLT FREQ START",          FltStart            },  // 96 0x60  48
-        {     8,      0, "FLT FREQ END",            FltEnd              },  // 97 0x61  49
-        {     8,      0, "FLT FREQ SUSTAIN",        SetSustainLevel     },  // 98 0x62  50
-        {     9,      0, "FLT Q",                   FltQ                },  // 99 0x63  51
-        {     9,      0, "N ",                      nullptr             },  //100 0x64  52
-        {     9,      0, "N ",                      nullptr             },  //101 0x65  53
-        {     0,      0, "N ",                      nullptr             },  //102 0x66  54
-        {     1,      0, "Master level",            SetMasterLevel      },  //103 0x67  55
+        {     0,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
+        {     0,      0, "FLT4 FREQ START",         FltStart            },  // 96 0x60  48  First Fader
+        {     0,      0, "FLT4 FREQ END",           FltEnd              },  // 97 0x61  49
+        {     0,      0, "FLT4 FREQ SUSTAIN",       SetSustainLevel     },  // 98 0x62  50
+        {     0,      0, "FLT4 Q",                  FltQ                },  // 99 0x63  51
+        {     1,      0, "LP FREQ START",           FltStart            },  //100 0x64  52
+        {     1,      0, "LP FREQ END",             FltEnd              },  //101 0x65  53
+        {     1,      0, "LP FREQ SUSTAIN",         SetSustainLevel     },  //102 0x66  54
+        {     1,      0, "LP Q",                    FltQ                },  //103 0x67  55
       },
 // XL_MIDI_MAP_LFO
       { {     0,   0x2C, "Hard LFO 1 course freq",  FreqLFO             },  // 48 0x30  0
@@ -363,22 +375,22 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,      0, "N ",                      nullptr             },  // 69 0x45  21
         {     0,      0, "N ",                      nullptr             },  // 70 0x46  22
         {     0,      0, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x3C, "LFO 1 freq Mod Sine",     toggleModVCO        },  // 72 0x48  24  First button
-        {     1,   0x3C, "LFO 1 freq Mod Ramp",     toggleModVCO        },  // 73 0x49  25
-        {     2,   0x3C, "LFO 1 freq Pulse",        toggleModVCO        },  // 74 0x4A  26
-        {     0,   0x3C, "Toggle Ramp 1 Direction", toggleModRampDir    },  // 75 0x4B  27
-        {     4,   0x3C, "LFO 2 freq Mod Sine",     toggleModVCO        },  // 76 0x4C  28
-        {     5,   0x3C, "LFO 2 freq Mod Ramp",     toggleModVCO        },  // 77 0x4D  29
-        {     6,   0x3C, "LFO 2 freq Pulse",        toggleModVCO        },  // 78 0x4E  30
-        {     1,   0x3C, "Toggle Ramp2  Direction", toggleModRampDir    },  // 79 0x4D  31
-        {     0,   0x3C, "VCA Mod Sine",            toggleModVCA        },  // 80 0x50  32
-        {     1,   0x3C, "VCA Mod Triangle",        toggleModVCA        },  // 81 0x51  33
-        {     2,   0x3C, "VCA Mod Ramp",            toggleModVCA        },  // 82 0x52  34
-        {     3,   0x3C, "VCA Mod Pulse",           toggleModVCA        },  // 83 0x53  35
-        {     4,   0x3C, "VCA Mod Noise",           toggleModVCA        },  // 84 0x54  36
-        {     0,      0, "N ",                      nullptr             },  // 85 0x55  37
-        {     0,   0x3C, "Toggle LFO 0 Mod Level",  toggleModLevelAlt   },  // 86 0x56  38
-        {     1,   0x3C, "Toggle LFO 1 Mod Level",  toggleModLevelAlt   },  // 87 0x57  39  last button
+        {     0,   0x3C, "LFO 1 freq Mod Sine",     toggleModVCO        },  // 72 0x48  24  TF1
+        {     1,   0x3C, "LFO 1 freq Mod Ramp",     toggleModVCO        },  // 73 0x49  25  TF2
+        {     2,   0x3C, "LFO 1 freq Pulse",        toggleModVCO        },  // 74 0x4A  26  TF3
+        {     0,   0x3C, "Toggle Ramp 1 Direction", toggleModRampDir    },  // 75 0x4B  27  TF4
+        {     4,   0x3C, "LFO 2 freq Mod Sine",     toggleModVCO        },  // 76 0x4C  28  TF5
+        {     5,   0x3C, "LFO 2 freq Mod Ramp",     toggleModVCO        },  // 77 0x4D  29  TF6
+        {     6,   0x3C, "LFO 2 freq Pulse",        toggleModVCO        },  // 78 0x4E  30  TF7
+        {     1,   0x3C, "Toggle Ramp2  Direction", toggleModRampDir    },  // 79 0x4D  31  TF8
+        {     0,   0x3C, "VCA Mod Sine",            toggleModVCA        },  // 80 0x50  32  TC1
+        {     1,   0x3C, "VCA Mod Triangle",        toggleModVCA        },  // 81 0x51  33  TC2
+        {     2,   0x3C, "VCA Mod Ramp",            toggleModVCA        },  // 82 0x52  34  TC3
+        {     3,   0x3C, "VCA Mod Pulse",           toggleModVCA        },  // 83 0x53  35  TC4
+        {     4,   0x3C, "VCA Mod Noise",           toggleModVCA        },  // 84 0x54  36  TC5
+        {     0,      0, "N ",                      nullptr             },  // 85 0x55  37  TC6
+        {     0,   0x3C, "Toggle LFO 0 Mod Level",  toggleModLevelAlt   },  // 86 0x56  38  TC7
+        {     1,   0x3C, "Toggle LFO 1 Mod Level",  toggleModLevelAlt   },  // 87 0x57  39  TC8
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
@@ -387,7 +399,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     1,      0, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,      0, "N ",                      nullptr             },  // 94 0x5E  46
         {     1,      0, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48
+        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48  First Fader
         {     0,      0, "N ",                      nullptr             },  // 97 0x61  49
         {     0,      0, "N ",                      nullptr             },  // 98 0x62  50
         {     0,      0, "N ",                      nullptr             },  // 99 0x63  51
@@ -421,22 +433,22 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  First button
-        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25
-        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26
-        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27
-        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28
-        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29
-        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31
-        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32
-        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33
-        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34
-        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35
-        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36
-        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
-        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button
+        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  TF1
+        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25  TF2
+        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26  TF3
+        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27  TF4
+        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28  TF5
+        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
+        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30  TF7
+        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31  TF8
+        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32  TC1
+        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33  TC2
+        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34  TC3
+        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35  TC4
+        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36  TC5
+        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37  TC6
+        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38  TC7
+        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  TC8
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x0C, "Load Configuration",      nullptr             },  // 90 0x5A  42
@@ -445,7 +457,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     1,   0x3F, "Send Sel DN",             sendDir             },  // 93 0x5D  45
         {     0,   0x3F, "Track Sel Left",          trackSel            },  // 94 0x5E  46
         {     1,   0x3F, "Track Sel Right",         trackSel            },  // 95 0x5F  47
-        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48
+        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48  First Fader
         {     0,      0, "N ",                      nullptr             },  // 97 0x61  49
         {     0,      0, "N ",                      nullptr             },  // 98 0x62  50
         {     0,      0, "N ",                      nullptr             },  // 99 0x63  51
@@ -479,22 +491,22 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  First button
-        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25
-        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26
-        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27
-        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28
-        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29
-        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31
-        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32
-        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33
-        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34
-        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35
-        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36
-        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
-        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button
+        {     0,   0x0C, "N ",                      nullptr             },  // 72 0x48  24  TF1
+        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25  TF2
+        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26  TF3
+        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27  TF4
+        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28  TF5
+        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
+        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30  TF7
+        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31  TF8
+        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32  TC1
+        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33  TC2
+        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34  TC3
+        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35  TC4
+        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36  TC5
+        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37  TC6
+        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38  TC7
+        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  TC8
         {     0,   0x3F, "Map mode select",         mappingSelect       },  // 88 0x58  40
         {     1,   0x3F, "Save Configuration",      saveConfig          },  // 89 0x59  41
         {     2,   0x3F, "Load Configuration",      loadConfig          },  // 90 0x5A  42
@@ -503,7 +515,7 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     1,   0x3F, "Send Sel DN",             sendDir             },  // 93 0x5D  45
         {     0,      0, "N ",                      nullptr             },  // 94 0x5E  46
         {     1,      0, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48
+        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48  First Fader
         {     0,      0, "N ",                      nullptr             },  // 97 0x61  49
         {     0,      0, "N ",                      nullptr             },  // 98 0x62  50
         {     0,      0, "N ",                      nullptr             },  // 99 0x63  51
@@ -537,22 +549,22 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x3C, "N ",                      nullptr             },  // 72 0x48  24  First button
-        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25
-        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26
-        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27
-        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28
-        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29
-        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30
-        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31
-        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32
-        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33
-        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34
-        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35
-        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36
-        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37
-        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38
-        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  last button
+        {     0,   0x3C, "N ",                      nullptr             },  // 72 0x48  24  TF1
+        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25  TF2
+        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26  TF3
+        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27  TF4
+        {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28  TF5
+        {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
+        {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30  TF7
+        {     0,   0x0C, "N ",                      nullptr             },  // 79 0x4D  31  TF8
+        {     0,   0x0C, "N ",                      nullptr             },  // 80 0x50  32  TC1
+        {     0,   0x0C, "N ",                      nullptr             },  // 81 0x51  33  TC2
+        {     0,   0x0C, "N ",                      nullptr             },  // 82 0x52  34  TC3
+        {     0,   0x0C, "N ",                      nullptr             },  // 83 0x53  35  TC4
+        {     0,   0x0C, "N ",                      nullptr             },  // 84 0x54  36  TC5
+        {     0,   0x0C, "N ",                      nullptr             },  // 85 0x55  37  TC6
+        {     0,   0x0C, "N ",                      nullptr             },  // 86 0x56  38  TC7
+        {     0,   0x0C, "N ",                      nullptr             },  // 87 0x57  39  TC8
         {     0,   0x0C, "N ",                      nullptr             },  // 88 0x58  40
         {     0,   0x0C, "N ",                      nullptr             },  // 89 0x59  41
         {     0,   0x0C, "N ",                      nullptr             },  // 90 0x5A  42

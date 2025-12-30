@@ -5,7 +5,7 @@
 	(uuid "c33b700d-97ef-488e-816c-45cfc7a509d7")
 	(paper "USLegal")
 	(title_block
-		(date "2025-11-28")
+		(date "2025-12-06")
 	)
 	(lib_symbols
 		(symbol "Connector_keyed_kicad_sym:Conn_01x04"

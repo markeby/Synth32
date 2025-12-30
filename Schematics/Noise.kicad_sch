@@ -6,7 +6,7 @@
 	(paper "USLegal")
 	(title_block
 		(title "Quad Noise Geneartor")
-		(date "2025-11-28")
+		(date "2025-12-06")
 		(rev "4.2")
 		(comment 1 "In Development ")
 	)

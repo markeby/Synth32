@@ -20,14 +20,14 @@ LIBS := --library $(SHARED)
 
 # header files
 INCLUDES := config.h UpdateOTA.h Debug.h I2Cdevices.h I2Cmessages.h Envelope.h FrontEnd.h ConfigJSON.h \
-            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h Voice.h Filter4.h Novation.h \
-	        $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h  
+            LFOosc.h Osc.h SerialMonitor.h Settings.h SoftLFO.h Voice.h Filter4.h FilterLP.h Novation.h \
+	        $(SHARED)/DispMessages.h $(SHARED)/SynthCommon.h Stats.h
  
 # source files
 SOURCES := $(PROJECT) Config.cpp SerialMonitor.cpp UpdateOTA.cpp I2Cdevices.cpp Debug.cpp Settings.cpp I2Cmessages.cpp \
            FrontEnd.cpp MIDI_Keyboard.cpp MIDI_Control.cpp MIDI_Sequencer.cpp Novation.cpp \
-           Control_Voice.cpp Control_LFO.cpp Tuning.cpp Mapping.cpp \
-           SoftLFO.cpp Filter4.cpp Voice.cpp Osc.cpp LFOosc.cpp Envelope.cpp  
+           Control_Voice.cpp Control_LFO.cpp Tuning.cpp Mapping.cpp Envelope.cpp LFOosc.cpp SoftLFO.cpp \
+           Filter4.cpp FilterLP.cpp Voice.cpp Osc.cpp 
    
 # serial port for uploading
 DEFAULT_PORT := COM3

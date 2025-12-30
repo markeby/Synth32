@@ -124,11 +124,13 @@ void SetReleaseTime         (short ch, short data);
 void SetSustainLevel        (short ch, short data);
 void ToggleRampDirection    (short ch, short data);
 void SetPulseWidth          (short data);
-void FltStart               (short index, short data);
-void FltEnd                 (short index, short data);
-void FltQ                   (short index, short data);
+void FltStart               (short ch, short data);
+void FltEnd                 (short ch, short data);
+void FltQ                   (short ch, short data);
 void SelectFilter           (short index);
-void FreqCtrlModeAdv        (void);
+void FltCtrlModeAdv         (byte ch);
+void FltLpPoleAdv           (void);
+void FltLpQSelAdv           (void);
 void Damper                 (byte mchan, bool state);
 
 

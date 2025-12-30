@@ -86,6 +86,7 @@
             <F N="Debug.cpp"/>
             <F N="Envelope.cpp"/>
             <F N="Filter4.cpp"/>
+            <F N="FilterLP.cpp"/>
             <F N="FrontEnd.cpp"/>
             <F N="I2Cdevices.cpp"/>
             <F N="I2Cmessages.cpp"/>
@@ -119,6 +120,7 @@
             <F N="Debug.h"/>
             <F N="Envelope.h"/>
             <F N="Filter4.h"/>
+            <F N="FilterLP.h"/>
             <F N="FrontEnd.h"/>
             <F N="I2Cdevices.h"/>
             <F N="I2Cmessages.h"/>
@@ -129,6 +131,7 @@
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
             <F N="SoftLFO.h"/>
+            <F N="Stats.h"/>
             <F N="UpdateOTA.h"/>
             <F N="Voice.h"/>
         </Folder>

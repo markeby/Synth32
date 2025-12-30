@@ -28,7 +28,7 @@ private:
     void  SendUpdate    (DISP_MESSAGE_N::CMD_C cmd, byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, short value);
 
 public:
-          I2C_MESSAGE_C (void);
+    I2C_MESSAGE_C (void);
     void  Begin         (byte display, byte sda, byte scl);
     void  Page          (byte page);
     void  Page          (DISP_MESSAGE_N::PAGE_C page)               { Page ((byte)page); }
@@ -71,7 +71,7 @@ public:
                     0, 0,
                     DISP_MESSAGE_N::EFFECT_C::NOTE,
                     value);
-        }
+    }
 
     //#################################################
     void TuningDtoA (short value)
@@ -143,7 +143,7 @@ public:
     //#################################################
     void SendGeneral (byte mapi, byte channel, DISP_MESSAGE_N::EFFECT_C effect, uint16_t value)
         {
-        SendUpdate(DISP_MESSAGE_N::CMD_C::GENERAL_PAGE_UPDATE, mapi, channel, effect, value);
+        SendUpdate (DISP_MESSAGE_N::CMD_C::GENERAL_PAGE_UPDATE, mapi, channel, effect, value);
         }
 
     //#################################################
@@ -162,13 +162,13 @@ public:
     //#################################################
     void OscMute (bool sel)
         {
-        SendUpdateOsc (0, 0, DISP_MESSAGE_N::EFFECT_C::MUTE, (( sel ) ? 1 : 0));
+        SendUpdateOsc (0, 0, DISP_MESSAGE_N::EFFECT_C::MUTE, ((sel) ? 1 : 0));
         }
 
     //#################################################
     void OscSelectedLevel (byte channel, bool sel)
         {
-        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( sel ) ? 1 : 0));
+        SendUpdateOsc (0, channel, DISP_MESSAGE_N::EFFECT_C::SELECTED, ((sel) ? 1 : 0));
         }
 
     //#################################################
@@ -212,7 +212,7 @@ public:
         {
         SendUpdateOsc (0, (byte)(DISP_MESSAGE_N::VOICE_OPT_C::RAMP),
                        DISP_MESSAGE_N::EFFECT_C::RAMP_DIRECTION,
-                       (( sel ) ? 1 : 0));
+                       ((sel) ? 1 : 0));
         }
 
     //#################################################
@@ -231,45 +231,72 @@ public:
         }
 
     //#################################################
+    // for Filter4 use ch = 0
+    // for FilterLP use ch = 1
+    //#################################################
     void FltSelected (bool sel)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::SELECTED, (( sel ) ? 1 : 0));
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::SELECTED, ((sel) ? 1 : 0));
         }
 
     //#################################################
-    void FltAttackTime (uint16_t value)
+    void FltAttackTime (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::ATTACK_TIME, value);
         }
 
     //#################################################
-    void FltDecayTime (uint16_t value)
+    void FltDecayTime (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::DECAY_TIME, value);
         }
 
     //#################################################
-    void FltReleaseTime (uint16_t value)
+    void FltReleaseTime (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::RELEASE_TIME, value);
         }
 
     //#################################################
-    void FltStart (uint16_t value)
+    void FltStart (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::BASE_LEVEL, value);
         }
 
     //#################################################
-    void FltEnd (uint16_t value)
+    void FltEnd (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::MAX_LEVEL, value);
         }
 
     //#################################################
-    void FltSustain (uint16_t value)
+    void FltSustain (byte ch, uint16_t value)
         {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::SUSTAIN_LEVEL, value);
+        }
+
+    //#################################################
+    void FltQ (byte ch, byte value)
+        {
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::Q, value);
+        }
+
+    //#################################################
+    void FltCtrl (byte ch, byte value)
+        {
+        SendUpdateFlt (0, ch, DISP_MESSAGE_N::EFFECT_C::CONTROL, value);
+        }
+
+    //#################################################
+    void FltPoleLP (byte value)
+        {
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::POLE, value);
+        }
+
+    //#################################################
+    void FltSetQLP (byte value)
+        {
+        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::QSET, value);
         }
 
     //#################################################
@@ -277,18 +304,6 @@ public:
         {
         SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::MAP_VOICE, fmap);
         }
-
-    //#################################################
-    void FltCtrl (byte value)
-        {
-        SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::CONTROL, value);
-        }
-
-    //#################################################
-   void FltQ (byte value)
-       {
-       SendUpdateFlt (0, 0, DISP_MESSAGE_N::EFFECT_C::Q, value);
-       }
 
     //#################################################
     //#################################################
@@ -304,9 +319,9 @@ public:
     void LfoSoftSelect (byte ch, bool sel)
         {
         SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::SOFTWARE_LFO),
-                             0,
-                             ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
-                             ch);
+                       0,
+                       ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
+                       ch);
         }
 
     //#################################################
@@ -358,10 +373,11 @@ public:
     void LfoHardSelect (byte index, byte wave, bool sel)
         {
         SendUpdateMod ((byte)(DISP_MESSAGE_N::VOICE_OPT_C::HARDWARE_LFO),
-                             index,
-                             ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
-                             wave);
+                       index,
+                       ((sel) ? DISP_MESSAGE_N::EFFECT_C::SELECTED : DISP_MESSAGE_N::EFFECT_C::DESELECTED),
+                       wave);
         }
+
     //#################################################
     void SendLoadSave (uint16_t value)
         {
@@ -370,6 +386,7 @@ public:
                     DISP_MESSAGE_N::EFFECT_C::VALUE,
                     value);
         }
+
     //#################################################
     void LoadMessage (void)
         {
@@ -378,6 +395,7 @@ public:
                     DISP_MESSAGE_N::EFFECT_C::MESSAGE,
                     1);
         }
+
     //#################################################
     void SaveMessage (void)
         {
@@ -386,6 +404,8 @@ public:
                     DISP_MESSAGE_N::EFFECT_C::MESSAGE,
                     2);
         }
+
+    //#################################################
     };
 
 extern I2C_MESSAGE_C DisplayMessage;

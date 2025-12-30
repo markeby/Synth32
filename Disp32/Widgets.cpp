@@ -12,12 +12,14 @@
 #include "config.h"
 #include "Widgets.h"
 
+//#######################################################################
+//#######################################################################
 void KeyLabel (lv_obj_t* base, const char* s, short x, short y)
     {
     lv_obj_t* keys = lv_label_create (base);
-    lv_obj_align (keys, LV_ALIGN_DEFAULT, x, y);
+    lv_obj_align      (keys, LV_ALIGN_DEFAULT, x, y);
     lv_label_set_text (keys, s);
-    lv_obj_add_style (keys, &GlobalKeyStyle, 0);
+    lv_obj_add_style  (keys, &GlobalKeyStyle, 0);
     }
 
 //#######################################################################
@@ -28,9 +30,9 @@ void KeyLabel (lv_obj_t* base, const char* s, short x, short y)
     Unit  = nullptr;
     Value = nullptr;
     Valid = false;
-    lv_style_init (&StyleLabel);
+    lv_style_init          (&StyleLabel);
     lv_style_set_text_font (&StyleLabel, &lv_font_montserrat_14);
-    lv_style_init (&StyleValue);
+    lv_style_init          (&StyleValue);
     lv_style_set_text_font (&StyleValue, &lv_font_montserrat_14);
     }
 
@@ -40,22 +42,22 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     short x = 2;
 
     Label = lv_label_create (base);
-    lv_obj_align (Label, LV_ALIGN_TOP_LEFT, -2, y);
-    lv_label_set_text (Label, s);
-    lv_obj_add_style (Label, &StyleLabel, 0);
+    lv_obj_align            (Label, LV_ALIGN_TOP_MID, -42, y);
+    lv_label_set_text       (Label, s);
+    lv_obj_add_style        (Label, &StyleLabel, 0);
     lv_style_set_text_color (&StyleLabel, lv_color_hex (color));
 
-    Value = lv_label_create(base);
-    lv_obj_align (Value, LV_ALIGN_TOP_LEFT, 58, y);
-    lv_obj_add_style (Value, &StyleValue, 0);
+    Value = lv_label_create (base);
+    lv_obj_align            (Value, LV_ALIGN_TOP_MID, 5, y);
+    lv_obj_add_style        (Value, &StyleValue, 0);
     lv_style_set_text_color (&StyleValue, lv_color_hex (color));
 
     if ( strlen (su) > 0 )
         {
-        Unit = lv_label_create(base);
-        lv_obj_align (Unit, LV_ALIGN_TOP_RIGHT, -4, y);
-        lv_label_set_text (Unit, su);
-        lv_obj_add_style (Unit, &StyleValue, 0);
+        Unit = lv_label_create (base);
+        lv_obj_align           (Unit, LV_ALIGN_TOP_MID, 45, y);
+        lv_label_set_text      (Unit, su);
+        lv_obj_add_style       (Unit, &StyleValue, 0);
         }
     }
 
@@ -66,19 +68,34 @@ void TEXT_INFO_C::BeginText (lv_obj_t* base, const char* s, const char* su, shor
     Begin (base, s, yoff);
     }
 
+//#######################################################################
     TITLE_WIDGET_C::TITLE_WIDGET_C (lv_obj_t* base, const char* s)
     {
     Begin (base, s, 0);
     }
 
+//#######################################################################
 void TITLE_WIDGET_C::Begin (lv_obj_t* base, const char* s, int yoff)
     {
-    lv_style_init (&Style);
-    lv_style_set_text_font (&Style, &lv_font_montserrat_18);
-    Label  = lv_label_create (base);
-    lv_obj_align (Label, LV_ALIGN_TOP_MID, 3, yoff);
-    lv_label_set_text (Label, s);
-    lv_obj_add_style (Label, &Style, 0);
+    lv_style_init             (&_Style);
+    lv_style_set_text_font    (&_Style, &lv_font_montserrat_18);
+    _Label  = lv_label_create (base);
+    lv_obj_align              (_Label, LV_ALIGN_TOP_MID, 3, yoff);
+    lv_label_set_text         (_Label, s);
+    lv_obj_add_style          (_Label, &_Style, 0);
+    }
+
+
+//#######################################################################
+//#######################################################################
+SUBTITLE_WIDGET_C::SUBTITLE_WIDGET_C (lv_obj_t* base, const char* s, int xoff)
+    {
+    lv_style_init             (&_Style);
+    lv_style_set_text_font    (&_Style, &lv_font_montserrat_20);
+    _Label  = lv_label_create (base);
+    lv_obj_align              (_Label, LV_ALIGN_TOP_LEFT, xoff, 12);
+    lv_label_set_text         (_Label, s);
+    lv_obj_add_style          (_Label, &_Style, 0);
     }
 
 
@@ -97,22 +114,22 @@ void TITLE_WIDGET_C::Begin (lv_obj_t* base, const char* s, int yoff)
     lv_style_init (&StyleSelect);
     lv_style_set_text_font (&StyleSelect, &lv_font_montserrat_14);
 
-    Roller = lv_roller_create (panel);
-    lv_roller_set_options (Roller, items, LV_ROLLER_MODE_INFINITE);
+    Roller = lv_roller_create       (panel);
+    lv_roller_set_options           (Roller, items, LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count (Roller, 3);
-    lv_obj_add_style (Roller, &StyleSelect, LV_PART_SELECTED);
-    lv_obj_align (Roller, LV_ALIGN_LEFT_MID, 0, 0);
+    lv_obj_add_style                (Roller, &StyleSelect, LV_PART_SELECTED);
+    lv_obj_align                    (Roller, LV_ALIGN_LEFT_MID, 0, 0);
     Current = 0;
     lv_roller_set_selected (Roller, Current, LV_ANIM_ON);
 
     Button = lv_btn_create (panel);
-    lv_obj_align      (Button, LV_ALIGN_CENTER, offset, 0);
-    lv_obj_add_flag   (Button, LV_OBJ_FLAG_CHECKABLE);
-    lv_obj_set_height (Button, LV_SIZE_CONTENT);
+    lv_obj_align           (Button, LV_ALIGN_CENTER, offset, 0);
+    lv_obj_add_flag        (Button, LV_OBJ_FLAG_CHECKABLE);
+    lv_obj_set_height      (Button, LV_SIZE_CONTENT);
 
     Label = lv_label_create (Button);
-    lv_label_set_text (Label, s);
-    lv_obj_center     (Label);
+    lv_label_set_text       (Label, s);
+    lv_obj_center           (Label);
     }
 
 //#######################################################################

@@ -58,13 +58,24 @@ public:
 class TITLE_WIDGET_C
     {
 private:
-    lv_obj_t*   Label;
-    lv_style_t  Style;
+    lv_obj_t*   _Label;
+    lv_style_t  _Style;
 
 public:
-            TITLE_WIDGET_C      (lv_obj_t* base, const char* s);
-            TITLE_WIDGET_C      (lv_obj_t* base, const char* s, int yoff);
-    void    Begin               (lv_obj_t* base, const char* s, int yoff);
+         TITLE_WIDGET_C (lv_obj_t* base, const char* s);
+         TITLE_WIDGET_C (lv_obj_t* base, const char* s, int yoff);
+    void Begin          (lv_obj_t* base, const char* s, int yoff);
+    };
+
+//############################################
+class SUBTITLE_WIDGET_C
+    {
+private:
+    lv_obj_t*   _Label;
+    lv_style_t  _Style;
+
+public:
+    SUBTITLE_WIDGET_C  (lv_obj_t* base, const char* s, int xoff);
     };
 
 //############################################

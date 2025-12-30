@@ -34,9 +34,36 @@ class MIDI_SEL_WIDGET_C;
 class PAGE_TITLE_C
     {
 protected:
-    lv_obj_t*       Title;
-    lv_style_t      TitleStyle;
+    lv_obj_t*       _Title;
+    lv_style_t      _TitleStyle;
         PAGE_TITLE_C (lv_obj_t* base, const char* str);
+    };
+
+//############################################
+//############################################
+class PAGE_FILTER_C : protected PAGE_TITLE_C
+    {
+private:
+    ADSR_METER_WIDGET_C*    _MeterADSR[2];
+    LEVEL_WIDGET_C*         _ValueStart[2];
+    LEVEL_WIDGET_C*         _ValueEnd[2];
+    LEVEL_WIDGET_C*         _ValueSustain[2];
+    LEVEL_WIDGET_C*         _Q[2];
+    lv_obj_t*               _Output[6];
+    lv_obj_t*               _Ctrl[2];
+    lv_obj_t*               _PoleLP;
+    lv_obj_t*               _SelectedQ;
+    lv_style_t              _SubtitleStyle;
+    byte                    _Midi;
+
+public:
+            PAGE_FILTER_C   (lv_obj_t* base);
+    void    UpdatePage      (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
+    void    SetMidi         (byte midi);
+    void    SelectOutput    (byte fmap);
+    void    SelectControl   (byte crtl, byte select);
+    void    SelectPole      (byte select);
+    void    SelectSetQ      (byte select);
     };
 
 //############################################
@@ -59,29 +86,6 @@ public:
     void      UpdatePage (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     void      Select     (byte fmap);
 };
-
-//############################################
-//############################################
-class PAGE_FILTER_C : protected PAGE_TITLE_C
-    {
-private:
-    ADSR_METER_WIDGET_C*    _MeterADSR;
-    LEVEL_WIDGET_C*         _ValueStart;
-    LEVEL_WIDGET_C*         _ValueEnd;
-    LEVEL_WIDGET_C*         _ValueSustain;
-    LEVEL_WIDGET_C*         _Q;
-    LEVEL_WIDGET_C*         _MasterLevel;
-    lv_obj_t*               _Output[5];
-    lv_obj_t*               _Ctrl[4];
-    byte                    _Midi;
-
-public:
-              PAGE_FILTER_C (lv_obj_t* base);
-    void      UpdatePage    (DISP_MESSAGE_N::EFFECT_C effect, short value);
-    void      SetMidi       (byte midi);
-    void      Select        (byte fmap);
-    void      Control       (byte select);
-    };
 
 //############################################
 //############################################
@@ -232,7 +236,7 @@ public:
     void    UpdatePageMod       (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageMod->UpdatePage (index, ch, effect, value); }
     void    UpdatePageTuning    (byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)              { PageTune->UpdatePage (ch, effect, value); }
     void    UpdatePageVoice     (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageVoice->UpdatePage (ch, effect, value); }
-    void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (effect, value); }
+    void    UpdatePageFilter    (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value)  { PageFilter->UpdatePage (ch, effect, value); }
     void    UpdatePageLoadSave  (DISP_MESSAGE_N::EFFECT_C effect, short value)                       { PageLoadSave->UpdatePage (effect, value); }
     void    GeneralCommand      (byte index, byte ch, DISP_MESSAGE_N::EFFECT_C effect, short value);
     };

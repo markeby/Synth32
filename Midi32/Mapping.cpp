@@ -176,7 +176,7 @@ void ResolveMapAllocation ()
         v0.NoiseSelect (sc.GetVoiceNoise ());
         v1.NoiseSelect (sc.GetVoiceNoise ());
 
-        for ( short v = 0;  v < OSC_MIXER_COUNT;  v++ )
+        for ( int v = 0;  v < OSC_MIXER_COUNT;  v++ )
             {
             v0.SetOscAttackTime   (v, sc.GetOscAttackTime (v));
             v1.SetOscAttackTime   (v, sc.GetOscAttackTime (v));
@@ -191,22 +191,40 @@ void ResolveMapAllocation ()
             sc.SelectedOscEnvelope[v] = false;
             }
 
-        v0.SetFltAttackTime  (sc.GetFltAttackTime ());
-        v1.SetFltAttackTime  (sc.GetFltAttackTime ());
-        v0.SetFltDecayTime   (sc.GetFltDecayTime ());
-        v1.SetFltDecayTime   (sc.GetFltDecayTime ());
-        v0.SetFltReleaseTime (sc.GetFltReleaseTime ());
-        v1.SetFltReleaseTime (sc.GetFltReleaseTime ());
-        v0.SetFltSustain     (sc.GetFltSustainLevel ());
-        v1.SetFltSustain     (sc.GetFltSustainLevel ());
-        v0.SetFltStart       (sc.GetFltStart ());
-        v1.SetFltStart       (sc.GetFltStart ());
-        v0.SetFltEnd         (sc.GetFltEnd ());
-        v1.SetFltEnd         (sc.GetFltEnd ());
-        v0.SetFltQ           (sc.GetFltQ ());
-        v1.SetFltQ           (sc.GetFltQ ());
-        v0.SetFltCtrl        (sc.GetFltCtrl ());
-        v1.SetFltCtrl        (sc.GetFltCtrl ());
+        v0.SetFlt4AttackTime  (sc.GetFltAttackTime (0));
+        v1.SetFlt4AttackTime  (sc.GetFltAttackTime (0));
+        v0.SetFlt4DecayTime   (sc.GetFltDecayTime (0));
+        v1.SetFlt4DecayTime   (sc.GetFltDecayTime (0));
+        v0.SetFlt4ReleaseTime (sc.GetFltReleaseTime (0));
+        v1.SetFlt4ReleaseTime (sc.GetFltReleaseTime (0));
+        v0.SetFlt4Sustain     (sc.GetFltSustainLevel (0));
+        v1.SetFlt4Sustain     (sc.GetFltSustainLevel (0));
+        v0.SetFlt4Start       (sc.GetFltStart (0));
+        v1.SetFlt4Start       (sc.GetFltStart (0));
+        v0.SetFlt4End         (sc.GetFltEnd (0));
+        v1.SetFlt4End         (sc.GetFltEnd (0));
+        v0.SetFlt4Q           (sc.GetFltQ (0));
+        v1.SetFlt4Q           (sc.GetFltQ (0));
+        v0.SetFlt4Ctrl        (sc.GetFltCtrl (0));
+        v1.SetFlt4Ctrl        (sc.GetFltCtrl (0));
+
+        v0.SetFltLpAttackTime  (sc.GetFltAttackTime (1));
+        v1.SetFltLpAttackTime  (sc.GetFltAttackTime (1));
+        v0.SetFltLpDecayTime   (sc.GetFltDecayTime (1));
+        v1.SetFltLpDecayTime   (sc.GetFltDecayTime (1));
+        v0.SetFltLpReleaseTime (sc.GetFltReleaseTime (1));
+        v1.SetFltLpReleaseTime (sc.GetFltReleaseTime (1));
+        v0.SetFltLpSustain     (sc.GetFltSustainLevel (1));
+        v1.SetFltLpSustain     (sc.GetFltSustainLevel (1));
+        v0.SetFltLpStart       (sc.GetFltStart (1));
+        v1.SetFltLpStart       (sc.GetFltStart (1));
+        v0.SetFltLpEnd         (sc.GetFltEnd (1));
+        v1.SetFltLpEnd         (sc.GetFltEnd (1));
+        v0.SetFltLpQ           (sc.GetFltQ (1));
+        v1.SetFltLpQ           (sc.GetFltQ (1));
+        v0.SetFltLpCtrl        (sc.GetFltCtrl (1));
+        v1.SetFltLpCtrl        (sc.GetFltCtrl (1));
+
         sc.SelectedFltEnvelope = false;
 
         v0.SetRampDirection (sc.GetRampDirection ());

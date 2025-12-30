@@ -93,6 +93,7 @@ public:
          //         -1 = Total failure
          //         +X = Some interface errors
     int  Begin              (void);
+    bool IsPortValid        (short device);
     void Loop               (void);
     void D2Analog           (short device, ushort value);
     void DigitalOut         (short device, bool value);
@@ -104,7 +105,7 @@ public:
 
     //#######################################################################
     void ResetAnalog (short device)
-            { this->Init1115 (pDevice[device].pBoard->Board); }
+        { this->Init1115(pDevice[device].pBoard->Board); }
 
     //#######################################################################
     int  NumBoards (void)
@@ -118,13 +119,6 @@ public:
     int GetDeviceCount (void)
         { return (this->DeviceCount); }
 
-    //#######################################################################
-    bool IsPortValid (uint8_t device)
-        {
-        if ( device < this->DeviceCount && this->pDevice[device].pBoard->Valid )
-            return (true);
-        return (false);
-        }
 
     //#######################################################################
     void SetCallbackAtoD (CallbackUShort fptr)

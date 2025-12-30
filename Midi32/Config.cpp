@@ -40,15 +40,23 @@ static const char* LabelD = "CFG";
         SelectedOscEnvelope[z]    = false;
         }
 
-    Cs.FltEnv.AttackTime   = 1.0;
-    Cs.FltEnv.DecayTime    = 1.0;
-    Cs.FltEnv.ReleaseTime  = 1.0;
-    Cs.FltEnv.SustainLevel = 0.0;
-    Cs.FltEnv.MaxLevel     = 0.0;
-    Cs.FltEnv.MinLevel     = 0.0;
-    Cs.FilterQ             = 0.5;
-    Cs.FilterCtrl          = 0;
-    SelectedFltEnvelope    = false;
+    Cs.Filter[0].Env.AttackTime   = 1.0;
+    Cs.Filter[0].Env.DecayTime    = 1.0;
+    Cs.Filter[0].Env.ReleaseTime  = 1.0;
+    Cs.Filter[0].Env.SustainLevel = 0.0;
+    Cs.Filter[0].Env.MaxLevel     = 0.0;
+    Cs.Filter[0].Env.MinLevel     = 0.0;
+    Cs.Filter[0].Q                = 0.5;
+    Cs.Filter[0].Control          = 0;
+    Cs.Filter[1].Env.AttackTime   = 1.0;
+    Cs.Filter[1].Env.DecayTime    = 1.0;
+    Cs.Filter[1].Env.ReleaseTime  = 1.0;
+    Cs.Filter[1].Env.SustainLevel = 0.0;
+    Cs.Filter[1].Env.MaxLevel     = 0.0;
+    Cs.Filter[1].Env.MinLevel     = 0.0;
+    Cs.Filter[1].Q                = 0.5;
+    Cs.Filter[1].Control          = 0;
+    SelectedFltEnvelope       = false;
 
     // Default preload state
     int preset = 1;
@@ -84,11 +92,16 @@ JsonDocument SYNTH_VOICE_CONFIG_C::CreateJSON ()
     cfg[k_MasterLevel] = Cs.MasterLevel;
     cfg[k_Ramp]        = Cs.RampDirection;
     cfg[k_OutMask]     = Cs.OutputMask;
-    cfg[k_FilterQ]     = Cs.FilterQ;
-    cfg[k_FilterCtrl]  = Cs.FilterCtrl;
     for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         cfg[k_OscEnv][z] = CreateEnvJSON (Cs.OscEnv[z]);
-    cfg[k_FltEnv] = CreateEnvJSON (Cs.FltEnv);
+    for ( int z = 0;  z < 2;  z++ )
+        {
+        cfg[k_FltEnv][z]     = CreateEnvJSON (Cs.Filter[z].Env);
+        cfg[k_FilterQ][z]    = Cs.Filter[z].Q;
+        cfg[k_FilterCtrl][z] = Cs.Filter[z].Control;
+        cfg[k_FilterPole][z] = Cs.Filter[z].Pole;
+        cfg[k_FilterSelQ][z] = Cs.Filter[z].QSel;
+        }
     return (cfg);
     }
 
@@ -107,19 +120,22 @@ void SYNTH_VOICE_CONFIG_C::LoadEnvJSON (JsonVariant cfg, SYNTH_VOICE_CONFIG_C::E
 //#######################################################################
 void SYNTH_VOICE_CONFIG_C::LoadJSON (JsonObject cfg)
     {
-    int z;
-
-    Cs.MapVoiceMidi  = cfg[k_Midi];
-    Cs.MapVoiceNoise = cfg[k_Noise];
-    Cs.MasterLevel   = cfg[k_MasterLevel];
-    Cs.PulseWidth    = cfg[k_PulseWidth];
-    Cs.RampDirection = cfg[k_Ramp];
-    Cs.OutputMask    = cfg[k_OutMask];
-    Cs.FilterQ       = cfg[k_FilterQ];
-    Cs.FilterCtrl    = cfg[k_FilterCtrl];
-    for ( z = 0;  z < OSC_MIXER_COUNT;  z++ )
+    Cs.MapVoiceMidi      = cfg[k_Midi];
+    Cs.MapVoiceNoise     = cfg[k_Noise];
+    Cs.MasterLevel       = cfg[k_MasterLevel];
+    Cs.PulseWidth        = cfg[k_PulseWidth];
+    Cs.RampDirection     = cfg[k_Ramp];
+    Cs.OutputMask        = cfg[k_OutMask];
+    for ( int z = 0;  z < OSC_MIXER_COUNT;  z++ )
         LoadEnvJSON (cfg[k_OscEnv][z], Cs.OscEnv[z]);
-    LoadEnvJSON (cfg[k_FltEnv], Cs.FltEnv);
+    for ( int z = 0;  z < 2;  z++ )
+        {
+        LoadEnvJSON (cfg[k_FltEnv][z], Cs.Filter[z].Env);
+        Cs.Filter[z].Q       = cfg[k_FilterQ][z];
+        Cs.Filter[z].Control = cfg[k_FilterCtrl][z];
+        Cs.Filter[z].Pole    = cfg[k_FilterPole][z];
+        Cs.Filter[z].QSel    = cfg[k_FilterSelQ][z];
+        }
     }
 
 

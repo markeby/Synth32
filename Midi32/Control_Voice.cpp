@@ -50,7 +50,7 @@ static void updateFltButtons ()
     SYNTH_VOICE_CONFIG_C& sc = SynthConfig.Voice[SelectedConfig];    // Configuration data for this voice pair
 
     byte mask = SynthConfig.Voice[SelectedConfig].GetOutputMask ();
-    for ( short z = 0;  z < 5;  z++ )
+    for ( short z = 0;  z < 6;  z++ )
         LaunchControl.SetButtonStateRG (z + 8, (mask >> z) & 1);
 
     LaunchControl.TemplateRefresh ();
@@ -74,9 +74,9 @@ void StartOscDisplay ()
         DisplayMessage.OscDamperMode    (z, sc.GetDamperMode (z));
         DisplayMessage.OscSelectedLevel (z, sc.SelectedOscEnvelope[z]);
         }
-    DisplayMessage.OscPulseWidth   (sc.GetPulseWidth  () * PRS_UNSCALER);
-
-    DisplayMessage.SetPage (PAGE_C::PAGE_OSC, SelectedMidi);
+    DisplayMessage.MasterLevel   (sc.GetMasterLevel () * PRS_UNSCALER );
+    DisplayMessage.OscPulseWidth (sc.GetPulseWidth  () * PRS_UNSCALER);
+    DisplayMessage.SetPage       (PAGE_C::PAGE_OSC, SelectedMidi);
     }
 
 //#######################################################################
@@ -84,16 +84,21 @@ void StartFltDisplay ()
     {
     SYNTH_VOICE_CONFIG_C& sc = SynthConfig.Voice[SelectedConfig];    // Configuration data for this voice pair
 
-    DisplayMessage.FltAttackTime  (sc.GetFltAttackTime () * (1.0/TIME_MULT));
-    DisplayMessage.FltDecayTime   (sc.GetFltDecayTime () * (1.0/TIME_MULT));
-    DisplayMessage.FltReleaseTime (sc.GetFltReleaseTime () * (1.0/TIME_MULT));
-    DisplayMessage.FltSustain     (sc.GetFltSustainLevel () * PRS_UNSCALER);
-    DisplayMessage.FltStart       (sc.GetFltStart () * PRS_UNSCALER);
-    DisplayMessage.FltEnd         (sc.GetFltEnd () * PRS_UNSCALER);
-    DisplayMessage.FltCtrl        (sc.GetFltCtrl ());
-    DisplayMessage.FltOut         (sc.GetOutputMask ());
-    DisplayMessage.FltQ           (sc.GetFltQ () * PRS_UNSCALER);
+    for ( int z = 0;  z < 2;  z++ )
+        {
+        DisplayMessage.FltAttackTime  (z, sc.GetFltAttackTime (z) * (1.0 / TIME_MULT));
+        DisplayMessage.FltDecayTime   (z, sc.GetFltDecayTime (z) * (1.0/TIME_MULT));
+        DisplayMessage.FltReleaseTime (z, sc.GetFltReleaseTime (z) * (1.0/TIME_MULT));
+        DisplayMessage.FltSustain     (z, sc.GetFltSustainLevel (z) * PRS_UNSCALER);
+        DisplayMessage.FltStart       (z, sc.GetFltStart (z) * PRS_UNSCALER);
+        DisplayMessage.FltEnd         (z, sc.GetFltEnd (z) * PRS_UNSCALER);
+        DisplayMessage.FltQ           (z, sc.GetFltQ (z) * PRS_UNSCALER);
+        DisplayMessage.FltCtrl        (z, sc.GetFltCtrl (z));
+        }
 
+    DisplayMessage.FltPoleLP     (sc.GetFltPole (1));
+    DisplayMessage.FltSetQLP     (sc.GetFltSelQ (1));
+    DisplayMessage.FltOut        (sc.GetOutputMask ());
     LaunchControl.SelectTemplate (XL_MIDI_MAP_FLT);
     updateFltButtons ();
 
@@ -203,8 +208,11 @@ void SetAttackTime (short ch, short data)
                 {
                 if ( SelectedFilter < 0 )
                     return;
-                SynthConfig.Voice[z >> 1].SetFltAttackTime (dtime);
-                VoiceArray[z]->SetFltAttackTime (dtime);
+                SynthConfig.Voice[z >> 1].SetFltAttackTime (ch, dtime);
+                if ( ch )
+                    VoiceArray[z]->SetFltLpAttackTime (dtime);
+                else
+                    VoiceArray[z]->SetFlt4AttackTime (dtime);
                 }
             else
                 {
@@ -214,7 +222,7 @@ void SetAttackTime (short ch, short data)
             }
         }
     if ( SelectedVoice < 0 )
-        DisplayMessage.FltAttackTime (data);
+        DisplayMessage.FltAttackTime (ch, data);
     else
         DisplayMessage.OscAttackTime (ch, data);
     }
@@ -232,8 +240,11 @@ void SetDecayTime (short ch, short data)
                 {
                 if ( SelectedFilter < 0 )
                     return;
-                SynthConfig.Voice[z >> 1].SetFltDecayTime (dtime);
-                VoiceArray[z]->SetFltDecayTime (dtime);
+                SynthConfig.Voice[z >> 1].SetFltDecayTime (ch, dtime);
+                if ( ch )
+                    VoiceArray[z]->SetFltLpDecayTime (dtime);
+                else
+                    VoiceArray[z]->SetFlt4DecayTime (dtime);
                 }
             else
                 {
@@ -243,7 +254,7 @@ void SetDecayTime (short ch, short data)
             }
         }
     if ( SelectedVoice < 0 )
-        DisplayMessage.FltDecayTime (data);
+        DisplayMessage.FltDecayTime (ch, data);
     else
         DisplayMessage.OscDecayTime (ch, data);
     }
@@ -261,8 +272,11 @@ void SetReleaseTime (short ch, short data)
                 {
                 if ( SelectedFilter < 0 )
                     return;
-                SynthConfig.Voice[z >> 1].SetFltReleaseTime (dtime);
-                VoiceArray[z]->SetFltReleaseTime (dtime);
+                SynthConfig.Voice[z >> 1].SetFltReleaseTime (ch, dtime);
+                if ( ch )
+                    VoiceArray[z]->SetFltLpReleaseTime (dtime);
+                else
+                    VoiceArray[z]->SetFlt4ReleaseTime (dtime);
                 }
             else
                 {
@@ -272,7 +286,7 @@ void SetReleaseTime (short ch, short data)
             }
         }
     if ( SelectedVoice < 0 )
-        DisplayMessage.FltReleaseTime (data);
+        DisplayMessage.FltReleaseTime (ch, data);
     else
         DisplayMessage.OscReleaseTime (ch, data);
     }
@@ -289,8 +303,11 @@ void SetSustainLevel (short ch, short data)
                 {
                 if ( SelectedFilter < 0 )
                     return;
-                SynthConfig.Voice[z >> 1].SetFltSustainLevel (val);
-                VoiceArray[z]->SetFltSustain (val);
+                SynthConfig.Voice[z >> 1].SetFltSustainLevel (ch, val);
+                if ( ch )
+                   VoiceArray[z]->SetFltLpSustain (val);
+                else
+                   VoiceArray[z]->SetFlt4Sustain (val);
                 }
             else
                 {
@@ -300,7 +317,7 @@ void SetSustainLevel (short ch, short data)
             }
         }
     if ( SelectedVoice < 0 )
-        DisplayMessage.FltSustain (data);
+        DisplayMessage.FltSustain (ch, data);
     else
         DisplayMessage.OscSustainLevel (ch, data);
     }
@@ -336,48 +353,63 @@ void SetPulseWidth (short data)
     }
 
 //#######################################################################
-void FltStart (short index, short data)
+void FltStart (short ch, short data)
     {
     float val = (float)data * PRS_SCALER;
+
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( SelectedMidi == VoiceArray[z]->GetMidi () )
             {
-            SynthConfig.Voice[z >> 1].SetFltStart (val);
-            VoiceArray[z]->SetFltStart (val);
+            SynthConfig.Voice[z >> 1].SetFltStart (ch, val);
+            if ( ch )
+              VoiceArray[z]->SetFltLpStart (val);
+            else
+              VoiceArray[z]->SetFlt4Start (val);
             }
         }
-    DisplayMessage.FltStart (data);
+
+    DisplayMessage.FltStart (ch, data);
     }
 
 //#######################################################################
-void FltEnd (short index, short data)
+void FltEnd (short ch, short data)
     {
     float val = (float)data * PRS_SCALER;
-    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+
+    for (int z = 0;  z < VOICE_COUNT;  z++)
         {
         if ( SelectedMidi == VoiceArray[z]->GetMidi () )
             {
-            SynthConfig.Voice[z >> 1].SetFltEnd (val);
-            VoiceArray[z]->SetFltEnd (val);
+            SynthConfig.Voice[z >> 1].SetFltEnd (ch, val);
+            if ( ch )
+                VoiceArray[z]->SetFltLpEnd (val);
+            else
+                VoiceArray[z]->SetFlt4End (val);
             }
         }
-    DisplayMessage.FltEnd (data);
+    DisplayMessage.FltEnd (ch, data);
     }
 
 //#######################################################################
-void FltQ (short index, short data)
+void FltQ (short ch, short data)
     {
     float val = (float)data * PRS_SCALER;
-    for ( int z = 0;  z < VOICE_COUNT;  z++ )
+    if ( ch )
         {
-        if ( SelectedMidi == VoiceArray[z]->GetMidi () )
+        for ( int z = 0;  z < VOICE_COUNT;  z++ )
             {
-            SynthConfig.Voice[z >> 1].SetFltQ (val);
-            VoiceArray[z]->SetFltQ (val);
+            if ( SelectedMidi == VoiceArray[z]->GetMidi () )
+                {
+                SynthConfig.Voice[z >> 1].SetFltQ (ch, val);
+                if ( ch )
+                    VoiceArray[z]->SetFltLpQ (val);
+                else
+                    VoiceArray[z]->SetFlt4Q (val);
+                }
             }
         }
-    DisplayMessage.FltQ (data);
+    DisplayMessage.FltQ (ch, data);
     }
 
 //#######################################################################
@@ -399,18 +431,53 @@ void SelectFilter (short index)
     }
 
 //#######################################################################
-void FreqCtrlModeAdv ()
+void FltCtrlModeAdv (byte ch)
     {
-    byte zb = (SynthConfig.Voice[SelectedConfig].GetFltCtrl () + 1) % FILTER_CONTROLS;
+    byte zb = (SynthConfig.Voice[SelectedConfig].GetFltCtrl (ch) + 1) % FILTER_CONTROLS;
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
         if ( SelectedMidi == VoiceArray[z]->GetMidi () )
             {
-            SynthConfig.Voice[z >> 1].SetFltCtrl (zb);
-            VoiceArray[z]->SetFltCtrl (zb);
+            SynthConfig.Voice[z >> 1].SetFltCtrl (ch, zb);
+            if ( ch )
+                VoiceArray[z]->SetFltLpCtrl (zb);
+            else
+                VoiceArray[z]->SetFlt4Ctrl (zb);
             }
         }
-    DisplayMessage.FltCtrl (zb);
+    DisplayMessage.FltCtrl (ch, zb);
+    updateFltButtons ();
+    }
+
+//#######################################################################
+void FltLpPoleAdv ()
+    {
+    byte zb = (SynthConfig.Voice[SelectedConfig].GetFltPole (1) + 1) % FILTER_CONTROLS;
+    for (int z = 0;  z < VOICE_COUNT;  z++)
+        {
+        if ( SelectedMidi == VoiceArray[z]->GetMidi () )
+            {
+            SynthConfig.Voice[z >> 1].SetFltPole (1, zb);
+            VoiceArray[z]->SetFltLpPole (zb);
+            }
+        }
+    DisplayMessage.FltPoleLP (zb);
+    updateFltButtons ();
+    }
+
+//#######################################################################
+void FltLpQSelAdv ()
+    {
+    byte zb = (SynthConfig.Voice[SelectedConfig].GetFltSelQ (1) + 1) % (FILTER_CONTROLS - 1);
+    for (int z = 0;  z < VOICE_COUNT;  z++)
+        {
+        if ( SelectedMidi == VoiceArray[z]->GetMidi () )
+            {
+            SynthConfig.Voice[z >> 1].SetFltSelQ (1, zb);
+            VoiceArray[z]->SetFltLpModeQ (zb);
+            }
+        }
+    DisplayMessage.FltSetQLP (zb);
     updateFltButtons ();
     }
 

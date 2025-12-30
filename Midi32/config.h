@@ -17,7 +17,7 @@
 //#####################################
 // Debug controls
 //#####################################
-#define DEBUG_SYNTH           1
+#define DEBUG_SYNTH
 //#define DEBUG_MIDI_MSG
 //#define DEBUG_FUNC
 
@@ -159,6 +159,14 @@ private:
         float   DecayTime;
         float   ReleaseTime;
         }  ENVELOPE_T;
+    typedef struct
+        {
+        ENVELOPE_T  Env;
+        float       Q;
+        byte        Control;
+        byte        QSel;
+        byte        Pole;
+        }   FILTER_T;
     struct
         {
         byte        MapVoiceMidi;
@@ -167,10 +175,8 @@ private:
         float       MasterLevel;
         bool        RampDirection;
         byte        OutputMask;
-        float       FilterQ;
-        byte        FilterCtrl;
         ENVELOPE_T  OscEnv[OSC_MIXER_COUNT];
-        ENVELOPE_T  FltEnv;
+        FILTER_T    Filter[2];
         }   Cs;
 
     String Name;
@@ -184,55 +190,60 @@ public:
     bool   SelectedFltEnvelope;
 
 
-           SYNTH_VOICE_CONFIG_C (void);
-    JsonDocument   CreateJSON   (void);
-    void           LoadJSON     (JsonObject cfg);
+           SYNTH_VOICE_CONFIG_C     (void);
+    JsonDocument   CreateJSON       (void);
+    void           LoadJSON         (JsonObject cfg);
 
-    void   SetMute              (bool state)               { Mute = state; }
-    bool   IsMute               (void)                     { return (Mute); }
-    void   SetDamperMode        (byte index, byte mode)    { Cs.OscEnv[index].Damper = mode; }
-    byte   GetDamperMode        (byte index)               { return (Cs.OscEnv[index].Damper); }
-    void   SetName              (String& name)             { Name = name;}
-    String Getname              (void)                     { return (Name); }
-    void   SetVoiceMidi         (byte data)                { Cs.MapVoiceMidi = data; }
-    byte   GetVoiceMidi         (void)                     { return (Cs.MapVoiceMidi); }
-    void   SetVoiceNoise        (short data)               { Cs.MapVoiceNoise = data; }
-    short  GetVoiceNoise        (void)                     { return (Cs.MapVoiceNoise); }
-    void   SetRampDirection     (bool data)                { Cs.RampDirection = data; }
-    bool   GetRampDirection     (void)                     { return (Cs.RampDirection); }
-    void   SetMasterLevel       (float data)               { Cs.MasterLevel = data; }
-    float  GetMasterLevel       (void)                     { return (Cs.MasterLevel); }
-    void   SetPulseWidth        (float data)               { Cs.PulseWidth = data; }
-    float  GetPulseWidth        (void)                     { return (Cs.PulseWidth); }
-    void   SetOscMaxLevel       (byte index, float data)   { Cs.OscEnv[index].MaxLevel = data; }
-    float  GetOscMaxLevel       (byte index)               { return (Cs.OscEnv[index].MaxLevel); }
-    void   SetOscSustainLevel   (byte index, float data)   { Cs.OscEnv[index].SustainLevel = data; }
-    float  GetOscSustainLevel   (byte index)               { return (Cs.OscEnv[index].SustainLevel); }
-    void   SetOscAttackTime     (byte index, float data)   { Cs.OscEnv[index].AttackTime = data; }
-    float  GetOscAttackTime     (byte index)               { return (Cs.OscEnv[index].AttackTime); }
-    void   SetOscDecayTime      (byte index, float data)   { Cs.OscEnv[index].DecayTime = data; }
-    float  GetOscDecayTime      (byte index)               { return (Cs.OscEnv[index].DecayTime); }
-    void   SetOscReleaseTime    (byte index, float data)   { Cs.OscEnv[index].ReleaseTime = data; }
-    float  GetOscReleaseTime    (byte index)               { return (Cs.OscEnv[index].ReleaseTime); }
+    void   SetMute                  (bool state)                { Mute = state; }
+    bool   IsMute                   (void)                      { return (Mute); }
+    void   SetDamperMode            (byte index, byte mode)     { Cs.OscEnv[index].Damper = mode; }
+    byte   GetDamperMode            (byte index)                { return (Cs.OscEnv[index].Damper); }
+    void   SetName                  (String& name)              { Name = name;}
+    String Getname                  (void)                      { return (Name); }
+    void   SetVoiceMidi             (byte data)                 { Cs.MapVoiceMidi = data; }
+    byte   GetVoiceMidi             (void)                      { return (Cs.MapVoiceMidi); }
+    void   SetVoiceNoise            (short data)                { Cs.MapVoiceNoise = data; }
+    short  GetVoiceNoise            (void)                      { return (Cs.MapVoiceNoise); }
+    void   SetRampDirection         (bool data)                 { Cs.RampDirection = data; }
+    bool   GetRampDirection         (void)                      { return (Cs.RampDirection); }
+    void   SetMasterLevel           (float data)                { Cs.MasterLevel = data; }
+    float  GetMasterLevel           (void)                      { return (Cs.MasterLevel); }
+    void   SetPulseWidth            (float data)                { Cs.PulseWidth = data; }
+    float  GetPulseWidth            (void)                      { return (Cs.PulseWidth); }
+    void   SetOscMaxLevel           (byte index, float data)    { Cs.OscEnv[index].MaxLevel = data; }
+    float  GetOscMaxLevel           (byte index)                { return (Cs.OscEnv[index].MaxLevel); }
+    void   SetOscSustainLevel       (byte index, float data)    { Cs.OscEnv[index].SustainLevel = data; }
+    float  GetOscSustainLevel       (byte index)                { return (Cs.OscEnv[index].SustainLevel); }
+    void   SetOscAttackTime         (byte index, float data)    { Cs.OscEnv[index].AttackTime = data; }
+    float  GetOscAttackTime         (byte index)                { return (Cs.OscEnv[index].AttackTime); }
+    void   SetOscDecayTime          (byte index, float data)    { Cs.OscEnv[index].DecayTime = data; }
+    float  GetOscDecayTime          (byte index)                { return (Cs.OscEnv[index].DecayTime); }
+    void   SetOscReleaseTime        (byte index, float data)    { Cs.OscEnv[index].ReleaseTime = data; }
+    float  GetOscReleaseTime        (byte index)                { return (Cs.OscEnv[index].ReleaseTime); }
 
-    void   SetFltStart          (float data)                { Cs.FltEnv.MinLevel = data; }
-    float  GetFltStart          (void)                      { return (Cs.FltEnv.MinLevel); }
-    void   SetFltEnd            (float data)                { Cs.FltEnv.MaxLevel = data; }
-    float  GetFltEnd            (void)                      { return (Cs.FltEnv.MaxLevel); }
-    void   SetFltSustainLevel   (float data)                { Cs.FltEnv.SustainLevel = data; }
-    float  GetFltSustainLevel   (void)                      { return (Cs.FltEnv.SustainLevel); }
-    void   SetFltAttackTime     (float data)                { Cs.FltEnv.AttackTime = data; }
-    float  GetFltAttackTime     (void)                      { return (Cs.FltEnv.AttackTime); }
-    void   SetFltDecayTime      (float data)                { Cs.FltEnv.DecayTime = data; }
-    float  GetFltDecayTime      (void)                      { return (Cs.FltEnv.DecayTime); }
-    void   SetFltReleaseTime    (float data)                { Cs.FltEnv.ReleaseTime = data; }
-    float  GetFltReleaseTime    (void)                      { return (Cs.FltEnv.ReleaseTime); }
-    void   SetOutputMask        (byte chanmap)              { Cs.OutputMask = chanmap; }
-    byte   GetOutputMask        (void)                      { return (Cs.OutputMask); }
-    void   SetFltCtrl           (int data)                  { Cs.FilterCtrl = data; }
-    byte   GetFltCtrl           (void)                      { return (Cs.FilterCtrl); }
-    void   SetFltQ              (float data)                { Cs.FilterQ = data; }
-    float  GetFltQ              (void)                      { return (Cs.FilterQ); }
+    void   SetFltStart              (int index, float data)     { Cs.Filter[index].Env.MinLevel = data; }
+    float  GetFltStart              (int index)                 { return (Cs.Filter[index].Env.MinLevel); }
+    void   SetFltEnd                (int index, float data)     { Cs.Filter[index].Env.MaxLevel = data; }
+    float  GetFltEnd                (int index)                 { return (Cs.Filter[index].Env.MaxLevel); }
+    void   SetFltSustainLevel       (int index, float data)     { Cs.Filter[index].Env.SustainLevel = data; }
+    float  GetFltSustainLevel       (int index)                 { return (Cs.Filter[index].Env.SustainLevel); }
+    void   SetFltAttackTime         (int index, float data)     { Cs.Filter[index].Env.AttackTime = data; }
+    float  GetFltAttackTime         (int index)                 { return (Cs.Filter[index].Env.AttackTime); }
+    void   SetFltDecayTime          (int index, float data)     { Cs.Filter[index].Env.DecayTime = data; }
+    float  GetFltDecayTime          (int index)                 { return (Cs.Filter[index].Env.DecayTime); }
+    void   SetFltReleaseTime        (int index, float data)     { Cs.Filter[index].Env.ReleaseTime = data; }
+    float  GetFltReleaseTime        (int index)                 { return (Cs.Filter[index].Env.ReleaseTime); }
+    void   SetFltQ                  (int index, float data)     { Cs.Filter[index].Q = data; }
+    float  GetFltQ                  (int index)                 { return (Cs.Filter[index].Q); }
+    void   SetFltCtrl               (int index, int data)       { Cs.Filter[index].Control = data; }
+    byte   GetFltCtrl               (int index)                 { return (Cs.Filter[index].Control); }
+    void   SetFltPole               (int index, int data)       { Cs.Filter[index].Pole = data; }
+    byte   GetFltPole               (int index)                 { return (Cs.Filter[index].Pole); }
+    void   SetFltSelQ               (int index, int data)       { Cs.Filter[index].QSel = data; }
+    byte   GetFltSelQ               (int index)                 { return (Cs.Filter[index].QSel); }
+
+    void   SetOutputMask            (byte chanmap)              { Cs.OutputMask = chanmap; }
+    byte   GetOutputMask            (void)                      { return (Cs.OutputMask); }
     };
 
 class SYNTH_CONFIG_C

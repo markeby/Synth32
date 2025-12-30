@@ -6,7 +6,7 @@
 	(paper "USLegal")
 	(title_block
 		(title "Top Interconnect")
-		(date "2025-11-28")
+		(date "2025-12-06")
 		(rev "3.2")
 		(comment 1 "In Development ")
 	)
@@ -65,7 +65,7 @@
 		)
 	)
 	(sheet
-		(at 214.63 41.91)
+		(at 191.77 44.45)
 		(size 64.77 69.85)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -80,7 +80,7 @@
 		)
 		(uuid "92fe7bea-64b6-40b3-8e51-c7dbcedff8cc")
 		(property "Sheetname" "AudioControl"
-			(at 216.154 44.196 0)
+			(at 193.294 46.736 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -89,7 +89,7 @@
 			)
 		)
 		(property "Sheetfile" "AudioControl.kicad_sch"
-			(at 214.63 81.8646 0)
+			(at 191.77 84.4046 0)
 			(effects
 				(font
 					(size 1.27 1.27)

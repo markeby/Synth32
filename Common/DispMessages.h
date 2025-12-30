@@ -172,6 +172,8 @@ namespace DISP_MESSAGE_N
         DAMPER,
         MUTE,
         Q,
+        POLE,
+        QSET,
         };
 
     //###########################################
@@ -203,6 +205,8 @@ namespace DISP_MESSAGE_N
         "DAMPER",
         "MUTE",
         "Q",
+        "POLE",
+        "QSET",
         };
     #else
     extern char* EffectText[];

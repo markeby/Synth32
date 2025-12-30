@@ -7,6 +7,7 @@
 #include <Arduino.h>
 #include "Osc.h"
 #include "Voice.h"
+#include "Stats.h"
 
 //#####################################################################
 VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENV_GENERATOR_C& envgen)
@@ -26,8 +27,9 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, 
     _ModMux[0] = mod_mux_digital + 8;
     _ModMux[1] = mod_mux_digital;
     _ModMux[2] = mod_mux_digital + 4;
-    _Osc.Begin (num, osc_d_a, _UseCount, envgen);
-    _Flt.Begin (num, osc_d_a + (( num & 1 ) ? 10 : 16), _UseCount, envgen);
+    _Osc.Begin   (num, osc_d_a, _UseCount, envgen);
+    _Flt4.Begin  (num, osc_d_a + (( num & 1 ) ? 10 : 16), _UseCount, envgen);
+    _FltLP.Begin (num, osc_d_a + (( num & 1 ) ? 20 : 28), _UseCount, envgen);
     I2cDevices.UpdateDigital ();
     I2cDevices.UpdateAnalog  ();
     }
@@ -47,8 +49,10 @@ void VOICE_C::NoteSet (byte mchan, byte key, byte velocity)
     {
     _ActiveTimer = 1;
     _Key = key;
-    _Osc.NoteSet (key, velocity);
-    _Flt.NoteSet (key, velocity);
+    _Osc.NoteSet   (key, velocity);
+    _Flt4.NoteSet  (key, velocity);
+    _FltLP.NoteSet (key, velocity);
+    SynthStats.Bump (_Number);
     }
 
 //#######################################################################
@@ -58,8 +62,9 @@ bool VOICE_C::NoteClear (byte mchan, byte key)
         return (false);
     if ( mchan == _Midi )
         {
-        _Osc.NoteClear ();
-        _Flt.NoteClear ();
+        _Osc.NoteClear   ();
+        _Flt4.NoteClear  ();
+        _FltLP.NoteClear ();
         _Key = -1;
         return (true);
         }
@@ -93,7 +98,8 @@ void VOICE_C::NoiseReset ()
 void VOICE_C::SetOutputMask (byte bitmap)
     {
     I2cDevices.DigitalOut (_DigitalOutOscillator, bitmap & 1);
-    _Flt.SetOutMap (bitmap >> 1);
+    _Flt4.SetOutMap ((bitmap >> 1) & 0x0F);
+    I2cDevices.DigitalOut (_DigitalOutLpFilter, bitmap & (1 << 5));
     I2cDevices.UpdateDigital ();
     }
 
@@ -104,3 +110,4 @@ void VOICE_C::TuningAdjust (bool up)
         _Osc.TuningAdjust (up);
     }
 
+STATS_C SynthStats;

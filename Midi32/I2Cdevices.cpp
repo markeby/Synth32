@@ -36,39 +36,39 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
     {
     I2C_LOCATION_T* zploc = ploc;
 
-    for ( this->BoardCount = 0;  zploc->Port != 255;  this->BoardCount++, zploc++ );
-    this->CallbackAtoD   = nullptr;
-    AtoD_loopDevice      = 0;
-    SystemFail           = false;
-    this->pBoard         = new I2C_BOARD_T[this->BoardCount];
-    this->DeviceCount    = 0;
-    this->AnalogOutCount = 0;
-    this->pClusterList   = pcluster;
+    for ( BoardCount = 0;  zploc->Port != 255;  BoardCount++, zploc++ );
+    CallbackAtoD     = nullptr;
+    AtoD_loopDevice  = 0;
+    SystemFail       = false;
+    pBoard           = new I2C_BOARD_T[BoardCount];
+    DeviceCount      = 0;
+    AnalogOutCount   = 0;
+    pClusterList     = pcluster;
 
-    for ( int z = 0;  z < this->BoardCount;  z++ )
+    for ( int z = 0;  z < BoardCount;  z++ )
         {
         I2C_LOCATION_T& loc = ploc[z];
-        this->pBoard[z].Board  = loc;
-        this->pBoard[z].Valid  = false;
-        this->AnalogOutCount  += loc.NumberDtoA;
-        this->DeviceCount     += loc.NumberDtoA;
-        this->DeviceCount     += loc.NumberAtoD;
-        this->DeviceCount     += loc.NumberDigital;
-        this->DigitalOutCount += loc.NumberDigital;
+        pBoard[z].Board     = loc;
+        pBoard[z].Valid     = false;
+        AnalogOutCount     += loc.NumberDtoA;
+        DeviceCount        += loc.NumberDtoA;
+        DeviceCount        += loc.NumberAtoD;
+        DeviceCount        += loc.NumberDigital;
+        DigitalOutCount    += loc.NumberDigital;
         }
 
-    if ( !this->DeviceCount )
+    if ( !DeviceCount )
         {
-        this->Error ();
+        Error ();
         return;      // FIXME tone error here
         }
 
-    this->pDevice = new I2C_DEVICE_T[DeviceCount];
+    pDevice = new I2C_DEVICE_T[DeviceCount];
 
     int at_dev = 0;
     for ( int zb = 0;  zb < BoardCount;  zb++ )
         {
-        I2C_BOARD_T& brd = this->pBoard[zb];
+        I2C_BOARD_T& brd = pBoard[zb];
 
         if ( brd.Board.NumberDtoA )
             {
@@ -76,8 +76,8 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
             brd.LastDataDtoA = 1;
             for ( int zd = 0;  zd < brd.Board.NumberDtoA;  zd++, at_dev++ )
                 {
-                this->pDevice[at_dev].pBoard = &(pBoard[zb]);
-                this->pDevice[at_dev].pDtoA  = &(brd.DtoA[zd]);
+                pDevice[at_dev].pBoard = &(pBoard[zb]);
+                pDevice[at_dev].pDtoA  = &(brd.DtoA[zd]);
                 }
             }
 
@@ -87,9 +87,9 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
             brd.LastDataDigital = 1;
             for ( int zd = 0;  zd < brd.Board.NumberDigital;  zd++, at_dev++ )
                 {
-                this->pDevice[at_dev].pBoard   = &(pBoard[zb]);
-                this->pDevice[at_dev].pDigital = &(brd.DataDigital);
-                this->pDevice[at_dev].Bit      = zd;
+                pDevice[at_dev].pBoard   = &(pBoard[zb]);
+                pDevice[at_dev].pDigital = &(brd.DataDigital);
+                pDevice[at_dev].Bit      = zd;
                 }
             }
 
@@ -99,9 +99,9 @@ I2C_INTERFACE_C::I2C_INTERFACE_C (I2C_CLUSTERS_T* pcluster, I2C_LOCATION_T* ploc
             brd.LastDataAtoD = 1;
             for ( int zd = 0;  zd < brd.Board.NumberAtoD;  zd++, at_dev++ )
                 {
-                this->pDevice[at_dev].pBoard  = &(pBoard[zb]);
-                this->pDevice[at_dev].pAtoD   = &(brd.AtoD[zd]);
-                this->pDevice[at_dev].DtoAain = this->DecodeIndex1115 (zd);
+                pDevice[at_dev].pBoard  = &(pBoard[zb]);
+                pDevice[at_dev].pAtoD   = &(brd.AtoD[zd]);
+                pDevice[at_dev].DtoAain = DecodeIndex1115 (zd);
                 }
             }
         }
@@ -113,9 +113,9 @@ void I2C_INTERFACE_C::BusMux (I2C_LOCATION_T& loc)
     DBGMUX ("Selecting cluster %d with slice %d", loc.Cluster, loc.Slice);
     Wire.beginTransmission (0x70 + loc.Cluster);    // TCA9548A address
     Wire.write (1 << loc.Slice);                    // send byte to select bus
-    this->LastEndT = Wire.endTransmission();
-    if ( this->LastEndT )
-        ERROR ("BusMux cluster %d select %d with error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
+    LastEndT = Wire.endTransmission();
+    if ( LastEndT )
+        ERROR ("BusMux cluster %d select %d with error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (LastEndT));
     }
 
 //#######################################################################
@@ -124,9 +124,9 @@ void I2C_INTERFACE_C::EndBusMux (I2C_LOCATION_T& loc)
     DBGMUX ("Deselecting cluster %d", loc.Cluster);
     Wire.beginTransmission (0x70 + loc.Cluster);    // TCA9548A address
     Wire.write (0);                                 // send byte to deselect bus
-    this->LastEndT = Wire.endTransmission();
-    if ( this->LastEndT )
-        ERROR ("Ending cluster %d  slice: %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
+    LastEndT = Wire.endTransmission();
+    if ( LastEndT )
+        ERROR ("Ending cluster %d  slice: %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (LastEndT));
     }
 
 //#######################################################################
@@ -134,9 +134,9 @@ void I2C_INTERFACE_C::WriteRegisterByte (uint8_t port, uint8_t data)
     {
     Wire.beginTransmission (port);
     Wire.write (data);
-    this->LastEndT = Wire.endTransmission (true);
-    if ( this->LastEndT )
-        ERROR ("Port: %#02.2X   data: %#02.2X   error: %s", port, data, ErrorStringI2C (this->LastEndT));
+    LastEndT = Wire.endTransmission (true);
+    if ( LastEndT )
+        ERROR ("Port: %#02.2X   data: %#02.2X   error: %s", port, data, ErrorStringI2C (LastEndT));
     }
 
 //#######################################################################
@@ -147,9 +147,9 @@ void I2C_INTERFACE_C::WriteRegister16 (uint8_t port, uint8_t addr, uint16_t data
     Wire.write (addr);
     Wire.write ((uint8_t)(data >> 8));
     Wire.write ((uint8_t)(data &  0xFF));
-    this->LastEndT = Wire.endTransmission (true);
-    if ( this->LastEndT )
-        ERROR ("Result: %s   port: %#02.2x   addr: %#02.2x   data: %#04.4x", ErrorStringI2C (this->LastEndT), port, addr, data);
+    LastEndT = Wire.endTransmission (true);
+    if ( LastEndT )
+        ERROR ("Result: %s   port: %#02.2x   addr: %#02.2x   data: %#04.4x", ErrorStringI2C (LastEndT), port, addr, data);
     }
 
 //#######################################################################
@@ -158,9 +158,9 @@ uint16_t I2C_INTERFACE_C::ReadRegister16 (uint8_t port, uint8_t addr)
     DBGAD ("Setup to read at port %#02.2x for addr %#02.2x", port, addr);
     Wire.beginTransmission (port);
     Wire.write (addr);
-    this->LastEndT = Wire.endTransmission (true);
-    if ( this->LastEndT )
-        ERROR ("Cannot issue read request to port: %#02.2X   addr: %#02.2X   error: %s", port, addr, ErrorStringI2C (this->LastEndT));
+    LastEndT = Wire.endTransmission (true);
+    if ( LastEndT )
+        ERROR ("Cannot issue read request to port: %#02.2X   addr: %#02.2X   error: %s", port, addr, ErrorStringI2C (LastEndT));
     Wire.requestFrom(port, (uint8_t)2, true);
     if ( Wire.available () )
         {
@@ -199,11 +199,11 @@ uint8_t I2C_INTERFACE_C::DecodeIndex1115 (uint8_t index)
 //#######################################################################
 void I2C_INTERFACE_C::Init1115 (I2C_LOCATION_T &loc)
     {
-    this->BusMux (loc);
-    this->WriteRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR, ADS1115_CONFIG_REG_DEF & ~(1 << ADS1115_OS_FLAG_POS));
-    this->WriteRegister16 (loc.Port, ADS1115_LOW_TRESH_REG_ADDR, ADS1115_LOW_TRESH_REG_DEF);
-    this->WriteRegister16 (loc.Port, ADS1115_HIGH_TRESH_REG_ADDR, ADS1115_HIGH_TRESH_REG_DEF);
-    this->EndBusMux (loc);
+    BusMux (loc);
+    WriteRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR, ADS1115_CONFIG_REG_DEF & ~(1 << ADS1115_OS_FLAG_POS));
+    WriteRegister16 (loc.Port, ADS1115_LOW_TRESH_REG_ADDR, ADS1115_LOW_TRESH_REG_DEF);
+    WriteRegister16 (loc.Port, ADS1115_HIGH_TRESH_REG_ADDR, ADS1115_HIGH_TRESH_REG_DEF);
+    EndBusMux (loc);
     AtoD_loopDevice = 0;
     }
 
@@ -222,7 +222,7 @@ void I2C_INTERFACE_C::Start1115 (I2C_DEVICE_T& device)
        |  (ADS1115_COMP_LAT_NO_LATCH     << ADS1115_COMP_LAT_FLAG_POS)  \
        |  (ADS1115_COMP_QUE_DISABLE      << ADS1115_COMP_QUE0_DAT_POS);
 
-    this->WriteRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR, val);
+    WriteRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR, val);
     }
 
 //#######################################################################
@@ -233,21 +233,21 @@ void I2C_INTERFACE_C::Init4728 (I2C_LOCATION_T &loc)
     static uint8_t g = 0xC0;        // value for gain
     static uint8_t d[8] = {0, 0, 0, 0, 0, 0, 0, 0 };
 
-    this->BusMux (loc);
-    if ( this->LastEndT )
+    BusMux (loc);
+    if ( LastEndT )
         {
-        ERROR ("Accessing cluster %d to enable slice %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (this->LastEndT));
+        ERROR ("Accessing cluster %d to enable slice %d   error: %s", loc.Cluster, loc.Slice, ErrorStringI2C (LastEndT));
         }
 
-    this->WriteRegisterByte (loc.Port, p);
-    this->WriteRegisterByte (loc.Port, r);
-    this->WriteRegisterByte (loc.Port, g);
+    WriteRegisterByte (loc.Port, p);
+    WriteRegisterByte (loc.Port, r);
+    WriteRegisterByte (loc.Port, g);
 
     Wire.beginTransmission (loc.Port);      // reset all D/A to zero
     Wire.write (d, 8);
-    this->LastEndT = Wire.endTransmission (true);
+    LastEndT = Wire.endTransmission (true);
 
-    this->EndBusMux (loc);
+    EndBusMux (loc);
     }
 
 //#######################################################################
@@ -255,30 +255,30 @@ void I2C_INTERFACE_C::Init8575 (I2C_LOCATION_T &loc)
     {
     static uint8_t d[2] = {0, 0 };
 
-    this->BusMux (loc);
+    BusMux (loc);
 
     Wire.beginTransmission (loc.Port);      // reset all D/A to zero
     Wire.write (d, 2);
-    this->LastEndT = Wire.endTransmission (true);
+    LastEndT = Wire.endTransmission (true);
 
-    this->EndBusMux (loc);
+    EndBusMux (loc);
     }
 
 //#######################################################################
 bool I2C_INTERFACE_C::ValidateDevice (ushort board)
     {
-    I2C_BOARD_T& brd = this->pBoard[board];
+    I2C_BOARD_T& brd = pBoard[board];
     brd.Valid = false;
-    this->BusMux (brd.Board);
+    BusMux (brd.Board);
     Wire.beginTransmission(brd.Board.Port);
 
-    this->LastEndT = Wire.endTransmission (true);
-    if ( this->LastEndT == 0 )
+    LastEndT = Wire.endTransmission (true);
+    if ( LastEndT == 0 )
         brd.Valid = true;
     else
-        DBGERROR ("Validation error on port %#02.2X.  %s", brd.Board.Port, ErrorStringI2C (this->LastEndT));
+        DBGERROR ("Validation error on port %#02.2X.  %s", brd.Board.Port, ErrorStringI2C (LastEndT));
 
-    this->EndBusMux (brd.Board);
+    EndBusMux (brd.Board);
     return (!brd.Valid);
     }
 
@@ -286,14 +286,14 @@ bool I2C_INTERFACE_C::ValidateDevice (ushort board)
 void I2C_INTERFACE_C::Write (I2C_LOCATION_T &loc, uint8_t* buff, uint8_t length)
     {
     int rval;
-    this->BusMux (loc);
+    BusMux (loc);
     Wire.beginTransmission (loc.Port);
     Wire.write (buff, length);
-    this->LastEndT = Wire.endTransmission (true);
-    this->EndBusMux (loc);
-    if ( this->LastEndT )
+    LastEndT = Wire.endTransmission (true);
+    EndBusMux (loc);
+    if ( LastEndT )
         {
-        ERROR ("Result: %s   cluster: %d   slice: %d   port: 0x%#02.2X   buff[0]: 0x%#02.2X   length: %d", ErrorStringI2C (this->LastEndT), loc.Cluster, loc.Slice, loc.Port, *buff, length);
+        ERROR ("Result: %s   cluster: %d   slice: %d   port: 0x%#02.2X   buff[0]: 0x%#02.2X   length: %d", ErrorStringI2C (LastEndT), loc.Cluster, loc.Slice, loc.Port, *buff, length);
         }
     }
 
@@ -317,7 +317,7 @@ void I2C_INTERFACE_C::Write4728 (I2C_BOARD_T& board)
     buf[6] = board.ByteData[7];
     buf[7] = board.ByteData[6];
     if ( board.Valid )
-        this->Write (loc, buf, 8);
+        Write (loc, buf, 8);
     board.LastDataDtoA = board.DataDtoA;
     }
 
@@ -344,8 +344,16 @@ void I2C_INTERFACE_C::Write857x (I2C_BOARD_T& board)
     if ( board.Board.NumberDigital == 8 )       // if device is a 8574
         board.ByteData[1] = board.ByteData[0];
     if ( board.Valid )
-        this->Write(loc, board.ByteData, 2);
+        Write(loc, board.ByteData, 2);
     board.LastDataDigital = board.DataDigital;
+    }
+
+//#######################################################################
+bool I2C_INTERFACE_C::IsPortValid (short device)
+    {
+    if ( device < DeviceCount && pDevice[device].pBoard->Valid )
+        return (true);
+    return (false);
     }
 
 //#######################################################################
@@ -361,15 +369,15 @@ int I2C_INTERFACE_C::Begin ()
 //    Wire.setClock (400000UL);     // clock for Fast mode
 
     uint8_t err = 0;
-    for ( I2C_CLUSTERS_T* pc = this->pClusterList;  *pc != -1;  pc++ )
+    for ( I2C_CLUSTERS_T* pc = pClusterList;  *pc != -1;  pc++ )
         {
         Wire.beginTransmission (0x70 + *pc);    // TCA9548A address
         Wire.write (0);                        // send byte to select bus
-        this->LastEndT = Wire.endTransmission();
-        if ( this->LastEndT )
-            DBGMUX ("Return for cluster %d is %s", *pc, ErrorStringI2C (this->LastEndT));
-        if ( this->LastEndT > err )
-            err = this->LastEndT;
+        LastEndT = Wire.endTransmission();
+        if ( LastEndT )
+            DBGMUX ("Return for cluster %d is %s", *pc, ErrorStringI2C (LastEndT));
+        if ( LastEndT > err )
+            err = LastEndT;
         }
     if ( err > 0 )
         {
@@ -378,12 +386,12 @@ int I2C_INTERFACE_C::Begin ()
         }
 
     int  ecount = 0;
-    for (int z = 0;  z < this->BoardCount;  z++)
+    for (int z = 0;  z < BoardCount;  z++)
         {
-        I2C_LOCATION_T& board = this->pBoard[z].Board;
+        I2C_LOCATION_T& board = pBoard[z].Board;
         if ( DebugI2C )
             printf("\t  >> Init: Cluster %d  Slice %d  Port 0x%X  %s    ", board.Cluster, board.Slice, board.Port,  board.Name);
-        if ( this->ValidateDevice (z) )
+        if ( ValidateDevice (z) )
             {
             printf ("\t****\tFailure to access I2C cluster %d  Slice %d  port %X  \"%s\"\n",  board.Cluster, board.Slice, board.Port, board.Name);
             ecount++;
@@ -391,11 +399,11 @@ int I2C_INTERFACE_C::Begin ()
         else
             {
             if ( board.NumberDtoA == 4 )
-                this->Init4728 (board);
+                Init4728 (board);
             if ( board.NumberAtoD == 4 )
-                this->Init1115 (board);
+                Init1115 (board);
             if ( board.NumberDigital )
-                this->Init8575 (board);
+                Init8575 (board);
             if ( DebugI2C )
                 printf ("Complete.\n");
             }
@@ -437,7 +445,7 @@ void I2C_INTERFACE_C::UpdateDigital ()
         {
         I2C_BOARD_T& brd = pBoard[z];
         if ( brd.Board.NumberDigital && (brd.DataDigital != brd.LastDataDigital) )
-            this->Write857x (pBoard[z]);
+            Write857x (pBoard[z]);
         }
     }
 
@@ -447,10 +455,10 @@ void I2C_INTERFACE_C::StartAtoD (short device)
     I2C_DEVICE_T& dev = pDevice[device];
     I2C_LOCATION_T& loc = dev.pBoard->Board;
 
-    this->BusMux (loc);
-    this->Start1115 (dev);
-    this->EndBusMux (loc);
-    this->AtoD_loopDevice = device;
+    BusMux (loc);
+    Start1115 (dev);
+    EndBusMux (loc);
+    AtoD_loopDevice = device;
     }
 
 //#######################################################################
@@ -464,18 +472,18 @@ void I2C_INTERFACE_C::Loop ()
     {
     int16_t val;
 
-    if ( this->AtoD_loopDevice > 0 )
+    if ( AtoD_loopDevice > 0 )
         {
-        I2C_LOCATION_T& loc = this->pDevice[this->AtoD_loopDevice].pBoard->Board;
+        I2C_LOCATION_T& loc = pDevice[AtoD_loopDevice].pBoard->Board;
 
-        this->BusMux (loc);
-        val = this->ReadRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR);
+        BusMux (loc);
+        val = ReadRegister16 (loc.Port, ADS1115_CONFIG_REG_ADDR);
         if ( val & (1 << ADS1115_OS_FLAG_POS) )
             {
-            val = this->ReadRegister16 (loc.Port, ADS1115_CONVERSION_REG_ADDR);
-            this->CallbackAtoD (val);
+            val = ReadRegister16 (loc.Port, ADS1115_CONVERSION_REG_ADDR);
+            CallbackAtoD (val);
             }
-        this->EndBusMux (loc);
+        EndBusMux (loc);
         }
     }
 

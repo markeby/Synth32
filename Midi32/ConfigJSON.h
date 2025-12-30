@@ -40,8 +40,11 @@ const char* k_Ramp          = "Ramp";
 const char* k_OutMask       = "OutMask";
 const char* k_FilterCtrl    = "FilterCtrl";
 const char* k_FilterQ       = "FilterQ";
+const char* k_FilterLpQ     = "FilterLpQ";
 const char* k_OscEnv        = "OscEnv";
 const char* k_FltEnv        = "FltEnv";
+const char* k_FilterPole    = "FltPole";
+const char* k_FilterSelQ    = "FltSelQ";
 
 //###########################################
 // Tuning keys

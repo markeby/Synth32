@@ -68,8 +68,8 @@ void Tuning ()
                         VoiceArray[zc]->SetTuningVolume(z, 0);
                     }
                 }
-            VoiceArray[zc]->SetTuningFlt (0, level_filter);
-            VoiceArray[zc]->SetTuningFlt (1, level_q);
+            VoiceArray[zc]->SetTuningFlt (false, level_filter);
+            VoiceArray[zc]->SetTuningFlt (true, level_q);
             if ( VoiceArray[zc]->TuningState () )
                 VoiceArray[zc]->SetOutputMask (output_select);
             else
@@ -127,7 +127,7 @@ void StartTuning ()
             {
             change_settings = true;
             VoiceArray[zc]->SetTuningNote (note);
-            VoiceArray[zc]->SetFltCtrl (0);
+            VoiceArray[zc]->SetFlt4Ctrl (0);
             }
         }
     DisplayMessage.TuningDtoA (VoiceArray[0]->LastDA ());

@@ -8,6 +8,17 @@
 #include <deque>
 #include "Config.h"
 
+//###########################################
+// Envelope selection bytes
+//###########################################
+enum class ENV_CTRL_E : int
+    {
+    FIXED = 0,
+    ENVELOPE = 1,
+    MODULATE = 2,
+    MODWHEEL = 3
+    };
+
 //#######################################################################
 enum class ESTATE
     {

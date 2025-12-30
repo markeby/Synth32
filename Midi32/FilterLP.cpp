@@ -6,12 +6,12 @@
 //#######################################################################
 #include <Arduino.h>
 #include "Settings.h"
-#include "Filter4.h"
+#include "FilterLP.h"
 #include "I2Cmessages.h"
 #include "Debug.h"
 
 #ifdef DEBUG_SYNTH
-static const char* label = "FLT";
+static const char* label = "LPF";
 #define DBG(args...) {if(DebugSynth){ DebugMsg(label,_Number,args);}}
 #else
 #define DBG(args...)
@@ -19,57 +19,62 @@ static const char* label = "FLT";
 
 static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
 //#######################################################################
-    FLT4_C::FLT4_C ()
+    LPF_C::LPF_C ()
     {
     _Valid  = false;
     }
 
 //#######################################################################
-void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
+void LPF_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
     {
     _Number = num;
-    // D/A configuration
 
-    _FreqIO   = first_device;
-    _QuIO     = first_device + 1;
-    _Envelope = envgen.NewADSR(num, "FLT4_C Freq", _FreqIO, usecount);
-    _Envelope->SetDualUse (true);
-
-    short dig = first_device + 4;       // get first digital switch
-    if ( num & 1 )                      //   odd numbered units need 2 more
-        dig += 2;
-
-    _OutSwitch[0] = dig++;
-    _OutSwitch[1] = dig++;
-    _OutSwitch[2] = dig++;
-    _OutSwitch[3] = dig;
-    _OutMap       = 0;
-
-    if ( I2cDevices.IsPortValid (_FreqIO) && I2cDevices.IsPortValid (_QuIO) && I2cDevices.IsPortValid (_OutSwitch[0]) )
+    if ( num & 1 )
         {
-        if ( DebugSynth )
-            printf("\t  >> VCF %d started for device %d\n", num, first_device);
-        _Valid = true;
+        _FreqIO      = first_device + 2;   // D/A configuration
+        _QuIO        = first_device + 3;
+        _QcompMuxIO1 = first_device + 4 + 4;   // base + 4 d/A ports + offset
+        _QcompMuxIO2 = first_device + 4 + 6;
         }
     else
-        printf("\t  ** VCF %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
+        {
+        _FreqIO      = first_device;           // D/A configuration
+        _QuIO        = first_device + 1;
+        _QcompMuxIO1 = first_device + 4 + 2;   // base + 4 d/A ports + offset
+        _QcompMuxIO2 = first_device + 4 + 7;
+        }
+    _StageIO = first_device + 4;
+
+    _Envelope = envgen.NewADSR (num, "LPF Freq", _FreqIO, usecount);
+    _Envelope->SetDualUse (true);
+
+    if ( I2cDevices.IsPortValid (_FreqIO) && I2cDevices.IsPortValid (_QuIO) && I2cDevices.IsPortValid (_QcompMuxIO1) )
+        {
+        if ( DebugSynth )
+            printf ("\t  >> LPF %d started for device %d\n", num, first_device);
+        SetModeQ (0);
+        SetPole (0);
+        _Valid =  true;
+        }
+    else
+        printf ("\t  ** LPF %d NO USABLE D/A CHANNELS FROM DEVICE %d\n", num, first_device);
     }
 
 //#######################################################################
-void FLT4_C::ClearState ()
+void LPF_C::ClearState ()
     {
     _Envelope->Clear ();
     }
 
 //#######################################################################
-void FLT4_C::Clear ()
+void LPF_C::Clear ()
     {
     ClearState ();
     I2cDevices.UpdateAnalog ();     // Update D/A ports
     }
 
 //#######################################################################
-void FLT4_C::SetQ (float level_percent)
+void LPF_C::SetQ (float level_percent)
     {
     _Q = level_percent;
     short z = (short)(level_percent * (float)DA_MAX);
@@ -77,25 +82,19 @@ void FLT4_C::SetQ (float level_percent)
     }
 
 //#######################################################################
-void FLT4_C::SetOutMap (byte fmap)
-    {
-    _OutMap = fmap;
-
-    for ( short z = 0;  z < 4;  z++ )
-        I2cDevices.DigitalOut (_OutSwitch[z], (fmap >> z) & 1);
-    }
-
-//#######################################################################
-void FLT4_C::SetTuning (bool qsel, uint16_t level)
+void LPF_C::SetTuning (bool qsel, uint16_t level)
     {
     if ( qsel )
+        {
+        _TuningQ = level;
         I2cDevices.D2Analog (_QuIO, level);
+        }
     else
         _Envelope->SetOverride (level);
     }
 
 //#######################################################################
-void FLT4_C::NoteSet (byte key, byte velocity)
+void LPF_C::NoteSet (byte key, byte velocity)
     {
     DBG ("FIlter Note set by %d with velocity %d", key, velocity);
     _Envelope->Clear ();
@@ -117,14 +116,39 @@ void FLT4_C::NoteSet (byte key, byte velocity)
     }
 
 //#######################################################################
-void FLT4_C::NoteClear ()
+void LPF_C::NoteClear ()
     {
     if ( _ControlSrc >= ENV_CTRL_E::ENVELOPE )
         _Envelope->End ();
     }
 
 //#######################################################################
-void FLT4_C::SetStart (float level_percent)
+void LPF_C::SetModeQ (byte value)
+    {
+    if ( value > 2 )
+        return;
+
+    _CurrentModeQ = value;
+    I2cDevices.DigitalOut    (_QcompMuxIO1, value & 1);
+    I2cDevices.DigitalOut    (_QcompMuxIO1 + 1, value & 2);
+    I2cDevices.DigitalOut    (_QcompMuxIO2, value & 2);
+    I2cDevices.UpdateDigital ();
+    }
+
+//#######################################################################
+void LPF_C::SetPole (byte value)
+    {
+    if ( value > 3 )
+        return;
+
+    _CurrentStage = value;
+    I2cDevices.DigitalOut    (_StageIO, value & 1);
+    I2cDevices.DigitalOut    (_StageIO + 1, value & 2);
+    I2cDevices.UpdateDigital ();
+    }
+
+//#######################################################################
+void LPF_C::SetStart (float level_percent)
     {
     _Envelope->SetLevel (ESTATE::START, level_percent);
 

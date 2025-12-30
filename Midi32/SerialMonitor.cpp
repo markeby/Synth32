@@ -11,6 +11,7 @@
 #include "SerialMonitor.h"
 #include "FrontEnd.h"
 #include "UpdateOTA.h"
+#include "Stats.h"
 
 //#######################################################################
 inline void DispRunTime (void)
@@ -226,6 +227,13 @@ void MONITOR_C::MenuSel (void)
                     Serial << "  Saving debug flags" << endl;
                     Mode (MENU);
                     break;
+                case 'a':
+                    Serial << endl << "   Synth Statistics" << endl;
+                    for ( int z = 0;  z <VOICE_COUNT;  z++ )
+                        Serial << "Voice " << String (z) << "  Count " << String (SynthStats.Data (z)) << endl;
+                    SynthStats.Clear ();
+                    Serial << endl << endl;
+                    break;
                 case 'S':
                     InputString = Settings.GetSSID ();
                     InputPrompt ("  Enter SSID");
@@ -244,24 +252,8 @@ void MONITOR_C::MenuSel (void)
                     Serial << "...\n\n";
                     break;
                 case 'z':           // Test function #1
-                    {
-                    static short z1 = 0;
-
-                    z1 = z1 ^ 1;
-                    I2cDevices.DigitalOut(208, z1);
-                    I2cDevices.UpdateDigital();
-                    DbgD(z1);
-                    }
                     break;
                 case 'x':           // Test function #2
-                    {
-                    static short x1 = 0;
-
-                    x1 = x1 ^ 1;
-                    I2cDevices.DigitalOut(209, x1);
-                    I2cDevices.UpdateDigital();
-                    DbgD(x1);
-                    }
                     break;
                 case 'c':           // Test function #3
                     break;
@@ -292,6 +284,7 @@ void MONITOR_C::Menu (void)
     Serial << "\td   - Save debug flags" << endl;
     Serial << "\ts   - Dump process Stats" << endl;
     Serial << "\tF   - Dump json files" << endl;
+    Serial << "\ta   - Dump voice statistics and clear" << endl;
     Serial << endl;
 //    Serial << "\tz   - Test function #1" << endl;
 //    Serial << "\tx   - Test function #2" << endl;

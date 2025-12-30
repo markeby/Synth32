@@ -67,7 +67,7 @@ void InitializeSynth ()
             {
             mod_mux_digital += 1;
             noise_digital   += 4;
-            voice           += 28;
+            voice           += 40;
             osc              = voice;
             }
         }

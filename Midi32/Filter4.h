@@ -8,24 +8,11 @@
 #include "Config.h"
 #include "Envelope.h"
 
-//###########################################
-// Envelope selection bytes
-//###########################################
-enum class FILTER_CTRL_C: int
-    {
-    FIXED = 0,
-    ENVELOPE = 1,
-    MODULATE = 2,
-    MODWHEEL = 3
-    };
-
-//#######################################################################
 class   FLT4_C
     {
 private:
     ENVELOPE_C*         _Envelope;
-    FILTER_CTRL_C       _ControlSrc;
-
+    ENV_CTRL_E          _ControlSrc;
     bool                _Valid;          // Completed init and good for use
     byte                _Number;
     short               _FreqIO;
@@ -58,10 +45,10 @@ public:
     float           GetEnd              (void)                     { return (_Envelope->GetLevel (ESTATE::ATTACK)); }
     void            SetQ                (float level_percent);
     float           GetQ                (void)                     { return (_Q); }
-    void            SetCtrl             (byte value)               { _ControlSrc = (FILTER_CTRL_C)value; }
-    FILTER_CTRL_C   GetCtrl             (void)                     { return (_ControlSrc); }
+    void            SetCtrl             (byte value)               { _ControlSrc = (ENV_CTRL_E)value; }
+    ENV_CTRL_E      GetCtrl             (void)                     { return (_ControlSrc); }
     void            SetOutMap           (byte fmap);
     byte            GetOutMap           (void)                     { return (_OutMap << 1); }
-    void            SetTuning           (int select, uint16_t level);
+    void            SetTuning           (bool qsel, uint16_t level);
     };
 
