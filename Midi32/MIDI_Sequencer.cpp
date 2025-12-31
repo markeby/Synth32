@@ -12,10 +12,12 @@
 #include "MidiConf.h"
 
 #ifdef DEBUG_SYNTH
-static const char* Label  = "SEQ";
+static const char* Label  = " SEQ";
+static const char* LabelN = "nSEQ";
 static const char* LabelM = "M";
 
 #define DBG(args...) {if(DebugSeq){DebugMsg(Label,mchan,args);}}
+#define DBGn(args...) {if(DebugSeq){DebugMsg(LabelN,mchan,args);}}
 #define DBGM(args...) {if(DebugMidi){DebugMsg(LabelM,mchan,args);}}
 #else
 #define DBG(args...)
@@ -23,8 +25,10 @@ static const char* LabelM = "M";
 #endif
 
 //########################################################
-static int rpnMSB = 127;
-static int rpnLSB = 127;
+static int rpnMSB  = 127;
+static int rpnLSB  = 127;
+static int nrpnMSB = 127;
+static int nrpnLSB = 127;
 
 using namespace MIDI_NAMESPACE;
 
@@ -87,7 +91,7 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
     switch ( type )
         {
         case 0x00:
-            DBG ("n/u Bank select: %d", value);
+            DBGn ("Bank select: %d", value);
             break;
 
         case 0x01:      // Modulation wheel
@@ -97,6 +101,11 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
             SoftLFO.Multiplier (mchan, (float)value * PRS_SCALER);
             break;
 
+        case 0x05:
+            DBGn ("Portamento Time: %d", value);
+            break;
+
+
         case 0x06:
             DBG ("Data Entry MSB: %d", value);
             switch ( rpnMSB )
@@ -105,7 +114,7 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
                     switch ( rpnLSB )
                         {
                         case 0:
-                            DBG("Pitch Bend %d simitones",  value)
+                            DBG("Pitch Bend %d simitones",  value);
                             PitchBendFactor[mchan] = value;
                             break;
                         default:
@@ -118,7 +127,11 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
             break;
 
         case 0x07:      // Channel volume
-            DBG ("n/u Channel volume: %d", value);
+            DBGn ("Channel volume: %d", value);
+            break;
+
+        case 0x0A:
+            DBGn ("Pan: %d", value);
             break;
 
         case 0x0B:
@@ -128,16 +141,12 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
                 VoiceArray[z]->Expression (mchan, zf);
             break;
 
-        case 0x10:
-            DBG ("n/u Pan: %d", value);
-            break;
-
         case 0x20:
-            DBG ("n/u Bank select LSB: %d", value);
+            DBGn ("Bank select LSB: %d", value);
             break;
 
         case 0x21:      // LSB Modulation wheel
-            DBG ("n/u Modulation wheel: LSB %d", value);
+            DBGn ("Modulation wheel: LSB %d", value);
             break;
 
         case 0x40:      // Damper pedal (sustain)
@@ -150,27 +159,37 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
         case 0x41:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("n/u Portamento:  %d", (( zl ) ? "ON" : "OFF"));
+            DBGn ("Portamento:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x42:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("nun/uSostenuto:  %d", (( zl ) ? "ON" : "OFF"));
+            DBGn ("Sostenuto:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x43:
             if ( value < 64 )   zl = false;
             else                zl = true;
-            DBG ("n/u Soft pedal:  %d", (( zl ) ? "ON" : "OFF"));
+            DBGn ("Soft pedal:  %d", (( zl ) ? "ON" : "OFF"));
             break;
 
         case 0x5B:
-            DBG ("n/u Reverb send level: %d", value);
+            DBGn ("Reverb send level: %d", value);
             break;
 
         case 0x5D:
-            DBG ("n/u Chorus send level: %d", value);
+            DBGn ("Chorus send level: %d", value);
+            break;
+
+        case 0x62:
+            DBG ("Non-RPN LSB: %d", value);
+            nrpnLSB = value;
+            break;
+
+        case 0x63:
+            DBG ("Non-RPN MSB: %d", value);
+            nrpnMSB = value;
             break;
 
         case 0x64:
@@ -194,8 +213,12 @@ void cb_ControlSequence (byte mchan, byte type, byte value)
             MidiParamReset ();
             break;
 
+        case 0x7B:
+            DBGn ("[Channel Mode Message] All notes off");
+            break;
+
         default:
-            DBG ("Uknown controller command: %d   value: %d", type, value);
+            DBGn ("Uknown controller command: %d   value: %d", type, value);
             break;
         }
 

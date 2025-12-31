@@ -395,18 +395,15 @@ void FltEnd (short ch, short data)
 void FltQ (short ch, short data)
     {
     float val = (float)data * PRS_SCALER;
-    if ( ch )
+    for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        for ( int z = 0;  z < VOICE_COUNT;  z++ )
+        if ( SelectedMidi == VoiceArray[z]->GetMidi () )
             {
-            if ( SelectedMidi == VoiceArray[z]->GetMidi () )
-                {
-                SynthConfig.Voice[z >> 1].SetFltQ (ch, val);
-                if ( ch )
-                    VoiceArray[z]->SetFltLpQ (val);
-                else
-                    VoiceArray[z]->SetFlt4Q (val);
-                }
+            SynthConfig.Voice[z >> 1].SetFltQ (ch, val);
+            if ( ch )
+                VoiceArray[z]->SetFltLpQ (val);
+            else
+                VoiceArray[z]->SetFlt4Q (val);
             }
         }
     DisplayMessage.FltQ (ch, data);
