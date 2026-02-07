@@ -230,6 +230,39 @@ static void pageAdvance (short ch, short data)
     PageAdvance ();
     }
 
+
+
+//########################################################
+//########################################################
+// Test area
+//########################################################
+static void TestPole (short ch, short data)
+    {
+    I2cDevices.D2Analog (258 + ch, (127 - data) * (MAX_DA / 127));
+    I2cDevices.UpdateAnalog  ();
+    }
+
+//########################################################
+static void TestAdj (short ch, short data)
+    {
+    I2cDevices.D2Analog (256 + ch, data * (MAX_DA / 127));
+    I2cDevices.UpdateAnalog  ();
+    }
+
+//########################################################
+static void TestQ (short ch, short state)
+    {
+    static bool status[4] = { false, false, false, false};
+    status[ch] = !status[ch];
+
+    printf("Status: %d  %d  %d  %d\n", status[0], status[1], status[2], status[3]);
+    I2cDevices.DigitalOut (264 + ch, status[ch]);
+    I2cDevices.UpdateDigital ();
+    }
+
+
+
+
 //########################################################
 //########################################################
 XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
@@ -549,10 +582,10 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 69 0x45  21
         {     0,   0x0C, "N ",                      nullptr             },  // 70 0x46  22
         {     0,   0x0C, "N ",                      nullptr             },  // 71 0x47  23
-        {     0,   0x3C, "N ",                      nullptr             },  // 72 0x48  24  TF1
-        {     0,   0x0C, "N ",                      nullptr             },  // 73 0x49  25  TF2
-        {     0,   0x0C, "N ",                      nullptr             },  // 74 0x4A  26  TF3
-        {     0,   0x0C, "N ",                      nullptr             },  // 75 0x4B  27  TF4
+        {     0,   0x0C, "N ",                      TestQ               },  // 72 0x48  24  TF1
+        {     1,   0x0C, "N ",                      TestQ               },  // 73 0x49  25  TF2
+        {     2,   0x0C, "N ",                      TestQ               },  // 74 0x4A  26  TF3
+        {     3,   0x0C, "N ",                      TestQ               },  // 75 0x4B  27  TF4
         {     0,   0x0C, "N ",                      nullptr             },  // 76 0x4C  28  TF5
         {     0,   0x0C, "N ",                      nullptr             },  // 77 0x4D  29  TF6
         {     0,   0x0C, "N ",                      nullptr             },  // 78 0x4E  30  TF7
@@ -573,14 +606,14 @@ XL_MIDI_MAP    XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_SIZE] =
         {     0,   0x0C, "N ",                      nullptr             },  // 93 0x5D  45
         {     0,   0x0C, "N ",                      nullptr             },  // 94 0x5E  46
         {     0,   0x0C, "N ",                      nullptr             },  // 95 0x5F  47
-        {     0,      0, "N ",                      nullptr             },  // 96 0x60  48  First Fader
-        {     1,      0, "N ",                      nullptr             },  // 97 0x61  49
-        {     2,      0, "N ",                      nullptr             },  // 98 0x62  50
-        {     3,      0, "N ",                      nullptr             },  // 99 0x63  51
-        {     4,      0, "N ",                      nullptr             },  //100 0x64  52
-        {     0,      0, "N ",                      nullptr             },  //101 0x65  53
-        {     0,      0, "N ",                      nullptr             },  //102 0x66  54
-        {     0,      0, "N ",                      nullptr             },  //103 0x67  55
+        {     0,      0, "N ",                      TestAdj             },  // 96 0x60  48  First Fader
+        {     1,      0, "N ",                      TestAdj             },  // 97 0x61  49
+        {     0,      0, "N ",                      TestPole             },  // 98 0x62  50
+        {     1,      0, "N ",                      TestPole            },  // 99 0x63  51
+        {     2,      0, "N ",                      TestPole            },  //100 0x64  52
+        {     3,      0, "N ",                      TestPole            },  //101 0x65  53
+        {     4,      0, "N ",                      TestPole            },  //102 0x66  54
+        {     5,      0, "N ",                      TestPole            },  //103 0x67  55
       },
   };
 
