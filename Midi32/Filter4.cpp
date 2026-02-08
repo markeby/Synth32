@@ -8,7 +8,6 @@
 #include "Settings.h"
 #include "Filter4.h"
 #include "I2Cmessages.h"
-#include "Debug.h"
 
 #ifdef DEBUG_SYNTH
 static const char* label = "FLT";

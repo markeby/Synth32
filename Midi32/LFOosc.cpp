@@ -10,7 +10,6 @@
 #include "I2Cmessages.h"
 #include "Settings.h"
 #include "LFOosc.h"
-#include "Debug.h"
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "LFO";

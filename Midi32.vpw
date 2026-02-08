@@ -2,5 +2,6 @@
 <Workspace Version="10.0" VendorName="SlickEdit" VCSProject="Git:">
     <Projects>
         <Project File="Midi32/.Midi32.vpj"/>
+        <Project File="Midi32/libraries/.Libraries.vpj"/>
     </Projects>
 </Workspace>

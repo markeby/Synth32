@@ -11,7 +11,6 @@
 #include "Settings.h"
 #include "Osc.h"
 #include "I2Cmessages.h"
-#include "Debug.h"
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "VCO";

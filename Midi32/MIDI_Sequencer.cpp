@@ -8,7 +8,6 @@
 
 #include "Config.h"
 #include "FrontEnd.h"
-#include "Debug.h"
 #include "MidiConf.h"
 
 #ifdef DEBUG_SYNTH

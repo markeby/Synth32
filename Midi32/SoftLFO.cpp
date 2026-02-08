@@ -1,6 +1,5 @@
 //#######################################################################
 #include "SoftLFO.h"
-#include "Debug.h"
 
 #ifdef DEBUG_SYNTH
 static const char* Label = "LFO-S";

@@ -7,9 +7,9 @@
 //#######################################################################
 #include <Arduino.h>
 #include <Wire.h>
+#include <Debug.h>
 #define ALLOCATE_DISP_MESSAGES
 #include "I2Cmessages.h"
-#include "Debug.h"
 
 using namespace DISP_MESSAGE_N;
 

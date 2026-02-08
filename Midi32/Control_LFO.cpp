@@ -11,7 +11,6 @@
 #include "I2Cmessages.h"
 #include "Osc.h"
 #include "FrontEnd.h"
-#include "Debug.h"
 
 #ifdef DEBUG_SYNTH
 static const char* Label  = "TOP";

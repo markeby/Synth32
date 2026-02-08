@@ -10,7 +10,6 @@
 #include "FrontEnd.h"
 #include "I2Cmessages.h"
 #include "SerialMonitor.h"
-#include "Debug.h"
 #include "MidiConf.h"
 
 #ifdef DEBUG_SYNTH

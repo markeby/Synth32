@@ -11,8 +11,8 @@
 #include <SPIFFS.h>
 
 #include <SynthCommon.h>
-#include "I2Cdevices.h"
-#include "Debug.h"
+#include <I2Cdevices.h>
+#include <Debug.h>
 
 //#####################################
 // Debug controls
