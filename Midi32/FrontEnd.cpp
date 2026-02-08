@@ -56,7 +56,7 @@ void InitializeSynth ()
     I2cDevices.D2Analog      (volumeOscMaster, 0);
     I2cDevices.D2Analog      (volumeFltMaster, 0);
     I2cDevices.D2Analog      (volumeFltLPMaster, 0);
-    I2cDevices.UpdateAnalog  ();
+    I2cDevices.Update  ();
 
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
@@ -93,7 +93,7 @@ void MasterVolume (short md)
 
     DBG ("D to A value for volume = %d", x);
     I2cDevices.D2Analog      (volumeMaster, x);
-    I2cDevices.UpdateAnalog  ();
+    I2cDevices.Update  ();
     }
 
 //#######################################################################
@@ -243,8 +243,7 @@ void LoopSynth ()
         EnvADSL.Loop ();                                    // process all envelope generators
         for ( int z = 0;  z < VOICE_COUNT;  z++ )           // Check all channels for done
             VoiceArray[z]->Loop ();
-        I2cDevices.UpdateDigital ();
-        I2cDevices.UpdateAnalog  ();     // Update D/A ports
+        I2cDevices.Update ();
         }
     else
         Tuning ();

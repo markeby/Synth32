@@ -69,7 +69,7 @@ I2C_LOCATION_T  DevicesI2C[] =
         { 7,        2,     0x60,     4,    0,      0, "D/A 244 - 247" },
         { 7,        3,     0x60,     4,    0,      0, "D/A 248 - 251" },
         { 7,        4,     0x60,     4,    0,      0, "D/A 252 - 255" },
-        { 255, 255, 255, 255, 255, 255, nullptr }
+        { -1, -1, -1, -1, -1, -1, nullptr }
     };
 
 //#######################################################################
@@ -173,6 +173,7 @@ void setup (void)
     BootDebug ();           // Pause here so that init of serial port in the monitor class can complete on power up
     printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
     Settings.Begin ();      // System settings
+    I2cDevices.SetDebug (DebugI2C);
     int z = Settings.GetSketchSize () - Settings.GetSketchSizePrev ();
     if ( z != 0 )
         printf ("\t>>> Change in size = %d\n", z);

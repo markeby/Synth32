@@ -111,7 +111,7 @@ void SYNTH_LFO_C::Begin (int num, uint8_t first_device, uint8_t lfo_digital)
 void SYNTH_LFO_C::Clear ()
     {
     ClearState ();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
@@ -128,7 +128,7 @@ void SYNTH_LFO_C::OutputFreqIO ()
     {
     DBG ("Set frequency %d", _CurrentFreq);
     I2cDevices.D2Analog (_OscPortIO, _CurrentFreq);
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
@@ -137,7 +137,7 @@ void SYNTH_LFO_C::SetPulseWidth (short value)
     _CurrentWidth = value;
     DBG ("Set pulse width %d", value);
     I2cDevices.D2Analog (_PwmPortIO, DA_MAX - value);
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
@@ -157,7 +157,7 @@ void SYNTH_LFO_C::SetWave (short ch, bool state)
 
     if ( _UpdateNeded )
         {
-        I2cDevices.UpdateAnalog ();     // Update D/A ports
+        I2cDevices.Update ();     // Update D/A ports
         _UpdateNeded = false;
         }
 
@@ -179,7 +179,7 @@ void SYNTH_LFO_C::SetLevelMidi (byte mchan, uint8_t data)
             }
         if ( _UpdateNeded )
             {
-            I2cDevices.UpdateAnalog ();     // Update D/A ports
+            I2cDevices.Update ();     // Update D/A ports
             _UpdateNeded = false;
             }
         if ( _InUse )
@@ -199,15 +199,15 @@ void SYNTH_LFO_C::ResetControl ()
 void SYNTH_LFO_C::PitchBend (short value)
     {
     I2cDevices.D2Analog (_BendPortIO, value + _Offset);
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
 void SYNTH_LFO_C::SetRampDir (bool state)
     {
     _RampSlope = state;
-    I2cDevices.DigitalOut     (_SlopePortO, state);
-    I2cDevices.UpdateDigital  ();
+    I2cDevices.DigitalOut (_SlopePortO, state);
+    I2cDevices.Update  ();
     }
 
 //#######################################################################

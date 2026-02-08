@@ -209,6 +209,7 @@ void MONITOR_C::MenuSel (void)
                     break;
                 case '3':
                     DebugI2C  = !DebugI2C;
+                    I2cDevices.SetDebug (DebugI2C);
                     Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;

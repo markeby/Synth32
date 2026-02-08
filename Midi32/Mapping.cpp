@@ -261,8 +261,7 @@ void ResolveMapAllocation ()
         SelectModVCA (z, SynthConfig.GetModSoftMixer (z));
 
     MuteVoicesReset ();
-    I2cDevices.UpdateDigital ();
-    I2cDevices.UpdateAnalog  ();
+    I2cDevices.Update ();
     PageAdvance ();
     }
 

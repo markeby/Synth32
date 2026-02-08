@@ -70,7 +70,7 @@ void LPF_C::ClearState ()
 void LPF_C::Clear ()
     {
     ClearState ();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
@@ -132,7 +132,7 @@ void LPF_C::SetModeQ (byte value)
     I2cDevices.DigitalOut    (_QcompMuxIO1, value & 1);
     I2cDevices.DigitalOut    (_QcompMuxIO1 + 1, value & 2);
     I2cDevices.DigitalOut    (_QcompMuxIO2, value & 2);
-    I2cDevices.UpdateDigital ();
+    I2cDevices.Update ();
     }
 
 //#######################################################################
@@ -144,7 +144,7 @@ void LPF_C::SetPole (byte value)
     _CurrentStage = value;
     I2cDevices.DigitalOut    (_StageIO, value & 1);
     I2cDevices.DigitalOut    (_StageIO + 1, value & 2);
-    I2cDevices.UpdateDigital ();
+    I2cDevices.Update ();
     }
 
 //#######################################################################

@@ -84,10 +84,9 @@ void Tuning ()
         DisplayMessage.TuningFilter (1, level_q * MIDI_INV_MULTIPLIER);
         }
 
-    change_settings = false;     // Indicate complete and ready for next not change
-    Down.Trigger = 0;         // Clear note change trigger
-    I2cDevices.UpdateDigital ();    // Update all digital port changes
-    I2cDevices.UpdateAnalog  ();    // Update D/A port changes
+    change_settings = false;    // Indicate complete and ready for next not change
+    Down.Trigger = 0;           // Clear note change trigger
+    I2cDevices.Update ();       // Update all digital port changes
     }
 
 //#######################################################################
@@ -216,7 +215,7 @@ static void  cb_Calibration (ushort val)
                 for ( int z = 4;  z < 8;  z++)
                     I2cDevices.DigitalOut (CalibrationBaseDigital + z, true);      // select LFO-1
                 }
-            I2cDevices.UpdateDigital ();                    // Update all digital port changes
+            I2cDevices.Update ();                    // Update all digital port changes
             delay (500);                                      // let voltage settle
             I2cDevices.StartAtoD  (CalibrationAtoD);
             calibration_phase = 3;
@@ -288,7 +287,7 @@ void StartCalibration ()
         I2cDevices.DigitalOut (CalibrationBaseDigital + z, false);
     for ( int z = 8;  z < 12;  z++)
         I2cDevices.DigitalOut (CalibrationBaseDigital + z,  true);
-    I2cDevices.UpdateDigital ();                    // Update all digital port changes
+    I2cDevices.Update ();                    // Update all digital port changes
     delay (500);                                      // let voltage settle
     I2cDevices.SetCallbackAtoD (cb_Calibration);
     I2cDevices.StartAtoD (CalibrationAtoD);   // Start analog sampling

@@ -65,7 +65,7 @@ void FLT4_C::ClearState ()
 void FLT4_C::Clear ()
     {
     ClearState ();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################

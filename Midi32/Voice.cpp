@@ -30,8 +30,7 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, 
     _Osc.Begin   (num, osc_d_a, _UseCount, envgen);
     _Flt4.Begin  (num, osc_d_a + (( num & 1 ) ? 10 : 16), _UseCount, envgen);
     _FltLP.Begin (num, osc_d_a + (( num & 1 ) ? 20 : 28), _UseCount, envgen);
-    I2cDevices.UpdateDigital ();
-    I2cDevices.UpdateAnalog  ();
+    I2cDevices.Update ();
     }
 
 //#######################################################################
@@ -84,7 +83,7 @@ void VOICE_C::NoiseSelect (byte color)
     for ( byte z = 0;  z < 4;  z++ )
         I2cDevices.DigitalOut (_NoiseDigitalIO + z, color == z);
     _NoiseSource = color;
-    I2cDevices.UpdateDigital ();
+    I2cDevices.Update ();
     }
 
 //#######################################################################
@@ -100,7 +99,7 @@ void VOICE_C::SetOutputMask (byte bitmap)
     I2cDevices.DigitalOut (_DigitalOutOscillator, bitmap & 1);
     _Flt4.SetOutMap ((bitmap >> 1) & 0x0F);
     I2cDevices.DigitalOut (_DigitalOutLpFilter, bitmap & (1 << 5));
-    I2cDevices.UpdateDigital ();
+    I2cDevices.Update ();
     }
 
 //#######################################################################

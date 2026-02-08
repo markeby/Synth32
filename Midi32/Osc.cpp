@@ -69,7 +69,7 @@ void OSC_C::ClearState ()
 void OSC_C::Clear ()
     {
     ClearState ();
-    I2cDevices.UpdateAnalog ();     // Update D/A ports
+    I2cDevices.Update ();     // Update D/A ports
     }
 
 //#######################################################################
