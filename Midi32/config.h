@@ -133,7 +133,6 @@ extern  XL_MIDI_MAP             XL_MidiMapArray[XL_MIDI_MAP_PAGES][XL_MIDI_MAP_S
 //#################################################
 //  I2C bus interfaces
 //#################################################
-extern  I2C_INTERFACE_C         I2cDevices;
 #define START_MIXER             0
 #define START_NOISE_DIGITAL     20
 #define START_LFO_CONTROL       36

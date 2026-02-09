@@ -10,7 +10,7 @@
 #include "Stats.h"
 
 //#####################################################################
-VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal, ENV_GENERATOR_C& envgen)
+VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, short noise_digitinal)
     {
     _Number               = num;
     _ActiveTimer          = 0;
@@ -27,9 +27,9 @@ VOICE_C::VOICE_C (short num, short osc_d_a, short mixer, short mod_mux_digital, 
     _ModMux[0] = mod_mux_digital + 8;
     _ModMux[1] = mod_mux_digital;
     _ModMux[2] = mod_mux_digital + 4;
-    _Osc.Begin   (num, osc_d_a, _UseCount, envgen);
-    _Flt4.Begin  (num, osc_d_a + (( num & 1 ) ? 10 : 16), _UseCount, envgen);
-    _FltLP.Begin (num, osc_d_a + (( num & 1 ) ? 20 : 28), _UseCount, envgen);
+    _Osc.Begin   (num, osc_d_a, _UseCount);
+    _Flt4.Begin  (num, osc_d_a + (( num & 1 ) ? 10 : 16), _UseCount);
+    _FltLP.Begin (num, osc_d_a + (( num & 1 ) ? 20 : 28), _UseCount);
     I2cDevices.Update ();
     }
 

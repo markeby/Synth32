@@ -30,7 +30,6 @@ typedef struct KEY_S KEY_T;
 extern KEY_T            Down;
 extern KEY_T            Up;
 
-extern ENV_GENERATOR_C  EnvADSL;                    // Envelope generator creation class
 extern SYNTH_LFO_C      Lfo[2];                     // Array of LFO interfaces
 extern VOICE_C*         VoiceArray[VOICE_COUNT];    // Pointers to each of the voice module devices
 extern byte             PitchBendFactor[MAX_MIDI];

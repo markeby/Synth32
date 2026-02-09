@@ -30,18 +30,23 @@ static  const char*     MixerNames[] = { "sine", "triangle", "square", "saw", "p
     }
 
 //#######################################################################
-void OSC_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
+void OSC_C::Begin (short num, short first_device, byte& usecount)
     {
     Number = num;
     // D/A configuration
     OscPortIO                 = first_device + byte(D_A_OFF::EXPO);
     PwmPortIO                 = first_device + byte(D_A_OFF::WIDTH);
     RampDirPortIO             = first_device + byte(D_A_OFF::DIR);
-    Mix[int(SHAPE::TRIANGLE)] = envgen.NewADSR (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), usecount);
-    Mix[int(SHAPE::RAMP)]     = envgen.NewADSR (num, MixerNames[int(SHAPE::RAMP)], first_device + byte(D_A_OFF::RAMP), usecount);
-    Mix[int(SHAPE::PULSE)]    = envgen.NewADSR (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), usecount);
-    Mix[int(SHAPE::SINE)]     = envgen.NewADSR (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), usecount);
-    Mix[int(SHAPE::NOISE)]    = envgen.NewADSR (num, MixerNames[int(SHAPE::NOISE)], first_device + byte(D_A_OFF::NOISE), usecount);
+    Mix[int(SHAPE::TRIANGLE)] = EnvelopeGenerator.NewADSR
+                                (num, MixerNames[int(SHAPE::TRIANGLE)], first_device + byte(D_A_OFF::TRIANGLE), DA_MAX, usecount);
+    Mix[int(SHAPE::RAMP)]     = EnvelopeGenerator.NewADSR
+                                (num, MixerNames[int(SHAPE::RAMP)], first_device + byte(D_A_OFF::RAMP), DA_MAX, usecount);
+    Mix[int(SHAPE::PULSE)]    = EnvelopeGenerator.NewADSR
+                                (num, MixerNames[int(SHAPE::PULSE)], first_device + byte(D_A_OFF::PULSE), DA_MAX, usecount);
+    Mix[int(SHAPE::SINE)]     = EnvelopeGenerator.NewADSR
+                                (num, MixerNames[int(SHAPE::SINE)], first_device + byte(D_A_OFF::SINE), DA_MAX, usecount);
+    Mix[int(SHAPE::NOISE)]    = EnvelopeGenerator.NewADSR
+                                (num, MixerNames[int(SHAPE::NOISE)], first_device + byte(D_A_OFF::NOISE), DA_MAX, usecount);
 
     for ( int z = 0;  z < (int)SHAPE::ALL;  z++ )
         Mix[z]->SetLevel (ESTATE::SUSTAIN, 1.0);

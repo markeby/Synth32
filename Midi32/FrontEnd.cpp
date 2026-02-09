@@ -60,7 +60,7 @@ void InitializeSynth ()
 
     for ( int z = 0;  z < VOICE_COUNT;  z++ )
         {
-        VoiceArray[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital, EnvADSL);
+        VoiceArray[z] = new VOICE_C(z, osc, mixer, mod_mux_digital, noise_digital);
         osc      += 8;
         mixer    += 1;
         if ( z & 1 )
@@ -195,7 +195,6 @@ void LoopSynth ()
 
     if ( !SetTuning )
         {
-        SoftLFO.Loop ();
         if ( Up.Trigger )
             {
             DBG ("Key up > %d", Up.Key);
@@ -240,10 +239,9 @@ void LoopSynth ()
             Down.Trigger = 0;                         // release the trigger
             }
 
-        EnvADSL.Loop ();                                    // process all envelope generators
+        EnvelopeGenerator.Loop (DeltaTimeMilli);            // process all envelope generators
         for ( int z = 0;  z < VOICE_COUNT;  z++ )           // Check all channels for done
             VoiceArray[z]->Loop ();
-        I2cDevices.Update ();
         }
     else
         Tuning ();
@@ -269,7 +267,6 @@ void SystemExDebug (byte* array, unsigned size)
 KEY_T           Down;
 KEY_T           Up;
 
-ENV_GENERATOR_C EnvADSL;                    //Envelope generator spawn tool
 NOVATION_XL_C   LaunchControl;              //Novation controller
 SYNTH_LFO_C     Lfo[2];                     //Hardware LFOs
 VOICE_C*        VoiceArray[VOICE_COUNT];    //Oscillators, filters, routing controls

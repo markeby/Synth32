@@ -24,14 +24,14 @@ static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
     }
 
 //#######################################################################
-void FLT4_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
+void FLT4_C::Begin (short num, short first_device, byte& usecount)
     {
     _Number = num;
     // D/A configuration
 
     _FreqIO   = first_device;
     _QuIO     = first_device + 1;
-    _Envelope = envgen.NewADSR(num, "FLT4_C Freq", _FreqIO, usecount);
+    _Envelope = EnvelopeGenerator.NewADSR (num, "FLT4_C Freq", _FreqIO, DA_MAX, usecount);
     _Envelope->SetDualUse (true);
 
     short dig = first_device + 4;       // get first digital switch

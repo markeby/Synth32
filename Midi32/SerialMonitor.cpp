@@ -198,23 +198,24 @@ void MONITOR_C::MenuSel (void)
                     Mode (MENU);
                     break;
                 case '1':
-                    DebugSeq  = !DebugSeq;
+                    DebugSeq = !DebugSeq;
                     Serial << "  MIDI sequence debugging " << (( DebugSeq ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '2':
-                    DebugMidi  = !DebugMidi;
+                    DebugMidi = !DebugMidi;
                     Serial << "  MIDI debugging " << (( DebugMidi ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '3':
-                    DebugI2C  = !DebugI2C;
+                    DebugI2C = !DebugI2C;
                     I2cDevices.SetDebug (DebugI2C);
                     Serial << "  I2C debugging " << (( DebugI2C ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;
                 case '4':
                     DebugSynth = !DebugSynth;
+                    EnvelopeGenerator.Debug (DebugSynth);
                     Serial << "  Synth debugging " << (( DebugSynth ) ? "Enabled" : "Disabled") << endl;
                     Mode (MENU);
                     break;

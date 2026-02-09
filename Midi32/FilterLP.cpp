@@ -24,7 +24,7 @@ static const char*  switchNames[] = { "LP", "LBP", "UBP", "HP" };
     }
 
 //#######################################################################
-void LPF_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_C& envgen)
+void LPF_C::Begin (short num, short first_device, byte& usecount)
     {
     _Number = num;
 
@@ -44,7 +44,7 @@ void LPF_C::Begin (short num, short first_device, byte& usecount, ENV_GENERATOR_
         }
     _StageIO = first_device + 4;
 
-    _Envelope = envgen.NewADSR (num, "LPF Freq", _FreqIO, usecount);
+    _Envelope = EnvelopeGenerator.NewADSR (num, "LPF Freq", _FreqIO, DA_MAX, usecount);
     _Envelope->SetDualUse (true);
 
     if ( I2cDevices.IsPortValid (_FreqIO) && I2cDevices.IsPortValid (_QuIO) && I2cDevices.IsPortValid (_QcompMuxIO1) )

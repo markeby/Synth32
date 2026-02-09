@@ -51,7 +51,6 @@
 #define MAX_MVAL            127
 
 #define MIDI_MULTIPLIER     32.245
-//#define MIDI_INV_MULTIPLIER 0.03101256
 #define MIDI_INV_MULTIPLIER 0.0311
 
 // Scaler for 100% on midi interface

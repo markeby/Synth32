@@ -83,7 +83,6 @@
             <F N="Config.cpp"/>
             <F N="Control_LFO.cpp"/>
             <F N="Control_Voice.cpp"/>
-            <F N="Envelope.cpp"/>
             <F N="Filter4.cpp"/>
             <F N="FilterLP.cpp"/>
             <F N="FrontEnd.cpp"/>
@@ -97,7 +96,6 @@
             <F N="Osc.cpp"/>
             <F N="SerialMonitor.cpp"/>
             <F N="Settings.cpp"/>
-            <F N="SoftLFO.cpp"/>
             <F N="Tuning.cpp"/>
             <F N="UpdateOTA.cpp"/>
             <F N="Voice.cpp"/>
@@ -115,7 +113,6 @@
             </Folder>
             <F N="Config.h"/>
             <F N="ConfigJSON.h"/>
-            <F N="Envelope.h"/>
             <F N="Filter4.h"/>
             <F N="FilterLP.h"/>
             <F N="FrontEnd.h"/>
@@ -126,7 +123,6 @@
             <F N="Osc.h"/>
             <F N="SerialMonitor.h"/>
             <F N="Settings.h"/>
-            <F N="SoftLFO.h"/>
             <F N="Stats.h"/>
             <F N="UpdateOTA.h"/>
             <F N="Voice.h"/>

@@ -18,8 +18,6 @@
 // SET_LOOP_TASK_STACK_SIZE(16 * 1024);  // 16KB
 
 //#######################################################################
-I2C_CLUSTERS_T  BusI2C[] = { 0, 1, 7, -1 };
-
 I2C_LOCATION_T  DevicesI2C[] =
     { // Cluster   Slice    Port    DtoA   AtoD    Dig     Name
         { 1,        7,     0x38,     0,    0,      8, "Dig 0   - 7"   }, // MUXmixer
@@ -80,7 +78,6 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial2, Midi_2);  // Sequencer MIDI device
 
 //#######################################################################
 MONITOR_C       Monitor;
-I2C_INTERFACE_C I2cDevices (BusI2C, DevicesI2C);
 
 bool        SystemError         = false;
 bool        SystemFail          = false;
@@ -169,11 +166,13 @@ void setup (void)
 
     pinMode      (HEARTBEAT_PIN, OUTPUT);
     digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
-
     BootDebug ();           // Pause here so that init of serial port in the monitor class can complete on power up
+
     printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);
     Settings.Begin ();      // System settings
     I2cDevices.SetDebug (DebugI2C);
+    EnvelopeGenerator.Debug (DebugSynth);
+
     int z = Settings.GetSketchSize () - Settings.GetSketchSizePrev ();
     if ( z != 0 )
         printf ("\t>>> Change in size = %d\n", z);
@@ -185,7 +184,7 @@ void setup (void)
     printf ("\t>>> Starting I2C & devices...\n");
 
     // First, validate for good I2C I/O bus
-    int cnt = I2cDevices.Begin ();
+    int cnt = I2cDevices.Begin (DevicesI2C);
     if ( cnt != 0 )
         {
         SystemError = true;
