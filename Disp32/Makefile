@@ -39,29 +39,29 @@ UPLOAD_OTA := 192.168.1.31
 # Configuration for Seeed Studio ESP32c3
 ############################################
 ifdef C3
-  ESP32  := --fqbn esp32:esp32:XIAO_ESP32C3
+  FQBN  := esp32:esp32:XIAO_ESP32C3
   OUTPUT := output_esp32c3
 endif
 ############################################
 # Configuration for Wrooom ESP32-S3-WROOM-1
 ############################################
 ifdef S3
-# ESP32 := --fqbn esp32:esp32:esp32s3usbotg
-  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
+# FQBN  := esp32:esp32:esp32s3usbotg
+  FQBN := esp32:esp32:esp32s3:PSRAM=opi,PartitionScheme=huge_app 
   OUTPUT := output_esp32s3
 endif
 ############################################
 # Configuration for Wrooom ESP32-S3-WROOM-1
 ############################################
 ifdef S3DEV
-  ESP32 := --fqbn esp32:esp32:esp32s3:PSRAM=opi,FlashSize=8M,PartitionScheme=huge_app
+  FQBN := esp32:esp32:esp32s3:PSRAM=opi,FlashSize=8M,PartitionScheme=huge_app
   OUTPUT := output_esp32s3dev
 endif
 ############################################
 # Configuration for Wrooom ESP32-WROOM
 ############################################
 ifdef DOIT
-  ESP32  := --fqbn esp32:esp32:esp32doit-devkit-v1
+  FQBN  := esp32:esp32:esp32doit-devkit-v1
   OUTPUT := output_doit
 endif
 
@@ -87,7 +87,7 @@ endif
 ifdef OTA
   UPLOAD := python ../tools/UploadOTA.py $(TARGET) $(OTA)
 else
-  UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
+  UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) --fqbn $(FQBN) $(TARGET)
 endif
 
 ############################################
@@ -119,7 +119,7 @@ target : $(TARGET)
 
 $(TARGET) : $(SOURCES) $(INCLUDES) libraries/.git
 	@if not exist $(OUTPUT) (mkdir $(OUTPUT))
-	$(ARDUNIO) $(COMPILE) $(ESP32) 
+	$(ARDUNIO) $(COMPILE) --fqbn $(FQBN) 
 
 libraries/.git:
 	@git submodule update --init --recursive

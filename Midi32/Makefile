@@ -41,22 +41,22 @@ UPLOAD_OTA := 192.168.2.21
 # Configuration for Seeed Studio ESP32c3
 ############################################
 ifdef C3
-  ESP32  := --fqbn esp32:esp32:XIAO_ESP32C3
+  FQBN   := esp32:esp32:XIAO_ESP32C3
   OUTPUT := output_esp32c3
 endif
 ############################################
 # Configuration for Wrooom ESP32-S3-WROOM-1
 ############################################
 ifdef S3
-  ESP32 := --fqbn esp32:esp32:esp32s3usbotg
-#  ESP32 := --fqbn esp32:esp32:esp32s3
+  FQBN   := esp32:esp32:esp32s3usbotg
+#  FQBN   := --fqbn esp32:esp32:esp32s3
   OUTPUT := output_esp32s3
 endif
 ############################################
 # Configuration for Wrooom ESP32-WROOM
 ############################################
 ifdef DOIT
-  ESP32  := --fqbn esp32:esp32:esp32doit-devkit-v1
+  FQBN   := esp32:esp32:esp32doit-devkit-v1
   OUTPUT := output_doit
 endif
 
@@ -82,7 +82,7 @@ endif
 ifdef OTA
   UPLOAD := espota.exe -d -r -i $(OTA) -p 3232 --auth=admin -f $(TARGET)
 else
-  UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) $(ESP32) $(TARGET)
+  UPLOAD := $(ARDUNIO) upload --input-dir $(OUTPUT) -p $(PT) --fqbn $(FQBN) $(TARGET)
 endif
 
 
@@ -114,7 +114,7 @@ target : $(TARGET)
 
 $(TARGET) : $(SOURCES) $(INCLUDES)  libraries/.git
 	if not exist $(OUTPUT) (mkdir $(OUTPUT))
-	$(ARDUNIO) $(COMPILE) $(ESP32)
+	$(ARDUNIO) $(COMPILE) --fqbn $(FQBN)
 
 libraries/.git:
 	@git submodule update --init --recursive
