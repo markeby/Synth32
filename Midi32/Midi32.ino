@@ -94,8 +94,6 @@ void setup (void)
     {
     bool fault = false;
 
-    pinMode      (HEARTBEAT_PIN, OUTPUT);
-    digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
     BootDebug ();           // Pause here so that init of serial port in the monitor class can complete on power up
 
     printf ("\n\t>>> Startup of Midi32 %s %s\n", __DATE__, __TIME__);

@@ -112,7 +112,7 @@ target : $(TARGET)
 	$(UPLOAD)
 	@python ../Tools/Beep.py OK
 
-$(TARGET) : $(SOURCES) $(INCLUDES)  libraries/.git
+$(TARGET) : $(SOURCES) $(INCLUDES) libraries/.git
 	if not exist $(OUTPUT) (mkdir $(OUTPUT))
 	$(ARDUNIO) $(COMPILE) --fqbn $(FQBN)
 
