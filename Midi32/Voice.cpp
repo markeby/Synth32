@@ -38,7 +38,7 @@ void VOICE_C::Loop ()
     {
     if ( _ActiveTimer )
         {
-        _ActiveTimer += DeltaTimeMilli;
+        _ActiveTimer += ZyTime.DeltaTimeMS ();
         if ( _UseCount == 0 )
             _ActiveTimer = 0;
         }

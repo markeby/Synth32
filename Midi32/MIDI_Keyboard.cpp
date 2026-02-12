@@ -118,9 +118,9 @@ static void stopKey (int index, bool state)
     static int      count    = 0;
     static uint64_t lasttime = 0;
 
-    if ( (RunTime - lasttime) > 1000000L )      // Looking to count every hit within 1 second
+    if ( (ZyTime.TotalRunningTime () - lasttime) > 1000000L )      // Looking to count every hit within 1 second
         count = 0;
-    lasttime = RunTime;
+    lasttime = ZyTime.TotalRunningTime ();
     count++;
 
     if ( count > 2 )
@@ -323,7 +323,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                         {
                         static uint64_t selection_time;
 
-                        if ( (RunTime - selection_time) < 5000 )
+                        if ( (ZyTime.TotalRunningTime () - selection_time) < 5000 )
                             {
                             VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelectSecond (type);
@@ -336,7 +336,7 @@ static void cb_Control_Keyboard (byte mchan, byte type, byte value)
                                 VoiceArray[z]->TuningState (false);
                             VoiceArray[type]->TuningState (true);
                             DisplayMessage.TuningSelect (type);
-                            selection_time = RunTime;
+                            selection_time = ZyTime.TotalRunningTime ();
                             TuningOutputBitFlip (7);
                             }
                         }

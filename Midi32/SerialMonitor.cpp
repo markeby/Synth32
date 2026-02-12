@@ -1,5 +1,5 @@
 //#######################################################################
-// Module:     SerialMonitor.ino
+// Module:     SerialMonitor.cpp
 // Descrption: Serial control for setup and debug
 // Creator:    markeby
 // Date:       9/4/2023
@@ -16,7 +16,7 @@
 //#######################################################################
 inline void DispRunTime (void)
     {
-    float fsc = RunTime * 0.000001;
+    float fsc = ZyTime.TotalRunningTime () * 0.000001;
     float fmn = fsc / 60;
     float fhr = fmn / 60;
     int   hr  = fhr;
@@ -68,10 +68,9 @@ void MONITOR_C::DumpStats (void)
     Serial << hh << "       Update URL = " << UpdateOTA.GetIP() << endl << endl;
     Serial << hh << "      Runing Time = ";
     DispRunTime ();
-    Serial << hh << "    Last interval = " << DeltaTimeMilli << " mSec" << endl;
-    Serial << hh << " Average interval = " << DeltaTimeMilliAvg << " mSec" << endl;
-    Serial << hh << " Longest interval = " << LongestTimeMilli << " mSec" << endl;
-    LongestTimeMilli = 0;
+    Serial << hh << "    Last interval = " << ZyTime.DeltaTimeMS () << " mSec" << endl;
+    Serial << hh << " Average interval = " << ZyTime.DeltaTimeAvg () << " mSec" << endl;
+    Serial << hh << " Longest interval = " << ZyTime.LongestTime () << " mSec" << endl;
     }
 
 //#######################################################################

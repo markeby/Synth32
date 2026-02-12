@@ -10,6 +10,7 @@
 #include <FS.h>
 #include <SPIFFS.h>
 
+#include <ZynthTime.h>
 #include <SynthCommon.h>
 #include <I2Cdevices.h>
 #include <Debug.h>
@@ -20,12 +21,6 @@
 #define DEBUG_SYNTH
 //#define DEBUG_MIDI_MSG
 //#define DEBUG_FUNC
-
-//#####################################
-// Usefull constants
-//#####################################
-#define MICRO_TO_MILLI(x) ((x) * 0.001)
-#define MILLI_TO_MICRO(x) ((x) * 1000)
 
 //#####################################
 // In case I get confused with Python
@@ -41,12 +36,6 @@ extern bool DebugI2C;
 extern bool DebugSynth;
 extern bool DebugDisp;
 extern bool DebugSeq;
-
-//#################################################
-//   Alarms and alerts
-//#################################################
-#define HEARTBEAT_PIN       2
-#define BEEP_PIN            15
 
 //#################################################
 //    Serial 1 MIDI echo out port
@@ -73,14 +62,8 @@ extern bool DebugSeq;
 //   Global system variables
 //#################################################
 extern bool     SynthActive;
-
 extern bool     SystemError;
 extern bool     SystemFail;
-extern float    DeltaTimeMilli;
-extern float    DeltaTimeMicro;
-extern float    LongestTimeMilli;
-extern float    DeltaTimeMilliAvg;
-extern uint64_t RunTime;
 
 //#################################################
 //    Synth specific constants

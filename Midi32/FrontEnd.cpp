@@ -239,7 +239,7 @@ void LoopSynth ()
             Down.Trigger = 0;                         // release the trigger
             }
 
-        EnvelopeGenerator.Loop (DeltaTimeMilli);            // process all envelope generators
+        EnvelopeGenerator.Loop ();                          // process all envelope generators
         for ( int z = 0;  z < VOICE_COUNT;  z++ )           // Check all channels for done
             VoiceArray[z]->Loop ();
         }

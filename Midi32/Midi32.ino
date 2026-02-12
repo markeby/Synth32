@@ -82,81 +82,11 @@ MONITOR_C       Monitor;
 bool        SystemError         = false;
 bool        SystemFail          = false;
 bool        SynthActive         = false;
-float       DeltaTimeMilli      = 0;             // Millisecond interval.
-float       DeltaTimeMicro      = 0;             // Microsecond interval
-float       DeltaTimeMilliAvg   = 0;
-float       LongestTimeMilli    = 0;
-uint64_t    RunTime             = 0;
 bool        DebugMidi           = false;
 bool        DebugI2C            = false;
 bool        DebugSynth          = false;
 bool        DebugDisp           = false;
 bool        DebugSeq            = false;
-
-static uint64_t startTime       = 0;
-
-//#######################################################################
-//#######################################################################
-inline void TimeDelta (void)
-    {
-    static uint64_t strt = 0;       // Starting time for next frame delta calculation
-
-    RunTime = micros ();
-    DeltaTimeMicro = (int)((uint64_t)RunTime - (uint64_t)strt);
-    DeltaTimeMilli = MICRO_TO_MILLI (DeltaTimeMicro);
-    if ( DeltaTimeMilliAvg == 0 )
-        DeltaTimeMilliAvg = DeltaTimeMilli;
-    else
-        DeltaTimeMilliAvg = (DeltaTimeMilliAvg + DeltaTimeMilli) / 2;
-    strt = RunTime;
-    if ( DeltaTimeMilli > 210 )     // throw out long serial debug outputs
-        return;
-    if ( DeltaTimeMilli > LongestTimeMilli )
-        LongestTimeMilli = DeltaTimeMilli;
-    }
-
-//#######################################################################
-inline bool TickTime (void)
-    {
-    static uint64_t loop_cnt_100hz = 0;
-    static uint64_t icount = 0;
-
-    loop_cnt_100hz += DeltaTimeMicro;
-    icount++;
-
-    if ( loop_cnt_100hz >= MILLI_TO_MICRO (10)  )
-        {
-        loop_cnt_100hz = 0;
-        icount = 0;
-        return (true);
-        }
-    return (false);
-    }
-
-//#######################################################################
-inline void TickState (void)
-    {
-    static uint32_t counter0 = 1;
-
-    if ( --counter0 == 0 )
-        {
-        digitalWrite (HEARTBEAT_PIN, HIGH);     // LED on
-        counter0 = 100;
-        }
-    if ( SystemFail )
-        {
-        if ( counter0 % 25 )
-            {
-            digitalWrite (HEARTBEAT_PIN, LOW);  // LED off
-            }
-        else
-            {
-            digitalWrite (HEARTBEAT_PIN, HIGH); // LED on
-            }
-        }
-    if ( counter0 == 98 )
-        digitalWrite (HEARTBEAT_PIN, LOW);      // LED off
-    }
 
 //#######################################################################
 //#######################################################################
@@ -189,7 +119,10 @@ void setup (void)
         {
         SystemError = true;
         if ( cnt < 0 )
+            {
             SystemFail = true;
+            ZyTime.SetFailMode (SystemFail);
+            }
         }
 
     if ( SystemFail )
@@ -218,7 +151,10 @@ void setup (void)
         printf ("\t>>>\tSerial2 midi ready\n");
 
         if ( SynthConfig.Begin () )
+            {
             SystemFail = true;
+            ZyTime.SetFailMode (SystemFail);
+            }
 
         if ( !SystemFail )
             {
@@ -240,9 +176,7 @@ void setup (void)
 //#######################################################################
 void loop (void)
     {
-    TimeDelta ();
-    if ( TickTime () )
-        TickState ();
+    ZyTime.Loop ();
 
     // Wifi connection manager
     if ( !UpdateOTA.WiFiStatus () )
