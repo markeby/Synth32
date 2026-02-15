@@ -109,9 +109,8 @@ void setup (void)
     printf ("\t>>> Startup OTA...\n");
     UpdateOTA.Setup (Settings.GetSSID (), Settings.GetPasswd ());
 
-    printf ("\t>>> Starting I2C & devices...\n");
-
     // First, validate for good I2C I/O bus
+    printf ("\t>>> Starting I2C & devices...\n");
     int cnt = I2cDevices.Begin (DevicesI2C);
     if ( cnt != 0 )
         {
